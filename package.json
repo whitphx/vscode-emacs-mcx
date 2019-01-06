@@ -16,8 +16,178 @@
 	"contributes": {
 		"keybindings": [
 			{
+				"key": "right",
+				"command": "emacs-mcx.cursorRight",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+f",
+				"command": "emacs-mcx.cursorRight",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+f",
+				"command": "emacs-mcx.cursorRight",
+				"when": "terminalFocus"
+			},
+			{
+				"key": "left",
+				"command": "emacs-mcx.cursorLeft",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+b",
+				"command": "emacs-mcx.cursorLeft",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "up",
+				"command": "emacs-mcx.cursorUp",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "up",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "ctrl+p",
+				"command": "emacs-mcx.cursorUp",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "ctrl+p",
+				"command": "emacs-mcx.cursorUp",
+				"when": "terminalFocus"
+			},
+			{
+				"key": "ctrl+p",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "down",
+				"command": "emacs-mcx.cursorDown",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "down",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "ctrl+n",
+				"command": "emacs-mcx.cursorDown",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "ctrl+n",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "home",
+				"command": "emacs-mcx.cursorHome",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+a",
+				"command": "emacs-mcx.cursorHome",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "end",
+				"command": "emacs-mcx.cursorEnd",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+e",
+				"command": "emacs-mcx.cursorEnd",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+e",
+				"command": "emacs-mcx.cursorEnd",
+				"when": "terminalFocus"
+			},
+			{
+				"key": "alt+f",
+				"command": "emacs-mcx.cursorWordRight",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "alt+b",
+				"command": "emacs-mcx.cursorWordLeft",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "pagedown",
+				"command": "emacs-mcx.cursorPageDown",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "pagedown",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "ctrl+v",
+				"command": "emacs-mcx.cursorPageDown",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "ctrl+v",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "pageup",
+				"command": "emacs-mcx.cursorPageUp",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "pageup",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "alt+v",
+				"command": "emacs-mcx.cursorPageUp",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "alt+v",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "alt+shift+.",
+				"command": "emacs-mcx.cursorBottom",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "alt+shift+.",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
+				"key": "alt+shift+,",
+				"command": "emacs-mcx.cursorTop",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "alt+shift+,",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
 				"key": "ctrl+g",
 				"command": "emacs-mcx.cancel",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+space",
+				"command": "emacs-mcx.enterMarkMode",
 				"when": "editorTextFocus"
 			}
 		]

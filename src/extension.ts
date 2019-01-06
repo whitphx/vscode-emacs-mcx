@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
+import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
+import { cursorMoves } from "./operations";
 
 export function activate(context: vscode.ExtensionContext) {
     const emulatorMap = new EmacsEmulatorMap();
@@ -31,14 +33,34 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    const disposable = vscode.commands.registerCommand("emacs-mcx.cancel", () => {
-        const emulator = getAndUpdateEmulator();
-        if (typeof emulator === "undefined") { return; }
+    function registerEmulatorCommand(
+        commandName: string,
+        callback: (emulator: EmacsEmulator, ...args: any[]) => any,
+    ) {
+        const disposable = vscode.commands.registerCommand(commandName, () => {
+            const emulator = getAndUpdateEmulator();
+            if (!emulator) {
+                return;
+            }
 
-        emulator.cancel();
+            callback(emulator);
+        });
+        context.subscriptions.push(disposable);
+    }
+
+    cursorMoves.forEach((commandName) => {
+        registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
+            emulator.cursorMove(commandName);
+        });
     });
 
-    context.subscriptions.push(disposable);
+    registerEmulatorCommand("emacs-mcx.enterMarkMode", (emulator) => {
+        emulator.enterMarkMode();
+    });
+
+    registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {
+        emulator.cancel();
+    });
 }
 
 // this method is called when your extension is deactivated
