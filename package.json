@@ -2,7 +2,7 @@
 		"name": "emacs-mcx",
 		"displayName": "emacs-mcx",
 		"description": "Multi cursor support added to keybindings derived from Emacs Friendly Keymap",
-		"version": "0.0.2",
+		"version": "0.0.3",
 		"publisher": "tuttieee",
 		"repository": {
 				"type": "git",
@@ -17,11 +17,11 @@
 		],
 		"license": "MIT",
 		"keywords": [
-			"emacs",
-			"keybindings",
-			"multi cursor",
-			"selection",
-			"mark mode"
+				"emacs",
+				"keybindings",
+				"multi cursor",
+				"selection",
+				"mark mode"
 		],
 		"activationEvents": [
 				"*"
