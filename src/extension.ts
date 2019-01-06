@@ -54,12 +54,16 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
+    registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
+        emulator.killLine();
+    });
+
     registerEmulatorCommand("emacs-mcx.killRegion", (emulator) => {
         emulator.killRegion();
     });
 
-    registerEmulatorCommand("emacs-mcx.copy", (emulator) => {
-        emulator.copy();
+    registerEmulatorCommand("emacs-mcx.copyRegion", (emulator) => {
+        emulator.copyRegion();
     });
 
     registerEmulatorCommand("emacs-mcx.yank", (emulator) => {
@@ -84,7 +88,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     // TODO: Implement these commands
     [
-        "emacs-mcx.killLine",
         "emacs-mcx.breakLine",
         "emacs-mcx.deleteBlankLines",
         "emacs-mcx.scrollLineToCenterTopBottom",

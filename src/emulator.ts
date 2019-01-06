@@ -1,6 +1,6 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
-import { Disposable, Range, Selection, TextEditor } from "vscode";
+import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { cursorMoves } from "./operations";
 
 export class EmacsEmulator implements Disposable {
@@ -51,20 +51,32 @@ export class EmacsEmulator implements Disposable {
         }
     }
 
-    public copy() {
-        clipboardy.writeSync(this.getSelectionsText());
+    public copyRegion() {
+        const ranges = this.getNonEmptySelections();
+        this.copyRanges(ranges);
         this.cancel();
     }
 
-    public async killRegion(appendClipboard?: boolean) {
-        if (appendClipboard) {
-            clipboardy.writeSync(clipboardy.readSync() + this.getSelectionsText());
-        } else {
-            clipboardy.writeSync(this.getSelectionsText());
-        }
+    public killLine() {
+        const ranges = this.textEditor.selections.map((selection) => {
+            const anchor = selection.anchor;
+            const lineAtAnchor = this.textEditor.document.lineAt(selection.anchor.line);
+            const lineEnd = lineAtAnchor.range.end;
 
-        await this.delete(this.getNonEmptySelections());
-        this.exitMarkMode();
+            if (anchor.isEqual(lineEnd)) {
+                // From the end of the line to the beginning of the next line
+                return new Range(anchor, new Position(anchor.line + 1, 0));
+            } else {
+                // From the current cursor to the end of line
+                return new Range(anchor, lineAtAnchor.range.end);
+            }
+        });
+        return this.killRanges(ranges);
+    }
+
+    public killRegion(appendClipboard?: boolean) {
+        const ranges = this.getNonEmptySelections();
+        return this.killRanges(ranges);
     }
 
     public yank(): Thenable<{} | undefined> {
@@ -112,12 +124,21 @@ export class EmacsEmulator implements Disposable {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
     }
 
+    private copyRanges(ranges: Range[]) {
+        clipboardy.writeSync(this.getSortedRangesText(ranges));
+    }
+
+    private async killRanges(ranges: Range[]) {
+        this.copyRanges(ranges);
+        await this.delete(ranges);
+        this.exitMarkMode();
+    }
+
     private getNonEmptySelections(): Selection[] {
         return this.textEditor.selections.filter((selection) => !selection.isEmpty);
     }
 
-    private getSelectionsText(): string {
-        const ranges: Range[] = this.getNonEmptySelections();
+    private getSortedRangesText(ranges: Range[]): string {
         const sortedRanges = ranges
             .sort((a, b) => {
                 if (a.start.line === b.start.line) {

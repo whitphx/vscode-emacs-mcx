@@ -55,8 +55,8 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-h` | Delete left (BACKSPACE) |
 | `M-d` | Delete word |
 | `M-Bksp` | Delete word left |
-| `C-k` | Kill to line end __(Under development)__ |
-| `C-S-Bksp` | Kill entire line __(Under development)__ |
+| `C-k` | Kill from the current cursor to the end of line (kill-line) |
+| `C-S-Bksp` | Kill whole line (kill-whole-line)  __(Under development)__  |
 | `C-w` | Kill region |
 | `M-w` | Copy region to kill ring |
 | `C-y` | Yank |
