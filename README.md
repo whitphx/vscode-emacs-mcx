@@ -77,7 +77,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-quote` | IntelliSense Suggestion |
 | `M-x` | Open command palette |
 | `C-M-SPC` | Toggle SideBar visibility |
-| `C-x z` | | Toggle Zen Mode |
+| `C-x z` | Toggle Zen Mode |
 
 ### File Commands
 |Command | Desc |
