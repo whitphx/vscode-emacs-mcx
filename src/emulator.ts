@@ -56,17 +56,15 @@ export class EmacsEmulator implements Disposable {
         this.cancel();
     }
 
-    public killRegion(appendClipboard?: boolean) {
+    public async killRegion(appendClipboard?: boolean) {
         if (appendClipboard) {
             clipboardy.writeSync(clipboardy.readSync() + this.getSelectionsText());
         } else {
             clipboardy.writeSync(this.getSelectionsText());
         }
-        const t = this.delete(this.getNonEmptySelections());
 
-        this.cancel();
-
-        return t;
+        await this.delete(this.getNonEmptySelections());
+        this.exitMarkMode();
     }
 
     public yank(): Thenable<{} | undefined> {
