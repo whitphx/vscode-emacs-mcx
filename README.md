@@ -10,7 +10,7 @@ Though there were such great extensions, this extension is written from scratch 
 This extension aims
 * to provide emacs-like keybindings
 * to be fully compatible with multi cursor
-* to support kill-ring integrated with the system clipboard
+* to support kill-ring integrated with the system clipboard __(Under development)__
 * to fix some bugs in the existing extensions such as
     * mark-mode states are shared amoung all editors
 
