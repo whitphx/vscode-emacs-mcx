@@ -3,6 +3,11 @@
 	"displayName": "emacs-mcx",
 	"description": "",
 	"version": "0.0.1",
+	"publisher": "tuttieee",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tuttieee/vscode-emacs-mcx"
+	},
 	"engines": {
 		"vscode": "^1.30.0"
 	},
