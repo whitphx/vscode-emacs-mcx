@@ -28,8 +28,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-e` | Move to the end of line |
 | `M-f` | Move forward by one word unit |
 | `M-b` | Move backward by one word unit |
-| `M->` | #Move to the end of buffer |
-| `M-<` | #Move to the beginning of buffer |
 | `C-v` | Scroll down by one screen unit |
 | `M-v` | Scroll up by one screen unit |
 | `M-g g` | Jump to line (command palette) |
