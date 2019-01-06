@@ -253,13 +253,23 @@
 					"when": "editorFocus"
 			},
 			{
+					"key": "delete",
+					"command": "emacs-mcx.deleteRight",
+					"when": "editorTextFocus && !editorReadonly"
+			},
+			{
 					"key": "ctrl+d",
-					"command": "deleteRight",
+					"command": "emacs-mcx.deleteRight",
+					"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+					"key": "backspace",
+					"command": "emacs-mcx.deleteLeft",
 					"when": "editorTextFocus && !editorReadonly"
 			},
 			{
 					"key": "ctrl+h",
-					"command": "deleteLeft",
+					"command": "emacs-mcx.deleteLeft",
 					"when": "editorTextFocus && !editorReadonly"
 			},
 			{

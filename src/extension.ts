@@ -74,6 +74,14 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.cancel();
     });
 
+    registerEmulatorCommand("emacs-mcx.deleteRight", (emulator) => {
+        emulator.deleteRight();
+    });
+
+    registerEmulatorCommand("emacs-mcx.deleteLeft", (emulator) => {
+        emulator.deleteLeft();
+    });
+
     // TODO: Implement these commands
     [
         "emacs-mcx.killLine",
