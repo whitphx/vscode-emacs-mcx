@@ -10,14 +10,17 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
-			"command": "extension.helloWorld",
-			"title": "Hello World"
-		}]
+		"keybindings": [
+			{
+				"key": "ctrl+g",
+				"command": "emacs-mcx.cancel",
+				"when": "editorTextFocus"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
