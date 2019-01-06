@@ -1,6 +1,6 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
-import { Disposable, Range, Selection, TextEditor } from "vscode";
+import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { cursorMoves } from "./operations";
 
 export class EmacsEmulator implements Disposable {
@@ -58,11 +58,18 @@ export class EmacsEmulator implements Disposable {
     }
 
     public killLine() {
-        // Ranges from the current cursors to the end of lines
         const ranges = this.textEditor.selections.map((selection) => {
             const anchor = selection.anchor;
-            const lineAtAnchor = this.textEditor.document.lineAt(anchor.line);
-            return new Selection(anchor, lineAtAnchor.range.end);
+            const lineAtAnchor = this.textEditor.document.lineAt(selection.anchor.line);
+            const lineEnd = lineAtAnchor.range.end;
+
+            if (anchor.isEqual(lineEnd)) {
+                // From the end of the line to the beginning of the next line
+                return new Range(anchor, new Position(anchor.line + 1, 0));
+            } else {
+                // From the current cursor to the end of line
+                return new Range(anchor, lineAtAnchor.range.end);
+            }
         });
         return this.killRanges(ranges);
     }
