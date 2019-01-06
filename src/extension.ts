@@ -54,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    registerEmulatorCommand("emacs-mcx.kill", (emulator) => {
+    registerEmulatorCommand("emacs-mcx.killRegion", (emulator) => {
         emulator.killRegion();
     });
 
@@ -72,6 +72,19 @@ export function activate(context: vscode.ExtensionContext) {
 
     registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {
         emulator.cancel();
+    });
+
+    // TODO: Implement these commands
+    [
+        "emacs-mcx.killLine",
+        "emacs-mcx.breakLine",
+        "emacs-mcx.deleteBlankLines",
+        "emacs-mcx.scrollLineToCenterTopBottom",
+        "emacs-mcx.deleteLine",
+    ].forEach((commandName) => {
+        registerEmulatorCommand(commandName, (emulator) => {
+            vscode.window.showInformationMessage(`Sorry, ${commandName} is not implemented yet.`);
+        });
     });
 }
 
