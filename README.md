@@ -1,6 +1,16 @@
-# emacs-mcx README
+# emacs-mcx [WIP]
 
-This is the README for your extension "emacs-mcx". After writing up a brief description, we recommend including the following sections.
+This Visual Studio Code extension provides emacs-like keybindings and operations.
+This is inspired by [the great vscode extension by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [vscode-emacs-improved by rkwan94](https://github.com/rkwan94/vscode-emacs) and [vscode-emacs-neon by NotKyon](https://github.com/NotKyon/vscode-emacs-neon).
+
+Though there were such great extensions, this extension is written from scratch because it was hard to achieve the goal listed below by extending the existent code base.
+
+This extension aims
+* to provide emacs-like keybindings
+* to be fully compatible with multi cursor
+* to support kill-ring integrated with the system clipboard
+* to fix some bugs in the existing extensions such as
+    * mark-mode states are shared amoung all editors
 
 ## Features
 
@@ -48,18 +58,3 @@ Fixed issue #.
 Added features X, Y, and Z.
 
 -----------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
