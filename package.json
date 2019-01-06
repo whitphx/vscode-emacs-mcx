@@ -189,6 +189,21 @@
 				"key": "ctrl+space",
 				"command": "emacs-mcx.enterMarkMode",
 				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+w",
+				"command": "emacs-mcx.kill",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"key": "alt+w",
+				"command": "emacs-mcx.copy",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+y",
+				"command": "emacs-mcx.yank",
+				"when": "editorTextFocus && !editorReadonly"
 			}
 		]
 	},
@@ -200,10 +215,14 @@
 		"test": "yarn run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
-		"tslint": "^5.8.0",
+		"@types/mocha": "^2.2.42",
 		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
+		"tslint": "^5.8.0",
+		"typescript": "^3.1.4",
+		"vscode": "^1.1.25"
+	},
+	"dependencies": {
+		"@types/clipboardy": "^1.1.0",
+		"clipboardy": "^1.2.3"
 	}
 }

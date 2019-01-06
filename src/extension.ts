@@ -54,6 +54,18 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
+    registerEmulatorCommand("emacs-mcx.kill", (emulator) => {
+        emulator.killRegion();
+    });
+
+    registerEmulatorCommand("emacs-mcx.copy", (emulator) => {
+        emulator.copy();
+    });
+
+    registerEmulatorCommand("emacs-mcx.yank", (emulator) => {
+        emulator.yank();
+    });
+
     registerEmulatorCommand("emacs-mcx.enterMarkMode", (emulator) => {
         emulator.enterMarkMode();
     });
