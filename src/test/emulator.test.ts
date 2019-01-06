@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import {Position, Selection} from "vscode";
 import {EmacsEmulator} from "../emulator";
 
-suite("EmacsEmulator.cut() and yank", () => {
+suite("EmacsEmulator.killRegion() and .yank()", () => {
     test("it sorts ranges and aggregates the selected texts in order when multi cursor mode", async () => {
         const content = `0123456789
 abcdefghij
