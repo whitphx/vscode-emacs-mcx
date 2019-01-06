@@ -303,7 +303,7 @@
 						},
 						{
 								"key": "alt+w",
-								"command": "emacs-mcx.copy",
+								"command": "emacs-mcx.copyRegion",
 								"when": "editorTextFocus"
 						},
 						{

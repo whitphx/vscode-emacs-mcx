@@ -51,31 +51,25 @@ export class EmacsEmulator implements Disposable {
         }
     }
 
-    public copy() {
-        clipboardy.writeSync(this.getSelectionsText());
+    public copyRegion() {
+        const ranges = this.getNonEmptySelections();
+        this.copyRanges(ranges);
         this.cancel();
     }
 
     public killLine() {
-        // Select to the end of each line
-        this.textEditor.selections = this.textEditor.selections.map((selection) => {
+        // Ranges from the current cursors to the end of lines
+        const ranges = this.textEditor.selections.map((selection) => {
             const anchor = selection.anchor;
             const lineAtAnchor = this.textEditor.document.lineAt(anchor.line);
             return new Selection(anchor, lineAtAnchor.range.end);
         });
-
-        return this.killRegion();
+        return this.killRanges(ranges);
     }
 
-    public async killRegion(appendClipboard?: boolean) {
-        if (appendClipboard) {
-            clipboardy.writeSync(clipboardy.readSync() + this.getSelectionsText());
-        } else {
-            clipboardy.writeSync(this.getSelectionsText());
-        }
-
-        await this.delete(this.getNonEmptySelections());
-        this.exitMarkMode();
+    public killRegion(appendClipboard?: boolean) {
+        const ranges = this.getNonEmptySelections();
+        return this.killRanges(ranges);
     }
 
     public yank(): Thenable<{} | undefined> {
@@ -123,12 +117,21 @@ export class EmacsEmulator implements Disposable {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
     }
 
+    private copyRanges(ranges: Range[]) {
+        clipboardy.writeSync(this.getSortedRangesText(ranges));
+    }
+
+    private async killRanges(ranges: Range[]) {
+        this.copyRanges(ranges);
+        await this.delete(ranges);
+        this.exitMarkMode();
+    }
+
     private getNonEmptySelections(): Selection[] {
         return this.textEditor.selections.filter((selection) => !selection.isEmpty);
     }
 
-    private getSelectionsText(): string {
-        const ranges: Range[] = this.getNonEmptySelections();
+    private getSortedRangesText(ranges: Range[]): string {
         const sortedRanges = ranges
             .sort((a, b) => {
                 if (a.start.line === b.start.line) {

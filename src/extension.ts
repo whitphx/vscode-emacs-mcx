@@ -62,8 +62,8 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.killRegion();
     });
 
-    registerEmulatorCommand("emacs-mcx.copy", (emulator) => {
-        emulator.copy();
+    registerEmulatorCommand("emacs-mcx.copyRegion", (emulator) => {
+        emulator.copyRegion();
     });
 
     registerEmulatorCommand("emacs-mcx.yank", (emulator) => {
