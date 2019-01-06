@@ -79,10 +79,10 @@ export class EmacsEmulator implements Disposable {
         return this.killRanges(ranges);
     }
 
-    public yank(): Thenable<{} | undefined> {
+    public async yank() {
         // TODO: multi cursor compatibility
-        this.cancel();
-        return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+        await vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+        this.exitMarkMode();
     }
 
     public delete(ranges: vscode.Range[]): Thenable<boolean> {
