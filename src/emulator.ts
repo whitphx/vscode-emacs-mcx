@@ -56,6 +56,17 @@ export class EmacsEmulator implements Disposable {
         this.cancel();
     }
 
+    public killLine() {
+        // Select to the end of each line
+        this.textEditor.selections = this.textEditor.selections.map((selection) => {
+            const anchor = selection.anchor;
+            const lineAtAnchor = this.textEditor.document.lineAt(anchor.line);
+            return new Selection(anchor, lineAtAnchor.range.end);
+        });
+
+        return this.killRegion();
+    }
+
     public async killRegion(appendClipboard?: boolean) {
         if (appendClipboard) {
             clipboardy.writeSync(clipboardy.readSync() + this.getSelectionsText());
