@@ -58,8 +58,9 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-w` | Kill region |
 | `M-w` | Copy region to kill ring |
 | `C-y` | Yank |
-| `C-j` | Enter __(Under development)__ |
-| `C-m` | Enter __(Under development)__ |
+| `C-o` | Open line (This keybinding is provided by native VSCode, but not this extension) |
+| `C-j` | New line __(Under development)__ |
+| `C-m` | New line __(Under development)__ |
 | `C-x C-o` | Delete blank lines around __(Under development)__ |
 | `C-x h` | Select All |
 | `C-x u` (`C-/`)| Undo |
