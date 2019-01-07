@@ -2,7 +2,7 @@
 		"name": "emacs-mcx",
 		"displayName": "emacs-mcx",
 		"description": "Multi cursor support added to keybindings derived from Emacs Friendly Keymap",
-		"version": "0.0.7",
+		"version": "0.0.8",
 		"publisher": "tuttieee",
 		"repository": {
 				"type": "git",
