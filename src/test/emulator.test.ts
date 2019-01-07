@@ -108,5 +108,39 @@ abcdefghijABCDEFGHIJ`,
                 "\n",
             );
         });
+
+        test("it works with multi cursor", async () => {
+            const emulator = new EmacsEmulator(activeTextEditor);
+
+            activeTextEditor.selections = [
+                new Selection(new Position(1, 1), new Position(1, 1)),
+                new Selection(new Position(0, 1), new Position(0, 1)),
+                new Selection(new Position(2, 1), new Position(2, 1)),
+            ];
+
+            await emulator.killLine();
+
+            assert.equal(
+                activeTextEditor.document.getText(),
+                `0
+a
+A`,
+            );
+
+            clearTextEditor(activeTextEditor);
+
+            activeTextEditor.selections = [
+                new Selection(new Position(0, 0), new Position(0, 0)),
+            ];
+            await emulator.yank();
+
+            assert.equal(
+                activeTextEditor.document.getText(),
+                `123456789
+bcdefghij
+BCDEFGHIJ`,
+            );
+
+        });
     });
 });
