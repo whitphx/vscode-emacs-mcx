@@ -20,7 +20,7 @@ export class EmacsEmulator implements Disposable {
     }
 
     public cursorMove(commandName: cursorMoves) {
-        vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
+        return vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
     }
 
     public enterMarkMode() {
@@ -112,6 +112,14 @@ export class EmacsEmulator implements Disposable {
     public deleteLeft() {
         this.exitMarkMode();
         vscode.commands.executeCommand("deleteLeft");
+    }
+
+    public async newLine() {
+        this.makeSelectionsEmpty();
+        this.exitMarkMode();
+        await vscode.commands.executeCommand("lineBreakInsert");
+        await vscode.commands.executeCommand("cursorHome");
+        await vscode.commands.executeCommand("cursorDown");
     }
 
     public dispose() {

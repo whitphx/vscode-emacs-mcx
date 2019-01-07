@@ -90,9 +90,12 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.deleteLeft();
     });
 
+    registerEmulatorCommand("emacs-mcx.newLine", (emulator) => {
+        emulator.newLine();
+    });
+
     // TODO: Implement these commands
     [
-        "emacs-mcx.breakLine",
         "emacs-mcx.deleteBlankLines",
         "emacs-mcx.scrollLineToCenterTopBottom",
     ].forEach((commandName) => {
