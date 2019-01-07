@@ -323,12 +323,12 @@
 						},
 						{
 								"key": "ctrl+m",
-								"command": "emacs-mcx.breakLine",
+								"command": "emacs-mcx.newLine",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
 								"key": "ctrl+j",
-								"command": "emacs-mcx.breakLine",
+								"command": "emacs-mcx.newLine",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
