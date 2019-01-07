@@ -68,9 +68,20 @@ export class EmacsEmulator implements Disposable {
                 return new Range(anchor, new Position(anchor.line + 1, 0));
             } else {
                 // From the current cursor to the end of line
-                return new Range(anchor, lineAtAnchor.range.end);
+                return new Range(anchor, lineEnd);
             }
         });
+        return this.killRanges(ranges);
+    }
+
+    public killWholeLine() {
+        const ranges = this.textEditor.selections.map((selection) =>
+            // From the beginning of the line to the beginning of the next line
+            new Range(
+                new Position(selection.anchor.line, 0),
+                new Position(selection.anchor.line + 1, 0),
+            ),
+        );
         return this.killRanges(ranges);
     }
 

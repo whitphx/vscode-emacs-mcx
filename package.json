@@ -604,7 +604,7 @@
 						},
 						{
 								"key": "ctrl+shift+backspace",
-								"command": "emacs-mcx.deleteLine",
+								"command": "emacs-mcx.killWholeLine",
 								"when": "editorTextFocus"
 						},
 						{
