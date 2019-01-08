@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
-import {Position, Range} from "vscode";
+import {Position, Range, TextEditor} from "vscode";
 
 export async function setupWorkspace(initialText: string = ""): Promise<vscode.TextEditor> {
     const doc = await vscode.workspace.openTextDocument({
@@ -28,4 +28,8 @@ export async function clearTextEditor(textEditor: vscode.TextEditor) {
 }
 
 export async function cleanUpWorkspace() {
+}
+
+export function assertTextEqual(textEditor: TextEditor, expectedText: string) {
+    assert.equal(textEditor.document.getText(), expectedText);
 }

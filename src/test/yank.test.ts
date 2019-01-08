@@ -1,13 +1,8 @@
-import * as assert from "assert";
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
-import {Position, Selection, TextEditor} from "vscode";
+import {Position, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
-import { cleanUpWorkspace, setupWorkspace} from "./utils";
-
-function assertTextEqual(textEditor: TextEditor, expectedText: string) {
-    assert.equal(textEditor.document.getText(), expectedText);
-}
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace} from "./utils";
 
 suite("Emulator with yank", () => {
     let activeTextEditor: vscode.TextEditor;

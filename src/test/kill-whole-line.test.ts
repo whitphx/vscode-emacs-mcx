@@ -1,12 +1,8 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
-import {Position, Selection, TextEditor} from "vscode";
+import {Position, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
-import { cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
-
-function assertTextEqual(textEditor: TextEditor, expectedText: string) {
-    assert.equal(textEditor.document.getText(), expectedText);
-}
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
 
 suite("Emulator.killWholeLine", () => {
     let activeTextEditor: vscode.TextEditor;
