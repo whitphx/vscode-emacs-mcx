@@ -317,6 +317,11 @@
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
+								"key": "alt+y",
+								"command": "emacs-mcx.yank-pop",
+								"when": "editorTextFocus && !editorReadonly"
+						},
+						{
 								"key": "ctrl+y",
 								"command": "closeFindWidget",
 								"when": "editorFocus && findWidgetVisible"

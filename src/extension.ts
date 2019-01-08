@@ -74,6 +74,10 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.yank();
     });
 
+    registerEmulatorCommand("emacs-mcx.yank-pop", (emulator) => {
+        emulator.yankPop();
+    });
+
     registerEmulatorCommand("emacs-mcx.enterMarkMode", (emulator) => {
         emulator.enterMarkMode();
     });
