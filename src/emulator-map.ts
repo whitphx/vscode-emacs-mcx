@@ -1,12 +1,15 @@
 import { Disposable, TextEditor } from "vscode";
 import { EditorIdentity } from "./editorIdentity";
 import { EmacsEmulator } from "./emulator";
+import { KillRing } from "./kill-ring";
 
 export class EmacsEmulatorMap implements Disposable {
     private emacsEmulatorMap: Map<string, EmacsEmulator>;
+    private killRing: KillRing;
 
-    constructor() {
+    constructor(killRing: KillRing) {
         this.emacsEmulatorMap = new Map();
+        this.killRing = killRing;
     }
 
     public getOrCreate(textEditor: TextEditor): [EmacsEmulator, boolean] {
@@ -19,7 +22,7 @@ export class EmacsEmulatorMap implements Disposable {
             return [existentEmulator, false];
         }
 
-        const newEmulator = new EmacsEmulator(textEditor);
+        const newEmulator = new EmacsEmulator(textEditor, this.killRing);
         this.emacsEmulatorMap.set(key, newEmulator);
         return [newEmulator, true];
     }

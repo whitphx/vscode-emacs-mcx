@@ -1,7 +1,7 @@
 {
 		"name": "emacs-mcx",
 		"displayName": "emacs-mcx",
-		"description": "Multi cursor support added to keybindings derived from Emacs Friendly Keymap",
+		"description": "Emacs Friendly Keymap with multi cursor support, kill-ring integrated with clipboard.",
 		"version": "0.0.8",
 		"publisher": "tuttieee",
 		"repository": {
@@ -314,6 +314,11 @@
 						{
 								"key": "ctrl+y",
 								"command": "emacs-mcx.yank",
+								"when": "editorTextFocus && !editorReadonly"
+						},
+						{
+								"key": "alt+y",
+								"command": "emacs-mcx.yank-pop",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{

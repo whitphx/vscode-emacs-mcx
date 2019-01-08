@@ -16,7 +16,7 @@ export async function setupWorkspace(initialText: string = ""): Promise<vscode.T
     return activeTextEditor!;
 }
 
-export async function clearTextEditor(textEditor: vscode.TextEditor) {
+export async function clearTextEditor(textEditor: vscode.TextEditor, initializeWith: string = "") {
     const doc = textEditor.document;
     await textEditor.edit((editBuilder) => {
         editBuilder.delete(new Range(
@@ -24,7 +24,13 @@ export async function clearTextEditor(textEditor: vscode.TextEditor) {
             doc.positionAt(doc.getText().length),
         ));
     });
-    assert.equal(doc.getText(), "");
+    await textEditor.edit((editBuilder) => {
+        editBuilder.insert(
+            new Position(0, 0),
+            initializeWith,
+        );
+    });
+    assert.equal(doc.getText(), initializeWith);
 }
 
 export async function cleanUpWorkspace() {

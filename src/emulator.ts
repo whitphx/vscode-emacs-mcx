@@ -1,18 +1,23 @@
-import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { KillRing } from "./kill-ring";
 import { cursorMoves } from "./operations";
+import { Yanker } from "./yank";
 
 export class EmacsEmulator implements Disposable {
     private isInMarkMode = false;
     private textEditor: TextEditor;
+    private yanker: Yanker;
 
-    constructor(textEditor: TextEditor) {
+    constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
+
+        this.yanker = new Yanker(textEditor, killRing);
     }
 
     public setTextEditor(textEditor: TextEditor) {
         this.textEditor = textEditor;
+        this.yanker.setTextEditor(textEditor);
     }
 
     public getTextEditor(): TextEditor {
@@ -53,7 +58,7 @@ export class EmacsEmulator implements Disposable {
 
     public copyRegion() {
         const ranges = this.getNonEmptySelections();
-        this.copyRanges(ranges);
+        this.yanker.copy(ranges);
         this.cancel();
     }
 
@@ -91,8 +96,12 @@ export class EmacsEmulator implements Disposable {
     }
 
     public async yank() {
-        // TODO: multi cursor compatibility
-        await vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+        await this.yanker.yank();
+        this.exitMarkMode();
+    }
+
+    public async yankPop() {
+        await this.yanker.yankPop();
         this.exitMarkMode();
     }
 
@@ -123,7 +132,7 @@ export class EmacsEmulator implements Disposable {
     }
 
     public dispose() {
-        // TODO
+        delete this.yanker;
     }
 
     private makeSelectionsEmpty() {
@@ -143,41 +152,13 @@ export class EmacsEmulator implements Disposable {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
     }
 
-    private copyRanges(ranges: Range[]) {
-        clipboardy.writeSync(this.getSortedRangesText(ranges));
-    }
-
     private async killRanges(ranges: Range[]) {
-        this.copyRanges(ranges);
+        this.yanker.copy(ranges);
         await this.delete(ranges);
         this.exitMarkMode();
     }
 
     private getNonEmptySelections(): Selection[] {
         return this.textEditor.selections.filter((selection) => !selection.isEmpty);
-    }
-
-    private getSortedRangesText(ranges: Range[]): string {
-        const sortedRanges = ranges
-            .sort((a, b) => {
-                if (a.start.line === b.start.line) {
-                    return a.start.character - b.start.character;
-                } else {
-                    return a.start.line - b.start.line;
-                }
-            });
-
-        let allText = "";
-        sortedRanges.forEach((range, i) => {
-            const selectedText = this.textEditor.document.getText(range);
-            const prevRange = sortedRanges[i - 1];
-            if (prevRange && prevRange.start.line !== range.start.line) {
-                allText += "\n" + selectedText;
-            } else {
-                allText += selectedText;
-            }
-        });
-
-        return allText;
     }
 }

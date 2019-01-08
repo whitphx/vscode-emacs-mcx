@@ -10,7 +10,7 @@ Though there were such great extensions, this extension is written from scratch 
 This extension aims
 * to provide emacs-like keybindings
 * to be fully compatible with multi cursor
-* to support kill-ring integrated with the system clipboard __(Under development)__
+* to support kill-ring integrated with the system clipboard
 * to fix some bugs in the existing extensions such as
     * mark-mode states are shared amoung all editors
 
@@ -58,6 +58,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-w` | Kill region |
 | `M-w` | Copy region to kill ring |
 | `C-y` | Yank |
+| `M-y` | Yank pop |
 | `C-o` | Open line (This keybinding is provided by native VSCode, but not this extension) |
 | `C-j` | New line |
 | `C-m` | New line |
