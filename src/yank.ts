@@ -1,11 +1,15 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Range, TextEditor } from "vscode";
+import { KillRing } from "./kill-ring";
 
 export class Yanker {
     private textEditor: TextEditor;
-    constructor(textEditor: TextEditor) {
+    private killRing: KillRing;
+
+    constructor(textEditor: TextEditor, killRing: KillRing) {
         this.textEditor = textEditor;
+        this.killRing = killRing;
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -17,11 +21,31 @@ export class Yanker {
     }
 
     public copy(ranges: Range[]) {
-        clipboardy.writeSync(this.getSortedRangesText(ranges));
+        const text = this.getSortedRangesText(ranges);
+        clipboardy.writeSync(text);
+        this.killRing.push(text);
     }
 
     public async yank() {
-        await vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+        const clipboardText = clipboardy.readSync();
+        const killRingText = this.killRing.getTop();
+
+        let text: string;
+        if (clipboardText && clipboardText === killRingText) {
+            text = killRingText;
+        } else {
+            text = clipboardText;
+            this.killRing.push(clipboardText);
+        }
+
+        await vscode.commands.executeCommand("paste", { text });
+    }
+
+    public async yankPop() {
+        const text = this.killRing.pop();
+
+        await vscode.commands.executeCommand("undo");
+        await vscode.commands.executeCommand("paste", { text });
     }
 
     private getSortedRangesText(ranges: Range[]): string {
