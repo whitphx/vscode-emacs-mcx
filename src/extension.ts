@@ -1,10 +1,15 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
+import { KillRing } from "./kill-ring";
 import { cursorMoves } from "./operations";
 
 export function activate(context: vscode.ExtensionContext) {
-    const emulatorMap = new EmacsEmulatorMap();
+    const killRingMaxLen = 60;  // TODO: be configurable
+    const killRing = new KillRing(killRingMaxLen);
+    context.subscriptions.push(killRing);
+
+    const emulatorMap = new EmacsEmulatorMap(killRing);
     context.subscriptions.push(emulatorMap);
 
     function getAndUpdateEmulator() {
