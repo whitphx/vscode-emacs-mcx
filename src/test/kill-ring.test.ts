@@ -2,6 +2,7 @@ import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import {Position, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
+import { KillRing } from "../kill-ring";
 import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
 
 suite("killRing", () => {
@@ -16,7 +17,8 @@ suite("killRing", () => {
         teardown(cleanUpWorkspace);
 
         test("it holds the past kills and takes them for yank", async () => {
-            const emulator = new EmacsEmulator(activeTextEditor);
+            const killRing = new KillRing(3);
+            const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
             // kill 3 times with different texts
             await clearTextEditor(

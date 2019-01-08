@@ -4,14 +4,12 @@ import { KillRing } from "./kill-ring";
 import { cursorMoves } from "./operations";
 import { Yanker } from "./yank";
 
-const killRing = new KillRing(3);  // XXX
-
 export class EmacsEmulator implements Disposable {
     private isInMarkMode = false;
     private textEditor: TextEditor;
     private yanker: Yanker;
 
-    constructor(textEditor: TextEditor) {
+    constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
         this.yanker = new Yanker(textEditor, killRing);

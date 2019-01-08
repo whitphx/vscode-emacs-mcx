@@ -5,9 +5,9 @@ import { KillRing } from "./kill-ring";
 
 export class Yanker {
     private textEditor: TextEditor;
-    private killRing: KillRing;
+    private killRing: KillRing | null;  // If null, killRing is disabled and only clipboard is used.
 
-    constructor(textEditor: TextEditor, killRing: KillRing) {
+    constructor(textEditor: TextEditor, killRing: KillRing | null) {
         this.textEditor = textEditor;
         this.killRing = killRing;
     }
@@ -23,10 +23,17 @@ export class Yanker {
     public copy(ranges: Range[]) {
         const text = this.getSortedRangesText(ranges);
         clipboardy.writeSync(text);
-        this.killRing.push(text);
+
+        if (this.killRing !== null) {
+            this.killRing.push(text);
+        }
     }
 
-    public async yank() {
+    public yank() {
+        if (this.killRing === null) {
+            return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+        }
+
         const clipboardText = clipboardy.readSync();
         const killRingText = this.killRing.getTop();
 
@@ -38,10 +45,14 @@ export class Yanker {
             this.killRing.push(clipboardText);
         }
 
-        await vscode.commands.executeCommand("paste", { text });
+        return vscode.commands.executeCommand("paste", { text });
     }
 
     public async yankPop() {
+        if (this.killRing === null) {
+            return;
+        }
+
         const text = this.killRing.pop();
 
         await vscode.commands.executeCommand("undo");
