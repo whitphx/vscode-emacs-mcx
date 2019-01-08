@@ -400,9 +400,52 @@ ABCDEFGHIJ`);
             });
 
         });
+    });
+});
 
-        test("shares killRing amoung multiple editors", () => {
-            // TODO
-        });
+suite("With not only single text editor", () => {
+    setup(async () => {
+        await clipboardy.write("");
+    });
+
+    test("shares killRing amoung multiple editors", async () => {
+        const killRing = new KillRing(3);
+
+        const activeTextEditor0 = await setupWorkspace();
+        const emulator0 = new EmacsEmulator(activeTextEditor0, killRing);
+
+        // Kill texts from one text editor
+        await clearTextEditor(
+            activeTextEditor0,
+            "FOO");
+        await vscode.commands.executeCommand("editor.action.selectAll");
+        emulator0.killRegion();
+
+        await clearTextEditor(
+            activeTextEditor0,
+            "BAR");
+        await vscode.commands.executeCommand("editor.action.selectAll");
+        emulator0.killRegion();
+
+        const activeTextEditor1 = await setupWorkspace("");
+        const emulator1 = new EmacsEmulator(activeTextEditor1, killRing);
+
+        // The killed texts are yanked on another text editor
+        await emulator1.yank();
+        assertTextEqual(
+            activeTextEditor1, "BAR");
+
+        await emulator1.yankPop();
+        assertTextEqual(
+            activeTextEditor1, "FOO");
+
+        // Repeat
+        await emulator1.yankPop();
+        assertTextEqual(
+            activeTextEditor1, "BAR");
+
+        await emulator1.yankPop();
+        assertTextEqual(
+            activeTextEditor1, "FOO");
     });
 });
