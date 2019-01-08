@@ -35,7 +35,7 @@ export class KillRing implements Disposable {
             return null;
         }
 
-        this.pointer = (this.pointer + 1) % this.maxNum;
+        this.pointer = (this.pointer + 1) % this.killRing.length;
         return this.killRing[this.pointer];
     }
 
