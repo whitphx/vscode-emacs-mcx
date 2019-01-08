@@ -1,11 +1,13 @@
+import * as assert from "assert";
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
-import {Position, Selection} from "vscode";
+import {Position, Range, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
 import { KillRing } from "../kill-ring";
+import { cursorMoves } from "../operations";
 import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
 
-suite("killRing", () => {
+suite("kill, yank, yank-pop", () => {
     let activeTextEditor: vscode.TextEditor;
 
     suite("with empty initial text", () => {
@@ -177,8 +179,226 @@ ABCDEFGHIJ`);
 
         });
 
-        test("yankPop does not work not after yank", () => {
-            // TODO
+        // Test yankPop is not executed after cursorMove or some other commands
+        const otherInterruptingCommands = [
+            "selectAll",
+        ];
+
+        const interruptingCommands: string[] = [...cursorMoves, ...otherInterruptingCommands];
+
+        interruptingCommands.forEach((interruptingCommand) => {
+            test(`yankPop does not work if ${interruptingCommand} is executed after previous yank`, async () => {
+                const killRing = new KillRing(3);
+                const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+                // Kill texts
+                await clearTextEditor(
+                    activeTextEditor,
+                    "FOO");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                await clearTextEditor(
+                    activeTextEditor,
+                    "BAR");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                // Initialize with non-empty text
+                const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+                await clearTextEditor(activeTextEditor, initialText);
+
+                // Set cursor at the middle of the text
+                activeTextEditor.selection = new Selection(
+                    new Position(1, 5),
+                    new Position(1, 5),
+                );
+
+                // yank first
+                await emulator.yank();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeBARfghij
+ABCDEFGHIJ`);
+
+                // Interruption command invoked
+                await vscode.commands.executeCommand(interruptingCommand);
+
+                // yankPop does not work
+                await emulator.yankPop();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeBARfghij
+ABCDEFGHIJ`);
+            });
+
+            test(`yankPop does not work if ${interruptingCommand} is executed after previous yankPop`, async () => {
+                const killRing = new KillRing(3);
+                const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+                // Kill texts
+                await clearTextEditor(
+                    activeTextEditor,
+                    "FOO");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                await clearTextEditor(
+                    activeTextEditor,
+                    "BAR");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                // Initialize with non-empty text
+                const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+                await clearTextEditor(activeTextEditor, initialText);
+
+                // Set cursor at the middle of the text
+                activeTextEditor.selection = new Selection(
+                    new Position(1, 5),
+                    new Position(1, 5),
+                );
+
+                // yank first
+                await emulator.yank();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeBARfghij
+ABCDEFGHIJ`);
+
+                // Then, yankPop
+                await emulator.yankPop();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeFOOfghij
+ABCDEFGHIJ`);
+
+                // Interruption command invoked
+                await vscode.commands.executeCommand(interruptingCommand);
+
+                // yankPop does not work
+                await emulator.yankPop();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeFOOfghij
+ABCDEFGHIJ`);
+            });
+
+        });
+
+        // Test for yankPop not to be executed after editing
+        const edits: Array<[string, () => Thenable<any>]> = [
+            ["edit", () => activeTextEditor.edit((editBuilder) =>
+                editBuilder.insert(new Position(0, 0), "hoge"))],
+            ["delete", () => activeTextEditor.edit((editBuilder) =>
+                editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))],
+            ["replace", () => activeTextEditor.edit((editBuilder) =>
+                editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge"))],
+        ];
+
+        edits.forEach(([label, editOp]) => {
+            test(`yankPop does not work if ${label} is executed after previous yank`, async () => {
+                const killRing = new KillRing(3);
+                const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+                // Kill texts
+                await clearTextEditor(
+                    activeTextEditor,
+                    "FOO");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                await clearTextEditor(
+                    activeTextEditor,
+                    "BAR");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                // Initialize with non-empty text
+                const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+                await clearTextEditor(activeTextEditor, initialText);
+
+                // Set cursor at the middle of the text
+                activeTextEditor.selection = new Selection(
+                    new Position(1, 5),
+                    new Position(1, 5),
+                );
+
+                // yank first
+                await emulator.yank();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeBARfghij
+ABCDEFGHIJ`);
+
+                // Interruption command invoked
+                await editOp();
+
+                // yankPop does not work
+                await emulator.yankPop();
+                assert.ok(activeTextEditor.document.getText().includes("BAR"));
+                assert.ok(!activeTextEditor.document.getText().includes("FOO"));
+            });
+
+            test(`yankPop does not work if ${label} is executed after previous yankPop`, async () => {
+                const killRing = new KillRing(3);
+                const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+                // Kill texts
+                await clearTextEditor(
+                    activeTextEditor,
+                    "FOO");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                await clearTextEditor(
+                    activeTextEditor,
+                    "BAR");
+                await vscode.commands.executeCommand("editor.action.selectAll");
+                emulator.killRegion();
+
+                // Initialize with non-empty text
+                const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+                await clearTextEditor(activeTextEditor, initialText);
+
+                // Set cursor at the middle of the text
+                activeTextEditor.selection = new Selection(
+                    new Position(1, 5),
+                    new Position(1, 5),
+                );
+
+                // yank first
+                await emulator.yank();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeBARfghij
+ABCDEFGHIJ`);
+
+                // Then, yankPop
+                await emulator.yankPop();
+                assertTextEqual(
+                    activeTextEditor, `0123456789
+abcdeFOOfghij
+ABCDEFGHIJ`);
+
+                // Interruption command invoked
+                await editOp();
+
+                // yankPop does not work
+                // yankPop does not work
+                await emulator.yankPop();
+                assert.ok(activeTextEditor.document.getText().includes("FOO"));
+                assert.ok(!activeTextEditor.document.getText().includes("BAR"));
+            });
+
         });
 
         test("shares killRing amoung multiple editors", () => {

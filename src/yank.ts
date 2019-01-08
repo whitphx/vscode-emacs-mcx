@@ -7,9 +7,19 @@ export class Yanker {
     private textEditor: TextEditor;
     private killRing: KillRing | null;  // If null, killRing is disabled and only clipboard is used.
 
+    private docChangedAfterYank = false;
+    private prevYankPositions: vscode.Position[];
+
     constructor(textEditor: TextEditor, killRing: KillRing | null) {
         this.textEditor = textEditor;
         this.killRing = killRing;
+
+        this.docChangedAfterYank = false;
+        this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
+        vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
+
+        this.prevYankPositions = [];
+
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -18,6 +28,15 @@ export class Yanker {
 
     public getTextEditor(): TextEditor {
         return this.textEditor;
+    }
+
+    public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
+        this.docChangedAfterYank = true;
+
+        // XXX: Is this a correct way to check the identity of document?
+        if (e.document.uri.toJSON() === this.textEditor.document.uri.toJSON()) {
+            this.docChangedAfterYank = true;
+        }
     }
 
     public copy(ranges: Range[]) {
@@ -29,7 +48,7 @@ export class Yanker {
         }
     }
 
-    public yank() {
+    public async yank() {
         if (this.killRing === null) {
             return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
         }
@@ -45,7 +64,10 @@ export class Yanker {
             this.killRing.push(clipboardText);
         }
 
-        return vscode.commands.executeCommand("paste", { text });
+        await vscode.commands.executeCommand("paste", { text });
+
+        this.docChangedAfterYank = false;
+        this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
     }
 
     public async yankPop() {
@@ -53,10 +75,17 @@ export class Yanker {
             return;
         }
 
+        if (this.isYankInterupted()) {
+            return;
+        }
+
         const text = this.killRing.pop();
 
         await vscode.commands.executeCommand("undo");
         await vscode.commands.executeCommand("paste", { text });
+
+        this.docChangedAfterYank = false;
+        this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
     }
 
     private getSortedRangesText(ranges: Range[]): string {
@@ -81,5 +110,15 @@ export class Yanker {
         });
 
         return allText;
+    }
+
+    private isYankInterupted(): boolean {
+        if (this.docChangedAfterYank) { return true; }
+
+        const currentActives = this.textEditor.selections.map((selection) => selection.active);
+        if (currentActives.length !== this.prevYankPositions.length) { return true; }
+        if (currentActives.some((active, i) => !active.isEqual(this.prevYankPositions[i]))) { return true; }
+
+        return false;
     }
 }
