@@ -109,7 +109,75 @@ abcdeLorem ipsumfghij
 ABCDEFGHIJ`);
         });
 
-        test("works with clipboard", () => {
+        test("works with clipboard", async () => {
+            const killRing = new KillRing(3);
+            const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+            // Kill first
+            await clearTextEditor(
+                activeTextEditor,
+                "Lorem ipsum");
+            await vscode.commands.executeCommand("editor.action.selectAll");
+            emulator.killRegion();
+
+            // Then, copy to clipboard
+            clipboardy.writeSync("12345");
+
+            // Initialize with non-empty text
+            const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+            await clearTextEditor(activeTextEditor, initialText);
+
+            // Set cursor at the middle of the text
+            activeTextEditor.selection = new Selection(
+                new Position(1, 5),
+                new Position(1, 5),
+            );
+
+            // yank firstly takes the text on clipboard
+            await emulator.yank();
+            assertTextEqual(
+                activeTextEditor, `0123456789
+abcde12345fghij
+ABCDEFGHIJ`);
+
+            // Then, yankPop takes from killRing
+            await emulator.yankPop();
+            assertTextEqual(
+                activeTextEditor, `0123456789
+abcdeLorem ipsumfghij
+ABCDEFGHIJ`);
+
+            // Repeat
+            await emulator.yankPop();
+            assertTextEqual(
+                activeTextEditor, `0123456789
+abcde12345fghij
+ABCDEFGHIJ`);
+
+            await emulator.yankPop();
+            assertTextEqual(
+                activeTextEditor, `0123456789
+abcdeLorem ipsumfghij
+ABCDEFGHIJ`);
+
+            // Repeat again
+            await emulator.yankPop();
+            assertTextEqual(
+                activeTextEditor, `0123456789
+abcde12345fghij
+ABCDEFGHIJ`);
+
+            await emulator.yankPop();
+            assertTextEqual(
+                activeTextEditor, `0123456789
+abcdeLorem ipsumfghij
+ABCDEFGHIJ`);
+
+        });
+
+        test("yankPop does not work not after yank", () => {
             // TODO
         });
 
