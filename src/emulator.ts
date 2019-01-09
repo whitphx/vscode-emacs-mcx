@@ -13,6 +13,9 @@ export class EmacsEmulator implements Disposable {
         this.textEditor = textEditor;
 
         this.yanker = new Yanker(textEditor, killRing);
+
+        this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
+        vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -22,6 +25,19 @@ export class EmacsEmulator implements Disposable {
 
     public getTextEditor(): TextEditor {
         return this.textEditor;
+    }
+
+    public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
+        // XXX: Is this a correct way to check the identity of document?
+        if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
+            if (e.contentChanges.some((contentChange) =>
+                this.textEditor.selections.some((selection) =>
+                    typeof contentChange.range.intersection(selection) !== "undefined",
+                ),
+            )) {
+                this.exitMarkMode();
+            }
+        }
     }
 
     public cursorMove(commandName: cursorMoves) {
@@ -111,16 +127,6 @@ export class EmacsEmulator implements Disposable {
                 editBuilder.delete(range);
             });
         });
-    }
-
-    public deleteRight() {
-        this.exitMarkMode();
-        vscode.commands.executeCommand("deleteRight");
-    }
-
-    public deleteLeft() {
-        this.exitMarkMode();
-        vscode.commands.executeCommand("deleteLeft");
     }
 
     public async newLine() {
