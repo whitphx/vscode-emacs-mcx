@@ -127,8 +127,8 @@ export class EmacsEmulator implements Disposable {
         this.makeSelectionsEmpty();
         this.exitMarkMode();
         await vscode.commands.executeCommand("lineBreakInsert");
-        await vscode.commands.executeCommand("cursorHome");
         await vscode.commands.executeCommand("cursorDown");
+        await vscode.commands.executeCommand("cursorEnd");
     }
 
     public dispose() {

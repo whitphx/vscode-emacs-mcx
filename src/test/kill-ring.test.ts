@@ -43,7 +43,6 @@ suite("KillRing", () => {
         assert.equal(killRing.pop(), "foo");
     });
 
-
     test("zero data", () => {
         const killRing = new KillRing(3);
 
