@@ -155,4 +155,29 @@ ABCDEFGHIJ`);
             });
         });
     });
+
+    suite("with indented text", () => {
+        setup(async () => {
+            const initialText = "{\n    \n}";
+            activeTextEditor = await setupWorkspace(initialText);
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        teardown(cleanUpWorkspace);
+
+        test("newLine preserves the indent", async () => {
+            activeTextEditor.selections = [
+                new Selection(
+                    new Position(1, 4),
+                    new Position(1, 4),
+                ),
+            ];
+
+            await emulator.newLine();
+
+            assertTextEqual(activeTextEditor, "{\n    \n    \n}");
+            assert.equal(activeTextEditor.selection.active.line, 2);
+            assert.equal(activeTextEditor.selection.active.character, 4);
+        });
+    });
 });
