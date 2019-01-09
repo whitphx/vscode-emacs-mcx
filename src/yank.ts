@@ -34,7 +34,7 @@ export class Yanker {
         this.docChangedAfterYank = true;
 
         // XXX: Is this a correct way to check the identity of document?
-        if (e.document.uri.toJSON() === this.textEditor.document.uri.toJSON()) {
+        if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
             this.docChangedAfterYank = true;
         }
     }
