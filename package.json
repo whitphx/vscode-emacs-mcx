@@ -1,7 +1,7 @@
 {
 		"name": "emacs-mcx",
 		"displayName": "emacs-mcx",
-		"description": "Emacs Friendly Keymap with multi cursor support, kill-ring, clipboard integration, and lots of improvements and bug fixes.",
+		"description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
 		"version": "0.0.12",
 		"publisher": "tuttieee",
 		"repository": {
