@@ -16,6 +16,7 @@
 				"Keymaps"
 		],
 		"license": "MIT",
+		"icon": "images/icon.png",
 		"keywords": [
 				"emacs",
 				"keybindings",
