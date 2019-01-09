@@ -129,16 +129,6 @@ export class EmacsEmulator implements Disposable {
         });
     }
 
-    public deleteRight() {
-        this.exitMarkMode();
-        vscode.commands.executeCommand("deleteRight");
-    }
-
-    public deleteLeft() {
-        this.exitMarkMode();
-        vscode.commands.executeCommand("deleteLeft");
-    }
-
     public async newLine() {
         this.makeSelectionsEmpty();
         this.exitMarkMode();
