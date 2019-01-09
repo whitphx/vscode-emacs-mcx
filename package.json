@@ -2,7 +2,7 @@
 		"name": "emacs-mcx",
 		"displayName": "emacs-mcx",
 		"description": "Emacs Friendly Keymap with multi cursor support, kill-ring integrated with clipboard.",
-		"version": "0.0.9",
+		"version": "0.0.10",
 		"publisher": "tuttieee",
 		"repository": {
 				"type": "git",
