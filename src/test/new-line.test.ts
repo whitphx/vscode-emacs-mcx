@@ -156,9 +156,9 @@ ABCDEFGHIJ`);
         });
     });
 
-    suite("with indented text", () => {
+    suite("with auto-indentation", () => {
         setup(async () => {
-            const initialText = "{\n    \n}";
+            const initialText = "()";
             activeTextEditor = await setupWorkspace(initialText);
             emulator = new EmacsEmulator(activeTextEditor);
         });
@@ -168,16 +168,41 @@ ABCDEFGHIJ`);
         test("newLine preserves the indent", async () => {
             activeTextEditor.selections = [
                 new Selection(
-                    new Position(1, 4),
-                    new Position(1, 4),
+                    new Position(0, 1),
+                    new Position(0, 1),
                 ),
             ];
 
             await emulator.newLine();
 
-            assertTextEqual(activeTextEditor, "{\n    \n    \n}");
-            assert.equal(activeTextEditor.selection.active.line, 2);
+            assertTextEqual(activeTextEditor, "(\n    \n)");
+            assert.equal(activeTextEditor.selection.active.line, 1);
             assert.equal(activeTextEditor.selection.active.character, 4);
+        });
+    });
+
+    suite("without auto-indentation", () => {
+        setup(async () => {
+            const initialText = "(a)";
+            activeTextEditor = await setupWorkspace(initialText);
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        teardown(cleanUpWorkspace);
+
+        test("newLine preserves the indent", async () => {
+            activeTextEditor.selections = [
+                new Selection(
+                    new Position(0, 2),
+                    new Position(0, 2),
+                ),
+            ];
+
+            await emulator.newLine();
+
+            assertTextEqual(activeTextEditor, "(a\n)");
+            assert.equal(activeTextEditor.selection.active.line, 1);
+            assert.equal(activeTextEditor.selection.active.character, 0);
         });
     });
 });
