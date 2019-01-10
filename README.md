@@ -1,4 +1,4 @@
-# emacs-mcx
+# Awesome Emacs Keymap (emacs-mcx)
 
 [![Build Status](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_apis/build/status/tuttieee.vscode-emacs-mcx?branchName=master)](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_build/latest?definitionId=1?branchName=master)
 
