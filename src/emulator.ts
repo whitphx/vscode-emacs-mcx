@@ -132,9 +132,16 @@ export class EmacsEmulator implements Disposable {
     public async newLine() {
         this.makeSelectionsEmpty();
         this.exitMarkMode();
+
+        // XXX: How to emulate Enter key...?
         await vscode.commands.executeCommand("lineBreakInsert");
-        await vscode.commands.executeCommand("cursorDown");
-        await vscode.commands.executeCommand("cursorEnd");
+
+        this.textEditor.selections = this.textEditor.selections.map((selection) => {
+            const lineNum = selection.active.line + 1;
+            const indent = this.textEditor.document.lineAt(lineNum).firstNonWhitespaceCharacterIndex;
+            const cursorPos = new Position(lineNum, indent);
+            return new Selection(cursorPos, cursorPos);
+        });
     }
 
     public dispose() {
