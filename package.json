@@ -402,6 +402,11 @@
 								"when": "editorTextFocus"
 						},
 						{
+								"key": "escape",
+								"command": "emacs-mcx.cancel",
+								"when": "editorTextFocus"
+						},
+						{
 								"key": "ctrl+g",
 								"command": "emacs-mcx.cancel",
 								"when": "editorTextFocus"
