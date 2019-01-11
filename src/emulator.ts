@@ -57,6 +57,16 @@ export class EmacsEmulator implements Disposable {
         this.isInMarkMode = false;
     }
 
+    public addSelectionToNextFindMatch() {
+        this.isInMarkMode = true;
+        return vscode.commands.executeCommand("editor.action.addSelectionToNextFindMatch");
+    }
+
+    public addSelectionToPreviousFindMatch() {
+        this.isInMarkMode = true;
+        return vscode.commands.executeCommand("editor.action.addSelectionToPreviousFindMatch");
+    }
+
     /**
      * Invoked by C-g
      */

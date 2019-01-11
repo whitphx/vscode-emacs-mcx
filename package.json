@@ -259,7 +259,7 @@
 						},
 						{
 								"key": "ctrl+alt+n",
-								"command": "editor.action.addSelectionToNextFindMatch",
+								"command": "emacs-mcx.addSelectionToNextFindMatch",
 								"when": "editorFocus"
 						},
 						{

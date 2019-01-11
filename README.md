@@ -43,7 +43,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-r` | Search backward |
 | `M-S-5` (`M-%` with US keyboard) | Replace |
 | `C-Enter` | Replace One Match (In replace dialog) |
-| `C-M-n` | Add selection to next find match |
+| `C-M-n` | Add selection to next find match (Tips: This extension also provides `emacs-mcx.addSelectionToNextFindMatch` command so that you can register its keybinding by yourself if you want.) |
 
 
 ### Edit commands
