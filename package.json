@@ -223,7 +223,19 @@
 								"command": "editor.action.marker.next"
 						},
 						{
+								"key": "alt+g alt+n",
+								"command": "editor.action.marker.next"
+						},
+						{
+								"key": "ctrl+x `",
+								"command": "editor.action.marker.next"
+						},
+						{
 								"key": "alt+g p",
+								"command": "editor.action.marker.prev"
+						},
+						{
+								"key": "alt+g alt+p",
 								"command": "editor.action.marker.prev"
 						},
 						{
