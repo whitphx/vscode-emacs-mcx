@@ -328,6 +328,11 @@
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
+								"key": "ctrl+o",
+								"command": "lineBreakInsert",
+								"when": "editorTextFocus && !editorReadonly"
+						},
+						{
 								"key": "ctrl+j",
 								"command": "closeFindWidget",
 								"when": "editorFocus && findWidgetVisible"
