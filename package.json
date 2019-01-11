@@ -211,6 +211,10 @@
 								"when": "editorFocus && findWidgetVisible"
 						},
 						{
+								"key": "alt+g alt+g",
+								"command": "workbench.action.gotoLine"
+						},
+						{
 								"key": "alt+g g",
 								"command": "workbench.action.gotoLine"
 						},

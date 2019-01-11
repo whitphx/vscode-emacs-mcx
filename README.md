@@ -30,7 +30,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `M-b` | Move backward by one word unit |
 | `C-v` | Scroll down by one screen unit |
 | `M-v` | Scroll up by one screen unit |
-| `M-g g` | Jump to line (command palette) |
+| `M-g g` (`M-g M-g`) | Jump to line (command palette) |
 | `M-g n` | Jump to next error |
 | `M-g p` | Jump to previous error |
 | `C-l` | Center screen on current line __(Under development)__ |
