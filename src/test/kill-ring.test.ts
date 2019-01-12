@@ -1,46 +1,65 @@
 import * as assert from "assert";
 import { KillRing } from "../kill-ring";
+import { ClipboardTextKillRingEntity } from "../kill-ring-entity/clipboard-text";
 
 suite("KillRing", () => {
     test("push, getTop, and pop", () => {
         const killRing = new KillRing(3);
 
-        killRing.push("foo");
-        killRing.push("bar");
-        killRing.push("baz");
-        killRing.push("qux");
+        const entities = [
+            new ClipboardTextKillRingEntity("foo"),
+            new ClipboardTextKillRingEntity("bar"),
+            new ClipboardTextKillRingEntity("baz"),
+            new ClipboardTextKillRingEntity("qux"),
+        ];
 
-        assert.equal(killRing.getTop(), "qux");  // Equivalent to yank
-        assert.equal(killRing.pop(), "baz");  // Equivalent to yankPop
-        assert.equal(killRing.pop(), "bar");
-        assert.equal(killRing.pop(), "qux");
-        assert.equal(killRing.pop(), "baz");
-        assert.equal(killRing.pop(), "bar");
+        entities.forEach((entity) => {
+            killRing.push(entity);
+        });
+
+        assert.equal(killRing.getTop()!.asString(), "qux");  // Equivalent to yank
+        assert.equal(killRing.pop()!.asString(), "baz");  // Equivalent to yankPop
+        assert.equal(killRing.pop()!.asString(), "bar");
+        assert.equal(killRing.pop()!.asString(), "qux");
+        assert.equal(killRing.pop()!.asString(), "baz");
+        assert.equal(killRing.pop()!.asString(), "bar");
     });
 
     test("less data than max", () => {
         const killRing = new KillRing(4);
 
-        killRing.push("foo");
-        killRing.push("bar");
-        killRing.push("baz");
+        const entities = [
+            new ClipboardTextKillRingEntity("foo"),
+            new ClipboardTextKillRingEntity("bar"),
+            new ClipboardTextKillRingEntity("baz"),
+        ];
 
-        assert.equal(killRing.getTop(), "baz");
-        assert.equal(killRing.pop(), "bar");
-        assert.equal(killRing.pop(), "foo");
-        assert.equal(killRing.pop(), "baz");
-        assert.equal(killRing.pop(), "bar");
-        assert.equal(killRing.pop(), "foo");
+        entities.forEach((entity) => {
+            killRing.push(entity);
+        });
+
+        assert.equal(killRing.getTop()!.asString(), "baz");
+        assert.equal(killRing.pop()!.asString(), "bar");
+        assert.equal(killRing.pop()!.asString(), "foo");
+        assert.equal(killRing.pop()!.asString(), "baz");
+        assert.equal(killRing.pop()!.asString(), "bar");
+        assert.equal(killRing.pop()!.asString(), "foo");
     });
 
     test("just single data", () => {
         const killRing = new KillRing(3);
 
-        killRing.push("foo");
+        const entities = [
+            new ClipboardTextKillRingEntity("foo"),
+        ];
 
-        assert.equal(killRing.getTop(), "foo");
-        assert.equal(killRing.pop(), "foo");
-        assert.equal(killRing.pop(), "foo");
+        entities.forEach((entity) => {
+            killRing.push(entity);
+        });
+
+        assert.equal(killRing.getTop()!.asString(), "foo");
+        assert.equal(killRing.pop()!.asString(), "foo");
+        assert.equal(killRing.pop()!.asString(), "foo");
     });
 
     test("zero data", () => {

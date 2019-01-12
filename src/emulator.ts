@@ -1,18 +1,18 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { KillRing } from "./kill-ring";
+import { KillYanker } from "./kill-yank";
 import { cursorMoves } from "./operations";
-import { Yanker } from "./yank";
 
 export class EmacsEmulator implements Disposable {
     private isInMarkMode = false;
     private textEditor: TextEditor;
-    private yanker: Yanker;
+    private yanker: KillYanker;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
-        this.yanker = new Yanker(textEditor, killRing);
+        this.yanker = new KillYanker(textEditor, killRing);
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
@@ -102,7 +102,8 @@ export class EmacsEmulator implements Disposable {
                 return new Range(anchor, lineEnd);
             }
         });
-        return this.killRanges(ranges);
+        this.exitMarkMode();
+        return this.yanker.kill(ranges);
     }
 
     public killWholeLine() {
@@ -113,12 +114,19 @@ export class EmacsEmulator implements Disposable {
                 new Position(selection.anchor.line + 1, 0),
             ),
         );
-        return this.killRanges(ranges);
+        this.exitMarkMode();
+        return this.yanker.kill(ranges);
     }
 
-    public killRegion(appendClipboard?: boolean) {
+    public async killRegion(appendClipboard?: boolean) {
         const ranges = this.getNonEmptySelections();
-        return this.killRanges(ranges);
+        await this.yanker.kill(ranges);
+        this.exitMarkMode();
+        this.cancelKillAppend();
+    }
+
+    public cancelKillAppend() {
+        this.yanker.cancelKillAppend();
     }
 
     public async yank() {
@@ -129,14 +137,6 @@ export class EmacsEmulator implements Disposable {
     public async yankPop() {
         await this.yanker.yankPop();
         this.exitMarkMode();
-    }
-
-    public delete(ranges: vscode.Range[]): Thenable<boolean> {
-        return this.textEditor.edit((editBuilder) => {
-            ranges.forEach((range) => {
-                editBuilder.delete(range);
-            });
-        });
     }
 
     public async newLine() {
@@ -173,12 +173,6 @@ export class EmacsEmulator implements Disposable {
 
     private hasNonEmptySelection(): boolean {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
-    }
-
-    private async killRanges(ranges: Range[]) {
-        this.yanker.copy(ranges);
-        await this.delete(ranges);
-        this.exitMarkMode();
     }
 
     private getNonEmptySelections(): Selection[] {
