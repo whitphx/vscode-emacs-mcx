@@ -6,7 +6,7 @@ import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { equalPositons } from "./utils";
 
-export class Yanker {
+export class KillYanker {
     private textEditor: TextEditor;
     private killRing: KillRing | null;  // If null, killRing is disabled and only clipboard is used.
 

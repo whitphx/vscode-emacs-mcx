@@ -1,18 +1,18 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { KillRing } from "./kill-ring";
+import { KillYanker } from "./kill-yank";
 import { cursorMoves } from "./operations";
-import { Yanker } from "./yank";
 
 export class EmacsEmulator implements Disposable {
     private isInMarkMode = false;
     private textEditor: TextEditor;
-    private yanker: Yanker;
+    private yanker: KillYanker;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
-        this.yanker = new Yanker(textEditor, killRing);
+        this.yanker = new KillYanker(textEditor, killRing);
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
