@@ -1,17 +1,19 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
-import { Range, TextEditor } from "vscode";
+import { Position, Range, TextEditor } from "vscode";
 import { KillRing } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+import { equalPositons } from "./utils";
 
 export class Yanker {
     private textEditor: TextEditor;
     private killRing: KillRing | null;  // If null, killRing is disabled and only clipboard is used.
 
     private isAppending = false;
+    private prevKillPositions: Position[];
     private docChangedAfterYank = false;
-    private prevYankPositions: vscode.Position[];
+    private prevYankPositions: Position[];
 
     constructor(textEditor: TextEditor, killRing: KillRing | null) {
         this.textEditor = textEditor;
@@ -21,6 +23,7 @@ export class Yanker {
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
 
+        this.prevKillPositions = [];
         this.prevYankPositions = [];
     }
 
@@ -36,18 +39,21 @@ export class Yanker {
         // XXX: Is this a correct way to check the identity of document?
         if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
             this.docChangedAfterYank = true;
-            // this.isAppending = false;  // TODO: this should be enable
+            this.isAppending = false;
         }
     }
 
     public async kill(ranges: Range[]) {
-        const shouldAppend = this.isAppending;
+        if (!equalPositons(this.getCursorPositions(), this.prevKillPositions)) {
+            this.isAppending = false;
+        }
 
-        this.copy(ranges, shouldAppend);
+        this.copy(ranges, this.isAppending);
 
         await this.delete(ranges);
 
         this.isAppending = true;
+        this.prevKillPositions = this.getCursorPositions();
     }
 
     public copy(ranges: Range[], shouldAppend= false) {
@@ -129,10 +135,11 @@ export class Yanker {
     private isYankInterupted(): boolean {
         if (this.docChangedAfterYank) { return true; }
 
-        const currentActives = this.textEditor.selections.map((selection) => selection.active);
-        if (currentActives.length !== this.prevYankPositions.length) { return true; }
-        if (currentActives.some((active, i) => !active.isEqual(this.prevYankPositions[i]))) { return true; }
+        const currentActives = this.getCursorPositions();
+        return !equalPositons(currentActives, this.prevYankPositions);
+    }
 
-        return false;
+    private getCursorPositions(): Position[] {
+        return this.textEditor.selections.map((selection) => selection.active);
     }
 }
