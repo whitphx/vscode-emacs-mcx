@@ -22,7 +22,6 @@ export class Yanker {
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
 
         this.prevYankPositions = [];
-
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -41,7 +40,17 @@ export class Yanker {
         }
     }
 
-    public copy(ranges: Range[]) {
+    public async kill(ranges: Range[]) {
+        const shouldAppend = this.isAppending;
+
+        this.copy(ranges, shouldAppend);
+
+        await this.delete(ranges);
+
+        this.isAppending = true;
+    }
+
+    public copy(ranges: Range[], shouldAppend= false) {
         const newKillEntity = new EditorTextKillRingEntity(ranges.map((range) => ({
             range,
             text: this.textEditor.document.getText(range),
@@ -49,7 +58,7 @@ export class Yanker {
 
         if (this.killRing !== null) {
             const currentKill = this.killRing.getTop();
-            if (this.isAppending && currentKill instanceof EditorTextKillRingEntity) {
+            if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
                 currentKill.append(newKillEntity);
                 clipboardy.writeSync(currentKill.asString());
             } else {
@@ -59,8 +68,6 @@ export class Yanker {
         } else {
             clipboardy.writeSync(newKillEntity.asString());
         }
-
-        this.isAppending = true;
     }
 
     public cancelKillAppend() {
@@ -109,6 +116,14 @@ export class Yanker {
 
         this.docChangedAfterYank = false;
         this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+    }
+
+    private delete(ranges: vscode.Range[]): Thenable<boolean> {
+        return this.textEditor.edit((editBuilder) => {
+            ranges.forEach((range) => {
+                editBuilder.delete(range);
+            });
+        });
     }
 
     private isYankInterupted(): boolean {

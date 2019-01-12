@@ -102,7 +102,8 @@ export class EmacsEmulator implements Disposable {
                 return new Range(anchor, lineEnd);
             }
         });
-        return this.killRanges(ranges);
+        this.exitMarkMode();
+        return this.yanker.kill(ranges);
     }
 
     public killWholeLine() {
@@ -113,12 +114,14 @@ export class EmacsEmulator implements Disposable {
                 new Position(selection.anchor.line + 1, 0),
             ),
         );
-        return this.killRanges(ranges);
+        this.exitMarkMode();
+        return this.yanker.kill(ranges);
     }
 
     public async killRegion(appendClipboard?: boolean) {
         const ranges = this.getNonEmptySelections();
-        await this.killRanges(ranges);
+        await this.yanker.kill(ranges);
+        this.exitMarkMode();
         this.cancelKillAppend();
     }
 
@@ -134,14 +137,6 @@ export class EmacsEmulator implements Disposable {
     public async yankPop() {
         await this.yanker.yankPop();
         this.exitMarkMode();
-    }
-
-    public delete(ranges: vscode.Range[]): Thenable<boolean> {
-        return this.textEditor.edit((editBuilder) => {
-            ranges.forEach((range) => {
-                editBuilder.delete(range);
-            });
-        });
     }
 
     public async newLine() {
@@ -178,12 +173,6 @@ export class EmacsEmulator implements Disposable {
 
     private hasNonEmptySelection(): boolean {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
-    }
-
-    private async killRanges(ranges: Range[]) {
-        this.yanker.copy(ranges);
-        await this.delete(ranges);
-        this.exitMarkMode();
     }
 
     private getNonEmptySelections(): Selection[] {
