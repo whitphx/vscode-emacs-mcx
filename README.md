@@ -101,6 +101,18 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-x 4` | Toggle split layout (vertical to horizontal) |
 | `C-x o` | Focus other split editor |
 
+### sexp
+|Command | Desc |
+|--------|------|
+| `C-M-f` (`Alt+K`) | Move forward by one s-exp |
+| `C-M-b` (`Alt+J`) | Move backward by one s-exp |
+| `C-M-SPC` (`Alt+I`) | Slurp one s-exp forward |
+| `C-M-S-SPC` (`Alt+U`) | Barf one s-exp to the front |
+
+These sexp functionalities are provided [sexp](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) extension by **haruhi-s**.
+Thanks to haruhi-s.
+[sexp](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) is declared as an Awesome Emacs Keymap's dependency so that it is also installed together.
+
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;
 - `ctrl+g`: workbench.action.gotoLine => **Use `alt+g g` instead**;

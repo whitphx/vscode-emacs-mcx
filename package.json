@@ -28,6 +28,9 @@
 				"*"
 		],
 		"main": "./out/extension.js",
+		"extensionDependencies": [
+			"haruhi-s.sexp"
+		],
 		"contributes": {
 				"keybindings": [
 						{
@@ -643,6 +646,28 @@
 								"key": "alt+backspace",
 								"command": "deleteWordLeft",
 								"when": "editorTextFocus && !editorReadonly"
+						},
+
+
+						{
+								"key": "ctrl+alt+f",
+								"command": "sexp.moveForward",
+								"when": "editorTextFocus"
+						},
+						{
+								"key": "ctrl+alt+b",
+								"command": "sexp.moveBackward",
+								"when": "editorTextFocus"
+						},
+						{
+								"command": "sexp.barf",
+								"key": "ctrl+alt+shift+space",
+								"when": "editorTextFocus"
+						},
+						{
+								"command": "sexp.slurp",
+								"key": "ctrl+alt+space",
+								"when": "editorTextFocus"
 						}
 				]
 		},
