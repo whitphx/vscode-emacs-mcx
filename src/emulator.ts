@@ -116,9 +116,14 @@ export class EmacsEmulator implements Disposable {
         return this.killRanges(ranges);
     }
 
-    public killRegion(appendClipboard?: boolean) {
+    public async killRegion(appendClipboard?: boolean) {
         const ranges = this.getNonEmptySelections();
-        return this.killRanges(ranges);
+        await this.killRanges(ranges);
+        this.cancelKillAppend();
+    }
+
+    public cancelKillAppend() {
+        this.yanker.cancelKillAppend();
     }
 
     public async yank() {

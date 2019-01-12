@@ -2,11 +2,14 @@ import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Range, TextEditor } from "vscode";
 import { KillRing } from "./kill-ring";
+import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
+import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 
 export class Yanker {
     private textEditor: TextEditor;
     private killRing: KillRing | null;  // If null, killRing is disabled and only clipboard is used.
 
+    private isAppending = false;
     private docChangedAfterYank = false;
     private prevYankPositions: vscode.Position[];
 
@@ -31,21 +34,37 @@ export class Yanker {
     }
 
     public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
-        this.docChangedAfterYank = true;
-
         // XXX: Is this a correct way to check the identity of document?
         if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
             this.docChangedAfterYank = true;
+            // this.isAppending = false;  // TODO: this should be enable
         }
     }
 
     public copy(ranges: Range[]) {
-        const text = this.getSortedRangesText(ranges);
-        clipboardy.writeSync(text);
+        const newKillEntity = new EditorTextKillRingEntity(ranges.map((range) => ({
+            range,
+            text: this.textEditor.document.getText(range),
+        })));
 
         if (this.killRing !== null) {
-            this.killRing.push(text);
+            const currentKill = this.killRing.getTop();
+            if (this.isAppending && currentKill instanceof EditorTextKillRingEntity) {
+                currentKill.append(newKillEntity);
+                clipboardy.writeSync(currentKill.asString());
+            } else {
+                this.killRing.push(newKillEntity);
+                clipboardy.writeSync(newKillEntity.asString());
+            }
+        } else {
+            clipboardy.writeSync(newKillEntity.asString());
         }
+
+        this.isAppending = true;
+    }
+
+    public cancelKillAppend() {
+        this.isAppending = false;
     }
 
     public async yank() {
@@ -54,17 +73,17 @@ export class Yanker {
         }
 
         const clipboardText = clipboardy.readSync();
-        const killRingText = this.killRing.getTop();
+        const killRingEntity = this.killRing.getTop();
 
-        let text: string;
-        if (clipboardText && clipboardText === killRingText) {
-            text = killRingText;
+        let pasteText: string;
+        if (killRingEntity === null || !killRingEntity.isSameClipboardText(clipboardText)) {
+            this.killRing.push(new ClipboardTextKillRingEntity(clipboardText));
+            pasteText = clipboardText;
         } else {
-            text = clipboardText;
-            this.killRing.push(clipboardText);
+            pasteText = killRingEntity.asString();
         }
 
-        await vscode.commands.executeCommand("paste", { text });
+        await vscode.commands.executeCommand("paste", { text: pasteText });
 
         this.docChangedAfterYank = false;
         this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
@@ -79,37 +98,17 @@ export class Yanker {
             return;
         }
 
-        const text = this.killRing.pop();
+        const killRingEntity = this.killRing.pop();
+        if (killRingEntity === null) {
+            return;
+        }
+        const text = killRingEntity.asString();
 
         await vscode.commands.executeCommand("undo");
         await vscode.commands.executeCommand("paste", { text });
 
         this.docChangedAfterYank = false;
         this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
-    }
-
-    private getSortedRangesText(ranges: Range[]): string {
-        const sortedRanges = ranges
-            .sort((a, b) => {
-                if (a.start.line === b.start.line) {
-                    return a.start.character - b.start.character;
-                } else {
-                    return a.start.line - b.start.line;
-                }
-            });
-
-        let allText = "";
-        sortedRanges.forEach((range, i) => {
-            const selectedText = this.textEditor.document.getText(range);
-            const prevRange = sortedRanges[i - 1];
-            if (prevRange && prevRange.start.line !== range.start.line) {
-                allText += "\n" + selectedText;
-            } else {
-                allText += selectedText;
-            }
-        });
-
-        return allText;
     }
 
     private isYankInterupted(): boolean {
