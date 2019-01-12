@@ -2,7 +2,7 @@
 		"name": "emacs-mcx",
 		"displayName": "Awesome Emacs Keymap",
 		"description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
-		"version": "0.1.1",
+		"version": "0.1.2",
 		"publisher": "tuttieee",
 		"repository": {
 				"type": "git",
@@ -29,7 +29,7 @@
 		],
 		"main": "./out/extension.js",
 		"extensionDependencies": [
-			"haruhi-s.sexp"
+				"haruhi-s.sexp"
 		],
 		"contributes": {
 				"keybindings": [
@@ -647,8 +647,6 @@
 								"command": "deleteWordLeft",
 								"when": "editorTextFocus && !editorReadonly"
 						},
-
-
 						{
 								"key": "ctrl+alt+f",
 								"command": "sexp.moveForward",
