@@ -1,6 +1,7 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
+import { EditorIdentity } from "./editorIdentity";
 import { KillRing } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
@@ -20,11 +21,13 @@ export class KillYanker {
         this.killRing = killRing;
 
         this.docChangedAfterYank = false;
-        this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
-        vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
-
         this.prevKillPositions = [];
         this.prevYankPositions = [];
+
+        this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
+        vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
+        this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
+        vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -38,6 +41,13 @@ export class KillYanker {
     public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
         // XXX: Is this a correct way to check the identity of document?
         if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
+            this.docChangedAfterYank = true;
+            this.isAppending = false;
+        }
+    }
+
+    public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
+        if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
             this.docChangedAfterYank = true;
             this.isAppending = false;
         }
