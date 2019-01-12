@@ -127,3 +127,4 @@ Thanks to haruhi-s.
 - `ctrl+/`: editor.action.commentLine => **Use `ctrl+;` instead**;
 - `ctrl+p` & `ctrl+e`: workbench.action.quickOpen => **Use `ctrl+x b` instead**;
 - `ctrl+p`: workbench.action.quickOpenNavigateNext => **Use `ctrl+n` instead**.
+- `ctrl+o`: workbench.action.files.openFileFolder;
