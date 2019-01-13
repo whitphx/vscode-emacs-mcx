@@ -422,7 +422,7 @@
 						},
 						{
 								"key": "ctrl+l",
-								"command": "emacs-mcx.scrollLineToCenterTopBottom",
+								"command": "emacs-mcx.recenterTopBottom",
 								"when": "editorTextFocus"
 						},
 						{
