@@ -7,6 +7,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - to make it configurable to turn on and off kill-ring integration with clipboard
     - to support more kill commands
 - To support `M-l` (downcase-word) and `M-u` (upcase-word)
+- `C-l` (recenter-top-bottom)
+- `C-x C-o` (delete-blank-lines)
 
 ## [0.1.2] - 2019-01-13
 ### Added
