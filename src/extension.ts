@@ -103,10 +103,13 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.newLine();
     });
 
+    registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
+        emulator.recenterTopBottom();
+    });
+
     // TODO: Implement these commands
     [
         "emacs-mcx.deleteBlankLines",
-        "emacs-mcx.scrollLineToCenterTopBottom",
     ].forEach((commandName) => {
         registerEmulatorCommand(commandName, (emulator) => {
             vscode.window.showInformationMessage(`Sorry, ${commandName} is not implemented yet.`);

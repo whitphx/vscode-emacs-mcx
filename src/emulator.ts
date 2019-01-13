@@ -3,16 +3,21 @@ import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { cursorMoves } from "./operations";
+import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
-    private isInMarkMode = false;
     private textEditor: TextEditor;
+
+    private isInMarkMode = false;
+
     private yanker: KillYanker;
+    private recenterer: Recenterer;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
         this.yanker = new KillYanker(textEditor, killRing);
+        this.recenterer = new Recenterer(textEditor);
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
@@ -21,6 +26,7 @@ export class EmacsEmulator implements Disposable {
     public setTextEditor(textEditor: TextEditor) {
         this.textEditor = textEditor;
         this.yanker.setTextEditor(textEditor);
+        this.recenterer.setTextEditor(textEditor);
     }
 
     public getTextEditor(): TextEditor {
@@ -80,6 +86,8 @@ export class EmacsEmulator implements Disposable {
         if (this.isInMarkMode) {
             this.exitMarkMode();
         }
+
+        this.recenterer.reset();
     }
 
     public copyRegion() {
@@ -154,8 +162,13 @@ export class EmacsEmulator implements Disposable {
         });
     }
 
+    public recenterTopBottom() {
+        this.recenterer.recenterTopBottom();
+    }
+
     public dispose() {
         delete this.yanker;
+        delete this.recenterer;
     }
 
     private makeSelectionsEmpty() {

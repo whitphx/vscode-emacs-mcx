@@ -33,7 +33,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `M-g g` (`M-g M-g`) | Jump to line (command palette) |
 | `M-g n` (`M-g M-n`, ``C-x ` ``) | Jump to next error |
 | `M-g p` (`M-g M-p`) | Jump to previous error |
-| `C-l` | Center screen on current line __(Under development)__ |
+| `C-l` | Center screen on current line (recenter-top-bottom) |
 
 
 ### Search Commands
