@@ -175,17 +175,19 @@ abcdefghij
             });
         });
 
-        // Test kill appending is not enabled after editing
-        const edits: Array<[string, () => Thenable<any>]> = [
+        // Test kill appending is not enabled after editing or some other ops
+        const ops: Array<[string, () => Thenable<any>]> = [
             ["edit", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.insert(new Position(0, 0), "hoge"))],
             ["delete", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))],
             ["replace", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge"))],
+
+            ["cancel", async () => await emulator.cancel()],
         ];
-        edits.forEach(([label, editOp]) => {
-            test(`it does not appends killed text if editing (${label})`, async () => {
+        ops.forEach(([label, op]) => {
+            test(`it does not append the killed text after ${label}`, async () => {
                 activeTextEditor.selections = [
                     new Selection(new Position(1, 5), new Position(1, 5)),
                 ];
@@ -193,7 +195,7 @@ abcdefghij
                 await emulator.killLine();  // 2st line
                 await emulator.killLine();  // EOL of 2st
 
-                await editOp();  // Interrupt
+                await op();  // Interrupt
 
                 await emulator.killLine();  // 3nd line
                 await emulator.killLine();  // EOL of 3nd (no effect)

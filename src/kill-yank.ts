@@ -66,7 +66,7 @@ export class KillYanker {
         this.prevKillPositions = this.getCursorPositions();
     }
 
-    public copy(ranges: Range[], shouldAppend= false) {
+    public copy(ranges: Range[], shouldAppend = false) {
         const newKillEntity = new EditorTextKillRingEntity(ranges.map((range) => ({
             range,
             text: this.textEditor.document.getText(range),
