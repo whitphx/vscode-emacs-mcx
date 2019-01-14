@@ -2,13 +2,10 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+- `C-x C-o` (delete-blank-lines)
 - Improvements of kill-ring
     - to make the maximum length of kill ring configurable
     - to make it configurable to turn on and off kill-ring integration with clipboard
-    - to support more kill commands
-- To support `M-l` (downcase-word) and `M-u` (upcase-word)
-- `C-l` (recenter-top-bottom)
-- `C-x C-o` (delete-blank-lines)
 - To support more kinds of kill command
     - `M-d`: (kill-word)
     - `M-DEL`: ((backward-kill-word)
@@ -16,6 +13,14 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-k`: (kill-sentence)
     - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
+
+## [0.1.3] - 2019-01-14
+### Added
+- `C-l` (recenter-top-bottom) (#40)
+- To support `M-l` (downcase-word) and `M-u` (upcase-word) (#23)
+
+### Fixed
+- `C-g` (`ESC`) cancels continuous kill (#42)
 
 ## [0.1.2] - 2019-01-13
 ### Added
