@@ -428,7 +428,12 @@
 						{
 								"key": "escape",
 								"command": "emacs-mcx.cancel",
-								"when": "editorTextFocus"
+								"when": "editorTextFocus && editorHasSelection"
+						},
+						{
+								"key": "escape",
+								"command": "emacs-mcx.cancel",
+								"when": "editorTextFocus && editorHasMultipleSelections"
 						},
 						{
 								"key": "ctrl+g",
