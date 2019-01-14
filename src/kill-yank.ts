@@ -118,6 +118,7 @@ export class KillYanker {
         }
 
         if (this.isYankInterupted()) {
+            vscode.window.setStatusBarMessage("Previous command was not a yank");
             return;
         }
 
