@@ -6,6 +6,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - Improvements of kill-ring
     - to make the maximum length of kill ring configurable
     - to make it configurable to turn on and off kill-ring integration with clipboard
+    - to browse kill-ring contents
 - To support more kinds of kill command
     - `M-d`: (kill-word)
     - `M-DEL`: ((backward-kill-word)
@@ -13,6 +14,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-k`: (kill-sentence)
     - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
+
+## [0.1.4] - 2019-01-14
+### Fixed
+- Fix `ESC` not to override existent necessary keybindings
+- Fix yank-pop to show a status bar message if invoked not after yank
 
 ## [0.1.3] - 2019-01-14
 ### Added
