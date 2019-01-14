@@ -10,13 +10,13 @@ export class EmacsEmulator implements Disposable {
 
     private isInMarkMode = false;
 
-    private yanker: KillYanker;
+    private killYanker: KillYanker;
     private recenterer: Recenterer;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
-        this.yanker = new KillYanker(textEditor, killRing);
+        this.killYanker = new KillYanker(textEditor, killRing);
         this.recenterer = new Recenterer(textEditor);
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
@@ -25,7 +25,7 @@ export class EmacsEmulator implements Disposable {
 
     public setTextEditor(textEditor: TextEditor) {
         this.textEditor = textEditor;
-        this.yanker.setTextEditor(textEditor);
+        this.killYanker.setTextEditor(textEditor);
         this.recenterer.setTextEditor(textEditor);
     }
 
@@ -87,13 +87,13 @@ export class EmacsEmulator implements Disposable {
             this.exitMarkMode();
         }
 
-        this.yanker.cancelKillAppend();
+        this.killYanker.cancelKillAppend();
         this.recenterer.reset();
     }
 
     public copyRegion() {
         const ranges = this.getNonEmptySelections();
-        this.yanker.copy(ranges);
+        this.killYanker.copy(ranges);
         this.cancel();
     }
 
@@ -112,7 +112,7 @@ export class EmacsEmulator implements Disposable {
             }
         });
         this.exitMarkMode();
-        return this.yanker.kill(ranges);
+        return this.killYanker.kill(ranges);
     }
 
     public killWholeLine() {
@@ -124,27 +124,27 @@ export class EmacsEmulator implements Disposable {
             ),
         );
         this.exitMarkMode();
-        return this.yanker.kill(ranges);
+        return this.killYanker.kill(ranges);
     }
 
     public async killRegion(appendClipboard?: boolean) {
         const ranges = this.getNonEmptySelections();
-        await this.yanker.kill(ranges);
+        await this.killYanker.kill(ranges);
         this.exitMarkMode();
         this.cancelKillAppend();
     }
 
     public cancelKillAppend() {
-        this.yanker.cancelKillAppend();
+        this.killYanker.cancelKillAppend();
     }
 
     public async yank() {
-        await this.yanker.yank();
+        await this.killYanker.yank();
         this.exitMarkMode();
     }
 
     public async yankPop() {
-        await this.yanker.yankPop();
+        await this.killYanker.yankPop();
         this.exitMarkMode();
     }
 
@@ -168,7 +168,7 @@ export class EmacsEmulator implements Disposable {
     }
 
     public dispose() {
-        delete this.yanker;
+        delete this.killYanker;
         delete this.recenterer;
     }
 
