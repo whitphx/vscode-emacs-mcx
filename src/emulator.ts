@@ -87,6 +87,7 @@ export class EmacsEmulator implements Disposable {
             this.exitMarkMode();
         }
 
+        this.yanker.cancelKillAppend();
         this.recenterer.reset();
     }
 
