@@ -73,7 +73,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 ### Other Commands
 |Command | Desc |
 |--------|------|
-| `C-g` | Cancel |
+| `C-g` (`ESC`) | Cancel |
 | `C-space` | Set mark |
 | `C-quote` | IntelliSense Suggestion |
 | `M-x` | Open command palette |
