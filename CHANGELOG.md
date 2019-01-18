@@ -15,6 +15,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
 
+## [0.1.5] - 2019-01-18
+### Fixed
+- status bar messages disappear when other operations are invoked (or 10 seconds after they appear).
+
 ## [0.1.4] - 2019-01-14
 ### Fixed
 - Fix `ESC` not to override existent necessary keybindings
