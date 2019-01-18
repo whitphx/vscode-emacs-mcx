@@ -4,10 +4,35 @@ import * as vscode from "vscode";
  * Shows emacs-like status bar message which disappears when any other command is invoked.
  */
 export class MessageManager implements vscode.Disposable {
+
+    /**
+     * MessageManager uses singleton pattern.
+     */
+    public static get instance(): MessageManager {
+        return this.inst;
+    }
+
+    public static initialize(context: vscode.ExtensionContext) {
+        if (this.inst) {
+            return;
+        }
+
+        this.inst = new MessageManager();
+        context.subscriptions.push(this.inst);
+    }
+
+    public static showMessage(text: string) {
+        if (this.instance) {
+            this.instance.showMessage(text);
+        }
+    }
+
+    private static inst: MessageManager;
+
     private timeout: number;
     private disposable: vscode.Disposable | null = null;
 
-    constructor(timeout: number = 10000) {
+    private constructor(timeout: number = 10000) {
         this.timeout = timeout;
 
         this.onInterrupt = this.onInterrupt.bind(this);
@@ -43,6 +68,9 @@ export class MessageManager implements vscode.Disposable {
     }
 
     public showMessage(text: string) {
+        if (this.disposable) {
+            this.disposable.dispose();
+        }
         this.disposable = vscode.window.setStatusBarMessage(text, this.timeout);
     }
 

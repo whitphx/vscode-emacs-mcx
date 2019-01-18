@@ -5,6 +5,7 @@ import { EditorIdentity } from "./editorIdentity";
 import { KillRing } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+import { MessageManager } from "./message";
 import { equalPositons } from "./utils";
 
 export class KillYanker {
@@ -118,7 +119,7 @@ export class KillYanker {
         }
 
         if (this.isYankInterupted()) {
-            vscode.window.setStatusBarMessage("Previous command was not a yank");
+            MessageManager.showMessage("Previous command was not a yank");
             return;
         }
 
