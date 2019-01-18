@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
+import { MessageManager } from "./message";
 import { cursorMoves } from "./operations";
 import { Recenterer } from "./recenter";
 
@@ -54,8 +55,10 @@ export class EmacsEmulator implements Disposable {
         if (this.isInMarkMode && !this.hasNonEmptySelection()) {
             // Toggle if enterMarkMode is invoked continuously without any cursor move.
             this.isInMarkMode = false;
+            MessageManager.showMessage("Mark deactivated");
         } else {
             this.isInMarkMode = true;
+            MessageManager.showMessage("Mark activated");
         }
     }
 
@@ -89,6 +92,8 @@ export class EmacsEmulator implements Disposable {
 
         this.killYanker.cancelKillAppend();
         this.recenterer.reset();
+
+        MessageManager.showMessage("Quit");
     }
 
     public copyRegion() {

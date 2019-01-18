@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-ring";
+import { MessageManager } from "./message";
 import { cursorMoves } from "./operations";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -11,6 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     const emulatorMap = new EmacsEmulatorMap(killRing);
     context.subscriptions.push(emulatorMap);
+
+    MessageManager.initialize(context);
 
     function getAndUpdateEmulator() {
         const activeTextEditor = vscode.window.activeTextEditor;
