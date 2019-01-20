@@ -20,21 +20,38 @@ export async function deleteBlankLines(textEditor: TextEditor) {
 
         // Search for the following empty lines and get the final line number
         let followingLineOffset = 0;
-        while (curLineNum + followingLineOffset + 1 <document.lineCount &&
+        while (curLineNum + followingLineOffset + 1 < document.lineCount &&
             document.lineAt(curLineNum + followingLineOffset + 1).isEmptyOrWhitespace) {
             followingLineOffset++;
         }
-        if (followingLineOffset === 0) {
-            // No following empty line exists
-            break;
+
+        // Search for the previous empty lines and get the first line number
+        let previousLineOffset = 0;
+        while (curLineNum - previousLineOffset - 1 >= 0 &&
+            document.lineAt(curLineNum - previousLineOffset - 1).isEmptyOrWhitespace) {
+            previousLineOffset++;
         }
-        const finalFollowingEmptyLineNum = curLineNum + followingLineOffset;
 
         await textEditor.edit((editBuilder) => {
-            editBuilder.delete(new Range(
-                new Position(curLineNum + 1, 0),
-                document.lineAt(finalFollowingEmptyLineNum).rangeIncludingLineBreak.end,
-            ));
+            if (followingLineOffset > 0) {
+                // Following empty lines exist
+                const finalFollowingEmptyLineNum = curLineNum + followingLineOffset;
+
+                editBuilder.delete(new Range(
+                    new Position(curLineNum + 1, 0),
+                    document.lineAt(finalFollowingEmptyLineNum).rangeIncludingLineBreak.end,
+                ));
+            }
+
+            if (previousLineOffset > 0) {
+                // Previous empty lines exist
+                const firstPreviousEmptyLineNum = curLineNum - previousLineOffset;
+
+                editBuilder.delete(new Range(
+                    new Position(firstPreviousEmptyLineNum, 0),
+                    document.lineAt(curLineNum - 1).rangeIncludingLineBreak.end,
+                ));
+            }
         });
     }
 }
