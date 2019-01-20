@@ -67,7 +67,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-x u` (`C-/`)| Undo |
 | `C-;` | Toggle line comment in and out |
 | `M-;` | Toggle region comment in and out |
-| `C-x C-l` (`M-l`) | Convert to lower case (On Emacs' original behavior, `C-x C-l` and `M-l` are assigned to different functionalities. However, this extension assigns those to the same `editor.action.transformToLowercase` command which works similarly to both commands. Upper case (below) is same) |
+| `C-x C-l` (`M-l`) | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Uppercase (below) is same) |
 | `C-x C-u` (`M-u`) | Convert to upper case |
 
 ### Other Commands
@@ -107,7 +107,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-M-f` (`Alt+K`) | Move forward by one s-exp |
 | `C-M-b` (`Alt+J`) | Move backward by one s-exp |
 | `C-M-SPC` (`Alt+I`) | Slurp one s-exp forward |
-| `C-M-S-SPC` (`Alt+U`) | Barf one s-exp to the front |
+| `C-M-S-SPC` ~~(`Alt+U`)~~ | Barf one s-exp to the front |
 
 These sexp functionalities are provided [sexp](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) extension by **haruhi-s**.
 Thanks to haruhi-s.
