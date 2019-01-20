@@ -639,22 +639,22 @@
 						},
 						{
 								"key": "ctrl+x ctrl+l",
-								"command": "editor.action.transformToLowercase",
+								"command": "emacs-mcx.transformToLowercase",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
 								"key": "alt+l",
-								"command": "editor.action.transformToLowercase",
+								"command": "emacs-mcx.transformToLowercase",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
 								"key": "ctrl+x ctrl+u",
-								"command": "editor.action.transformToUppercase",
+								"command": "emacs-mcx.transformToUppercase",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
 								"key": "alt+u",
-								"command": "editor.action.transformToUppercase",
+								"command": "emacs-mcx.transformToUppercase",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
