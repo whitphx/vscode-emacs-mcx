@@ -62,7 +62,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-o` | Open line |
 | `C-j` | New line |
 | `C-m` | New line |
-| `C-x C-o` | Delete blank lines around __(Under development)__ |
+| `C-x C-o` | Delete blank lines around (delete-blank-lines) |
 | `C-x h` | Select All |
 | `C-x u` (`C-/`)| Undo |
 | `C-;` | Toggle line comment in and out |

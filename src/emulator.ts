@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { deleteBlankLines } from "./delete-blank-lines";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
@@ -166,6 +167,10 @@ export class EmacsEmulator implements Disposable {
             const cursorPos = new Position(lineNum, indent);
             return new Selection(cursorPos, cursorPos);
         });
+    }
+
+    public deleteBlankLines() {
+        return deleteBlankLines(this.textEditor);
     }
 
     public async transformToUppercase() {

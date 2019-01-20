@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
-import {Position, Range, TextEditor} from "vscode";
+import {Position, Range, Selection, TextEditor} from "vscode";
 
 export async function setupWorkspace(initialText: string = ""): Promise<vscode.TextEditor> {
     const doc = await vscode.workspace.openTextDocument({
@@ -16,7 +16,7 @@ export async function setupWorkspace(initialText: string = ""): Promise<vscode.T
     return activeTextEditor!;
 }
 
-export async function clearTextEditor(textEditor: vscode.TextEditor, initializeWith: string = "") {
+export async function clearTextEditor(textEditor: TextEditor, initializeWith: string = "") {
     const doc = textEditor.document;
     await textEditor.edit((editBuilder) => {
         editBuilder.delete(new Range(
@@ -31,6 +31,11 @@ export async function clearTextEditor(textEditor: vscode.TextEditor, initializeW
         );
     });
     assert.equal(doc.getText(), initializeWith);
+}
+
+export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>) {
+    textEditor.selections = positions.map((p) =>
+        new Selection(new Position(p[0], p[1]), new Position(p[0], p[1])));
 }
 
 export async function cleanUpWorkspace() {
