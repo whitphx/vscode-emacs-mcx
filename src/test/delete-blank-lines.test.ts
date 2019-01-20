@@ -28,35 +28,24 @@ ABCDEFGHIJ`;
 
     teardown(cleanUpWorkspace);
 
-    test("removing all but 1 lines around the cursor", async () => {
-        setEmptyCursors(activeTextEditor, [1, 0]);
+    const cursorPositionsLinst: Array<Array<[number, number]>> = [
+        [[1, 0], [7, 0]],  // At the beginning of each blanks
+        [[3, 0], [9, 0]],  // At the middle of each blanks
+        [[5, 0], [11, 0]],  // At the end of each blanks
+    ];
+    cursorPositionsLinst.forEach((cursorPositions) => {
+        test("removing all but 1 lines around the cursor with multi cursor", async () => {
+            setEmptyCursors(activeTextEditor, ...cursorPositions);
 
-        await emulator.deleteBlankLines();
+            await emulator.deleteBlankLines();
 
-        const expected = `0123456789
-
-abcdefghij
-
-
-
-
-
-ABCDEFGHIJ`;
-
-        assertTextEqual(activeTextEditor, expected);
-    });
-
-    test("removing all but 1 lines around the cursor with multi cursor", async () => {
-        setEmptyCursors(activeTextEditor, [1, 0], [7, 0]);
-
-        await emulator.deleteBlankLines();
-
-        const expected = `0123456789
+            const expected = `0123456789
 
 abcdefghij
 
 ABCDEFGHIJ`;
 
-        assertTextEqual(activeTextEditor, expected);
+            assertTextEqual(activeTextEditor, expected);
+        });
     });
 });
