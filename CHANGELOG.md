@@ -2,7 +2,6 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
-- `C-x C-o` (delete-blank-lines)
 - Improvements of kill-ring
     - to make the maximum length of kill ring configurable
     - to make it configurable to turn on and off kill-ring integration with clipboard
@@ -15,6 +14,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+
+## [0.3.0] - 2019-01-20
+### Added
+- `C-x C-o` (delete-blank-lines)
 
 ## [0.2.0] - 2019-01-20
 ### Added
