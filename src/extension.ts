@@ -114,17 +114,12 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.transformToLowercase();
     });
 
-    registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
-        emulator.recenterTopBottom();
+    registerEmulatorCommand("emacs-mcx.deleteBlankLines", (emulator) => {
+        emulator.deleteBlankLines();
     });
 
-    // TODO: Implement these commands
-    [
-        "emacs-mcx.deleteBlankLines",
-    ].forEach((commandName) => {
-        registerEmulatorCommand(commandName, (emulator) => {
-            vscode.window.showInformationMessage(`Sorry, ${commandName} is not implemented yet.`);
-        });
+    registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
+        emulator.recenterTopBottom();
     });
 }
 
