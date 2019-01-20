@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import { EmacsEmulator } from "../emulator";
 import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace, setEmptyCursors} from "./utils";
 
-suite.only("deleteBlankLines", () => {
+suite("deleteBlankLines", () => {
     let activeTextEditor: vscode.TextEditor;
     let emulator: EmacsEmulator;
 
