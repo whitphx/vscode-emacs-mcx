@@ -1,7 +1,6 @@
-import * as assert from "assert";
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../emulator";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace, setEmptyCursors} from "./utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace} from "./utils";
 
 suite("deleteBlankLines", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -73,7 +72,7 @@ xxx    yyy
 
     suite("cursors are at the end of non-empty lines", () => {
         const cursorPositionsLinst: Array<Array<[number, number]>> = [
-            [[0, 10], [6, 10]]
+            [[0, 10], [6, 10]],
         ];
         cursorPositionsLinst.forEach((cursorPositions) => {
             test("removing all following lines", async () => {
