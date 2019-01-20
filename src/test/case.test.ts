@@ -53,7 +53,8 @@ suite("transformToUppercase", () => {
 
             teardown(cleanUpWorkspace);
 
-            test("cursor moves with upcasing which enables continuous transformation", async () => {
+            // tslint:disable-next-line:max-line-length
+            test("cursor moves with upcasing which enables continuous transformation when the selection is empty", async () => {
                 activeTextEditor.selections = [
                     new Selection(new Position(0, 0), new Position(0, 0)),
                 ];
@@ -119,7 +120,8 @@ suite("transformToLowercase", () => {
 
             teardown(cleanUpWorkspace);
 
-            test("cursor moves with downcasing which enables continuous transformation", async () => {
+            // tslint:disable-next-line:max-line-length
+            test("cursor moves with downcasing which enables continuous transformation when the selection is empty", async () => {
                 activeTextEditor.selections = [
                     new Selection(new Position(0, 0), new Position(0, 0)),
                 ];

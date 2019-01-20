@@ -169,12 +169,16 @@ export class EmacsEmulator implements Disposable {
     }
 
     public async transformToUppercase() {
-        await vscode.commands.executeCommand("emacs-mcx.cursorWordRight");
+        if (!this.hasNonEmptySelection()) {
+            await this.cursorMove("cursorWordRight");
+        }
         await vscode.commands.executeCommand("editor.action.transformToUppercase");
     }
 
     public async transformToLowercase() {
-        await vscode.commands.executeCommand("emacs-mcx.cursorWordRight");
+        if (!this.hasNonEmptySelection()) {
+            await this.cursorMove("cursorWordRight");
+        }
         await vscode.commands.executeCommand("editor.action.transformToLowercase");
     }
 

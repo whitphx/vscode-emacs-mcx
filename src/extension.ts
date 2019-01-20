@@ -106,6 +106,14 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.newLine();
     });
 
+    registerEmulatorCommand("emacs-mcx.transformToUppercase", (emulator) => {
+        emulator.transformToUppercase();
+    });
+
+    registerEmulatorCommand("emacs-mcx.transformToLowercase", (emulator) => {
+        emulator.transformToLowercase();
+    });
+
     registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
         emulator.recenterTopBottom();
     });
