@@ -168,6 +168,16 @@ export class EmacsEmulator implements Disposable {
         });
     }
 
+    public async transformToUppercase() {
+        await vscode.commands.executeCommand("emacs-mcx.cursorWordRight");
+        await vscode.commands.executeCommand("editor.action.transformToUppercase");
+    }
+
+    public async transformToLowercase() {
+        await vscode.commands.executeCommand("emacs-mcx.cursorWordRight");
+        await vscode.commands.executeCommand("editor.action.transformToLowercase");
+    }
+
     public recenterTopBottom() {
         this.recenterer.recenterTopBottom();
     }

@@ -1,38 +1,136 @@
 import * as assert from "assert";
-import {Position, Range, Selection, TextEditor} from "vscode";
+import {Position, Selection, TextEditor} from "vscode";
 import { EmacsEmulator } from "../emulator";
-import { cleanUpWorkspace, setupWorkspace, assertTextEqual} from "./utils";
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace} from "./utils";
 
-suite("upcaseWord", () => {
+suite("transformToUppercase", () => {
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
 
-    setup(async () => {
-        const initialText = "aaa bbb ccc";
-        activeTextEditor = await setupWorkspace(initialText);
-        emulator = new EmacsEmulator(activeTextEditor);
+    // tslint:disable:object-literal-sort-keys
+    const testCases = [
+        {
+            initialText: "aaa bbb ccc",
+            expectedResults: [
+                { cursorAt: new Position(0, 3), text: "AAA bbb ccc"},
+                { cursorAt: new Position(0, 7), text: "AAA BBB ccc"},
+                { cursorAt: new Position(0, 11), text: "AAA BBB CCC"},
+            ],
+        },
+        {
+            initialText: "aaa  bbb  ccc",
+            expectedResults: [
+                { cursorAt: new Position(0, 3), text: "AAA  bbb  ccc"},
+                { cursorAt: new Position(0, 8), text: "AAA  BBB  ccc"},
+                { cursorAt: new Position(0, 13), text: "AAA  BBB  CCC"},
+            ],
+        },
+        {
+            initialText: "aaa\nbbb\nccc",
+            expectedResults: [
+                { cursorAt: new Position(0, 3), text: "AAA\nbbb\nccc"},
+                { cursorAt: new Position(1, 3), text: "AAA\nBBB\nccc"},
+                { cursorAt: new Position(2, 3), text: "AAA\nBBB\nCCC"},
+            ],
+        },
+        // TODO: Currently, this test case fails.
+        // {
+        //     initialText: "aaa \nbbb \nccc",
+        //     expectedResults: [
+        //         { cursorAt: new Position(0, 3), text: "AAA\nbbb\nccc"},
+        //         { cursorAt: new Position(1, 3), text: "AAA\nBBB\nccc"},
+        //         { cursorAt: new Position(2, 3), text: "AAA\nBBB\nCCC"},
+        //     ],
+        // },
+    ];
+
+    testCases.forEach(({ initialText, expectedResults }) => {
+        suite(`initialText is ${initialText}`, () => {
+            setup(async () => {
+                activeTextEditor = await setupWorkspace(initialText);
+                emulator = new EmacsEmulator(activeTextEditor);
+            });
+
+            teardown(cleanUpWorkspace);
+
+            test("cursor moves with upcasing which enables continuous transformation", async () => {
+                activeTextEditor.selections = [
+                    new Selection(new Position(0, 0), new Position(0, 0)),
+                ];
+
+                for (const { cursorAt, text } of expectedResults) {
+                    await emulator.transformToUppercase();
+                    assertTextEqual(activeTextEditor, text);
+                    assert.ok(activeTextEditor.selections.length === 1);
+                    assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));
+                }
+            });
+        });
     });
+});
 
-    teardown(cleanUpWorkspace);
+suite("transformToLowercase", () => {
+    let activeTextEditor: TextEditor;
+    let emulator: EmacsEmulator;
 
-    test("cursor moves with capitalization which enables continuous transformation", async () => {
-        activeTextEditor.selections = [
-            new Selection(new Position(0, 0), new Position(0, 0)),
-        ];
+    // tslint:disable:object-literal-sort-keys
+    const testCases = [
+        {
+            initialText: "AAA BBB CCC",
+            expectedResults: [
+                { cursorAt: new Position(0, 3), text: "aaa BBB CCC"},
+                { cursorAt: new Position(0, 7), text: "aaa bbb CCC"},
+                { cursorAt: new Position(0, 11), text: "aaa bbb ccc"},
+            ],
+        },
+        {
+            initialText: "AAA  BBB  CCC",
+            expectedResults: [
+                { cursorAt: new Position(0, 3), text: "aaa  BBB  CCC"},
+                { cursorAt: new Position(0, 8), text: "aaa  bbb  CCC"},
+                { cursorAt: new Position(0, 13), text: "aaa  bbb  ccc"},
+            ],
+        },
+        {
+            initialText: "AAA\nBBB\nCCC",
+            expectedResults: [
+                { cursorAt: new Position(0, 3), text: "aaa\nBBB\nCCC"},
+                { cursorAt: new Position(1, 3), text: "aaa\nbbb\nCCC"},
+                { cursorAt: new Position(2, 3), text: "aaa\nbbb\nccc"},
+            ],
+        },
+        // TODO: Currently, this test case fails.
+        // {
+        //     initialText: "AAA \nBBB \nCCC",
+        //     expectedResults: [
+        //         { cursorAt: new Position(0, 3), text: "aaa\nBBB\nCCC"},
+        //         { cursorAt: new Position(1, 3), text: "aaa\nbbb\nCCC"},
+        //         { cursorAt: new Position(2, 3), text: "aaa\nbbb\nccc"},
+        //     ],
+        // },
+    ];
 
-        await emulator.transformToUppercase();
-        assertTextEqual(activeTextEditor, "AAA bbb ccc");
-        assert.ok(activeTextEditor.selections.length === 1);
-        assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(0, 3), new Position(0, 3))))
+    testCases.forEach(({ initialText, expectedResults }) => {
+        suite(`initialText is ${initialText}`, () => {
+            setup(async () => {
+                activeTextEditor = await setupWorkspace(initialText);
+                emulator = new EmacsEmulator(activeTextEditor);
+            });
 
-        await emulator.transformToUppercase();
-        assertTextEqual(activeTextEditor, "AAA BBB ccc");
-        assert.ok(activeTextEditor.selections.length === 1);
-        assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(0, 7), new Position(0, 7))))
+            teardown(cleanUpWorkspace);
 
-        await emulator.transformToUppercase();
-        assertTextEqual(activeTextEditor, "AAA BBB CCC");
-        assert.ok(activeTextEditor.selections.length === 1);
-        assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(0, 11), new Position(0, 11))))
+            test("cursor moves with downcasing which enables continuous transformation", async () => {
+                activeTextEditor.selections = [
+                    new Selection(new Position(0, 0), new Position(0, 0)),
+                ];
+
+                for (const { cursorAt, text } of expectedResults) {
+                    await emulator.transformToLowercase();
+                    assertTextEqual(activeTextEditor, text);
+                    assert.ok(activeTextEditor.selections.length === 1);
+                    assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));
+                }
+            });
+        });
     });
 });
