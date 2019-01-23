@@ -15,6 +15,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.4.0] - 2019-01-23
+### Added
+- A `when` clause context `emacs-mcx.inMarkMode` is supported.
+
 ## [0.3.0] - 2019-01-20
 ### Added
 - `C-x C-o` (delete-blank-lines)
