@@ -194,10 +194,16 @@ export class EmacsEmulator implements Disposable {
 
     private enterMarkMode() {
         this.isInMarkMode = true;
+
+        // At this moment, the only way to set the context for `when` conditions is `setContext` command.
+        // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471
+        // TODO: How to write unittest for `setContext`?
+        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
     }
 
     private exitMarkMode() {
         this.isInMarkMode = false;
+        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
     }
 
     private makeSelectionsEmpty() {
