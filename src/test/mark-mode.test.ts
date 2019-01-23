@@ -33,7 +33,7 @@ ABCDEFGHIJ`;
             activeTextEditor.selections = [
                 new Selection(new Position(0, 0), new Position(0, 0)),
             ];
-            await emulator.enterMarkMode();
+            await emulator.setMarkCommand();
             await emulator.cursorMove("cursorRight");
 
             // Edit occurs

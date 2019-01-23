@@ -86,8 +86,8 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.yankPop();
     });
 
-    registerEmulatorCommand("emacs-mcx.enterMarkMode", (emulator) => {
-        emulator.enterMarkMode();
+    registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
+        emulator.setMarkCommand();
     });
 
     registerEmulatorCommand("emacs-mcx.addSelectionToNextFindMatch", (emulator) => {

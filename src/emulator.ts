@@ -52,28 +52,24 @@ export class EmacsEmulator implements Disposable {
         return vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
     }
 
-    public enterMarkMode() {
+    public setMarkCommand() {
         if (this.isInMarkMode && !this.hasNonEmptySelection()) {
             // Toggle if enterMarkMode is invoked continuously without any cursor move.
-            this.isInMarkMode = false;
+            this.exitMarkMode();
             MessageManager.showMessage("Mark deactivated");
         } else {
-            this.isInMarkMode = true;
+            this.enterMarkMode();
             MessageManager.showMessage("Mark activated");
         }
     }
 
-    public exitMarkMode() {
-        this.isInMarkMode = false;
-    }
-
     public addSelectionToNextFindMatch() {
-        this.isInMarkMode = true;
+        this.enterMarkMode();
         return vscode.commands.executeCommand("editor.action.addSelectionToNextFindMatch");
     }
 
     public addSelectionToPreviousFindMatch() {
-        this.isInMarkMode = true;
+        this.enterMarkMode();
         return vscode.commands.executeCommand("editor.action.addSelectionToPreviousFindMatch");
     }
 
@@ -194,6 +190,20 @@ export class EmacsEmulator implements Disposable {
     public dispose() {
         delete this.killYanker;
         delete this.recenterer;
+    }
+
+    private enterMarkMode() {
+        this.isInMarkMode = true;
+
+        // At this moment, the only way to set the context for `when` conditions is `setContext` command.
+        // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471
+        // TODO: How to write unittest for `setContext`?
+        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
+    }
+
+    private exitMarkMode() {
+        this.isInMarkMode = false;
+        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
     }
 
     private makeSelectionsEmpty() {
