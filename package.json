@@ -507,7 +507,7 @@
 						},
 						{
 								"key": "ctrl+space",
-								"command": "emacs-mcx.enterMarkMode",
+								"command": "emacs-mcx.setMarkCommand",
 								"when": "editorTextFocus"
 						},
 						{
