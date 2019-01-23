@@ -113,6 +113,11 @@ These sexp functionalities are provided [sexp](https://marketplace.visualstudio.
 Thanks to haruhi-s.
 [sexp](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) is declared as an Awesome Emacs Keymap's dependency so that it is also installed together.
 
+## 'when' clause context
+This extension provides mark-mode functionality and
+you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
+in order to check whether or not mark-mode is enabled.
+
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;
 - `ctrl+g`: workbench.action.gotoLine => **Use `alt+g g` instead**;
