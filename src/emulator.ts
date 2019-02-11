@@ -16,7 +16,7 @@ export class EmacsEmulator implements Disposable {
     private recenterer: Recenterer;
 
     private isInUniversalArgumentMode = false;
-    private universalArgument: string = "";
+    private universalArgumentStr: string = "";
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
@@ -63,14 +63,12 @@ export class EmacsEmulator implements Disposable {
 
         if (!isNaN(+text)) {
             // If `text` is a numeric charactor
-            this.universalArgument += text;
+            this.universalArgumentStr += text;
             return;
         }
 
-        let universalArgument = parseInt(this.universalArgument, 10);
-        if (isNaN(universalArgument)) {
-            universalArgument = 4;
-        }
+        const universalArgument = this.getUniversalArgument();
+        if (universalArgument === undefined) { return; }
 
         this.exitUniversalArgumentMode();
         const promises = [];
@@ -86,12 +84,22 @@ export class EmacsEmulator implements Disposable {
 
     public enterUniversalArgumentMode() {
         this.isInUniversalArgumentMode = true;
-        this.universalArgument = "";
+        this.universalArgumentStr = "";
     }
 
     public exitUniversalArgumentMode() {
         this.isInUniversalArgumentMode = false;
-        this.universalArgument = "";
+        this.universalArgumentStr = "";
+    }
+
+    public getUniversalArgument(): number | undefined {
+        if (!this.isInUniversalArgumentMode) { return undefined; }
+
+        const universalArgument = parseInt(this.universalArgumentStr, 10);
+        if (isNaN(universalArgument)) {
+            return 4;
+        }
+        return universalArgument;
     }
 
     public cursorMove(commandName: cursorMoves) {
