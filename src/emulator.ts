@@ -26,6 +26,9 @@ export class EmacsEmulator implements Disposable {
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
+
+        // TODO: I want to use a decorator
+        this.cursorMove = this.makePrefixArgumentAcceptable(this.cursorMove);
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -102,8 +105,17 @@ export class EmacsEmulator implements Disposable {
         return prefixArgument;
     }
 
-    public cursorMove(commandName: cursorMoves) {
-        return vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
+    public cursorMove(commandName: cursorMoves, prefixArgument: number | undefined = 1) {
+        // TODO: Replace to executing built-in `cursorMove` command with `value` argument
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        if (repeat < 0) { return; }
+
+        const promises = [];
+        for (let i = 0; i < repeat; ++i) {
+            const promise = vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
+            promises.push(promise);
+        }
+        return Promise.all(promises);
     }
 
     public setMarkCommand() {
@@ -259,6 +271,19 @@ export class EmacsEmulator implements Disposable {
     private exitMarkMode() {
         this.isInMarkMode = false;
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
+    }
+
+    // TODO: I want to make this a decorator
+    private makePrefixArgumentAcceptable(method: (...args: any[]) => any) {
+        return (...args: any[]) => {
+            const prefixArgument = this.getPrefixArgument();
+
+            const ret = method.apply(this, [...args, prefixArgument]);
+
+            this.exitPrefixArgumentMode();
+
+            return ret;
+        };
     }
 
     private makeSelectionsEmpty() {
