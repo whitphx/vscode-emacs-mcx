@@ -15,6 +15,9 @@ export class EmacsEmulator implements Disposable {
     private killYanker: KillYanker;
     private recenterer: Recenterer;
 
+    private isInUniversalArgumentMode = false;
+    private universalArgument: string = "";
+
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
@@ -46,6 +49,49 @@ export class EmacsEmulator implements Disposable {
                 this.exitMarkMode();
             }
         }
+    }
+
+    // tslint:disable-next-line:max-line-length
+    // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
+    public type(text: string) {
+        if (!this.isInUniversalArgumentMode) {
+            // Simply delegate to the original behavior
+            return vscode.commands.executeCommand("default:type", {
+                text,
+            });
+        }
+
+        if (!isNaN(+text)) {
+            // If `text` is a numeric charactor
+            this.universalArgument += text;
+            return;
+        }
+
+        let universalArgument = parseInt(this.universalArgument, 10);
+        if (isNaN(universalArgument)) {
+            universalArgument = 4;
+        }
+
+        this.exitUniversalArgumentMode();
+        const promises = [];
+        for (let i = 0; i < universalArgument; ++i) {
+            const promise = vscode.commands.executeCommand("default:type", {
+                text,
+            });
+            promises.push(promise);
+        }
+        // NOTE: Current implementation executes promises concurrently. Should it be sequential?
+        return Promise.all(promises);
+    }
+
+    public enterUniversalArgumentMode() {
+        this.isInUniversalArgumentMode = true;
+        this.universalArgument = "";
+    }
+
+    public exitUniversalArgumentMode() {
+        this.isInUniversalArgumentMode = false;
+        this.universalArgument = "";
     }
 
     public cursorMove(commandName: cursorMoves) {
@@ -89,6 +135,7 @@ export class EmacsEmulator implements Disposable {
 
         this.killYanker.cancelKillAppend();
         this.recenterer.reset();
+        this.exitUniversalArgumentMode();
 
         MessageManager.showMessage("Quit");
     }

@@ -663,6 +663,11 @@
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
+								"key": "ctrl+u",
+								"command": "emacs-mcx.universalArgument",
+								"when": "editorTextFocus"
+						},
+						{
 								"key": "ctrl+alt+f",
 								"command": "sexp.moveForward",
 								"when": "editorTextFocus"
