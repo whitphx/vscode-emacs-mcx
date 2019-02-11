@@ -664,7 +664,7 @@
 						},
 						{
 								"key": "ctrl+u",
-								"command": "emacs-mcx.universalArgument",
+								"command": "emacs-mcx.prefixArgument",
 								"when": "editorTextFocus"
 						},
 						{

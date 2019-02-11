@@ -75,8 +75,8 @@ export function activate(context: vscode.ExtensionContext) {
         (args) => vscode.commands.executeCommand("default:type", args),
     );
 
-    registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
-        emulator.enterUniversalArgumentMode();
+    registerEmulatorCommand("emacs-mcx.prefixArgument", (emulator) => {
+        emulator.enterPrefixArgumentMode();
     });
 
     registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {

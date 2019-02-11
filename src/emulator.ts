@@ -15,8 +15,8 @@ export class EmacsEmulator implements Disposable {
     private killYanker: KillYanker;
     private recenterer: Recenterer;
 
-    private isInUniversalArgumentMode = false;
-    private universalArgumentStr: string = "";
+    private isInPrefixArgumentMode = false;
+    private prefixArgumentStr: string = "";
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
@@ -54,7 +54,7 @@ export class EmacsEmulator implements Disposable {
     // tslint:disable-next-line:max-line-length
     // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
     public type(text: string) {
-        if (!this.isInUniversalArgumentMode) {
+        if (!this.isInPrefixArgumentMode) {
             // Simply delegate to the original behavior
             return vscode.commands.executeCommand("default:type", {
                 text,
@@ -63,16 +63,16 @@ export class EmacsEmulator implements Disposable {
 
         if (!isNaN(+text)) {
             // If `text` is a numeric charactor
-            this.universalArgumentStr += text;
+            this.prefixArgumentStr += text;
             return;
         }
 
-        const universalArgument = this.getUniversalArgument();
-        if (universalArgument === undefined) { return; }
+        const prefixArgument = this.getPrefixArgument();
+        if (prefixArgument === undefined) { return; }
 
-        this.exitUniversalArgumentMode();
+        this.exitPrefixArgumentMode();
         const promises = [];
-        for (let i = 0; i < universalArgument; ++i) {
+        for (let i = 0; i < prefixArgument; ++i) {
             const promise = vscode.commands.executeCommand("default:type", {
                 text,
             });
@@ -82,24 +82,24 @@ export class EmacsEmulator implements Disposable {
         return Promise.all(promises);
     }
 
-    public enterUniversalArgumentMode() {
-        this.isInUniversalArgumentMode = true;
-        this.universalArgumentStr = "";
+    public enterPrefixArgumentMode() {
+        this.isInPrefixArgumentMode = true;
+        this.prefixArgumentStr = "";
     }
 
-    public exitUniversalArgumentMode() {
-        this.isInUniversalArgumentMode = false;
-        this.universalArgumentStr = "";
+    public exitPrefixArgumentMode() {
+        this.isInPrefixArgumentMode = false;
+        this.prefixArgumentStr = "";
     }
 
-    public getUniversalArgument(): number | undefined {
-        if (!this.isInUniversalArgumentMode) { return undefined; }
+    public getPrefixArgument(): number | undefined {
+        if (!this.isInPrefixArgumentMode) { return undefined; }
 
-        const universalArgument = parseInt(this.universalArgumentStr, 10);
-        if (isNaN(universalArgument)) {
+        const prefixArgument = parseInt(this.prefixArgumentStr, 10);
+        if (isNaN(prefixArgument)) {
             return 4;
         }
-        return universalArgument;
+        return prefixArgument;
     }
 
     public cursorMove(commandName: cursorMoves) {
@@ -143,7 +143,7 @@ export class EmacsEmulator implements Disposable {
 
         this.killYanker.cancelKillAppend();
         this.recenterer.reset();
-        this.exitUniversalArgumentMode();
+        this.exitPrefixArgumentMode();
 
         MessageManager.showMessage("Quit");
     }
