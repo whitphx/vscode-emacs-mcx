@@ -34,7 +34,7 @@ ABCDEFGHIJ`;
                 new Selection(new Position(0, 0), new Position(0, 0)),
             ];
             await emulator.setMarkCommand();
-            await emulator.cursorMove("cursorRight");
+            await emulator.cursorMove("forwardChar");
 
             // Edit occurs
             await editOp();
@@ -42,7 +42,7 @@ ABCDEFGHIJ`;
             // assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
 
             // After edit, mark-mode is no longer active
-            await emulator.cursorMove("cursorRight");
+            await emulator.cursorMove("forwardChar");
             assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
         });
     });

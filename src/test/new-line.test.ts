@@ -130,7 +130,7 @@ ABCDEFGHIJ
                     new Selection(new Position(0, 0), new Position(0, 0)),
                 ];
                 emulator.setMarkCommand();
-                await emulator.cursorMove("cursorRight");
+                await emulator.cursorMove("forwardChar");
                 assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
 
                 // Test newLine
@@ -150,7 +150,7 @@ ABCDEFGHIJ`);
                     new Selection(new Position(0, 0), new Position(0, 0)),
                 ];
                 emulator.setMarkCommand();
-                await emulator.cursorMove("cursorRight");
+                await emulator.cursorMove("forwardChar");
                 assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
             });
         });

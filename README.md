@@ -18,22 +18,22 @@ This extension makes use of code in the existent extensions listed above and, in
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
 ### Move commands
-|Command | Desc |
-|--------|------|
-| `C-f` | Move forward |
-| `C-b` | Move backward |
-| `C-n` | Move to the next line |
-| `C-p` | Move to the previous line |
-| `C-a` | Move to the beginning of line |
-| `C-e` | Move to the end of line |
-| `M-f` | Move forward by one word unit |
-| `M-b` | Move backward by one word unit |
-| `C-v` | Scroll down by one screen unit |
-| `M-v` | Scroll up by one screen unit |
-| `M-g g` (`M-g M-g`) | Jump to line (command palette) |
-| `M-g n` (`M-g M-n`, ``C-x ` ``) | Jump to next error |
-| `M-g p` (`M-g M-p`) | Jump to previous error |
-| `C-l` | Center screen on current line (recenter-top-bottom) |
+|Command |Prefix argument |Desc |
+|--------|----------------|------|
+| `C-f` | ✓ | Move forward (forward-char) |
+| `C-b` | ✓ | Move backward (backward-char) |
+| `C-n` | ✓ | Move to the next line (next-line) |
+| `C-p` | ✓ | Move to the previous line (previous-line) |
+| `C-a` | ✓ | Move to the beginning of line (move-beginning-of-line) |
+| `C-e` | ✓ | Move to the end of line (move-end-of-line) |
+| `M-f` | ✓ | Move forward by one word unit (forward-word) |
+| `M-b` | ✓ | Move backward by one word unit (backward-word) |
+| `C-v` | ✓ | Scroll down by one screen unit (scroll-up-command) |
+| `M-v` | ✓ | Scroll up by one screen unit (scroll-down-command) |
+| `M-g g` (`M-g M-g`) | | Jump to line (command palette) |
+| `M-g n` (`M-g M-n`, ``C-x ` ``) | | Jump to next error |
+| `M-g p` (`M-g M-p`) | | Jump to previous error |
+| `C-l` | | Center screen on current line (recenter-top-bottom) |
 
 
 ### Search Commands

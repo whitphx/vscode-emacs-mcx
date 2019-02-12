@@ -4,7 +4,7 @@ import { deleteBlankLines } from "./delete-blank-lines";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
-import { cursorMoves } from "./operations";
+import { moveCommands } from "./move";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
 
@@ -85,17 +85,16 @@ export class EmacsEmulator implements Disposable {
         this.prefixArgumentHandler.universalArgument();
     }
 
-    public cursorMove(commandName: cursorMoves, prefixArgument: number | undefined = 1) {
-        // TODO: Replace to executing built-in `cursorMove` command with `value` argument
+    public cursorMove(commandName: string, prefixArgument: number | undefined = 1) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-        if (repeat < 0) { return; }
+        if (repeat <= 0) { return; }  // TODO: Zero and negative value are not supported
 
-        const promises = [];
-        for (let i = 0; i < repeat; ++i) {
-            const promise = vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
-            promises.push(promise);
+        const cursorMoveCommand = moveCommands[commandName];
+        if (typeof cursorMoveCommand !== "function") {
+            throw Error(`Unsupported cursor move command: ${commandName}`);
         }
-        return Promise.all(promises);
+
+        return cursorMoveCommand(repeat, this.isInMarkMode);
     }
 
     public setMarkCommand() {
@@ -218,14 +217,14 @@ export class EmacsEmulator implements Disposable {
 
     public async transformToUppercase() {
         if (!this.hasNonEmptySelection()) {
-            await this.cursorMove("cursorWordRight");
+            await this.cursorMove("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToUppercase");
     }
 
     public async transformToLowercase() {
         if (!this.hasNonEmptySelection()) {
-            await this.cursorMove("cursorWordRight");
+            await this.cursorMove("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToLowercase");
     }

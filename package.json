@@ -35,37 +35,37 @@
 				"keybindings": [
 						{
 								"key": "right",
-								"command": "emacs-mcx.cursorRight",
+								"command": "emacs-mcx.forwardChar",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+f",
-								"command": "emacs-mcx.cursorRight",
+								"command": "emacs-mcx.forwardChar",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+f",
-								"command": "emacs-mcx.cursorRight",
+								"command": "emacs-mcx.forwardChar",
 								"when": "terminalFocus"
 						},
 						{
 								"key": "left",
-								"command": "emacs-mcx.cursorLeft",
+								"command": "emacs-mcx.backwardChar",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+b",
-								"command": "emacs-mcx.cursorLeft",
+								"command": "emacs-mcx.backwardChar",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+b",
-								"command": "emacs-mcx.cursorLeft",
+								"command": "emacs-mcx.backwardChar",
 								"when": "terminalFocus"
 						},
 						{
 								"key": "up",
-								"command": "emacs-mcx.cursorUp",
+								"command": "emacs-mcx.previousLine",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
@@ -75,12 +75,12 @@
 						},
 						{
 								"key": "ctrl+p",
-								"command": "emacs-mcx.cursorUp",
+								"command": "emacs-mcx.previousLine",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
 								"key": "ctrl+p",
-								"command": "emacs-mcx.cursorUp",
+								"command": "emacs-mcx.previousLine",
 								"when": "terminalFocus"
 						},
 						{
@@ -90,7 +90,7 @@
 						},
 						{
 								"key": "down",
-								"command": "emacs-mcx.cursorDown",
+								"command": "emacs-mcx.nextLine",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
@@ -100,12 +100,12 @@
 						},
 						{
 								"key": "ctrl+n",
-								"command": "emacs-mcx.cursorDown",
+								"command": "emacs-mcx.nextLine",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
 								"key": "ctrl+n",
-								"command": "emacs-mcx.cursorDown",
+								"command": "emacs-mcx.nextLine",
 								"when": "terminalFocus"
 						},
 						{
@@ -115,47 +115,47 @@
 						},
 						{
 								"key": "home",
-								"command": "emacs-mcx.cursorHome",
+								"command": "emacs-mcx.moveBeginningOfLine",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+a",
-								"command": "emacs-mcx.cursorHome",
+								"command": "emacs-mcx.moveBeginningOfLine",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+a",
-								"command": "emacs-mcx.cursorHome",
+								"command": "emacs-mcx.moveBeginningOfLine",
 								"when": "terminalFocus"
 						},
 						{
 								"key": "end",
-								"command": "emacs-mcx.cursorEnd",
+								"command": "emacs-mcx.moveEndOfLine",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+e",
-								"command": "emacs-mcx.cursorEnd",
+								"command": "emacs-mcx.moveEndOfLine",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+e",
-								"command": "emacs-mcx.cursorEnd",
+								"command": "emacs-mcx.moveEndOfLine",
 								"when": "terminalFocus"
 						},
 						{
 								"key": "alt+f",
-								"command": "emacs-mcx.cursorWordRight",
+								"command": "emacs-mcx.forwardWord",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "alt+b",
-								"command": "emacs-mcx.cursorWordLeft",
+								"command": "emacs-mcx.backwardWord",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "pagedown",
-								"command": "emacs-mcx.cursorPageDown",
+								"command": "emacs-mcx.scrollUpCommand",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
@@ -165,7 +165,7 @@
 						},
 						{
 								"key": "ctrl+v",
-								"command": "emacs-mcx.cursorPageDown",
+								"command": "emacs-mcx.scrollUpCommand",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
@@ -175,7 +175,7 @@
 						},
 						{
 								"key": "pageup",
-								"command": "emacs-mcx.cursorPageUp",
+								"command": "emacs-mcx.scrollDownCommand",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
@@ -185,7 +185,7 @@
 						},
 						{
 								"key": "alt+v",
-								"command": "emacs-mcx.cursorPageUp",
+								"command": "emacs-mcx.scrollDownCommand",
 								"when": "editorTextFocus && !suggestWidgetVisible"
 						},
 						{
@@ -195,7 +195,7 @@
 						},
 						{
 								"key": "alt+shift+.",
-								"command": "emacs-mcx.cursorBottom",
+								"command": "emacs-mcx.endOfBuffer",
 								"when": "editorTextFocus"
 						},
 						{
@@ -205,7 +205,7 @@
 						},
 						{
 								"key": "alt+shift+,",
-								"command": "emacs-mcx.cursorTop",
+								"command": "emacs-mcx.beginningOfBuffer",
 								"when": "editorTextFocus"
 						},
 						{
