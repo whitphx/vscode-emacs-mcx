@@ -13,7 +13,15 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-k`: (kill-sentence)
     - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
+- To support prefix argument with
+    - `kill-line`
+    - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+
+## [0.5.0] - 2019-02-12
+### Added
+- `C-u` (universal-prefix) is implemented.
+- Prefix argument is supported with single character inputs and movement commands.
 
 ## [0.4.0] - 2019-01-23
 ### Added
