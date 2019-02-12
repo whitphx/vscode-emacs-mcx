@@ -5,6 +5,7 @@ import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { cursorMoves } from "./operations";
+import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
@@ -14,15 +15,20 @@ export class EmacsEmulator implements Disposable {
 
     private killYanker: KillYanker;
     private recenterer: Recenterer;
+    private prefixArgumentHandler: PrefixArgumentHandler;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
         this.killYanker = new KillYanker(textEditor, killRing);
         this.recenterer = new Recenterer(textEditor);
+        this.prefixArgumentHandler = new PrefixArgumentHandler();
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
+
+        // TODO: I want to use a decorator
+        this.cursorMove = this.makePrefixArgumentAcceptable(this.cursorMove);
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -48,8 +54,48 @@ export class EmacsEmulator implements Disposable {
         }
     }
 
-    public cursorMove(commandName: cursorMoves) {
-        return vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
+    // tslint:disable-next-line:max-line-length
+    // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
+    public type(text: string) {
+        const handled = this.prefixArgumentHandler.handleType(text);
+        if (handled) { return; }
+
+        // Single character input with prefix argument
+        const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+        this.prefixArgumentHandler.cancel();
+
+        if (prefixArgument !== undefined && prefixArgument >= 0) {
+            const promises = [];
+            for (let i = 0; i < prefixArgument; ++i) {
+                const promise = vscode.commands.executeCommand("default:type", {
+                    text,
+                });
+                promises.push(promise);
+            }
+            // NOTE: Current implementation executes promises concurrently. Should it be sequential?
+            return Promise.all(promises);
+        }
+
+        return vscode.commands.executeCommand("default:type", {
+            text,
+        });
+    }
+
+    public universalArgument() {
+        this.prefixArgumentHandler.universalArgument();
+    }
+
+    public cursorMove(commandName: cursorMoves, prefixArgument: number | undefined = 1) {
+        // TODO: Replace to executing built-in `cursorMove` command with `value` argument
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        if (repeat < 0) { return; }
+
+        const promises = [];
+        for (let i = 0; i < repeat; ++i) {
+            const promise = vscode.commands.executeCommand(this.isInMarkMode ? `${commandName}Select` : commandName);
+            promises.push(promise);
+        }
+        return Promise.all(promises);
     }
 
     public setMarkCommand() {
@@ -89,6 +135,7 @@ export class EmacsEmulator implements Disposable {
 
         this.killYanker.cancelKillAppend();
         this.recenterer.reset();
+        this.prefixArgumentHandler.cancel();
 
         MessageManager.showMessage("Quit");
     }
@@ -204,6 +251,18 @@ export class EmacsEmulator implements Disposable {
     private exitMarkMode() {
         this.isInMarkMode = false;
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
+    }
+
+    private makePrefixArgumentAcceptable(method: (...args: any[]) => any) {
+        return (...args: any[]) => {
+            const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+
+            const ret = method.apply(this, [...args, prefixArgument]);
+
+            this.prefixArgumentHandler.cancel();
+
+            return ret;
+        };
     }
 
     private makeSelectionsEmpty() {

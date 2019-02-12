@@ -44,14 +44,18 @@ export function activate(context: vscode.ExtensionContext) {
     function registerEmulatorCommand(
         commandName: string,
         callback: (emulator: EmacsEmulator, ...args: any[]) => any,
+        onNoEmulator?: (...args: any[]) => any,
     ) {
-        const disposable = vscode.commands.registerCommand(commandName, () => {
+        const disposable = vscode.commands.registerCommand(commandName, (...args) => {
             const emulator = getAndUpdateEmulator();
             if (!emulator) {
+                if (typeof onNoEmulator === "function") {
+                    onNoEmulator(...args);
+                }
                 return;
             }
 
-            callback(emulator);
+            callback(emulator, ...args);
         });
         context.subscriptions.push(disposable);
     }
@@ -60,6 +64,19 @@ export function activate(context: vscode.ExtensionContext) {
         registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
             emulator.cursorMove(commandName);
         });
+    });
+
+    registerEmulatorCommand("type",
+        (emulator, args) => {
+            // Capture typing charactors for universal argument functionality.
+            // TODO: How to capture backspace?
+            emulator.type(args.text);
+        },
+        (args) => vscode.commands.executeCommand("default:type", args),
+    );
+
+    registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
+        emulator.universalArgument();
     });
 
     registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
