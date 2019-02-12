@@ -5,6 +5,7 @@ import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { cursorMoves } from "./operations";
+import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
@@ -14,17 +15,14 @@ export class EmacsEmulator implements Disposable {
 
     private killYanker: KillYanker;
     private recenterer: Recenterer;
-
-    private isInPrefixArgumentMode = false;
-    private isAcceptingPrefixArgument = false;
-    private cuCount = 0;  // How many C-u are input continuously
-    private prefixArgumentStr = "";  // Prefix argument string input after C-u
+    private prefixArgumentHandler: PrefixArgumentHandler;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
         this.killYanker = new KillYanker(textEditor, killRing);
         this.recenterer = new Recenterer(textEditor);
+        this.prefixArgumentHandler = new PrefixArgumentHandler();
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
@@ -59,60 +57,32 @@ export class EmacsEmulator implements Disposable {
     // tslint:disable-next-line:max-line-length
     // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
     public type(text: string) {
-        if (!this.isInPrefixArgumentMode) {
-            // Simply delegate to the original behavior
-            return vscode.commands.executeCommand("default:type", {
-                text,
-            });
+        const handled = this.prefixArgumentHandler.handleType(text);
+        if (handled) { return; }
+
+        // Single character input with prefix argument
+        const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+        this.prefixArgumentHandler.cancel();
+
+        if (prefixArgument !== undefined && prefixArgument >= 0) {
+            const promises = [];
+            for (let i = 0; i < prefixArgument; ++i) {
+                const promise = vscode.commands.executeCommand("default:type", {
+                    text,
+                });
+                promises.push(promise);
+            }
+            // NOTE: Current implementation executes promises concurrently. Should it be sequential?
+            return Promise.all(promises);
         }
 
-        if (this.isAcceptingPrefixArgument && !isNaN(+text)) {
-            // If `text` is a numeric charactor
-            this.prefixArgumentStr += text;
-            return;
-        }
-
-        const prefixArgument = this.getPrefixArgument();
-        if (prefixArgument === undefined) { return; }
-
-        this.exitPrefixArgumentMode();
-        const promises = [];
-        for (let i = 0; i < prefixArgument; ++i) {
-            const promise = vscode.commands.executeCommand("default:type", {
-                text,
-            });
-            promises.push(promise);
-        }
-        // NOTE: Current implementation executes promises concurrently. Should it be sequential?
-        return Promise.all(promises);
+        return vscode.commands.executeCommand("default:type", {
+            text,
+        });
     }
 
-    public enterPrefixArgumentMode() {
-        if (this.isInPrefixArgumentMode && this.prefixArgumentStr.length > 0) {
-            this.isAcceptingPrefixArgument = false;
-        } else {
-            this.isInPrefixArgumentMode = true;
-            this.isAcceptingPrefixArgument = true;
-            this.cuCount++;
-            this.prefixArgumentStr = "";
-        }
-    }
-
-    public exitPrefixArgumentMode() {
-        this.isInPrefixArgumentMode = false;
-        this.isAcceptingPrefixArgument = false;
-        this.cuCount = 0;
-        this.prefixArgumentStr = "";
-    }
-
-    public getPrefixArgument(): number | undefined {
-        if (!this.isInPrefixArgumentMode) { return undefined; }
-
-        const prefixArgument = parseInt(this.prefixArgumentStr, 10);
-        if (isNaN(prefixArgument)) {
-            return 4 ** this.cuCount;
-        }
-        return prefixArgument;
+    public universalArgument() {
+        this.prefixArgumentHandler.universalArgument();
     }
 
     public cursorMove(commandName: cursorMoves, prefixArgument: number | undefined = 1) {
@@ -165,7 +135,7 @@ export class EmacsEmulator implements Disposable {
 
         this.killYanker.cancelKillAppend();
         this.recenterer.reset();
-        this.exitPrefixArgumentMode();
+        this.prefixArgumentHandler.cancel();
 
         MessageManager.showMessage("Quit");
     }
@@ -283,14 +253,13 @@ export class EmacsEmulator implements Disposable {
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
     }
 
-    // TODO: I want to make this a decorator
     private makePrefixArgumentAcceptable(method: (...args: any[]) => any) {
         return (...args: any[]) => {
-            const prefixArgument = this.getPrefixArgument();
+            const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
 
             const ret = method.apply(this, [...args, prefixArgument]);
 
-            this.exitPrefixArgumentMode();
+            this.prefixArgumentHandler.cancel();
 
             return ret;
         };

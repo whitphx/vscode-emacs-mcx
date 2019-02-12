@@ -16,7 +16,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         teardown(cleanUpWorkspace);
 
         test("repeating charactor input for the given argument", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("2");
             await emulator.type("a");
 
@@ -30,7 +30,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("repeating charactor input for the given argument 0", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
 
             await emulator.type("0");
             await emulator.type("a");
@@ -43,7 +43,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("repeating charactor input for the given argument prefixed by 0", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("0");
             await emulator.type("2");
             await emulator.type("a");
@@ -59,7 +59,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("repeating charactor input for the given argument with multiple digits", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("1");
             await emulator.type("2");
             await emulator.type("a");
@@ -75,7 +75,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("repeating charactor input with default argument (4)", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("a");
 
             assertTextEqual(activeTextEditor, "aaaa");
@@ -89,7 +89,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         [2, 3].forEach((times) => {
             test(`repeating charactor input with ${times} C-u`, async () => {
                 for (let i = 0; i < times; ++i) {
-                    emulator.enterPrefixArgumentMode();
+                    emulator.universalArgument();
                 }
                 await emulator.type("a");
 
@@ -103,11 +103,11 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("c-u stops prefix argument input", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("1");
             await emulator.type("2");
-            emulator.enterPrefixArgumentMode();
-            await emulator.type("3")
+            emulator.universalArgument();
+            await emulator.type("3");
 
             assertTextEqual(activeTextEditor, "333333333333");
 
@@ -119,9 +119,9 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("numerical input cancels previous repeated c-u", async () => {
-            emulator.enterPrefixArgumentMode();
-            emulator.enterPrefixArgumentMode();
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
+            emulator.universalArgument();
+            emulator.universalArgument();
             await emulator.type("3");
             await emulator.type("a");
 
@@ -146,7 +146,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("repeating cursorMove for the given argument", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("3");
             await emulator.cursorMove("cursorRight");
 
@@ -173,7 +173,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("repeating cursorMove for the given argument 0", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("0");
             await emulator.cursorMove("cursorRight");
 
@@ -200,7 +200,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("repeating cursorMove for the given argument 0", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("0");
             await emulator.cursorMove("cursorRight");
 
@@ -227,7 +227,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("repeating cursorMove for the given argument with multiple digits", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("1");
             await emulator.type("2");
             await emulator.cursorMove("cursorRight");
@@ -256,7 +256,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("repeating cursorMove for the default argument (4)", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.cursorMove("cursorRight");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -278,8 +278,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("repeating charactor input with 2 C-u", async () => {
-            emulator.enterPrefixArgumentMode();
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
+            emulator.universalArgument();
             await emulator.cursorMove("cursorRight");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -301,10 +301,10 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("c-u stops prefix argument input", async () => {
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("1");
             await emulator.type("2");
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.cursorMove("cursorRight");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -326,9 +326,9 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("numerical input cancels previous repeated c-u", async () => {
-            emulator.enterPrefixArgumentMode();
-            emulator.enterPrefixArgumentMode();
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
+            emulator.universalArgument();
+            emulator.universalArgument();
             await emulator.type("3");
             await emulator.cursorMove("cursorRight");
 
@@ -353,7 +353,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("multicursor with given argument", async () => {
             setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
 
-            emulator.enterPrefixArgumentMode();
+            emulator.universalArgument();
             await emulator.type("3");
             await emulator.cursorMove("cursorRight");
 
