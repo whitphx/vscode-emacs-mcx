@@ -17,6 +17,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `kill-line`
     - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+- Run CI on Windows
 
 ## [0.5.0] - 2019-02-12
 ### Added

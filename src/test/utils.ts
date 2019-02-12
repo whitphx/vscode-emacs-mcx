@@ -13,6 +13,9 @@ export async function setupWorkspace(initialText: string = ""): Promise<vscode.T
     const activeTextEditor = vscode.window.activeTextEditor;
     assert.ok(activeTextEditor);
 
+    // Set EOL to LF for the tests to work even on Windows
+    (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(vscode.EndOfLine.LF));
+
     return activeTextEditor!;
 }
 
