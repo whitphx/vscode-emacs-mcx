@@ -11,6 +11,7 @@ This extension aims
 * to provide emacs-like keybindings
 * to be fully compatible with multi cursor
 * to support kill-ring integrated with the system clipboard
+* to support prefix argument
 * to fix some bugs in the existing extensions such as
     * mark-mode states are shared amoung all editors
 
