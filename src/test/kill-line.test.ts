@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
 import { KillRing } from "../kill-ring";
-import { cursorMoves } from "../operations";
+import { moveCommands } from "../move";
 import { cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
 
 suite("killLine", () => {
@@ -145,7 +145,7 @@ abcdefghij
             "selectAll",
         ];
 
-        const interruptingCommands: string[] = [...cursorMoves, ...otherInterruptingCommands];
+        const interruptingCommands: string[] = [...otherInterruptingCommands];
         interruptingCommands.forEach((interruptingCommand) => {
             test(`it does not appends killed text if another command (${interruptingCommand}) invoked`, async () => {
                 activeTextEditor.selections = [
@@ -175,16 +175,26 @@ abcdefghij
             });
         });
 
-        // Test kill appending is not enabled after editing or some other ops
-        const ops: Array<[string, () => Thenable<any>]> = [
+        // Test kill appending is not enabled after cursorMoves, editing, or some other ops
+        const moves =
+            Object.keys(moveCommands).map((commandName): [string, () => (Thenable<any> | undefined)] =>
+                [commandName, () => emulator.cursorMove(commandName)]);
+        const edits: Array<[string, () => Thenable<any>]> = [
             ["edit", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.insert(new Position(0, 0), "hoge"))],
             ["delete", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))],
             ["replace", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge"))],
-
+        ];
+        const otherOps: Array<[string, () => Thenable<any>]> = [
             ["cancel", async () => await emulator.cancel()],
+        ];
+
+        const ops: Array<[string, () => (Thenable<any> | undefined)]> = [
+            ...moves,
+            ...edits,
+            ...otherOps,
         ];
         ops.forEach(([label, op]) => {
             test(`it does not append the killed text after ${label}`, async () => {
