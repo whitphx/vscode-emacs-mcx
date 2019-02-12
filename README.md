@@ -101,6 +101,11 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-x 4` | Toggle split layout (vertical to horizontal) |
 | `C-x o` | Focus other split editor |
 
+### Prefix argument
+|Command | Desc |
+|--------|------|
+| `C-u` | universal-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
+
 ### sexp
 |Command | Desc |
 |--------|------|
