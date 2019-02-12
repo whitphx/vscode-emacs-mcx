@@ -16,7 +16,9 @@ export class EmacsEmulator implements Disposable {
     private recenterer: Recenterer;
 
     private isInPrefixArgumentMode = false;
-    private prefixArgumentStr: string = "";
+    private isAcceptingPrefixArgument = false;
+    private cuCount = 0;  // How many C-u are input continuously
+    private prefixArgumentStr = "";  // Prefix argument string input after C-u
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
@@ -64,7 +66,7 @@ export class EmacsEmulator implements Disposable {
             });
         }
 
-        if (!isNaN(+text)) {
+        if (this.isAcceptingPrefixArgument && !isNaN(+text)) {
             // If `text` is a numeric charactor
             this.prefixArgumentStr += text;
             return;
@@ -86,12 +88,20 @@ export class EmacsEmulator implements Disposable {
     }
 
     public enterPrefixArgumentMode() {
-        this.isInPrefixArgumentMode = true;
-        this.prefixArgumentStr = "";
+        if (this.isInPrefixArgumentMode && this.prefixArgumentStr.length > 0) {
+            this.isAcceptingPrefixArgument = false;
+        } else {
+            this.isInPrefixArgumentMode = true;
+            this.isAcceptingPrefixArgument = true;
+            this.cuCount++;
+            this.prefixArgumentStr = "";
+        }
     }
 
     public exitPrefixArgumentMode() {
         this.isInPrefixArgumentMode = false;
+        this.isAcceptingPrefixArgument = false;
+        this.cuCount = 0;
         this.prefixArgumentStr = "";
     }
 
@@ -100,7 +110,7 @@ export class EmacsEmulator implements Disposable {
 
         const prefixArgument = parseInt(this.prefixArgumentStr, 10);
         if (isNaN(prefixArgument)) {
-            return 4;
+            return 4 ** this.cuCount;
         }
         return prefixArgument;
     }

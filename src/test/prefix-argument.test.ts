@@ -85,6 +85,54 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
             assertTextEqual(activeTextEditor, "aaaab");
         });
+
+        [2, 3].forEach((times) => {
+            test(`repeating charactor input with ${times} C-u`, async () => {
+                for (let i = 0; i < times; ++i) {
+                    emulator.enterPrefixArgumentMode();
+                }
+                await emulator.type("a");
+
+                assertTextEqual(activeTextEditor, "a".repeat(4 ** times));
+
+                // exitied from universal argument mode
+                await emulator.type("b");
+
+                assertTextEqual(activeTextEditor, "a".repeat(4 ** times) + "b");
+            });
+        });
+
+        test("c-u stops prefix argument input", async () => {
+            emulator.enterPrefixArgumentMode();
+            await emulator.type("1");
+            await emulator.type("2");
+            emulator.enterPrefixArgumentMode();
+            await emulator.type("3")
+
+            assertTextEqual(activeTextEditor, "333333333333");
+
+            // exitied from universal argument mode
+            await emulator.type("4");
+            await emulator.type("b");
+
+            assertTextEqual(activeTextEditor, "3333333333334b");
+        });
+
+        test("numerical input cancels previous repeated c-u", async () => {
+            emulator.enterPrefixArgumentMode();
+            emulator.enterPrefixArgumentMode();
+            emulator.enterPrefixArgumentMode();
+            await emulator.type("3");
+            await emulator.type("a");
+
+            assertTextEqual(activeTextEditor, "aaa");
+
+            // exitied from universal argument mode
+            await emulator.type("3");
+            await emulator.type("b");
+
+            assertTextEqual(activeTextEditor, "aaa3b");
+        });
     });
 
     suite("repeating EmacsEmulator's command (cursorMove (cursorRight)) with prefix command", () => {
@@ -225,6 +273,79 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             assert.ok(
                 activeTextEditor.selections[0].isEqual(
                     new Range(new Position(0, 5), new Position(0, 5)),
+                ),
+            );
+        });
+
+        test("repeating charactor input with 2 C-u", async () => {
+            emulator.enterPrefixArgumentMode();
+            emulator.enterPrefixArgumentMode();
+            await emulator.cursorMove("cursorRight");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(0, 16), new Position(0, 16)),
+                ),
+            );
+
+            // exitied from universal argument mode
+            await emulator.cursorMove("cursorRight");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(0, 17), new Position(0, 17)),
+                ),
+            );
+        });
+
+        test("c-u stops prefix argument input", async () => {
+            emulator.enterPrefixArgumentMode();
+            await emulator.type("1");
+            await emulator.type("2");
+            emulator.enterPrefixArgumentMode();
+            await emulator.cursorMove("cursorRight");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(0, 12), new Position(0, 12)),
+                ),
+            );
+
+            // exitied from universal argument mode
+            await emulator.cursorMove("cursorRight");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(0, 13), new Position(0, 13)),
+                ),
+            );
+        });
+
+        test("numerical input cancels previous repeated c-u", async () => {
+            emulator.enterPrefixArgumentMode();
+            emulator.enterPrefixArgumentMode();
+            emulator.enterPrefixArgumentMode();
+            await emulator.type("3");
+            await emulator.cursorMove("cursorRight");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(0, 3), new Position(0, 3)),
+                ),
+            );
+
+            // exitied from universal argument mode
+            await emulator.cursorMove("cursorRight");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(0, 4), new Position(0, 4)),
                 ),
             );
         });
