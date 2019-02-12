@@ -5,7 +5,7 @@ function createParallel<T>(concurrency: number, promiseFactory: () => Thenable<T
 }
 
 // tslint:disable:object-literal-sort-keys
-export const moveCommands: {[command: string]: (arg: number, select: boolean) => Thenable<any>} = {
+export const moveCommands: {[command: string]: (arg: number, select: boolean) => (Thenable<any> | undefined)} = {
     forwardChar: (arg, select) =>
         vscode.commands.executeCommand("cursorMove",
             {
@@ -42,10 +42,30 @@ export const moveCommands: {[command: string]: (arg: number, select: boolean) =>
                 select,
             },
         ),
-    moveBeginningOfLine: (arg, select) => createParallel(arg, () =>
-        vscode.commands.executeCommand(select ? "cursorHomeSelect" : "cursorHome")),
-    moveEndOfLine: (arg, select) => createParallel(arg, () =>
-        vscode.commands.executeCommand(select ? "cursorEndSelect" : "cursorEnd")),
+    moveBeginningOfLine: (arg, select) => {
+        if (arg === 1) {
+            return vscode.commands.executeCommand(select ? "cursorHomeSelect" : "cursorHome");
+        } else if (arg > 1) {
+            return vscode.commands.executeCommand("cursorMove", {
+                to: "down",
+                by: "line",
+                value: arg - 1,
+                select,
+            }).then(() => vscode.commands.executeCommand(select ? "cursorHomeSelect" : "cursorHome"));
+        }
+    },
+    moveEndOfLine: (arg, select) => {
+        if (arg === 1) {
+            return vscode.commands.executeCommand(select ? "cursorEndSelect" : "cursorEnd");
+        } else if (arg > 1) {
+            return vscode.commands.executeCommand("cursorMove", {
+                to: "down",
+                by: "line",
+                value: arg - 1,
+                select,
+            }).then(() => vscode.commands.executeCommand(select ? "cursorEndSelect" : "cursorEnd"));
+        }
+    },
     forwardWord: (arg, select) => createParallel(arg, () =>
         vscode.commands.executeCommand(select ? "cursorWordRightSelect" : "cursorWordRight")),
     backwardWord: (arg, select) => createParallel(arg, () =>
