@@ -705,6 +705,7 @@
 		},
 		"dependencies": {
 				"@types/clipboardy": "^1.1.0",
-				"clipboardy": "^1.2.3"
+				"clipboardy": "^1.2.3",
+				"paredit.js": "^0.3.4"
 		}
 }

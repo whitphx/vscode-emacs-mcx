@@ -5,10 +5,13 @@ import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { moveCommands } from "./move";
+import { Paredit } from "./paredit";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
+    public readonly paredit: Paredit;
+
     private textEditor: TextEditor;
 
     // tslint:disable-next-line:variable-name
@@ -25,6 +28,7 @@ export class EmacsEmulator implements Disposable {
         this.textEditor = textEditor;
 
         this.killYanker = new KillYanker(textEditor, killRing);
+        this.paredit = new Paredit(this);
         this.recenterer = new Recenterer(textEditor);
         this.prefixArgumentHandler = new PrefixArgumentHandler();
 
