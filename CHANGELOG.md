@@ -21,7 +21,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [0.5.0] - 2019-02-12
 ### Added
-- `C-u` (universal-prefix) is implemented.
+- `C-u` (universal-argument) is implemented.
 - Prefix argument is supported with single character inputs and movement commands.
 
 ## [0.4.0] - 2019-01-23
