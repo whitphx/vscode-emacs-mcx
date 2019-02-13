@@ -5,13 +5,20 @@ import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { moveCommands } from "./move";
+import { Paredit } from "./paredit";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
+    public readonly paredit: Paredit;
+
     private textEditor: TextEditor;
 
-    private isInMarkMode = false;
+    // tslint:disable-next-line:variable-name
+    private _isInMarkMode = false;
+    public get isInMarkMode() {
+        return this._isInMarkMode;
+    }
 
     private killYanker: KillYanker;
     private recenterer: Recenterer;
@@ -21,6 +28,7 @@ export class EmacsEmulator implements Disposable {
         this.textEditor = textEditor;
 
         this.killYanker = new KillYanker(textEditor, killRing);
+        this.paredit = new Paredit(this);
         this.recenterer = new Recenterer(textEditor);
         this.prefixArgumentHandler = new PrefixArgumentHandler();
 
@@ -239,7 +247,7 @@ export class EmacsEmulator implements Disposable {
     }
 
     private enterMarkMode() {
-        this.isInMarkMode = true;
+        this._isInMarkMode = true;
 
         // At this moment, the only way to set the context for `when` conditions is `setContext` command.
         // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471
@@ -248,7 +256,7 @@ export class EmacsEmulator implements Disposable {
     }
 
     private exitMarkMode() {
-        this.isInMarkMode = false;
+        this._isInMarkMode = false;
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
     }
 

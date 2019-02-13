@@ -28,9 +28,6 @@
 				"*"
 		],
 		"main": "./out/extension.js",
-		"extensionDependencies": [
-				"haruhi-s.sexp"
-		],
 		"contributes": {
 				"keybindings": [
 						{
@@ -669,22 +666,12 @@
 						},
 						{
 								"key": "ctrl+alt+f",
-								"command": "sexp.moveForward",
+								"command": "emacs-mcx.paredit.forwardSexp",
 								"when": "editorTextFocus"
 						},
 						{
 								"key": "ctrl+alt+b",
-								"command": "sexp.moveBackward",
-								"when": "editorTextFocus"
-						},
-						{
-								"command": "sexp.barf",
-								"key": "ctrl+alt+shift+space",
-								"when": "editorTextFocus"
-						},
-						{
-								"command": "sexp.slurp",
-								"key": "ctrl+alt+space",
+								"command": "emacs-mcx.paredit.backwardSexp",
 								"when": "editorTextFocus"
 						}
 				]
@@ -705,6 +692,7 @@
 		},
 		"dependencies": {
 				"@types/clipboardy": "^1.1.0",
-				"clipboardy": "^1.2.3"
+				"clipboardy": "^1.2.3",
+				"paredit.js": "^0.3.4"
 		}
 }

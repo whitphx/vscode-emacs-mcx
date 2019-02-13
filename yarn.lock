@@ -17,6 +17,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.39.tgz#e7e87ad00364dd7bc485c940926345b8ec1a26ca"
   integrity sha512-rE7fktr02J8ybFf6eysife+WF+L4sAHWzw09DgdCebEu+qDwMvv4zl6Bc+825ttGZP73kCKxa3dhJOoGJ8+5mA==
 
+ace.improved@>=0.1.4:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ace.improved/-/ace.improved-0.2.1.tgz#4d74628fc431b09cdcaa1fb2b23d1ec83c5d2f32"
+  integrity sha1-TXRij8QxsJzcqh+ysj0eyDxdLzI=
+
 ajv@^6.5.5:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.2.tgz#caceccf474bf3fc3ce3b147443711a24063cc30d"
@@ -1076,6 +1081,13 @@ p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
   integrity sha1-P7z7FbiZpEEjs0ttzBi3JDNqLK4=
+
+paredit.js@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/paredit.js/-/paredit.js-0.3.4.tgz#1c12859959d67bf9622d6e39f6d3f60f2f8168e0"
+  integrity sha512-b6t7ORo/MwT6xvRiuu1c1do3+CAUd7/0rgc1d3qNHUeP64zxy4ttLIvK7SEHzyfyDLvD9pPuV9mYKHf6MgUkmg==
+  dependencies:
+    ace.improved ">=0.1.4"
 
 path-dirname@^1.0.0:
   version "1.0.2"

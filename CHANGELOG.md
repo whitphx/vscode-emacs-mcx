@@ -18,6 +18,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 - Run CI on Windows
+- Sexp navigations with mark-mode compatibility
 
 ## [0.5.0] - 2019-02-12
 ### Added

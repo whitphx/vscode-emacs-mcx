@@ -12,6 +12,7 @@ This extension aims
 * to be fully compatible with multi cursor
 * to support kill-ring integrated with the system clipboard
 * to support prefix argument
+* to support sexp
 * to fix some bugs in the existing extensions such as
     * mark-mode states are shared amoung all editors
 
@@ -110,14 +111,10 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 ### sexp
 |Command | Desc |
 |--------|------|
-| `C-M-f` (`Alt+K`) | Move forward by one s-exp |
-| `C-M-b` (`Alt+J`) | Move backward by one s-exp |
-| `C-M-SPC` (`Alt+I`) | Slurp one s-exp forward |
-| `C-M-S-SPC` ~~(`Alt+U`)~~ | Barf one s-exp to the front |
+| `C-M-f` | Move forward by one s-exp |
+| `C-M-b` | Move backward by one s-exp |
 
-These sexp functionalities are provided [sexp](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) extension by **haruhi-s**.
-Thanks to haruhi-s.
-[sexp](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) is declared as an Awesome Emacs Keymap's dependency so that it is also installed together.
+This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
 ## 'when' clause context
 This extension provides mark-mode functionality and
