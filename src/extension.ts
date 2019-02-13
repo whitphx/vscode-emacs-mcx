@@ -138,6 +138,14 @@ export function activate(context: vscode.ExtensionContext) {
     registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
         emulator.recenterTopBottom();
     });
+
+    registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {
+        emulator.paredit.forwardSexp();
+    });
+
+    registerEmulatorCommand("emacs-mcx.paredit.backwardSexp", (emulator) => {
+        emulator.paredit.backwardSexp();
+    });
 }
 
 // this method is called when your extension is deactivated
