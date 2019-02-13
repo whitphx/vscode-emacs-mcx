@@ -17,8 +17,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `kill-line`
     - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+
+## [0.6.0] - 2019-02-13
+### Added
 - Run CI on Windows
 - Sexp navigations with mark-mode compatibility
+    - A dependency to an external extension `haruhi-s.sexp` is eliminated.
 
 ## [0.5.0] - 2019-02-12
 ### Added
