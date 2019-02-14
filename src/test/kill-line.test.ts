@@ -4,7 +4,7 @@ import {Position, Range, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
 import { KillRing } from "../kill-ring";
 import { moveCommands } from "../move";
-import { cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace} from "./utils";
 
 suite("killLine", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -223,6 +223,36 @@ abcdefghij
                 await emulator.yankPop();
                 assert.equal(activeTextEditor.document.getText(), "fghij\n");  // First 2 kills appear here
             });
+        });
+    });
+
+    suite("when prefix argument specified", () => {
+        setup(() => {
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        test("it kills multiple lines and does not leave a blank line", async () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
+            emulator.universalArgument();
+            emulator.type("2");
+
+            await emulator.killLine();
+
+            assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(activeTextEditor.selection.isEqual(
+                new Selection(new Position(0, 0), new Position(0, 0)),
+            ));
+
+            await clearTextEditor(activeTextEditor);
+
+            await emulator.yank();
+            assertTextEqual(
+                activeTextEditor,
+                `0123456789
+abcdefghij
+`);
         });
     });
 });

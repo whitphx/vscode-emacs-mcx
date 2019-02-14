@@ -37,6 +37,7 @@ export class EmacsEmulator implements Disposable {
 
         // TODO: I want to use a decorator
         this.cursorMove = this.makePrefixArgumentAcceptable(this.cursorMove);
+        this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -153,10 +154,16 @@ export class EmacsEmulator implements Disposable {
         this.cancel();
     }
 
-    public killLine() {
+    // tslint:disable-next-line:no-unnecessary-initializer
+    public killLine(prefixArgument: number | undefined = undefined) {
         const ranges = this.textEditor.selections.map((selection) => {
             const cursor = selection.anchor;
             const lineAtCursor = this.textEditor.document.lineAt(cursor.line);
+
+            if (prefixArgument !== undefined) {
+                return new Range(cursor, new Position(cursor.line + prefixArgument, 0));
+            }
+
             const lineEnd = lineAtCursor.range.end;
 
             if (cursor.isEqual(lineEnd)) {
