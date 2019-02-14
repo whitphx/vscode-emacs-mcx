@@ -5,26 +5,40 @@ function createParallel<T>(concurrency: number, promiseFactory: () => Thenable<T
 }
 
 // tslint:disable:object-literal-sort-keys
-export const moveCommands: {[command: string]: (arg: number, select: boolean) => (Thenable<any> | undefined)} = {
-    forwardChar: (arg, select) =>
-        vscode.commands.executeCommand("cursorMove",
-            {
-                to: "right",
-                // by: "",
-                value: arg,
-                select,
-            },
-        ),
-    backwardChar: (arg, select) =>
-        vscode.commands.executeCommand("cursorMove",
-            {
-                to: "left",
-                // by: "",
-                value: arg,
-                select,
-            },
-        ),
-    nextLine: (arg, select) =>
+export const moveCommands: {
+    [command: string]:
+        (textEditor: vscode.TextEditor, arg: number, select: boolean) =>
+            (Thenable<any> | undefined),
+} = {
+    forwardChar: (textEditor, arg, select) => {
+        if (arg === 1) {
+            return vscode.commands.executeCommand(select ? "cursorRightSelect" : "cursorRight");
+        } else if (arg > 0) {
+            const doc = textEditor.document;
+            const newSelections = textEditor.selections.map((selection) => {
+                const offset = doc.offsetAt(selection.active);
+                const newActivePos = doc.positionAt(offset + arg);
+                const newAnchorPos = select ? selection.anchor : newActivePos;
+                return new vscode.Selection(newAnchorPos, newActivePos);
+            });
+            textEditor.selections = newSelections;
+        }
+    },
+    backwardChar: (textEditor, arg, select) => {
+        if (arg === 1) {
+            return vscode.commands.executeCommand(select ? "cursorLeftSelect" : "cursorLeft");
+        } else if (arg > 0) {
+            const doc = textEditor.document;
+            const newSelections = textEditor.selections.map((selection) => {
+                const offset = doc.offsetAt(selection.active);
+                const newActivePos = doc.positionAt(offset - arg);
+                const newAnchorPos = select ? selection.anchor : newActivePos;
+                return new vscode.Selection(newAnchorPos, newActivePos);
+            });
+            textEditor.selections = newSelections;
+        }
+    },
+    nextLine: (textEditor, arg, select) =>
         vscode.commands.executeCommand("cursorMove",
             {
                 to: "down",
@@ -33,7 +47,7 @@ export const moveCommands: {[command: string]: (arg: number, select: boolean) =>
                 select,
             },
         ),
-    previousLine: (arg, select) =>
+    previousLine: (textEditor, arg, select) =>
         vscode.commands.executeCommand("cursorMove",
             {
                 to: "up",
@@ -42,7 +56,7 @@ export const moveCommands: {[command: string]: (arg: number, select: boolean) =>
                 select,
             },
         ),
-    moveBeginningOfLine: (arg, select) => {
+    moveBeginningOfLine: (textEditor, arg, select) => {
         if (arg === 1) {
             return vscode.commands.executeCommand(select ? "cursorHomeSelect" : "cursorHome");
         } else if (arg > 1) {
@@ -54,7 +68,7 @@ export const moveCommands: {[command: string]: (arg: number, select: boolean) =>
             }).then(() => vscode.commands.executeCommand(select ? "cursorHomeSelect" : "cursorHome"));
         }
     },
-    moveEndOfLine: (arg, select) => {
+    moveEndOfLine: (textEditor, arg, select) => {
         if (arg === 1) {
             return vscode.commands.executeCommand(select ? "cursorEndSelect" : "cursorEnd");
         } else if (arg > 1) {
@@ -66,16 +80,16 @@ export const moveCommands: {[command: string]: (arg: number, select: boolean) =>
             }).then(() => vscode.commands.executeCommand(select ? "cursorEndSelect" : "cursorEnd"));
         }
     },
-    forwardWord: (arg, select) => createParallel(arg, () =>
+    forwardWord: (textEditor, arg, select) => createParallel(arg, () =>
         vscode.commands.executeCommand(select ? "cursorWordRightSelect" : "cursorWordRight")),
-    backwardWord: (arg, select) => createParallel(arg, () =>
+    backwardWord: (textEditor, arg, select) => createParallel(arg, () =>
         vscode.commands.executeCommand(select ? "cursorWordLeftSelect" : "cursorWordLeft")),
-    beginningOfBuffer: (arg, select) =>
+    beginningOfBuffer: (textEditor, arg, select) =>
         vscode.commands.executeCommand(select ? "cursorTopSelect" : "cursorTop"),
-    endOfBuffer: (arg, select) =>
+    endOfBuffer: (textEditor, arg, select) =>
         vscode.commands.executeCommand(select ? "cursorBottomSelect" : "cursorBottom"),
-    scrollUpCommand: (arg, select) => createParallel(arg, () =>
+    scrollUpCommand: (textEditor, arg, select) => createParallel(arg, () =>
         vscode.commands.executeCommand(select ? "cursorPageDownSelect" : "cursorPageDown")),
-    scrollDownCommand: (arg, select) => createParallel(arg, () =>
+    scrollDownCommand: (textEditor, arg, select) => createParallel(arg, () =>
         vscode.commands.executeCommand(select ? "cursorPageUpSelect" : "cursorPageUp")),
 };

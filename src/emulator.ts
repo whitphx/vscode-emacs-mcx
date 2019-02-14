@@ -102,7 +102,7 @@ export class EmacsEmulator implements Disposable {
             throw Error(`Unsupported cursor move command: ${commandName}`);
         }
 
-        return cursorMoveCommand(repeat, this.isInMarkMode);
+        return cursorMoveCommand(this.textEditor, repeat, this.isInMarkMode);
     }
 
     public setMarkCommand() {

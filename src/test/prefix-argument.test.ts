@@ -280,6 +280,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("repeating charactor input with 2 C-u", async () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
             emulator.universalArgument();
             emulator.universalArgument();
             await emulator.cursorMove("forwardChar");
@@ -303,6 +305,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("c-u stops prefix argument input", async () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
             emulator.universalArgument();
             await emulator.type("1");
             await emulator.type("2");
@@ -328,6 +332,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
 
         test("numerical input cancels previous repeated c-u", async () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
             emulator.universalArgument();
             emulator.universalArgument();
             emulator.universalArgument();
@@ -385,6 +391,90 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             assert.ok(
                 activeTextEditor.selections[1].isEqual(
                     new Range(new Position(1, 5), new Position(1, 5)),
+                ),
+            );
+        });
+    });
+
+    suite.only("with forwardChar in multi-line text", () => {
+        setup(async () => {
+            activeTextEditor = await setupWorkspace("aaa\n".repeat(8));
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        teardown(cleanUpWorkspace);
+
+        test("cursor moves over lines", () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
+            emulator.universalArgument();
+            emulator.universalArgument();  // C-u * 2 makes 16 character movements
+
+            emulator.cursorMove("forwardChar");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selection.isEqual(
+                    new Range(new Position(4, 0), new Position(4, 0)),
+                ),
+            );
+        });
+
+        test("cursor moves at most to the end of the text", () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
+            emulator.universalArgument();
+            emulator.universalArgument();
+            emulator.universalArgument();  // C-u * 3 makes 64 character movements
+
+            emulator.cursorMove("forwardChar");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selection.isEqual(
+                    new Range(new Position(8, 0), new Position(8, 0)),
+                ),
+            );
+        });
+    });
+
+    suite("with backwardChar in multi-line text", () => {
+        setup(async () => {
+            activeTextEditor = await setupWorkspace("aaa\n".repeat(8));
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        teardown(cleanUpWorkspace);
+
+        test("cursor moves over lines", () => {
+            setEmptyCursors(activeTextEditor, [8, 0]);
+
+            emulator.universalArgument();
+            emulator.universalArgument();  // C-u * 2 makes 16 character movements
+
+            emulator.cursorMove("backwardChar");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selection.isEqual(
+                    new Range(new Position(4, 0), new Position(4, 0)),
+                ),
+            );
+        });
+
+        test("cursor moves at most to the beginning of the text", () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
+            emulator.universalArgument();
+            emulator.universalArgument();
+            emulator.universalArgument();  // C-u * 3 makes 64 character movements
+
+            emulator.cursorMove("backwardChar");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(
+                activeTextEditor.selection.isEqual(
+                    new Range(new Position(0, 0), new Position(0, 0)),
                 ),
             );
         });
