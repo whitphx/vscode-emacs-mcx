@@ -155,16 +155,16 @@ export class EmacsEmulator implements Disposable {
 
     public killLine() {
         const ranges = this.textEditor.selections.map((selection) => {
-            const anchor = selection.anchor;
-            const lineAtAnchor = this.textEditor.document.lineAt(selection.anchor.line);
-            const lineEnd = lineAtAnchor.range.end;
+            const cursor = selection.anchor;
+            const lineAtCursor = this.textEditor.document.lineAt(cursor.line);
+            const lineEnd = lineAtCursor.range.end;
 
-            if (anchor.isEqual(lineEnd)) {
+            if (cursor.isEqual(lineEnd)) {
                 // From the end of the line to the beginning of the next line
-                return new Range(anchor, new Position(anchor.line + 1, 0));
+                return new Range(cursor, new Position(cursor.line + 1, 0));
             } else {
                 // From the current cursor to the end of line
-                return new Range(anchor, lineEnd);
+                return new Range(cursor, lineEnd);
             }
         });
         this.exitMarkMode();
@@ -183,7 +183,7 @@ export class EmacsEmulator implements Disposable {
         return this.killYanker.kill(ranges);
     }
 
-    public async killRegion(appendClipboard?: boolean) {
+    public async killRegion() {
         const ranges = this.getNonEmptySelections();
         await this.killYanker.kill(ranges);
         this.exitMarkMode();
