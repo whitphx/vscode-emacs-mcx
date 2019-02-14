@@ -18,6 +18,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.7.0] - 2019-02-15
+### Added
+- `C-k` (kill-line) now supports prefix argument.
+
+### Fixed
+-  Behaviors of `C-f` (forward-char) and `C-b` (backward-char) are modified to move cursors over multiple lines when prefix argument specified.
+
 ## [0.6.0] - 2019-02-13
 ### Added
 - Run CI on Windows

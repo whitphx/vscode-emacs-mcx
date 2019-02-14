@@ -49,28 +49,28 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 
 
 ### Edit commands
-|Command | Desc |
-|--------|------|
-| `C-d` | Delete right (DEL) |
-| `C-h` | Delete left (BACKSPACE) |
-| `M-d` | Delete word |
-| `M-Bksp` | Delete word left |
-| `C-k` | Kill from the current cursor to the end of line (kill-line) |
-| `C-S-Bksp` | Kill whole line (kill-whole-line) |
-| `C-w` | Kill region |
-| `M-w` | Copy region to kill ring |
-| `C-y` | Yank |
-| `M-y` | Yank pop |
-| `C-o` | Open line |
-| `C-j` | New line |
-| `C-m` | New line |
-| `C-x C-o` | Delete blank lines around (delete-blank-lines) |
-| `C-x h` | Select All |
-| `C-x u` (`C-/`)| Undo |
-| `C-;` | Toggle line comment in and out |
-| `M-;` | Toggle region comment in and out |
-| `C-x C-l` (`M-l`) | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Uppercase (below) is same) |
-| `C-x C-u` (`M-u`) | Convert to upper case |
+|Command |Prefix argument | Desc |
+|--------|----------------|------|
+| `C-d` |  | Delete right (DEL) |
+| `C-h` |  | Delete left (BACKSPACE) |
+| `M-d` |  | Delete word |
+| `M-Bksp` |  | Delete word left |
+| `C-k` | ✓ | Kill from the current cursor to the end of line (kill-line) |
+| `C-S-Bksp`   || Kill whole line (kill-whole-line) |
+| `C-w` |  | Kill region |
+| `M-w` |  | Copy region to kill ring |
+| `C-y` |  | Yank |
+| `M-y` |  | Yank pop |
+| `C-o` |  | Open line |
+| `C-j` |  | New line |
+| `C-m` |  | New line |
+| `C-x C-o` |  | Delete blank lines around (delete-blank-lines) |
+| `C-x h` |  | Select All |
+| `C-x u` (`C-/`)|  | Undo |
+| `C-;` |  | Toggle line comment in and out |
+| `M-;` |  | Toggle region comment in and out |
+| `C-x C-l` (`M-l`) |  | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Uppercase (below) is same) |
+| `C-x C-u` (`M-u`) |  | Convert to upper case |
 
 ### Other Commands
 |Command | Desc |
