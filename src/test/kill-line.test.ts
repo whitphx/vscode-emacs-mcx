@@ -4,7 +4,7 @@ import {Position, Range, Selection} from "vscode";
 import { EmacsEmulator } from "../emulator";
 import { KillRing } from "../kill-ring";
 import { moveCommands } from "../move";
-import { cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace} from "./utils";
 
 suite("killLine", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -25,9 +25,7 @@ ABCDEFGHIJ`;
         });
 
         test("it cuts the current line", async () => {
-            activeTextEditor.selections = [
-                new Selection(new Position(1, 1), new Position(1, 1)),  // Line_1
-            ];
+            setEmptyCursors(activeTextEditor, [1, 1]);  // Line_1
 
             await emulator.killLine();
 
@@ -40,53 +38,36 @@ ABCDEFGHIJ`,
 
             clearTextEditor(activeTextEditor);
 
-            activeTextEditor.selections = [
-                new Selection(new Position(0, 0), new Position(0, 0)),
-            ];
+            setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.yank();
 
-            assert.equal(
-                activeTextEditor.document.getText(),
-                "bcdefghij",
-            );
+            assertTextEqual(activeTextEditor, "bcdefghij");
         });
 
         test("it removes line break if invoked at the end of line", async () => {
-            activeTextEditor.selections = [
-                new Selection(new Position(1, 10), new Position(1, 10)),  // at the end of line_1
-            ];
+            setEmptyCursors(activeTextEditor, [1, 10]);
             await emulator.killLine();
 
-            assert.equal(
-                activeTextEditor.document.getText(),
+            assertTextEqual(
+                activeTextEditor,
                 `0123456789
-abcdefghijABCDEFGHIJ`,
-            );
+abcdefghijABCDEFGHIJ`);
 
             clearTextEditor(activeTextEditor);
 
-            activeTextEditor.selections = [
-                new Selection(new Position(0, 0), new Position(0, 0)),
-            ];
+            setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.yank();
 
-            assert.equal(
-                activeTextEditor.document.getText(),
-                "\n",
-            );
+            assertTextEqual(activeTextEditor, "\n");
         });
 
         test("it works with multi cursor", async () => {
-            activeTextEditor.selections = [
-                new Selection(new Position(1, 1), new Position(1, 1)),
-                new Selection(new Position(0, 1), new Position(0, 1)),
-                new Selection(new Position(2, 1), new Position(2, 1)),
-            ];
+            setEmptyCursors(activeTextEditor, [1, 1], [0, 1], [2, 1]);
 
             await emulator.killLine();
 
-            assert.equal(
-                activeTextEditor.document.getText(),
+            assertTextEqual(
+                activeTextEditor,
                 `0
 a
 A`,
@@ -94,13 +75,11 @@ A`,
 
             clearTextEditor(activeTextEditor);
 
-            activeTextEditor.selections = [
-                new Selection(new Position(0, 0), new Position(0, 0)),
-            ];
+            setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.yank();
 
-            assert.equal(
-                activeTextEditor.document.getText(),
+            assertTextEqual(
+                activeTextEditor,
                 `123456789
 bcdefghij
 BCDEFGHIJ`,
@@ -116,9 +95,7 @@ BCDEFGHIJ`,
         });
 
         test("it appends killed text if invoked continuously", async () => {
-            activeTextEditor.selections = [
-                new Selection(new Position(0, 0), new Position(0, 0)),
-            ];
+            setEmptyCursors(activeTextEditor, [0, 0]);
 
             await emulator.killLine();  // 1st line
             await emulator.killLine();  // EOL of 1st
@@ -127,13 +104,11 @@ BCDEFGHIJ`,
 
             clearTextEditor(activeTextEditor);
 
-            activeTextEditor.selections = [
-                new Selection(new Position(0, 0), new Position(0, 0)),
-            ];
+            setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.yank();
 
-            assert.equal(
-                activeTextEditor.document.getText(),
+            assertTextEqual(
+                activeTextEditor,
                 `0123456789
 abcdefghij
 `,
@@ -148,9 +123,7 @@ abcdefghij
         const interruptingCommands: string[] = [...otherInterruptingCommands];
         interruptingCommands.forEach((interruptingCommand) => {
             test(`it does not appends killed text if another command (${interruptingCommand}) invoked`, async () => {
-                activeTextEditor.selections = [
-                    new Selection(new Position(1, 5), new Position(1, 5)),
-                ];
+                setEmptyCursors(activeTextEditor, [1, 5]);
 
                 await emulator.killLine();  // 2st line
                 await emulator.killLine();  // EOL of 2st
@@ -162,9 +135,7 @@ abcdefghij
 
                 await clearTextEditor(activeTextEditor);
 
-                activeTextEditor.selections = [
-                    new Selection(new Position(0, 0), new Position(0, 0)),
-                ];
+                setEmptyCursors(activeTextEditor, [0, 0]);
                 await emulator.yank();
 
                 assert.ok(
@@ -198,9 +169,7 @@ abcdefghij
         ];
         ops.forEach(([label, op]) => {
             test(`it does not append the killed text after ${label}`, async () => {
-                activeTextEditor.selections = [
-                    new Selection(new Position(1, 5), new Position(1, 5)),
-                ];
+                setEmptyCursors(activeTextEditor, [1, 5]);
 
                 await emulator.killLine();  // 2st line
                 await emulator.killLine();  // EOL of 2st
@@ -212,9 +181,7 @@ abcdefghij
 
                 await clearTextEditor(activeTextEditor);
 
-                activeTextEditor.selections = [
-                    new Selection(new Position(0, 0), new Position(0, 0)),
-                ];
+                setEmptyCursors(activeTextEditor, [0, 0]);
                 await emulator.yank();
 
                 assert.ok(
@@ -223,6 +190,36 @@ abcdefghij
                 await emulator.yankPop();
                 assert.equal(activeTextEditor.document.getText(), "fghij\n");  // First 2 kills appear here
             });
+        });
+    });
+
+    suite("when prefix argument specified", () => {
+        setup(() => {
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        test("it kills multiple lines and does not leave a blank line", async () => {
+            setEmptyCursors(activeTextEditor, [0, 0]);
+
+            emulator.universalArgument();
+            emulator.type("2");
+
+            await emulator.killLine();
+
+            assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
+            assert.equal(activeTextEditor.selections.length, 1);
+            assert.ok(activeTextEditor.selection.isEqual(
+                new Selection(new Position(0, 0), new Position(0, 0)),
+            ));
+
+            await clearTextEditor(activeTextEditor);
+
+            await emulator.yank();
+            assertTextEqual(
+                activeTextEditor,
+                `0123456789
+abcdefghij
+`);
         });
     });
 });
