@@ -396,7 +396,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         });
     });
 
-    suite.only("with forwardChar in multi-line text", () => {
+    suite("with forwardChar in multi-line text", () => {
         setup(async () => {
             activeTextEditor = await setupWorkspace("aaa\n".repeat(8));
             emulator = new EmacsEmulator(activeTextEditor);
