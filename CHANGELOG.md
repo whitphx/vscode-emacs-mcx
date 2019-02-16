@@ -18,6 +18,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.8.0] - 2019-02-17
+### Added
+- `C-h` (delete-backward-char) and `C-d` (delete-forward-char) now support prefix argument.
+
 ## [0.7.0] - 2019-02-15
 ### Added
 - `C-k` (kill-line) now supports prefix argument.
