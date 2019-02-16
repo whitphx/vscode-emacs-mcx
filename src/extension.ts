@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { moveCommandIds } from "./commands/move";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-ring";
@@ -59,12 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(disposable);
     }
 
-    [
-        "forwardChar", "backwardChar", "nextLine", "previousLine",
-        "moveBeginningOfLine", "moveEndOfLine", "forwardWord", "backwardWord",
-        "beginningOfBuffer", "endOfBuffer", "scrollUpCommand", "scrollDownCommand",
-    ]
-    .map((commandName) => {
+    moveCommandIds.map((commandName) => {
         registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
             emulator.cursorMove(commandName);
         });

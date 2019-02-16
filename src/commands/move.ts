@@ -4,6 +4,13 @@ import * as vscode from "vscode";
 import { TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 
+// TODO: be unnecessary
+export const moveCommandIds = [
+    "forwardChar", "backwardChar", "nextLine", "previousLine",
+    "moveBeginningOfLine", "moveEndOfLine", "forwardWord", "backwardWord",
+    "beginningOfBuffer", "endOfBuffer", "scrollUpCommand", "scrollDownCommand",
+];
+
 export class ForwardChar extends EmacsCommand {
     public readonly id = "forwardChar";
 

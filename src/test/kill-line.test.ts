@@ -1,9 +1,9 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
+import { moveCommandIds } from "../commands/move";
 import { EmacsEmulator } from "../emulator";
 import { KillRing } from "../kill-ring";
-import { moveCommands } from "../move";
 import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace} from "./utils";
 
 suite("killLine", () => {
@@ -148,7 +148,7 @@ abcdefghij
 
         // Test kill appending is not enabled after cursorMoves, editing, or some other ops
         const moves =
-            Object.keys(moveCommands).map((commandName): [string, () => (Thenable<any> | undefined)] =>
+            moveCommandIds.map((commandName): [string, () => (Thenable<any> | undefined)] =>
                 [commandName, () => emulator.cursorMove(commandName)]);
         const edits: Array<[string, () => Thenable<any>]> = [
             ["edit", () => activeTextEditor.edit((editBuilder) =>

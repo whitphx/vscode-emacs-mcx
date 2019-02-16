@@ -17,12 +17,14 @@ export abstract class EmacsCommand {
         textEditor: TextEditor,
         isInMarkMode: boolean,
         prefixArgument: number | undefined,
-    ): (undefined | Thenable<{} | undefined>) {
-        this.execute(textEditor, isInMarkMode, prefixArgument);
-
-        this.afterExecute();
-
-        return;
+    ): (undefined | Thenable<{} | undefined | void>) {
+        const ret = this.execute(textEditor, isInMarkMode, prefixArgument);
+        if (ret !== undefined && (ret as Thenable<any>).then !== undefined) {
+            return (ret as Thenable<any>).then(() => this.afterExecute());
+        } else {
+            this.afterExecute();
+            return;
+        }
     }
 
     public abstract execute(
