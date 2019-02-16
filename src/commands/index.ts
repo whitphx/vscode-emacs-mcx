@@ -5,6 +5,8 @@ export function createParallel<T>(concurrency: number, promiseFactory: () => The
 }
 
 export abstract class EmacsCommand {
+    public abstract readonly id: string;
+
     private afterExecute: () => void;
 
     public constructor(afterExecute: () => void) {

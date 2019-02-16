@@ -5,6 +5,8 @@ import { TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 
 export class ForwardChar extends EmacsCommand {
+    public readonly id = "forwardChar";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (prefixArgument === undefined || prefixArgument === 1) {
             return vscode.commands.executeCommand(isInMarkMode ? "cursorRightSelect" : "cursorRight");
@@ -22,6 +24,8 @@ export class ForwardChar extends EmacsCommand {
 }
 
 export class BackwardChar extends EmacsCommand {
+    public readonly id = "backwardChar";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (prefixArgument === undefined || prefixArgument === 1) {
             return vscode.commands.executeCommand(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
@@ -39,6 +43,8 @@ export class BackwardChar extends EmacsCommand {
 }
 
 export class NextLine extends EmacsCommand {
+    public readonly id = "nextLine";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const value = prefixArgument === undefined ? 1 : prefixArgument;
 
@@ -54,6 +60,8 @@ export class NextLine extends EmacsCommand {
 }
 
 export class PreviousLine extends EmacsCommand {
+    public readonly id = "previousLine";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const value = prefixArgument === undefined ? 1 : prefixArgument;
 
@@ -69,6 +77,8 @@ export class PreviousLine extends EmacsCommand {
 }
 
 export class MoveBeginningOfLine extends EmacsCommand {
+    public readonly id = "moveBeginningOfLine";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (prefixArgument === undefined || prefixArgument === 1) {
             return vscode.commands.executeCommand(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
@@ -84,6 +94,8 @@ export class MoveBeginningOfLine extends EmacsCommand {
 }
 
 export class MoveEndOfLine extends EmacsCommand {
+    public readonly id = "moveEndOfLine";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (prefixArgument === undefined || prefixArgument === 1) {
             return vscode.commands.executeCommand(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
@@ -99,6 +111,8 @@ export class MoveEndOfLine extends EmacsCommand {
 }
 
 export class ForwardWord extends EmacsCommand {
+    public readonly id = "forwardWord";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
@@ -107,6 +121,8 @@ export class ForwardWord extends EmacsCommand {
 }
 
 export class BackwardWord extends EmacsCommand {
+    public readonly id = "backwardWord";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
@@ -115,6 +131,8 @@ export class BackwardWord extends EmacsCommand {
 }
 
 export class BeginningOfBuffer extends EmacsCommand {
+    public readonly id = "beginningOfBuffer";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
@@ -123,6 +141,8 @@ export class BeginningOfBuffer extends EmacsCommand {
 }
 
 export class EndOfBuffer extends EmacsCommand {
+    public readonly id = "endOfBuffer";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
@@ -131,6 +151,8 @@ export class EndOfBuffer extends EmacsCommand {
 }
 
 export class ScrollUpCommand extends EmacsCommand {
+    public readonly id = "scrollUpCommand";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
@@ -139,6 +161,8 @@ export class ScrollUpCommand extends EmacsCommand {
 }
 
 export class ScrollDownCommand extends EmacsCommand {
+    public readonly id = "scrollDownCommand";
+
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
