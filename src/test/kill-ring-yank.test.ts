@@ -303,7 +303,7 @@ ABCDEFGHIJ`);
 
             const moves =
                 moveCommandIds.map((commandName): [string, () => (Thenable<any> | undefined)] =>
-                    [commandName, () => emulator.cursorMove(commandName)]);
+                    [commandName, () => emulator.runCommand(commandName)]);
 
             setup(() => {
                 const killRing = new KillRing(3);

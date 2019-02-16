@@ -149,7 +149,7 @@ abcdefghij
         // Test kill appending is not enabled after cursorMoves, editing, or some other ops
         const moves =
             moveCommandIds.map((commandName): [string, () => (Thenable<any> | undefined)] =>
-                [commandName, () => emulator.cursorMove(commandName)]);
+                [commandName, () => emulator.runCommand(commandName)]);
         const edits: Array<[string, () => Thenable<any>]> = [
             ["edit", () => activeTextEditor.edit((editBuilder) =>
                 editBuilder.insert(new Position(0, 0), "hoge"))],

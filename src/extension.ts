@@ -60,12 +60,6 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(disposable);
     }
 
-    moveCommandIds.map((commandName) => {
-        registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
-            emulator.cursorMove(commandName);
-        });
-    });
-
     registerEmulatorCommand("type",
         (emulator, args) => {
             // Capture typing charactors for universal argument functionality.
@@ -74,6 +68,12 @@ export function activate(context: vscode.ExtensionContext) {
         },
         (args) => vscode.commands.executeCommand("default:type", args),
     );
+
+    moveCommandIds.map((commandName) => {
+        registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
+            emulator.runCommand(commandName);
+        });
+    });
 
     registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
         emulator.universalArgument();

@@ -115,7 +115,7 @@ export class EmacsEmulator implements Disposable {
         this.prefixArgumentHandler.cancel();
     }
 
-    public cursorMove(commandName: string) {
+    public runCommand(commandName: string) {
         const command = this.commandRegistry.get(commandName);
 
         if (command === undefined) {
@@ -255,14 +255,14 @@ export class EmacsEmulator implements Disposable {
 
     public async transformToUppercase() {
         if (!this.hasNonEmptySelection()) {
-            await this.cursorMove("forwardWord");
+            await this.runCommand("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToUppercase");
     }
 
     public async transformToLowercase() {
         if (!this.hasNonEmptySelection()) {
-            await this.cursorMove("forwardWord");
+            await this.runCommand("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToLowercase");
     }
