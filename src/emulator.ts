@@ -1,10 +1,12 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { DeleteBackwardChar, DeleteForwardChar } from "./commands/edit";
+import * as MoveCommands from "./commands/move";
+import { EmacsCommandRegistry } from "./commands/registry";
 import { deleteBlankLines } from "./delete-blank-lines";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
-import { moveCommands } from "./move";
 import { Paredit } from "./paredit";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
@@ -13,6 +15,8 @@ export class EmacsEmulator implements Disposable {
     public readonly paredit: Paredit;
 
     private textEditor: TextEditor;
+
+    private commandRegistry: EmacsCommandRegistry;
 
     // tslint:disable-next-line:variable-name
     private _isInMarkMode = false;
@@ -35,8 +39,24 @@ export class EmacsEmulator implements Disposable {
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
 
+        this.commandRegistry = new EmacsCommandRegistry();
+        this.afterCommand = this.afterCommand.bind(this);
+        this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand));
+        this.commandRegistry.register(new DeleteBackwardChar(this.afterCommand));
+        this.commandRegistry.register(new DeleteForwardChar(this.afterCommand));
+
         // TODO: I want to use a decorator
-        this.cursorMove = this.makePrefixArgumentAcceptable(this.cursorMove);
         this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
     }
 
@@ -94,16 +114,18 @@ export class EmacsEmulator implements Disposable {
         this.prefixArgumentHandler.universalArgument();
     }
 
-    public cursorMove(commandName: string, prefixArgument: number | undefined = 1) {
-        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-        if (repeat <= 0) { return; }  // TODO: Zero and negative value are not supported
+    public runCommand(commandName: string) {
+        const command = this.commandRegistry.get(commandName);
 
-        const cursorMoveCommand = moveCommands[commandName];
-        if (typeof cursorMoveCommand !== "function") {
-            throw Error(`Unsupported cursor move command: ${commandName}`);
+        if (command === undefined) {
+            throw Error(`command ${commandName} is not found`);
         }
 
-        return cursorMoveCommand(this.textEditor, repeat, this.isInMarkMode);
+        if (command !== undefined) {
+            const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+
+            return command.run(this.textEditor, this.isInMarkMode, prefixArgument);
+        }
     }
 
     public setMarkCommand() {
@@ -232,14 +254,14 @@ export class EmacsEmulator implements Disposable {
 
     public async transformToUppercase() {
         if (!this.hasNonEmptySelection()) {
-            await this.cursorMove("forwardWord");
+            await this.runCommand("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToUppercase");
     }
 
     public async transformToLowercase() {
         if (!this.hasNonEmptySelection()) {
-            await this.cursorMove("forwardWord");
+            await this.runCommand("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToLowercase");
     }
@@ -298,5 +320,9 @@ export class EmacsEmulator implements Disposable {
 
     private getNonEmptySelections(): Selection[] {
         return this.textEditor.selections.filter((selection) => !selection.isEmpty);
+    }
+
+    private afterCommand() {
+        this.prefixArgumentHandler.cancel();
     }
 }

@@ -280,12 +280,17 @@
 						},
 						{
 								"key": "ctrl+d",
-								"command": "deleteRight",
+								"command": "emacs-mcx.deleteForwardChar",
+								"when": "editorTextFocus && !editorReadonly"
+						},
+						{
+								"key": "backspace",
+								"command": "emacs-mcx.deleteBackwardChar",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
 								"key": "ctrl+h",
-								"command": "deleteLeft",
+								"command": "emacs-mcx.deleteBackwardChar",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{

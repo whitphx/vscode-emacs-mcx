@@ -45,7 +45,7 @@ ccc`;
             assert.ok(activeTextEditor.selections[1].isEqual(secondRange));
 
             // And mark-mode is still valid
-            await emulator.cursorMove("backwardChar");
+            await emulator.runCommand("backwardChar");
             assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
         });
     });

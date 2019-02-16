@@ -2,9 +2,9 @@ import * as assert from "assert";
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
+import { moveCommandIds } from "../commands/move";
 import { EmacsEmulator } from "../emulator";
 import { KillRing } from "../kill-ring";
-import { moveCommands } from "../move";
 import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
 
 suite("kill, yank, yank-pop", () => {
@@ -302,8 +302,8 @@ ABCDEFGHIJ`);
             ];
 
             const moves =
-                Object.keys(moveCommands).map((commandName): [string, () => (Thenable<any> | undefined)] =>
-                    [commandName, () => emulator.cursorMove(commandName)]);
+                moveCommandIds.map((commandName): [string, () => (Thenable<any> | undefined)] =>
+                    [commandName, () => emulator.runCommand(commandName)]);
 
             setup(() => {
                 const killRing = new KillRing(3);

@@ -51,8 +51,8 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 ### Edit commands
 |Command |Prefix argument | Desc |
 |--------|----------------|------|
-| `C-d` |  | Delete right (DEL) |
-| `C-h` |  | Delete left (BACKSPACE) |
+| `C-d` | ✓ | Delete right (DEL) |
+| `C-h` | ✓ | Delete left (BACKSPACE) |
 | `M-d` |  | Delete word |
 | `M-Bksp` |  | Delete word left |
 | `C-k` | ✓ | Kill from the current cursor to the end of line (kill-line) |

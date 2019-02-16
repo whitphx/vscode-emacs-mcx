@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
+import { moveCommandIds } from "./commands/move";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-ring";
 import { MessageManager } from "./message";
-import { moveCommands } from "./move";
 
 export function activate(context: vscode.ExtensionContext) {
     const killRingMaxLen = 60;  // TODO: be configurable
@@ -60,12 +60,6 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(disposable);
     }
 
-    Object.keys(moveCommands).map((commandName) => {
-        registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
-            emulator.cursorMove(commandName);
-        });
-    });
-
     registerEmulatorCommand("type",
         (emulator, args) => {
             // Capture typing charactors for universal argument functionality.
@@ -74,6 +68,20 @@ export function activate(context: vscode.ExtensionContext) {
         },
         (args) => vscode.commands.executeCommand("default:type", args),
     );
+
+    moveCommandIds.map((commandName) => {
+        registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
+            emulator.runCommand(commandName);
+        });
+    });
+
+    registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {
+        emulator.runCommand("deleteBackwardChar");
+    });
+
+    registerEmulatorCommand("emacs-mcx.deleteForwardChar", (emulator) => {
+        emulator.runCommand("deleteForwardChar");
+    });
 
     registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
         emulator.universalArgument();
