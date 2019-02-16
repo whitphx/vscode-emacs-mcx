@@ -3,7 +3,6 @@ import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-ring";
 import { MessageManager } from "./message";
-import { moveCommands } from "./move";
 
 export function activate(context: vscode.ExtensionContext) {
     const killRingMaxLen = 60;  // TODO: be configurable
@@ -60,7 +59,12 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(disposable);
     }
 
-    Object.keys(moveCommands).map((commandName) => {
+    [
+        "forwardChar", "backwardChar", "nextLine", "previousLine",
+        "moveBeginningOfLine", "moveEndOfLine", "forwardWord", "backwardWord",
+        "beginningOfBuffer", "endOfBuffer", "scrollUpCommand", "scrollDownCommand",
+    ]
+    .map((commandName) => {
         registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
             emulator.cursorMove(commandName);
         });
