@@ -75,6 +75,14 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
+    registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {
+        emulator.runCommand("deleteBackwardChar");
+    });
+
+    registerEmulatorCommand("emacs-mcx.deleteForwardChar", (emulator) => {
+        emulator.runCommand("deleteForwardChar");
+    });
+
     registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
         emulator.universalArgument();
     });
