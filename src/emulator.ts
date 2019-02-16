@@ -40,21 +40,21 @@ export class EmacsEmulator implements Disposable {
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
 
         this.commandRegistry = new EmacsCommandRegistry();
-        this.cancelPrefixArgument = this.cancelPrefixArgument.bind(this);
-        this.commandRegistry.register(new MoveCommands.ForwardChar(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.BackwardChar(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.NextLine(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.PreviousLine(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.ForwardWord(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.BackwardWord(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.cancelPrefixArgument));
-        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.cancelPrefixArgument));
-        this.commandRegistry.register(new DeleteBackwardChar(this.cancelPrefixArgument));
-        this.commandRegistry.register(new DeleteForwardChar(this.cancelPrefixArgument));
+        this.afterCommand = this.afterCommand.bind(this);
+        this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand));
+        this.commandRegistry.register(new DeleteBackwardChar(this.afterCommand));
+        this.commandRegistry.register(new DeleteForwardChar(this.afterCommand));
 
         // TODO: I want to use a decorator
         this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
@@ -112,10 +112,6 @@ export class EmacsEmulator implements Disposable {
 
     public universalArgument() {
         this.prefixArgumentHandler.universalArgument();
-    }
-
-    public cancelPrefixArgument() {
-        this.prefixArgumentHandler.cancel();
     }
 
     public runCommand(commandName: string) {
@@ -324,5 +320,9 @@ export class EmacsEmulator implements Disposable {
 
     private getNonEmptySelections(): Selection[] {
         return this.textEditor.selections.filter((selection) => !selection.isEmpty);
+    }
+
+    private afterCommand() {
+        this.prefixArgumentHandler.cancel();
     }
 }
