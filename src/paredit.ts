@@ -1,5 +1,5 @@
 import * as paredit from "paredit.js";
-import { Selection } from "vscode";
+import { Selection, TextEditorRevealType } from "vscode";
 import { EmacsEmulator } from "./emulator";
 
 export class Paredit {
@@ -37,5 +37,6 @@ export class Paredit {
         });
 
         textEditor.selections = newSelections;
+        textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport);
     }
 }
