@@ -149,11 +149,11 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {
-        emulator.paredit.forwardSexp();
+        emulator.runCommand("paredit.forwardSexp");
     });
 
     registerEmulatorCommand("emacs-mcx.paredit.backwardSexp", (emulator) => {
-        emulator.paredit.backwardSexp();
+        emulator.runCommand("paredit.backwardSexp");
     });
 
     vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {

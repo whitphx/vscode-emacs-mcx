@@ -3,17 +3,15 @@ import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import { DeleteBackwardChar, DeleteForwardChar } from "./commands/edit";
 import * as MoveCommands from "./commands/move";
+import { BackwardSexp, ForwardSexp } from "./commands/paredit";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
-import { Paredit } from "./paredit";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
-    public readonly paredit: Paredit;
-
     private textEditor: TextEditor;
 
     private commandRegistry: EmacsCommandRegistry;
@@ -32,7 +30,6 @@ export class EmacsEmulator implements Disposable {
         this.textEditor = textEditor;
 
         this.killYanker = new KillYanker(textEditor, killRing);
-        this.paredit = new Paredit(this);
         this.recenterer = new Recenterer(textEditor);
         this.prefixArgumentHandler = new PrefixArgumentHandler();
 
@@ -41,6 +38,7 @@ export class EmacsEmulator implements Disposable {
 
         this.commandRegistry = new EmacsCommandRegistry();
         this.afterCommand = this.afterCommand.bind(this);
+
         this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand));
         this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand));
         this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand));
@@ -56,6 +54,9 @@ export class EmacsEmulator implements Disposable {
         this.commandRegistry.register(new DeleteBackwardChar(this.afterCommand));
         this.commandRegistry.register(new DeleteForwardChar(this.afterCommand));
         this.commandRegistry.register(new DeleteBlankLines(this.afterCommand));
+
+        this.commandRegistry.register(new ForwardSexp(this.afterCommand));
+        this.commandRegistry.register(new BackwardSexp(this.afterCommand));
 
         // TODO: I want to use a decorator
         this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
