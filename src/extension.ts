@@ -141,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.deleteBlankLines", (emulator) => {
-        emulator.deleteBlankLines();
+        emulator.runCommand("deleteBlankLines");
     });
 
     registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
