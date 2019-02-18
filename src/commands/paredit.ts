@@ -13,16 +13,22 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
         const src = doc.getText();
         const ast = paredit.parse(src);
 
-        const newSelections = textEditor.selections.map((selection) => {
-            const idx = doc.offsetAt(selection.active);
-            const newIdx = this.pareditNavigatorFn(ast, idx);
-            const newActivePosition = doc.positionAt(newIdx);
-            return new Selection(
-                preserveSelect ? selection.anchor : newActivePosition,
-                newActivePosition);
-        });
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        if (repeat <= 0) { return; }
 
-        textEditor.selections = newSelections;
+        for (let i = 0; i < repeat; ++i) {
+            const newSelections = textEditor.selections.map((selection) => {
+                const idx = doc.offsetAt(selection.active);
+                const newIdx = this.pareditNavigatorFn(ast, idx);
+                const newActivePosition = doc.positionAt(newIdx);
+                return new Selection(
+                    preserveSelect ? selection.anchor : newActivePosition,
+                    newActivePosition);
+            });
+
+            textEditor.selections = newSelections;
+        }
+
         textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport);
     }
 }

@@ -60,3 +60,39 @@ suite("paredit commands", () => {
         });
     });
 });
+
+suite("paredit commands with prefix argument", () => {
+    let activeTextEditor: TextEditor;
+    let emulator: EmacsEmulator;
+
+    setup(async () => {
+        const initialText = "(0 1 2 3 4 5 6 7 8 9)";
+
+        activeTextEditor = await setupWorkspace(initialText);
+        emulator = new EmacsEmulator(activeTextEditor);
+    });
+
+    test("forwardSexp", () => {
+        setEmptyCursors(activeTextEditor, [0, 2]);  // the right to `0`
+
+        emulator.universalArgument();
+        emulator.type("2");
+        emulator.runCommand("paredit.forwardSexp");
+
+        assert.equal(activeTextEditor.selections.length, 1);
+        assert.ok(activeTextEditor.selections[0].isEqual(
+            new Range(new Position(0, 6), new Position(0, 6))));
+    });
+
+    test("backwardSexp", () => {
+        setEmptyCursors(activeTextEditor, [0, 19]);  // the left to `9`
+
+        emulator.universalArgument();
+        emulator.type("2");
+        emulator.runCommand("paredit.backwardSexp");
+
+        assert.equal(activeTextEditor.selections.length, 1);
+        assert.ok(activeTextEditor.selections[0].isEqual(
+            new Range(new Position(0, 15), new Position(0, 15))));
+    });
+});

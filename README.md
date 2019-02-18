@@ -109,10 +109,10 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-u` | universal-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
 
 ### sexp
-|Command | Desc |
-|--------|------|
-| `C-M-f` | Move forward by one s-exp |
-| `C-M-b` | Move backward by one s-exp |
+|Command |Prefix argument | Desc |
+|--------|----------------|------|
+| `C-M-f` | ✓ | Move forward by one s-exp |
+| `C-M-b` | ✓ | Move backward by one s-exp |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
