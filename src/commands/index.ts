@@ -31,5 +31,5 @@ export abstract class EmacsCommand {
         textEditor: TextEditor,
         isInMarkMode: boolean,
         prefixArgument: number | undefined,
-    ): (undefined | Thenable<{} | undefined>);
+    ): (undefined | Thenable<{} | undefined> | Promise<void>);
 }

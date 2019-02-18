@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import { DeleteBackwardChar, DeleteForwardChar } from "./commands/edit";
 import * as MoveCommands from "./commands/move";
 import { EmacsCommandRegistry } from "./commands/registry";
-import { deleteBlankLines } from "./delete-blank-lines";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
@@ -55,6 +55,7 @@ export class EmacsEmulator implements Disposable {
         this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand));
         this.commandRegistry.register(new DeleteBackwardChar(this.afterCommand));
         this.commandRegistry.register(new DeleteForwardChar(this.afterCommand));
+        this.commandRegistry.register(new DeleteBlankLines(this.afterCommand));
 
         // TODO: I want to use a decorator
         this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
@@ -246,10 +247,6 @@ export class EmacsEmulator implements Disposable {
             const cursorPos = new Position(lineNum, indent);
             return new Selection(cursorPos, cursorPos);
         });
-    }
-
-    public deleteBlankLines() {
-        return deleteBlankLines(this.textEditor);
     }
 
     public async transformToUppercase() {

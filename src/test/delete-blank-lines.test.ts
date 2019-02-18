@@ -38,7 +38,7 @@ xxx    yyy
             test("removing all but 1 lines around the cursor", async () => {
                 setEmptyCursors(activeTextEditor, ...cursorPositions);
 
-                await emulator.deleteBlankLines();
+                await emulator.runCommand("deleteBlankLines");
 
                 const expected = `aaa    bbb
 
@@ -63,7 +63,7 @@ xxx    yyy
             test("nothing happens", async () => {
                 setEmptyCursors(activeTextEditor, ...cursorPositions);
 
-                await emulator.deleteBlankLines();
+                await emulator.runCommand("deleteBlankLines");
 
                 assertTextEqual(activeTextEditor, initialText);
             });
@@ -78,7 +78,7 @@ xxx    yyy
             test("removing all following lines", async () => {
                 setEmptyCursors(activeTextEditor, ...cursorPositions);
 
-                await emulator.deleteBlankLines();
+                await emulator.runCommand("deleteBlankLines");
 
                 const expected = `aaa    bbb
 xxx    yyy
