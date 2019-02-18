@@ -1,9 +1,9 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
-import { EmacsEmulator } from "../emulator";
-import { setEmptyCursors, setupWorkspace } from "./utils";
+import { EmacsEmulator } from "../../emulator";
+import { setEmptyCursors, setupWorkspace } from "../utils";
 
-suite("paredit", () => {
+suite("paredit commands", () => {
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
 
@@ -18,7 +18,7 @@ suite("paredit", () => {
         test("without mark-mode", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.paredit.forwardSexp();
+            emulator.runCommand("paredit.forwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -29,7 +29,7 @@ suite("paredit", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.setMarkCommand();
-            emulator.paredit.forwardSexp();
+            emulator.runCommand("paredit.forwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -41,7 +41,7 @@ suite("paredit", () => {
         test("without mark-mode", () => {
             setEmptyCursors(activeTextEditor, [0, 5]);
 
-            emulator.paredit.backwardSexp();
+            emulator.runCommand("paredit.backwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -52,7 +52,7 @@ suite("paredit", () => {
             setEmptyCursors(activeTextEditor, [0, 5]);
 
             emulator.setMarkCommand();
-            emulator.paredit.backwardSexp();
+            emulator.runCommand("paredit.backwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
