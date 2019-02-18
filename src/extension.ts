@@ -36,8 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
             if (emulator === undefined ||
                 emulator.getTextEditor() === undefined ||
                 documents.indexOf(emulator.getTextEditor().document) === -1) {
-                    emulatorMap.delete(key);
-                }
+                emulatorMap.delete(key);
+            }
         }
     });
 
@@ -153,6 +153,15 @@ export function activate(context: vscode.ExtensionContext) {
 
     registerEmulatorCommand("emacs-mcx.paredit.backwardSexp", (emulator) => {
         emulator.paredit.backwardSexp();
+    });
+
+    vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
+        if (1 <= args.length) {
+            const promises = args[0].map((command: any) => vscode.commands.executeCommand(command));
+            for (const promise of promises) {
+                await promise;
+            }
+        }
     });
 }
 
