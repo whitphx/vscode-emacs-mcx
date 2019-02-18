@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
+import { executeCommands } from "./execute-commands";
 import { KillRing } from "./kill-ring";
 import { MessageManager } from "./message";
 
@@ -157,10 +158,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
         if (1 <= args.length) {
-            const promises = args[0].map((command: any) => vscode.commands.executeCommand(command));
-            for (const promise of promises) {
-                await promise;
-            }
+            executeCommands(args[0]);
         }
     });
 }
