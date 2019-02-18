@@ -18,6 +18,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - etc
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.9.1] - 2019-02-19
+### Added
+- `forward-sexp` and `backward-sexp` are updated to support prefix argument.
+
 ## [0.9.0] - 2019-02-18
 ### Added
 - Many commands hide the find widget like the original behavior of emacs' i-search. by @ganaware
