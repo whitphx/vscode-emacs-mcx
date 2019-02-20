@@ -42,3 +42,13 @@ export class BackwardSexp extends PareditNavigatorCommand {
     public readonly id = "paredit.backwardSexp";
     public readonly pareditNavigatorFn = paredit.navigator.backwardSexp;
 }
+
+export class ForwardDownSexp extends PareditNavigatorCommand {
+    public readonly id = "paredit.forwardDownSexp";
+    public readonly pareditNavigatorFn = paredit.navigator.forwardDownSexp;
+}
+
+export class BackwardUpSexp extends PareditNavigatorCommand {
+    public readonly id = "paredit.backwardUpSexp";
+    public readonly pareditNavigatorFn = paredit.navigator.backwardUpSexp;
+}
