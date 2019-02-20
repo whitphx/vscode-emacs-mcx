@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
-import { DeleteBackwardChar, DeleteForwardChar } from "./commands/edit";
+import * as EditCommands from "./commands/edit";
 import * as MoveCommands from "./commands/move";
 import { BackwardSexp, ForwardSexp } from "./commands/paredit";
 import { EmacsCommandRegistry } from "./commands/registry";
@@ -51,8 +51,9 @@ export class EmacsEmulator implements Disposable {
         this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand));
         this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand));
         this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand));
-        this.commandRegistry.register(new DeleteBackwardChar(this.afterCommand));
-        this.commandRegistry.register(new DeleteForwardChar(this.afterCommand));
+        this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand));
+        this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand));
+        this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand));
         this.commandRegistry.register(new DeleteBlankLines(this.afterCommand));
 
         this.commandRegistry.register(new ForwardSexp(this.afterCommand));
@@ -236,18 +237,9 @@ export class EmacsEmulator implements Disposable {
     }
 
     public async newLine() {
-        this.makeSelectionsEmpty();
         this.exitMarkMode();
 
-        // XXX: How to emulate Enter key...?
-        await vscode.commands.executeCommand("lineBreakInsert");
-
-        this.textEditor.selections = this.textEditor.selections.map((selection) => {
-            const lineNum = selection.active.line + 1;
-            const indent = this.textEditor.document.lineAt(lineNum).firstNonWhitespaceCharacterIndex;
-            const cursorPos = new Position(lineNum, indent);
-            return new Selection(cursorPos, cursorPos);
-        });
+        await this.runCommand("newLine");
     }
 
     public async transformToUppercase() {

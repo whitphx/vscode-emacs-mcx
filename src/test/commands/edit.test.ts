@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { assertTextEqual, setEmptyCursors, setupWorkspace} from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../utils";
 
 suite("deleteForwardChar", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -11,6 +11,8 @@ suite("deleteForwardChar", () => {
         activeTextEditor = await setupWorkspace(initialText);
         emulator = new EmacsEmulator(activeTextEditor);
     });
+
+    teardown(cleanUpWorkspace);
 
     test("it deletes a character on the right", async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
