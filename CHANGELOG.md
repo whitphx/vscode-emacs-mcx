@@ -13,10 +13,14 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-k`: (kill-sentence)
     - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
-- To support prefix argument with
-    - `kill-line`
-    - etc
+- To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+
+## [0.9.2] - 2019-02-19
+### Fixed
+- `C-m` is fixed to behave more like ENTER.
+- `C-m` is fixed to work with prefix argument.
+- `emacs-mcx.paredit.forwardDownSexp` and `emacs-mcx.paredit.backwardUpSexp` are implemented (not assigned to keys).
 
 ## [0.9.1] - 2019-02-19
 ### Added
