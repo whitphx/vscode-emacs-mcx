@@ -3,7 +3,7 @@ import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import { DeleteBackwardChar, DeleteForwardChar } from "./commands/edit";
 import * as MoveCommands from "./commands/move";
-import { BackwardSexp, ForwardSexp } from "./commands/paredit";
+import { BackwardSexp, ForwardSexp, BackwardUpSexp, ForwardDownSexp } from "./commands/paredit";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
@@ -57,6 +57,8 @@ export class EmacsEmulator implements Disposable {
 
         this.commandRegistry.register(new ForwardSexp(this.afterCommand));
         this.commandRegistry.register(new BackwardSexp(this.afterCommand));
+        this.commandRegistry.register(new ForwardDownSexp (this.afterCommand));
+        this.commandRegistry.register(new BackwardUpSexp (this.afterCommand));
 
         // TODO: I want to use a decorator
         this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
