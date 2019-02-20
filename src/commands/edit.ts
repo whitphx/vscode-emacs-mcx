@@ -31,6 +31,8 @@ export class NewLine extends EmacsCommand {
         textEditor.selections = textEditor.selections.map((selection) =>
             new Selection(selection.active, selection.active));
 
-        return vscode.commands.executeCommand("default:type", { text: "\n" });
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        return createParallel(repeat, () =>
+            vscode.commands.executeCommand("default:type", { text: "\n" }));
     }
 }

@@ -154,15 +154,11 @@ suite("newLine", () => {
             });
 
             suite("without auto-indentation", () => {
-                setup(async () => {
+                test("newLine preserves the indent", async () => {
                     const initialText = "(a)";
                     activeTextEditor = await setupWorkspace(initialText, eol);
                     emulator = new EmacsEmulator(activeTextEditor);
-                });
 
-                teardown(cleanUpWorkspace);
-
-                test("newLine preserves the indent", async () => {
                     setEmptyCursors(activeTextEditor, [0, 2]);
 
                     await emulator.newLine();
@@ -171,6 +167,21 @@ suite("newLine", () => {
                     assert.equal(activeTextEditor.selection.active.line, 1);
                     assert.equal(activeTextEditor.selection.active.character, 0);
                 });
+            });
+
+            test("working with prefix argument", async () => {
+                const initialText = "";
+                activeTextEditor = await setupWorkspace(initialText, eol);
+                emulator = new EmacsEmulator(activeTextEditor);
+
+                setEmptyCursors(activeTextEditor, [0, 0]);
+
+                emulator.universalArgument();
+                await emulator.newLine();
+
+                assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);
+                assert.equal(activeTextEditor.selection.active.line, 4);
+                assert.equal(activeTextEditor.selection.active.character, 0);
             });
         });
     });
