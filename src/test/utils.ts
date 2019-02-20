@@ -2,7 +2,7 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Range, Selection, TextEditor} from "vscode";
 
-export async function setupWorkspace(initialText: string = ""): Promise<vscode.TextEditor> {
+export async function setupWorkspace(initialText: string = "", eol = vscode.EndOfLine.LF): Promise<vscode.TextEditor> {
     const doc = await vscode.workspace.openTextDocument({
         content: initialText,
         language: "text",
@@ -14,7 +14,7 @@ export async function setupWorkspace(initialText: string = ""): Promise<vscode.T
     assert.ok(activeTextEditor);
 
     // Set EOL to LF for the tests to work even on Windows
-    (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(vscode.EndOfLine.LF));
+    (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
 
     return activeTextEditor!;
 }
