@@ -1,7 +1,7 @@
 // tslint:disable:max-classes-per-file
 // tslint:disable:object-literal-sort-keys
 import * as vscode from "vscode";
-import { TextEditor } from "vscode";
+import { Selection, TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 
 export class DeleteBackwardChar extends EmacsCommand {
@@ -21,5 +21,16 @@ export class DeleteForwardChar extends EmacsCommand {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
             vscode.commands.executeCommand("deleteRight"));
+    }
+}
+
+export class NewLine extends EmacsCommand {
+    public readonly id = "newLine";
+
+    public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        textEditor.selections = textEditor.selections.map((selection) =>
+            new Selection(selection.active, selection.active));
+
+        return vscode.commands.executeCommand("default:type", { text: "\n" });
     }
 }

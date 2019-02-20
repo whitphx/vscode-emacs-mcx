@@ -124,15 +124,11 @@ suite("newLine", () => {
             });
 
             suite("with auto-indentation", () => {
-                setup(async () => {
+                test("newLine preserves the indent", async () => {
                     const initialText = "()";
                     activeTextEditor = await setupWorkspace(initialText, eol);
                     emulator = new EmacsEmulator(activeTextEditor);
-                });
 
-                teardown(cleanUpWorkspace);
-
-                test("newLine preserves the indent", async () => {
                     setEmptyCursors(activeTextEditor, [0, 1]);
 
                     await emulator.newLine();
@@ -140,6 +136,20 @@ suite("newLine", () => {
                     assertTextEqual(activeTextEditor, `(${eolStr}    ${eolStr})`);
                     assert.equal(activeTextEditor.selection.active.line, 1);
                     assert.equal(activeTextEditor.selection.active.character, 4);
+                });
+
+                test("newLine does not disable the language specific control", async () => {
+                    const initialText = "/** */";
+                    activeTextEditor = await setupWorkspace(initialText, eol, "typescript");
+                    emulator = new EmacsEmulator(activeTextEditor);
+
+                    setEmptyCursors(activeTextEditor, [0, 3]);
+
+                    await emulator.newLine();
+
+                    assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} */`);
+                    assert.equal(activeTextEditor.selection.active.line, 1);
+                    assert.equal(activeTextEditor.selection.active.character, 3);
                 });
             });
 

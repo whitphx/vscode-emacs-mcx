@@ -2,10 +2,14 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Range, Selection, TextEditor} from "vscode";
 
-export async function setupWorkspace(initialText: string = "", eol = vscode.EndOfLine.LF): Promise<vscode.TextEditor> {
+export async function setupWorkspace(
+    initialText: string = "",
+    eol = vscode.EndOfLine.LF,
+    language: string = "text",
+): Promise<vscode.TextEditor> {
     const doc = await vscode.workspace.openTextDocument({
         content: initialText,
-        language: "text",
+        language,
     });
 
     await vscode.window.showTextDocument(doc);
