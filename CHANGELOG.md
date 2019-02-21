@@ -16,6 +16,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.9.3] - unreleased
+### Fixed
+- Internal implementation of `C-l` (recenter-top-bottom) is updated.
+
 ## [0.9.2] - 2019-02-19
 ### Fixed
 - `C-m` is fixed to behave more like ENTER.

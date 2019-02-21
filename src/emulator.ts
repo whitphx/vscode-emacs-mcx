@@ -1,15 +1,17 @@
 import * as vscode from "vscode";
 import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { instanceOfIEmacsCommandInterrupted } from "./commands";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
 import * as MoveCommands from "./commands/move";
-import { BackwardSexp, ForwardSexp, BackwardUpSexp, ForwardDownSexp } from "./commands/paredit";
+import { BackwardSexp, BackwardUpSexp, ForwardDownSexp, ForwardSexp } from "./commands/paredit";
+import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
+import { EditorIdentity } from "./editorIdentity";
 import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
-import { Recenterer } from "./recenter";
 
 export class EmacsEmulator implements Disposable {
     private textEditor: TextEditor;
@@ -23,18 +25,18 @@ export class EmacsEmulator implements Disposable {
     }
 
     private killYanker: KillYanker;
-    private recenterer: Recenterer;
     private prefixArgumentHandler: PrefixArgumentHandler;
 
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
         this.killYanker = new KillYanker(textEditor, killRing);
-        this.recenterer = new Recenterer(textEditor);
         this.prefixArgumentHandler = new PrefixArgumentHandler();
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
         vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
+        this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
+        vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
 
         this.commandRegistry = new EmacsCommandRegistry();
         this.afterCommand = this.afterCommand.bind(this);
@@ -61,6 +63,8 @@ export class EmacsEmulator implements Disposable {
         this.commandRegistry.register(new ForwardDownSexp (this.afterCommand));
         this.commandRegistry.register(new BackwardUpSexp (this.afterCommand));
 
+        this.commandRegistry.register(new RecenterTopBottom(this.afterCommand));
+
         // TODO: I want to use a decorator
         this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
     }
@@ -68,7 +72,6 @@ export class EmacsEmulator implements Disposable {
     public setTextEditor(textEditor: TextEditor) {
         this.textEditor = textEditor;
         this.killYanker.setTextEditor(textEditor);
-        this.recenterer.setTextEditor(textEditor);
     }
 
     public getTextEditor(): TextEditor {
@@ -85,6 +88,14 @@ export class EmacsEmulator implements Disposable {
             )) {
                 this.exitMarkMode();
             }
+
+            this.onDidInterruptTextEditor();
+        }
+    }
+
+    public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
+        if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
+            this.onDidInterruptTextEditor();
         }
     }
 
@@ -168,8 +179,9 @@ export class EmacsEmulator implements Disposable {
             this.exitMarkMode();
         }
 
+        this.onDidInterruptTextEditor();
+
         this.killYanker.cancelKillAppend();
-        this.recenterer.reset();
         this.prefixArgumentHandler.cancel();
 
         MessageManager.showMessage("Quit");
@@ -258,13 +270,8 @@ export class EmacsEmulator implements Disposable {
         await vscode.commands.executeCommand("editor.action.transformToLowercase");
     }
 
-    public recenterTopBottom() {
-        this.recenterer.recenterTopBottom();
-    }
-
     public dispose() {
         delete this.killYanker;
-        delete this.recenterer;
     }
 
     private enterMarkMode() {
@@ -316,5 +323,13 @@ export class EmacsEmulator implements Disposable {
 
     private afterCommand() {
         this.prefixArgumentHandler.cancel();
+    }
+
+    private onDidInterruptTextEditor() {
+        this.commandRegistry.forEach((command) => {
+            if (instanceOfIEmacsCommandInterrupted(command)) {
+                command.onDidInterruptTextEditor();
+            }
+        });
     }
 }

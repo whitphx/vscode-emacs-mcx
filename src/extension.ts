@@ -145,7 +145,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
-        emulator.recenterTopBottom();
+        emulator.runCommand("recenterTopBottom");
     });
 
     registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {

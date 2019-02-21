@@ -31,5 +31,13 @@ export abstract class EmacsCommand {
         textEditor: TextEditor,
         isInMarkMode: boolean,
         prefixArgument: number | undefined,
-    ): (undefined | Thenable<{} | undefined> | Promise<void>);
+    ): (void | undefined | Thenable<{} | undefined> | Promise<void>);
+}
+
+export interface IEmacsCommandInterrupted {
+    onDidInterruptTextEditor(): void;
+}
+
+export function instanceOfIEmacsCommandInterrupted(obj: any): obj is IEmacsCommandInterrupted {
+    return typeof obj.onDidInterruptTextEditor === "function";
 }
