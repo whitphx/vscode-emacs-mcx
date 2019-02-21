@@ -1,3 +1,5 @@
+import { MessageManager } from "./message";
+
 export class PrefixArgumentHandler {
     private isInPrefixArgumentMode = false;
     private isAcceptingPrefixArgument = false;
@@ -12,6 +14,7 @@ export class PrefixArgumentHandler {
         if (this.isAcceptingPrefixArgument && !isNaN(+text)) {
             // If `text` is a numeric charactor
             this.prefixArgumentStr += text;
+            MessageManager.showMessage(`C-u ${this.prefixArgumentStr}-`);
             return true;
         }
 
