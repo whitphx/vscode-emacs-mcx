@@ -68,6 +68,11 @@ function getNonEmptySelections(textEditor: TextEditor): Selection[] {
     return textEditor.selections.filter((selection) => !selection.isEmpty);
 }
 
+function makeSelectionsEmpty(textEditor: TextEditor) {
+    textEditor.selections = textEditor.selections.map((selection) =>
+        new Selection(selection.active, selection.active));
+}
+
 export class KillRegion extends KillYankCommand {
     public readonly id = "killRegion";
 
@@ -88,6 +93,7 @@ export class CopyRegion extends KillYankCommand {
         await this.killYanker.copy(ranges);
         this.emulator.exitMarkMode();
         this.killYanker.cancelKillAppend();
+        makeSelectionsEmpty(textEditor);
     }
 }
 

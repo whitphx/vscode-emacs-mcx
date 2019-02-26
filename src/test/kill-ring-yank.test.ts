@@ -27,19 +27,19 @@ suite("kill, yank, yank-pop", () => {
                 activeTextEditor,
                 "Lorem ipsum");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.killRegion();
+            emulator.runCommand("killRegion");
 
             await clearTextEditor(
                 activeTextEditor,
                 "dolor sit amet,\nconsectetur adipiscing elit,");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.killRegion();
+            emulator.runCommand("killRegion");
 
             await clearTextEditor(
                 activeTextEditor,
                 "sed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.killRegion();
+            emulator.runCommand("killRegion");
 
             // Initialize with non-empty text
             const initialText = `0123456789
@@ -54,57 +54,57 @@ ABCDEFGHIJ`;
             );
 
             // yank + yankPop
-            await emulator.yank();
+            await emulator.runCommand("yank");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
 ABCDEFGHIJ`);
 
             // Repeat
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
 ABCDEFGHIJ`);
 
             // Repeat again
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -120,7 +120,7 @@ ABCDEFGHIJ`);
                 activeTextEditor,
                 "Lorem ipsum");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.killRegion();
+            emulator.runCommand("killRegion");
 
             // Then, copy to clipboard
             clipboardy.writeSync("12345");
@@ -138,40 +138,40 @@ ABCDEFGHIJ`;
             );
 
             // yank firstly takes the text on clipboard
-            await emulator.yank();
+            await emulator.runCommand("yank");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcde12345fghij
 ABCDEFGHIJ`);
 
             // Then, yankPop takes from killRing
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
 ABCDEFGHIJ`);
 
             // Repeat
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcde12345fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
 ABCDEFGHIJ`);
 
             // Repeat again
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcde12345fghij
 ABCDEFGHIJ`);
 
-            await emulator.yankPop();
+            await emulator.runCommand("yankPop");
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -195,13 +195,13 @@ ABCDEFGHIJ`);
                     activeTextEditor,
                     "FOO");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.killRegion();
+                emulator.runCommand("killRegion");
 
                 await clearTextEditor(
                     activeTextEditor,
                     "BAR");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.killRegion();
+                emulator.runCommand("killRegion");
 
                 // Initialize with non-empty text
                 const initialText = `0123456789
@@ -216,7 +216,7 @@ ABCDEFGHIJ`;
                 );
 
                 // yank first
-                await emulator.yank();
+                await emulator.runCommand("yank");
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeBARfghij
@@ -226,7 +226,7 @@ ABCDEFGHIJ`);
                 await vscode.commands.executeCommand(interruptingCommand);
 
                 // yankPop does not work
-                await emulator.yankPop();
+                await emulator.runCommand("yankPop");
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeBARfghij
@@ -242,13 +242,13 @@ ABCDEFGHIJ`);
                     activeTextEditor,
                     "FOO");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.killRegion();
+                emulator.runCommand("killRegion");
 
                 await clearTextEditor(
                     activeTextEditor,
                     "BAR");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.killRegion();
+                emulator.runCommand("killRegion");
 
                 // Initialize with non-empty text
                 const initialText = `0123456789
@@ -263,14 +263,14 @@ ABCDEFGHIJ`;
                 );
 
                 // yank first
-                await emulator.yank();
+                await emulator.runCommand("yank");
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeBARfghij
 ABCDEFGHIJ`);
 
                 // Then, yankPop
-                await emulator.yankPop();
+                await emulator.runCommand("yankPop");
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeFOOfghij
@@ -280,7 +280,7 @@ ABCDEFGHIJ`);
                 await vscode.commands.executeCommand(interruptingCommand);
 
                 // yankPop does not work
-                await emulator.yankPop();
+                await emulator.runCommand("yankPop");
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeFOOfghij
@@ -317,13 +317,13 @@ ABCDEFGHIJ`);
                         activeTextEditor,
                         "FOO");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.killRegion();
+                    emulator.runCommand("killRegion");
 
                     await clearTextEditor(
                         activeTextEditor,
                         "BAR");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.killRegion();
+                    emulator.runCommand("killRegion");
 
                     // Initialize with non-empty text
                     const initialText = `0123456789
@@ -338,7 +338,7 @@ ABCDEFGHIJ`;
                     );
 
                     // yank first
-                    await emulator.yank();
+                    await emulator.runCommand("yank");
                     assertTextEqual(
                         activeTextEditor, `0123456789
 abcdeBARfghij
@@ -348,7 +348,7 @@ ABCDEFGHIJ`);
                     await interruptOp();
 
                     // yankPop does not work
-                    await emulator.yankPop();
+                    await emulator.runCommand("yankPop");
                     assert.ok(activeTextEditor.document.getText().includes("BAR"));
                     assert.ok(!activeTextEditor.document.getText().includes("FOO"));
                 });
@@ -359,13 +359,13 @@ ABCDEFGHIJ`);
                         activeTextEditor,
                         "FOO");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.killRegion();
+                    emulator.runCommand("killRegion");
 
                     await clearTextEditor(
                         activeTextEditor,
                         "BAR");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.killRegion();
+                    emulator.runCommand("killRegion");
 
                     // Initialize with non-empty text
                     const initialText = `0123456789
@@ -380,14 +380,14 @@ ABCDEFGHIJ`;
                     );
 
                     // yank first
-                    await emulator.yank();
+                    await emulator.runCommand("yank");
                     assertTextEqual(
                         activeTextEditor, `0123456789
 abcdeBARfghij
 ABCDEFGHIJ`);
 
                     // Then, yankPop
-                    await emulator.yankPop();
+                    await emulator.runCommand("yankPop");
                     assertTextEqual(
                         activeTextEditor, `0123456789
 abcdeFOOfghij
@@ -398,7 +398,7 @@ ABCDEFGHIJ`);
 
                     // yankPop does not work
                     // yankPop does not work
-                    await emulator.yankPop();
+                    await emulator.runCommand("yankPop");
                     assert.ok(activeTextEditor.document.getText().includes("FOO"));
                     assert.ok(!activeTextEditor.document.getText().includes("BAR"));
                 });
@@ -424,32 +424,32 @@ suite("With not only single text editor", () => {
             activeTextEditor0,
             "FOO");
         await vscode.commands.executeCommand("editor.action.selectAll");
-        emulator0.killRegion();
+        emulator0.runCommand("killRegion");
 
         await clearTextEditor(
             activeTextEditor0,
             "BAR");
         await vscode.commands.executeCommand("editor.action.selectAll");
-        emulator0.killRegion();
+        emulator0.runCommand("killRegion");
 
         const activeTextEditor1 = await setupWorkspace("");
         const emulator1 = new EmacsEmulator(activeTextEditor1, killRing);
 
         // The killed texts are yanked on another text editor
-        await emulator1.yank();
+        await emulator1.runCommand("yank");
         assertTextEqual(
             activeTextEditor1, "BAR");
 
-        await emulator1.yankPop();
+        await emulator1.runCommand("yankPop");
         assertTextEqual(
             activeTextEditor1, "FOO");
 
         // Repeat
-        await emulator1.yankPop();
+        await emulator1.runCommand("yankPop");
         assertTextEqual(
             activeTextEditor1, "BAR");
 
-        await emulator1.yankPop();
+        await emulator1.runCommand("yankPop");
         assertTextEqual(
             activeTextEditor1, "FOO");
     });

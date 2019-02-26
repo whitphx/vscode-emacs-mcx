@@ -27,7 +27,7 @@ ABCDEFGHIJ`;
         test("it cuts the current line", async () => {
             setEmptyCursors(activeTextEditor, [1, 1]);  // Line_1
 
-            await emulator.killLine();
+            await emulator.runCommand("killLine");
 
             assert.equal(
                 activeTextEditor.document.getText(),
@@ -39,14 +39,14 @@ ABCDEFGHIJ`,
             clearTextEditor(activeTextEditor);
 
             setEmptyCursors(activeTextEditor, [0, 0]);
-            await emulator.yank();
+            await emulator.runCommand("yank");
 
             assertTextEqual(activeTextEditor, "bcdefghij");
         });
 
         test("it removes line break if invoked at the end of line", async () => {
             setEmptyCursors(activeTextEditor, [1, 10]);
-            await emulator.killLine();
+            await emulator.runCommand("killLine");
 
             assertTextEqual(
                 activeTextEditor,
@@ -56,7 +56,7 @@ abcdefghijABCDEFGHIJ`);
             clearTextEditor(activeTextEditor);
 
             setEmptyCursors(activeTextEditor, [0, 0]);
-            await emulator.yank();
+            await emulator.runCommand("yank");
 
             assertTextEqual(activeTextEditor, "\n");
         });
@@ -64,7 +64,7 @@ abcdefghijABCDEFGHIJ`);
         test("it works with multi cursor", async () => {
             setEmptyCursors(activeTextEditor, [1, 1], [0, 1], [2, 1]);
 
-            await emulator.killLine();
+            await emulator.runCommand("killLine");
 
             assertTextEqual(
                 activeTextEditor,
@@ -76,7 +76,7 @@ A`,
             clearTextEditor(activeTextEditor);
 
             setEmptyCursors(activeTextEditor, [0, 0]);
-            await emulator.yank();
+            await emulator.runCommand("yank");
 
             assertTextEqual(
                 activeTextEditor,
@@ -97,15 +97,15 @@ BCDEFGHIJ`,
         test("it appends killed text if invoked continuously", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            await emulator.killLine();  // 1st line
-            await emulator.killLine();  // EOL of 1st
-            await emulator.killLine();  // 2nd line
-            await emulator.killLine();  // EOL of 2nd
+            await emulator.runCommand("killLine");  // 1st line
+            await emulator.runCommand("killLine");  // EOL of 1st
+            await emulator.runCommand("killLine");  // 2nd line
+            await emulator.runCommand("killLine");  // EOL of 2nd
 
             clearTextEditor(activeTextEditor);
 
             setEmptyCursors(activeTextEditor, [0, 0]);
-            await emulator.yank();
+            await emulator.runCommand("yank");
 
             assertTextEqual(
                 activeTextEditor,
@@ -125,23 +125,23 @@ abcdefghij
             test(`it does not appends killed text if another command (${interruptingCommand}) invoked`, async () => {
                 setEmptyCursors(activeTextEditor, [1, 5]);
 
-                await emulator.killLine();  // 2st line
-                await emulator.killLine();  // EOL of 2st
+                await emulator.runCommand("killLine");  // 2st line
+                await emulator.runCommand("killLine");  // EOL of 2st
 
                 await vscode.commands.executeCommand(interruptingCommand);  // Interrupt
 
-                await emulator.killLine();  // 3nd line
-                await emulator.killLine();  // EOL of 3nd (no effect)
+                await emulator.runCommand("killLine");  // 3nd line
+                await emulator.runCommand("killLine");  // EOL of 3nd (no effect)
 
                 await clearTextEditor(activeTextEditor);
 
                 setEmptyCursors(activeTextEditor, [0, 0]);
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assert.ok(
                     !activeTextEditor.document.getText().includes("fghij\n"),  // First 2 kills does not appear here
                 );
-                await emulator.yankPop();
+                await emulator.runCommand("yankPop");
                 assert.equal(activeTextEditor.document.getText(), "fghij\n");  // First 2 kills appear here
             });
         });
@@ -171,23 +171,23 @@ abcdefghij
             test(`it does not append the killed text after ${label}`, async () => {
                 setEmptyCursors(activeTextEditor, [1, 5]);
 
-                await emulator.killLine();  // 2st line
-                await emulator.killLine();  // EOL of 2st
+                await emulator.runCommand("killLine");  // 2st line
+                await emulator.runCommand("killLine");  // EOL of 2st
 
                 await op();  // Interrupt
 
-                await emulator.killLine();  // 3nd line
-                await emulator.killLine();  // EOL of 3nd (no effect)
+                await emulator.runCommand("killLine");  // 3nd line
+                await emulator.runCommand("killLine");  // EOL of 3nd (no effect)
 
                 await clearTextEditor(activeTextEditor);
 
                 setEmptyCursors(activeTextEditor, [0, 0]);
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assert.ok(
                     !activeTextEditor.document.getText().includes("fghij\n"),  // First 2 kills does not appear here
                 );
-                await emulator.yankPop();
+                await emulator.runCommand("yankPop");
                 assert.equal(activeTextEditor.document.getText(), "fghij\n");  // First 2 kills appear here
             });
         });
@@ -204,7 +204,7 @@ abcdefghij
             emulator.universalArgument();
             emulator.type("2");
 
-            await emulator.killLine();
+            await emulator.runCommand("killLine");
 
             assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
             assert.equal(activeTextEditor.selections.length, 1);
@@ -214,7 +214,7 @@ abcdefghij
 
             await clearTextEditor(activeTextEditor);
 
-            await emulator.yank();
+            await emulator.runCommand("yank");
             assertTextEqual(
                 activeTextEditor,
                 `0123456789

@@ -193,30 +193,6 @@ export class EmacsEmulator implements Disposable {
         MessageManager.showMessage("Quit");
     }
 
-    public copyRegion() {
-        return this.runCommand("copyRegion");
-    }
-
-    public killLine() {
-        return this.runCommand("killLine");
-    }
-
-    public killWholeLine() {
-        return this.runCommand("killWholeLine");
-    }
-
-    public killRegion() {
-        return this.runCommand("killRegion");
-    }
-
-    public async yank() {
-        return this.runCommand("yank");
-    }
-
-    public async yankPop() {
-        return this.runCommand("yankPop");
-    }
-
     public async newLine() {
         this.exitMarkMode();
 
