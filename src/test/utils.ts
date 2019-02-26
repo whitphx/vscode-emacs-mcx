@@ -4,8 +4,13 @@ import {Position, Range, Selection, TextEditor} from "vscode";
 
 export async function setupWorkspace(
     initialText: string = "",
-    eol = vscode.EndOfLine.LF,
-    language: string = "text",
+    {
+        eol = vscode.EndOfLine.LF,
+        language = "text",
+    }: {
+        eol?: vscode.EndOfLine,
+        language?: string,
+    } = {},
 ): Promise<vscode.TextEditor> {
     const doc = await vscode.workspace.openTextDocument({
         content: initialText,
