@@ -96,3 +96,46 @@ suite("paredit commands with prefix argument", () => {
             new Range(new Position(0, 15), new Position(0, 15))));
     });
 });
+
+suite("with semicolon", () => {
+    const initialText = "(a ; b)";
+
+    let activeTextEditor: TextEditor;
+    let emulator: EmacsEmulator;
+
+    suite("with lisp (clojure)", () => {
+        setup(async () => {
+            activeTextEditor = await setupWorkspace(initialText, {language: "clojure"});
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        test("semicolon is treated as comment", async () => {
+            setEmptyCursors(activeTextEditor, [0, 2]);
+
+            emulator.runCommand("paredit.forwardSexp");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            // The cursor at the end of line
+            assert.ok(activeTextEditor.selections[0].isEqual(
+                new Range(new Position(0, initialText.length), new Position(0, initialText.length))));
+        });
+    });
+
+    suite("with other than lisp", () => {
+        setup(async () => {
+            activeTextEditor = await setupWorkspace(initialText, {language: "csharp"});
+            emulator = new EmacsEmulator(activeTextEditor);
+        });
+
+        test("semicolon is treated as one entity", async () => {
+            setEmptyCursors(activeTextEditor, [0, 2]);
+
+            emulator.runCommand("paredit.forwardSexp");
+
+            assert.equal(activeTextEditor.selections.length, 1);
+            // The cursor is right to ";"
+            assert.ok(activeTextEditor.selections[0].isEqual(
+                new Range(new Position(0, 4), new Position(0, 4))));
+        });
+    });
+});
