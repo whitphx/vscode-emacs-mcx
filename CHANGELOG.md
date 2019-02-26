@@ -16,6 +16,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.9.4] - 2019-02-27
+### Fixed
+- Update `emacs-mcx.paredit.forwardDownSexp` and `emacs-mcx.paredit.backwardUpSexp` to treat a semicolon as one entity, but not comment.
+
 ## [0.9.3] - 2019-02-22
 ### Fixed
 - Internal implementation of `C-l` (recenter-top-bottom) is updated.
