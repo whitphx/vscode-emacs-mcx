@@ -17,7 +17,7 @@ suite("newLine", () => {
             suite("basic behaviors", () => {
                 setup(async () => {
                     const initialText = `0123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`;
-                    activeTextEditor = await setupWorkspace(initialText, eol);
+                    activeTextEditor = await setupWorkspace(initialText, {eol});
                     emulator = new EmacsEmulator(activeTextEditor);
                 });
 
@@ -126,7 +126,7 @@ suite("newLine", () => {
             suite("with auto-indentation", () => {
                 test("newLine preserves the indent", async () => {
                     const initialText = "()";
-                    activeTextEditor = await setupWorkspace(initialText, eol);
+                    activeTextEditor = await setupWorkspace(initialText, {eol});
                     emulator = new EmacsEmulator(activeTextEditor);
 
                     setEmptyCursors(activeTextEditor, [0, 1]);
@@ -140,7 +140,7 @@ suite("newLine", () => {
 
                 test("newLine does not disable the language specific control", async () => {
                     const initialText = "/** */";
-                    activeTextEditor = await setupWorkspace(initialText, eol, "typescript");
+                    activeTextEditor = await setupWorkspace(initialText, {eol, language: "typescript"});
                     emulator = new EmacsEmulator(activeTextEditor);
 
                     setEmptyCursors(activeTextEditor, [0, 3]);
@@ -156,7 +156,7 @@ suite("newLine", () => {
             suite("without auto-indentation", () => {
                 test("newLine preserves the indent", async () => {
                     const initialText = "(a)";
-                    activeTextEditor = await setupWorkspace(initialText, eol);
+                    activeTextEditor = await setupWorkspace(initialText, {eol});
                     emulator = new EmacsEmulator(activeTextEditor);
 
                     setEmptyCursors(activeTextEditor, [0, 2]);
@@ -171,7 +171,7 @@ suite("newLine", () => {
 
             test("working with prefix argument", async () => {
                 const initialText = "";
-                activeTextEditor = await setupWorkspace(initialText, eol);
+                activeTextEditor = await setupWorkspace(initialText, {eol});
                 emulator = new EmacsEmulator(activeTextEditor);
 
                 setEmptyCursors(activeTextEditor, [0, 0]);
