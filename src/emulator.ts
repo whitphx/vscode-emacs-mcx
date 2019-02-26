@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
-import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { Disposable, Selection, TextEditor } from "vscode";
 import { instanceOfIEmacsCommandInterrupted } from "./commands";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
+import { CopyRegion, KillLine, KillRegion, KillWholeLine, Yank, YankPop } from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import { BackwardSexp, BackwardUpSexp, ForwardDownSexp, ForwardSexp } from "./commands/paredit";
 import { RecenterTopBottom } from "./commands/recenter";
@@ -30,7 +31,6 @@ export class EmacsEmulator implements Disposable {
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
-        this.killYanker = new KillYanker(textEditor, killRing);
         this.prefixArgumentHandler = new PrefixArgumentHandler();
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
@@ -65,8 +65,14 @@ export class EmacsEmulator implements Disposable {
 
         this.commandRegistry.register(new RecenterTopBottom(this.afterCommand));
 
-        // TODO: I want to use a decorator
-        this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
+        const killYanker = new KillYanker(textEditor, killRing);
+        this.commandRegistry.register(new KillLine(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new KillWholeLine(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new KillRegion(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new CopyRegion(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new Yank(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new YankPop(this.afterCommand, this, killYanker));
+        this.killYanker = killYanker;  // TODO: To be removed
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -188,66 +194,27 @@ export class EmacsEmulator implements Disposable {
     }
 
     public copyRegion() {
-        const ranges = this.getNonEmptySelections();
-        this.killYanker.copy(ranges);
-        this.cancel();
+        return this.runCommand("copyRegion");
     }
 
-    // tslint:disable-next-line:no-unnecessary-initializer
-    public killLine(prefixArgument: number | undefined = undefined) {
-        const ranges = this.textEditor.selections.map((selection) => {
-            const cursor = selection.anchor;
-            const lineAtCursor = this.textEditor.document.lineAt(cursor.line);
-
-            if (prefixArgument !== undefined) {
-                return new Range(cursor, new Position(cursor.line + prefixArgument, 0));
-            }
-
-            const lineEnd = lineAtCursor.range.end;
-
-            if (cursor.isEqual(lineEnd)) {
-                // From the end of the line to the beginning of the next line
-                return new Range(cursor, new Position(cursor.line + 1, 0));
-            } else {
-                // From the current cursor to the end of line
-                return new Range(cursor, lineEnd);
-            }
-        });
-        this.exitMarkMode();
-        return this.killYanker.kill(ranges);
+    public killLine() {
+        return this.runCommand("killLine");
     }
 
     public killWholeLine() {
-        const ranges = this.textEditor.selections.map((selection) =>
-            // From the beginning of the line to the beginning of the next line
-            new Range(
-                new Position(selection.anchor.line, 0),
-                new Position(selection.anchor.line + 1, 0),
-            ),
-        );
-        this.exitMarkMode();
-        return this.killYanker.kill(ranges);
+        return this.runCommand("killWholeLine");
     }
 
-    public async killRegion() {
-        const ranges = this.getNonEmptySelections();
-        await this.killYanker.kill(ranges);
-        this.exitMarkMode();
-        this.cancelKillAppend();
-    }
-
-    public cancelKillAppend() {
-        this.killYanker.cancelKillAppend();
+    public killRegion() {
+        return this.runCommand("killRegion");
     }
 
     public async yank() {
-        await this.killYanker.yank();
-        this.exitMarkMode();
+        return this.runCommand("yank");
     }
 
     public async yankPop() {
-        await this.killYanker.yankPop();
-        this.exitMarkMode();
+        return this.runCommand("yankPop");
     }
 
     public async newLine() {
@@ -274,6 +241,11 @@ export class EmacsEmulator implements Disposable {
         delete this.killYanker;
     }
 
+    public exitMarkMode() {
+        this._isInMarkMode = false;
+        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
+    }
+
     private enterMarkMode() {
         this._isInMarkMode = true;
 
@@ -281,23 +253,6 @@ export class EmacsEmulator implements Disposable {
         // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471
         // TODO: How to write unittest for `setContext`?
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
-    }
-
-    private exitMarkMode() {
-        this._isInMarkMode = false;
-        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
-    }
-
-    private makePrefixArgumentAcceptable(method: (...args: any[]) => any) {
-        return (...args: any[]) => {
-            const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
-
-            const ret = method.apply(this, [...args, prefixArgument]);
-
-            this.prefixArgumentHandler.cancel();
-
-            return ret;
-        };
     }
 
     private makeSelectionsEmpty() {
@@ -315,10 +270,6 @@ export class EmacsEmulator implements Disposable {
 
     private hasNonEmptySelection(): boolean {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
-    }
-
-    private getNonEmptySelections(): Selection[] {
-        return this.textEditor.selections.filter((selection) => !selection.isEmpty);
     }
 
     private afterCommand() {
