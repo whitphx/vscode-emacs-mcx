@@ -2,10 +2,10 @@ import * as assert from "assert";
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
-import { moveCommandIds } from "../commands/move";
-import { EmacsEmulator } from "../emulator";
-import { KillRing } from "../kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
+import { moveCommandIds } from "../../commands/move";
+import { EmacsEmulator } from "../../emulator";
+import { KillRing } from "../../kill-ring";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "../utils";
 
 suite("kill, yank, yank-pop", () => {
     let activeTextEditor: vscode.TextEditor;
