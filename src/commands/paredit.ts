@@ -24,7 +24,7 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
             // However, in other languages, semicolon should be treated as one entity, but not comment for convenience.
             // To do so, ";" is replaced with another character which is not treated as comment by paredit.js
             // if the document is not lisp or lisp-like languages.
-            src = src.replace(";", "_");
+            src = src.split(";").join("_");  // split + join = replaceAll
         }
         const ast = paredit.parse(src);
 
