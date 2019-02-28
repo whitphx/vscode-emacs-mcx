@@ -414,6 +414,11 @@
 								"when": "editorFocus"
 						},
 						{
+								"key": "ctrl+alt+p",
+								"command": "emacs-mcx.addSelectionToPreviousFindMatch",
+								"when": "editorFocus"
+						},
+						{
 								"key": "ctrl+d",
 								"command": "emacs-mcx.deleteForwardChar",
 								"when": "editorTextFocus && !editorReadonly"

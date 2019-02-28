@@ -117,11 +117,11 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.addSelectionToNextFindMatch", (emulator) => {
-        emulator.addSelectionToNextFindMatch();
+        emulator.runCommand("addSelectionToNextFindMatch");
     });
 
     registerEmulatorCommand("emacs-mcx.addSelectionToPreviousFindMatch", (emulator) => {
-        emulator.addSelectionToPreviousFindMatch();
+        emulator.runCommand("addSelectionToPreviousFindMatch");
     });
 
     registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {

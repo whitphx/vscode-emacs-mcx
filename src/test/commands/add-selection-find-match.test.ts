@@ -1,9 +1,9 @@
 import * as assert from "assert";
 import {Position, Range, Selection, TextEditor} from "vscode";
-import { EmacsEmulator } from "../emulator";
-import { cleanUpWorkspace, setupWorkspace} from "./utils";
+import { EmacsEmulator } from "../../emulator";
+import { cleanUpWorkspace, setupWorkspace} from "../utils";
 
-suite("addSelectionToNextFindMatch", () => {
+suite("addSelectionTo(Next|Previous)FindMatch", () => {
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
 
@@ -32,13 +32,7 @@ ccc`;
             ];
 
             // execute command
-            if (commandName === "addSelectionToNextFindMatch") {
-                await emulator.addSelectionToNextFindMatch();
-            } else if (commandName === "addSelectionToPreviousFindMatch") {
-                await emulator.addSelectionToPreviousFindMatch();
-            } else {
-                throw Error("Unexpected test");
-            }
+            await emulator.runCommand(commandName);
 
             // Then, next 'aaa' is selected
             assert.ok(activeTextEditor.selections[0].isEqual(firstRange));
