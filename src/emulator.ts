@@ -14,7 +14,12 @@ import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 
-export class EmacsEmulator implements Disposable {
+export interface IMarkModeController {
+    enterMarkMode(): void;
+    exitMarkMode(): void;
+}
+
+export class EmacsEmulator implements Disposable, IMarkModeController {
     private textEditor: TextEditor;
 
     private commandRegistry: EmacsCommandRegistry;
@@ -217,18 +222,18 @@ export class EmacsEmulator implements Disposable {
         delete this.killYanker;
     }
 
-    public exitMarkMode() {
-        this._isInMarkMode = false;
-        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
-    }
-
-    private enterMarkMode() {
+    public enterMarkMode() {
         this._isInMarkMode = true;
 
         // At this moment, the only way to set the context for `when` conditions is `setContext` command.
         // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471
         // TODO: How to write unittest for `setContext`?
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
+    }
+
+    public exitMarkMode() {
+        this._isInMarkMode = false;
+        vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
     }
 
     private makeSelectionsEmpty() {

@@ -2,21 +2,21 @@
 // tslint:disable:object-literal-sort-keys
 import { Position, Range, Selection, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
-import { EmacsEmulator } from "../emulator";
+import { IMarkModeController } from "../emulator";
 import { KillYanker } from "../kill-yank";
 
 abstract class KillYankCommand extends EmacsCommand {
-    protected emulator: EmacsEmulator;
+    protected markModeController: IMarkModeController;
     protected killYanker: KillYanker;
 
     public constructor(
         afterExecute: () => void,
-        emulator: EmacsEmulator,  // XXX: kill and yank commands have to manipulate mark-mode status
+        markModeController: IMarkModeController,  // XXX: kill and yank commands have to manipulate mark-mode status
         killYanker: KillYanker,
     ) {
         super(afterExecute);
 
-        this.emulator = emulator;
+        this.markModeController =  markModeController;
         this.killYanker = killYanker;
     }
 }
@@ -43,7 +43,7 @@ export class KillLine extends KillYankCommand {
                 return new Range(cursor, lineEnd);
             }
         });
-        this.emulator.exitMarkMode();
+        this.markModeController.exitMarkMode();
         return this.killYanker.kill(ranges);
     }
 }
@@ -59,7 +59,7 @@ export class KillWholeLine extends KillYankCommand {
                 new Position(selection.anchor.line + 1, 0),
             ),
         );
-        this.emulator.exitMarkMode();
+        this.markModeController.exitMarkMode();
         return this.killYanker.kill(ranges);
     }
 }
@@ -79,7 +79,7 @@ export class KillRegion extends KillYankCommand {
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const ranges = getNonEmptySelections(textEditor);
         await this.killYanker.kill(ranges);
-        this.emulator.exitMarkMode();
+        this.markModeController.exitMarkMode();
         this.killYanker.cancelKillAppend();
     }
 }
@@ -91,7 +91,7 @@ export class CopyRegion extends KillYankCommand {
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const ranges = getNonEmptySelections(textEditor);
         await this.killYanker.copy(ranges);
-        this.emulator.exitMarkMode();
+        this.markModeController.exitMarkMode();
         this.killYanker.cancelKillAppend();
         makeSelectionsEmpty(textEditor);
     }
@@ -102,7 +102,7 @@ export class Yank extends KillYankCommand {
 
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         await this.killYanker.yank();
-        this.emulator.exitMarkMode();
+        this.markModeController.exitMarkMode();
     }
 }
 
@@ -111,6 +111,6 @@ export class YankPop extends KillYankCommand {
 
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         await this.killYanker.yankPop();
-        this.emulator.exitMarkMode();
+        this.markModeController.exitMarkMode();
     }
 }
