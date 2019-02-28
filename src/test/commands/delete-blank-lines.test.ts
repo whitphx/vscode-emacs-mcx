@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { EmacsEmulator } from "../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace} from "./utils";
+import { EmacsEmulator } from "../../emulator";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace} from "../utils";
 
 suite("deleteBlankLines", () => {
     let activeTextEditor: vscode.TextEditor;
