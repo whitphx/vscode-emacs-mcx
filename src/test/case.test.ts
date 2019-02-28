@@ -60,7 +60,7 @@ suite("transformToUppercase", () => {
                 ];
 
                 for (const { cursorAt, text } of expectedResults) {
-                    await emulator.transformToUppercase();
+                    await emulator.runCommand("transformToUppercase");
                     assertTextEqual(activeTextEditor, text);
                     assert.ok(activeTextEditor.selections.length === 1);
                     assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));
@@ -127,7 +127,7 @@ suite("transformToLowercase", () => {
                 ];
 
                 for (const { cursorAt, text } of expectedResults) {
-                    await emulator.transformToLowercase();
+                    await emulator.runCommand("transformToLowercase");
                     assertTextEqual(activeTextEditor, text);
                     assert.ok(activeTextEditor.selections.length === 1);
                     assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));

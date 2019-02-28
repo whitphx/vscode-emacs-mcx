@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { Disposable, Selection, TextEditor } from "vscode";
 import { instanceOfIEmacsCommandInterrupted } from "./commands";
 import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
+import { TransformToLowercase, TransformToUppercase } from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
 import { CopyRegion, KillLine, KillRegion, KillWholeLine, Yank, YankPop } from "./commands/kill";
@@ -15,12 +16,16 @@ import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 
+export interface IEmacsCommandRunner {
+    runCommand(commandName: string): (undefined | Thenable<{} | undefined | void>);
+}
+
 export interface IMarkModeController {
     enterMarkMode(): void;
     exitMarkMode(): void;
 }
 
-export class EmacsEmulator implements Disposable, IMarkModeController {
+export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkModeController {
     private textEditor: TextEditor;
 
     private commandRegistry: EmacsCommandRegistry;
@@ -82,6 +87,9 @@ export class EmacsEmulator implements Disposable, IMarkModeController {
 
         this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
         this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));
+
+        this.commandRegistry.register(new TransformToUppercase(this.afterCommand, this));
+        this.commandRegistry.register(new TransformToLowercase(this.afterCommand, this));
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -190,20 +198,6 @@ export class EmacsEmulator implements Disposable, IMarkModeController {
         this.prefixArgumentHandler.cancel();
 
         MessageManager.showMessage("Quit");
-    }
-
-    public async transformToUppercase() {
-        if (!this.hasNonEmptySelection()) {
-            await this.runCommand("forwardWord");
-        }
-        await vscode.commands.executeCommand("editor.action.transformToUppercase");
-    }
-
-    public async transformToLowercase() {
-        if (!this.hasNonEmptySelection()) {
-            await this.runCommand("forwardWord");
-        }
-        await vscode.commands.executeCommand("editor.action.transformToLowercase");
     }
 
     public dispose() {
