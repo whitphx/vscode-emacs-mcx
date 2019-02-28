@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Disposable, Selection, TextEditor } from "vscode";
 import { instanceOfIEmacsCommandInterrupted } from "./commands";
+import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
 import { CopyRegion, KillLine, KillRegion, KillWholeLine, Yank, YankPop } from "./commands/kill";
@@ -78,6 +79,9 @@ export class EmacsEmulator implements Disposable, IMarkModeController {
         this.commandRegistry.register(new Yank(this.afterCommand, this, killYanker));
         this.commandRegistry.register(new YankPop(this.afterCommand, this, killYanker));
         this.killYanker = killYanker;  // TODO: To be removed
+
+        this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
+        this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -164,16 +168,6 @@ export class EmacsEmulator implements Disposable, IMarkModeController {
             this.enterMarkMode();
             MessageManager.showMessage("Mark activated");
         }
-    }
-
-    public addSelectionToNextFindMatch() {
-        this.enterMarkMode();
-        return vscode.commands.executeCommand("editor.action.addSelectionToNextFindMatch");
-    }
-
-    public addSelectionToPreviousFindMatch() {
-        this.enterMarkMode();
-        return vscode.commands.executeCommand("editor.action.addSelectionToPreviousFindMatch");
     }
 
     /**
