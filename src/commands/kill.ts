@@ -6,7 +6,6 @@ import { IMarkModeController } from "../emulator";
 import { KillYanker } from "../kill-yank";
 
 abstract class KillYankCommand extends EmacsCommand {
-    protected markModeController: IMarkModeController;
     protected killYanker: KillYanker;
 
     public constructor(
@@ -14,9 +13,8 @@ abstract class KillYankCommand extends EmacsCommand {
         markModeController: IMarkModeController,  // XXX: kill and yank commands have to manipulate mark-mode status
         killYanker: KillYanker,
     ) {
-        super(afterExecute);
+        super(afterExecute, markModeController);
 
-        this.markModeController =  markModeController;
         this.killYanker = killYanker;
     }
 }

@@ -46,29 +46,29 @@ export class EmacsEmulator implements Disposable, IMarkModeController {
         this.commandRegistry = new EmacsCommandRegistry();
         this.afterCommand = this.afterCommand.bind(this);
 
-        this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand));
-        this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand));
-        this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand));
-        this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand));
-        this.commandRegistry.register(new DeleteBlankLines(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand, this));
+        this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand, this));
+        this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
 
-        this.commandRegistry.register(new ForwardSexp(this.afterCommand));
-        this.commandRegistry.register(new BackwardSexp(this.afterCommand));
-        this.commandRegistry.register(new ForwardDownSexp (this.afterCommand));
-        this.commandRegistry.register(new BackwardUpSexp (this.afterCommand));
+        this.commandRegistry.register(new ForwardSexp(this.afterCommand, this));
+        this.commandRegistry.register(new BackwardSexp(this.afterCommand, this));
+        this.commandRegistry.register(new ForwardDownSexp (this.afterCommand, this));
+        this.commandRegistry.register(new BackwardUpSexp (this.afterCommand, this));
 
-        this.commandRegistry.register(new RecenterTopBottom(this.afterCommand));
+        this.commandRegistry.register(new RecenterTopBottom(this.afterCommand, this));
 
         const killYanker = new KillYanker(textEditor, killRing);
         this.commandRegistry.register(new KillLine(this.afterCommand, this, killYanker));
