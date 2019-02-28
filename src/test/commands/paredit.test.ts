@@ -98,7 +98,7 @@ suite("paredit commands with prefix argument", () => {
 });
 
 suite("with semicolon", () => {
-    const initialText = "(a ; b)";
+    const initialText = "(a ; b)\n(a ; b)\n(a ; b)";
 
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
@@ -115,9 +115,9 @@ suite("with semicolon", () => {
             emulator.runCommand("paredit.forwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
-            // The cursor at the end of line
+            // The cursor at the beginning of the next line
             assert.ok(activeTextEditor.selections[0].isEqual(
-                new Range(new Position(0, initialText.length), new Position(0, initialText.length))));
+                new Range(new Position(1, 0), new Position(1, 0))));
         });
     });
 
@@ -127,15 +127,17 @@ suite("with semicolon", () => {
             emulator = new EmacsEmulator(activeTextEditor);
         });
 
-        test("semicolon is treated as one entity", async () => {
-            setEmptyCursors(activeTextEditor, [0, 2]);
+        [0, 1, 2].forEach((line) => {
+            test(`semicolon is treated as one entity (line ${line})`, async () => {
+                setEmptyCursors(activeTextEditor, [line, 2]);
 
-            emulator.runCommand("paredit.forwardSexp");
+                emulator.runCommand("paredit.forwardSexp");
 
-            assert.equal(activeTextEditor.selections.length, 1);
-            // The cursor is right to ";"
-            assert.ok(activeTextEditor.selections[0].isEqual(
-                new Range(new Position(0, 4), new Position(0, 4))));
-        });
+                assert.equal(activeTextEditor.selections.length, 1);
+                // The cursor is right to ";"
+                assert.ok(activeTextEditor.selections[0].isEqual(
+                    new Range(new Position(line, 4), new Position(line, 4))));
+            });
+        })
     });
 });
