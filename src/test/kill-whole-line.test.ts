@@ -31,7 +31,7 @@ ABCDEFGHIJ`;
                         ),
                     ];
 
-                    await emulator.killWholeLine();
+                    await emulator.runCommand("killWholeLine");
 
                     assertTextEqual(activeTextEditor, `0123456789
 ABCDEFGHIJ`);
@@ -41,7 +41,7 @@ ABCDEFGHIJ`);
                     activeTextEditor.selections = [
                         new Selection(new Position(0, 0), new Position(0, 0)),
                     ];
-                    await emulator.yank();
+                    await emulator.runCommand("yank");
                     assert.equal(
                         activeTextEditor.document.getText(),
                         "abcdefghij\n",
@@ -64,7 +64,7 @@ ABCDEFGHIJ`);
                         ),
                     ];
 
-                    await emulator.killWholeLine();
+                    await emulator.runCommand("killWholeLine");
 
                     assertTextEqual(activeTextEditor, `0123456789
 abcdefghij
@@ -75,7 +75,7 @@ abcdefghij
                     activeTextEditor.selections = [
                         new Selection(new Position(0, 0), new Position(0, 0)),
                     ];
-                    await emulator.yank();
+                    await emulator.runCommand("yank");
                     assert.equal(
                         activeTextEditor.document.getText(),
                         "ABCDEFGHIJ",

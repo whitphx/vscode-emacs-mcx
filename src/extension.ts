@@ -89,27 +89,27 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
-        emulator.killLine();
+        emulator.runCommand("killLine");
     });
 
     registerEmulatorCommand("emacs-mcx.killWholeLine", (emulator) => {
-        emulator.killWholeLine();
+        emulator.runCommand("killWholeLine");
     });
 
     registerEmulatorCommand("emacs-mcx.killRegion", (emulator) => {
-        emulator.killRegion();
+        emulator.runCommand("killRegion");
     });
 
     registerEmulatorCommand("emacs-mcx.copyRegion", (emulator) => {
-        emulator.copyRegion();
+        emulator.runCommand("copyRegion");
     });
 
     registerEmulatorCommand("emacs-mcx.yank", (emulator) => {
-        emulator.yank();
+        emulator.runCommand("yank");
     });
 
     registerEmulatorCommand("emacs-mcx.yank-pop", (emulator) => {
-        emulator.yankPop();
+        emulator.runCommand("yankPop");
     });
 
     registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {

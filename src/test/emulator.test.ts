@@ -26,7 +26,7 @@ ABCDEFGHIJ`;
                 new Selection(new Position(0, 0), new Position(0, 3)),
                 new Selection(new Position(2, 0), new Position(2, 3)),
             ];
-            await emulator.killRegion();
+            await emulator.runCommand("killRegion");
 
             assert.equal(
                 activeTextEditor.document.getText(),
@@ -40,7 +40,7 @@ DEFGHIJ`,
             activeTextEditor.selections = [
                 new Selection(new Position(0, 0), new Position(0, 0)),
             ];
-            await emulator.yank();
+            await emulator.runCommand("yank");
 
             assert.equal(
                 activeTextEditor.document.getText(),

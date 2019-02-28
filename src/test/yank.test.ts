@@ -27,7 +27,7 @@ suite("Emulator with yank", () => {
                     new Selection(new Position(1, 0), new Position(1, 0)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assertTextEqual(activeTextEditor, "\nLorem ipsum\n");
             });
@@ -41,7 +41,7 @@ suite("Emulator with yank", () => {
                     new Selection(new Position(2, 0), new Position(2, 0)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assertTextEqual(activeTextEditor, "Lorem ipsum\nLorem ipsum\nLorem ipsum");
             });
@@ -59,7 +59,7 @@ suite("Emulator with yank", () => {
                     new Selection(new Position(1, 0), new Position(1, 0)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assertTextEqual(activeTextEditor, `
 Lorem ipsum
@@ -76,7 +76,7 @@ dolor sit amet,
                     new Selection(new Position(2, 0), new Position(2, 0)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assertTextEqual(
                     activeTextEditor,
@@ -98,7 +98,7 @@ dolor sit amet,`,
                     new Selection(new Position(0, 0), new Position(0, 0)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 // Just single paste
                 assertTextEqual(
@@ -134,7 +134,7 @@ ABCDEFGHIJ`;
                     new Selection(new Position(1, 0), new Position(1, 4)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assertTextEqual(
                     activeTextEditor,
@@ -153,7 +153,7 @@ ABCDEFGHIJ`,
                     new Selection(new Position(2, 6), new Position(2, 9)),
                 ];
 
-                await emulator.yank();
+                await emulator.runCommand("yank");
 
                 assertTextEqual(
                     activeTextEditor,

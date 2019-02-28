@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
-import { Disposable, Position, Range, Selection, TextEditor } from "vscode";
+import { Disposable, Selection, TextEditor } from "vscode";
 import { instanceOfIEmacsCommandInterrupted } from "./commands";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
+import { CopyRegion, KillLine, KillRegion, KillWholeLine, Yank, YankPop } from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import { BackwardSexp, BackwardUpSexp, ForwardDownSexp, ForwardSexp } from "./commands/paredit";
 import { RecenterTopBottom } from "./commands/recenter";
@@ -13,7 +14,12 @@ import { KillYanker } from "./kill-yank";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 
-export class EmacsEmulator implements Disposable {
+export interface IMarkModeController {
+    enterMarkMode(): void;
+    exitMarkMode(): void;
+}
+
+export class EmacsEmulator implements Disposable, IMarkModeController {
     private textEditor: TextEditor;
 
     private commandRegistry: EmacsCommandRegistry;
@@ -30,7 +36,6 @@ export class EmacsEmulator implements Disposable {
     constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
         this.textEditor = textEditor;
 
-        this.killYanker = new KillYanker(textEditor, killRing);
         this.prefixArgumentHandler = new PrefixArgumentHandler();
 
         this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
@@ -41,32 +46,38 @@ export class EmacsEmulator implements Disposable {
         this.commandRegistry = new EmacsCommandRegistry();
         this.afterCommand = this.afterCommand.bind(this);
 
-        this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand));
-        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand));
-        this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand));
-        this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand));
-        this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand));
-        this.commandRegistry.register(new DeleteBlankLines(this.afterCommand));
+        this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand, this));
+        this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand, this));
+        this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand, this));
+        this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand, this));
+        this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
 
-        this.commandRegistry.register(new ForwardSexp(this.afterCommand));
-        this.commandRegistry.register(new BackwardSexp(this.afterCommand));
-        this.commandRegistry.register(new ForwardDownSexp (this.afterCommand));
-        this.commandRegistry.register(new BackwardUpSexp (this.afterCommand));
+        this.commandRegistry.register(new ForwardSexp(this.afterCommand, this));
+        this.commandRegistry.register(new BackwardSexp(this.afterCommand, this));
+        this.commandRegistry.register(new ForwardDownSexp (this.afterCommand, this));
+        this.commandRegistry.register(new BackwardUpSexp (this.afterCommand, this));
 
-        this.commandRegistry.register(new RecenterTopBottom(this.afterCommand));
+        this.commandRegistry.register(new RecenterTopBottom(this.afterCommand, this));
 
-        // TODO: I want to use a decorator
-        this.killLine = this.makePrefixArgumentAcceptable(this.killLine);
+        const killYanker = new KillYanker(textEditor, killRing);
+        this.commandRegistry.register(new KillLine(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new KillWholeLine(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new KillRegion(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new CopyRegion(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new Yank(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new YankPop(this.afterCommand, this, killYanker));
+        this.killYanker = killYanker;  // TODO: To be removed
     }
 
     public setTextEditor(textEditor: TextEditor) {
@@ -187,69 +198,6 @@ export class EmacsEmulator implements Disposable {
         MessageManager.showMessage("Quit");
     }
 
-    public copyRegion() {
-        const ranges = this.getNonEmptySelections();
-        this.killYanker.copy(ranges);
-        this.cancel();
-    }
-
-    // tslint:disable-next-line:no-unnecessary-initializer
-    public killLine(prefixArgument: number | undefined = undefined) {
-        const ranges = this.textEditor.selections.map((selection) => {
-            const cursor = selection.anchor;
-            const lineAtCursor = this.textEditor.document.lineAt(cursor.line);
-
-            if (prefixArgument !== undefined) {
-                return new Range(cursor, new Position(cursor.line + prefixArgument, 0));
-            }
-
-            const lineEnd = lineAtCursor.range.end;
-
-            if (cursor.isEqual(lineEnd)) {
-                // From the end of the line to the beginning of the next line
-                return new Range(cursor, new Position(cursor.line + 1, 0));
-            } else {
-                // From the current cursor to the end of line
-                return new Range(cursor, lineEnd);
-            }
-        });
-        this.exitMarkMode();
-        return this.killYanker.kill(ranges);
-    }
-
-    public killWholeLine() {
-        const ranges = this.textEditor.selections.map((selection) =>
-            // From the beginning of the line to the beginning of the next line
-            new Range(
-                new Position(selection.anchor.line, 0),
-                new Position(selection.anchor.line + 1, 0),
-            ),
-        );
-        this.exitMarkMode();
-        return this.killYanker.kill(ranges);
-    }
-
-    public async killRegion() {
-        const ranges = this.getNonEmptySelections();
-        await this.killYanker.kill(ranges);
-        this.exitMarkMode();
-        this.cancelKillAppend();
-    }
-
-    public cancelKillAppend() {
-        this.killYanker.cancelKillAppend();
-    }
-
-    public async yank() {
-        await this.killYanker.yank();
-        this.exitMarkMode();
-    }
-
-    public async yankPop() {
-        await this.killYanker.yankPop();
-        this.exitMarkMode();
-    }
-
     public async newLine() {
         this.exitMarkMode();
 
@@ -274,7 +222,7 @@ export class EmacsEmulator implements Disposable {
         delete this.killYanker;
     }
 
-    private enterMarkMode() {
+    public enterMarkMode() {
         this._isInMarkMode = true;
 
         // At this moment, the only way to set the context for `when` conditions is `setContext` command.
@@ -283,21 +231,9 @@ export class EmacsEmulator implements Disposable {
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
     }
 
-    private exitMarkMode() {
+    public exitMarkMode() {
         this._isInMarkMode = false;
         vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
-    }
-
-    private makePrefixArgumentAcceptable(method: (...args: any[]) => any) {
-        return (...args: any[]) => {
-            const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
-
-            const ret = method.apply(this, [...args, prefixArgument]);
-
-            this.prefixArgumentHandler.cancel();
-
-            return ret;
-        };
     }
 
     private makeSelectionsEmpty() {
@@ -315,10 +251,6 @@ export class EmacsEmulator implements Disposable {
 
     private hasNonEmptySelection(): boolean {
         return this.textEditor.selections.some((selection) => !selection.isEmpty);
-    }
-
-    private getNonEmptySelections(): Selection[] {
-        return this.textEditor.selections.filter((selection) => !selection.isEmpty);
     }
 
     private afterCommand() {

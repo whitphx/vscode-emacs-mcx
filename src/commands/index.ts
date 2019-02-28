@@ -1,4 +1,5 @@
 import { TextEditor } from "vscode";
+import { IMarkModeController } from "../emulator";
 
 export function createParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
     return Promise.all(Array.apply(null, Array(concurrency)).map(promiseFactory));
@@ -7,10 +8,12 @@ export function createParallel<T>(concurrency: number, promiseFactory: () => The
 export abstract class EmacsCommand {
     public abstract readonly id: string;
 
+    protected markModeController: IMarkModeController;
     private afterExecute: () => void;
 
-    public constructor(afterExecute: () => void) {
+    public constructor(afterExecute: () => void, markModeController: IMarkModeController) {
         this.afterExecute = afterExecute;
+        this.markModeController = markModeController;
     }
 
     public run(
