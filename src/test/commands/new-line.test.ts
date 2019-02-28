@@ -29,7 +29,7 @@ suite("newLine", () => {
                     test(`it works with single cursor at the beginning of the line`, async () => {
                         setEmptyCursors(activeTextEditor, [cursorLineNum, 0]);
 
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(
                             activeTextEditor,
@@ -40,7 +40,7 @@ suite("newLine", () => {
                     test(`it works with single cursor at the middle of the line`, async () => {
                         setEmptyCursors(activeTextEditor, [cursorLineNum, 5]);
 
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(
                             activeTextEditor,
@@ -51,7 +51,7 @@ suite("newLine", () => {
                     test(`it works with single cursor at the end of the line`, async () => {
                         setEmptyCursors(activeTextEditor, [cursorLineNum, 10]);
 
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(
                             activeTextEditor,
@@ -66,7 +66,7 @@ suite("newLine", () => {
                     test(`it works with single cursor at the beginning of the line`, async () => {
                         setEmptyCursors(activeTextEditor, [cursorLineNum, 0]);
 
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(
                             activeTextEditor,
@@ -77,7 +77,7 @@ suite("newLine", () => {
                     test(`it works with single cursor at the middle of the line`, async () => {
                         setEmptyCursors(activeTextEditor, [cursorLineNum, 5]);
 
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(
                             activeTextEditor,
@@ -88,7 +88,7 @@ suite("newLine", () => {
                     test(`it works with single cursor at the end of the line`, async () => {
                         setEmptyCursors(activeTextEditor, [cursorLineNum, 10]);
 
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(
                             activeTextEditor,
@@ -106,7 +106,7 @@ suite("newLine", () => {
                         assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
 
                         // Test newLine
-                        await emulator.newLine();
+                        await emulator.runCommand("newLine");
 
                         assertTextEqual(activeTextEditor, `0${eolStr}123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`);
 
@@ -131,7 +131,7 @@ suite("newLine", () => {
 
                     setEmptyCursors(activeTextEditor, [0, 1]);
 
-                    await emulator.newLine();
+                    await emulator.runCommand("newLine");
 
                     assertTextEqual(activeTextEditor, `(${eolStr}    ${eolStr})`);
                     assert.equal(activeTextEditor.selection.active.line, 1);
@@ -145,7 +145,7 @@ suite("newLine", () => {
 
                     setEmptyCursors(activeTextEditor, [0, 3]);
 
-                    await emulator.newLine();
+                    await emulator.runCommand("newLine");
 
                     assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} */`);
                     assert.equal(activeTextEditor.selection.active.line, 1);
@@ -161,7 +161,7 @@ suite("newLine", () => {
 
                     setEmptyCursors(activeTextEditor, [0, 2]);
 
-                    await emulator.newLine();
+                    await emulator.runCommand("newLine");
 
                     assertTextEqual(activeTextEditor, `(a${eolStr})`);
                     assert.equal(activeTextEditor.selection.active.line, 1);
@@ -177,7 +177,7 @@ suite("newLine", () => {
                 setEmptyCursors(activeTextEditor, [0, 0]);
 
                 emulator.universalArgument();
-                await emulator.newLine();
+                await emulator.runCommand("newLine");
 
                 assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);
                 assert.equal(activeTextEditor.selection.active.line, 4);

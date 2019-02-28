@@ -129,7 +129,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.newLine", (emulator) => {
-        emulator.newLine();
+        emulator.runCommand("newLine");
     });
 
     registerEmulatorCommand("emacs-mcx.transformToUppercase", (emulator) => {

@@ -192,12 +192,6 @@ export class EmacsEmulator implements Disposable, IMarkModeController {
         MessageManager.showMessage("Quit");
     }
 
-    public async newLine() {
-        this.exitMarkMode();
-
-        await this.runCommand("newLine");
-    }
-
     public async transformToUppercase() {
         if (!this.hasNonEmptySelection()) {
             await this.runCommand("forwardWord");
