@@ -16,6 +16,14 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.10.0] - 2019-03-01
+### Added
+- `C-M-p` (`emacs-mcx.addSelectionToPreviousFindMatch`) is supported.
+- Command implementations are drastically changed to be class-based.
+
+### Fixed
+- Fix `emacs-mcx.paredit.forwardDownSexp` and `emacs-mcx.paredit.backwardUpSexp` to ignore semicolon in non-lisp languages correctly.
+
 ## [0.9.4] - 2019-02-27
 ### Fixed
 - Update `emacs-mcx.paredit.forwardDownSexp` and `emacs-mcx.paredit.backwardUpSexp` to treat a semicolon as one entity, but not comment.
