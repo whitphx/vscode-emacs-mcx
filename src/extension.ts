@@ -133,11 +133,11 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     registerEmulatorCommand("emacs-mcx.transformToUppercase", (emulator) => {
-        emulator.transformToUppercase();
+        emulator.runCommand("transformToUppercase");
     });
 
     registerEmulatorCommand("emacs-mcx.transformToLowercase", (emulator) => {
-        emulator.transformToLowercase();
+        emulator.runCommand("transformToLowercase");
     });
 
     registerEmulatorCommand("emacs-mcx.deleteBlankLines", (emulator) => {
