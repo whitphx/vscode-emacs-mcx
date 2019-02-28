@@ -1,9 +1,9 @@
 import * as assert from "assert";
 import {Position, Range, Selection, TextEditor} from "vscode";
-import { EmacsEmulator } from "../emulator";
-import { cleanUpWorkspace, setupWorkspace} from "./utils";
+import { EmacsEmulator } from "../../emulator";
+import { cleanUpWorkspace, setupWorkspace} from "../utils";
 
-suite("addSelectionToNextFindMatch", () => {
+suite("addSelectionTo(Next|Previous)FindMatch", () => {
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
 
