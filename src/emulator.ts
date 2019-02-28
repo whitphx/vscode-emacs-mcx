@@ -88,8 +88,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
         this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
         this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));
 
-        this.commandRegistry.register(new TransformToUppercase(this.afterCommand, this, this));
-        this.commandRegistry.register(new TransformToLowercase(this.afterCommand, this, this));
+        this.commandRegistry.register(new TransformToUppercase(this.afterCommand, this));
+        this.commandRegistry.register(new TransformToLowercase(this.afterCommand, this));
     }
 
     public setTextEditor(textEditor: TextEditor) {

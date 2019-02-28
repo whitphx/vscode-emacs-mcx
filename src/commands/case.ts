@@ -3,7 +3,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
-import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 
 function hasNonEmptySelection(textEditor: TextEditor): boolean {
     return textEditor.selections.some((selection) => !selection.isEmpty);
@@ -12,21 +11,9 @@ function hasNonEmptySelection(textEditor: TextEditor): boolean {
 export class TransformToUppercase extends EmacsCommand {
     public readonly id = "transformToUppercase";
 
-    private emacsCommandRunner: IEmacsCommandRunner;
-
-    public constructor(
-        afterExecute: () => void,
-        markModeController: IMarkModeController,  // XXX: kill and yank commands have to manipulate mark-mode status
-        emacsCommandRunner: IEmacsCommandRunner,
-    ) {
-        super(afterExecute, markModeController);
-
-        this.emacsCommandRunner = emacsCommandRunner;
-    }
-
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (!hasNonEmptySelection(textEditor)) {
-            await this.emacsCommandRunner.runCommand("forwardWord");
+            await this.emacsController.runCommand("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToUppercase");
 
@@ -36,21 +23,9 @@ export class TransformToUppercase extends EmacsCommand {
 export class TransformToLowercase extends EmacsCommand {
     public readonly id = "transformToLowercase";
 
-    private emacsCommandRunner: IEmacsCommandRunner;
-
-    public constructor(
-        afterExecute: () => void,
-        markModeController: IMarkModeController,  // XXX: kill and yank commands have to manipulate mark-mode status
-        emacsCommandRunner: IEmacsCommandRunner,
-    ) {
-        super(afterExecute, markModeController);
-
-        this.emacsCommandRunner = emacsCommandRunner;
-    }
-
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (!hasNonEmptySelection(textEditor)) {
-            await this.emacsCommandRunner.runCommand("forwardWord");
+            await this.emacsController.runCommand("forwardWord");
         }
         await vscode.commands.executeCommand("editor.action.transformToLowercase");
 
