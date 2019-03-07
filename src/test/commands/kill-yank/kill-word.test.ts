@@ -108,4 +108,44 @@ suite("killWord", () => {
 
         assertTextEqual(activeTextEditor, "sum dolor");
     });
+
+    test("working with prefix argument", async () => {
+        setEmptyCursors(activeTextEditor, [0, 11]);
+
+        // Prefix argument '4'
+        await emulator.universalArgument();
+
+        // Kill
+        await emulator.runCommand("killWord");
+
+        assertTextEqual(activeTextEditor, "Lorem ipsum adipiscing elit,");
+        assertCursorsEqual(activeTextEditor, [0, 11]);
+
+        // Check the killed words
+        await clearTextEditor(activeTextEditor);
+
+        await emulator.runCommand("yank");
+
+        assertTextEqual(activeTextEditor, " dolor sit amet,\nconsectetur");
+    });
+
+    // TODO: Edge case
+    // test("working with prefix argument with reaching the end of document and comma", async () => {
+    //     setEmptyCursors(activeTextEditor, [1, 11]);
+
+    //     // Prefix argument '4'
+    //     await emulator.universalArgument();
+
+    //     // Kill
+    //     await emulator.runCommand("killWord");
+    //     assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit,");
+    //     assertCursorsEqual(activeTextEditor, [1, 11]);
+
+    //     // Check the killed words
+    //     await clearTextEditor(activeTextEditor);
+
+    //     await emulator.runCommand("yank");
+
+    //     assertTextEqual(activeTextEditor, " adipiscing elit,");
+    // });
 });

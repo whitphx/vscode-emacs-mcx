@@ -19,24 +19,37 @@ abstract class KillYankCommand extends EmacsCommand {
     }
 }
 
-function findNextWordRange(doc: TextDocument, position: Position) {
+function findNextWordRange(doc: TextDocument, position: Position, repeat: number = 1) {
     const doclen = doc.getText().length;
     let idx = doc.offsetAt(position) + 1;
-    while (idx < doclen) {
+
+    let foundWords = 0;
+    const wordRanges = [];
+
+    while (idx < doclen && foundWords < repeat) {
         const wordRange = doc.getWordRangeAtPosition(doc.positionAt(idx));
         if (wordRange !== undefined) {
-            return wordRange;
+            wordRanges.push(wordRange);
+            foundWords++;
+            idx = doc.offsetAt(wordRange.end);
         }
         idx++;
     }
+
+    if (wordRanges.length === 0) { return undefined; }
+
+    return new Range(wordRanges[0].start, wordRanges[wordRanges.length - 1].end);
 }
 
 export class KillWord extends KillYankCommand {
     public readonly id = "killWord";
 
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        if (repeat <= 0) { return; }
+
         const nextWordRanges = textEditor.selections.map((selection) =>
-            findNextWordRange(textEditor.document, selection.active));
+            findNextWordRange(textEditor.document, selection.active, repeat));
         const killRanges: Range[] = nextWordRanges.map((nextWordRange, i) => {
             if (nextWordRange === undefined) {
                 return undefined;
