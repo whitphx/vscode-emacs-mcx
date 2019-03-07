@@ -56,3 +56,13 @@ export async function cleanUpWorkspace() {
 export function assertTextEqual(textEditor: TextEditor, expectedText: string) {
     assert.equal(textEditor.document.getText(), expectedText);
 }
+
+export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[number, number]>) {
+    assert.equal(textEditor.selections.length, positions.length);
+    textEditor.selections.forEach((selection, idx) => {
+        const pos = positions[idx];
+        assert.ok(
+            selection.isEqual(new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1])))
+        );
+    });
+}

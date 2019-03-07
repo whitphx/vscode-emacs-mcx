@@ -1,6 +1,6 @@
 // tslint:disable:max-classes-per-file
 // tslint:disable:object-literal-sort-keys
-import { Position, Range, Selection, TextEditor } from "vscode";
+import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { KillYanker } from "../kill-yank";
@@ -16,6 +16,35 @@ abstract class KillYankCommand extends EmacsCommand {
         super(afterExecute, emacsController);
 
         this.killYanker = killYanker;
+    }
+}
+
+function findNextWordRange(doc: TextDocument, position: Position) {
+    const doclen = doc.getText().length;
+    let idx = doc.offsetAt(position) + 1;
+    while (idx < doclen) {
+        const wordRange = doc.getWordRangeAtPosition(doc.positionAt(idx));
+        if (wordRange !== undefined) {
+            return wordRange;
+        }
+        idx++;
+    }
+}
+
+export class KillWord extends KillYankCommand {
+    public readonly id = "killWord";
+
+    public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const nextWordRanges = textEditor.selections.map((selection) =>
+            findNextWordRange(textEditor.document, selection.active));
+        const killRanges: Range[] = nextWordRanges.map((nextWordRange, i) => {
+            if (nextWordRange === undefined) {
+                return undefined;
+            }
+
+            return new Range(textEditor.selections[i].active, nextWordRange.end);
+        }).filter((range): range is Range => range !== undefined);
+        await this.killYanker.kill(killRanges);
     }
 }
 
