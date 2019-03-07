@@ -19,26 +19,33 @@ abstract class KillYankCommand extends EmacsCommand {
     }
 }
 
-function findNextWordRange(doc: TextDocument, position: Position, repeat: number = 1) {
+function findNextKillWordRange(doc: TextDocument, position: Position, repeat: number = 1) {
     const doclen = doc.getText().length;
     let idx = doc.offsetAt(position) + 1;
 
     let foundWords = 0;
-    const wordRanges = [];
+    const killRanges = [];
 
-    while (idx < doclen && foundWords < repeat) {
+    while (idx <= doclen && foundWords < repeat) {
         const wordRange = doc.getWordRangeAtPosition(doc.positionAt(idx));
         if (wordRange !== undefined) {
-            wordRanges.push(wordRange);
+            killRanges.push(wordRange);
             foundWords++;
             idx = doc.offsetAt(wordRange.end);
         }
         idx++;
     }
 
-    if (wordRanges.length === 0) { return undefined; }
+    // If there are spaces (or some non-word characters)
+    // between the current position and the end of the document,
+    // it should be killed too.
+    if (foundWords < repeat) {
+        killRanges.push(new Range(doc.positionAt(idx), doc.positionAt(doclen)));
+    }
 
-    return new Range(wordRanges[0].start, wordRanges[wordRanges.length - 1].end);
+    if (killRanges.length === 0) { return undefined; }
+
+    return new Range(killRanges[0].start, killRanges[killRanges.length - 1].end);
 }
 
 export class KillWord extends KillYankCommand {
@@ -49,7 +56,7 @@ export class KillWord extends KillYankCommand {
         if (repeat <= 0) { return; }
 
         const nextWordRanges = textEditor.selections.map((selection) =>
-            findNextWordRange(textEditor.document, selection.active, repeat));
+            findNextKillWordRange(textEditor.document, selection.active, repeat));
         const killRanges: Range[] = nextWordRanges.map((nextWordRange, i) => {
             if (nextWordRange === undefined) {
                 return undefined;
