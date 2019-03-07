@@ -1,6 +1,6 @@
 // tslint:disable:max-classes-per-file
 // tslint:disable:object-literal-sort-keys
-import { Position, Range, Selection, TextEditor } from "vscode";
+import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { KillYanker } from "../kill-yank";
@@ -16,6 +16,55 @@ abstract class KillYankCommand extends EmacsCommand {
         super(afterExecute, emacsController);
 
         this.killYanker = killYanker;
+    }
+}
+
+function findNextKillWordRange(doc: TextDocument, position: Position, repeat: number = 1) {
+    const doclen = doc.getText().length;
+    let idx = doc.offsetAt(position) + 1;
+
+    let foundWords = 0;
+    const killRanges = [];
+
+    while (idx <= doclen && foundWords < repeat) {
+        const wordRange = doc.getWordRangeAtPosition(doc.positionAt(idx));
+        if (wordRange !== undefined) {
+            killRanges.push(wordRange);
+            foundWords++;
+            idx = doc.offsetAt(wordRange.end);
+        }
+        idx++;
+    }
+
+    // If there are spaces (or some non-word characters)
+    // between the current position and the end of the document,
+    // it should be killed too.
+    if (foundWords < repeat) {
+        killRanges.push(new Range(doc.positionAt(idx), doc.positionAt(doclen)));
+    }
+
+    if (killRanges.length === 0) { return undefined; }
+
+    return new Range(killRanges[0].start, killRanges[killRanges.length - 1].end);
+}
+
+export class KillWord extends KillYankCommand {
+    public readonly id = "killWord";
+
+    public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        if (repeat <= 0) { return; }
+
+        const nextWordRanges = textEditor.selections.map((selection) =>
+            findNextKillWordRange(textEditor.document, selection.active, repeat));
+        const killRanges: Range[] = nextWordRanges.map((nextWordRange, i) => {
+            if (nextWordRange === undefined) {
+                return undefined;
+            }
+
+            return new Range(textEditor.selections[i].active, nextWordRange.end);
+        }).filter((range): range is Range => range !== undefined);
+        await this.killYanker.kill(killRanges);
     }
 }
 

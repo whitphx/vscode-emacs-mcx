@@ -435,7 +435,7 @@
 						},
 						{
 								"key": "alt+d",
-								"command": "deleteWordRight",
+								"command": "emacs-mcx.killWord",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{
