@@ -825,7 +825,7 @@
 						},
 						{
 								"key": "alt+backspace",
-								"command": "deleteWordLeft",
+								"command": "emacs-mcx.backwardKillWord",
 								"when": "editorTextFocus && !editorReadonly"
 						},
 						{

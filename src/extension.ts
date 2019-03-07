@@ -96,6 +96,10 @@ export function activate(context: vscode.ExtensionContext) {
         emulator.runCommand("killWord");
     });
 
+    registerEmulatorCommand("emacs-mcx.backwardKillWord", (emulator) => {
+        emulator.runCommand("backwardKillWord");
+    });
+
     registerEmulatorCommand("emacs-mcx.killWholeLine", (emulator) => {
         emulator.runCommand("killWholeLine");
     });

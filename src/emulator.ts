@@ -5,7 +5,10 @@ import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./
 import { TransformToLowercase, TransformToUppercase } from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
-import { CopyRegion, KillLine, KillRegion, KillWholeLine, KillWord, Yank, YankPop } from "./commands/kill";
+import {
+    BackwardKillWord, CopyRegion, KillLine, KillRegion, KillWholeLine,
+    KillWord, Yank, YankPop,
+} from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import { BackwardSexp, BackwardUpSexp, ForwardDownSexp, ForwardSexp } from "./commands/paredit";
 import { RecenterTopBottom } from "./commands/recenter";
@@ -78,6 +81,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
         const killYanker = new KillYanker(textEditor, killRing);
         this.commandRegistry.register(new KillWord(this.afterCommand, this, killYanker));
+        this.commandRegistry.register(new BackwardKillWord(this.afterCommand, this, killYanker));
         this.commandRegistry.register(new KillLine(this.afterCommand, this, killYanker));
         this.commandRegistry.register(new KillWholeLine(this.afterCommand, this, killYanker));
         this.commandRegistry.register(new KillRegion(this.afterCommand, this, killYanker));

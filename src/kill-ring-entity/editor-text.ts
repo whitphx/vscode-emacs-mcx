@@ -20,7 +20,12 @@ class AppendedRegionTexts {
     }
 
     public append(another: AppendedRegionTexts) {
-        this.regionTexts = this.regionTexts.concat(another.regionTexts);
+        const appendAfter = this.getLastRange().start.isBeforeOrEqual(another.getLastRange().start);
+        if (appendAfter) {
+            this.regionTexts = this.regionTexts.concat(another.regionTexts);
+        } else {
+            this.regionTexts = another.regionTexts.concat(this.regionTexts);
+        }
     }
 
     public getAppendedText(): string {
