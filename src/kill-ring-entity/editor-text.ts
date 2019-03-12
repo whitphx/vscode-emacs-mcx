@@ -8,6 +8,11 @@ interface IRegionText {
     range: Range;
 }
 
+export enum AppendDirection {
+    Forward,
+    Backward,
+}
+
 class AppendedRegionTexts {
     /**
      * This class represents a sequence of IRegionTexts appended by kill command.
@@ -19,9 +24,8 @@ class AppendedRegionTexts {
         this.regionTexts = [regionText];
     }
 
-    public append(another: AppendedRegionTexts) {
-        const appendAfter = this.getLastRange().start.isBeforeOrEqual(another.getLastRange().start);
-        if (appendAfter) {
+    public append(another: AppendedRegionTexts, appendDirection: AppendDirection = AppendDirection.Forward) {
+        if (appendDirection === AppendDirection.Forward) {
             this.regionTexts = this.regionTexts.concat(another.regionTexts);
         } else {
             this.regionTexts = another.regionTexts.concat(this.regionTexts);
@@ -82,13 +86,13 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
         return this.regionTextsList;
     }
 
-    public append(entity: EditorTextKillRingEntity) {
+    public append(entity: EditorTextKillRingEntity, appendDirection: AppendDirection = AppendDirection.Forward) {
         const additional = entity.getregionTextsList();
         if (additional.length !== this.regionTextsList.length) {
             throw Error("Not appendable");
         }
 
         this.regionTextsList.map((appendedRegionTexts, i) =>
-            appendedRegionTexts.append(additional[i]));
+            appendedRegionTexts.append(additional[i], appendDirection));
     }
 }

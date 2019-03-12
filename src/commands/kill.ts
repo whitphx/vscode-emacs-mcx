@@ -3,6 +3,7 @@
 import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
+import { AppendDirection } from "../kill-ring-entity/editor-text";
 import { KillYanker } from "../kill-yank";
 
 abstract class KillYankCommand extends EmacsCommand {
@@ -113,7 +114,7 @@ export class BackwardKillWord extends KillYankCommand {
 
             return new Range(previousWordRange.start, textEditor.selections[i].active);
         }).filter((range): range is Range => range !== undefined);
-        await this.killYanker.kill(killRanges);
+        await this.killYanker.kill(killRanges, AppendDirection.Backward);
     }
 }
 

@@ -4,7 +4,7 @@ import { Position, Range, TextEditor } from "vscode";
 import { EditorIdentity } from "./editorIdentity";
 import { KillRing } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
-import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { MessageManager } from "./message";
 import { equalPositons } from "./utils";
 
@@ -54,12 +54,12 @@ export class KillYanker {
         }
     }
 
-    public async kill(ranges: Range[]) {
+    public async kill(ranges: Range[], appendDirection: AppendDirection = AppendDirection.Forward) {
         if (!equalPositons(this.getCursorPositions(), this.prevKillPositions)) {
             this.isAppending = false;
         }
 
-        this.copy(ranges, this.isAppending);
+        this.copy(ranges, this.isAppending, appendDirection);
 
         await this.delete(ranges);
 
@@ -67,7 +67,7 @@ export class KillYanker {
         this.prevKillPositions = this.getCursorPositions();
     }
 
-    public copy(ranges: Range[], shouldAppend = false) {
+    public copy(ranges: Range[], shouldAppend = false, appendDirection: AppendDirection = AppendDirection.Forward) {
         const newKillEntity = new EditorTextKillRingEntity(ranges.map((range) => ({
             range,
             text: this.textEditor.document.getText(range),
@@ -76,7 +76,7 @@ export class KillYanker {
         if (this.killRing !== null) {
             const currentKill = this.killRing.getTop();
             if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
-                currentKill.append(newKillEntity);
+                currentKill.append(newKillEntity, appendDirection);
                 clipboardy.writeSync(currentKill.asString());
             } else {
                 this.killRing.push(newKillEntity);

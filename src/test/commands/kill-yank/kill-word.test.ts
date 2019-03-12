@@ -284,3 +284,36 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
         });
     });
 });
+
+suite("Combination killing", () => {
+    let activeTextEditor: TextEditor;
+    let emulator: EmacsEmulator;
+
+    setup(async () => {
+        const initialText = "aaa bbb ccc ddd";
+        activeTextEditor = await setupWorkspace(initialText);
+        const killRing = new KillRing(3);
+        emulator = new EmacsEmulator(activeTextEditor, killRing);
+    });
+
+    teardown(cleanUpWorkspace);
+
+    test("combination killing", async () => {
+        setEmptyCursors(activeTextEditor, [0, 7]); // Just after 'bbb'
+
+        await emulator.runCommand("killWord");
+        assertTextEqual(activeTextEditor, "aaa bbb ddd");
+        await emulator.runCommand("backwardKillWord");
+        assertTextEqual(activeTextEditor, "aaa  ddd");
+        await emulator.runCommand("killWord");
+        assertTextEqual(activeTextEditor, "aaa ");
+        await emulator.runCommand("backwardKillWord");
+        assertTextEqual(activeTextEditor, "");
+
+        // All killed texts are appended
+        await clearTextEditor(activeTextEditor);
+
+        await emulator.runCommand("yank");
+        assertTextEqual(activeTextEditor, "aaa bbb ccc ddd");
+    });
+});
