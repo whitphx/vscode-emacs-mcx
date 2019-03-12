@@ -141,12 +141,19 @@ export class KillYanker {
         this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
     }
 
-    private delete(ranges: vscode.Range[]): Thenable<boolean> {
-        return this.textEditor.edit((editBuilder) => {
-            ranges.forEach((range) => {
-                editBuilder.delete(range);
+    private async delete(ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
+        let success = false;
+        let trial = 0;
+        while (!success && trial < maxTrials) {
+            success = await this.textEditor.edit((editBuilder) => {
+                ranges.forEach((range) => {
+                    editBuilder.delete(range);
+                });
             });
-        });
+            trial++;
+        }
+
+        return success;
     }
 
     private isYankInterupted(): boolean {
