@@ -1,7 +1,7 @@
 import { Disposable, TextEditor } from "vscode";
 import { EditorIdentity } from "./editorIdentity";
 import { EmacsEmulator } from "./emulator";
-import { KillRing } from "./kill-ring";
+import { KillRing } from "./kill-yank/kill-ring";
 
 export class EmacsEmulatorMap implements Disposable {
     private emacsEmulatorMap: Map<string, EmacsEmulator>;

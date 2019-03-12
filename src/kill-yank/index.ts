@@ -1,12 +1,17 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
-import { EditorIdentity } from "./editorIdentity";
+import { EditorIdentity } from "../editorIdentity";
+import { MessageManager } from "../message";
+import { equalPositons } from "../utils";
 import { KillRing } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
-import { MessageManager } from "./message";
-import { equalPositons } from "./utils";
+
+export enum AppendDirection {
+    Forward,
+    Backward,
+}
 
 export class KillYanker {
     private textEditor: TextEditor;
@@ -54,12 +59,12 @@ export class KillYanker {
         }
     }
 
-    public async kill(ranges: Range[]) {
+    public async kill(ranges: Range[], appendDirection: AppendDirection = AppendDirection.Forward) {
         if (!equalPositons(this.getCursorPositions(), this.prevKillPositions)) {
             this.isAppending = false;
         }
 
-        this.copy(ranges, this.isAppending);
+        this.copy(ranges, this.isAppending, appendDirection);
 
         await this.delete(ranges);
 
@@ -67,7 +72,7 @@ export class KillYanker {
         this.prevKillPositions = this.getCursorPositions();
     }
 
-    public copy(ranges: Range[], shouldAppend = false) {
+    public copy(ranges: Range[], shouldAppend = false, appendDirection: AppendDirection = AppendDirection.Forward) {
         const newKillEntity = new EditorTextKillRingEntity(ranges.map((range) => ({
             range,
             text: this.textEditor.document.getText(range),
@@ -76,7 +81,7 @@ export class KillYanker {
         if (this.killRing !== null) {
             const currentKill = this.killRing.getTop();
             if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
-                currentKill.append(newKillEntity);
+                currentKill.append(newKillEntity, appendDirection);
                 clipboardy.writeSync(currentKill.asString());
             } else {
                 this.killRing.push(newKillEntity);
@@ -136,12 +141,19 @@ export class KillYanker {
         this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
     }
 
-    private delete(ranges: vscode.Range[]): Thenable<boolean> {
-        return this.textEditor.edit((editBuilder) => {
-            ranges.forEach((range) => {
-                editBuilder.delete(range);
+    private async delete(ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
+        let success = false;
+        let trial = 0;
+        while (!success && trial < maxTrials) {
+            success = await this.textEditor.edit((editBuilder) => {
+                ranges.forEach((range) => {
+                    editBuilder.delete(range);
+                });
             });
-        });
+            trial++;
+        }
+
+        return success;
     }
 
     private isYankInterupted(): boolean {

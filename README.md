@@ -55,7 +55,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-d` | ✓ | Delete right (DEL) |
 | `C-h` | ✓ | Delete left (BACKSPACE) |
 | `M-d` | ✓ | Kill word (kill-word) |
-| `M-Bksp` |  | Delete word left |
+| `M-Bksp` | ✓ | Kill word left (backward-kill-word) |
 | `C-k` | ✓ | Kill from the current cursor to the end of line (kill-line) |
 | `C-S-Bksp`   || Kill whole line (kill-whole-line) |
 | `C-w` |  | Kill region |
