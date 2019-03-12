@@ -14,8 +14,8 @@ import { BackwardSexp, BackwardUpSexp, ForwardDownSexp, ForwardSexp } from "./co
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { EditorIdentity } from "./editorIdentity";
-import { KillRing } from "./kill-ring";
 import { KillYanker } from "./kill-yank";
+import { KillRing } from "./kill-yank/kill-ring";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 

@@ -1,12 +1,17 @@
 import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
-import { EditorIdentity } from "./editorIdentity";
+import { EditorIdentity } from "../editorIdentity";
+import { MessageManager } from "../message";
+import { equalPositons } from "../utils";
 import { KillRing } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
-import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
-import { MessageManager } from "./message";
-import { equalPositons } from "./utils";
+import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+
+export enum AppendDirection {
+    Forward,
+    Backward,
+}
 
 export class KillYanker {
     private textEditor: TextEditor;

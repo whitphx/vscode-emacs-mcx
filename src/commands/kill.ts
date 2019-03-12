@@ -3,8 +3,7 @@
 import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
-import { AppendDirection } from "../kill-ring-entity/editor-text";
-import { KillYanker } from "../kill-yank";
+import { AppendDirection, KillYanker } from "../kill-yank";
 
 abstract class KillYankCommand extends EmacsCommand {
     protected killYanker: KillYanker;

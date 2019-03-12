@@ -3,7 +3,7 @@ import { moveCommandIds } from "./commands/move";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { executeCommands } from "./execute-commands";
-import { KillRing } from "./kill-ring";
+import { KillRing } from "./kill-yank/kill-ring";
 import { MessageManager } from "./message";
 
 export function activate(context: vscode.ExtensionContext) {

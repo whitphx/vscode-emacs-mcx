@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
 import { moveCommandIds } from "../../../commands/move";
 import { EmacsEmulator } from "../../../emulator";
-import { KillRing } from "../../../kill-ring";
+import { KillRing } from "../../../kill-yank/kill-ring";
 import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace} from "../../utils";
 
 suite("killLine", () => {

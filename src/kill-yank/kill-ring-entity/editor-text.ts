@@ -1,16 +1,12 @@
 // tslint:disable:max-classes-per-file
 
 import { Range } from "vscode";
+import { AppendDirection } from "../";
 import { IKillRingEntity } from "./kill-ring-entity";
 
 interface IRegionText {
     text: string;
     range: Range;
-}
-
-export enum AppendDirection {
-    Forward,
-    Backward,
 }
 
 class AppendedRegionTexts {
