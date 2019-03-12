@@ -7,8 +7,6 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - to make it configurable to turn on and off kill-ring integration with clipboard
     - to browse kill-ring contents
 - To support more kinds of kill command
-    - `M-d`: (kill-word)
-    - `M-DEL`: ((backward-kill-word)
     - `C-x DEL`: (backward-kill-sentence)
     - `M-k`: (kill-sentence)
     - `C-M-k`: (kill-sexp)  # Maybe ignored
