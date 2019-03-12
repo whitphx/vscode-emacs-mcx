@@ -16,6 +16,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.11.0] - 2019-03-12
+### Added
+- `kill-word` and `backward-kill-word` are now supported and assigned to `M-d` and `M-DEL` respectively.
+- `kill-word` and `backward-kill-word` now support prefix argument.
+
 ## [0.10.0] - 2019-03-01
 ### Added
 - `C-M-p` (`emacs-mcx.addSelectionToPreviousFindMatch`) is supported.
