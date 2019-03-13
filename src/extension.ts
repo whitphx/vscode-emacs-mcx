@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
+import { Configuration } from "./configuration/configuration";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { executeCommands } from "./execute-commands";
@@ -7,14 +8,14 @@ import { KillRing } from "./kill-yank/kill-ring";
 import { MessageManager } from "./message";
 
 export function activate(context: vscode.ExtensionContext) {
-    const killRingMaxLen = 60;  // TODO: be configurable
-    const killRing = new KillRing(killRingMaxLen);
+    MessageManager.initialize(context);
+    Configuration.initialize(context);
+
+    const killRing = new KillRing(Configuration.instance.killRingMax);
     context.subscriptions.push(killRing);
 
     const emulatorMap = new EmacsEmulatorMap(killRing);
     context.subscriptions.push(emulatorMap);
-
-    MessageManager.initialize(context);
 
     function getAndUpdateEmulator() {
         const activeTextEditor = vscode.window.activeTextEditor;

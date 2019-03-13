@@ -19,6 +19,7 @@ This extension aims
 This extension makes use of code in the existent extensions listed above and, in addition, [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
+## Keymaps
 ### Move commands
 |Command |Prefix argument |Desc |
 |--------|----------------|------|
@@ -37,7 +38,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `M-g p` (`M-g M-p`) | | Jump to previous error |
 | `C-l` | | Center screen on current line (recenter-top-bottom) |
 
-
 ### Search Commands
 |Command | Desc |
 |--------|------|
@@ -47,7 +47,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-Enter` | Replace One Match (In replace dialog) |
 | `C-M-n` | Add selection to next find match |
 | `C-M-p` | Add selection to previous find match |
-
 
 ### Edit commands
 |Command |Prefix argument | Desc |
@@ -121,6 +120,11 @@ This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to 
 This extension provides mark-mode functionality and
 you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
 in order to check whether or not mark-mode is enabled.
+
+## Kill ring
+This extension supports emacs-like kill ring integrated with system clipboard.
+The default maximum number of kill ring entries (which is configured by 'kill-ring-max' variable on original emacs) is 60,
+and it can be changed via extension setting (`emacs-mcx.killRingMax`).
 
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;

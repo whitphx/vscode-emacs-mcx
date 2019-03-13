@@ -29,6 +29,17 @@
 		],
 		"main": "./out/extension.js",
 		"contributes": {
+				"configuration": {
+					"type": "object",
+					"title": "Awesome Emacs Keymap (emacs-mcx) configuration",
+					"properties": {
+						"emacs-mcx.killRingMax": {
+								"type": "number",
+								"default": 60,
+								"description": "Maximum number of Kill ring entries"
+						}
+					}
+				},
 				"keybindings": [
 						{
 								"key": "right",
