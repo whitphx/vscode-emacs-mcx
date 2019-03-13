@@ -62,7 +62,6 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
     textEditor.selections.forEach((selection, idx) => {
         const pos = positions[idx];
         assert.ok(
-            selection.isEqual(new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1])))
-        );
+            selection.isEqual(new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]))));
     });
 }
