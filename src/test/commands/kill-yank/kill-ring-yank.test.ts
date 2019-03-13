@@ -406,6 +406,98 @@ ABCDEFGHIJ`);
             });
         });
     });
+
+    suite("yank works with empty string", () => {
+        setup(async () => {
+            const initialText = "aaa";
+            activeTextEditor = await setupWorkspace(initialText);
+            await clipboardy.write("");
+        });
+
+        teardown(cleanUpWorkspace);
+
+        test("yank works with empty string", async () => {
+            const killRing = new KillRing(3);
+            const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+            // Kill text
+            await vscode.commands.executeCommand("editor.action.selectAll");
+            await emulator.runCommand("killRegion");
+
+            // Kill empty text
+            await vscode.commands.executeCommand("editor.action.selectAll");
+            await emulator.runCommand("killRegion");
+
+            // Now the text is empty
+            assertTextEqual(activeTextEditor, "");
+
+            // Yank pastes "" (an emtpy string)
+            await emulator.runCommand("yank");
+            assertTextEqual(activeTextEditor, "");
+
+            // YankPop pastes "aaa"
+            await emulator.runCommand("yankPop");
+            assertTextEqual(activeTextEditor, "aaa");
+
+            // YankPop pastes "" (an emtpy string)
+            await emulator.runCommand("yankPop");
+            assertTextEqual(activeTextEditor, "");
+
+            // YankPop pastes "aaa"
+            await emulator.runCommand("yankPop");
+            assertTextEqual(activeTextEditor, "aaa");
+        });
+    });
+
+    suite("yank works with multi cursor and empty string", () => {
+        setup(async () => {
+            const initialText = "aaa\nbbb\nccc";
+            activeTextEditor = await setupWorkspace(initialText);
+            await clipboardy.write("");
+        });
+
+        teardown(cleanUpWorkspace);
+
+        test("yank works with multi cursor and empty string", async () => {
+            const killRing = new KillRing(3);
+            const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+            // Kill text
+            activeTextEditor.selections = [
+                new Selection(new Position(0, 0), new Position(0, 3)),
+                new Selection(new Position(1, 0), new Position(1, 3)),
+                new Selection(new Position(2, 0), new Position(2, 3)),
+            ];
+            await emulator.runCommand("killRegion");
+
+            // Kill empty text
+            activeTextEditor.selections = [
+                new Selection(new Position(0, 0), new Position(0, 0)),
+                new Selection(new Position(1, 0), new Position(1, 0)),
+                new Selection(new Position(2, 0), new Position(2, 0)),
+            ];
+            await emulator.runCommand("killRegion");
+
+            // Now the text is empty
+            assertTextEqual(activeTextEditor, "\n\n");
+
+            // Yank pastes "" (an emtpy string)
+            await emulator.runCommand("yank");
+            assertTextEqual(activeTextEditor, "\n\n");
+
+            // YankPop pastes "aaa"
+            await emulator.runCommand("yankPop");
+            assertTextEqual(activeTextEditor, "aaa\nbbb\nccc");
+
+            // YankPop pastes "" (an emtpy string)
+            await emulator.runCommand("yankPop");
+            assertTextEqual(activeTextEditor, "\n\n");
+
+            // YankPop pastes "aaa"
+            await emulator.runCommand("yankPop");
+            assertTextEqual(activeTextEditor, "aaa\nbbb\nccc");
+        });
+    });
 });
 
 suite("With not only single text editor", () => {

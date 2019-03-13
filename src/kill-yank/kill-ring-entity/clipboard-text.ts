@@ -11,6 +11,10 @@ export class ClipboardTextKillRingEntity implements IKillRingEntity {
         return clipboardText === this.text;
     }
 
+    public isEmpty(): boolean {
+        return this.text === "";
+    }
+
     public asString(): string {
         return this.text;
     }

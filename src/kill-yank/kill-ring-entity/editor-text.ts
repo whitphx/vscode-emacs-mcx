@@ -28,6 +28,10 @@ class AppendedRegionTexts {
         }
     }
 
+    public isEmpty() {
+        return this.regionTexts.every((regionText) => regionText.text === "");
+    }
+
     public getAppendedText(): string {
         return this.regionTexts.map((regionText) => regionText.text).join("");
     }
@@ -46,6 +50,10 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
 
     public isSameClipboardText(clipboardText: string): boolean {
         return this.asString() === clipboardText;
+    }
+
+    public isEmpty(): boolean {
+        return this.regionTextsList.every((regionTexts) => regionTexts.isEmpty());
     }
 
     // TODO: Cache the result of this method because it is called repeatedly
