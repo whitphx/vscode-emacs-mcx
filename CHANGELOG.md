@@ -3,8 +3,6 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 - Improvements of kill-ring
-    - to make the maximum length of kill ring configurable
-    - to make it configurable to turn on and off kill-ring integration with clipboard
     - to browse kill-ring contents
 - To support more kinds of kill command
     - `C-x DEL`: (backward-kill-sentence)
@@ -13,6 +11,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+
+## [0.11.1] - 2019-03-13
+### Added
+- The maximum number of kill ring entries is now configurable (`emacs-mcx.killRingMax`).
+
+### Fixed
+- A bug at yank of empty string is fixed.
 
 ## [0.11.0] - 2019-03-12
 ### Added
