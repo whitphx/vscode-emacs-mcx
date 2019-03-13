@@ -128,13 +128,17 @@ export class KillYanker {
             return;
         }
 
+        const prevKillRingEntity = this.killRing.getTop();
+
         const killRingEntity = this.killRing.pop();
         if (killRingEntity === null) {
             return;
         }
         const text = killRingEntity.asString();
 
-        await vscode.commands.executeCommand("undo");
+        if (prevKillRingEntity !== null && !prevKillRingEntity.isEmpty()) {
+            await vscode.commands.executeCommand("undo");
+        }
         await vscode.commands.executeCommand("paste", { text });
 
         this.docChangedAfterYank = false;
