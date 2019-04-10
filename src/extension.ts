@@ -5,11 +5,14 @@ import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { executeCommands } from "./execute-commands";
 import { KillRing } from "./kill-yank/kill-ring";
+import { initializeLogger, logger } from "./logger";
 import { MessageManager } from "./message";
 
 export function activate(context: vscode.ExtensionContext) {
     MessageManager.initialize(context);
     Configuration.initialize(context);
+
+    initializeLogger(Configuration.instance);
 
     const killRing = new KillRing(Configuration.instance.killRingMax);
     context.subscriptions.push(killRing);
@@ -49,6 +52,8 @@ export function activate(context: vscode.ExtensionContext) {
         onNoEmulator?: (...args: any[]) => any,
     ) {
         const disposable = vscode.commands.registerCommand(commandName, (...args) => {
+            logger.debug(`[command]\t Command executed: "${commandName}"`);
+
             const emulator = getAndUpdateEmulator();
             if (!emulator) {
                 if (typeof onNoEmulator === "function") {
@@ -64,8 +69,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     registerEmulatorCommand("type",
         (emulator, args) => {
-            // Capture typing charactors for universal argument functionality.
-            // TODO: How to capture backspace?
+            // Capture typing charactors for prefix argument functionality.
+            logger.debug(`[type command]\t args.text = "${args.text}"`);
+
             emulator.type(args.text);
         },
         (args) => vscode.commands.executeCommand("default:type", args),

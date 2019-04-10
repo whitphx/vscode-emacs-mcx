@@ -37,6 +37,23 @@
 										"type": "number",
 										"default": 60,
 										"description": "Maximum number of Kill ring entries"
+								},
+								"emacs-mcx.debug.silent": {
+									"type": "boolean",
+									"description": "If true, all logs are suppressed.",
+									"default": false
+								},
+								"emacs-mcx.debug.loggingLevelForAlert": {
+									"type": "string",
+									"description": "Maximum level of messages to present as VS Code information window.",
+									"default": "error",
+									"enum": ["error", "warn", "info", "verbose", "debug", "silly"]
+								},
+								"emacs-mcx.debug.loggingLevelForConsole": {
+									"type": "string",
+									"description": "Maximum level of messages to log to console. Logs are visible in developer tools.",
+									"default": "error",
+									"enum": ["error", "warn", "info", "verbose", "debug", "silly"]
 								}
 						}
 				},
@@ -881,6 +898,8 @@
 		"dependencies": {
 				"@types/clipboardy": "^1.1.0",
 				"clipboardy": "^1.2.3",
-				"paredit.js": "^0.3.4"
+				"paredit.js": "^0.3.4",
+				"winston": "^3.2.1",
+				"winston-console-for-electron": "^0.0.6"
 		}
 }

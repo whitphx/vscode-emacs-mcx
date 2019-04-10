@@ -1,5 +1,11 @@
+/**
+ * This file is derived from VSCodeVim/Vim.
+ */
+
+// tslint:disable: object-literal-sort-keys
+
 import * as vscode from "vscode";
-import { IConfiguration } from "./iconfiguration";
+import { IConfiguration, IDebugConfiguration } from "./iconfiguration";
 
 export class Configuration implements IConfiguration, vscode.Disposable {
     /**
@@ -26,6 +32,12 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
     public killRingMax = 60;
 
+    public debug: IDebugConfiguration = {
+        silent: false,
+        loggingLevelForAlert: "error",
+        loggingLevelForConsole: "error",
+    };
+
     /**
      * Instance methods
      */
@@ -44,14 +56,25 @@ export class Configuration implements IConfiguration, vscode.Disposable {
         /* tslint:disable:forin */
         // Disable forin rule here as we make accessors enumerable.`
         for (const option in this) {
-            const val = emacsConfigs[option] as any;
+            let val = emacsConfigs[option] as any;
             if (val !== null && val !== undefined) {
-                // This code is copied from VSCodeVim/Vim, but now not necessary for this extension.
-                // if (val.constructor.name === Object.name) {
-                //     val = Configuration.unproxify(val);
-                // }
+                if (val.constructor.name === Object.name) {
+                    val = Configuration.unproxify(val);
+                }
                 this[option] = val;
             }
         }
+    }
+
+    // tslint:disable-next-line: member-ordering
+    private static unproxify(obj: {[key: string]: any}) {
+        const result: {[key: string]: any} = {};
+        for (const key in obj) {
+            const val = obj[key] as any;
+            if (val !== null && val !== undefined) {
+                result[key] = val;
+            }
+        }
+        return result;
     }
 }

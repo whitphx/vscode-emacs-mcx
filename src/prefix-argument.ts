@@ -1,3 +1,4 @@
+import { logger } from "./logger";
 import { MessageManager } from "./message";
 
 export class PrefixArgumentHandler {
@@ -8,6 +9,7 @@ export class PrefixArgumentHandler {
 
     public handleType(text: string): boolean {
         if (!this.isInPrefixArgumentMode) {
+            logger.debug(`[PrefixArgumentHandler.handleType]\t Not in prefix argument mode. exit.`);
             return false;
         }
 
@@ -15,9 +17,12 @@ export class PrefixArgumentHandler {
             // If `text` is a numeric charactor
             this.prefixArgumentStr += text;
             MessageManager.showMessage(`C-u ${this.prefixArgumentStr}-`);
+
+            logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument is "${this.prefixArgumentStr}"`);
             return true;
         }
 
+        logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument input is not accepted.`);
         return false;
     }
 
@@ -26,8 +31,10 @@ export class PrefixArgumentHandler {
      */
     public universalArgument() {
         if (this.isInPrefixArgumentMode && this.prefixArgumentStr.length > 0) {
+            logger.debug(`[PrefixArgumentHandler.universalArgument]\t Stop accepting prefix argument.`);
             this.isAcceptingPrefixArgument = false;
         } else {
+            logger.debug(`[PrefixArgumentHandler.universalArgument]\t Start prefix argument or count up C-u.`);
             this.isInPrefixArgumentMode = true;
             this.isAcceptingPrefixArgument = true;
             this.cuCount++;
@@ -36,6 +43,7 @@ export class PrefixArgumentHandler {
     }
 
     public cancel() {
+        logger.debug(`[PrefixArgumentHandler.cancel]`);
         this.isInPrefixArgumentMode = false;
         this.isAcceptingPrefixArgument = false;
         this.cuCount = 0;

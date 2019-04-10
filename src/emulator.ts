@@ -16,6 +16,7 @@ import { EmacsCommandRegistry } from "./commands/registry";
 import { EditorIdentity } from "./editorIdentity";
 import { KillYanker } from "./kill-yank";
 import { KillRing } from "./kill-yank/kill-ring";
+import { logger } from "./logger";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 
@@ -131,12 +132,16 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
     public type(text: string) {
         const handled = this.prefixArgumentHandler.handleType(text);
-        if (handled) { return; }
+        if (handled) {
+            logger.debug(`[EmacsEmulator.type]\t prefix argument is handled.`);
+            return;
+        }
 
         // Single character input with prefix argument
         const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
         this.prefixArgumentHandler.cancel();
 
+        logger.debug(`[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
         if (prefixArgument !== undefined && prefixArgument >= 0) {
             const promises = [];
             for (let i = 0; i < prefixArgument; ++i) {
@@ -149,6 +154,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
             return Promise.all(promises);
         }
 
+        logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
         return vscode.commands.executeCommand("default:type", {
             text,
         });
