@@ -12,6 +12,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.11.2] - 2019-04-11
+### Added
+- Logging system is introduced to some code especially around prefix argument functionality.
+- Logging levels are configurable (`emacs-mcx.debug.*`).
+
 ## [0.11.1] - 2019-03-13
 ### Added
 - The maximum number of kill ring entries is now configurable (`emacs-mcx.killRingMax`).
