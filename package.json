@@ -2,7 +2,7 @@
 		"name": "emacs-mcx",
 		"displayName": "Awesome Emacs Keymap",
 		"description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
-		"version": "0.11.1",
+		"version": "0.11.2",
 		"publisher": "tuttieee",
 		"repository": {
 				"type": "git",
@@ -39,21 +39,35 @@
 										"description": "Maximum number of Kill ring entries"
 								},
 								"emacs-mcx.debug.silent": {
-									"type": "boolean",
-									"description": "If true, all logs are suppressed.",
-									"default": false
+										"type": "boolean",
+										"description": "If true, all logs are suppressed.",
+										"default": false
 								},
 								"emacs-mcx.debug.loggingLevelForAlert": {
-									"type": "string",
-									"description": "Maximum level of messages to present as VS Code information window.",
-									"default": "error",
-									"enum": ["error", "warn", "info", "verbose", "debug", "silly"]
+										"type": "string",
+										"description": "Maximum level of messages to present as VS Code information window.",
+										"default": "error",
+										"enum": [
+												"error",
+												"warn",
+												"info",
+												"verbose",
+												"debug",
+												"silly"
+										]
 								},
 								"emacs-mcx.debug.loggingLevelForConsole": {
-									"type": "string",
-									"description": "Maximum level of messages to log to console. Logs are visible in developer tools.",
-									"default": "error",
-									"enum": ["error", "warn", "info", "verbose", "debug", "silly"]
+										"type": "string",
+										"description": "Maximum level of messages to log to console. Logs are visible in developer tools.",
+										"default": "error",
+										"enum": [
+												"error",
+												"warn",
+												"info",
+												"verbose",
+												"debug",
+												"silly"
+										]
 								}
 						}
 				},
