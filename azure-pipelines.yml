@@ -69,3 +69,45 @@ jobs:
     displayName: 'Run tests'
     env:
       DISPLAY: :10
+
+- job: GithubRelease
+  pool:
+    name: Hosted Ubuntu 1604
+    demands: npm
+  steps:
+  - task: NodeTool@0
+    displayName: 'Use Node 8.x'
+    inputs:
+      versionSpec: 8.x
+  - task: Npm@1
+    displayName: 'Install dependencies'
+    inputs:
+      verbose: false
+
+# Acquire the `vsce` tool and use it to package
+  - script: |
+      npm install -g vsce
+      vsce package
+    displayName: Create VSIX
+  - script: |
+      npm run vscode:prepublish
+      cat /home/vsts/.npm/_logs/*.log
+    displayName: Echo npm error logs on failure
+    condition: failed()
+
+# Choose files to publish
+  - task: CopyFiles@2
+    displayName: Stage VSIX for publishing
+    inputs:
+      contents: |-
+        *.vsix
+      targetFolder: $(Build.ArtifactStagingDirectory)
+
+# create a GitHub Release
+  - task: GithubRelease@0
+    displayName: 'Create Github Release'
+    inputs:
+      githubConnection: 'Github connection'
+      repositoryName: '$(Build.Repository.Name)'
+      action: create
+      assets: '$(Build.ArtifactStagingDirectory)/*'
