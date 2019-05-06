@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.11.3] - 2019-05-06
+### Added
+- Set extensionKind to support Remote Development. @limon
+
 ## [0.11.2] - 2019-04-11
 ### Added
 - Logging system is introduced to some code especially around prefix argument functionality.
