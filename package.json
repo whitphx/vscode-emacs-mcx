@@ -893,8 +893,28 @@
 										"emacs-mcx.forwardChar",
 										"emacs-mcx.nextLine"
 								]
+						},
+						{
+								"key": "ctrl+up",
+								"command": "emacs-mcx.blockUpCommand",
+								"when": "editorTextFocus"
+						},
+						{
+								"key": "alt+shift+[",
+								"command": "emacs-mcx.blockUpCommand",
+								"when": "editorTextFocus"
+						},
+						{
+								"key": "ctrl+down",
+								"command": "emacs-mcx.blockDownCommand",
+								"when": "editorTextFocus"
+						},
+						{
+								"key": "alt+shift+]",
+								"command": "emacs-mcx.blockDownCommand",
+								"when": "editorTextFocus"
 						}
-				]
+			]
 		},
 		"scripts": {
 				"vscode:prepublish": "yarn run compile",

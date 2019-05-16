@@ -9,6 +9,7 @@ export const moveCommandIds = [
     "forwardChar", "backwardChar", "nextLine", "previousLine",
     "moveBeginningOfLine", "moveEndOfLine", "forwardWord", "backwardWord",
     "beginningOfBuffer", "endOfBuffer", "scrollUpCommand", "scrollDownCommand",
+    "blockUpCommand", "blockDownCommand"
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -174,5 +175,25 @@ export class ScrollDownCommand extends EmacsCommand {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
             vscode.commands.executeCommand(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp"));
+    }
+}
+
+export class BlockUpCommand extends EmacsCommand {
+    public readonly id = "blockUpCommand";
+
+    public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        return createParallel(repeat, () =>
+            vscode.commands.executeCommand(isInMarkMode ? "block-travel.selectUp" : "block-travel.jumpUp"));
+    }
+}
+
+export class BlockDownCommand extends EmacsCommand {
+    public readonly id = "blockDownCommand";
+
+    public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+        return createParallel(repeat, () =>
+            vscode.commands.executeCommand(isInMarkMode ? "block-travel.selectDown" : "block-travel.jumpDown"));
     }
 }
