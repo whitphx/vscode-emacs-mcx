@@ -130,6 +130,7 @@ and it can be changed via extension setting (`emacs-mcx.killRingMax`).
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;
 - `ctrl+g`: workbench.action.gotoLine => **Use `alt+g g` instead**;
 - `ctrl+b`: workbench.action.toggleSidebarVisibility => **Use `ctrl+alt+space` instead**;
+- `ctrl+j`: workbench.action.togglePanel => **Use `ctrl+x j` instead**;
 - `ctrl+space`: toggleSuggestionDetails, editor.action.triggerSuggest => **Use `ctrl+'` instead**;
 - `ctrl+x`: editor.action.clipboardCutAction => **Use `ctrl+w` instead**;
 - `ctrl+v`: editor.action.clipboardPasteAction => **Use `ctrl+y` instead**;

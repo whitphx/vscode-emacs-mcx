@@ -830,6 +830,10 @@
 								"when": "editorTextFocus"
 						},
 						{
+								"key": "ctrl+x j",
+								"command": "workbench.action.togglePanel"
+						},
+						{
 								"key": "alt+x",
 								"command": "workbench.action.showCommands"
 						},
