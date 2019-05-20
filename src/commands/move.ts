@@ -1,7 +1,7 @@
 // tslint:disable:max-classes-per-file
 // tslint:disable:object-literal-sort-keys
 import * as vscode from "vscode";
-import { TextEditor } from "vscode";
+import { TextEditor, TextEditorRevealType } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 
 // TODO: be unnecessary
@@ -162,21 +162,21 @@ export class ScrollUpCommand extends EmacsCommand {
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-        return createParallel(repeat, () =>
-            repeat > 1 ?
-            vscode.commands.executeCommand("cursorMove", {
+
+        if (repeat === 1) {
+            return vscode.commands.executeCommand(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
+        }
+
+        return vscode.commands.executeCommand(
+            "cursorMove",
+            {
                 to: "down",
-                by: "line",
+                by: "wrappedLine",
                 value: repeat,
-                select: isInMarkMode
-            }).then(()=>
-                vscode.commands.executeCommand("editorScroll", {
-                    to: "down",
-                    by: "line",
-                    value: repeat
-                 })
-            ) :
-            vscode.commands.executeCommand(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown")
+                select: isInMarkMode,
+            },
+        ).then(() =>
+            textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport),
         );
     }
 }
@@ -186,21 +186,21 @@ export class ScrollDownCommand extends EmacsCommand {
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-        return createParallel(repeat, () =>
-            repeat > 1 ?
-            vscode.commands.executeCommand("cursorMove", {
+
+        if (repeat === 1) {
+            return vscode.commands.executeCommand(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
+        }
+
+        return vscode.commands.executeCommand(
+            "cursorMove",
+            {
                 to: "up",
-                by: "line",
+                by: "wrappedLine",
                 value: repeat,
-                select: isInMarkMode
-            }).then(()=>
-                vscode.commands.executeCommand("editorScroll", {
-                    to: "up",
-                    by: "line",
-                    value: repeat
-                })
-            ) :
-            vscode.commands.executeCommand(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp")
+                select: isInMarkMode,
+            },
+        ).then(() =>
+            textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport),
         );
     }
 }
