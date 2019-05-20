@@ -88,14 +88,20 @@ export class MoveBeginningOfLine extends EmacsCommand {
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         if (prefixArgument === undefined || prefixArgument === 1) {
-            return vscode.commands.executeCommand(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
+            return vscode.commands.executeCommand("cursorMove", {
+                to: "wrappedLineStart",
+                select: isInMarkMode,
+            })
         } else if (prefixArgument > 1) {
             return vscode.commands.executeCommand("cursorMove", {
                 to: "down",
                 by: "line",
                 value: prefixArgument - 1,
                 isInMarkMode,
-            }).then(() => vscode.commands.executeCommand(isInMarkMode ? "cursorHomeSelect" : "cursorHome"));
+            }).then(() => vscode.commands.executeCommand("cursorMove", {
+                to: "wrappedLineStart",
+                select: isInMarkMode,
+            }));
         }
     }
 }
