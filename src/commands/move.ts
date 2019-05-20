@@ -163,7 +163,21 @@ export class ScrollUpCommand extends EmacsCommand {
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
-            vscode.commands.executeCommand(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown"));
+            repeat > 1 ?
+            vscode.commands.executeCommand("cursorMove", {
+                to: "down",
+                by: "line",
+                value: repeat,
+                select: isInMarkMode
+            }).then(()=>
+                vscode.commands.executeCommand("editorScroll", {
+                    to: "down",
+                    by: "line",
+                    value: repeat
+                 })
+            ) :
+            vscode.commands.executeCommand(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown")
+        );
     }
 }
 
@@ -173,6 +187,20 @@ export class ScrollDownCommand extends EmacsCommand {
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
-            vscode.commands.executeCommand(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp"));
+            repeat > 1 ?
+            vscode.commands.executeCommand("cursorMove", {
+                to: "up",
+                by: "line",
+                value: repeat,
+                select: isInMarkMode
+            }).then(()=>
+                vscode.commands.executeCommand("editorScroll", {
+                    to: "up",
+                    by: "line",
+                    value: repeat
+                })
+            ) :
+            vscode.commands.executeCommand(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp")
+        );
     }
 }
