@@ -121,10 +121,24 @@ This extension provides mark-mode functionality and
 you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
 in order to check whether or not mark-mode is enabled.
 
-## Kill ring
-This extension supports emacs-like kill ring integrated with system clipboard.
-The default maximum number of kill ring entries (which is configured by 'kill-ring-max' variable on original emacs) is 60,
-and it can be changed via extension setting (`emacs-mcx.killRingMax`).
+## Configs
+This extension has some custom settings named with a prefix `emacs-mcx`.
+You can configure those settings.
+
+See also: https://code.visualstudio.com/docs/getstarted/settings#_settings-editor
+
+### `emacs-mcx.strictEmacsMove`
+If set to true, the original emacs's cursor movements are strictly simulated.
+If set to false, the VSCode's native cursor movements are preserved.
+For example, if set to true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
+If set to false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
+
+### `emacs-mcx.killRingMax`
+Configures the maximum number of kill ring entries.
+The default is 60.
+
+### `emacs-mcx.debug.*`
+Configurations for debugging.
 
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;

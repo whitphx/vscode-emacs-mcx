@@ -22,6 +22,11 @@ export interface IConfiguration {
     killRingMax: number;
 
     /**
+     * Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones
+     */
+    strictEmacsMove: boolean;
+
+    /**
      * Extension debugging settings
      */
     debug: IDebugConfiguration;
