@@ -39,6 +39,11 @@
 										"default": 60,
 										"description": "Maximum number of Kill ring entries"
 								},
+								"emacs-mcx.strictEmacsMove": {
+										"type": "boolean",
+										"default": false,
+										"description": "Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones"
+								},
 								"emacs-mcx.debug.silent": {
 										"type": "boolean",
 										"description": "If true, all logs are suppressed.",

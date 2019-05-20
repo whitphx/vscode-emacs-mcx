@@ -32,6 +32,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
     public killRingMax = 60;
 
+    public strictEmacsMove = false;
+
     public debug: IDebugConfiguration = {
         silent: false,
         loggingLevelForAlert: "error",

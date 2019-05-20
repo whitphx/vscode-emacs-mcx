@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { TextEditor, TextEditorRevealType } from "vscode";
 import { createParallel, EmacsCommand } from ".";
+import { Configuration } from "../configuration/configuration";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -87,21 +88,28 @@ export class MoveBeginningOfLine extends EmacsCommand {
     public readonly id = "moveBeginningOfLine";
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const moveHomeCommandFunc = () => {
+            if (Configuration.instance.strictEmacsMove) {
+                // Emacs behavior: Move to the beginning of the line.
+                return vscode.commands.executeCommand("cursorMove", {
+                    to: "wrappedLineStart",
+                    select: isInMarkMode,
+                });
+            } else {
+                // VSCode behavior: Move to the first non-empty charactor (indentation).
+                return vscode.commands.executeCommand(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
+            }
+        };
+
         if (prefixArgument === undefined || prefixArgument === 1) {
-            return vscode.commands.executeCommand("cursorMove", {
-                to: "wrappedLineStart",
-                select: isInMarkMode,
-            })
+            return moveHomeCommandFunc();
         } else if (prefixArgument > 1) {
             return vscode.commands.executeCommand("cursorMove", {
                 to: "down",
                 by: "line",
                 value: prefixArgument - 1,
                 isInMarkMode,
-            }).then(() => vscode.commands.executeCommand("cursorMove", {
-                to: "wrappedLineStart",
-                select: isInMarkMode,
-            }));
+            }).then(moveHomeCommandFunc);
         }
     }
 }
@@ -110,15 +118,17 @@ export class MoveEndOfLine extends EmacsCommand {
     public readonly id = "moveEndOfLine";
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+        const moveEndCommandFunc = () => vscode.commands.executeCommand(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+
         if (prefixArgument === undefined || prefixArgument === 1) {
-            return vscode.commands.executeCommand(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+            return moveEndCommandFunc();
         } else if (prefixArgument > 1) {
             return vscode.commands.executeCommand("cursorMove", {
                 to: "down",
                 by: "line",
                 value: prefixArgument - 1,
                 isInMarkMode,
-            }).then(() => vscode.commands.executeCommand(isInMarkMode ? "cursorEndSelect" : "cursorEnd"));
+            }).then(moveEndCommandFunc);
         }
     }
 }
