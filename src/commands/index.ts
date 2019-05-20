@@ -34,7 +34,7 @@ export abstract class EmacsCommand {
         textEditor: TextEditor,
         isInMarkMode: boolean,
         prefixArgument: number | undefined,
-    ): (void | undefined | Thenable<{} | undefined> | Promise<void>);
+    ): (void | undefined | Thenable<{} | undefined | void> | Promise<void>);
 }
 
 export interface IEmacsCommandInterrupted {
