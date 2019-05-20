@@ -12,6 +12,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.12.0] - 2019-05-21
+### Added
+- Strictly emacs-like behaviors of `C-a`, `C-v` and `M-v`. @joeshaw
+- Config to switch between strictly emacs-line behaviors and VSCode's native ones.
+- Correct behavior of `C-v` and `M-v` with a prefix argument. @GuyShane
+- Document `C-j` conflict and provide replacement `C-x j`. @jedbrown
+
 ## [0.11.3] - 2019-05-06
 ### Added
 - Set extensionKind to support Remote Development. @limon
