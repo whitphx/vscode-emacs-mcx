@@ -180,16 +180,20 @@ export class ScrollUpCommand extends EmacsCommand {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
         if (repeat === 1) {
-            return vscode.commands.executeCommand("editorScroll", {
-                to: "down",
-                by: "page",
-            }).then(() => vscode.commands.executeCommand("cursorMove", {
-                to: "viewPortTop",
-                select: isInMarkMode,
-            })).then(() => vscode.commands.executeCommand("cursorMove", {
-                to: "wrappedLineStart",
-                select: isInMarkMode,
-            }));
+            if (Configuration.instance.strictEmacsMove) {
+                return vscode.commands.executeCommand("editorScroll", {
+                    to: "down",
+                    by: "page",
+                }).then(() => vscode.commands.executeCommand("cursorMove", {
+                    to: "viewPortTop",
+                    select: isInMarkMode,
+                })).then(() => vscode.commands.executeCommand("cursorMove", {
+                    to: "wrappedLineStart",
+                    select: isInMarkMode,
+                }));
+            } else {
+                return vscode.commands.executeCommand(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
+            }
         }
 
         return vscode.commands.executeCommand(
@@ -213,16 +217,20 @@ export class ScrollDownCommand extends EmacsCommand {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
         if (repeat === 1) {
-            return vscode.commands.executeCommand("editorScroll", {
-                to: "up",
-                by: "page",
-            }).then(() => vscode.commands.executeCommand("cursorMove", {
-                to: "viewPortBottom",
-                select: isInMarkMode,
-            })).then(() => vscode.commands.executeCommand("cursorMove", {
-                to: "wrappedLineStart",
-                select: isInMarkMode,
-            }));
+            if (Configuration.instance.strictEmacsMove) {
+                return vscode.commands.executeCommand("editorScroll", {
+                    to: "up",
+                    by: "page",
+                }).then(() => vscode.commands.executeCommand("cursorMove", {
+                    to: "viewPortBottom",
+                    select: isInMarkMode,
+                })).then(() => vscode.commands.executeCommand("cursorMove", {
+                    to: "wrappedLineStart",
+                    select: isInMarkMode,
+                }));
+            } else {
+                return vscode.commands.executeCommand(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
+            }
         }
 
         return vscode.commands.executeCommand(
