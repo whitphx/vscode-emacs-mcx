@@ -10,7 +10,7 @@ export class DeleteBackwardChar extends EmacsCommand {
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
-            vscode.commands.executeCommand("deleteLeft"));
+            vscode.commands.executeCommand<void>("deleteLeft"));
     }
 }
 
@@ -20,7 +20,7 @@ export class DeleteForwardChar extends EmacsCommand {
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
-            vscode.commands.executeCommand("deleteRight"));
+            vscode.commands.executeCommand<void>("deleteRight"));
     }
 }
 
@@ -35,6 +35,6 @@ export class NewLine extends EmacsCommand {
 
         const repeat = prefixArgument === undefined ? 1 : prefixArgument;
         return createParallel(repeat, () =>
-            vscode.commands.executeCommand("default:type", { text: "\n" }));
+            vscode.commands.executeCommand<void>("default:type", { text: "\n" }));
     }
 }

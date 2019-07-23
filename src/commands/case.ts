@@ -15,7 +15,7 @@ export class TransformToUppercase extends EmacsCommand {
         if (!hasNonEmptySelection(textEditor)) {
             await this.emacsController.runCommand("forwardWord");
         }
-        await vscode.commands.executeCommand("editor.action.transformToUppercase");
+        await vscode.commands.executeCommand<void>("editor.action.transformToUppercase");
 
     }
 }
@@ -27,7 +27,7 @@ export class TransformToLowercase extends EmacsCommand {
         if (!hasNonEmptySelection(textEditor)) {
             await this.emacsController.runCommand("forwardWord");
         }
-        await vscode.commands.executeCommand("editor.action.transformToLowercase");
+        await vscode.commands.executeCommand<void>("editor.action.transformToLowercase");
 
     }
 }

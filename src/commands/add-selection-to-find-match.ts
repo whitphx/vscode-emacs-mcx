@@ -9,7 +9,7 @@ export class AddSelectionToNextFindMatch extends EmacsCommand {
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         this.emacsController.enterMarkMode();
-        return vscode.commands.executeCommand("editor.action.addSelectionToNextFindMatch");
+        return vscode.commands.executeCommand<void>("editor.action.addSelectionToNextFindMatch");
     }
 }
 
@@ -18,6 +18,6 @@ export class AddSelectionToPreviousFindMatch extends EmacsCommand {
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         this.emacsController.enterMarkMode();
-        return vscode.commands.executeCommand("editor.action.addSelectionToPreviousFindMatch");
+        return vscode.commands.executeCommand<void>("editor.action.addSelectionToPreviousFindMatch");
     }
 }
