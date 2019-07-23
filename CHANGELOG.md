@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.12.1] - 2019-07-23
+### Fixed
+- Update vulnerable dependencies for security.
+
 ## [0.12.0] - 2019-05-21
 ### Added
 - Strictly emacs-like behaviors of `C-a`, `C-v` and `M-v`. @joeshaw
