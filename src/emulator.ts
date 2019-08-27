@@ -130,8 +130,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
     // tslint:disable-next-line:max-line-length
     // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
-    public type(text: string) {
-        const handled = this.prefixArgumentHandler.handleType(text);
+    public type(args: {text: string}) {
+        const handled = this.prefixArgumentHandler.handleType(args.text);
         if (handled) {
             logger.debug(`[EmacsEmulator.type]\t prefix argument is handled.`);
             return;
@@ -141,23 +141,23 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
         const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
         this.prefixArgumentHandler.cancel();
 
-        logger.debug(`[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
+        logger.debug(`[EmacsEmulator.type]\t Single char (text: "${args.text}", prefix argument: ${prefixArgument}).`);
         if (prefixArgument !== undefined && prefixArgument >= 0) {
             const promises = [];
             for (let i = 0; i < prefixArgument; ++i) {
-                const promise = vscode.commands.executeCommand("default:type", {
-                    text,
-                });
+                const promise = vscode.commands.executeCommand("default:type", args);
                 promises.push(promise);
             }
             // NOTE: Current implementation executes promises concurrently. Should it be sequential?
             return Promise.all(promises);
         }
 
-        logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
-        return vscode.commands.executeCommand("default:type", {
-            text,
-        });
+        logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${args.text}")`);
+        return vscode.commands.executeCommand("default:type", args);
+    }
+
+    public replacePreviousChar(args: { text: string, replaceCharCnt: number }) {
+      return vscode.commands.executeCommand("default:replacePreviousChar", args);
     }
 
     public universalArgument() {

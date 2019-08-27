@@ -17,14 +17,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
         test("repeating charactor input for the given argument", async () => {
             emulator.universalArgument();
-            await emulator.type("2");
-            await emulator.type("a");
+            await emulator.type({text: "2"});
+            await emulator.type({text: "a"});
 
             assertTextEqual(activeTextEditor, "aa");
 
             // exitied from universal argument mode
-            await emulator.type("2");
-            await emulator.type("b");
+            await emulator.type({text: "2"});
+            await emulator.type({text: "b"});
 
             assertTextEqual(activeTextEditor, "aa2b");
         });
@@ -32,56 +32,56 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         test("repeating charactor input for the given argument 0", async () => {
             emulator.universalArgument();
 
-            await emulator.type("0");
-            await emulator.type("a");
+            await emulator.type({text: "0"});
+            await emulator.type({text: "a"});
             assertTextEqual(activeTextEditor, "");
 
             // exitied from universal argument mode
-            await emulator.type("0");
-            await emulator.type("b");
+            await emulator.type({text: "0"});
+            await emulator.type({text: "b"});
             assertTextEqual(activeTextEditor, "0b");
         });
 
         test("repeating charactor input for the given argument prefixed by 0", async () => {
             emulator.universalArgument();
-            await emulator.type("0");
-            await emulator.type("2");
-            await emulator.type("a");
+            await emulator.type({text: "0"});
+            await emulator.type({text: "2"});
+            await emulator.type({text: "a"});
 
             assertTextEqual(activeTextEditor, "aa");
 
             // exitied from universal argument mode
-            await emulator.type("0");
-            await emulator.type("2");
-            await emulator.type("b");
+            await emulator.type({text: "0"});
+            await emulator.type({text: "2"});
+            await emulator.type({text: "b"});
 
             assertTextEqual(activeTextEditor, "aa02b");
         });
 
         test("repeating charactor input for the given argument with multiple digits", async () => {
             emulator.universalArgument();
-            await emulator.type("1");
-            await emulator.type("2");
-            await emulator.type("a");
+            await emulator.type({text: "1"});
+            await emulator.type({text: "2"});
+            await emulator.type({text: "a"});
 
             assertTextEqual(activeTextEditor, "aaaaaaaaaaaa");
 
             // exitied from universal argument mode
-            await emulator.type("1");
-            await emulator.type("2");
-            await emulator.type("b");
+            await emulator.type({text: "1"});
+            await emulator.type({text: "2"});
+            await emulator.type({text: "b"});
 
             assertTextEqual(activeTextEditor, "aaaaaaaaaaaa12b");
         });
 
         test("repeating charactor input with default argument (4)", async () => {
             emulator.universalArgument();
-            await emulator.type("a");
+            await emulator.type({text: "a"});
 
             assertTextEqual(activeTextEditor, "aaaa");
 
             // exitied from universal argument mode
-            await emulator.type("b");
+            await emulator.type({text: "b"});
 
             assertTextEqual(activeTextEditor, "aaaab");
         });
@@ -91,12 +91,12 @@ suite("Prefix argument (Universal argument: C-u)", () => {
                 for (let i = 0; i < times; ++i) {
                     emulator.universalArgument();
                 }
-                await emulator.type("a");
+                await emulator.type({text: "a"});
 
                 assertTextEqual(activeTextEditor, "a".repeat(4 ** times));
 
                 // exitied from universal argument mode
-                await emulator.type("b");
+                await emulator.type({text: "b"});
 
                 assertTextEqual(activeTextEditor, "a".repeat(4 ** times) + "b");
             });
@@ -104,16 +104,16 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
         test("c-u stops prefix argument input", async () => {
             emulator.universalArgument();
-            await emulator.type("1");
-            await emulator.type("2");
+            await emulator.type({text: "1"});
+            await emulator.type({text: "2"});
             emulator.universalArgument();
-            await emulator.type("3");
+            await emulator.type({text: "3"});
 
             assertTextEqual(activeTextEditor, "333333333333");
 
             // exitied from universal argument mode
-            await emulator.type("4");
-            await emulator.type("b");
+            await emulator.type({text: "4"});
+            await emulator.type({text: "b"});
 
             assertTextEqual(activeTextEditor, "3333333333334b");
         });
@@ -122,14 +122,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             emulator.universalArgument();
             emulator.universalArgument();
             emulator.universalArgument();
-            await emulator.type("3");
-            await emulator.type("a");
+            await emulator.type({text: "3"});
+            await emulator.type({text: "a"});
 
             assertTextEqual(activeTextEditor, "aaa");
 
             // exitied from universal argument mode
-            await emulator.type("3");
-            await emulator.type("b");
+            await emulator.type({text: "3"});
+            await emulator.type({text: "b"});
 
             assertTextEqual(activeTextEditor, "aaa3b");
         });
@@ -147,7 +147,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
-            await emulator.type("3");
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -158,7 +158,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
 
             // exitied from universal argument mode
-            await emulator.type("3");
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assertTextEqual(activeTextEditor, "abc3defghijklmnopqrst\nabcdefghijklmnopqrst");
@@ -174,7 +174,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
-            await emulator.type("0");
+            await emulator.type({text: "0"});
             await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -185,7 +185,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
 
             // exitied from universal argument mode
-            await emulator.type("0");
+            await emulator.type({text: "0"});
             await emulator.runCommand("forwardChar");
 
             assertTextEqual(activeTextEditor, "0abcdefghijklmnopqrst\nabcdefghijklmnopqrst");
@@ -201,8 +201,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
-            await emulator.type("0");
-            await emulator.type("3");
+            await emulator.type({text: "0"});
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -213,8 +213,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
 
             // exitied from universal argument mode
-            await emulator.type("0");
-            await emulator.type("3");
+            await emulator.type({text: "0"});
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assertTextEqual(activeTextEditor, "abc03defghijklmnopqrst\nabcdefghijklmnopqrst");
@@ -230,8 +230,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
-            await emulator.type("1");
-            await emulator.type("2");
+            await emulator.type({text: "1"});
+            await emulator.type({text: "2"});
             await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -242,8 +242,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
 
             // exitied from universal argument mode
-            await emulator.type("1");
-            await emulator.type("2");
+            await emulator.type({text: "1"});
+            await emulator.type({text: "2"});
             await emulator.runCommand("forwardChar");
 
             assertTextEqual(activeTextEditor, "abcdefghijkl12mnopqrst\nabcdefghijklmnopqrst");
@@ -308,8 +308,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
-            await emulator.type("1");
-            await emulator.type("2");
+            await emulator.type({text: "1"});
+            await emulator.type({text: "2"});
             emulator.universalArgument();
             await emulator.runCommand("forwardChar");
 
@@ -337,7 +337,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             emulator.universalArgument();
             emulator.universalArgument();
             emulator.universalArgument();
-            await emulator.type("3");
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
@@ -362,7 +362,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
 
             emulator.universalArgument();
-            await emulator.type("3");
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 2);
@@ -378,7 +378,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
 
             // exitied from universal argument mode
-            await emulator.type("3");
+            await emulator.type({text: "3"});
             await emulator.runCommand("forwardChar");
 
             assertTextEqual(activeTextEditor, "abc3defghijklmnopqrst\nabc3defghijklmnopqrst");
