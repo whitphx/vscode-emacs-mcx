@@ -77,6 +77,13 @@ export function activate(context: vscode.ExtensionContext) {
         (args) => vscode.commands.executeCommand("default:type", args),
     );
 
+    registerEmulatorCommand("compositionStart", (emulator) => {
+        emulator.compositionStart();
+    });
+    registerEmulatorCommand("replacePreviousChar", (emulator, args) => {
+        emulator.replacePreviousChar(args);
+    });
+
     moveCommandIds.map((commandName) => {
         registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
             emulator.runCommand(commandName);
