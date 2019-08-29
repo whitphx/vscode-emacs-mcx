@@ -902,6 +902,15 @@
 										"emacs-mcx.forwardChar",
 										"emacs-mcx.nextLine"
 								]
+						},
+						{
+								"key": "alt+shift+6",
+								"command": "emacs-mcx.executeCommands",
+								"when": "editorTextFocus && !editorReadOnly",
+								"args": [
+										"emacs-mcx.previousLine",
+										"editor.action.joinLines"
+								]
 						}
 				]
 		},
