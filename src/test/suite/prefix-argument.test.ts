@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
-import { EmacsEmulator } from "../emulator";
+import { EmacsEmulator } from "../../emulator";
 import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "./utils";
 
 suite("Prefix argument (Universal argument: C-u)", () => {

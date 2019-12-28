@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import { Position, Range, Selection, TextEditor } from "vscode";
-import { EmacsEmulator } from "../../../emulator";
+import { EmacsEmulator } from "../../../../emulator";
 import { assertTextEqual, clearTextEditor, setupWorkspace } from "../../utils";
 
 suite("copyRegion", () => {

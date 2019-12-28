@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Selection} from "vscode";
-import { EmacsEmulator } from "../emulator";
+import { EmacsEmulator } from "../../emulator";
 import { cleanUpWorkspace, clearTextEditor, setupWorkspace} from "./utils";
 
 suite("Emulator with text editing", () => {

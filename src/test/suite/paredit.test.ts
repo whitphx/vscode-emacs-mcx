@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { setEmptyCursors, setupWorkspace } from "../utils";
+import { setEmptyCursors, setupWorkspace } from "./utils";
 
 suite("paredit commands", () => {
     let activeTextEditor: TextEditor;
