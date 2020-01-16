@@ -1209,10 +1209,10 @@ p-finally@^1.0.0:
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
   integrity sha1-P7z7FbiZpEEjs0ttzBi3JDNqLK4=
 
-paredit.js@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/paredit.js/-/paredit.js-0.3.4.tgz#1c12859959d67bf9622d6e39f6d3f60f2f8168e0"
-  integrity sha512-b6t7ORo/MwT6xvRiuu1c1do3+CAUd7/0rgc1d3qNHUeP64zxy4ttLIvK7SEHzyfyDLvD9pPuV9mYKHf6MgUkmg==
+paredit.js@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/paredit.js/-/paredit.js-0.3.6.tgz#c126623caa2fc972a48df3a4cbd82d234c17d4ef"
+  integrity sha512-Z97Go1ucly6XzJDWsX8g6aXKIapx610JElNEgAvOQ8DA3A5uTAzEIaPZyn3r/WskHS+HpaO17oALcy2dUsKlQA==
   dependencies:
     ace.improved ">=0.1.4"
 
