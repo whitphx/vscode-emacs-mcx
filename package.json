@@ -930,7 +930,7 @@
 		},
 		"dependencies": {
 				"@types/clipboardy": "^1.1.0",
-				"clipboardy": "^1.2.3",
+				"clipboardy": "^2.1.0",
 				"paredit.js": "^0.3.4",
 				"winston": "^3.2.1",
 				"winston-console-for-electron": "^0.0.6"
