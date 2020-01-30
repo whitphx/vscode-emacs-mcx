@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@types/clipboardy/-/clipboardy-1.1.0.tgz#316fe1a3ed71b1a51becb925e7e0497986c6a85c"
   integrity sha512-KOxf4ah9diZWmREM5jCupx2+pZaBPwKk5d5jeNK2+TY6IgEO35uhG55NnDT4cdXeRX8irDSHQPtdRrr0JOTQIw==
 
-"@types/mocha@^2.2.42":
-  version "2.2.48"
-  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.48.tgz#3523b126a0b049482e1c3c11877460f76622ffab"
-  integrity sha512-nlK/iyETgafGli8Zh9zJVCTicvU3iajSkRwOh3Hhiva598CMqNJ4NcVCGMTGKpGpTYj/9R8RLzS9NAykSSCqGw==
+"@types/mocha@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-7.0.1.tgz#5d7ec2a789a1f77c59b7ad071b9d50bf1abbfc9e"
+  integrity sha512-L/Nw/2e5KUaprNJoRA33oly+M8X8n0K+FwLTbYqwTcR14wdPWeRkigBLfSFpN/Asf9ENZTMZwLxjtjeYucAA4Q==
 
 "@types/node@^8.10.25":
   version "8.10.39"
