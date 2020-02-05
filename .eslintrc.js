@@ -15,7 +15,8 @@ module.exports = {
     },
     "plugins": [
         "@typescript-eslint",
-        "@typescript-eslint/tslint"
+        "@typescript-eslint/tslint",
+        "prefer-arrow"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "warn",
@@ -136,7 +137,7 @@ module.exports = {
             "warn"
         ],
         "@typescript-eslint/no-unnecessary-type-assertion": [
-            "error"
+            "warn"
         ],
         "@typescript-eslint/prefer-includes": [
             "error"
@@ -160,7 +161,7 @@ module.exports = {
             "error"
         ],
         "prefer-spread": [
-            "error"
+            "warn"
         ],
         "@typescript-eslint/ban-ts-ignore": [
             "error"
