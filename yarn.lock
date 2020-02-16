@@ -41,10 +41,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.39.tgz#e7e87ad00364dd7bc485c940926345b8ec1a26ca"
   integrity sha512-rE7fktr02J8ybFf6eysife+WF+L4sAHWzw09DgdCebEu+qDwMvv4zl6Bc+825ttGZP73kCKxa3dhJOoGJ8+5mA==
 
-"@types/vscode@^1.41.0":
-  version "1.41.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.41.0.tgz#b0d75920220f84e07093285e59180c0f11d336cd"
-  integrity sha512-7SfeY5u9jgiELwxyLB3z7l6l/GbN9CqpCQGkcRlB7tKRFBxzbz2PoBfGrLxI1vRfUCIq5+hg5vtDHExwq5j3+A==
+"@types/vscode@1.31.0":
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.31.0.tgz#6238228482f8cae4973e50091153e3125f067044"
+  integrity sha512-uUpjvtrQ14ZEqqRE/EGuBvGbm9GuxDp76mtsnw3goMogsWmEEYS/y4eL2Zwf0rbFMh/hg3hEs+E3CvuuNEs+GA==
 
 ace.improved@>=0.1.4:
   version "0.2.1"
