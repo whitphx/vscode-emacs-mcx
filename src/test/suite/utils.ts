@@ -25,6 +25,8 @@ export async function setupWorkspace(
     // Set EOL to LF for the tests to work even on Windows
     await (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
 
+    await tick();
+
     assertTextEqual(activeTextEditor as TextEditor, initialText);
 
     return activeTextEditor!;
