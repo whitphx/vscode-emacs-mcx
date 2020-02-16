@@ -50,7 +50,36 @@ export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[num
         new Selection(new Position(p[0], p[1]), new Position(p[0], p[1])));
 }
 
-export async function cleanUpWorkspace() {
+// This function is copied from https://github.com/VSCodeVim/Vim/blob/3ad7cbdd1fc568d6959407610b2f2d151faf654b/test/testUtils.ts#L129
+export async function cleanUpWorkspace(): Promise<void> {
+  return new Promise((c, e) => {
+    if (vscode.window.visibleTextEditors.length === 0) {
+      return c();
+    }
+
+    // TODO: the visibleTextEditors variable doesn't seem to be
+    // up to date after a onDidChangeActiveTextEditor event, not
+    // even using a setTimeout 0... so we MUST poll :(
+    const interval = setInterval(() => {
+      if (vscode.window.visibleTextEditors.length > 0) {
+        return;
+      }
+
+      clearInterval(interval);
+      c();
+    }, 10);
+
+    vscode.commands.executeCommand('workbench.action.closeAllEditors').then(
+      () => null,
+      (err: any) => {
+        clearInterval(interval);
+        e(err);
+      }
+    );
+  }).then(() => {
+    assert.strictEqual(vscode.window.visibleTextEditors.length, 0, 'Expected all editors closed.');
+    assert(!vscode.window.activeTextEditor, 'Expected no active text editor.');
+  });
 }
 
 export function assertTextEqual(textEditor: TextEditor, expectedText: string) {
