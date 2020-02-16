@@ -23,7 +23,9 @@ export async function setupWorkspace(
     assert.ok(activeTextEditor);
 
     // Set EOL to LF for the tests to work even on Windows
-    (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
+    await (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
+
+    assertTextEqual(activeTextEditor as TextEditor, initialText);
 
     return activeTextEditor!;
 }
@@ -96,5 +98,5 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
 }
 
 export function tick(): Promise<void> {
-  return new Promise((resolve) => setImmediate(resolve));
+  return new Promise((resolve) => setTimeout(resolve, 10));
 }
