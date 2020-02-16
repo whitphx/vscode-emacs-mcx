@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Position, Range, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
-import { assertTextEqual, clearTextEditor, setupWorkspace } from "../../utils";
+import { assertTextEqual, clearTextEditor, setupWorkspace, cleanUpWorkspace } from "../../utils";
 
 suite("copyRegion", () => {
     let activeTextEditor: TextEditor;
@@ -14,6 +14,8 @@ ABCDEFGHIJ`;
         activeTextEditor = await setupWorkspace(initialText);
         emulator = new EmacsEmulator(activeTextEditor);
     });
+
+    teardown(cleanUpWorkspace);
 
     test("mark-mode is disabled and selections are unset after copy region", async () => {
         activeTextEditor.selections = [
