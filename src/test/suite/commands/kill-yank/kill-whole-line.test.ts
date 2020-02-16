@@ -37,7 +37,7 @@ ABCDEFGHIJ`;
 ABCDEFGHIJ`);
 
                     // Check the cut text
-                    clearTextEditor(activeTextEditor);
+                    await clearTextEditor(activeTextEditor);
                     activeTextEditor.selections = [
                         new Selection(new Position(0, 0), new Position(0, 0)),
                     ];
@@ -71,7 +71,7 @@ abcdefghij
 `);
 
                     // Check the cut text
-                    clearTextEditor(activeTextEditor);
+                    await clearTextEditor(activeTextEditor);
                     activeTextEditor.selections = [
                         new Selection(new Position(0, 0), new Position(0, 0)),
                     ];
