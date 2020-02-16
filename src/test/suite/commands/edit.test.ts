@@ -63,6 +63,8 @@ suite("deleteBackwardChar", () => {
         emulator = new EmacsEmulator(activeTextEditor);
     });
 
+    teardown(cleanUpWorkspace);
+
     test("it deletes a character on the right", async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
         await emulator.runCommand("deleteBackwardChar");

@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace, tick } from "../utils";
+import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace, tick } from "../utils";
 
 suite("scroll-up/down-command", () => {
     let activeTextEditor: TextEditor;
@@ -17,6 +17,8 @@ suite("scroll-up/down-command", () => {
         visibleRange = activeTextEditor.visibleRanges[0];
         pageLines = visibleRange.end.line - visibleRange.start.line;
     });
+
+    teardown(cleanUpWorkspace);
 
     suite("scroll-up-command", () => {
         test("it scrolls one page", async () => {

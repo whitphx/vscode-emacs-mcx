@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { setEmptyCursors, setupWorkspace, tick } from "./utils";
+import { setEmptyCursors, setupWorkspace, cleanUpWorkspace, tick } from "./utils";
 
 suite("paredit commands", () => {
     let activeTextEditor: TextEditor;
@@ -13,6 +13,8 @@ suite("paredit commands", () => {
         activeTextEditor = await setupWorkspace(initialText);
         emulator = new EmacsEmulator(activeTextEditor);
     });
+
+    teardown(cleanUpWorkspace);
 
     suite("forwardSexp", () => {
         test("without mark-mode", async () => {
@@ -76,6 +78,8 @@ suite("paredit commands with prefix argument", () => {
         emulator = new EmacsEmulator(activeTextEditor);
     });
 
+    teardown(cleanUpWorkspace);
+
     test("forwardSexp", async () => {
         setEmptyCursors(activeTextEditor, [0, 2]);  // the right to `0`
 
@@ -115,6 +119,8 @@ suite("with semicolon", () => {
             emulator = new EmacsEmulator(activeTextEditor);
         });
 
+        teardown(cleanUpWorkspace);
+
         test("semicolon is treated as comment", async () => {
             setEmptyCursors(activeTextEditor, [0, 2]);
 
@@ -133,6 +139,8 @@ suite("with semicolon", () => {
             activeTextEditor = await setupWorkspace(initialText, {language: "csharp"});
             emulator = new EmacsEmulator(activeTextEditor);
         });
+
+        teardown(cleanUpWorkspace);
 
         [0, 1, 2].forEach((line) => {
             test(`semicolon is treated as one entity (line ${line})`, async () => {
