@@ -2,7 +2,7 @@ import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import {Position, Selection} from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace} from "./utils";
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace, tick} from "./utils";
 
 suite("Emulator with yank", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -28,6 +28,7 @@ suite("Emulator with yank", () => {
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 assertTextEqual(activeTextEditor, "\nLorem ipsum\n");
             });
@@ -42,6 +43,7 @@ suite("Emulator with yank", () => {
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 assertTextEqual(activeTextEditor, "Lorem ipsum\nLorem ipsum\nLorem ipsum");
             });
@@ -60,6 +62,7 @@ suite("Emulator with yank", () => {
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 assertTextEqual(activeTextEditor, `
 Lorem ipsum
@@ -77,6 +80,7 @@ dolor sit amet,
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 assertTextEqual(
                     activeTextEditor,
@@ -99,6 +103,7 @@ dolor sit amet,`,
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 // Just single paste
                 assertTextEqual(
@@ -135,6 +140,7 @@ ABCDEFGHIJ`;
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 assertTextEqual(
                     activeTextEditor,
@@ -154,6 +160,7 @@ ABCDEFGHIJ`,
                 ];
 
                 await emulator.runCommand("yank");
+                await tick();
 
                 assertTextEqual(
                     activeTextEditor,

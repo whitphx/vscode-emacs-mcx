@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace} from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace, tick} from "../utils";
 
 suite("deleteBlankLines", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -39,6 +39,7 @@ xxx    yyy
                 setEmptyCursors(activeTextEditor, ...cursorPositions);
 
                 await emulator.runCommand("deleteBlankLines");
+                await tick();
 
                 const expected = `aaa    bbb
 
@@ -64,6 +65,7 @@ xxx    yyy
                 setEmptyCursors(activeTextEditor, ...cursorPositions);
 
                 await emulator.runCommand("deleteBlankLines");
+                await tick();
 
                 assertTextEqual(activeTextEditor, initialText);
             });
@@ -79,6 +81,7 @@ xxx    yyy
                 setEmptyCursors(activeTextEditor, ...cursorPositions);
 
                 await emulator.runCommand("deleteBlankLines");
+                await tick();
 
                 const expected = `aaa    bbb
 xxx    yyy

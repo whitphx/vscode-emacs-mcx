@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { setEmptyCursors, setupWorkspace } from "./utils";
+import { setEmptyCursors, setupWorkspace, tick } from "./utils";
 
 suite("paredit commands", () => {
     let activeTextEditor: TextEditor;
@@ -19,6 +19,7 @@ suite("paredit commands", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             await emulator.runCommand("paredit.forwardSexp");
+            await tick();
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -30,6 +31,7 @@ suite("paredit commands", () => {
 
             emulator.setMarkCommand();
             await emulator.runCommand("paredit.forwardSexp");
+            await tick();
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -42,6 +44,7 @@ suite("paredit commands", () => {
             setEmptyCursors(activeTextEditor, [0, 5]);
 
             await emulator.runCommand("paredit.backwardSexp");
+            await tick();
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -53,6 +56,7 @@ suite("paredit commands", () => {
 
             emulator.setMarkCommand();
             await emulator.runCommand("paredit.backwardSexp");
+            await tick();
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -78,6 +82,7 @@ suite("paredit commands with prefix argument", () => {
         emulator.universalArgument();
         emulator.type("2");
         await emulator.runCommand("paredit.forwardSexp");
+        await tick();
 
         assert.equal(activeTextEditor.selections.length, 1);
         assert.ok(activeTextEditor.selections[0].isEqual(
@@ -90,6 +95,7 @@ suite("paredit commands with prefix argument", () => {
         emulator.universalArgument();
         emulator.type("2");
         await emulator.runCommand("paredit.backwardSexp");
+        await tick();
 
         assert.equal(activeTextEditor.selections.length, 1);
         assert.ok(activeTextEditor.selections[0].isEqual(
@@ -113,6 +119,7 @@ suite("with semicolon", () => {
             setEmptyCursors(activeTextEditor, [0, 2]);
 
             await emulator.runCommand("paredit.forwardSexp");
+            await tick();
 
             assert.equal(activeTextEditor.selections.length, 1);
             // The cursor at the beginning of the next line
@@ -132,6 +139,7 @@ suite("with semicolon", () => {
                 setEmptyCursors(activeTextEditor, [line, 2]);
 
                 await emulator.runCommand("paredit.forwardSexp");
+                await tick();
 
                 assert.equal(activeTextEditor.selections.length, 1);
                 // The cursor is right to ";"

@@ -2,7 +2,7 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace} from "./utils";
+import { cleanUpWorkspace, setupWorkspace, tick} from "./utils";
 
 suite("mark-mode", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -35,6 +35,7 @@ ABCDEFGHIJ`;
             ];
             await emulator.setMarkCommand();
             await emulator.runCommand("forwardChar");
+            await tick();
 
             // Edit occurs
             await editOp();
@@ -43,6 +44,8 @@ ABCDEFGHIJ`;
 
             // After edit, mark-mode is no longer active
             await emulator.runCommand("forwardChar");
+            await tick();
+
             assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
         });
     });

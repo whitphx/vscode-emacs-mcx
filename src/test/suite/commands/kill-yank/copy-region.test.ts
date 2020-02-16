@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Position, Range, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
-import { assertTextEqual, clearTextEditor, setupWorkspace } from "../../utils";
+import { assertTextEqual, clearTextEditor, setupWorkspace, tick } from "../../utils";
 
 suite("copyRegion", () => {
     let activeTextEditor: TextEditor;
@@ -21,6 +21,7 @@ ABCDEFGHIJ`;
         ];
 
         await emulator.runCommand("copyRegion");
+        await tick();
 
         // Selection is unset
         assert.equal(activeTextEditor.selections.length, 1);
@@ -29,6 +30,7 @@ ABCDEFGHIJ`;
 
         // mark-mode is disabled
         await emulator.runCommand("forwardChar");
+        await tick();
         assert.equal(activeTextEditor.selections.length, 1);
         assert.ok(activeTextEditor.selections[0].isEqual(
             new Range(new Position(0, 6), new Position(0, 6))));  // Selection is empty
@@ -36,6 +38,7 @@ ABCDEFGHIJ`;
         await clearTextEditor(activeTextEditor);
 
         await emulator.runCommand("yank");
+        await tick();
         assertTextEqual(activeTextEditor, "01234");
     });
 
@@ -47,6 +50,7 @@ ABCDEFGHIJ`;
         ];
 
         await emulator.runCommand("copyRegion");
+        await tick();
 
         // Selections are unset
         assert.equal(activeTextEditor.selections.length, 3);
@@ -59,6 +63,7 @@ ABCDEFGHIJ`;
 
         // mark-mode is disabled
         await emulator.runCommand("forwardChar");
+        await tick();
         assert.equal(activeTextEditor.selections.length, 3);
         assert.ok(activeTextEditor.selections[0].isEqual(
             new Range(new Position(0, 6), new Position(0, 6))));  // Selections are empty
@@ -70,6 +75,7 @@ ABCDEFGHIJ`;
         await clearTextEditor(activeTextEditor);
 
         await emulator.runCommand("yank");
+        await tick();
         assertTextEqual(activeTextEditor, "01234\nabcde\nABCDE");
     });
 });

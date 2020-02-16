@@ -5,7 +5,7 @@ import {Position, Range, Selection} from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace, tick} from "../../utils";
 
 suite("kill, yank, yank-pop", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -55,18 +55,21 @@ ABCDEFGHIJ`;
 
             // yank + yankPop
             await emulator.runCommand("yank");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -74,18 +77,21 @@ ABCDEFGHIJ`);
 
             // Repeat
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -93,18 +99,21 @@ ABCDEFGHIJ`);
 
             // Repeat again
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -139,6 +148,7 @@ ABCDEFGHIJ`;
 
             // yank firstly takes the text on clipboard
             await emulator.runCommand("yank");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcde12345fghij
@@ -146,6 +156,7 @@ ABCDEFGHIJ`);
 
             // Then, yankPop takes from killRing
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -153,12 +164,14 @@ ABCDEFGHIJ`);
 
             // Repeat
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcde12345fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -166,12 +179,14 @@ ABCDEFGHIJ`);
 
             // Repeat again
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcde12345fghij
 ABCDEFGHIJ`);
 
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(
                 activeTextEditor, `0123456789
 abcdeLorem ipsumfghij
@@ -217,6 +232,7 @@ ABCDEFGHIJ`;
 
                 // yank first
                 await emulator.runCommand("yank");
+                await tick();
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeBARfghij
@@ -227,6 +243,7 @@ ABCDEFGHIJ`);
 
                 // yankPop does not work
                 await emulator.runCommand("yankPop");
+                await tick();
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeBARfghij
@@ -264,6 +281,7 @@ ABCDEFGHIJ`;
 
                 // yank first
                 await emulator.runCommand("yank");
+                await tick();
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeBARfghij
@@ -271,6 +289,7 @@ ABCDEFGHIJ`);
 
                 // Then, yankPop
                 await emulator.runCommand("yankPop");
+                await tick();
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeFOOfghij
@@ -281,6 +300,7 @@ ABCDEFGHIJ`);
 
                 // yankPop does not work
                 await emulator.runCommand("yankPop");
+                await tick();
                 assertTextEqual(
                     activeTextEditor, `0123456789
 abcdeFOOfghij
@@ -339,6 +359,7 @@ ABCDEFGHIJ`;
 
                     // yank first
                     await emulator.runCommand("yank");
+                    await tick();
                     assertTextEqual(
                         activeTextEditor, `0123456789
 abcdeBARfghij
@@ -349,6 +370,7 @@ ABCDEFGHIJ`);
 
                     // yankPop does not work
                     await emulator.runCommand("yankPop");
+                    await tick();
                     assert.ok(activeTextEditor.document.getText().includes("BAR"));
                     assert.ok(!activeTextEditor.document.getText().includes("FOO"));
                 });
@@ -381,6 +403,7 @@ ABCDEFGHIJ`;
 
                     // yank first
                     await emulator.runCommand("yank");
+                    await tick();
                     assertTextEqual(
                         activeTextEditor, `0123456789
 abcdeBARfghij
@@ -388,6 +411,7 @@ ABCDEFGHIJ`);
 
                     // Then, yankPop
                     await emulator.runCommand("yankPop");
+                    await tick();
                     assertTextEqual(
                         activeTextEditor, `0123456789
 abcdeFOOfghij
@@ -399,6 +423,7 @@ ABCDEFGHIJ`);
                     // yankPop does not work
                     // yankPop does not work
                     await emulator.runCommand("yankPop");
+                    await tick();
                     assert.ok(activeTextEditor.document.getText().includes("FOO"));
                     assert.ok(!activeTextEditor.document.getText().includes("BAR"));
                 });
@@ -433,18 +458,22 @@ ABCDEFGHIJ`);
 
             // Yank pastes "" (an emtpy string)
             await emulator.runCommand("yank");
+            await tick();
             assertTextEqual(activeTextEditor, "");
 
             // YankPop pastes "aaa"
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(activeTextEditor, "aaa");
 
             // YankPop pastes "" (an emtpy string)
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(activeTextEditor, "");
 
             // YankPop pastes "aaa"
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(activeTextEditor, "aaa");
         });
     });
@@ -477,24 +506,29 @@ ABCDEFGHIJ`);
                 new Selection(new Position(2, 0), new Position(2, 0)),
             ];
             await emulator.runCommand("killRegion");
+            await tick();
 
             // Now the text is empty
             assertTextEqual(activeTextEditor, "\n\n");
 
             // Yank pastes "" (an emtpy string)
             await emulator.runCommand("yank");
+            await tick();
             assertTextEqual(activeTextEditor, "\n\n");
 
             // YankPop pastes "aaa"
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(activeTextEditor, "aaa\nbbb\nccc");
 
             // YankPop pastes "" (an emtpy string)
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(activeTextEditor, "\n\n");
 
             // YankPop pastes "aaa"
             await emulator.runCommand("yankPop");
+            await tick();
             assertTextEqual(activeTextEditor, "aaa\nbbb\nccc");
         });
     });
@@ -529,19 +563,23 @@ suite("With not only single text editor", () => {
 
         // The killed texts are yanked on another text editor
         await emulator1.runCommand("yank");
+        await tick();
         assertTextEqual(
             activeTextEditor1, "BAR");
 
         await emulator1.runCommand("yankPop");
+        await tick();
         assertTextEqual(
             activeTextEditor1, "FOO");
 
         // Repeat
         await emulator1.runCommand("yankPop");
+        await tick();
         assertTextEqual(
             activeTextEditor1, "BAR");
 
         await emulator1.runCommand("yankPop");
+        await tick();
         assertTextEqual(
             activeTextEditor1, "FOO");
     });

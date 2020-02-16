@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import {Position, Range, Selection, TextEditor} from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { cleanUpWorkspace, setupWorkspace} from "../utils";
+import { cleanUpWorkspace, setupWorkspace, tick} from "../utils";
 
 suite("addSelectionTo(Next|Previous)FindMatch", () => {
     let activeTextEditor: TextEditor;
@@ -33,6 +33,7 @@ ccc`;
 
             // execute command
             await emulator.runCommand(commandName);
+            await tick();
 
             // Then, next 'aaa' is selected
             assert.ok(activeTextEditor.selections[0].isEqual(firstRange));
@@ -40,6 +41,8 @@ ccc`;
 
             // And mark-mode is still valid
             await emulator.runCommand("backwardChar");
+            await tick();
+
             assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
         });
     });

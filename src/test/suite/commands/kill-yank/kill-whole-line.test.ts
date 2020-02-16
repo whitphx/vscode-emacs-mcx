@@ -2,7 +2,7 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Selection} from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace} from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace, tick} from "../../utils";
 
 suite("Emulator.killWholeLine", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -32,6 +32,7 @@ ABCDEFGHIJ`;
                     ];
 
                     await emulator.runCommand("killWholeLine");
+                    await tick();
 
                     assertTextEqual(activeTextEditor, `0123456789
 ABCDEFGHIJ`);
@@ -42,6 +43,7 @@ ABCDEFGHIJ`);
                         new Selection(new Position(0, 0), new Position(0, 0)),
                     ];
                     await emulator.runCommand("yank");
+                    await tick();
                     assert.equal(
                         activeTextEditor.document.getText(),
                         "abcdefghij\n",
@@ -65,6 +67,7 @@ ABCDEFGHIJ`);
                     ];
 
                     await emulator.runCommand("killWholeLine");
+                    await tick();
 
                     assertTextEqual(activeTextEditor, `0123456789
 abcdefghij
@@ -76,6 +79,7 @@ abcdefghij
                         new Selection(new Position(0, 0), new Position(0, 0)),
                     ];
                     await emulator.runCommand("yank");
+                    await tick();
                     assert.equal(
                         activeTextEditor.document.getText(),
                         "ABCDEFGHIJ",

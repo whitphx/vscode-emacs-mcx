@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
+import { assertCursorsEqual, setEmptyCursors, setupWorkspace, tick } from "../utils";
 
 suite("scroll-up/down-command", () => {
     let activeTextEditor: TextEditor;
@@ -23,6 +23,7 @@ suite("scroll-up/down-command", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);  // The first line
 
             await emulator.runCommand("scrollUpCommand");
+            await tick();
 
             assert.ok(activeTextEditor.selection.start.line >= pageLines - 1);
         });
@@ -33,6 +34,7 @@ suite("scroll-up/down-command", () => {
             emulator.universalArgument();
             emulator.type("2");
             await emulator.runCommand("scrollUpCommand");
+            await tick();
 
             assertCursorsEqual(activeTextEditor, [2, 0]);  // 2 lines down
         });
@@ -44,6 +46,7 @@ suite("scroll-up/down-command", () => {
             setEmptyCursors(activeTextEditor, [startLine, 0]);
 
             await emulator.runCommand("scrollDownCommand");
+            await tick();
 
             assert.ok(activeTextEditor.selection.start.line <= startLine - pageLines + 1);
         });
@@ -54,6 +57,7 @@ suite("scroll-up/down-command", () => {
             emulator.universalArgument();
             emulator.type("2");
             await emulator.runCommand("scrollDownCommand");
+            await tick();
 
             assertCursorsEqual(activeTextEditor, [8, 0]);  // 2 lines up
         });

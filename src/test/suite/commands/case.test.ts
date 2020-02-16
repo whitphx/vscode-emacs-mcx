@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import {Position, Selection, TextEditor} from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace} from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace, tick} from "../utils";
 
 suite("transformToUppercase", () => {
     let activeTextEditor: TextEditor;
@@ -61,6 +61,7 @@ suite("transformToUppercase", () => {
 
                 for (const { cursorAt, text } of expectedResults) {
                     await emulator.runCommand("transformToUppercase");
+                    await tick();
                     assertTextEqual(activeTextEditor, text);
                     assert.ok(activeTextEditor.selections.length === 1);
                     assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));
@@ -128,6 +129,7 @@ suite("transformToLowercase", () => {
 
                 for (const { cursorAt, text } of expectedResults) {
                     await emulator.runCommand("transformToLowercase");
+                    await tick();
                     assertTextEqual(activeTextEditor, text);
                     assert.ok(activeTextEditor.selections.length === 1);
                     assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));

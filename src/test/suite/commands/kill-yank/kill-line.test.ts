@@ -4,7 +4,7 @@ import {Position, Range, Selection} from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace} from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace, tick} from "../../utils";
 
 suite("killLine", () => {
     let activeTextEditor: vscode.TextEditor;
@@ -28,6 +28,7 @@ ABCDEFGHIJ`;
             setEmptyCursors(activeTextEditor, [1, 1]);  // Line_1
 
             await emulator.runCommand("killLine");
+            await tick();
 
             assert.equal(
                 activeTextEditor.document.getText(),
@@ -40,6 +41,7 @@ ABCDEFGHIJ`,
 
             setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.runCommand("yank");
+            await tick();
 
             assertTextEqual(activeTextEditor, "bcdefghij");
         });
@@ -47,6 +49,7 @@ ABCDEFGHIJ`,
         test("it removes line break if invoked at the end of line", async () => {
             setEmptyCursors(activeTextEditor, [1, 10]);
             await emulator.runCommand("killLine");
+            await tick();
 
             assertTextEqual(
                 activeTextEditor,
@@ -57,6 +60,7 @@ abcdefghijABCDEFGHIJ`);
 
             setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.runCommand("yank");
+            await tick();
 
             assertTextEqual(activeTextEditor, "\n");
         });
@@ -65,6 +69,7 @@ abcdefghijABCDEFGHIJ`);
             setEmptyCursors(activeTextEditor, [1, 1], [0, 1], [2, 1]);
 
             await emulator.runCommand("killLine");
+            await tick();
 
             assertTextEqual(
                 activeTextEditor,
@@ -77,6 +82,7 @@ A`,
 
             setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.runCommand("yank");
+            await tick();
 
             assertTextEqual(
                 activeTextEditor,
@@ -101,11 +107,13 @@ BCDEFGHIJ`,
             await emulator.runCommand("killLine");  // EOL of 1st
             await emulator.runCommand("killLine");  // 2nd line
             await emulator.runCommand("killLine");  // EOL of 2nd
+            await tick();
 
             await clearTextEditor(activeTextEditor);
 
             setEmptyCursors(activeTextEditor, [0, 0]);
             await emulator.runCommand("yank");
+            await tick();
 
             assertTextEqual(
                 activeTextEditor,
@@ -137,6 +145,7 @@ abcdefghij
 
                 setEmptyCursors(activeTextEditor, [0, 0]);
                 await emulator.runCommand("yank");
+                await tick();
 
                 assert.ok(
                     !activeTextEditor.document.getText().includes("fghij\n"),  // First 2 kills does not appear here
@@ -183,6 +192,7 @@ abcdefghij
 
                 setEmptyCursors(activeTextEditor, [0, 0]);
                 await emulator.runCommand("yank");
+                await tick();
 
                 assert.ok(
                     !activeTextEditor.document.getText().includes("fghij\n"),  // First 2 kills does not appear here
@@ -205,6 +215,7 @@ abcdefghij
             emulator.type("2");
 
             await emulator.runCommand("killLine");
+            await tick();
 
             assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
             assert.equal(activeTextEditor.selections.length, 1);
@@ -215,6 +226,7 @@ abcdefghij
             await clearTextEditor(activeTextEditor);
 
             await emulator.runCommand("yank");
+            await tick();
             assertTextEqual(
                 activeTextEditor,
                 `0123456789
