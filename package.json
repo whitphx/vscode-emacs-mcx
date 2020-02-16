@@ -932,7 +932,7 @@
 				"vscode-test": "^1.3.0"
 		},
 		"dependencies": {
-				"@types/clipboardy": "^1.1.0",
+				"@types/clipboardy": "1.1.0",
 				"clipboardy": "^1.2.3",
 				"paredit.js": "^0.3.4",
 				"winston": "^3.2.1",
