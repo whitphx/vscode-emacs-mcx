@@ -5,6 +5,7 @@ import {
     assertCursorsEqual, assertTextEqual,
     cleanUpWorkspace, clearTextEditor,
     setEmptyCursors, setupWorkspace,
+    tick,
 } from "../../utils";
 
 suite("killWord and backwardKillWord with Lorem ipsum", () => {
@@ -93,11 +94,13 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
             setEmptyCursors(activeTextEditor, [0, 8]);  // Between 'p' and 's' of 'ipsum'
 
             await emulator.runCommand("killWord");
+            await tick();
 
             assertTextEqual(activeTextEditor, "Lorem ip dolor sit amet,\nconsectetur adipiscing elit,");
             assertCursorsEqual(activeTextEditor, [0, 8]);
 
             await emulator.runCommand("killWord");
+            await tick();
 
             assertTextEqual(activeTextEditor, "Lorem ip sit amet,\nconsectetur adipiscing elit,");
             assertCursorsEqual(activeTextEditor, [0, 8]);
@@ -106,6 +109,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
             await clearTextEditor(activeTextEditor);
 
             await emulator.runCommand("yank");
+            await tick();
 
             assertTextEqual(activeTextEditor, "sum dolor");
         });

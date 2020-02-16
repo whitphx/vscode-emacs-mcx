@@ -94,3 +94,7 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
             selection.isEqual(new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]))));
     });
 }
+
+export function tick(): Promise<void> {
+  return new Promise((resolve) => setImmediate(resolve));
+}
