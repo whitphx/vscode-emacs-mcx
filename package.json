@@ -924,11 +924,11 @@
 		"devDependencies": {
 				"@types/glob": "^7.1.1",
 				"@types/mocha": "^2.2.42",
-				"@types/node": "^8.10.25",
+				"@types/node": "^8.10.57",
 				"@types/vscode": "^1.31.0",
 				"mocha": "^6.2.2",
 				"tslint": "^5.8.0",
-				"typescript": "^3.1.4",
+				"typescript": "^3.7.5",
 				"vscode-test": "^1.3.0"
 		},
 		"dependencies": {
