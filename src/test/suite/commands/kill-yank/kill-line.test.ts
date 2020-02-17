@@ -212,7 +212,7 @@ abcdefghij
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
-            emulator.type("2");
+            await emulator.type("2");
 
             await emulator.runCommand("killLine");
             await tick();

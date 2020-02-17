@@ -84,7 +84,7 @@ suite("paredit commands with prefix argument", () => {
         setEmptyCursors(activeTextEditor, [0, 2]);  // the right to `0`
 
         emulator.universalArgument();
-        emulator.type("2");
+        await emulator.type("2");
         await emulator.runCommand("paredit.forwardSexp");
         await tick();
 
@@ -97,7 +97,7 @@ suite("paredit commands with prefix argument", () => {
         setEmptyCursors(activeTextEditor, [0, 19]);  // the left to `9`
 
         emulator.universalArgument();
-        emulator.type("2");
+        await emulator.type("2");
         await emulator.runCommand("paredit.backwardSexp");
         await tick();
 
