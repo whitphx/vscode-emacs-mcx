@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
-import { executeCommands } from "../execute-commands";
+import { executeCommands } from "../../execute-commands";
 
 suite("executeCommands", () => {
     test("executing commands sequentially", async () => {

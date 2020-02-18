@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import {Position, Range, Selection} from "vscode";
-import { EmacsEmulator } from "../emulator";
+import { EmacsEmulator } from "../../emulator";
 import { cleanUpWorkspace, setupWorkspace} from "./utils";
 
 suite("mark-mode", () => {

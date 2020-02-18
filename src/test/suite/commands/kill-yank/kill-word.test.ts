@@ -1,6 +1,6 @@
 import { TextEditor } from "vscode";
-import { EmacsEmulator } from "../../../emulator";
-import { KillRing } from "../../../kill-yank/kill-ring";
+import { EmacsEmulator } from "../../../../emulator";
+import { KillRing } from "../../../../kill-yank/kill-ring";
 import {
     assertCursorsEqual, assertTextEqual,
     cleanUpWorkspace, clearTextEditor,

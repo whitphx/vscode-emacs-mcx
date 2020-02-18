@@ -1,6 +1,6 @@
 import * as assert from "assert";
-import { KillRing } from "../kill-yank/kill-ring";
-import { ClipboardTextKillRingEntity } from "../kill-yank/kill-ring-entity/clipboard-text";
+import { KillRing } from "../../kill-yank/kill-ring";
+import { ClipboardTextKillRingEntity } from "../../kill-yank/kill-ring-entity/clipboard-text";
 
 suite("KillRing", () => {
     test("push, getTop, and pop", () => {
