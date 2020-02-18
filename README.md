@@ -33,6 +33,8 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `M-b` | ✓ | Move backward by one word unit (backward-word) |
 | `C-v` | ✓ | Scroll down by one screen unit (scroll-up-command) |
 | `M-v` | ✓ | Scroll up by one screen unit (scroll-down-command) |
+| `M-S-,` (`M-<` with US keyboard) | ✓ | Move to the top of the buffer (beginning-of-buffer) |
+| `M-S-.` (`M->` with US keyboard) | ✓ | Move to the end of the buffer (end-of-buffer) |
 | `M-g g` (`M-g M-g`) | | Jump to line (command palette) |
 | `M-g n` (`M-g M-n`, ``C-x ` ``) | | Jump to next error |
 | `M-g p` (`M-g M-p`) | | Jump to previous error |
@@ -71,7 +73,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `M-;` |  | Toggle region comment in and out |
 | `C-x C-l` (`M-l`) |  | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Uppercase (below) is same) |
 | `C-x C-u` (`M-u`) |  | Convert to upper case |
-| `M-^` |  | Merge the previous and the current line (delete-indentation) |
+| `M-S-6` (`M-^` with US keyboard) |  | Merge the previous and the current line (delete-indentation) |
 
 ### Other Commands
 |Command | Desc |
@@ -86,6 +88,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 ### File Commands
 |Command | Desc |
 |--------|------|
+| `C-x C-f` | QuickOpen a file |
 | `C-x C-s` | Save |
 | `C-x C-w` | Save as |
 | `C-x C-n` | Open new window |
@@ -94,7 +97,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 |Command | Desc |
 |--------|------|
 | `C-x b` | Switch to another open buffer |
-| `C-x C-f` | QuickOpen a file |
 | `C-x k` | Close current tab (buffer) |
 | `C-x C-k` | Close all tabs |
 | `C-x 0` | Close editors in the current group.  |
