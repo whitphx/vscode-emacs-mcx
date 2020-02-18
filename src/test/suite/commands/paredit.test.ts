@@ -15,21 +15,21 @@ suite("paredit commands", () => {
     });
 
     suite("forwardSexp", () => {
-        test("without mark-mode", () => {
+        test("without mark-mode", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
-            emulator.runCommand("paredit.forwardSexp");
+            await emulator.runCommand("paredit.forwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
                 new Range(new Position(0, 5), new Position(0, 5))));
         });
 
-        test("with mark-mode", () => {
+        test("with mark-mode", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.setMarkCommand();
-            emulator.runCommand("paredit.forwardSexp");
+            await emulator.runCommand("paredit.forwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -38,21 +38,21 @@ suite("paredit commands", () => {
     });
 
     suite("backwardSexp", () => {
-        test("without mark-mode", () => {
+        test("without mark-mode", async () => {
             setEmptyCursors(activeTextEditor, [0, 5]);
 
-            emulator.runCommand("paredit.backwardSexp");
+            await emulator.runCommand("paredit.backwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
                 new Range(new Position(0, 0), new Position(0, 0))));
         });
 
-        test("with mark-mode", () => {
+        test("with mark-mode", async () => {
             setEmptyCursors(activeTextEditor, [0, 5]);
 
             emulator.setMarkCommand();
-            emulator.runCommand("paredit.backwardSexp");
+            await emulator.runCommand("paredit.backwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(activeTextEditor.selections[0].isEqual(
@@ -72,24 +72,24 @@ suite("paredit commands with prefix argument", () => {
         emulator = new EmacsEmulator(activeTextEditor);
     });
 
-    test("forwardSexp", () => {
+    test("forwardSexp", async () => {
         setEmptyCursors(activeTextEditor, [0, 2]);  // the right to `0`
 
         emulator.universalArgument();
-        emulator.type("2");
-        emulator.runCommand("paredit.forwardSexp");
+        await emulator.type("2");
+        await emulator.runCommand("paredit.forwardSexp");
 
         assert.equal(activeTextEditor.selections.length, 1);
         assert.ok(activeTextEditor.selections[0].isEqual(
             new Range(new Position(0, 6), new Position(0, 6))));
     });
 
-    test("backwardSexp", () => {
+    test("backwardSexp", async () => {
         setEmptyCursors(activeTextEditor, [0, 19]);  // the left to `9`
 
         emulator.universalArgument();
-        emulator.type("2");
-        emulator.runCommand("paredit.backwardSexp");
+        await emulator.type("2");
+        await emulator.runCommand("paredit.backwardSexp");
 
         assert.equal(activeTextEditor.selections.length, 1);
         assert.ok(activeTextEditor.selections[0].isEqual(
@@ -112,7 +112,7 @@ suite("with semicolon", () => {
         test("semicolon is treated as comment", async () => {
             setEmptyCursors(activeTextEditor, [0, 2]);
 
-            emulator.runCommand("paredit.forwardSexp");
+            await emulator.runCommand("paredit.forwardSexp");
 
             assert.equal(activeTextEditor.selections.length, 1);
             // The cursor at the beginning of the next line
@@ -131,7 +131,7 @@ suite("with semicolon", () => {
             test(`semicolon is treated as one entity (line ${line})`, async () => {
                 setEmptyCursors(activeTextEditor, [line, 2]);
 
-                emulator.runCommand("paredit.forwardSexp");
+                await emulator.runCommand("paredit.forwardSexp");
 
                 assert.equal(activeTextEditor.selections.length, 1);
                 // The cursor is right to ";"
