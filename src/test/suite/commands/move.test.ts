@@ -1,6 +1,6 @@
 import * as assert from "assert";
 import { Range, TextEditor } from "vscode";
-import { EmacsEmulator } from "../../emulator";
+import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
 
 suite("scroll-up/down-command", () => {
