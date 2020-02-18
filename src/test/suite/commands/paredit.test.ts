@@ -138,6 +138,6 @@ suite("with semicolon", () => {
                 assert.ok(activeTextEditor.selections[0].isEqual(
                     new Range(new Position(line, 4), new Position(line, 4))));
             });
-        })
+        });
     });
 });
