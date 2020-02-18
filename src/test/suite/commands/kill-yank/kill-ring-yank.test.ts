@@ -27,19 +27,19 @@ suite("kill, yank, yank-pop", () => {
                 activeTextEditor,
                 "Lorem ipsum");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.runCommand("killRegion");
+            await emulator.runCommand("killRegion");
 
             await clearTextEditor(
                 activeTextEditor,
                 "dolor sit amet,\nconsectetur adipiscing elit,");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.runCommand("killRegion");
+            await emulator.runCommand("killRegion");
 
             await clearTextEditor(
                 activeTextEditor,
                 "sed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.runCommand("killRegion");
+            await emulator.runCommand("killRegion");
 
             // Initialize with non-empty text
             const initialText = `0123456789
@@ -120,7 +120,7 @@ ABCDEFGHIJ`);
                 activeTextEditor,
                 "Lorem ipsum");
             await vscode.commands.executeCommand("editor.action.selectAll");
-            emulator.runCommand("killRegion");
+            await emulator.runCommand("killRegion");
 
             // Then, copy to clipboard
             clipboardy.writeSync("12345");
@@ -195,13 +195,13 @@ ABCDEFGHIJ`);
                     activeTextEditor,
                     "FOO");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.runCommand("killRegion");
+                await emulator.runCommand("killRegion");
 
                 await clearTextEditor(
                     activeTextEditor,
                     "BAR");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.runCommand("killRegion");
+                await emulator.runCommand("killRegion");
 
                 // Initialize with non-empty text
                 const initialText = `0123456789
@@ -242,13 +242,13 @@ ABCDEFGHIJ`);
                     activeTextEditor,
                     "FOO");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.runCommand("killRegion");
+                await emulator.runCommand("killRegion");
 
                 await clearTextEditor(
                     activeTextEditor,
                     "BAR");
                 await vscode.commands.executeCommand("editor.action.selectAll");
-                emulator.runCommand("killRegion");
+                await emulator.runCommand("killRegion");
 
                 // Initialize with non-empty text
                 const initialText = `0123456789
@@ -317,13 +317,13 @@ ABCDEFGHIJ`);
                         activeTextEditor,
                         "FOO");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.runCommand("killRegion");
+                    await emulator.runCommand("killRegion");
 
                     await clearTextEditor(
                         activeTextEditor,
                         "BAR");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.runCommand("killRegion");
+                    await emulator.runCommand("killRegion");
 
                     // Initialize with non-empty text
                     const initialText = `0123456789
@@ -359,13 +359,13 @@ ABCDEFGHIJ`);
                         activeTextEditor,
                         "FOO");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.runCommand("killRegion");
+                    await emulator.runCommand("killRegion");
 
                     await clearTextEditor(
                         activeTextEditor,
                         "BAR");
                     await vscode.commands.executeCommand("editor.action.selectAll");
-                    emulator.runCommand("killRegion");
+                    await emulator.runCommand("killRegion");
 
                     // Initialize with non-empty text
                     const initialText = `0123456789

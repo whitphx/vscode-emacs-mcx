@@ -404,13 +404,13 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
         teardown(cleanUpWorkspace);
 
-        test("cursor moves over lines", () => {
+        test("cursor moves over lines", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
             emulator.universalArgument();  // C-u * 2 makes 16 character movements
 
-            emulator.runCommand("forwardChar");
+            await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(
@@ -420,14 +420,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
         });
 
-        test("cursor moves at most to the end of the text", () => {
+        test("cursor moves at most to the end of the text", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
             emulator.universalArgument();
             emulator.universalArgument();  // C-u * 3 makes 64 character movements
 
-            emulator.runCommand("forwardChar");
+            await emulator.runCommand("forwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(
@@ -446,13 +446,13 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
         teardown(cleanUpWorkspace);
 
-        test("cursor moves over lines", () => {
+        test("cursor moves over lines", async () => {
             setEmptyCursors(activeTextEditor, [8, 0]);
 
             emulator.universalArgument();
             emulator.universalArgument();  // C-u * 2 makes 16 character movements
 
-            emulator.runCommand("backwardChar");
+            await emulator.runCommand("backwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(
@@ -462,14 +462,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
             );
         });
 
-        test("cursor moves at most to the beginning of the text", () => {
+        test("cursor moves at most to the beginning of the text", async () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
 
             emulator.universalArgument();
             emulator.universalArgument();
             emulator.universalArgument();  // C-u * 3 makes 64 character movements
 
-            emulator.runCommand("backwardChar");
+            await emulator.runCommand("backwardChar");
 
             assert.equal(activeTextEditor.selections.length, 1);
             assert.ok(
