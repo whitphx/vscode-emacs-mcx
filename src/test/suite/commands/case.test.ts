@@ -55,9 +55,7 @@ suite("transformToUppercase", () => {
 
       // tslint:disable-next-line:max-line-length
       test("cursor moves with upcasing which enables continuous transformation when the selection is empty", async () => {
-        activeTextEditor.selections = [
-          new Selection(new Position(0, 0), new Position(0, 0))
-        ];
+        activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
 
         for (const { cursorAt, text } of expectedResults) {
           await emulator.runCommand("transformToUppercase");
@@ -122,9 +120,7 @@ suite("transformToLowercase", () => {
 
       // tslint:disable-next-line:max-line-length
       test("cursor moves with downcasing which enables continuous transformation when the selection is empty", async () => {
-        activeTextEditor.selections = [
-          new Selection(new Position(0, 0), new Position(0, 0))
-        ];
+        activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
 
         for (const { cursorAt, text } of expectedResults) {
           await emulator.runCommand("transformToLowercase");

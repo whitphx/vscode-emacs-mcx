@@ -1,10 +1,7 @@
 import * as vscode from "vscode";
 import { Disposable, Selection, TextEditor } from "vscode";
 import { instanceOfIEmacsCommandInterrupted } from "./commands";
-import {
-  AddSelectionToNextFindMatch,
-  AddSelectionToPreviousFindMatch
-} from "./commands/add-selection-to-find-match";
+import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
@@ -29,8 +26,7 @@ export interface IMarkModeController {
   exitMarkMode(): void;
 }
 
-export class EmacsEmulator
-  implements Disposable, IEmacsCommandRunner, IMarkModeController {
+export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkModeController {
   private textEditor: TextEditor;
 
   private commandRegistry: EmacsCommandRegistry;
@@ -51,122 +47,52 @@ export class EmacsEmulator
 
     this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
-    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(
-      this
-    );
-    vscode.window.onDidChangeTextEditorSelection(
-      this.onDidChangeTextEditorSelection
-    );
+    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
+    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
 
     this.commandRegistry = new EmacsCommandRegistry();
     this.afterCommand = this.afterCommand.bind(this);
 
-    this.commandRegistry.register(
-      new MoveCommands.ForwardChar(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.BackwardChar(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.NextLine(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.PreviousLine(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.MoveBeginningOfLine(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.MoveEndOfLine(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.ForwardWord(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.BackwardWord(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.BeginningOfBuffer(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.EndOfBuffer(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.ScrollUpCommand(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new MoveCommands.ScrollDownCommand(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new EditCommands.DeleteBackwardChar(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new EditCommands.DeleteForwardChar(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new EditCommands.NewLine(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new DeleteBlankLines(this.afterCommand, this)
-    );
+    this.commandRegistry.register(new MoveCommands.ForwardChar(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.BackwardChar(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.NextLine(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.PreviousLine(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this.afterCommand, this));
+    this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand, this));
+    this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand, this));
+    this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand, this));
+    this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
 
-    this.commandRegistry.register(
-      new PareditCommands.ForwardSexp(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new PareditCommands.BackwardSexp(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new PareditCommands.ForwardDownSexp(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new PareditCommands.BackwardUpSexp(this.afterCommand, this)
-    );
+    this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.BackwardUpSexp(this.afterCommand, this));
 
-    this.commandRegistry.register(
-      new RecenterTopBottom(this.afterCommand, this)
-    );
+    this.commandRegistry.register(new RecenterTopBottom(this.afterCommand, this));
 
     const killYanker = new KillYanker(textEditor, killRing);
-    this.commandRegistry.register(
-      new KillCommands.KillWord(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.BackwardKillWord(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.KillLine(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.KillWholeLine(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.KillRegion(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.CopyRegion(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.Yank(this.afterCommand, this, killYanker)
-    );
-    this.commandRegistry.register(
-      new KillCommands.YankPop(this.afterCommand, this, killYanker)
-    );
+    this.commandRegistry.register(new KillCommands.KillWord(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.BackwardKillWord(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.KillLine(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.KillWholeLine(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.KillRegion(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.CopyRegion(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.Yank(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new KillCommands.YankPop(this.afterCommand, this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
 
-    this.commandRegistry.register(
-      new AddSelectionToNextFindMatch(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new AddSelectionToPreviousFindMatch(this.afterCommand, this)
-    );
+    this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
+    this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));
 
-    this.commandRegistry.register(
-      new CaseCommands.TransformToUppercase(this.afterCommand, this)
-    );
-    this.commandRegistry.register(
-      new CaseCommands.TransformToLowercase(this.afterCommand, this)
-    );
+    this.commandRegistry.register(new CaseCommands.TransformToUppercase(this.afterCommand, this));
+    this.commandRegistry.register(new CaseCommands.TransformToLowercase(this.afterCommand, this));
   }
 
   public setTextEditor(textEditor: TextEditor) {
@@ -184,8 +110,7 @@ export class EmacsEmulator
       if (
         e.contentChanges.some(contentChange =>
           this.textEditor.selections.some(
-            selection =>
-              typeof contentChange.range.intersection(selection) !== "undefined"
+            selection => typeof contentChange.range.intersection(selection) !== "undefined"
           )
         )
       ) {
@@ -196,14 +121,8 @@ export class EmacsEmulator
     }
   }
 
-  public onDidChangeTextEditorSelection(
-    e: vscode.TextEditorSelectionChangeEvent
-  ) {
-    if (
-      new EditorIdentity(e.textEditor).isEqual(
-        new EditorIdentity(this.textEditor)
-      )
-    ) {
+  public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
+    if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
       this.onDidInterruptTextEditor();
     }
   }
@@ -221,9 +140,7 @@ export class EmacsEmulator
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 
-    logger.debug(
-      `[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`
-    );
+    logger.debug(`[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
     if (prefixArgument !== undefined && prefixArgument >= 0) {
       const promises = [];
       for (let i = 0; i < prefixArgument; ++i) {
@@ -236,9 +153,7 @@ export class EmacsEmulator
       return Promise.all(promises);
     }
 
-    logger.debug(
-      `[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`
-    );
+    logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
     return vscode.commands.executeCommand("default:type", {
       text
     });

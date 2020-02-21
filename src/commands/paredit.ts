@@ -6,16 +6,9 @@ import { EmacsCommand } from ".";
 const languagesSemicolonComment = new Set(["clojure", "lisp", "scheme"]);
 
 abstract class PareditNavigatorCommand extends EmacsCommand {
-  public abstract readonly pareditNavigatorFn: (
-    ast: paredit.AST,
-    idx: number
-  ) => number;
+  public abstract readonly pareditNavigatorFn: (ast: paredit.AST, idx: number) => number;
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const preserveSelect = isInMarkMode;
 
     const doc = textEditor.document;
@@ -41,19 +34,13 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
         const idx = doc.offsetAt(selection.active);
         const newIdx = this.pareditNavigatorFn(ast, idx);
         const newActivePosition = doc.positionAt(newIdx);
-        return new Selection(
-          preserveSelect ? selection.anchor : newActivePosition,
-          newActivePosition
-        );
+        return new Selection(preserveSelect ? selection.anchor : newActivePosition, newActivePosition);
       });
 
       textEditor.selections = newSelections;
     }
 
-    textEditor.revealRange(
-      textEditor.selection,
-      TextEditorRevealType.InCenterIfOutsideViewport
-    );
+    textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport);
   }
 }
 

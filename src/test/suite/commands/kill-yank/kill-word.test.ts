@@ -15,8 +15,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
   let emulator: EmacsEmulator;
 
   setup(async () => {
-    const initialText =
-      "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit,";
+    const initialText = "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit,";
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(3);
     emulator = new EmacsEmulator(activeTextEditor, killRing);
@@ -31,18 +30,12 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Kill twice
       await emulator.runCommand("killWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum sit amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum sit amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 11]);
 
       await emulator.runCommand("killWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 11]);
 
       // Assert the killed 2 words are appended
@@ -59,10 +52,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Kill twice
       await emulator.runCommand("killWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum sit amet,\nconsectetur elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum sit amet,\nconsectetur elit,");
       assertCursorsEqual(activeTextEditor, [0, 11], [1, 11]);
 
       await emulator.runCommand("killWord");
@@ -83,10 +73,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
 
       await emulator.runCommand("killWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor sit,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 21]);
 
       await emulator.runCommand("killWord");
@@ -94,10 +81,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Killing comma and word-break together.
       // This behavior is different from the vscode's original deleteWordRight,
       // but same to the emacs's original one.
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor sit adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 21]);
 
       // Assert the killed 2 words are appended
@@ -113,18 +97,12 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
 
       await emulator.runCommand("killWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ip dolor sit amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ip dolor sit amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 8]);
 
       await emulator.runCommand("killWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ip sit amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ip sit amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 8]);
 
       // Assert the killed 2 words are appended
@@ -165,10 +143,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
 
       // Kill
       await emulator.runCommand("killWord");
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor sit amet,\nconsectetur"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit amet,\nconsectetur");
       assertCursorsEqual(activeTextEditor, [1, 11]);
 
       // Check the killed words
@@ -189,18 +164,12 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Kill twice
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor  amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor  amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 18]);
 
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum  amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum  amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 12]);
 
       // Assert the killed 2 words are appended
@@ -217,10 +186,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Kill twice
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor  amet,\nconsectetur adipiscing ,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor  amet,\nconsectetur adipiscing ,");
       assertCursorsEqual(activeTextEditor, [0, 18], [1, 23]);
 
       await emulator.runCommand("backwardKillWord");
@@ -241,10 +207,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
 
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor sit amet,\n adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit amet,\n adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [1, 0]);
 
       await emulator.runCommand("backwardKillWord");
@@ -252,10 +215,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Killing comma and word-break together.
       // This behavior is different from the vscode's original deleteWordLeft,
       // but same to the emacs's original one.
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum dolor sit  adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit  adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 22]);
 
       // Assert the killed 2 words are appended
@@ -271,18 +231,12 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
 
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem ipsum lor sit amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem ipsum lor sit amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 12]);
 
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(
-        activeTextEditor,
-        "Lorem lor sit amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, "Lorem lor sit amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 6]);
 
       // Assert the killed 2 words are appended
@@ -321,10 +275,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
 
       // Kill
       await emulator.runCommand("backwardKillWord");
-      assertTextEqual(
-        activeTextEditor,
-        " dolor sit amet,\nconsectetur adipiscing elit,"
-      );
+      assertTextEqual(activeTextEditor, " dolor sit amet,\nconsectetur adipiscing elit,");
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       // Check the killed words

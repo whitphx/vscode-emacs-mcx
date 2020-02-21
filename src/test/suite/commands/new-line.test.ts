@@ -1,12 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import {
-  assertTextEqual,
-  cleanUpWorkspace,
-  setEmptyCursors,
-  setupWorkspace
-} from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../utils";
 
 suite("newLine", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -36,10 +31,7 @@ suite("newLine", () => {
 
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0123456789${eolStr}${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`
-            );
+            assertTextEqual(activeTextEditor, `0123456789${eolStr}${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`);
           });
 
           test(`it works with single cursor at the middle of the line`, async () => {
@@ -47,10 +39,7 @@ suite("newLine", () => {
 
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0123456789${eolStr}abcde${eolStr}fghij${eolStr}ABCDEFGHIJ`
-            );
+            assertTextEqual(activeTextEditor, `0123456789${eolStr}abcde${eolStr}fghij${eolStr}ABCDEFGHIJ`);
           });
 
           test(`it works with single cursor at the end of the line`, async () => {
@@ -58,10 +47,7 @@ suite("newLine", () => {
 
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0123456789${eolStr}abcdefghij${eolStr}${eolStr}ABCDEFGHIJ`
-            );
+            assertTextEqual(activeTextEditor, `0123456789${eolStr}abcdefghij${eolStr}${eolStr}ABCDEFGHIJ`);
           });
         });
 
@@ -73,10 +59,7 @@ suite("newLine", () => {
 
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0123456789${eolStr}abcdefghij${eolStr}${eolStr}ABCDEFGHIJ`
-            );
+            assertTextEqual(activeTextEditor, `0123456789${eolStr}abcdefghij${eolStr}${eolStr}ABCDEFGHIJ`);
           });
 
           test(`it works with single cursor at the middle of the line`, async () => {
@@ -84,10 +67,7 @@ suite("newLine", () => {
 
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0123456789${eolStr}abcdefghij${eolStr}ABCDE${eolStr}FGHIJ`
-            );
+            assertTextEqual(activeTextEditor, `0123456789${eolStr}abcdefghij${eolStr}ABCDE${eolStr}FGHIJ`);
           });
 
           test(`it works with single cursor at the end of the line`, async () => {
@@ -95,10 +75,7 @@ suite("newLine", () => {
 
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ${eolStr}`
-            );
+            assertTextEqual(activeTextEditor, `0123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ${eolStr}`);
           });
         });
 
@@ -108,29 +85,20 @@ suite("newLine", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
             emulator.setMarkCommand();
             await emulator.runCommand("forwardChar");
-            assert.ok(
-              activeTextEditor.selections.every(selection => !selection.isEmpty)
-            );
+            assert.ok(activeTextEditor.selections.every(selection => !selection.isEmpty));
 
             // Test newLine
             await emulator.runCommand("newLine");
 
-            assertTextEqual(
-              activeTextEditor,
-              `0${eolStr}123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`
-            );
+            assertTextEqual(activeTextEditor, `0${eolStr}123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`);
 
-            assert.ok(
-              activeTextEditor.selections.every(selection => selection.isEmpty)
-            );
+            assert.ok(activeTextEditor.selections.every(selection => selection.isEmpty));
 
             // Then, next mark-mode works
             setEmptyCursors(activeTextEditor, [0, 0]);
             emulator.setMarkCommand();
             await emulator.runCommand("forwardChar");
-            assert.ok(
-              activeTextEditor.selections.every(selection => !selection.isEmpty)
-            );
+            assert.ok(activeTextEditor.selections.every(selection => !selection.isEmpty));
           });
         });
       });
@@ -194,10 +162,7 @@ suite("newLine", () => {
         emulator.universalArgument();
         await emulator.runCommand("newLine");
 
-        assertTextEqual(
-          activeTextEditor,
-          `${eolStr}${eolStr}${eolStr}${eolStr}`
-        );
+        assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);
         assert.equal(activeTextEditor.selection.active.line, 4);
         assert.equal(activeTextEditor.selection.active.character, 0);
       });

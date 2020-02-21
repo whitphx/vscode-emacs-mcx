@@ -17,11 +17,7 @@ abstract class KillYankCommand extends EmacsCommand {
   }
 }
 
-function findNextKillWordRange(
-  doc: TextDocument,
-  position: Position,
-  repeat = 1
-) {
+function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
   const doclen = doc.getText().length;
   let idx = doc.offsetAt(position) + 1;
 
@@ -55,11 +51,7 @@ function findNextKillWordRange(
 export class KillWord extends KillYankCommand {
   public readonly id = "killWord";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -81,11 +73,7 @@ export class KillWord extends KillYankCommand {
   }
 }
 
-function findPreviousKillWordRange(
-  doc: TextDocument,
-  position: Position,
-  repeat = 1
-) {
+function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
   // const doclen = doc.getText().length;
   let idx = doc.offsetAt(position) - 1;
 
@@ -119,11 +107,7 @@ function findPreviousKillWordRange(
 export class BackwardKillWord extends KillYankCommand {
   public readonly id = "backwardKillWord";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -138,10 +122,7 @@ export class BackwardKillWord extends KillYankCommand {
           return undefined;
         }
 
-        return new Range(
-          previousWordRange.start,
-          textEditor.selections[i].active
-        );
+        return new Range(previousWordRange.start, textEditor.selections[i].active);
       })
       .filter((range): range is Range => range !== undefined);
     await this.killYanker.kill(killRanges, AppendDirection.Backward);
@@ -151,11 +132,7 @@ export class BackwardKillWord extends KillYankCommand {
 export class KillLine extends KillYankCommand {
   public readonly id = "killLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = textEditor.selections.map(selection => {
       const cursor = selection.anchor;
       const lineAtCursor = textEditor.document.lineAt(cursor.line);
@@ -182,18 +159,11 @@ export class KillLine extends KillYankCommand {
 export class KillWholeLine extends KillYankCommand {
   public readonly id = "killWholeLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = textEditor.selections.map(
       selection =>
         // From the beginning of the line to the beginning of the next line
-        new Range(
-          new Position(selection.anchor.line, 0),
-          new Position(selection.anchor.line + 1, 0)
-        )
+        new Range(new Position(selection.anchor.line, 0), new Position(selection.anchor.line + 1, 0))
     );
     this.emacsController.exitMarkMode();
     return this.killYanker.kill(ranges);
@@ -205,19 +175,13 @@ function getNonEmptySelections(textEditor: TextEditor): Selection[] {
 }
 
 function makeSelectionsEmpty(textEditor: TextEditor) {
-  textEditor.selections = textEditor.selections.map(
-    selection => new Selection(selection.active, selection.active)
-  );
+  textEditor.selections = textEditor.selections.map(selection => new Selection(selection.active, selection.active));
 }
 
 export class KillRegion extends KillYankCommand {
   public readonly id = "killRegion";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = getNonEmptySelections(textEditor);
     await this.killYanker.kill(ranges);
     this.emacsController.exitMarkMode();
@@ -229,11 +193,7 @@ export class KillRegion extends KillYankCommand {
 export class CopyRegion extends KillYankCommand {
   public readonly id = "copyRegion";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = getNonEmptySelections(textEditor);
     await this.killYanker.copy(ranges);
     this.emacsController.exitMarkMode();
@@ -245,11 +205,7 @@ export class CopyRegion extends KillYankCommand {
 export class Yank extends KillYankCommand {
   public readonly id = "yank";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     await this.killYanker.yank();
     this.emacsController.exitMarkMode();
   }
@@ -258,11 +214,7 @@ export class Yank extends KillYankCommand {
 export class YankPop extends KillYankCommand {
   public readonly id = "yankPop";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     await this.killYanker.yankPop();
     this.emacsController.exitMarkMode();
   }

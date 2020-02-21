@@ -8,31 +8,20 @@ enum RecenterPosition {
   Bottom
 }
 
-export class RecenterTopBottom extends EmacsCommand
-  implements IEmacsCommandInterrupted {
+export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInterrupted {
   public readonly id = "recenterTopBottom";
 
   private recenterPosition: RecenterPosition = RecenterPosition.Middle;
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     switch (this.recenterPosition) {
       case RecenterPosition.Middle: {
-        textEditor.revealRange(
-          textEditor.selection,
-          TextEditorRevealType.InCenter
-        );
+        textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenter);
         this.recenterPosition = RecenterPosition.Top;
         break;
       }
       case RecenterPosition.Top: {
-        textEditor.revealRange(
-          textEditor.selection,
-          TextEditorRevealType.AtTop
-        );
+        textEditor.revealRange(textEditor.selection, TextEditorRevealType.AtTop);
         this.recenterPosition = RecenterPosition.Bottom;
         break;
       }
