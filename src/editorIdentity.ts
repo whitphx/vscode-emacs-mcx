@@ -1,10 +1,11 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class EditorIdentity {
   private _fileName: string;
 
   constructor(textEditor?: vscode.TextEditor) {
-    this._fileName = (textEditor && textEditor.document && textEditor.document.fileName) || '';
+    this._fileName =
+      (textEditor && textEditor.document && textEditor.document.fileName) || "";
   }
 
   get fileName() {
