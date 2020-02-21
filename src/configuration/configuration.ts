@@ -72,7 +72,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   private static unproxify(obj: { [key: string]: any }) {
     const result: { [key: string]: any } = {};
     for (const key in obj) {
-      const val = obj[key] as any;
+      const val = obj[key];
       if (val !== null && val !== undefined) {
         result[key] = val;
       }
