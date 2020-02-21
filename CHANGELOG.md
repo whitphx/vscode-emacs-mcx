@@ -12,6 +12,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.14.1] - 2020-02-21
+- Internal changes including code formatting.
+
 ## [0.14.0] - 2020-02-19
 - Internal package updates.
 
