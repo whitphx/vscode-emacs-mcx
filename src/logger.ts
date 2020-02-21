@@ -15,17 +15,17 @@ import { IConfiguration } from "./configuration/iconfiguration";
 class VsCodeMessage extends TransportStream {
   public log(info: { level: string; message: string }, callback: () => void) {
     switch (info.level) {
-        case "error":
-            vscode.window.showErrorMessage(info.message, "Dismiss");
-            break;
-        case "warn":
-            vscode.window.showWarningMessage(info.message, "Dismiss");
-            break;
-        case "info":
-        case "verbose":
-        case "debug":
-            vscode.window.showInformationMessage(info.message, "Dismiss");
-            break;
+      case "error":
+        vscode.window.showErrorMessage(info.message, "Dismiss");
+        break;
+      case "warn":
+        vscode.window.showWarningMessage(info.message, "Dismiss");
+        break;
+      case "info":
+      case "verbose":
+      case "debug":
+        vscode.window.showInformationMessage(info.message, "Dismiss");
+        break;
     }
 
     if (callback) {
@@ -35,31 +35,31 @@ class VsCodeMessage extends TransportStream {
 }
 
 export let logger = winston.createLogger({
-    format: winston.format.simple(),
-    transports: [
-        new ConsoleForElectron({
-            level: "error",
-            silent: false,
-        }),
-        new VsCodeMessage({
-            level: "error",
-            silent: false,
-        }),
-    ],
+  format: winston.format.simple(),
+  transports: [
+    new ConsoleForElectron({
+      level: "error",
+      silent: false
+    }),
+    new VsCodeMessage({
+      level: "error",
+      silent: false
+    })
+  ]
 });
 
 export function initializeLogger(configuration: IConfiguration) {
-    logger = winston.createLogger({
-        format: winston.format.simple(),
-        transports: [
-            new ConsoleForElectron({
-                level: configuration.debug.loggingLevelForConsole,
-                silent: configuration.debug.silent,
-            }),
-            new VsCodeMessage({
-                level: configuration.debug.loggingLevelForAlert,
-                silent: configuration.debug.silent,
-            }),
-        ],
-    });
+  logger = winston.createLogger({
+    format: winston.format.simple(),
+    transports: [
+      new ConsoleForElectron({
+        level: configuration.debug.loggingLevelForConsole,
+        silent: configuration.debug.silent
+      }),
+      new VsCodeMessage({
+        level: configuration.debug.loggingLevelForAlert,
+        silent: configuration.debug.silent
+      })
+    ]
+  });
 }

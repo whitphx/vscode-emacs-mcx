@@ -9,181 +9,195 @@ import { initializeLogger, logger } from "./logger";
 import { MessageManager } from "./message";
 
 export function activate(context: vscode.ExtensionContext) {
-    MessageManager.initialize(context);
-    Configuration.initialize(context);
+  MessageManager.initialize(context);
+  Configuration.initialize(context);
 
-    initializeLogger(Configuration.instance);
+  initializeLogger(Configuration.instance);
 
-    const killRing = new KillRing(Configuration.instance.killRingMax);
-    context.subscriptions.push(killRing);
+  const killRing = new KillRing(Configuration.instance.killRingMax);
+  context.subscriptions.push(killRing);
 
-    const emulatorMap = new EmacsEmulatorMap(killRing);
-    context.subscriptions.push(emulatorMap);
+  const emulatorMap = new EmacsEmulatorMap(killRing);
+  context.subscriptions.push(emulatorMap);
 
-    function getAndUpdateEmulator() {
-        const activeTextEditor = vscode.window.activeTextEditor;
-        if (typeof activeTextEditor === "undefined") { return undefined; }
-
-        const [curEmulator, isNew] = emulatorMap.getOrCreate(activeTextEditor);
-        if (isNew) {
-            context.subscriptions.push(curEmulator);
-        }
-
-        return curEmulator;
+  function getAndUpdateEmulator() {
+    const activeTextEditor = vscode.window.activeTextEditor;
+    if (typeof activeTextEditor === "undefined") {
+      return undefined;
     }
 
-    vscode.workspace.onDidCloseTextDocument(() => {
-        const documents = vscode.workspace.textDocuments;
-
-        // Delete emulators once all tabs of this document have been closed
-        for (const key of emulatorMap.getKeys()) {
-            const emulator = emulatorMap.get(key);
-            if (emulator === undefined ||
-                emulator.getTextEditor() === undefined ||
-                documents.indexOf(emulator.getTextEditor().document) === -1) {
-                emulatorMap.delete(key);
-            }
-        }
-    });
-
-    function registerEmulatorCommand(
-        commandName: string,
-        callback: (emulator: EmacsEmulator, ...args: any[]) => any,
-        onNoEmulator?: (...args: any[]) => any,
-    ) {
-        const disposable = vscode.commands.registerCommand(commandName, (...args) => {
-            logger.debug(`[command]\t Command executed: "${commandName}"`);
-
-            const emulator = getAndUpdateEmulator();
-            if (!emulator) {
-                if (typeof onNoEmulator === "function") {
-                    onNoEmulator(...args);
-                }
-                return;
-            }
-
-            callback(emulator, ...args);
-        });
-        context.subscriptions.push(disposable);
+    const [curEmulator, isNew] = emulatorMap.getOrCreate(activeTextEditor);
+    if (isNew) {
+      context.subscriptions.push(curEmulator);
     }
 
-    registerEmulatorCommand("type",
-        (emulator, args) => {
-            // Capture typing charactors for prefix argument functionality.
-            logger.debug(`[type command]\t args.text = "${args.text}"`);
+    return curEmulator;
+  }
 
-            emulator.type(args.text);
-        },
-        (args) => vscode.commands.executeCommand("default:type", args),
+  vscode.workspace.onDidCloseTextDocument(() => {
+    const documents = vscode.workspace.textDocuments;
+
+    // Delete emulators once all tabs of this document have been closed
+    for (const key of emulatorMap.getKeys()) {
+      const emulator = emulatorMap.get(key);
+      if (
+        emulator === undefined ||
+        emulator.getTextEditor() === undefined ||
+        documents.indexOf(emulator.getTextEditor().document) === -1
+      ) {
+        emulatorMap.delete(key);
+      }
+    }
+  });
+
+  function registerEmulatorCommand(
+    commandName: string,
+    callback: (emulator: EmacsEmulator, ...args: any[]) => any,
+    onNoEmulator?: (...args: any[]) => any
+  ) {
+    const disposable = vscode.commands.registerCommand(
+      commandName,
+      (...args) => {
+        logger.debug(`[command]\t Command executed: "${commandName}"`);
+
+        const emulator = getAndUpdateEmulator();
+        if (!emulator) {
+          if (typeof onNoEmulator === "function") {
+            onNoEmulator(...args);
+          }
+          return;
+        }
+
+        callback(emulator, ...args);
+      }
     );
+    context.subscriptions.push(disposable);
+  }
 
-    moveCommandIds.map((commandName) => {
-        registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
-            emulator.runCommand(commandName);
-        });
-    });
+  registerEmulatorCommand(
+    "type",
+    (emulator, args) => {
+      // Capture typing charactors for prefix argument functionality.
+      logger.debug(`[type command]\t args.text = "${args.text}"`);
 
-    registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {
-        emulator.runCommand("deleteBackwardChar");
-    });
+      emulator.type(args.text);
+    },
+    args => vscode.commands.executeCommand("default:type", args)
+  );
 
-    registerEmulatorCommand("emacs-mcx.deleteForwardChar", (emulator) => {
-        emulator.runCommand("deleteForwardChar");
+  moveCommandIds.map(commandName => {
+    registerEmulatorCommand(`emacs-mcx.${commandName}`, emulator => {
+      emulator.runCommand(commandName);
     });
+  });
 
-    registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
-        emulator.universalArgument();
-    });
+  registerEmulatorCommand("emacs-mcx.deleteBackwardChar", emulator => {
+    emulator.runCommand("deleteBackwardChar");
+  });
 
-    registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
-        emulator.runCommand("killLine");
-    });
+  registerEmulatorCommand("emacs-mcx.deleteForwardChar", emulator => {
+    emulator.runCommand("deleteForwardChar");
+  });
 
-    registerEmulatorCommand("emacs-mcx.killWord", (emulator) => {
-        emulator.runCommand("killWord");
-    });
+  registerEmulatorCommand("emacs-mcx.universalArgument", emulator => {
+    emulator.universalArgument();
+  });
 
-    registerEmulatorCommand("emacs-mcx.backwardKillWord", (emulator) => {
-        emulator.runCommand("backwardKillWord");
-    });
+  registerEmulatorCommand("emacs-mcx.killLine", emulator => {
+    emulator.runCommand("killLine");
+  });
 
-    registerEmulatorCommand("emacs-mcx.killWholeLine", (emulator) => {
-        emulator.runCommand("killWholeLine");
-    });
+  registerEmulatorCommand("emacs-mcx.killWord", emulator => {
+    emulator.runCommand("killWord");
+  });
 
-    registerEmulatorCommand("emacs-mcx.killRegion", (emulator) => {
-        emulator.runCommand("killRegion");
-    });
+  registerEmulatorCommand("emacs-mcx.backwardKillWord", emulator => {
+    emulator.runCommand("backwardKillWord");
+  });
 
-    registerEmulatorCommand("emacs-mcx.copyRegion", (emulator) => {
-        emulator.runCommand("copyRegion");
-    });
+  registerEmulatorCommand("emacs-mcx.killWholeLine", emulator => {
+    emulator.runCommand("killWholeLine");
+  });
 
-    registerEmulatorCommand("emacs-mcx.yank", (emulator) => {
-        emulator.runCommand("yank");
-    });
+  registerEmulatorCommand("emacs-mcx.killRegion", emulator => {
+    emulator.runCommand("killRegion");
+  });
 
-    registerEmulatorCommand("emacs-mcx.yank-pop", (emulator) => {
-        emulator.runCommand("yankPop");
-    });
+  registerEmulatorCommand("emacs-mcx.copyRegion", emulator => {
+    emulator.runCommand("copyRegion");
+  });
 
-    registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
-        emulator.setMarkCommand();
-    });
+  registerEmulatorCommand("emacs-mcx.yank", emulator => {
+    emulator.runCommand("yank");
+  });
 
-    registerEmulatorCommand("emacs-mcx.addSelectionToNextFindMatch", (emulator) => {
-        emulator.runCommand("addSelectionToNextFindMatch");
-    });
+  registerEmulatorCommand("emacs-mcx.yank-pop", emulator => {
+    emulator.runCommand("yankPop");
+  });
 
-    registerEmulatorCommand("emacs-mcx.addSelectionToPreviousFindMatch", (emulator) => {
-        emulator.runCommand("addSelectionToPreviousFindMatch");
-    });
+  registerEmulatorCommand("emacs-mcx.setMarkCommand", emulator => {
+    emulator.setMarkCommand();
+  });
 
-    registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {
-        emulator.cancel();
-    });
+  registerEmulatorCommand("emacs-mcx.addSelectionToNextFindMatch", emulator => {
+    emulator.runCommand("addSelectionToNextFindMatch");
+  });
 
-    registerEmulatorCommand("emacs-mcx.newLine", (emulator) => {
-        emulator.runCommand("newLine");
-    });
+  registerEmulatorCommand(
+    "emacs-mcx.addSelectionToPreviousFindMatch",
+    emulator => {
+      emulator.runCommand("addSelectionToPreviousFindMatch");
+    }
+  );
 
-    registerEmulatorCommand("emacs-mcx.transformToUppercase", (emulator) => {
-        emulator.runCommand("transformToUppercase");
-    });
+  registerEmulatorCommand("emacs-mcx.cancel", emulator => {
+    emulator.cancel();
+  });
 
-    registerEmulatorCommand("emacs-mcx.transformToLowercase", (emulator) => {
-        emulator.runCommand("transformToLowercase");
-    });
+  registerEmulatorCommand("emacs-mcx.newLine", emulator => {
+    emulator.runCommand("newLine");
+  });
 
-    registerEmulatorCommand("emacs-mcx.deleteBlankLines", (emulator) => {
-        emulator.runCommand("deleteBlankLines");
-    });
+  registerEmulatorCommand("emacs-mcx.transformToUppercase", emulator => {
+    emulator.runCommand("transformToUppercase");
+  });
 
-    registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
-        emulator.runCommand("recenterTopBottom");
-    });
+  registerEmulatorCommand("emacs-mcx.transformToLowercase", emulator => {
+    emulator.runCommand("transformToLowercase");
+  });
 
-    registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {
-        emulator.runCommand("paredit.forwardSexp");
-    });
+  registerEmulatorCommand("emacs-mcx.deleteBlankLines", emulator => {
+    emulator.runCommand("deleteBlankLines");
+  });
 
-    registerEmulatorCommand("emacs-mcx.paredit.forwardDownSexp", (emulator) => {
-        emulator.runCommand("paredit.forwardDownSexp");
-    });
+  registerEmulatorCommand("emacs-mcx.recenterTopBottom", emulator => {
+    emulator.runCommand("recenterTopBottom");
+  });
 
-    registerEmulatorCommand("emacs-mcx.paredit.backwardSexp", (emulator) => {
-        emulator.runCommand("paredit.backwardSexp");
-    });
+  registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", emulator => {
+    emulator.runCommand("paredit.forwardSexp");
+  });
 
-    registerEmulatorCommand("emacs-mcx.paredit.backwardUpSexp", (emulator) => {
-        emulator.runCommand("paredit.backwardUpSexp");
-    });
+  registerEmulatorCommand("emacs-mcx.paredit.forwardDownSexp", emulator => {
+    emulator.runCommand("paredit.forwardDownSexp");
+  });
 
-    vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
-        if (1 <= args.length) {
-            executeCommands(args[0]);
-        }
-    });
+  registerEmulatorCommand("emacs-mcx.paredit.backwardSexp", emulator => {
+    emulator.runCommand("paredit.backwardSexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.paredit.backwardUpSexp", emulator => {
+    emulator.runCommand("paredit.backwardUpSexp");
+  });
+
+  vscode.commands.registerCommand(
+    "emacs-mcx.executeCommands",
+    async (...args: any[]) => {
+      if (1 <= args.length) {
+        executeCommands(args[0]);
+      }
+    }
+  );
 }
 
 // this method is called when your extension is deactivated
