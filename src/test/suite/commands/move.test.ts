@@ -45,9 +45,7 @@ suite("scroll-up/down-command", () => {
 
       await emulator.runCommand("scrollDownCommand");
 
-      assert.ok(
-        activeTextEditor.selection.start.line <= startLine - pageLines + 1
-      );
+      assert.ok(activeTextEditor.selection.start.line <= startLine - pageLines + 1);
     });
 
     test("it scrolls with the speficied number of lines by the prefix argument", async () => {

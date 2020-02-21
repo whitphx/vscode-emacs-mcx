@@ -21,11 +21,7 @@ suite("paredit commands", () => {
       await emulator.runCommand("paredit.forwardSexp");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selections[0].isEqual(
-          new Range(new Position(0, 5), new Position(0, 5))
-        )
-      );
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
     });
 
     test("with mark-mode", async () => {
@@ -35,11 +31,7 @@ suite("paredit commands", () => {
       await emulator.runCommand("paredit.forwardSexp");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selections[0].isEqual(
-          new Range(new Position(0, 0), new Position(0, 5))
-        )
-      );
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 5))));
     });
   });
 
@@ -50,11 +42,7 @@ suite("paredit commands", () => {
       await emulator.runCommand("paredit.backwardSexp");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selections[0].isEqual(
-          new Range(new Position(0, 0), new Position(0, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 0))));
     });
 
     test("with mark-mode", async () => {
@@ -64,11 +52,7 @@ suite("paredit commands", () => {
       await emulator.runCommand("paredit.backwardSexp");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selections[0].isEqual(
-          new Range(new Position(0, 5), new Position(0, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 0))));
     });
   });
 });
@@ -92,11 +76,7 @@ suite("paredit commands with prefix argument", () => {
     await emulator.runCommand("paredit.forwardSexp");
 
     assert.equal(activeTextEditor.selections.length, 1);
-    assert.ok(
-      activeTextEditor.selections[0].isEqual(
-        new Range(new Position(0, 6), new Position(0, 6))
-      )
-    );
+    assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 6), new Position(0, 6))));
   });
 
   test("backwardSexp", async () => {
@@ -107,11 +87,7 @@ suite("paredit commands with prefix argument", () => {
     await emulator.runCommand("paredit.backwardSexp");
 
     assert.equal(activeTextEditor.selections.length, 1);
-    assert.ok(
-      activeTextEditor.selections[0].isEqual(
-        new Range(new Position(0, 15), new Position(0, 15))
-      )
-    );
+    assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 15), new Position(0, 15))));
   });
 });
 
@@ -136,11 +112,7 @@ suite("with semicolon", () => {
 
       assert.equal(activeTextEditor.selections.length, 1);
       // The cursor at the beginning of the next line
-      assert.ok(
-        activeTextEditor.selections[0].isEqual(
-          new Range(new Position(1, 0), new Position(1, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(1, 0), new Position(1, 0))));
     });
   });
 
@@ -160,11 +132,7 @@ suite("with semicolon", () => {
 
         assert.equal(activeTextEditor.selections.length, 1);
         // The cursor is right to ";"
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(line, 4), new Position(line, 4))
-          )
-        );
+        assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(line, 4), new Position(line, 4))));
       });
     });
   });

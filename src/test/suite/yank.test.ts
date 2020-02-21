@@ -23,9 +23,7 @@ suite("Emulator with yank", () => {
       test("it works with single cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [
-          new Selection(new Position(1, 0), new Position(1, 0))
-        ];
+        activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 0))];
 
         await emulator.runCommand("yank");
 
@@ -43,10 +41,7 @@ suite("Emulator with yank", () => {
 
         await emulator.runCommand("yank");
 
-        assertTextEqual(
-          activeTextEditor,
-          "Lorem ipsum\nLorem ipsum\nLorem ipsum"
-        );
+        assertTextEqual(activeTextEditor, "Lorem ipsum\nLorem ipsum\nLorem ipsum");
       });
     });
 
@@ -58,9 +53,7 @@ suite("Emulator with yank", () => {
       test("it works with single cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [
-          new Selection(new Position(1, 0), new Position(1, 0))
-        ];
+        activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 0))];
 
         await emulator.runCommand("yank");
 
@@ -135,9 +128,7 @@ ABCDEFGHIJ`;
       test("it works with single non-empty cursor (selected text are removed)", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [
-          new Selection(new Position(1, 0), new Position(1, 4))
-        ];
+        activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 4))];
 
         await emulator.runCommand("yank");
 

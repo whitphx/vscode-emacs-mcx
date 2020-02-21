@@ -20,10 +20,7 @@ class AppendedRegionTexts {
     this.regionTexts = [regionText];
   }
 
-  public append(
-    another: AppendedRegionTexts,
-    appendDirection: AppendDirection = AppendDirection.Forward
-  ) {
+  public append(another: AppendedRegionTexts, appendDirection: AppendDirection = AppendDirection.Forward) {
     if (appendDirection === AppendDirection.Forward) {
       this.regionTexts = this.regionTexts.concat(another.regionTexts);
     } else {
@@ -48,9 +45,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
   private regionTextsList: AppendedRegionTexts[];
 
   constructor(regionTexts: IRegionText[]) {
-    this.regionTextsList = regionTexts.map(
-      regionText => new AppendedRegionTexts(regionText)
-    );
+    this.regionTextsList = regionTexts.map(regionText => new AppendedRegionTexts(regionText));
   }
 
   public isSameClipboardText(clipboardText: string): boolean {
@@ -93,17 +88,12 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     return this.regionTextsList;
   }
 
-  public append(
-    entity: EditorTextKillRingEntity,
-    appendDirection: AppendDirection = AppendDirection.Forward
-  ) {
+  public append(entity: EditorTextKillRingEntity, appendDirection: AppendDirection = AppendDirection.Forward) {
     const additional = entity.getregionTextsList();
     if (additional.length !== this.regionTextsList.length) {
       throw Error("Not appendable");
     }
 
-    this.regionTextsList.map((appendedRegionTexts, i) =>
-      appendedRegionTexts.append(additional[i], appendDirection)
-    );
+    this.regionTextsList.map((appendedRegionTexts, i) => appendedRegionTexts.append(additional[i], appendDirection));
   }
 }

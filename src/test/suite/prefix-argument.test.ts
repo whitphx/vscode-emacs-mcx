@@ -1,12 +1,7 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import {
-  assertTextEqual,
-  cleanUpWorkspace,
-  setEmptyCursors,
-  setupWorkspace
-} from "./utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "./utils";
 
 suite("Prefix argument (Universal argument: C-u)", () => {
   let activeTextEditor: TextEditor;
@@ -140,286 +135,186 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     });
   });
 
-  suite(
-    "repeating EmacsEmulator's command (cursorMove (forwardChar)) with prefix command",
-    () => {
-      setup(async () => {
-        activeTextEditor = await setupWorkspace(
-          "abcdefghijklmnopqrst\nabcdefghijklmnopqrst"
-        );
-        emulator = new EmacsEmulator(activeTextEditor);
-      });
+  suite("repeating EmacsEmulator's command (cursorMove (forwardChar)) with prefix command", () => {
+    setup(async () => {
+      activeTextEditor = await setupWorkspace("abcdefghijklmnopqrst\nabcdefghijklmnopqrst");
+      emulator = new EmacsEmulator(activeTextEditor);
+    });
 
-      teardown(cleanUpWorkspace);
+    teardown(cleanUpWorkspace);
 
-      test("repeating cursorMove for the given argument", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("repeating cursorMove for the given argument", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 3), new Position(0, 3))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 3), new Position(0, 3))));
 
-        // exitied from universal argument mode
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assertTextEqual(
-          activeTextEditor,
-          "abc3defghijklmnopqrst\nabcdefghijklmnopqrst"
-        );
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 5), new Position(0, 5))
-          )
-        );
-      });
+      assertTextEqual(activeTextEditor, "abc3defghijklmnopqrst\nabcdefghijklmnopqrst");
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
+    });
 
-      test("repeating cursorMove for the given argument 0", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("repeating cursorMove for the given argument 0", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        await emulator.type("0");
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.type("0");
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 0), new Position(0, 0))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 0))));
 
-        // exitied from universal argument mode
-        await emulator.type("0");
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.type("0");
+      await emulator.runCommand("forwardChar");
 
-        assertTextEqual(
-          activeTextEditor,
-          "0abcdefghijklmnopqrst\nabcdefghijklmnopqrst"
-        );
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 2), new Position(0, 2))
-          )
-        );
-      });
+      assertTextEqual(activeTextEditor, "0abcdefghijklmnopqrst\nabcdefghijklmnopqrst");
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 2), new Position(0, 2))));
+    });
 
-      test("repeating cursorMove for the given argument prefixed by 0", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("repeating cursorMove for the given argument prefixed by 0", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        await emulator.type("0");
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.type("0");
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 3), new Position(0, 3))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 3), new Position(0, 3))));
 
-        // exitied from universal argument mode
-        await emulator.type("0");
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.type("0");
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assertTextEqual(
-          activeTextEditor,
-          "abc03defghijklmnopqrst\nabcdefghijklmnopqrst"
-        );
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 6), new Position(0, 6))
-          )
-        );
-      });
+      assertTextEqual(activeTextEditor, "abc03defghijklmnopqrst\nabcdefghijklmnopqrst");
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 6), new Position(0, 6))));
+    });
 
-      test("repeating cursorMove for the given argument with multiple digits", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("repeating cursorMove for the given argument with multiple digits", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        await emulator.type("1");
-        await emulator.type("2");
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.type("1");
+      await emulator.type("2");
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 12), new Position(0, 12))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 12), new Position(0, 12))));
 
-        // exitied from universal argument mode
-        await emulator.type("1");
-        await emulator.type("2");
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.type("1");
+      await emulator.type("2");
+      await emulator.runCommand("forwardChar");
 
-        assertTextEqual(
-          activeTextEditor,
-          "abcdefghijkl12mnopqrst\nabcdefghijklmnopqrst"
-        );
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 15), new Position(0, 15))
-          )
-        );
-      });
+      assertTextEqual(activeTextEditor, "abcdefghijkl12mnopqrst\nabcdefghijklmnopqrst");
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 15), new Position(0, 15))));
+    });
 
-      test("repeating cursorMove for the default argument (4)", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("repeating cursorMove for the default argument (4)", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 4), new Position(0, 4))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 4), new Position(0, 4))));
 
-        // exitied from universal argument mode
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 5), new Position(0, 5))
-          )
-        );
-      });
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
+    });
 
-      test("repeating charactor input with 2 C-u", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("repeating charactor input with 2 C-u", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        emulator.universalArgument();
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      emulator.universalArgument();
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 16), new Position(0, 16))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 16), new Position(0, 16))));
 
-        // exitied from universal argument mode
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 17), new Position(0, 17))
-          )
-        );
-      });
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 17), new Position(0, 17))));
+    });
 
-      test("c-u stops prefix argument input", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("c-u stops prefix argument input", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        await emulator.type("1");
-        await emulator.type("2");
-        emulator.universalArgument();
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.type("1");
+      await emulator.type("2");
+      emulator.universalArgument();
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 12), new Position(0, 12))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 12), new Position(0, 12))));
 
-        // exitied from universal argument mode
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 13), new Position(0, 13))
-          )
-        );
-      });
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 13), new Position(0, 13))));
+    });
 
-      test("numerical input cancels previous repeated c-u", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0]);
+    test("numerical input cancels previous repeated c-u", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
-        emulator.universalArgument();
-        emulator.universalArgument();
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      emulator.universalArgument();
+      emulator.universalArgument();
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 3), new Position(0, 3))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 3), new Position(0, 3))));
 
-        // exitied from universal argument mode
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 1);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 4), new Position(0, 4))
-          )
-        );
-      });
+      assert.equal(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 4), new Position(0, 4))));
+    });
 
-      test("multicursor with given argument", async () => {
-        setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
+    test("multicursor with given argument", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
 
-        emulator.universalArgument();
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      emulator.universalArgument();
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assert.equal(activeTextEditor.selections.length, 2);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 3), new Position(0, 3))
-          )
-        );
-        assert.ok(
-          activeTextEditor.selections[1].isEqual(
-            new Range(new Position(1, 3), new Position(1, 3))
-          )
-        );
+      assert.equal(activeTextEditor.selections.length, 2);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 3), new Position(0, 3))));
+      assert.ok(activeTextEditor.selections[1].isEqual(new Range(new Position(1, 3), new Position(1, 3))));
 
-        // exitied from universal argument mode
-        await emulator.type("3");
-        await emulator.runCommand("forwardChar");
+      // exitied from universal argument mode
+      await emulator.type("3");
+      await emulator.runCommand("forwardChar");
 
-        assertTextEqual(
-          activeTextEditor,
-          "abc3defghijklmnopqrst\nabc3defghijklmnopqrst"
-        );
-        assert.equal(activeTextEditor.selections.length, 2);
-        assert.ok(
-          activeTextEditor.selections[0].isEqual(
-            new Range(new Position(0, 5), new Position(0, 5))
-          )
-        );
-        assert.ok(
-          activeTextEditor.selections[1].isEqual(
-            new Range(new Position(1, 5), new Position(1, 5))
-          )
-        );
-      });
-    }
-  );
+      assertTextEqual(activeTextEditor, "abc3defghijklmnopqrst\nabc3defghijklmnopqrst");
+      assert.equal(activeTextEditor.selections.length, 2);
+      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
+      assert.ok(activeTextEditor.selections[1].isEqual(new Range(new Position(1, 5), new Position(1, 5))));
+    });
+  });
 
   suite("with forwardChar in multi-line text", () => {
     setup(async () => {
@@ -438,11 +333,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selection.isEqual(
-          new Range(new Position(4, 0), new Position(4, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(4, 0), new Position(4, 0))));
     });
 
     test("cursor moves at most to the end of the text", async () => {
@@ -455,11 +346,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selection.isEqual(
-          new Range(new Position(8, 0), new Position(8, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(8, 0), new Position(8, 0))));
     });
   });
 
@@ -480,11 +367,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("backwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selection.isEqual(
-          new Range(new Position(4, 0), new Position(4, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(4, 0), new Position(4, 0))));
     });
 
     test("cursor moves at most to the beginning of the text", async () => {
@@ -497,11 +380,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("backwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selection.isEqual(
-          new Range(new Position(0, 0), new Position(0, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selection.isEqual(new Range(new Position(0, 0), new Position(0, 0))));
     });
   });
 });

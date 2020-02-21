@@ -1,11 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import {
-  assertTextEqual,
-  cleanUpWorkspace,
-  setEmptyCursors,
-  setupWorkspace
-} from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../utils";
 
 suite("deleteForwardChar", () => {
   let activeTextEditor: vscode.TextEditor;

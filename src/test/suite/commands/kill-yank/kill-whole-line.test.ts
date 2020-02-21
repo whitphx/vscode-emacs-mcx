@@ -2,12 +2,7 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
-import {
-  assertTextEqual,
-  cleanUpWorkspace,
-  clearTextEditor,
-  setupWorkspace
-} from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace } from "../../utils";
 
 suite("Emulator.killWholeLine", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -30,10 +25,7 @@ ABCDEFGHIJ`;
           const emulator = new EmacsEmulator(activeTextEditor);
 
           activeTextEditor.selections = [
-            new Selection(
-              new Position(cursorLineNum, cursorCharNum),
-              new Position(cursorLineNum, cursorCharNum)
-            )
+            new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum))
           ];
 
           await emulator.runCommand("killWholeLine");
@@ -46,9 +38,7 @@ ABCDEFGHIJ`
 
           // Check the cut text
           clearTextEditor(activeTextEditor);
-          activeTextEditor.selections = [
-            new Selection(new Position(0, 0), new Position(0, 0))
-          ];
+          activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
           await emulator.runCommand("yank");
           assert.equal(activeTextEditor.document.getText(), "abcdefghij\n");
         });
@@ -63,10 +53,7 @@ ABCDEFGHIJ`
           const emulator = new EmacsEmulator(activeTextEditor);
 
           activeTextEditor.selections = [
-            new Selection(
-              new Position(cursorLineNum, cursorCharNum),
-              new Position(cursorLineNum, cursorCharNum)
-            )
+            new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum))
           ];
 
           await emulator.runCommand("killWholeLine");
@@ -80,9 +67,7 @@ abcdefghij
 
           // Check the cut text
           clearTextEditor(activeTextEditor);
-          activeTextEditor.selections = [
-            new Selection(new Position(0, 0), new Position(0, 0))
-          ];
+          activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
           await emulator.runCommand("yank");
           assert.equal(activeTextEditor.document.getText(), "ABCDEFGHIJ");
         });

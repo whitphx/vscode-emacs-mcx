@@ -37,9 +37,7 @@ DEFGHIJ`
 
       clearTextEditor(activeTextEditor);
 
-      activeTextEditor.selections = [
-        new Selection(new Position(0, 0), new Position(0, 0))
-      ];
+      activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
       await emulator.runCommand("yank");
 
       assert.equal(

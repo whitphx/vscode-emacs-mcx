@@ -1,9 +1,6 @@
 import { Position } from "vscode";
 
-export function equalPositons(
-  positions1: Position[],
-  positions2: Position[]
-): boolean {
+export function equalPositons(positions1: Position[], positions2: Position[]): boolean {
   if (positions1.length !== positions2.length) {
     return false;
   }

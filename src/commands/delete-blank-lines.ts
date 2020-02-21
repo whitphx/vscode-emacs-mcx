@@ -5,11 +5,7 @@ import { EmacsCommand } from ".";
 export class DeleteBlankLines extends EmacsCommand {
   public readonly id = "deleteBlankLines";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const document = textEditor.document;
 
     for (let iSel = 0; iSel < textEditor.selections.length; ++iSel) {
@@ -32,8 +28,7 @@ export class DeleteBlankLines extends EmacsCommand {
       let followingLineOffset = 0;
       while (
         curLineNum + followingLineOffset + 1 < document.lineCount &&
-        document.lineAt(curLineNum + followingLineOffset + 1)
-          .isEmptyOrWhitespace
+        document.lineAt(curLineNum + followingLineOffset + 1).isEmptyOrWhitespace
       ) {
         followingLineOffset++;
       }
@@ -55,9 +50,7 @@ export class DeleteBlankLines extends EmacsCommand {
           editBuilder.delete(
             new Range(
               new Position(curLineNum + 1, 0),
-              document.lineAt(
-                finalFollowingEmptyLineNum
-              ).rangeIncludingLineBreak.end
+              document.lineAt(finalFollowingEmptyLineNum).rangeIncludingLineBreak.end
             )
           );
         }

@@ -1,10 +1,7 @@
 import { TextEditor } from "vscode";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 
-export function createParallel<T>(
-  concurrency: number,
-  promiseFactory: () => Thenable<T>
-): Thenable<T[]> {
+export function createParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
   return Promise.all(Array.from({ length: concurrency }, promiseFactory));
 }
 
@@ -14,10 +11,7 @@ export abstract class EmacsCommand {
   protected emacsController: IMarkModeController & IEmacsCommandRunner;
   private afterExecute: () => void;
 
-  public constructor(
-    afterExecute: () => void,
-    markModeController: IMarkModeController & IEmacsCommandRunner
-  ) {
+  public constructor(afterExecute: () => void, markModeController: IMarkModeController & IEmacsCommandRunner) {
     this.afterExecute = afterExecute;
     this.emacsController = markModeController;
   }
@@ -47,8 +41,6 @@ export interface IEmacsCommandInterrupted {
   onDidInterruptTextEditor(): void;
 }
 
-export function instanceOfIEmacsCommandInterrupted(
-  obj: any
-): obj is IEmacsCommandInterrupted {
+export function instanceOfIEmacsCommandInterrupted(obj: any): obj is IEmacsCommandInterrupted {
   return typeof obj.onDidInterruptTextEditor === "function";
 }

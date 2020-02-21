@@ -32,12 +32,8 @@ export class KillYanker {
 
     this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
-    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(
-      this
-    );
-    vscode.window.onDidChangeTextEditorSelection(
-      this.onDidChangeTextEditorSelection
-    );
+    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
+    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
   }
 
   public setTextEditor(textEditor: TextEditor) {
@@ -56,23 +52,14 @@ export class KillYanker {
     }
   }
 
-  public onDidChangeTextEditorSelection(
-    e: vscode.TextEditorSelectionChangeEvent
-  ) {
-    if (
-      new EditorIdentity(e.textEditor).isEqual(
-        new EditorIdentity(this.textEditor)
-      )
-    ) {
+  public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
+    if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
       this.docChangedAfterYank = true;
       this.isAppending = false;
     }
   }
 
-  public async kill(
-    ranges: Range[],
-    appendDirection: AppendDirection = AppendDirection.Forward
-  ) {
+  public async kill(ranges: Range[], appendDirection: AppendDirection = AppendDirection.Forward) {
     if (!equalPositons(this.getCursorPositions(), this.prevKillPositions)) {
       this.isAppending = false;
     }
@@ -85,11 +72,7 @@ export class KillYanker {
     this.prevKillPositions = this.getCursorPositions();
   }
 
-  public copy(
-    ranges: Range[],
-    shouldAppend = false,
-    appendDirection: AppendDirection = AppendDirection.Forward
-  ) {
+  public copy(ranges: Range[], shouldAppend = false, appendDirection: AppendDirection = AppendDirection.Forward) {
     const newKillEntity = new EditorTextKillRingEntity(
       ranges.map(range => ({
         range,
@@ -117,19 +100,14 @@ export class KillYanker {
 
   public async yank() {
     if (this.killRing === null) {
-      return vscode.commands.executeCommand(
-        "editor.action.clipboardPasteAction"
-      );
+      return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
     }
 
     const clipboardText = clipboardy.readSync();
     const killRingEntity = this.killRing.getTop();
 
     let pasteText: string;
-    if (
-      killRingEntity === null ||
-      !killRingEntity.isSameClipboardText(clipboardText)
-    ) {
+    if (killRingEntity === null || !killRingEntity.isSameClipboardText(clipboardText)) {
       this.killRing.push(new ClipboardTextKillRingEntity(clipboardText));
       pasteText = clipboardText;
     } else {
@@ -139,9 +117,7 @@ export class KillYanker {
     await vscode.commands.executeCommand("paste", { text: pasteText });
 
     this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map(
-      selection => selection.active
-    );
+    this.prevYankPositions = this.textEditor.selections.map(selection => selection.active);
   }
 
   public async yankPop() {
@@ -168,15 +144,10 @@ export class KillYanker {
     await vscode.commands.executeCommand("paste", { text });
 
     this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map(
-      selection => selection.active
-    );
+    this.prevYankPositions = this.textEditor.selections.map(selection => selection.active);
   }
 
-  private async delete(
-    ranges: vscode.Range[],
-    maxTrials = 3
-  ): Promise<boolean> {
+  private async delete(ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
     let success = false;
     let trial = 0;
     while (!success && trial < maxTrials) {

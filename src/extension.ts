@@ -55,22 +55,19 @@ export function activate(context: vscode.ExtensionContext) {
     callback: (emulator: EmacsEmulator, ...args: any[]) => any,
     onNoEmulator?: (...args: any[]) => any
   ) {
-    const disposable = vscode.commands.registerCommand(
-      commandName,
-      (...args) => {
-        logger.debug(`[command]\t Command executed: "${commandName}"`);
+    const disposable = vscode.commands.registerCommand(commandName, (...args) => {
+      logger.debug(`[command]\t Command executed: "${commandName}"`);
 
-        const emulator = getAndUpdateEmulator();
-        if (!emulator) {
-          if (typeof onNoEmulator === "function") {
-            onNoEmulator(...args);
-          }
-          return;
+      const emulator = getAndUpdateEmulator();
+      if (!emulator) {
+        if (typeof onNoEmulator === "function") {
+          onNoEmulator(...args);
         }
-
-        callback(emulator, ...args);
+        return;
       }
-    );
+
+      callback(emulator, ...args);
+    });
     context.subscriptions.push(disposable);
   }
 
@@ -143,12 +140,9 @@ export function activate(context: vscode.ExtensionContext) {
     emulator.runCommand("addSelectionToNextFindMatch");
   });
 
-  registerEmulatorCommand(
-    "emacs-mcx.addSelectionToPreviousFindMatch",
-    emulator => {
-      emulator.runCommand("addSelectionToPreviousFindMatch");
-    }
-  );
+  registerEmulatorCommand("emacs-mcx.addSelectionToPreviousFindMatch", emulator => {
+    emulator.runCommand("addSelectionToPreviousFindMatch");
+  });
 
   registerEmulatorCommand("emacs-mcx.cancel", emulator => {
     emulator.cancel();
@@ -190,14 +184,11 @@ export function activate(context: vscode.ExtensionContext) {
     emulator.runCommand("paredit.backwardUpSexp");
   });
 
-  vscode.commands.registerCommand(
-    "emacs-mcx.executeCommands",
-    async (...args: any[]) => {
-      if (1 <= args.length) {
-        executeCommands(args[0]);
-      }
+  vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
+    if (1 <= args.length) {
+      executeCommands(args[0]);
     }
-  );
+  });
 }
 
 // this method is called when your extension is deactivated

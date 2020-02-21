@@ -23,22 +23,15 @@ export async function setupWorkspace(
   assert.ok(activeTextEditor);
 
   // Set EOL to LF for the tests to work even on Windows
-  (activeTextEditor as TextEditor).edit(editBuilder =>
-    editBuilder.setEndOfLine(eol)
-  );
+  (activeTextEditor as TextEditor).edit(editBuilder => editBuilder.setEndOfLine(eol));
 
   return activeTextEditor!;
 }
 
-export async function clearTextEditor(
-  textEditor: TextEditor,
-  initializeWith = ""
-) {
+export async function clearTextEditor(textEditor: TextEditor, initializeWith = "") {
   const doc = textEditor.document;
   await textEditor.edit(editBuilder => {
-    editBuilder.delete(
-      new Range(new Position(0, 0), doc.positionAt(doc.getText().length))
-    );
+    editBuilder.delete(new Range(new Position(0, 0), doc.positionAt(doc.getText().length)));
   });
   await textEditor.edit(editBuilder => {
     editBuilder.insert(new Position(0, 0), initializeWith);
@@ -46,13 +39,8 @@ export async function clearTextEditor(
   assert.equal(doc.getText(), initializeWith);
 }
 
-export function setEmptyCursors(
-  textEditor: TextEditor,
-  ...positions: Array<[number, number]>
-) {
-  textEditor.selections = positions.map(
-    p => new Selection(new Position(p[0], p[1]), new Position(p[0], p[1]))
-  );
+export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>) {
+  textEditor.selections = positions.map(p => new Selection(new Position(p[0], p[1]), new Position(p[0], p[1])));
 }
 
 export async function cleanUpWorkspace() {
@@ -63,17 +51,10 @@ export function assertTextEqual(textEditor: TextEditor, expectedText: string) {
   assert.equal(textEditor.document.getText(), expectedText);
 }
 
-export function assertCursorsEqual(
-  textEditor: TextEditor,
-  ...positions: Array<[number, number]>
-) {
+export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[number, number]>) {
   assert.equal(textEditor.selections.length, positions.length);
   textEditor.selections.forEach((selection, idx) => {
     const pos = positions[idx];
-    assert.ok(
-      selection.isEqual(
-        new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]))
-      )
-    );
+    assert.ok(selection.isEqual(new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]))));
   });
 }

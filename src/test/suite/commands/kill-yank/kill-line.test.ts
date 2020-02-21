@@ -4,13 +4,7 @@ import { Position, Range, Selection } from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import {
-  assertTextEqual,
-  cleanUpWorkspace,
-  clearTextEditor,
-  setEmptyCursors,
-  setupWorkspace
-} from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace } from "../../utils";
 
 suite("killLine", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -151,47 +145,28 @@ abcdefghij
     });
 
     // Test kill appending is not enabled after cursorMoves, editing, or some other ops
-    const moves = moveCommandIds.map((commandName): [
-      string,
-      () => Thenable<any> | undefined
-    ] => [commandName, () => emulator.runCommand(commandName)]);
+    const moves = moveCommandIds.map((commandName): [string, () => Thenable<any> | undefined] => [
+      commandName,
+      () => emulator.runCommand(commandName)
+    ]);
     const edits: Array<[string, () => Thenable<any>]> = [
-      [
-        "edit",
-        () =>
-          activeTextEditor.edit(editBuilder =>
-            editBuilder.insert(new Position(0, 0), "hoge")
-          )
-      ],
+      ["edit", () => activeTextEditor.edit(editBuilder => editBuilder.insert(new Position(0, 0), "hoge"))],
       [
         "delete",
         () =>
-          activeTextEditor.edit(editBuilder =>
-            editBuilder.delete(
-              new Range(new Position(0, 0), new Position(0, 1))
-            )
-          )
+          activeTextEditor.edit(editBuilder => editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))
       ],
       [
         "replace",
         () =>
           activeTextEditor.edit(editBuilder =>
-            editBuilder.replace(
-              new Range(new Position(0, 0), new Position(0, 1)),
-              "hoge"
-            )
+            editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
           )
       ]
     ];
-    const otherOps: Array<[string, () => Thenable<any>]> = [
-      ["cancel", async () => await emulator.cancel()]
-    ];
+    const otherOps: Array<[string, () => Thenable<any>]> = [["cancel", async () => await emulator.cancel()]];
 
-    const ops: Array<[string, () => Thenable<any> | undefined]> = [
-      ...moves,
-      ...edits,
-      ...otherOps
-    ];
+    const ops: Array<[string, () => Thenable<any> | undefined]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {
       test(`it does not append the killed text after ${label}`, async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
@@ -233,11 +208,7 @@ abcdefghij
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(
-        activeTextEditor.selection.isEqual(
-          new Selection(new Position(0, 0), new Position(0, 0))
-        )
-      );
+      assert.ok(activeTextEditor.selection.isEqual(new Selection(new Position(0, 0), new Position(0, 0))));
 
       await clearTextEditor(activeTextEditor);
 
