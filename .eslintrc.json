@@ -8,9 +8,18 @@
     "plugins": [
         "@typescript-eslint"
     ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/eslint-recommended"
+    ],
+    "env": {
+        "mocha": true
+    },
     "rules": {
         "@typescript-eslint/class-name-casing": "warn",
         "@typescript-eslint/semi": "warn",
+        "@typescript-eslint/interface-name-prefix": "warn",
         "curly": "warn",
         "eqeqeq": "warn",
         "no-throw-literal": "warn",

@@ -1,4 +1,3 @@
-// tslint:disable:max-classes-per-file
 import * as paredit from "paredit.js";
 import { Selection, TextEditor, TextEditorRevealType } from "vscode";
 import { EmacsCommand } from ".";

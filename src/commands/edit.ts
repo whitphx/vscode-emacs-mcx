@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-// tslint:disable:object-literal-sort-keys
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";

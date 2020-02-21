@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-// tslint:disable:object-literal-sort-keys
 import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
@@ -19,7 +17,7 @@ abstract class KillYankCommand extends EmacsCommand {
     }
 }
 
-function findNextKillWordRange(doc: TextDocument, position: Position, repeat: number = 1) {
+function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
     const doclen = doc.getText().length;
     let idx = doc.offsetAt(position) + 1;
 
@@ -68,7 +66,7 @@ export class KillWord extends KillYankCommand {
     }
 }
 
-function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat: number = 1) {
+function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
     // const doclen = doc.getText().length;
     let idx = doc.offsetAt(position) - 1;
 

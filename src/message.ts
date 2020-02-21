@@ -32,7 +32,7 @@ export class MessageManager implements vscode.Disposable {
     private timeout: number;
     private disposable: vscode.Disposable | null = null;
 
-    private constructor(timeout: number = 10000) {
+    private constructor(timeout = 10000) {
         this.timeout = timeout;
 
         this.onInterrupt = this.onInterrupt.bind(this);

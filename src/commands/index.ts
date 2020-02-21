@@ -2,7 +2,7 @@ import { TextEditor } from "vscode";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 
 export function createParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
-    return Promise.all(Array.apply(null, Array(concurrency)).map(promiseFactory));
+    return Promise.all(Array.from({ length: concurrency }, promiseFactory));
 }
 
 export abstract class EmacsCommand {

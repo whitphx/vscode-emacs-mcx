@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-// tslint:disable:object-literal-sort-keys
 import * as vscode from "vscode";
 import { TextEditor, TextEditorRevealType } from "vscode";
 import { EmacsCommand, IEmacsCommandInterrupted } from ".";
@@ -17,15 +15,17 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
 
     public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         switch (this.recenterPosition) {
-            case RecenterPosition.Middle:
+            case RecenterPosition.Middle: {
                 textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenter);
                 this.recenterPosition = RecenterPosition.Top;
                 break;
-            case RecenterPosition.Top:
+            }
+            case RecenterPosition.Top: {
                 textEditor.revealRange(textEditor.selection, TextEditorRevealType.AtTop);
                 this.recenterPosition = RecenterPosition.Bottom;
                 break;
-            case RecenterPosition.Bottom:
+            }
+            case RecenterPosition.Bottom: {
                 // TextEditor.revealRange does not supprt to set the cursor at the bottom of window.
                 // Therefore, the number of lines to scroll is calculated here.
                 const current = textEditor.selection.active.line;
@@ -42,6 +42,7 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
 
                 this.recenterPosition = RecenterPosition.Middle;
                 break;
+            }
         }
     }
 

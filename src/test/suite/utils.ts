@@ -3,13 +3,13 @@ import * as vscode from "vscode";
 import {Position, Range, Selection, TextEditor} from "vscode";
 
 export async function setupWorkspace(
-    initialText: string = "",
+    initialText = "",
     {
         eol = vscode.EndOfLine.LF,
         language = "text",
     }: {
-        eol?: vscode.EndOfLine,
-        language?: string,
+        eol?: vscode.EndOfLine;
+        language?: string;
     } = {},
 ): Promise<vscode.TextEditor> {
     const doc = await vscode.workspace.openTextDocument({
@@ -28,7 +28,7 @@ export async function setupWorkspace(
     return activeTextEditor!;
 }
 
-export async function clearTextEditor(textEditor: TextEditor, initializeWith: string = "") {
+export async function clearTextEditor(textEditor: TextEditor, initializeWith = "") {
     const doc = textEditor.document;
     await textEditor.edit((editBuilder) => {
         editBuilder.delete(new Range(
@@ -51,6 +51,7 @@ export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[num
 }
 
 export async function cleanUpWorkspace() {
+  return;
 }
 
 export function assertTextEqual(textEditor: TextEditor, expectedText: string) {

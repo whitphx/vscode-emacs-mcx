@@ -8,7 +8,6 @@ export class DeleteBlankLines extends EmacsCommand {
     public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
         const document = textEditor.document;
 
-        // tslint:disable-next-line:prefer-for-of
         for (let iSel = 0; iSel < textEditor.selections.length; ++iSel) {
             // `selection[iSel]` is mutated during the loop,
             // therefore, each selection must be obtained
