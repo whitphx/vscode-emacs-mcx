@@ -5,26 +5,12 @@ import {
   AddSelectionToNextFindMatch,
   AddSelectionToPreviousFindMatch
 } from "./commands/add-selection-to-find-match";
-import { TransformToLowercase, TransformToUppercase } from "./commands/case";
+import * as CaseCommands from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
-import {
-  BackwardKillWord,
-  CopyRegion,
-  KillLine,
-  KillRegion,
-  KillWholeLine,
-  KillWord,
-  Yank,
-  YankPop
-} from "./commands/kill";
+import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
-import {
-  BackwardSexp,
-  BackwardUpSexp,
-  ForwardDownSexp,
-  ForwardSexp
-} from "./commands/paredit";
+import * as PareditCommands from "./commands/paredit";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { EditorIdentity } from "./editorIdentity";
@@ -124,10 +110,18 @@ export class EmacsEmulator
       new DeleteBlankLines(this.afterCommand, this)
     );
 
-    this.commandRegistry.register(new ForwardSexp(this.afterCommand, this));
-    this.commandRegistry.register(new BackwardSexp(this.afterCommand, this));
-    this.commandRegistry.register(new ForwardDownSexp(this.afterCommand, this));
-    this.commandRegistry.register(new BackwardUpSexp(this.afterCommand, this));
+    this.commandRegistry.register(
+      new PareditCommands.ForwardSexp(this.afterCommand, this)
+    );
+    this.commandRegistry.register(
+      new PareditCommands.BackwardSexp(this.afterCommand, this)
+    );
+    this.commandRegistry.register(
+      new PareditCommands.ForwardDownSexp(this.afterCommand, this)
+    );
+    this.commandRegistry.register(
+      new PareditCommands.BackwardUpSexp(this.afterCommand, this)
+    );
 
     this.commandRegistry.register(
       new RecenterTopBottom(this.afterCommand, this)
@@ -135,28 +129,28 @@ export class EmacsEmulator
 
     const killYanker = new KillYanker(textEditor, killRing);
     this.commandRegistry.register(
-      new KillWord(this.afterCommand, this, killYanker)
+      new KillCommands.KillWord(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new BackwardKillWord(this.afterCommand, this, killYanker)
+      new KillCommands.BackwardKillWord(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new KillLine(this.afterCommand, this, killYanker)
+      new KillCommands.KillLine(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new KillWholeLine(this.afterCommand, this, killYanker)
+      new KillCommands.KillWholeLine(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new KillRegion(this.afterCommand, this, killYanker)
+      new KillCommands.KillRegion(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new CopyRegion(this.afterCommand, this, killYanker)
+      new KillCommands.CopyRegion(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new Yank(this.afterCommand, this, killYanker)
+      new KillCommands.Yank(this.afterCommand, this, killYanker)
     );
     this.commandRegistry.register(
-      new YankPop(this.afterCommand, this, killYanker)
+      new KillCommands.YankPop(this.afterCommand, this, killYanker)
     );
     this.killYanker = killYanker; // TODO: To be removed
 
@@ -168,10 +162,10 @@ export class EmacsEmulator
     );
 
     this.commandRegistry.register(
-      new TransformToUppercase(this.afterCommand, this)
+      new CaseCommands.TransformToUppercase(this.afterCommand, this)
     );
     this.commandRegistry.register(
-      new TransformToLowercase(this.afterCommand, this)
+      new CaseCommands.TransformToLowercase(this.afterCommand, this)
     );
   }
 
