@@ -938,7 +938,7 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^7.0.2",
-		"@types/node": "^13.9.0",
+		"@types/node": "^13.9.1",
 		"@types/vscode": "^1.42.0",
 		"@typescript-eslint/eslint-plugin": "^2.23.0",
 		"@typescript-eslint/parser": "^2.23.0",
