@@ -1,960 +1,970 @@
 {
-	"name": "emacs-mcx",
-	"displayName": "Awesome Emacs Keymap",
-	"description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
-	"version": "0.14.1",
-	"publisher": "tuttieee",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/tuttieee/vscode-emacs-mcx"
-	},
-	"engines": {
-		"vscode": "^1.42.0"
-	},
-	"categories": [
-		"Other",
-		"Keymaps"
-	],
-	"license": "MIT",
-	"icon": "images/icon.png",
-	"keywords": [
-		"emacs",
-		"keybindings",
-		"multi cursor",
-		"selection",
-		"mark mode"
-	],
-	"activationEvents": [
-		"*"
-	],
-	"extensionKind": [
-		"ui"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"configuration": {
-			"type": "object",
-			"title": "Awesome Emacs Keymap (emacs-mcx) configuration",
-			"properties": {
-				"emacs-mcx.killRingMax": {
-					"type": "number",
-					"default": 60,
-					"description": "Maximum number of Kill ring entries"
-				},
-				"emacs-mcx.strictEmacsMove": {
-					"type": "boolean",
-					"default": false,
-					"description": "Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones"
-				},
-				"emacs-mcx.debug.silent": {
-					"type": "boolean",
-					"description": "If true, all logs are suppressed.",
-					"default": false
-				},
-				"emacs-mcx.debug.loggingLevelForAlert": {
-					"type": "string",
-					"description": "Maximum level of messages to present as VS Code information window.",
-					"default": "error",
-					"enum": [
-						"error",
-						"warn",
-						"info",
-						"verbose",
-						"debug",
-						"silly"
-					]
-				},
-				"emacs-mcx.debug.loggingLevelForConsole": {
-					"type": "string",
-					"description": "Maximum level of messages to log to console. Logs are visible in developer tools.",
-					"default": "error",
-					"enum": [
-						"error",
-						"warn",
-						"info",
-						"verbose",
-						"debug",
-						"silly"
-					]
-				}
-			}
-		},
-		"keybindings": [
-			{
-				"key": "right",
-				"command": "emacs-mcx.forwardChar",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "right",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.forwardChar"
-				]
-			},
-			{
-				"key": "ctrl+f",
-				"command": "emacs-mcx.forwardChar",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+f",
-				"command": "emacs-mcx.forwardChar",
-				"when": "terminalFocus"
-			},
-			{
-				"key": "ctrl+f",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.forwardChar"
-				]
-			},
-			{
-				"key": "left",
-				"command": "emacs-mcx.backwardChar",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "left",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.backwardChar",
-					"emacs-mcx.backwardChar"
-				]
-			},
-			{
-				"key": "ctrl+b",
-				"command": "emacs-mcx.backwardChar",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+b",
-				"command": "emacs-mcx.backwardChar",
-				"when": "terminalFocus"
-			},
-			{
-				"key": "ctrl+b",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.backwardChar",
-					"emacs-mcx.backwardChar"
-				]
-			},
-			{
-				"key": "up",
-				"command": "emacs-mcx.previousLine",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "up",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.previousLine"
-				]
-			},
-			{
-				"key": "ctrl+p",
-				"command": "emacs-mcx.previousLine",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "emacs-mcx.previousLine",
-				"when": "terminalFocus"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.previousLine"
-				]
-			},
-			{
-				"key": "down",
-				"command": "emacs-mcx.nextLine",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "down",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.nextLine"
-				]
-			},
-			{
-				"key": "ctrl+n",
-				"command": "emacs-mcx.nextLine",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "emacs-mcx.nextLine",
-				"when": "terminalFocus"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.nextLine"
-				]
-			},
-			{
-				"key": "home",
-				"command": "emacs-mcx.moveBeginningOfLine",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "home",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.moveBeginningOfLine"
-				]
-			},
-			{
-				"key": "ctrl+a",
-				"command": "emacs-mcx.moveBeginningOfLine",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+a",
-				"command": "emacs-mcx.moveBeginningOfLine",
-				"when": "terminalFocus"
-			},
-			{
-				"key": "ctrl+a",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.moveBeginningOfLine"
-				]
-			},
-			{
-				"key": "end",
-				"command": "emacs-mcx.moveEndOfLine",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "end",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.moveEndOfLine"
-				]
-			},
-			{
-				"key": "ctrl+e",
-				"command": "emacs-mcx.moveEndOfLine",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+e",
-				"command": "emacs-mcx.moveEndOfLine",
-				"when": "terminalFocus"
-			},
-			{
-				"key": "ctrl+e",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.moveEndOfLine"
-				]
-			},
-			{
-				"key": "alt+f",
-				"command": "emacs-mcx.forwardWord",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "alt+f",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.forwardWord"
-				]
-			},
-			{
-				"key": "alt+b",
-				"command": "emacs-mcx.backwardWord",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "alt+b",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.backwardWord"
-				]
-			},
-			{
-				"key": "pagedown",
-				"command": "emacs-mcx.scrollUpCommand",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "pagedown",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+v",
-				"command": "emacs-mcx.scrollUpCommand",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+v",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "pageup",
-				"command": "emacs-mcx.scrollDownCommand",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "pageup",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "alt+v",
-				"command": "emacs-mcx.scrollDownCommand",
-				"when": "editorTextFocus && !suggestWidgetVisible"
-			},
-			{
-				"key": "alt+v",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "alt+shift+.",
-				"command": "emacs-mcx.endOfBuffer",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "alt+shift+.",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.endOfBuffer"
-				]
-			},
-			{
-				"key": "alt+shift+,",
-				"command": "emacs-mcx.beginningOfBuffer",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "alt+shift+,",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.beginningOfBuffer"
-				]
-			},
-			{
-				"key": "alt+g alt+g",
-				"command": "workbench.action.gotoLine"
-			},
-			{
-				"key": "alt+g g",
-				"command": "workbench.action.gotoLine"
-			},
-			{
-				"key": "alt+g alt+g",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"workbench.action.gotoLine"
-				]
-			},
-			{
-				"key": "alt+g g",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"workbench.action.gotoLine"
-				]
-			},
-			{
-				"key": "alt+g n",
-				"command": "editor.action.marker.next"
-			},
-			{
-				"key": "alt+g alt+n",
-				"command": "editor.action.marker.next"
-			},
-			{
-				"key": "ctrl+x `",
-				"command": "editor.action.marker.next"
-			},
-			{
-				"key": "alt+g p",
-				"command": "editor.action.marker.prev"
-			},
-			{
-				"key": "alt+g alt+p",
-				"command": "editor.action.marker.prev"
-			},
-			{
-				"key": "ctrl+l",
-				"command": "emacs-mcx.recenterTopBottom",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+s",
-				"command": "actions.find",
-				"when": "!findWidgetVisible"
-			},
-			{
-				"key": "ctrl+s",
-				"command": "editor.action.nextMatchFindAction",
-				"when": "findWidgetVisible"
-			},
-			{
-				"key": "ctrl+r",
-				"command": "actions.find",
-				"when": "!findWidgetVisible"
-			},
-			{
-				"key": "ctrl+r",
-				"command": "editor.action.previousMatchFindAction",
-				"when": "findWidgetVisible"
-			},
-			{
-				"key": "alt+shift+5",
-				"command": "editor.action.startFindReplaceAction",
-				"when": "editorFocus"
-			},
-			{
-				"key": "ctrl+enter",
-				"command": "editor.action.replaceOne",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+alt+n",
-				"command": "emacs-mcx.addSelectionToNextFindMatch",
-				"when": "editorFocus"
-			},
-			{
-				"key": "ctrl+alt+p",
-				"command": "emacs-mcx.addSelectionToPreviousFindMatch",
-				"when": "editorFocus"
-			},
-			{
-				"key": "ctrl+d",
-				"command": "emacs-mcx.deleteForwardChar",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "backspace",
-				"command": "emacs-mcx.deleteBackwardChar",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+h",
-				"command": "emacs-mcx.deleteBackwardChar",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+d",
-				"command": "emacs-mcx.killWord",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+backspace",
-				"command": "emacs-mcx.backwardKillWord",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+k",
-				"command": "emacs-mcx.killLine",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+shift+backspace",
-				"command": "emacs-mcx.killWholeLine",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+w",
-				"command": "emacs-mcx.killRegion",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "alt+w",
-				"command": "emacs-mcx.copyRegion",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "alt+w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+y",
-				"command": "emacs-mcx.yank",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+y",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "alt+y",
-				"command": "emacs-mcx.yank-pop",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+y",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+o",
-				"command": "lineBreakInsert",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+o",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+m",
-				"command": "emacs-mcx.newLine",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+m",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+j",
-				"command": "emacs-mcx.newLine",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+j",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+x ctrl+o",
-				"command": "emacs-mcx.deleteBlankLines",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+x ctrl+o",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"emacs-mcx.deleteBlankLines"
-				]
-			},
-			{
-				"key": "ctrl+x h",
-				"command": "editor.action.selectAll",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x h",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"editor.action.selectAll"
-				]
-			},
-			{
-				"key": "ctrl+x u",
-				"command": "undo",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+x u",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"undo"
-				]
-			},
-			{
-				"key": "ctrl+/",
-				"command": "undo",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+/",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"undo"
-				]
-			},
-			{
-				"key": "ctrl+;",
-				"command": "editor.action.commentLine",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+;",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"editor.action.commentLine"
-				]
-			},
-			{
-				"key": "alt+;",
-				"command": "editor.action.blockComment",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+;",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorFocus && findWidgetVisible",
-				"args": [
-					"closeFindWidget",
-					"editor.action.blockComment"
-				]
-			},
-			{
-				"key": "ctrl+x ctrl+l",
-				"command": "emacs-mcx.transformToLowercase",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+l",
-				"command": "emacs-mcx.transformToLowercase",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "ctrl+x ctrl+u",
-				"command": "emacs-mcx.transformToUppercase",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+u",
-				"command": "emacs-mcx.transformToUppercase",
-				"when": "editorTextFocus && !editorReadonly"
-			},
-			{
-				"key": "alt+shift+6",
-				"command": "emacs-mcx.executeCommands",
-				"when": "editorTextFocus && !editorReadOnly",
-				"args": [
-					"emacs-mcx.previousLine",
-					"editor.action.joinLines"
-				]
-			},
-			{
-				"key": "escape",
-				"command": "emacs-mcx.cancel",
-				"when": "editorTextFocus && editorHasSelection"
-			},
-			{
-				"key": "escape",
-				"command": "emacs-mcx.cancel",
-				"when": "editorTextFocus && editorHasMultipleSelections"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "emacs-mcx.cancel",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeReferenceSearchEditor",
-				"when": "inReferenceSearchEditor && !config.editor.stablePeek"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeReferenceSearch",
-				"when": "referenceSearchVisible && !config.editor.stablePeek"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeBreakpointWidget",
-				"when": "breakpointWidgetVisible && editorFocus"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "leaveSnippet",
-				"when": "editorTextFocus && inSnippetMode"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeMarkersNavigation",
-				"when": "editorFocus && markersNavigationVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeParameterHints",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "hideSuggestWidget",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "cancelRenameInput",
-				"when": "editorFocus && renameInputVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeAccessibilityHelp",
-				"when": "accessibilityHelpWidgetVisible && editorFocus"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "closeReplaceInFilesWidget",
-				"when": "replaceInputBoxFocus && searchViewletVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "workbench.action.closeMessages",
-				"when": "globalMessageVisible"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "workbench.action.closeQuickOpen",
-				"when": "inQuickOpen"
-			},
-			{
-				"key": "ctrl+space",
-				"command": "emacs-mcx.setMarkCommand",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+'",
-				"command": "editor.action.triggerSuggest",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+'",
-				"command": "toggleSuggestionDetails",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "alt+x",
-				"command": "workbench.action.showCommands"
-			},
-			{
-				"key": "ctrl+alt+space",
-				"command": "workbench.action.toggleSidebarVisibility"
-			},
-			{
-				"key": "ctrl+x z",
-				"command": "workbench.action.toggleZenMode"
-			},
-			{
-				"key": "ctrl+x ctrl+f",
-				"command": "workbench.action.quickOpen"
-			},
-			{
-				"key": "ctrl+x ctrl+s",
-				"command": "workbench.action.files.save",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x ctrl+w",
-				"command": "workbench.action.files.saveAs",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x ctrl+n",
-				"command": "workbench.action.newWindow"
-			},
-			{
-				"key": "ctrl+x b",
-				"command": "workbench.action.showAllEditors"
-			},
-			{
-				"key": "ctrl+x k",
-				"command": "workbench.action.closeActiveEditor"
-			},
-			{
-				"key": "ctrl+x ctrl-k",
-				"command": "workbench.action.closeAllEditors"
-			},
-			{
-				"key": "ctrl+x 0",
-				"command": "workbench.action.closeEditorsInGroup"
-			},
-			{
-				"key": "ctrl+x 1",
-				"command": "workbench.action.closeEditorsInOtherGroups"
-			},
-			{
-				"key": "ctrl+x 2",
-				"command": "workbench.action.splitEditorDown"
-			},
-			{
-				"key": "ctrl+x 3",
-				"command": "workbench.action.splitEditorRight"
-			},
-			{
-				"key": "ctrl+x 4",
-				"command": "workbench.action.toggleEditorGroupLayout"
-			},
-			{
-				"key": "ctrl+x o",
-				"command": "workbench.action.navigateEditorGroups"
-			},
-			{
-				"key": "ctrl+u",
-				"command": "emacs-mcx.universalArgument",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+alt+f",
-				"command": "emacs-mcx.paredit.forwardSexp",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+alt+b",
-				"command": "emacs-mcx.paredit.backwardSexp",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "showPrevParameterHint",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "showNextParameterHint",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "selectPrevQuickFix",
-				"when": "editorFocus && quickFixWidgetVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "selectNextQuickFix",
-				"when": "editorFocus && quickFixWidgetVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "selectPrevSuggestion",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "selectNextSuggestion",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "workbench.action.quickOpenNavigatePrevious",
-				"when": "inQuickOpen"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "workbench.action.quickOpenNavigateNext",
-				"when": "inQuickOpen"
-			},
-			{
-				"key": "ctrl+shift+'",
-				"command": "editor.action.triggerParameterHints",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x j",
-				"command": "workbench.action.togglePanel"
-			},
-			{
-				"key": "ctrl+i",
-				"command": "emacs-mcx.executeCommands",
-				"args": [
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.nextLine"
-				]
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "yarn run compile",
-		"prettier": "prettier --write 'src/**/*.ts'",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "yarn run compile && yarn run lint",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^7.0.2",
-		"@types/node": "^13.9.1",
-		"@types/vscode": "^1.43.0",
-		"@typescript-eslint/eslint-plugin": "^2.23.0",
-		"@typescript-eslint/parser": "^2.23.0",
-		"eslint": "^6.8.0",
-		"eslint-config-prettier": "^6.10.0",
-		"eslint-plugin-prettier": "^3.1.2",
-		"glob": "^7.1.6",
-		"mocha": "^7.1.0",
-		"prettier": "^1.19.1",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.3.0"
-	},
-	"dependencies": {
-		"clipboardy": "^2.2.0",
-		"paredit.js": "^0.3.4",
-		"winston": "^3.2.1",
-		"winston-console-for-electron": "^0.0.6"
-	}
+  "name": "emacs-mcx",
+  "displayName": "Awesome Emacs Keymap",
+  "description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
+  "version": "0.14.1",
+  "publisher": "tuttieee",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tuttieee/vscode-emacs-mcx"
+  },
+  "engines": {
+    "vscode": "^1.42.0"
+  },
+  "categories": [
+    "Other",
+    "Keymaps"
+  ],
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "keywords": [
+    "emacs",
+    "keybindings",
+    "multi cursor",
+    "selection",
+    "mark mode"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Awesome Emacs Keymap (emacs-mcx) configuration",
+      "properties": {
+        "emacs-mcx.killRingMax": {
+          "type": "number",
+          "default": 60,
+          "description": "Maximum number of Kill ring entries"
+        },
+        "emacs-mcx.strictEmacsMove": {
+          "type": "boolean",
+          "default": false,
+          "description": "Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones"
+        },
+        "emacs-mcx.debug.silent": {
+          "type": "boolean",
+          "description": "If true, all logs are suppressed.",
+          "default": false
+        },
+        "emacs-mcx.debug.loggingLevelForAlert": {
+          "type": "string",
+          "description": "Maximum level of messages to present as VS Code information window.",
+          "default": "error",
+          "enum": [
+            "error",
+            "warn",
+            "info",
+            "verbose",
+            "debug",
+            "silly"
+          ]
+        },
+        "emacs-mcx.debug.loggingLevelForConsole": {
+          "type": "string",
+          "description": "Maximum level of messages to log to console. Logs are visible in developer tools.",
+          "default": "error",
+          "enum": [
+            "error",
+            "warn",
+            "info",
+            "verbose",
+            "debug",
+            "silly"
+          ]
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "key": "right",
+        "command": "emacs-mcx.forwardChar",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "right",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.forwardChar"
+        ]
+      },
+      {
+        "key": "ctrl+f",
+        "command": "emacs-mcx.forwardChar",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+f",
+        "command": "emacs-mcx.forwardChar",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+f",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.forwardChar"
+        ]
+      },
+      {
+        "key": "left",
+        "command": "emacs-mcx.backwardChar",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "left",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.backwardChar",
+          "emacs-mcx.backwardChar"
+        ]
+      },
+      {
+        "key": "ctrl+b",
+        "command": "emacs-mcx.backwardChar",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+b",
+        "command": "emacs-mcx.backwardChar",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+b",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.backwardChar",
+          "emacs-mcx.backwardChar"
+        ]
+      },
+      {
+        "key": "up",
+        "command": "emacs-mcx.previousLine",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "up",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.previousLine"
+        ]
+      },
+      {
+        "key": "ctrl+p",
+        "command": "emacs-mcx.previousLine",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "emacs-mcx.previousLine",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.previousLine"
+        ]
+      },
+      {
+        "key": "down",
+        "command": "emacs-mcx.nextLine",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "down",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.nextLine"
+        ]
+      },
+      {
+        "key": "ctrl+n",
+        "command": "emacs-mcx.nextLine",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "emacs-mcx.nextLine",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.nextLine"
+        ]
+      },
+      {
+        "key": "home",
+        "command": "emacs-mcx.moveBeginningOfLine",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "home",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.moveBeginningOfLine"
+        ]
+      },
+      {
+        "key": "ctrl+a",
+        "command": "emacs-mcx.moveBeginningOfLine",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+a",
+        "command": "emacs-mcx.moveBeginningOfLine",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+a",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.moveBeginningOfLine"
+        ]
+      },
+      {
+        "key": "end",
+        "command": "emacs-mcx.moveEndOfLine",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "end",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.moveEndOfLine"
+        ]
+      },
+      {
+        "key": "ctrl+e",
+        "command": "emacs-mcx.moveEndOfLine",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+e",
+        "command": "emacs-mcx.moveEndOfLine",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+e",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.moveEndOfLine"
+        ]
+      },
+      {
+        "key": "alt+f",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+f",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.forwardWord"
+        ]
+      },
+      {
+        "key": "alt+b",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+b",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.backwardWord"
+        ]
+      },
+      {
+        "key": "pagedown",
+        "command": "emacs-mcx.scrollUpCommand",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "pagedown",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+v",
+        "command": "emacs-mcx.scrollUpCommand",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+v",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "pageup",
+        "command": "emacs-mcx.scrollDownCommand",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "pageup",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "alt+v",
+        "command": "emacs-mcx.scrollDownCommand",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "alt+v",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "alt+shift+.",
+        "command": "emacs-mcx.endOfBuffer",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+shift+.",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.endOfBuffer"
+        ]
+      },
+      {
+        "key": "alt+shift+,",
+        "command": "emacs-mcx.beginningOfBuffer",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+shift+,",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.beginningOfBuffer"
+        ]
+      },
+      {
+        "key": "alt+g alt+g",
+        "command": "workbench.action.gotoLine"
+      },
+      {
+        "key": "alt+g g",
+        "command": "workbench.action.gotoLine"
+      },
+      {
+        "key": "alt+g alt+g",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "workbench.action.gotoLine"
+        ]
+      },
+      {
+        "key": "alt+g g",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "workbench.action.gotoLine"
+        ]
+      },
+      {
+        "key": "alt+g n",
+        "command": "editor.action.marker.next"
+      },
+      {
+        "key": "alt+g alt+n",
+        "command": "editor.action.marker.next"
+      },
+      {
+        "key": "ctrl+x `",
+        "command": "editor.action.marker.next"
+      },
+      {
+        "key": "alt+g p",
+        "command": "editor.action.marker.prev"
+      },
+      {
+        "key": "alt+g alt+p",
+        "command": "editor.action.marker.prev"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "emacs-mcx.recenterTopBottom",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+s",
+        "command": "actions.find",
+        "when": "!findWidgetVisible"
+      },
+      {
+        "key": "ctrl+s",
+        "command": "editor.action.nextMatchFindAction",
+        "when": "findWidgetVisible"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "actions.find",
+        "when": "!findWidgetVisible"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "editor.action.previousMatchFindAction",
+        "when": "findWidgetVisible"
+      },
+      {
+        "key": "alt+shift+5",
+        "command": "editor.action.startFindReplaceAction",
+        "when": "editorFocus"
+      },
+      {
+        "key": "ctrl+enter",
+        "command": "editor.action.replaceOne",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+alt+n",
+        "command": "emacs-mcx.addSelectionToNextFindMatch",
+        "when": "editorFocus"
+      },
+      {
+        "key": "ctrl+alt+p",
+        "command": "emacs-mcx.addSelectionToPreviousFindMatch",
+        "when": "editorFocus"
+      },
+      {
+        "key": "ctrl+d",
+        "command": "emacs-mcx.deleteForwardChar",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "backspace",
+        "command": "emacs-mcx.deleteBackwardChar",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+h",
+        "command": "emacs-mcx.deleteBackwardChar",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+d",
+        "command": "emacs-mcx.killWord",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+backspace",
+        "command": "emacs-mcx.backwardKillWord",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+k",
+        "command": "emacs-mcx.killLine",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+shift+backspace",
+        "command": "emacs-mcx.killWholeLine",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+w",
+        "command": "emacs-mcx.killRegion",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+w",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "alt+w",
+        "command": "emacs-mcx.copyRegion",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+w",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+y",
+        "command": "emacs-mcx.yank",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+y",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "alt+y",
+        "command": "emacs-mcx.yank-pop",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+y",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+o",
+        "command": "lineBreakInsert",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+o",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+m",
+        "command": "emacs-mcx.newLine",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+m",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+j",
+        "command": "emacs-mcx.newLine",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+j",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+x ctrl+o",
+        "command": "emacs-mcx.deleteBlankLines",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+x ctrl+o",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "emacs-mcx.deleteBlankLines"
+        ]
+      },
+      {
+        "key": "ctrl+x h",
+        "command": "editor.action.selectAll",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+x h",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "editor.action.selectAll"
+        ]
+      },
+      {
+        "key": "ctrl+x u",
+        "command": "undo",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+x u",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "undo"
+        ]
+      },
+      {
+        "key": "ctrl+/",
+        "command": "undo",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+/",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "undo"
+        ]
+      },
+      {
+        "key": "ctrl+;",
+        "command": "editor.action.commentLine",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+;",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "editor.action.commentLine"
+        ]
+      },
+      {
+        "key": "alt+;",
+        "command": "editor.action.blockComment",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+;",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorFocus && findWidgetVisible",
+        "args": [
+          "closeFindWidget",
+          "editor.action.blockComment"
+        ]
+      },
+      {
+        "key": "ctrl+x ctrl+l",
+        "command": "emacs-mcx.transformToLowercase",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+l",
+        "command": "emacs-mcx.transformToLowercase",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+x ctrl+u",
+        "command": "emacs-mcx.transformToUppercase",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+u",
+        "command": "emacs-mcx.transformToUppercase",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "alt+shift+6",
+        "command": "emacs-mcx.executeCommands",
+        "when": "editorTextFocus && !editorReadOnly",
+        "args": [
+          "emacs-mcx.previousLine",
+          "editor.action.joinLines"
+        ]
+      },
+      {
+        "key": "escape",
+        "command": "emacs-mcx.cancel",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "key": "escape",
+        "command": "emacs-mcx.cancel",
+        "when": "editorTextFocus && editorHasMultipleSelections"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "emacs-mcx.cancel",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeReferenceSearchEditor",
+        "when": "inReferenceSearchEditor && !config.editor.stablePeek"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeReferenceSearch",
+        "when": "referenceSearchVisible && !config.editor.stablePeek"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeBreakpointWidget",
+        "when": "breakpointWidgetVisible && editorFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "leaveSnippet",
+        "when": "editorTextFocus && inSnippetMode"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeMarkersNavigation",
+        "when": "editorFocus && markersNavigationVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeParameterHints",
+        "when": "editorTextFocus && parameterHintsVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "hideSuggestWidget",
+        "when": "editorTextFocus && suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "cancelRenameInput",
+        "when": "editorFocus && renameInputVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeAccessibilityHelp",
+        "when": "accessibilityHelpWidgetVisible && editorFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeReplaceInFilesWidget",
+        "when": "replaceInputBoxFocus && searchViewletVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.closeMessages",
+        "when": "globalMessageVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.closeQuickOpen",
+        "when": "inQuickOpen"
+      },
+      {
+        "key": "ctrl+space",
+        "command": "emacs-mcx.setMarkCommand",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+'",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+'",
+        "command": "toggleSuggestionDetails",
+        "when": "editorTextFocus && suggestWidgetVisible"
+      },
+      {
+        "key": "alt+x",
+        "command": "workbench.action.showCommands"
+      },
+      {
+        "key": "ctrl+alt+space",
+        "command": "workbench.action.toggleSidebarVisibility"
+      },
+      {
+        "key": "ctrl+x z",
+        "command": "workbench.action.toggleZenMode"
+      },
+      {
+        "key": "ctrl+x ctrl+f",
+        "command": "workbench.action.quickOpen"
+      },
+      {
+        "key": "ctrl+x ctrl+s",
+        "command": "workbench.action.files.save",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+x ctrl+w",
+        "command": "workbench.action.files.saveAs",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+x ctrl+n",
+        "command": "workbench.action.newWindow"
+      },
+      {
+        "key": "ctrl+x b",
+        "command": "workbench.action.showAllEditors"
+      },
+      {
+        "key": "ctrl+x k",
+        "command": "workbench.action.closeActiveEditor"
+      },
+      {
+        "key": "ctrl+x ctrl-k",
+        "command": "workbench.action.closeAllEditors"
+      },
+      {
+        "key": "ctrl+x 0",
+        "command": "workbench.action.closeEditorsInGroup"
+      },
+      {
+        "key": "ctrl+x 1",
+        "command": "workbench.action.closeEditorsInOtherGroups"
+      },
+      {
+        "key": "ctrl+x 2",
+        "command": "workbench.action.splitEditorDown"
+      },
+      {
+        "key": "ctrl+x 3",
+        "command": "workbench.action.splitEditorRight"
+      },
+      {
+        "key": "ctrl+x 4",
+        "command": "workbench.action.toggleEditorGroupLayout"
+      },
+      {
+        "key": "ctrl+x o",
+        "command": "workbench.action.navigateEditorGroups"
+      },
+      {
+        "key": "ctrl+u",
+        "command": "emacs-mcx.universalArgument",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+alt+f",
+        "command": "emacs-mcx.paredit.forwardSexp",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+alt+b",
+        "command": "emacs-mcx.paredit.backwardSexp",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "showPrevParameterHint",
+        "when": "editorTextFocus && parameterHintsVisible"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "showNextParameterHint",
+        "when": "editorTextFocus && parameterHintsVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "selectPrevQuickFix",
+        "when": "editorFocus && quickFixWidgetVisible"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "selectNextQuickFix",
+        "when": "editorFocus && quickFixWidgetVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "selectPrevSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "selectNextSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.quickOpenNavigatePrevious",
+        "when": "inQuickOpen"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.quickOpenNavigateNext",
+        "when": "inQuickOpen"
+      },
+      {
+        "key": "ctrl+shift+'",
+        "command": "editor.action.triggerParameterHints",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+x j",
+        "command": "workbench.action.togglePanel"
+      },
+      {
+        "key": "ctrl+i",
+        "command": "emacs-mcx.executeCommands",
+        "args": [
+          "emacs-mcx.forwardChar",
+          "emacs-mcx.nextLine"
+        ]
+      },
+      {
+        "key": "alt+shift+[",
+        "command": "emacs-mcx.backwardParagraph",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+shift+]",
+        "command": "emacs-mcx.forwardParagraph",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "prettier": "prettier --write 'src/**/*.ts'",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.1",
+    "@types/vscode": "^1.43.0",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "glob": "^7.1.6",
+    "mocha": "^7.1.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.3.0"
+  },
+  "dependencies": {
+    "clipboardy": "^2.2.0",
+    "paredit.js": "^0.3.4",
+    "winston": "^3.2.1",
+    "winston-console-for-electron": "^0.0.6"
+  }
 }
