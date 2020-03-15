@@ -139,6 +139,19 @@ If set to false, the VSCode's native cursor movements are preserved.
 For example, if set to true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
 If set to false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
 
+### `emacs-mcx.useMetaPrefixEscape`
+If set to true, Escape key works as the Meta prefix like original emacs.
+If set to false, Escape key works as cancel, the VSCode's native behavior.
+For example, if set to true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
+
+The only exception is the commands which begin with `M-g` (`M-g g`, `M-g n`, `M-g p`).
+It is because VSCode can handle only up to two key strokes as the key bindings.
+So, as the special case, `Escape g` works as follows.
+
+|Command | Desc |
+|--------|------|
+| `Escape g` | Jump to line (command palette) |
+
 ### `emacs-mcx.killRingMax`
 Configures the maximum number of kill ring entries.
 The default is 60.
