@@ -27,3 +27,14 @@ export class TransformToLowercase extends EmacsCommand {
     await vscode.commands.executeCommand<void>("editor.action.transformToLowercase");
   }
 }
+
+export class TransformToTitlecase extends EmacsCommand {
+  public readonly id = "transformToTitlecase";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (!hasNonEmptySelection(textEditor)) {
+      await this.emacsController.runCommand("forwardWord");
+    }
+    await vscode.commands.executeCommand<void>("editor.action.transformToTitlecase");
+  }
+}

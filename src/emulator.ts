@@ -93,6 +93,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
     this.commandRegistry.register(new CaseCommands.TransformToUppercase(this.afterCommand, this));
     this.commandRegistry.register(new CaseCommands.TransformToLowercase(this.afterCommand, this));
+    this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this.afterCommand, this));
   }
 
   public setTextEditor(textEditor: TextEditor) {

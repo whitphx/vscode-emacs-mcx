@@ -160,6 +160,10 @@ export function activate(context: vscode.ExtensionContext) {
     emulator.runCommand("transformToLowercase");
   });
 
+  registerEmulatorCommand("emacs-mcx.transformToTitlecase", emulator => {
+    emulator.runCommand("transformToTitlecase");
+  });
+
   registerEmulatorCommand("emacs-mcx.deleteBlankLines", emulator => {
     emulator.runCommand("deleteBlankLines");
   });
