@@ -2,6 +2,10 @@ import * as vscode from "vscode";
 import { TextEditor, TextEditorRevealType } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 import { Configuration } from "../configuration/configuration";
+import {
+  travelForward as travelForwardParagraph,
+  travelBackward as travelBackwardParagraph
+} from "./helpers/paragraph";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -16,7 +20,9 @@ export const moveCommandIds = [
   "beginningOfBuffer",
   "endOfBuffer",
   "scrollUpCommand",
-  "scrollDownCommand"
+  "scrollDownCommand",
+  "forwardParagraph",
+  "backwardParagraph"
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -264,5 +270,43 @@ export class ScrollDownCommand extends EmacsCommand {
         select: isInMarkMode
       })
       .then(() => textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport));
+  }
+}
+
+export class ForwardParagraph extends EmacsCommand {
+  public readonly id = "forwardParagraph";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+
+    const doc = textEditor.document;
+    const newSelections = textEditor.selections.map(selection => {
+      let active = selection.active;
+      for (let i = 0; i < repeat; ++i) {
+        active = travelForwardParagraph(doc, active);
+      }
+      return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
+    });
+    textEditor.selections = newSelections;
+    textEditor.revealRange(textEditor.selection);
+  }
+}
+
+export class BackwardParagraph extends EmacsCommand {
+  public readonly id = "backwardParagraph";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+
+    const doc = textEditor.document;
+    const newSelections = textEditor.selections.map(selection => {
+      let active = selection.active;
+      for (let i = 0; i < repeat; ++i) {
+        active = travelBackwardParagraph(doc, active);
+      }
+      return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
+    });
+    textEditor.selections = newSelections;
+    textEditor.revealRange(textEditor.selection);
   }
 }

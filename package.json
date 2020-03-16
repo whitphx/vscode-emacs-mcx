@@ -350,6 +350,16 @@
 				"when": "editorTextFocus && !suggestWidgetVisible"
 			},
 			{
+				"key": "alt+shift+[",
+				"command": "emacs-mcx.backwardParagraph",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
+				"key": "alt+shift+]",
+				"command": "emacs-mcx.forwardParagraph",
+				"when": "editorTextFocus && !suggestWidgetVisible"
+			},
+			{
 				"key": "alt+v",
 				"command": "closeFindWidget",
 				"when": "editorFocus && findWidgetVisible"

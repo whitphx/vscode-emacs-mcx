@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.16.0] - 2020-03-16
+### Added
+- Add `M-{` (backward-paragraph) and `M-}` (forward-paragraph). @icub3d
+
 ## [0.15.0] - 2020-03-16
 ### Added
 - Add `M-c` (capitalize-word). @yunkya2

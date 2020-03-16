@@ -59,3 +59,59 @@ suite("scroll-up/down-command", () => {
     });
   });
 });
+
+suite("forwardParagraph", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `aaa
+bbb
+
+ccc
+ddd
+
+eee
+fff`;
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  test("it moves to the next end of the paragraph", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.runCommand("forwardParagraph");
+    assertCursorsEqual(activeTextEditor, [2, 0]);
+    await emulator.runCommand("forwardParagraph");
+    assertCursorsEqual(activeTextEditor, [5, 0]);
+    await emulator.runCommand("forwardParagraph");
+    assertCursorsEqual(activeTextEditor, [7, 3]);
+  });
+});
+
+suite("backwardParagraph", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `aaa
+bbb
+
+ccc
+ddd
+
+eee
+fff`;
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  test("it moves to the previous beginning of the paragraph", async () => {
+    setEmptyCursors(activeTextEditor, [7, 3]);
+    await emulator.runCommand("backwardParagraph");
+    assertCursorsEqual(activeTextEditor, [5, 0]);
+    await emulator.runCommand("backwardParagraph");
+    assertCursorsEqual(activeTextEditor, [2, 0]);
+    await emulator.runCommand("backwardParagraph");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+  });
+});
