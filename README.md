@@ -71,7 +71,7 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-x u` (`C-/`)|  | Undo |
 | `C-;` |  | Toggle line comment in and out |
 | `M-;` |  | Toggle region comment in and out |
-| `C-x C-l` (`M-l`) |  | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Uppercase (below) is same) |
+| `C-x C-l` (`M-l`) |  | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Upper case and title case (below) are same) |
 | `C-x C-u` (`M-u`) |  | Convert to upper case |
 | `M-c` |  | Convert to title case |
 | `M-S-6` (`M-^` with US keyboard) |  | Merge the previous and the current line (delete-indentation) |
