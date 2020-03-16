@@ -16,9 +16,7 @@ export const moveCommandIds = [
   "beginningOfBuffer",
   "endOfBuffer",
   "scrollUpCommand",
-  "scrollDownCommand",
-  "backwardParagraph",
-  "forwardParagraph"
+  "scrollDownCommand"
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -266,64 +264,5 @@ export class ScrollDownCommand extends EmacsCommand {
         select: isInMarkMode
       })
       .then(() => textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport));
-  }
-}
-
-// Find the next empty line. Direction should be -1 for back or +1 for forward.
-function nextEmptyLine(textEditor: TextEditor, direction: number) {
-  // Find the limit (either first or last line).
-  let bound = 0;
-  if (direction > 0) {
-    bound = textEditor.document.lineCount - 1;
-  }
-
-  let line = textEditor.selection.active.line;
-  for (;;) {
-    // If we've reached the boundary, we can't go further.
-    if (line === bound) {
-      break;
-    }
-    line += direction;
-    // If we've found an empty line, we are done.
-    if (textEditor.document.lineAt(line).isEmptyOrWhitespace) {
-      break;
-    }
-  }
-  return textEditor.document.lineAt(line);
-}
-
-export class BackwardParagraph extends EmacsCommand {
-  public readonly id = "backwardParagraph";
-
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    let repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    for (; repeat > 0; repeat--) {
-      const line = nextEmptyLine(textEditor, -1);
-      const pos = new vscode.Position(line.lineNumber, 0);
-      // If we are in mark mode, we want to use the current selection as the
-      // anchor, otherwise, just the new position.
-      const anchor = isInMarkMode ? textEditor.selection.anchor : pos;
-      const sel = new vscode.Selection(anchor, pos);
-      textEditor.selection = sel;
-      textEditor.revealRange(new vscode.Range(pos, pos));
-    }
-  }
-}
-
-export class ForwardParagraph extends EmacsCommand {
-  public readonly id = "forwardParagraph";
-
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    let repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    for (; repeat > 0; repeat--) {
-      const line = nextEmptyLine(textEditor, 1);
-      const pos = new vscode.Position(line.lineNumber, 0);
-      // If we are in mark mode, we want to use the current selection as the
-      // anchor, otherwise, just the new position.
-      const anchor = isInMarkMode ? textEditor.selection.anchor : pos;
-      const sel = new vscode.Selection(anchor, pos);
-      textEditor.selection = sel;
-      textEditor.revealRange(new vscode.Range(pos, pos));
-    }
   }
 }

@@ -33,8 +33,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `M-b` | ✓ | Move backward by one word unit (backward-word) |
 | `C-v` | ✓ | Scroll down by one screen unit (scroll-up-command) |
 | `M-v` | ✓ | Scroll up by one screen unit (scroll-down-command) |
-| `M-{` | ✓ | Move forward one paragraph (forward-paragraph) |
-| `M-}` | ✓ | Move backward one paragraph (backward-paragraph) |
 | `M-S-,` (`M-<` with US keyboard) | ✓ | Move to the top of the buffer (beginning-of-buffer) |
 | `M-S-.` (`M->` with US keyboard) | ✓ | Move to the end of the buffer (end-of-buffer) |
 | `M-g g` (`M-g M-g`) | | Jump to line (command palette) |

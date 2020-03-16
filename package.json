@@ -928,16 +928,6 @@
 					"emacs-mcx.forwardChar",
 					"emacs-mcx.nextLine"
 				]
-			},
-			{
-			  "key": "alt+shift+[",
-			  "command": "emacs-mcx.backwardParagraph",
-			  "when": "editorTextFocus"
-			},
-			{
-			  "key": "alt+shift+]",
-			  "command": "emacs-mcx.forwardParagraph",
-			  "when": "editorTextFocus"
 			}
 		]
 	},
