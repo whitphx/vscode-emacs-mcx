@@ -683,6 +683,11 @@
 				"when": "editorTextFocus && !editorReadonly"
 			},
 			{
+				"key": "alt+c",
+				"command": "emacs-mcx.transformToTitlecase",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
 				"key": "alt+shift+6",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorTextFocus && !editorReadOnly",
