@@ -435,7 +435,7 @@
 			},
 			{
 				"key": "ctrl+s",
-				"command": "actions.find",
+				"command": "emacs-mcx.find",
 				"when": "!findWidgetVisible"
 			},
 			{
