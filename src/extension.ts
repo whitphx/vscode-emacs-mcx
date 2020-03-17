@@ -88,6 +88,10 @@ export function activate(context: vscode.ExtensionContext) {
     });
   });
 
+  registerEmulatorCommand("emacs-mcx.find", emulator => {
+    emulator.runCommand("find");
+  });
+
   registerEmulatorCommand("emacs-mcx.deleteBackwardChar", emulator => {
     emulator.runCommand("deleteBackwardChar");
   });
