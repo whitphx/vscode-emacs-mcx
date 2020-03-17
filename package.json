@@ -445,7 +445,7 @@
 			},
 			{
 				"key": "ctrl+s",
-				"command": "emacs-mcx.find",
+				"command": "emacs-mcx.isearchForward",
 				"when": "!findWidgetVisible"
 			},
 			{
@@ -455,7 +455,7 @@
 			},
 			{
 				"key": "ctrl+r",
-				"command": "actions.find",
+				"command": "emacs-mcx.isearchBackward",
 				"when": "!findWidgetVisible"
 			},
 			{

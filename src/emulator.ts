@@ -71,7 +71,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand, this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand, this));
     this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand, this));
-    this.commandRegistry.register(new FindCommands.Find(this.afterCommand, this));
+    this.commandRegistry.register(new FindCommands.IsearchForward(this.afterCommand, this));
+    this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this));
     this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
