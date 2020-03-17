@@ -19,7 +19,7 @@
         "mocha": true
     },
     "rules": {
-        "@typescript-eslint/interface-name-prefix": "warn",
+        "@typescript-eslint/interface-name-prefix": ["warn", { "prefixWithI": "always" }],
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-unused-vars": ["error", {
             "argsIgnorePattern": "textEditor|isInMarkMode|prefixArgument"
