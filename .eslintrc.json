@@ -19,12 +19,10 @@
         "mocha": true
     },
     "rules": {
-        "@typescript-eslint/class-name-casing": "warn",
-        "@typescript-eslint/semi": "warn",
-        "@typescript-eslint/interface-name-prefix": "warn",
-        "curly": "warn",
-        "eqeqeq": "warn",
-        "no-throw-literal": "warn",
-        "semi": "off"
+        "@typescript-eslint/interface-name-prefix": ["warn", { "prefixWithI": "always" }],
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-unused-vars": ["error", {
+            "argsIgnorePattern": "textEditor|isInMarkMode|prefixArgument"
+        }]
     }
 }

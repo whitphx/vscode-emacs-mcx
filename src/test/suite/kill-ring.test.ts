@@ -17,12 +17,12 @@ suite("KillRing", () => {
       killRing.push(entity);
     });
 
-    assert.equal(killRing.getTop()!.asString(), "qux"); // Equivalent to yank
-    assert.equal(killRing.pop()!.asString(), "baz"); // Equivalent to yankPop
-    assert.equal(killRing.pop()!.asString(), "bar");
-    assert.equal(killRing.pop()!.asString(), "qux");
-    assert.equal(killRing.pop()!.asString(), "baz");
-    assert.equal(killRing.pop()!.asString(), "bar");
+    assert.equal(killRing.getTop()?.asString(), "qux"); // Equivalent to yank
+    assert.equal(killRing.pop()?.asString(), "baz"); // Equivalent to yankPop
+    assert.equal(killRing.pop()?.asString(), "bar");
+    assert.equal(killRing.pop()?.asString(), "qux");
+    assert.equal(killRing.pop()?.asString(), "baz");
+    assert.equal(killRing.pop()?.asString(), "bar");
   });
 
   test("less data than max", () => {
@@ -38,12 +38,12 @@ suite("KillRing", () => {
       killRing.push(entity);
     });
 
-    assert.equal(killRing.getTop()!.asString(), "baz");
-    assert.equal(killRing.pop()!.asString(), "bar");
-    assert.equal(killRing.pop()!.asString(), "foo");
-    assert.equal(killRing.pop()!.asString(), "baz");
-    assert.equal(killRing.pop()!.asString(), "bar");
-    assert.equal(killRing.pop()!.asString(), "foo");
+    assert.equal(killRing.getTop()?.asString(), "baz");
+    assert.equal(killRing.pop()?.asString(), "bar");
+    assert.equal(killRing.pop()?.asString(), "foo");
+    assert.equal(killRing.pop()?.asString(), "baz");
+    assert.equal(killRing.pop()?.asString(), "bar");
+    assert.equal(killRing.pop()?.asString(), "foo");
   });
 
   test("just single data", () => {
@@ -55,9 +55,9 @@ suite("KillRing", () => {
       killRing.push(entity);
     });
 
-    assert.equal(killRing.getTop()!.asString(), "foo");
-    assert.equal(killRing.pop()!.asString(), "foo");
-    assert.equal(killRing.pop()!.asString(), "foo");
+    assert.equal(killRing.getTop()?.asString(), "foo");
+    assert.equal(killRing.pop()?.asString(), "foo");
+    assert.equal(killRing.pop()?.asString(), "foo");
   });
 
   test("zero data", () => {
