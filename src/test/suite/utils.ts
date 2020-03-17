@@ -25,7 +25,7 @@ export async function setupWorkspace(
   // Set EOL to LF for the tests to work even on Windows
   (activeTextEditor as TextEditor).edit(editBuilder => editBuilder.setEndOfLine(eol));
 
-  return activeTextEditor!;
+  return activeTextEditor as TextEditor;
 }
 
 export async function clearTextEditor(textEditor: TextEditor, initializeWith = "") {
