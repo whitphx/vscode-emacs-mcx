@@ -48,7 +48,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 | `C-s` | Search forward |
 | `C-r` | Search backward |
 | `M-S-5` (`M-%` with US keyboard) | Replace |
-| `C-Enter` | Replace One Match (In replace dialog) |
 | `C-M-n` | Add selection to next find match |
 | `C-M-p` | Add selection to previous find match |
 

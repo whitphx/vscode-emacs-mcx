@@ -469,11 +469,6 @@
 				"when": "editorFocus"
 			},
 			{
-				"key": "ctrl+enter",
-				"command": "editor.action.replaceOne",
-				"when": "editorFocus && findWidgetVisible"
-			},
-			{
 				"key": "ctrl+alt+n",
 				"command": "emacs-mcx.addSelectionToNextFindMatch",
 				"when": "editorFocus"
