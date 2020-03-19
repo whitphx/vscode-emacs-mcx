@@ -1156,7 +1156,7 @@
 		"vscode-test": "^1.3.0"
 	},
 	"dependencies": {
-		"clipboardy": "^2.2.0",
+		"clipboardy": "^2.3.0",
 		"paredit.js": "^0.3.4",
 		"winston": "^3.2.1",
 		"winston-console-for-electron": "^0.0.6"
