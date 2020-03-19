@@ -1131,7 +1131,7 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn run compile",
+		"vscode:prepublish": "yarn && yarn run compile",
 		"prettier": "prettier --write 'src/**/*.ts'",
 		"compile": "tsc -p ./",
 		"lint": "eslint src --ext ts",
