@@ -131,7 +131,7 @@
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
 					"closeFindWidget",
-					"emacs-mcx.backwardChar",
+					"emacs-mcx.forwardChar",
 					"emacs-mcx.backwardChar"
 				]
 			},
@@ -151,7 +151,7 @@
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
 					"closeFindWidget",
-					"emacs-mcx.backwardChar",
+					"emacs-mcx.forwardChar",
 					"emacs-mcx.backwardChar"
 				]
 			},
