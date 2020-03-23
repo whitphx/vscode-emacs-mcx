@@ -119,7 +119,7 @@ abcdefghij
     const otherInterruptingCommands = ["selectAll"];
 
     const interruptingCommands: string[] = [...otherInterruptingCommands];
-    interruptingCommands.forEach(interruptingCommand => {
+    interruptingCommands.forEach((interruptingCommand) => {
       test(`it does not appends killed text if another command (${interruptingCommand}) invoked`, async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
 
@@ -147,22 +147,22 @@ abcdefghij
     // Test kill appending is not enabled after cursorMoves, editing, or some other ops
     const moves = moveCommandIds.map((commandName): [string, () => Thenable<any> | undefined] => [
       commandName,
-      () => emulator.runCommand(commandName)
+      () => emulator.runCommand(commandName),
     ]);
     const edits: Array<[string, () => Thenable<any>]> = [
-      ["edit", () => activeTextEditor.edit(editBuilder => editBuilder.insert(new Position(0, 0), "hoge"))],
+      ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
       [
         "delete",
         () =>
-          activeTextEditor.edit(editBuilder => editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))
+          activeTextEditor.edit((editBuilder) => editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1)))),
       ],
       [
         "replace",
         () =>
-          activeTextEditor.edit(editBuilder =>
+          activeTextEditor.edit((editBuilder) =>
             editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
-          )
-      ]
+          ),
+      ],
     ];
     const otherOps: Array<[string, () => Thenable<any>]> = [["cancel", async () => await emulator.cancel()]];
 

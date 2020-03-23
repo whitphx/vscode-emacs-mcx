@@ -6,7 +6,7 @@ export async function setupWorkspace(
   initialText = "",
   {
     eol = vscode.EndOfLine.LF,
-    language = "text"
+    language = "text",
   }: {
     eol?: vscode.EndOfLine;
     language?: string;
@@ -14,7 +14,7 @@ export async function setupWorkspace(
 ): Promise<vscode.TextEditor> {
   const doc = await vscode.workspace.openTextDocument({
     content: initialText,
-    language
+    language,
   });
 
   await vscode.window.showTextDocument(doc);
@@ -23,24 +23,24 @@ export async function setupWorkspace(
   assert.ok(activeTextEditor);
 
   // Set EOL to LF for the tests to work even on Windows
-  (activeTextEditor as TextEditor).edit(editBuilder => editBuilder.setEndOfLine(eol));
+  (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
 
   return activeTextEditor as TextEditor;
 }
 
 export async function clearTextEditor(textEditor: TextEditor, initializeWith = "") {
   const doc = textEditor.document;
-  await textEditor.edit(editBuilder => {
+  await textEditor.edit((editBuilder) => {
     editBuilder.delete(new Range(new Position(0, 0), doc.positionAt(doc.getText().length)));
   });
-  await textEditor.edit(editBuilder => {
+  await textEditor.edit((editBuilder) => {
     editBuilder.insert(new Position(0, 0), initializeWith);
   });
   assert.equal(doc.getText(), initializeWith);
 }
 
 export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>) {
-  textEditor.selections = positions.map(p => new Selection(new Position(p[0], p[1]), new Position(p[0], p[1])));
+  textEditor.selections = positions.map((p) => new Selection(new Position(p[0], p[1]), new Position(p[0], p[1])));
 }
 
 export async function cleanUpWorkspace() {

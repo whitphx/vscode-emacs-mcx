@@ -7,7 +7,7 @@ import {
   cleanUpWorkspace,
   clearTextEditor,
   setEmptyCursors,
-  setupWorkspace
+  setupWorkspace,
 } from "../../utils";
 
 suite("killWord and backwardKillWord with Lorem ipsum", () => {

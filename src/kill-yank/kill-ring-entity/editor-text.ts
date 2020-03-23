@@ -29,11 +29,11 @@ class AppendedRegionTexts {
   }
 
   public isEmpty() {
-    return this.regionTexts.every(regionText => regionText.text === "");
+    return this.regionTexts.every((regionText) => regionText.text === "");
   }
 
   public getAppendedText(): string {
-    return this.regionTexts.map(regionText => regionText.text).join("");
+    return this.regionTexts.map((regionText) => regionText.text).join("");
   }
 
   public getLastRange(): Range {
@@ -45,7 +45,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
   private regionTextsList: AppendedRegionTexts[];
 
   constructor(regionTexts: IRegionText[]) {
-    this.regionTextsList = regionTexts.map(regionText => new AppendedRegionTexts(regionText));
+    this.regionTextsList = regionTexts.map((regionText) => new AppendedRegionTexts(regionText));
   }
 
   public isSameClipboardText(clipboardText: string): boolean {
@@ -53,14 +53,14 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
   }
 
   public isEmpty(): boolean {
-    return this.regionTextsList.every(regionTexts => regionTexts.isEmpty());
+    return this.regionTextsList.every((regionTexts) => regionTexts.isEmpty());
   }
 
   // TODO: Cache the result of this method because it is called repeatedly
   public asString(): string {
-    const appendedTexts = this.regionTextsList.map(appendedRegionTexts => ({
+    const appendedTexts = this.regionTextsList.map((appendedRegionTexts) => ({
       range: appendedRegionTexts.getLastRange(),
-      text: appendedRegionTexts.getAppendedText()
+      text: appendedRegionTexts.getAppendedText(),
     }));
 
     const sortedAppendedTexts = appendedTexts.sort((a, b) => {

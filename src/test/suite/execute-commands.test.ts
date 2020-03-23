@@ -13,7 +13,7 @@ suite("executeCommands", () => {
     registerCommand(
       "mockCommand1",
       () =>
-        new Promise(resolve =>
+        new Promise((resolve) =>
           setTimeout(() => {
             results.push(1);
             resolve();
@@ -23,7 +23,7 @@ suite("executeCommands", () => {
     registerCommand(
       "mockCommand2",
       () =>
-        new Promise(resolve =>
+        new Promise((resolve) =>
           setTimeout(() => {
             results.push(2);
             resolve();
@@ -33,7 +33,7 @@ suite("executeCommands", () => {
     registerCommand(
       "mockCommand3",
       () =>
-        new Promise(resolve =>
+        new Promise((resolve) =>
           setTimeout(() => {
             results.push(3);
             resolve();

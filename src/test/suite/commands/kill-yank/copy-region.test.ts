@@ -39,7 +39,7 @@ ABCDEFGHIJ`;
     activeTextEditor.selections = [
       new Selection(new Position(0, 0), new Position(0, 5)),
       new Selection(new Position(1, 0), new Position(1, 5)),
-      new Selection(new Position(2, 0), new Position(2, 5))
+      new Selection(new Position(2, 0), new Position(2, 5)),
     ];
 
     await emulator.runCommand("copyRegion");

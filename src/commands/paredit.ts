@@ -30,7 +30,7 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
     const ast = paredit.parse(src);
 
     for (let i = 0; i < repeat; ++i) {
-      const newSelections = textEditor.selections.map(selection => {
+      const newSelections = textEditor.selections.map((selection) => {
         const idx = doc.offsetAt(selection.active);
         const newIdx = this.pareditNavigatorFn(ast, idx);
         const newActivePosition = doc.positionAt(newIdx);

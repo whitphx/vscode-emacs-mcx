@@ -57,7 +57,7 @@ export class KillWord extends KillYankCommand {
       return;
     }
 
-    const nextWordRanges = textEditor.selections.map(selection =>
+    const nextWordRanges = textEditor.selections.map((selection) =>
       findNextKillWordRange(textEditor.document, selection.active, repeat)
     );
     const killRanges: Range[] = nextWordRanges
@@ -113,7 +113,7 @@ export class BackwardKillWord extends KillYankCommand {
       return;
     }
 
-    const previousWordRanges = textEditor.selections.map(selection =>
+    const previousWordRanges = textEditor.selections.map((selection) =>
       findPreviousKillWordRange(textEditor.document, selection.active, repeat)
     );
     const killRanges: Range[] = previousWordRanges
@@ -133,7 +133,7 @@ export class KillLine extends KillYankCommand {
   public readonly id = "killLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const ranges = textEditor.selections.map(selection => {
+    const ranges = textEditor.selections.map((selection) => {
       const cursor = selection.anchor;
       const lineAtCursor = textEditor.document.lineAt(cursor.line);
 
@@ -161,7 +161,7 @@ export class KillWholeLine extends KillYankCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = textEditor.selections.map(
-      selection =>
+      (selection) =>
         // From the beginning of the line to the beginning of the next line
         new Range(new Position(selection.anchor.line, 0), new Position(selection.anchor.line + 1, 0))
     );
@@ -171,11 +171,11 @@ export class KillWholeLine extends KillYankCommand {
 }
 
 function getNonEmptySelections(textEditor: TextEditor): Selection[] {
-  return textEditor.selections.filter(selection => !selection.isEmpty);
+  return textEditor.selections.filter((selection) => !selection.isEmpty);
 }
 
 function makeSelectionsEmpty(textEditor: TextEditor) {
-  textEditor.selections = textEditor.selections.map(selection => new Selection(selection.active, selection.active));
+  textEditor.selections = textEditor.selections.map((selection) => new Selection(selection.active, selection.active));
 }
 
 export class KillRegion extends KillYankCommand {

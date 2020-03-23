@@ -24,7 +24,7 @@ ABCDEFGHIJ`;
       activeTextEditor.selections = [
         new Selection(new Position(1, 0), new Position(1, 3)),
         new Selection(new Position(0, 0), new Position(0, 3)),
-        new Selection(new Position(2, 0), new Position(2, 3))
+        new Selection(new Position(2, 0), new Position(2, 3)),
       ];
       await emulator.runCommand("killRegion");
 
