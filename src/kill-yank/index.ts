@@ -10,7 +10,7 @@ import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 
 export enum AppendDirection {
   Forward,
-  Backward
+  Backward,
 }
 
 export class KillYanker {
@@ -74,9 +74,9 @@ export class KillYanker {
 
   public copy(ranges: Range[], shouldAppend = false, appendDirection: AppendDirection = AppendDirection.Forward) {
     const newKillEntity = new EditorTextKillRingEntity(
-      ranges.map(range => ({
+      ranges.map((range) => ({
         range,
-        text: this.textEditor.document.getText(range)
+        text: this.textEditor.document.getText(range),
       }))
     );
 
@@ -117,7 +117,7 @@ export class KillYanker {
     await vscode.commands.executeCommand("paste", { text: pasteText });
 
     this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map(selection => selection.active);
+    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
   public async yankPop() {
@@ -144,15 +144,15 @@ export class KillYanker {
     await vscode.commands.executeCommand("paste", { text });
 
     this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map(selection => selection.active);
+    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
   private async delete(ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
     let success = false;
     let trial = 0;
     while (!success && trial < maxTrials) {
-      success = await this.textEditor.edit(editBuilder => {
-        ranges.forEach(range => {
+      success = await this.textEditor.edit((editBuilder) => {
+        ranges.forEach((range) => {
           editBuilder.delete(range);
         });
       });
@@ -172,6 +172,6 @@ export class KillYanker {
   }
 
   private getCursorPositions(): Position[] {
-    return this.textEditor.selections.map(selection => selection.active);
+    return this.textEditor.selections.map((selection) => selection.active);
   }
 }

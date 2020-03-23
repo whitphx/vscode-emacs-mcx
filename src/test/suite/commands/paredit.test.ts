@@ -100,7 +100,7 @@ suite("with semicolon", () => {
   suite("with lisp (clojure)", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, {
-        language: "clojure"
+        language: "clojure",
       });
       emulator = new EmacsEmulator(activeTextEditor);
     });
@@ -119,12 +119,12 @@ suite("with semicolon", () => {
   suite("with other than lisp", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, {
-        language: "csharp"
+        language: "csharp",
       });
       emulator = new EmacsEmulator(activeTextEditor);
     });
 
-    [0, 1, 2].forEach(line => {
+    [0, 1, 2].forEach((line) => {
       test(`semicolon is treated as one entity (line ${line})`, async () => {
         setEmptyCursors(activeTextEditor, [line, 2]);
 

@@ -42,7 +42,7 @@ export class DeleteBlankLines extends EmacsCommand {
         previousLineOffset++;
       }
 
-      await textEditor.edit(editBuilder => {
+      await textEditor.edit((editBuilder) => {
         if (followingLineOffset > 0) {
           // Following empty lines exist
           const finalFollowingEmptyLineNum = curLineNum + followingLineOffset;

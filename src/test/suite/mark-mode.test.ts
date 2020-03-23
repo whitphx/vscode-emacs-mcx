@@ -19,18 +19,19 @@ ABCDEFGHIJ`;
   teardown(cleanUpWorkspace);
 
   const edits: Array<[string, () => Thenable<any>]> = [
-    ["edit", () => activeTextEditor.edit(editBuilder => editBuilder.insert(new Position(0, 0), "hoge"))],
+    ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
     [
       "delete",
-      () => activeTextEditor.edit(editBuilder => editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))
+      () =>
+        activeTextEditor.edit((editBuilder) => editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1)))),
     ],
     [
       "replace",
       () =>
-        activeTextEditor.edit(editBuilder =>
+        activeTextEditor.edit((editBuilder) =>
           editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
-        )
-    ]
+        ),
+    ],
   ];
 
   edits.forEach(([label, editOp]) => {
@@ -47,7 +48,7 @@ ABCDEFGHIJ`;
 
       // After edit, mark-mode is no longer active
       await emulator.runCommand("forwardChar");
-      assert.ok(activeTextEditor.selections.every(selection => selection.isEmpty));
+      assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
     });
   });
 });

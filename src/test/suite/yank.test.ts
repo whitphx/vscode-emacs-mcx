@@ -36,7 +36,7 @@ suite("Emulator with yank", () => {
         activeTextEditor.selections = [
           new Selection(new Position(1, 0), new Position(1, 0)),
           new Selection(new Position(0, 0), new Position(0, 0)),
-          new Selection(new Position(2, 0), new Position(2, 0))
+          new Selection(new Position(2, 0), new Position(2, 0)),
         ];
 
         await emulator.runCommand("yank");
@@ -72,7 +72,7 @@ dolor sit amet,
         activeTextEditor.selections = [
           new Selection(new Position(1, 0), new Position(1, 0)),
           new Selection(new Position(0, 0), new Position(0, 0)),
-          new Selection(new Position(2, 0), new Position(2, 0))
+          new Selection(new Position(2, 0), new Position(2, 0)),
         ];
 
         await emulator.runCommand("yank");
@@ -94,7 +94,7 @@ dolor sit amet,`
         // 2 selections: the same line number to the text on clipboard
         activeTextEditor.selections = [
           new Selection(new Position(1, 0), new Position(1, 0)),
-          new Selection(new Position(0, 0), new Position(0, 0))
+          new Selection(new Position(0, 0), new Position(0, 0)),
         ];
 
         await emulator.runCommand("yank");
@@ -146,7 +146,7 @@ ABCDEFGHIJ`
         activeTextEditor.selections = [
           new Selection(new Position(1, 0), new Position(1, 3)),
           new Selection(new Position(0, 3), new Position(0, 6)),
-          new Selection(new Position(2, 6), new Position(2, 9))
+          new Selection(new Position(2, 6), new Position(2, 9)),
         ];
 
         await emulator.runCommand("yank");

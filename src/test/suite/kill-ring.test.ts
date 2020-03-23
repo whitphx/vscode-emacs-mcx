@@ -10,10 +10,10 @@ suite("KillRing", () => {
       new ClipboardTextKillRingEntity("foo"),
       new ClipboardTextKillRingEntity("bar"),
       new ClipboardTextKillRingEntity("baz"),
-      new ClipboardTextKillRingEntity("qux")
+      new ClipboardTextKillRingEntity("qux"),
     ];
 
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       killRing.push(entity);
     });
 
@@ -31,10 +31,10 @@ suite("KillRing", () => {
     const entities = [
       new ClipboardTextKillRingEntity("foo"),
       new ClipboardTextKillRingEntity("bar"),
-      new ClipboardTextKillRingEntity("baz")
+      new ClipboardTextKillRingEntity("baz"),
     ];
 
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       killRing.push(entity);
     });
 
@@ -51,7 +51,7 @@ suite("KillRing", () => {
 
     const entities = [new ClipboardTextKillRingEntity("foo")];
 
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       killRing.push(entity);
     });
 

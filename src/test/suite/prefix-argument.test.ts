@@ -86,7 +86,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       assertTextEqual(activeTextEditor, "aaaab");
     });
 
-    [2, 3].forEach(times => {
+    [2, 3].forEach((times) => {
       test(`repeating charactor input with ${times} C-u`, async () => {
         for (let i = 0; i < times; ++i) {
           emulator.universalArgument();

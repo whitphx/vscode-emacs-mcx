@@ -20,7 +20,7 @@ ccc`;
 
   teardown(cleanUpWorkspace);
 
-  ["addSelectionToNextFindMatch", "addSelectionToPreviousFindMatch"].forEach(commandName => {
+  ["addSelectionToNextFindMatch", "addSelectionToPreviousFindMatch"].forEach((commandName) => {
     test(`mark-mode is enabled when ${commandName} is invoked`, async () => {
       // 'aaa' appearances
       const firstRange = new Range(new Position(0, 0), new Position(0, 3));
@@ -38,7 +38,7 @@ ccc`;
 
       // And mark-mode is still valid
       await emulator.runCommand("backwardChar");
-      assert.ok(activeTextEditor.selections.every(selection => !selection.isEmpty));
+      assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
     });
   });
 });

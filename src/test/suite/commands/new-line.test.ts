@@ -9,7 +9,7 @@ suite("newLine", () => {
 
   const eols: Array<[vscode.EndOfLine, string]> = [
     [vscode.EndOfLine.LF, "\n"],
-    [vscode.EndOfLine.CRLF, "\r\n"]
+    [vscode.EndOfLine.CRLF, "\r\n"],
   ];
 
   eols.forEach(([eol, eolStr]) => {
@@ -85,20 +85,20 @@ suite("newLine", () => {
             setEmptyCursors(activeTextEditor, [0, 0]);
             emulator.setMarkCommand();
             await emulator.runCommand("forwardChar");
-            assert.ok(activeTextEditor.selections.every(selection => !selection.isEmpty));
+            assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
 
             // Test newLine
             await emulator.runCommand("newLine");
 
             assertTextEqual(activeTextEditor, `0${eolStr}123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`);
 
-            assert.ok(activeTextEditor.selections.every(selection => selection.isEmpty));
+            assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
 
             // Then, next mark-mode works
             setEmptyCursors(activeTextEditor, [0, 0]);
             emulator.setMarkCommand();
             await emulator.runCommand("forwardChar");
-            assert.ok(activeTextEditor.selections.every(selection => !selection.isEmpty));
+            assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
           });
         });
       });
@@ -122,7 +122,7 @@ suite("newLine", () => {
           const initialText = "/** */";
           activeTextEditor = await setupWorkspace(initialText, {
             eol,
-            language: "typescript"
+            language: "typescript",
           });
           emulator = new EmacsEmulator(activeTextEditor);
 

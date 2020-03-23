@@ -114,9 +114,9 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
       if (
-        e.contentChanges.some(contentChange =>
+        e.contentChanges.some((contentChange) =>
           this.textEditor.selections.some(
-            selection => typeof contentChange.range.intersection(selection) !== "undefined"
+            (selection) => typeof contentChange.range.intersection(selection) !== "undefined"
           )
         )
       ) {
@@ -151,7 +151,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
       const promises = [];
       for (let i = 0; i < prefixArgument; ++i) {
         const promise = vscode.commands.executeCommand("default:type", {
-          text
+          text,
         });
         promises.push(promise);
       }
@@ -161,7 +161,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
     logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
     return vscode.commands.executeCommand("default:type", {
-      text
+      text,
     });
   }
 
@@ -236,7 +236,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
   private makeSelectionsEmpty() {
     this.textEditor.selections = this.textEditor.selections.map(
-      selection => new Selection(selection.active, selection.active)
+      (selection) => new Selection(selection.active, selection.active)
     );
   }
 
@@ -249,7 +249,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
   }
 
   private hasNonEmptySelection(): boolean {
-    return this.textEditor.selections.some(selection => !selection.isEmpty);
+    return this.textEditor.selections.some((selection) => !selection.isEmpty);
   }
 
   private afterCommand() {
@@ -257,7 +257,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
   }
 
   private onDidInterruptTextEditor() {
-    this.commandRegistry.forEach(command => {
+    this.commandRegistry.forEach((command) => {
       if (instanceOfIEmacsCommandInterrupted(command)) {
         command.onDidInterruptTextEditor();
       }

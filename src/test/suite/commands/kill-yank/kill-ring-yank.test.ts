@@ -198,7 +198,7 @@ ABCDEFGHIJ`
     const otherInterruptingCommands = ["selectAll"];
     const interruptingCommands: string[] = [...otherInterruptingCommands];
 
-    interruptingCommands.forEach(interruptingCommand => {
+    interruptingCommands.forEach((interruptingCommand) => {
       test(`yankPop does not work if ${interruptingCommand} is executed after previous yank`, async () => {
         const killRing = new KillRing(3);
         const emulator = new EmacsEmulator(activeTextEditor, killRing);
@@ -301,24 +301,26 @@ ABCDEFGHIJ`
       let emulator: EmacsEmulator;
 
       const edits: Array<[string, () => Thenable<any>]> = [
-        ["edit", () => activeTextEditor.edit(editBuilder => editBuilder.insert(new Position(0, 0), "hoge"))],
+        ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
         [
           "delete",
           () =>
-            activeTextEditor.edit(editBuilder => editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))))
+            activeTextEditor.edit((editBuilder) =>
+              editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1)))
+            ),
         ],
         [
           "replace",
           () =>
-            activeTextEditor.edit(editBuilder =>
+            activeTextEditor.edit((editBuilder) =>
               editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
-            )
-        ]
+            ),
+        ],
       ];
 
       const moves = moveCommandIds.map((commandName): [string, () => Thenable<any> | undefined] => [
         commandName,
-        () => emulator.runCommand(commandName)
+        () => emulator.runCommand(commandName),
       ]);
 
       setup(() => {
@@ -473,7 +475,7 @@ ABCDEFGHIJ`
       activeTextEditor.selections = [
         new Selection(new Position(0, 0), new Position(0, 3)),
         new Selection(new Position(1, 0), new Position(1, 3)),
-        new Selection(new Position(2, 0), new Position(2, 3))
+        new Selection(new Position(2, 0), new Position(2, 3)),
       ];
       await emulator.runCommand("killRegion");
 
@@ -481,7 +483,7 @@ ABCDEFGHIJ`
       activeTextEditor.selections = [
         new Selection(new Position(0, 0), new Position(0, 0)),
         new Selection(new Position(1, 0), new Position(1, 0)),
-        new Selection(new Position(2, 0), new Position(2, 0))
+        new Selection(new Position(2, 0), new Position(2, 0)),
       ];
       await emulator.runCommand("killRegion");
 

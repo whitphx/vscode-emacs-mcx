@@ -3,7 +3,7 @@ import { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 
 function hasNonEmptySelection(textEditor: TextEditor): boolean {
-  return textEditor.selections.some(selection => !selection.isEmpty);
+  return textEditor.selections.some((selection) => !selection.isEmpty);
 }
 
 export class TransformToUppercase extends EmacsCommand {

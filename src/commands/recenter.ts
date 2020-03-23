@@ -5,7 +5,7 @@ import { EmacsCommand, IEmacsCommandInterrupted } from ".";
 enum RecenterPosition {
   Middle,
   Top,
-  Bottom
+  Bottom,
 }
 
 export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInterrupted {

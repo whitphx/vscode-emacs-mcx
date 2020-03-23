@@ -37,7 +37,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   public debug: IDebugConfiguration = {
     silent: false,
     loggingLevelForAlert: "error",
-    loggingLevelForConsole: "error"
+    loggingLevelForConsole: "error",
   };
 
   /**

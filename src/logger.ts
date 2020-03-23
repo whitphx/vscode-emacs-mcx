@@ -39,13 +39,13 @@ export let logger = winston.createLogger({
   transports: [
     new ConsoleForElectron({
       level: "error",
-      silent: false
+      silent: false,
     }),
     new VsCodeMessage({
       level: "error",
-      silent: false
-    })
-  ]
+      silent: false,
+    }),
+  ],
 });
 
 export function initializeLogger(configuration: IConfiguration) {
@@ -54,12 +54,12 @@ export function initializeLogger(configuration: IConfiguration) {
     transports: [
       new ConsoleForElectron({
         level: configuration.debug.loggingLevelForConsole,
-        silent: configuration.debug.silent
+        silent: configuration.debug.silent,
       }),
       new VsCodeMessage({
         level: configuration.debug.loggingLevelForAlert,
-        silent: configuration.debug.silent
-      })
-    ]
+        silent: configuration.debug.silent,
+      }),
+    ],
   });
 }

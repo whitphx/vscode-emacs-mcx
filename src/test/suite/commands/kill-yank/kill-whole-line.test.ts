@@ -20,12 +20,12 @@ ABCDEFGHIJ`;
     suite("single cursor in the middle line of the document", () => {
       const cursorLineNum = 1;
       const cursorCharNums = [0, 5, 10]; // beginning, middle, end
-      cursorCharNums.forEach(cursorCharNum => {
+      cursorCharNums.forEach((cursorCharNum) => {
         test(`it works with single cursor at (${cursorLineNum}, ${cursorCharNum})`, async () => {
           const emulator = new EmacsEmulator(activeTextEditor);
 
           activeTextEditor.selections = [
-            new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum))
+            new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum)),
           ];
 
           await emulator.runCommand("killWholeLine");
@@ -48,12 +48,12 @@ ABCDEFGHIJ`
     suite("single cursor in the last line of the document", () => {
       const cursorLineNum = 2; // the last line
       const cursorCharNums = [0, 5, 10]; // beginning, middle, end
-      cursorCharNums.forEach(cursorCharNum => {
+      cursorCharNums.forEach((cursorCharNum) => {
         test(`it works with single cursor at (${cursorLineNum}, ${cursorCharNum})`, async () => {
           const emulator = new EmacsEmulator(activeTextEditor);
 
           activeTextEditor.selections = [
-            new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum))
+            new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum)),
           ];
 
           await emulator.runCommand("killWholeLine");

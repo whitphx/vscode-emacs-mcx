@@ -26,7 +26,7 @@ export class NewLine extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     this.emacsController.exitMarkMode();
 
-    textEditor.selections = textEditor.selections.map(selection => new Selection(selection.active, selection.active));
+    textEditor.selections = textEditor.selections.map((selection) => new Selection(selection.active, selection.active));
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () => vscode.commands.executeCommand<void>("default:type", { text: "\n" }));
