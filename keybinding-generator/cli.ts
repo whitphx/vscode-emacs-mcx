@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as stripJsonComments from "strip-json-comments";
-import { KeyBinding, KeyBindingSource, generateKeybindings } from "./generate-keybindings";
+import { KeyBinding, isKeyBindingSource, generateKeybindings } from "./generate-keybindings";
 
 const srcFilePath = "./keybindings.json";
 const packageDotJsonPath = "./package.json";
@@ -8,11 +8,15 @@ const packageDotJsonPath = "./package.json";
 console.info(`Reading ${srcFilePath} ...`);
 const srcContent = fs.readFileSync(srcFilePath, "utf8");
 const srcJSON = JSON.parse(stripJsonComments(srcContent));
-const keybindingSrcs: KeyBindingSource[] = srcJSON["keybindings"];
+const keybindingSrcs: Array<object> = srcJSON["keybindings"];
 
 let dstKeybindings: KeyBinding[] = [];
 
 keybindingSrcs.forEach((keybindingSrc) => {
+  if (!isKeyBindingSource(keybindingSrc)) {
+    throw new Error(`${JSON.stringify(keybindingSrc)} is not a valid source`);
+  }
+
   const keybindings = generateKeybindings(keybindingSrc);
   dstKeybindings = dstKeybindings.concat(keybindings);
 });

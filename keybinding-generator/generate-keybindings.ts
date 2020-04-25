@@ -3,6 +3,7 @@ export interface KeyBindingSource {
   keys?: string[];
   command: string;
   when?: string;
+  whens?: string[];
   args?: string[];
 }
 
@@ -42,48 +43,112 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     throw new Error(`Neither .key nor .keys are provided`);
   }
 
+  let whens: (string | undefined)[] = [];
+  if (src.when) {
+    whens = [src.when];
+    if (src.whens) {
+      throw new Error(`Both .when and .whens are provided while just one of them should be.`);
+    }
+  } else if (src.whens) {
+    whens = src.whens;
+  }
+  if (whens.length === 0) {
+    whens = [undefined];
+  }
+
   const keybindings: KeyBinding[] = [];
-  keys.forEach((key) => {
-    if (key.includes("meta")) {
-      // Generate a keybinding using ALT as meta.
-      keybindings.push({
-        key: replaceAll(key, "meta", "alt"),
-        command: src.command,
-        when: src.when,
-        args: src.args,
-      });
-
-      // Generate a keybinding using CMD as meta for macOS.
-      keybindings.push({
-        mac: replaceAll(key, "meta", "cmd"),
-        command: src.command,
-        when: addWhenCond(src.when, "config.emacs-mcx.useMetaPrefixMacCmd"),
-        args: src.args,
-      });
-
-      // Generate a keybinding using ESC as meta for macOS.
-      const keystrokes = key.split(" ").filter((k) => k);
-      if (keystrokes.length === 1) {
+  whens.forEach((when) => {
+    keys.forEach((key) => {
+      if (key.includes("meta")) {
+        // Generate a keybinding using ALT as meta.
         keybindings.push({
-          key: key.replace("meta+", "escape "), // NOTE: This is not fully compatible for all cases!
+          key: replaceAll(key, "meta", "alt"),
           command: src.command,
-          when: addWhenCond(src.when, "config.emacs-mcx.useMetaPrefixEscape"),
+          when,
           args: src.args,
         });
+
+        // Generate a keybinding using CMD as meta for macOS.
+        keybindings.push({
+          mac: replaceAll(key, "meta", "cmd"),
+          command: src.command,
+          when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
+          args: src.args,
+        });
+
+        // Generate a keybinding using ESC as meta for macOS.
+        const keystrokes = key.split(" ").filter((k) => k);
+        if (keystrokes.length === 1) {
+          keybindings.push({
+            key: key.replace("meta+", "escape "), // NOTE: This is not fully compatible for all cases!
+            command: src.command,
+            when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
+            args: src.args,
+          });
+        } else {
+          console.warn(
+            `${key} includes more than one key strokes then it cannot be converted to a keybinding with ESC key.`
+          );
+        }
       } else {
-        console.warn(
-          `${key} includes more than one key strokes then it cannot be converted to a keybinding with ESC key.`
-        );
+        keybindings.push({
+          key,
+          command: src.command,
+          when,
+          args: src.args,
+        });
       }
-    } else {
-      keybindings.push({
-        key,
-        command: src.command,
-        when: src.when,
-        args: src.args,
-      });
-    }
+    });
   });
 
   return keybindings;
+}
+
+export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc is KeyBindingSource {
+  // Check for .key
+  if (typeof maybeSrc.key !== "undefined" && typeof maybeSrc.key !== "string") {
+    return false;
+  }
+
+  // Checks for .keys
+  if (typeof maybeSrc.keys !== "undefined") {
+    if (!Array.isArray(maybeSrc.keys)) {
+      return false;
+    }
+    if (maybeSrc.keys.some((k) => typeof k !== "string")) {
+      return false;
+    }
+  }
+
+  // Check for .command
+  if (typeof maybeSrc.command !== "string") {
+    return false;
+  }
+
+  // Check for .when
+  if (typeof maybeSrc.when !== "undefined" && typeof maybeSrc.when !== "string") {
+    return false;
+  }
+
+  // Checks for .whens
+  if (typeof maybeSrc.whens !== "undefined") {
+    if (!Array.isArray(maybeSrc.whens)) {
+      return false;
+    }
+    if (maybeSrc.whens.some((w) => typeof w !== "string")) {
+      return false;
+    }
+  }
+
+  // Checks for .args
+  if (typeof maybeSrc.args !== "undefined") {
+    if (!Array.isArray(maybeSrc.args)) {
+      return false;
+    }
+    if (maybeSrc.args.some((a) => typeof a !== "string")) {
+      return false;
+    }
+  }
+
+  return true;
 }

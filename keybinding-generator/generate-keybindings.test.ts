@@ -129,4 +129,35 @@ describe("generateKeybindings", () => {
     ];
     expect(generateKeybindings(src)).toEqual(expected);
   });
+
+  it("converts src including 'whens'", () => {
+    const src: KeyBindingSource = {
+      keys: ["right", "ctrl+f"],
+      command: "emacs-mcx.forwardChar",
+      whens: ["editorTextFocus", "terminalFocus"],
+    };
+    const expected: KeyBinding[] = [
+      {
+        key: "right",
+        command: "emacs-mcx.forwardChar",
+        when: "editorTextFocus",
+      },
+      {
+        key: "ctrl+f",
+        command: "emacs-mcx.forwardChar",
+        when: "editorTextFocus",
+      },
+      {
+        key: "right",
+        command: "emacs-mcx.forwardChar",
+        when: "terminalFocus",
+      },
+      {
+        key: "ctrl+f",
+        command: "emacs-mcx.forwardChar",
+        when: "terminalFocus",
+      },
+    ];
+    expect(generateKeybindings(src)).toEqual(expected);
+  });
 });
