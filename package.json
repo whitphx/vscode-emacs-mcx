@@ -293,11 +293,13 @@
 			},
 			{
 				"key": "alt+f",
+				"mac": "cmd+f",
 				"command": "emacs-mcx.forwardWord",
 				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+f",
+				"mac": "cmd+f",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -321,11 +323,13 @@
 			},
 			{
 				"key": "alt+b",
+				"mac": "cmd+b",
 				"command": "emacs-mcx.backwardWord",
 				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+b",
+				"mac": "cmd+b",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -379,11 +383,13 @@
 			},
 			{
 				"key": "alt+v",
+				"mac": "cmd+v",
 				"command": "emacs-mcx.scrollDownCommand",
 				"when": "editorTextFocus && !suggestWidgetVisible"
 			},
 			{
 				"key": "alt+v",
+				"mac": "cmd+v",
 				"command": "closeFindWidget",
 				"when": "editorFocus && findWidgetVisible"
 			},
@@ -399,6 +405,7 @@
 			},
 			{
 				"key": "alt+shift+[",
+				"mac": "cmd+shift+[",
 				"command": "emacs-mcx.backwardParagraph",
 				"when": "editorTextFocus && !suggestWidgetVisible"
 			},
@@ -409,6 +416,7 @@
 			},
 			{
 				"key": "alt+shift+]",
+				"mac": "cmd+shift+]",
 				"command": "emacs-mcx.forwardParagraph",
 				"when": "editorTextFocus && !suggestWidgetVisible"
 			},
@@ -419,11 +427,13 @@
 			},
 			{
 				"key": "alt+shift+.",
+				"mac": "cmd+shift+.",
 				"command": "emacs-mcx.endOfBuffer",
 				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+shift+.",
+				"mac": "cmd+shift+.",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -447,11 +457,13 @@
 			},
 			{
 				"key": "alt+shift+,",
+				"mac": "cmd+shift+,",
 				"command": "emacs-mcx.beginningOfBuffer",
 				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+shift+,",
+				"mac": "cmd+shift+,",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -475,14 +487,17 @@
 			},
 			{
 				"key": "alt+g alt+g",
+				"mac": "cmd+g cmd+g",
 				"command": "workbench.action.gotoLine"
 			},
 			{
 				"key": "alt+g g",
+				"mac": "cmd+g g",
 				"command": "workbench.action.gotoLine"
 			},
 			{
 				"key": "alt+g alt+g",
+				"mac": "cmd+g cmd+g",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -492,6 +507,7 @@
 			},
 			{
 				"key": "alt+g g",
+				"mac": "cmd+g g",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -506,10 +522,12 @@
 			},
 			{
 				"key": "alt+g n",
+				"mac": "cmd+g n",
 				"command": "editor.action.marker.next"
 			},
 			{
 				"key": "alt+g alt+n",
+				"mac": "cmd+g cmd+n",
 				"command": "editor.action.marker.next"
 			},
 			{
@@ -518,10 +536,12 @@
 			},
 			{
 				"key": "alt+g p",
+				"mac": "cmd+g p",
 				"command": "editor.action.marker.prev"
 			},
 			{
 				"key": "alt+g alt+p",
+				"mac": "cmd+g cmd+p",
 				"command": "editor.action.marker.prev"
 			},
 			{
@@ -551,6 +571,7 @@
 			},
 			{
 				"key": "alt+shift+5",
+				"mac": "cmd+shift+5",
 				"command": "editor.action.startFindReplaceAction",
 				"when": "editorFocus"
 			},
@@ -561,6 +582,7 @@
 			},
 			{
 				"key": "ctrl+alt+n",
+				"mac": "ctrl+cmd+n",
 				"command": "emacs-mcx.addSelectionToNextFindMatch",
 				"when": "editorFocus"
 			},
@@ -571,6 +593,7 @@
 			},
 			{
 				"key": "ctrl+alt+p",
+				"mac": "ctrl+cmd+p",
 				"command": "emacs-mcx.addSelectionToPreviousFindMatch",
 				"when": "editorFocus"
 			},
@@ -596,6 +619,7 @@
 			},
 			{
 				"key": "alt+d",
+				"mac": "cmd+d",
 				"command": "emacs-mcx.killWord",
 				"when": "editorTextFocus && !editorReadonly"
 			},
@@ -606,6 +630,7 @@
 			},
 			{
 				"key": "alt+backspace",
+				"mac": "cmd+backspace",
 				"command": "emacs-mcx.backwardKillWord",
 				"when": "editorTextFocus && !editorReadonly"
 			},
@@ -636,11 +661,13 @@
 			},
 			{
 				"key": "alt+w",
+				"mac": "cmd+w",
 				"command": "emacs-mcx.copyRegion",
 				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+w",
+				"mac": "cmd+w",
 				"command": "closeFindWidget",
 				"when": "editorFocus && findWidgetVisible"
 			},
@@ -666,11 +693,13 @@
 			},
 			{
 				"key": "alt+y",
+				"mac": "cmd+y",
 				"command": "emacs-mcx.yank-pop",
 				"when": "editorTextFocus && !editorReadonly"
 			},
 			{
 				"key": "alt+y",
+				"mac": "cmd+y",
 				"command": "closeFindWidget",
 				"when": "editorFocus && findWidgetVisible"
 			},
@@ -786,11 +815,13 @@
 			},
 			{
 				"key": "alt+;",
+				"mac": "cmd+;",
 				"command": "editor.action.blockComment",
 				"when": "editorTextFocus && !editorReadonly"
 			},
 			{
 				"key": "alt+;",
+				"mac": "cmd+;",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -819,6 +850,7 @@
 			},
 			{
 				"key": "alt+l",
+				"mac": "cmd+l",
 				"command": "emacs-mcx.transformToLowercase",
 				"when": "editorTextFocus && !editorReadonly"
 			},
@@ -834,6 +866,7 @@
 			},
 			{
 				"key": "alt+u",
+				"mac": "cmd+u",
 				"command": "emacs-mcx.transformToUppercase",
 				"when": "editorTextFocus && !editorReadonly"
 			},
@@ -844,6 +877,7 @@
 			},
 			{
 				"key": "alt+c",
+				"mac": "cmd+c",
 				"command": "emacs-mcx.transformToTitlecase",
 				"when": "editorTextFocus && !editorReadonly"
 			},
@@ -854,6 +888,7 @@
 			},
 			{
 				"key": "alt+shift+6",
+				"mac": "cmd+shift+6",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorTextFocus && !editorReadOnly",
 				"args": [
@@ -972,6 +1007,7 @@
 			},
 			{
 				"key": "alt+x",
+				"mac": "cmd+x",
 				"command": "workbench.action.showCommands"
 			},
 			{
@@ -981,6 +1017,7 @@
 			},
 			{
 				"key": "ctrl+alt+space",
+				"mac": "ctrl+cmd+space",
 				"command": "workbench.action.toggleSidebarVisibility"
 			},
 			{
@@ -1053,6 +1090,7 @@
 			},
 			{
 				"key": "ctrl+alt+f",
+				"mac": "ctrl+cmd+f",
 				"command": "emacs-mcx.paredit.forwardSexp",
 				"when": "editorTextFocus"
 			},
@@ -1063,6 +1101,7 @@
 			},
 			{
 				"key": "ctrl+alt+b",
+				"mac": "ctrl+cmd+b",
 				"command": "emacs-mcx.paredit.backwardSexp",
 				"when": "editorTextFocus"
 			},
