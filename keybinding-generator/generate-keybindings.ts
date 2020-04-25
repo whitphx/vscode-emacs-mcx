@@ -22,11 +22,23 @@ export function isValidKey(key: string): boolean {
 
   // * '+' must be only as a concatenator of keys.
   // * Key combinations must be concatenated by '+' without surrouding white spaces.
-  if (key.match(/[^a-z]\+/) || key.match(/\+[^a-z]/)) {
+  if (key.match(/\s\+/) || key.match(/\+\s/)) {
     return false;
   }
 
   return true;
+}
+
+export function replaceMetaWithEscape(keycombo: string): string {
+  if (keycombo.includes(" ")) {
+    throw new Error(`Key combo "${keycombo}" has white spaces.`);
+  }
+
+  const strokes = keycombo.split("+");
+  const strokesWithoutMeta = strokes.filter((stroke) => stroke !== "meta");
+  const metaIncluded = strokes.includes("meta");
+
+  return (metaIncluded ? "escape " : "") + strokesWithoutMeta.join("+");
 }
 
 function addWhenCond(base: string | undefined, additional: string): string {
@@ -77,6 +89,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         throw new Error(`Unparsable key string: "${key}"`);
       }
 
+      // Convert "meta" specifications
       if (key.includes("meta")) {
         // Generate a keybinding using ALT as meta.
         keybindings.push({
@@ -98,7 +111,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         const keystrokes = key.split(" ").filter((k) => k);
         if (keystrokes.length === 1) {
           keybindings.push({
-            key: key.replace("meta+", "escape "), // NOTE: This is not fully compatible for all cases!
+            key: replaceMetaWithEscape(key),
             command: src.command,
             when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
             args: src.args,

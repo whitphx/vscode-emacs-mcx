@@ -724,12 +724,12 @@
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixEscape"
 			},
 			{
-				"key": "alt+ctrl+n",
+				"key": "ctrl+alt+n",
 				"command": "emacs-mcx.addSelectionToNextFindMatch",
 				"when": "editorFocus"
 			},
 			{
-				"mac": "cmd+ctrl+n",
+				"mac": "ctrl+cmd+n",
 				"command": "emacs-mcx.addSelectionToNextFindMatch",
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixMacCmd"
 			},
@@ -739,12 +739,12 @@
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixEscape"
 			},
 			{
-				"key": "alt+ctrl+p",
+				"key": "ctrl+alt+p",
 				"command": "emacs-mcx.addSelectionToPreviousFindMatch",
 				"when": "editorFocus"
 			},
 			{
-				"mac": "cmd+ctrl+p",
+				"mac": "ctrl+cmd+p",
 				"command": "emacs-mcx.addSelectionToPreviousFindMatch",
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixMacCmd"
 			},
@@ -1227,11 +1227,11 @@
 				"when": "config.emacs-mcx.useMetaPrefixEscape"
 			},
 			{
-				"key": "alt+ctrl+space",
+				"key": "ctrl+alt+space",
 				"command": "workbench.action.toggleSidebarVisibility"
 			},
 			{
-				"mac": "cmd+ctrl+space",
+				"mac": "ctrl+cmd+space",
 				"command": "workbench.action.toggleSidebarVisibility",
 				"when": "config.emacs-mcx.useMetaPrefixMacCmd"
 			},
@@ -1304,12 +1304,12 @@
 				"when": "editorTextFocus"
 			},
 			{
-				"key": "alt+ctrl+f",
+				"key": "ctrl+alt+f",
 				"command": "emacs-mcx.paredit.forwardSexp",
 				"when": "editorTextFocus"
 			},
 			{
-				"mac": "cmd+ctrl+f",
+				"mac": "ctrl+cmd+f",
 				"command": "emacs-mcx.paredit.forwardSexp",
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
 			},
@@ -1319,12 +1319,12 @@
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
 			},
 			{
-				"key": "alt+ctrl+b",
+				"key": "ctrl+alt+b",
 				"command": "emacs-mcx.paredit.backwardSexp",
 				"when": "editorTextFocus"
 			},
 			{
-				"mac": "cmd+ctrl+b",
+				"mac": "ctrl+cmd+b",
 				"command": "emacs-mcx.paredit.backwardSexp",
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
 			},
