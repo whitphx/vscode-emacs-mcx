@@ -1,5 +1,5 @@
 import * as expect from "expect";
-import { generateKeybindings, KeyBindingSource, KeyBinding } from "./generate-keybindings";
+import { generateKeybindings, isValidKey, KeyBindingSource, KeyBinding } from "./generate-keybindings";
 
 describe("generateKeybindings", () => {
   it("converts src including 'keys'", () => {
@@ -159,5 +159,22 @@ describe("generateKeybindings", () => {
       },
     ];
     expect(generateKeybindings(src)).toEqual(expected);
+  });
+});
+
+describe("isValidKey", () => {
+  const testcases: { key: string; expected: boolean }[] = [
+    { key: "", expected: false },
+    { key: " ", expected: false },
+    { key: "ctrl+f", expected: true },
+    { key: "ctrl +f", expected: false },
+    { key: "ctrl+ f", expected: false },
+    { key: "ctrl + f", expected: false },
+    { key: "ctrl+x f", expected: true },
+  ];
+  testcases.forEach(({ key, expected }) => {
+    it(`returns ${expected} given "${key}"`, () => {
+      expect(isValidKey(key)).toEqual(expected);
+    });
   });
 });

@@ -15,6 +15,20 @@ export interface KeyBinding {
   args?: string[];
 }
 
+export function isValidKey(key: string): boolean {
+  if (key.trim() === "") {
+    return false;
+  }
+
+  // * '+' must be only as a concatenator of keys.
+  // * Key combinations must be concatenated by '+' without surrouding white spaces.
+  if (key.match(/[^a-z]\+/) || key.match(/\+[^a-z]/)) {
+    return false;
+  }
+
+  return true;
+}
+
 function addWhenCond(base: string | undefined, additional: string): string {
   if (!base || base.trim() === "") {
     return additional;
@@ -40,7 +54,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   } else if (src.keys) {
     keys = src.keys;
   } else {
-    throw new Error(`Neither .key nor .keys are provided`);
+    throw new Error(`Neither .key nor .keys are provided: ${JSON.stringify(src)}`);
   }
 
   let whens: (string | undefined)[] = [];
@@ -59,6 +73,10 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
   whens.forEach((when) => {
     keys.forEach((key) => {
+      if (!isValidKey(key)) {
+        throw new Error(`Unparsable key string: "${key}"`);
+      }
+
       if (key.includes("meta")) {
         // Generate a keybinding using ALT as meta.
         keybindings.push({
