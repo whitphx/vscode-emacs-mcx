@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.19.1] - 2020-04-25
+### Added
+- Introduce Webpack to bundle the source code to improve performance and reduce package size.
+
 ## [0.19.0] - 2020-04-25
 ### Added
 - `useMetaPrefixMacCmd` option to use Command (⌘) key as a meta key. @flindeberg
