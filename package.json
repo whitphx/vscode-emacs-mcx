@@ -1435,6 +1435,7 @@
 		"glob": "^7.1.6",
 		"mocha": "^7.1.1",
 		"prettier": "^2.0.5",
+		"strip-json-comments": "^3.1.0",
 		"ts-loader": "^7.0.1",
 		"ts-mocha": "^7.0.0",
 		"typescript": "^3.8.3",
