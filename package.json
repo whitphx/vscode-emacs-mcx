@@ -30,7 +30,7 @@
 	"extensionKind": [
 		"ui"
 	],
-	"main": "./out/extension.js",
+	"main": "./dist/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -1363,12 +1363,13 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn && yarn run compile",
+		"vscode:prepublish": "yarn && webpack --mode production",
+		"webpack": "webpack --mode development",
+		"webpack-dev": "webpack --mode development --watch",
+		"test-compile": "tsc -p ./",
 		"prettier": "prettier --write 'src/**/*.ts'",
-		"compile": "tsc -p ./",
 		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "yarn run compile && yarn run lint",
+		"pretest": "yarn run test-compile",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
@@ -1384,8 +1385,11 @@
 		"glob": "^7.1.6",
 		"mocha": "^7.1.1",
 		"prettier": "^2.0.5",
+		"ts-loader": "^7.0.1",
 		"typescript": "^3.8.3",
-		"vscode-test": "^1.3.0"
+		"vscode-test": "^1.3.0",
+		"webpack": "^4.43.0",
+		"webpack-cli": "^3.3.11"
 	},
 	"dependencies": {
 		"clipboardy": "^2.3.0",

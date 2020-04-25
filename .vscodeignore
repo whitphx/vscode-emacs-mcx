@@ -1,10 +1,13 @@
-.vscode/**
-.vscode-test/**
-out/test/**
-src/**
+.vscode
+.vscode-test
+node_modules
+out/
+src/
 .gitignore
 vsc-extension-quickstart.md
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
 **/*.ts
+**/webpack.config.js
+azure-pipelines.yml
