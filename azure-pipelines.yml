@@ -27,12 +27,11 @@ steps:
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
 
 - bash: |
-    echo ">>> Compile vscode-test"
-    yarn && yarn compile
-    echo ">>> Compiled vscode-test"
-    cd sample
-    echo ">>> Run sample integration test"
+    echo ">>> Run tests"
     yarn && yarn compile && yarn test
+    echo ">>> Check vsce package runnability"
+    npm install -g vsce
+    vsce package
   displayName: Run Tests
   env:
     DISPLAY: ':99.0'
