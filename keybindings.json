@@ -258,12 +258,12 @@
     },
     // addSelectionToNext/PreviousFindMatch
     {
-      "key": "meta+ctrl+n",  // TODO: should be "ctrl+meta+n" to adjust orignial def
+      "key": "ctrl+meta+n",
       "command": "emacs-mcx.addSelectionToNextFindMatch",
       "when": "editorFocus"
     },
     {
-      "key": "meta+ctrl+p",  // TODO: should be "ctrl+meta+n" to adjust orignial def
+      "key": "ctrl+meta+p",
       "command": "emacs-mcx.addSelectionToPreviousFindMatch",
       "when": "editorFocus"
     },
@@ -597,7 +597,7 @@
     },
     // Sidebar
     {
-      "key": "meta+ctrl+space", // TODO: Should be "ctrl+meta+space"
+      "key": "ctrl+meta+space",
       "command": "workbench.action.toggleSidebarVisibility"
     },
     // Workspace
@@ -667,12 +667,12 @@
       },
 
 			{
-				"key": "meta+ctrl+f",  // TODO: be "ctrl+meta+f"
+				"key": "ctrl+meta+f",
 				"command": "emacs-mcx.paredit.forwardSexp",
 				"when": "editorTextFocus"
 			},
 			{
-				"key": "meta+ctrl+b",
+				"key": "ctrl+meta+b",
 				"command": "emacs-mcx.paredit.backwardSexp",
 				"when": "editorTextFocus"
 			},

@@ -1,5 +1,11 @@
 import * as expect from "expect";
-import { generateKeybindings, isValidKey, KeyBindingSource, KeyBinding } from "./generate-keybindings";
+import {
+  generateKeybindings,
+  isValidKey,
+  replaceMetaWithEscape,
+  KeyBindingSource,
+  KeyBinding,
+} from "./generate-keybindings";
 
 describe("generateKeybindings", () => {
   it("converts src including 'keys'", () => {
@@ -171,10 +177,27 @@ describe("isValidKey", () => {
     { key: "ctrl+ f", expected: false },
     { key: "ctrl + f", expected: false },
     { key: "ctrl+x f", expected: true },
+    { key: "meta+shift+[", expected: true },
   ];
   testcases.forEach(({ key, expected }) => {
     it(`returns ${expected} given "${key}"`, () => {
       expect(isValidKey(key)).toEqual(expected);
+    });
+  });
+});
+
+describe("replaceMetaWithEscape", () => {
+  const testcases: { key: string; expected: string }[] = [
+    { key: "ctrl+f", expected: "ctrl+f" },
+    { key: "meta+f", expected: "escape f" },
+    { key: "ctrl+meta+f", expected: "escape ctrl+f" },
+  ];
+  testcases.forEach(({ key, expected }) => {
+    it(`returns ${expected} given "${key}"`, () => {
+      if (!isValidKey(key)) {
+        throw new Error("Invalid key");
+      }
+      expect(replaceMetaWithEscape(key)).toEqual(expected);
     });
   });
 });
