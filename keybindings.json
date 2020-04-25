@@ -601,137 +601,135 @@
       "command": "workbench.action.toggleSidebarVisibility"
     },
     // Workspace
-
-			{
-				"key": "ctrl+x z",
-				"command": "workbench.action.toggleZenMode"
-			},
-			{
-				"key": "ctrl+x ctrl+f",
-				"command": "workbench.action.quickOpen"
-			},
-			{
-				"key": "ctrl+x ctrl+s",
-				"command": "workbench.action.files.save",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x ctrl+w",
-				"command": "workbench.action.files.saveAs",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x ctrl+n",
-				"command": "workbench.action.newWindow"
-			},
-			{
-				"key": "ctrl+x b",
-				"command": "workbench.action.showAllEditors"
-			},
-			{
-				"key": "ctrl+x k",
-				"command": "workbench.action.closeActiveEditor"
-			},
-			{
-				"key": "ctrl+x ctrl-k",
-				"command": "workbench.action.closeAllEditors"
-			},
-			{
-				"key": "ctrl+x 0",
-				"command": "workbench.action.closeEditorsInGroup"
-			},
-			{
-				"key": "ctrl+x 1",
-				"command": "workbench.action.closeEditorsInOtherGroups"
-			},
-			{
-				"key": "ctrl+x 2",
-				"command": "workbench.action.splitEditorDown"
-			},
-			{
-				"key": "ctrl+x 3",
-				"command": "workbench.action.splitEditorRight"
-			},
-			{
-				"key": "ctrl+x 4",
-				"command": "workbench.action.toggleEditorGroupLayout"
-			},
-			{
-				"key": "ctrl+x o",
-				"command": "workbench.action.navigateEditorGroups"
-			},
-			{
-				"key": "ctrl+u",
-				"command": "emacs-mcx.universalArgument",
-				"when": "editorTextFocus"
-      },
-
-			{
-				"key": "ctrl+meta+f",
-				"command": "emacs-mcx.paredit.forwardSexp",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+meta+b",
-				"command": "emacs-mcx.paredit.backwardSexp",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "showPrevParameterHint",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "showNextParameterHint",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "selectPrevQuickFix",
-				"when": "editorFocus && quickFixWidgetVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "selectNextQuickFix",
-				"when": "editorFocus && quickFixWidgetVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "selectPrevSuggestion",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "selectNextSuggestion",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "workbench.action.quickOpenNavigatePrevious",
-				"when": "inQuickOpen"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "workbench.action.quickOpenNavigateNext",
-				"when": "inQuickOpen"
-			},
-			{
-				"key": "ctrl+shift+'",
-				"command": "editor.action.triggerParameterHints",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "ctrl+x j",
-				"command": "workbench.action.togglePanel"
-			},
-			{
-				"key": "ctrl+i",
-				"command": "emacs-mcx.executeCommands",
-				"args": [
-					"emacs-mcx.forwardChar",
-					"emacs-mcx.nextLine"
-				]
-			}
+    {
+      "key": "ctrl+x z",
+      "command": "workbench.action.toggleZenMode"
+    },
+    {
+      "key": "ctrl+x ctrl+f",
+      "command": "workbench.action.quickOpen"
+    },
+    {
+      "key": "ctrl+x ctrl+s",
+      "command": "workbench.action.files.save",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+x ctrl+w",
+      "command": "workbench.action.files.saveAs",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+x ctrl+n",
+      "command": "workbench.action.newWindow"
+    },
+    {
+      "key": "ctrl+x b",
+      "command": "workbench.action.showAllEditors"
+    },
+    {
+      "key": "ctrl+x k",
+      "command": "workbench.action.closeActiveEditor"
+    },
+    {
+      "key": "ctrl+x ctrl-k",
+      "command": "workbench.action.closeAllEditors"
+    },
+    {
+      "key": "ctrl+x 0",
+      "command": "workbench.action.closeEditorsInGroup"
+    },
+    {
+      "key": "ctrl+x 1",
+      "command": "workbench.action.closeEditorsInOtherGroups"
+    },
+    {
+      "key": "ctrl+x 2",
+      "command": "workbench.action.splitEditorDown"
+    },
+    {
+      "key": "ctrl+x 3",
+      "command": "workbench.action.splitEditorRight"
+    },
+    {
+      "key": "ctrl+x 4",
+      "command": "workbench.action.toggleEditorGroupLayout"
+    },
+    {
+      "key": "ctrl+x o",
+      "command": "workbench.action.navigateEditorGroups"
+    },
+    {
+      "key": "ctrl+u",
+      "command": "emacs-mcx.universalArgument",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+meta+f",
+      "command": "emacs-mcx.paredit.forwardSexp",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+meta+b",
+      "command": "emacs-mcx.paredit.backwardSexp",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "showPrevParameterHint",
+      "when": "editorTextFocus && parameterHintsVisible"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "showNextParameterHint",
+      "when": "editorTextFocus && parameterHintsVisible"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "selectPrevQuickFix",
+      "when": "editorFocus && quickFixWidgetVisible"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "selectNextQuickFix",
+      "when": "editorFocus && quickFixWidgetVisible"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "selectPrevSuggestion",
+      "when": "editorTextFocus && suggestWidgetVisible"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "selectNextSuggestion",
+      "when": "editorTextFocus && suggestWidgetVisible"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "workbench.action.quickOpenNavigatePrevious",
+      "when": "inQuickOpen"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "workbench.action.quickOpenNavigateNext",
+      "when": "inQuickOpen"
+    },
+    {
+      "key": "ctrl+shift+'",
+      "command": "editor.action.triggerParameterHints",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+x j",
+      "command": "workbench.action.togglePanel"
+    },
+    {
+      "key": "ctrl+i",
+      "command": "emacs-mcx.executeCommands",
+      "args": [
+        "emacs-mcx.forwardChar",
+        "emacs-mcx.nextLine"
+      ]
+    }
   ]
 }
