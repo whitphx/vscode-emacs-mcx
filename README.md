@@ -147,6 +147,11 @@ The only exception is the commands which begin with `M-g` (`M-g g`, `M-g n`, `M-
 It is because VSCode can handle only up to two key strokes as the key bindings.
 So, as the special case, `Escape g` works as follows.
 
+### `emacs-mcx.useMetaPrefixMacCmd`
+If set to true, Command (⌘) key works as the Meta prefix like original emacs.
+This option only works on macOS.
+
+
 |Command | Desc |
 |--------|------|
 | `Escape g` | Jump to line (command palette) |
