@@ -28,7 +28,7 @@ steps:
 
 - bash: |
     echo ">>> Run tests"
-    yarn && yarn compile && yarn test
+    yarn && yarn lint && yarn test
     echo ">>> Check vsce package runnability"
     npm install -g vsce
     vsce package
