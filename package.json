@@ -1393,10 +1393,11 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn && webpack --mode production",
+		"vscode:prepublish": "yarn && yarn gen-keys && webpack --mode production",
 		"webpack": "webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
 		"test-compile": "tsc -p ./",
+		"gen-keys": "ts-node ./keybinding-generator/cli.ts",
 		"prettier": "prettier --write 'src/**/*.ts'",
 		"lint": "eslint src --ext ts",
 		"pretest": "yarn run test-compile",
@@ -1420,6 +1421,7 @@
 		"strip-json-comments": "^3.1.0",
 		"ts-loader": "^7.0.1",
 		"ts-mocha": "^7.0.0",
+		"ts-node": "^8.9.0",
 		"typescript": "^3.8.3",
 		"vscode-test": "^1.3.0",
 		"webpack": "^4.43.0",
