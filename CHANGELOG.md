@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.19.3] - 2020-04-26
+### Fixed
+- Fix `useMetaPrefixMacCmd` option to enable only the Command key to work as a meta key and disable the Alt key.
+
 ## [0.19.2] - 2020-04-26
 ### Fixed
 - Fix a bug at bundling to make clipboardy work on Windows and Linux.
