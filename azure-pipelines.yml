@@ -29,6 +29,8 @@ steps:
 - bash: |
     echo ">>> Run tests"
     yarn && yarn lint && yarn test
+    echo ">>> Check keybinding generation"
+    yarn gen-keys
     echo ">>> Check vsce package runnability"
     npm install -g vsce
     vsce package
