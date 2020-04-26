@@ -95,12 +95,13 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         keybindings.push({
           key: replaceAll(key, "meta", "alt"),
           command: src.command,
-          when,
+          when: addWhenCond(when, "!config.emacs-mcx.useMetaPrefixMacCmd"),
           args: src.args,
         });
 
         // Generate a keybinding using CMD as meta for macOS.
         keybindings.push({
+          key: replaceAll(key, "meta", "alt"),
           mac: replaceAll(key, "meta", "cmd"),
           command: src.command,
           when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
