@@ -3,7 +3,7 @@
 "use strict";
 
 const path = require("path");
-const CopyPlugin = require("copy-webpack-plugin");
+//const CopyPlugin = require("copy-webpack-plugin");
 
 /**@type {import('webpack').Configuration}*/
 const config = {
@@ -29,7 +29,8 @@ const config = {
     // See https://github.com/tuttieee/vscode-emacs-mcx/issues/260
     __dirname: false,
   },
-  plugins: [new CopyPlugin([{ from: "node_modules/clipboardy/fallbacks", to: "fallbacks" }])],
+  // XXX: CopyPlugin does not support copying permissions. So now we use `cp` shell command outside webpack. It's inconsistent and fragile and should be fixed.
+  //plugins: [new CopyPlugin([{ from: "node_modules/clipboardy/fallbacks", to: "fallbacks" }])],
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: [".ts", ".js"],

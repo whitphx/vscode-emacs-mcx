@@ -1440,9 +1440,11 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn && yarn gen-keys && webpack --mode production",
-		"webpack": "webpack --mode development",
-		"webpack-dev": "webpack --mode development --watch",
+		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod",
+		"webpack:dev": "webpack --mode development && yarn post-webpack",
+		"webpack:prod": "webpack --mode production && yarn post-webpack",
+		"webpack": "yarn webpack:dev",
+		"post-webpack": "cp -rp node_modules/clipboardy/fallbacks dist/.",
 		"test-compile": "tsc -p ./",
 		"gen-keys": "ts-node ./keybinding-generator/cli.ts",
 		"prettier": "prettier --write 'src/**/*.ts'",
