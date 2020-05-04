@@ -12,6 +12,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.19.5] - 2020-04-26
+### Fixed
+- Internal fix to call clipboardy asynchronously.
+- Internal fix to omit unnecessary files from the bundle.
+
 ## [0.19.4] - 2020-04-26
 ### Fixed
 - Fix a bug at bundling to make clipboardy work on Linux.
