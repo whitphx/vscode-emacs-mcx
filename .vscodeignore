@@ -11,3 +11,5 @@ vsc-extension-quickstart.md
 **/*.ts
 **/webpack.config.js
 azure-pipelines.yml
+keybindings.json
+DEVELOPMENT.md
