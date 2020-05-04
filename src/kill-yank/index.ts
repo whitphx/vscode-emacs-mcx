@@ -64,7 +64,7 @@ export class KillYanker {
       this.isAppending = false;
     }
 
-    this.copy(ranges, this.isAppending, appendDirection);
+    await this.copy(ranges, this.isAppending, appendDirection);
 
     await this.delete(ranges);
 
@@ -72,7 +72,7 @@ export class KillYanker {
     this.prevKillPositions = this.getCursorPositions();
   }
 
-  public copy(ranges: Range[], shouldAppend = false, appendDirection: AppendDirection = AppendDirection.Forward) {
+  public async copy(ranges: Range[], shouldAppend = false, appendDirection: AppendDirection = AppendDirection.Forward) {
     const newKillEntity = new EditorTextKillRingEntity(
       ranges.map((range) => ({
         range,
@@ -84,13 +84,13 @@ export class KillYanker {
       const currentKill = this.killRing.getTop();
       if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
         currentKill.append(newKillEntity, appendDirection);
-        clipboardy.writeSync(currentKill.asString());
+        await clipboardy.write(currentKill.asString());
       } else {
         this.killRing.push(newKillEntity);
-        clipboardy.writeSync(newKillEntity.asString());
+        await clipboardy.write(newKillEntity.asString());
       }
     } else {
-      clipboardy.writeSync(newKillEntity.asString());
+      await clipboardy.write(newKillEntity.asString());
     }
   }
 
@@ -103,7 +103,7 @@ export class KillYanker {
       return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
     }
 
-    const clipboardText = clipboardy.readSync();
+    const clipboardText = await clipboardy.read();
     const killRingEntity = this.killRing.getTop();
 
     let pasteText: string;
