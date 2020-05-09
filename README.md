@@ -62,6 +62,8 @@ you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
 in order to check whether or not mark-mode is enabled.
 
 ## Keymaps
+Alt key is mapped to a meta prefix (`M`) by default though you can change it to Escape or Command key (macOS only) by the settings above.
+
 ### Move commands
 |Command |Prefix argument |Desc |
 |--------|----------------|------|
