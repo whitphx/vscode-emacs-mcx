@@ -19,6 +19,48 @@ This extension aims
 This extension makes use of code in the existent extensions listed above and, in addition, [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
+## Configs
+This extension has some custom settings named with a prefix `emacs-mcx`.
+You can configure those settings.
+(See [this page](https://code.visualstudio.com/docs/getstarted/settings#_settings-editor) to know how to change the settings.)
+
+Configurable options of this extension are the followings.
+
+### `emacs-mcx.strictEmacsMove`
+If set to true, the original emacs's cursor movements are strictly simulated.
+If set to false, the VSCode's native cursor movements are preserved.
+For example, if set to true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
+If set to false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
+
+### `emacs-mcx.useMetaPrefixEscape`
+If set to true, Escape key works as the Meta prefix like original emacs.
+If set to false, Escape key works as cancel, the VSCode's native behavior.
+For example, if set to true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
+
+The only exception is the commands which begin with `M-g` (`M-g g`, `M-g n`, `M-g p`).
+It is because VSCode can handle only up to two key strokes as the key bindings.
+So, as the special case, `Escape g` works as follows.
+
+|Command | Desc |
+|--------|------|
+| `Escape g` | Jump to line (command palette) |
+
+### `emacs-mcx.useMetaPrefixMacCmd`
+If set to true, Command (⌘) key works as the Meta prefix like original emacs on macOS.
+This option only works on macOS.
+
+### `emacs-mcx.killRingMax`
+Configures the maximum number of kill ring entries.
+The default is 60.
+
+### `emacs-mcx.debug.*`
+Configurations for debugging.
+
+## 'when' clause context
+This extension provides mark-mode functionality and
+you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
+in order to check whether or not mark-mode is enabled.
+
 ## Keymaps
 ### Move commands
 |Command |Prefix argument |Desc |
@@ -121,47 +163,6 @@ Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly b
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
-## 'when' clause context
-This extension provides mark-mode functionality and
-you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
-in order to check whether or not mark-mode is enabled.
-
-## Configs
-This extension has some custom settings named with a prefix `emacs-mcx`.
-You can configure those settings.
-
-See also: https://code.visualstudio.com/docs/getstarted/settings#_settings-editor
-
-### `emacs-mcx.strictEmacsMove`
-If set to true, the original emacs's cursor movements are strictly simulated.
-If set to false, the VSCode's native cursor movements are preserved.
-For example, if set to true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
-If set to false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
-
-### `emacs-mcx.useMetaPrefixEscape`
-If set to true, Escape key works as the Meta prefix like original emacs.
-If set to false, Escape key works as cancel, the VSCode's native behavior.
-For example, if set to true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
-
-The only exception is the commands which begin with `M-g` (`M-g g`, `M-g n`, `M-g p`).
-It is because VSCode can handle only up to two key strokes as the key bindings.
-So, as the special case, `Escape g` works as follows.
-
-|Command | Desc |
-|--------|------|
-| `Escape g` | Jump to line (command palette) |
-
-### `emacs-mcx.useMetaPrefixMacCmd`
-If set to true, Command (⌘) key works as the Meta prefix like original emacs.
-This option only works on macOS.
-
-### `emacs-mcx.killRingMax`
-Configures the maximum number of kill ring entries.
-The default is 60.
-
-### `emacs-mcx.debug.*`
-Configurations for debugging.
-
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;
 - `ctrl+g`: workbench.action.gotoLine => **Use `alt+g g` instead**;
@@ -178,3 +179,8 @@ Configurations for debugging.
 - `ctrl+p` & `ctrl+e`: workbench.action.quickOpen => **Use `ctrl+x b` instead**;
 - `ctrl+p`: workbench.action.quickOpenNavigateNext => **Use `ctrl+n` instead**.
 - `ctrl+o`: workbench.action.files.openFileFolder;
+
+## Contributions/Development
+Your contributions are very welcome!
+
+Please see [DEVELOPMENT.md](./DEVELOPMENT.md) about development of this extension.
