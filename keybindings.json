@@ -625,7 +625,7 @@
     },
     {
       "key": "ctrl+x b",
-      "command": "workbench.action.showAllEditorsByRecentlyUsed"
+      "command": "workbench.action.showAllEditorsByMostRecentlyUsed"
     },
     {
       "key": "ctrl+x k",
