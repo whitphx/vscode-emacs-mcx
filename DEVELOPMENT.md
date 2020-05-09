@@ -1,5 +1,6 @@
 # Awesome Emacs Keymap
 ## Development
+
 ### Unit test, linter, and CI
 This repository has introduced linter (ESlint), code formatter (Prettier), and unit testing.
 
@@ -33,9 +34,9 @@ Make sure that **CI has passed all coding style checks and unit tests** before r
 
 ### Keybindings generation
 Keybindings of a VSCode extension must be defined in its `contributes.keybindings` section in `package.json` as described in [the doc](https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings),
-but you MUST NOT edit it directly.
+but you MUST NOT edit it directly in case of this extension.
 
-Instead, to change keybindings, you have to edit `keybindings.json` and run `yarn gen-keys` to generate a resultant keybindings definition and update `package.json` with it.
+Instead, to change the keybindings, you have to edit `keybindings.json` and run `yarn gen-keys` to generate a resultant keybindings definition and update `package.json` with it.
 
 In `keybindings.json`, you can use some extended syntax.
 
@@ -59,3 +60,18 @@ that enables users to switch the key to use as a meta key by the config.
 
 #### Comments
 You can write comments in `keybindings.json`.
+
+### How to add a new command
+First you have to create a command class.
+One command is implemented as one class extending `EmacsCommand` class.
+See `src/commands/*.ts`.
+
+After a new command class is implemented, it must be registered to `commandRegistry` in `EmacsEmulator` class, which is the central controller of this extension.
+See `src/emulator.ts`.
+
+Then, you have to register a new command exposed by the extension to trigger the emulator's command registered above.
+See `src/extension.ts`.
+
+Finally, bind the exposed command to key strokes.
+It's typically done by editing `package.json` though, it's incorrect in this extension.
+Edit `keybindings.json` and run `yarn gen-keys` instead as described above.
