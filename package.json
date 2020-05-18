@@ -1460,7 +1460,7 @@
 		"@types/vscode": "^1.44.0",
 		"@typescript-eslint/eslint-plugin": "^2.33.0",
 		"@typescript-eslint/parser": "^2.33.0",
-		"copy-webpack-plugin": "^5.1.1",
+		"copy-webpack-plugin": "^6.0.1",
 		"eslint": "^6.8.0",
 		"eslint-config-prettier": "^6.11.0",
 		"eslint-plugin-prettier": "^3.1.3",
