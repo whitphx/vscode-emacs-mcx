@@ -1,5 +1,4 @@
 import * as assert from "assert";
-import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { setEmptyCursors, setupWorkspace } from "../utils";
