@@ -26,14 +26,15 @@ steps:
   displayName: Start xvfb
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
 
-- bash: |
-    echo ">>> Run tests"
-    yarn && yarn lint && yarn test
-    echo ">>> Check keybinding generation"
-    yarn gen-keys
-    echo ">>> Check vsce package runnability"
-    npm install -g vsce
-    vsce package
-  displayName: Run Tests
+- bash: yarn && yarn lint && yarn test
+  displayName: Command test
   env:
     DISPLAY: ':99.0'
+
+- bash: yarn gen-keys
+  displayName: Keybinding generator test
+
+- bash: |
+    npm install -g vsce
+    vsce package
+  displayName: Packaging test
