@@ -9,8 +9,8 @@ import { initializeLogger, logger } from "./logger";
 import { MessageManager } from "./message";
 
 export function activate(context: vscode.ExtensionContext) {
-  MessageManager.initialize(context);
-  Configuration.initialize(context);
+  MessageManager.registerDispose(context);
+  Configuration.registerDispose(context);
 
   initializeLogger(Configuration.instance);
 
