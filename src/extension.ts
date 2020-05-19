@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      callback(emulator, ...args);
+      return callback(emulator, ...args);
     });
     context.subscriptions.push(disposable);
   }
@@ -79,8 +79,17 @@ export function activate(context: vscode.ExtensionContext) {
 
       emulator.type(args.text);
     },
-    (args) => vscode.commands.executeCommand("default:type", args)
+    (args, ...rest) => vscode.commands.executeCommand("default:type", args, ...rest)
   );
+  registerEmulatorCommand("compositionStart", (emulator, ...args) => {
+    return emulator.compositionStart(...args);
+  });
+  registerEmulatorCommand("compositionEnd", (emulator, ...args) => {
+    return emulator.compositionEnd(...args);
+  });
+  registerEmulatorCommand("replacePreviousChar", (emulator, ...args) => {
+    return emulator.replacePreviousChar(...args);
+  });
 
   moveCommandIds.map((commandName) => {
     registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
