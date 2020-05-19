@@ -1,6 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection, TextEditor } from "vscode";
+import { Configuration } from "../../configuration/configuration";
 
 export async function setupWorkspace(
   initialText = "",
@@ -12,6 +13,8 @@ export async function setupWorkspace(
     language?: string;
   } = {}
 ): Promise<vscode.TextEditor> {
+  Configuration.initialize();
+
   const doc = await vscode.workspace.openTextDocument({
     content: initialText,
     language,

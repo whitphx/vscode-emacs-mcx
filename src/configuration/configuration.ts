@@ -15,13 +15,17 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     return this.inst;
   }
 
-  public static initialize(context: vscode.ExtensionContext) {
+  public static initialize(context?: vscode.ExtensionContext) {
     if (this.inst) {
       return;
     }
 
     this.inst = new Configuration();
-    context.subscriptions.push(this.inst);
+
+    // context can be undefined for tests
+    if (context) {
+      context.subscriptions.push(this.inst);
+    }
   }
 
   private static inst: Configuration;
