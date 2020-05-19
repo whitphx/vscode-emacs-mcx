@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { setEmptyCursors, setupWorkspace } from "../utils";
@@ -54,6 +55,46 @@ suite("paredit commands", () => {
       assert.equal(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 0))));
     });
+  });
+});
+
+suite("paredit commands with a long text that requires revealing", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = "(" + "\n".repeat(1000) + ")";
+
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  test("forwardSexp: the selection is revealed at the active cursor", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    emulator.setMarkCommand();
+
+    await emulator.runCommand("paredit.forwardSexp");
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    assert.equal(activeTextEditor.selections.length, 1);
+    assert.equal(activeTextEditor.selection.active.line, 1000);
+    const visibleRange = activeTextEditor.visibleRanges[0];
+    assert.equal(visibleRange.end.line, 1000);
+  });
+
+  test("backwardSexp: the selection is revealed at the active cursor", async () => {
+    setEmptyCursors(activeTextEditor, [1000, 1]);
+    emulator.setMarkCommand();
+
+    await emulator.runCommand("paredit.backwardSexp");
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    assert.equal(activeTextEditor.selections.length, 1);
+    assert.equal(activeTextEditor.selection.active.line, 0);
+    const visibleRange = activeTextEditor.visibleRanges[0];
+    assert.equal(visibleRange.start.line, 0);
   });
 });
 

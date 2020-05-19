@@ -40,7 +40,8 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
       textEditor.selections = newSelections;
     }
 
-    textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport);
+    const primaryActiveCursor = new Selection(textEditor.selection.active, textEditor.selection.active);
+    textEditor.revealRange(primaryActiveCursor, TextEditorRevealType.InCenterIfOutsideViewport);
   }
 }
 
