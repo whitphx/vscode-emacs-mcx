@@ -12,6 +12,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.19.7] - Unreleased
+### Fixed
+- Fix `forwardSexp` and `backwardSexp` to reveal the primary active cursor.
+- Internal fix of Configuration and Message implementations.
+
 ## [0.19.6] - 2020-05-09
 ### Fixed
 - `C-x b` is mapped to `workbench.action.showAllEditorsByRecentlyUsed` command, whose behavior is closer to the original Emacs'. @joeshaw
