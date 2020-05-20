@@ -8,16 +8,15 @@ export class MessageManager implements vscode.Disposable {
    * MessageManager uses singleton pattern.
    */
   public static get instance(): MessageManager {
+    if (!this.inst) {
+      this.inst = new MessageManager();
+    }
+
     return this.inst;
   }
 
-  public static initialize(context: vscode.ExtensionContext) {
-    if (this.inst) {
-      return;
-    }
-
-    this.inst = new MessageManager();
-    context.subscriptions.push(this.inst);
+  public static registerDispose(context: vscode.ExtensionContext) {
+    context.subscriptions.push(this.instance);
   }
 
   public static showMessage(text: string) {

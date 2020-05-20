@@ -12,16 +12,15 @@ export class Configuration implements IConfiguration, vscode.Disposable {
    * Configuration uses singleton pattern.
    */
   public static get instance(): Configuration {
+    if (!this.inst) {
+      this.inst = new Configuration();
+    }
+
     return this.inst;
   }
 
-  public static initialize(context: vscode.ExtensionContext) {
-    if (this.inst) {
-      return;
-    }
-
-    this.inst = new Configuration();
-    context.subscriptions.push(this.inst);
+  public static registerDispose(context: vscode.ExtensionContext) {
+    context.subscriptions.push(this.instance);
   }
 
   private static inst: Configuration;

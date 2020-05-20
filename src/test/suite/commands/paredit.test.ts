@@ -1,5 +1,4 @@
 import * as assert from "assert";
-import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { setEmptyCursors, setupWorkspace } from "../utils";
@@ -75,7 +74,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     await emulator.runCommand("paredit.forwardSexp");
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     assert.equal(activeTextEditor.selections.length, 1);
     assert.equal(activeTextEditor.selection.active.line, 1000);
@@ -89,7 +88,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     await emulator.runCommand("paredit.backwardSexp");
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     assert.equal(activeTextEditor.selections.length, 1);
     assert.equal(activeTextEditor.selection.active.line, 0);
