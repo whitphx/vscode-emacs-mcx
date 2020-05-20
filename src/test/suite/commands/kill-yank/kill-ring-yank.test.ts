@@ -523,11 +523,11 @@ suite("With not only single text editor", () => {
     // Kill texts from one text editor
     await clearTextEditor(activeTextEditor0, "FOO");
     await vscode.commands.executeCommand("editor.action.selectAll");
-    emulator0.runCommand("killRegion");
+    await emulator0.runCommand("killRegion");
 
     await clearTextEditor(activeTextEditor0, "BAR");
     await vscode.commands.executeCommand("editor.action.selectAll");
-    emulator0.runCommand("killRegion");
+    await emulator0.runCommand("killRegion");
 
     const activeTextEditor1 = await setupWorkspace("");
     const emulator1 = new EmacsEmulator(activeTextEditor1, killRing);
