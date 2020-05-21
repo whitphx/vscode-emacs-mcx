@@ -17,6 +17,7 @@ import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
+import { CompositionHandler } from "./compositionHandler";
 
 export interface IEmacsCommandRunner {
   runCommand(commandName: string): undefined | Thenable<{} | undefined | void>;
@@ -32,6 +33,10 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
   private commandRegistry: EmacsCommandRegistry;
 
+  // This manages execution order of `type` and `replacePreviousChar` commands
+  // to avoid the IME bug described in https://github.com/tuttieee/vscode-emacs-mcx/issues/115
+  private compositionHandler: CompositionHandler;
+
   // tslint:disable-next-line:variable-name
   private _isInMarkMode = false;
   public get isInMarkMode() {
@@ -45,6 +50,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     this.textEditor = textEditor;
 
     this.prefixArgumentHandler = new PrefixArgumentHandler();
+
+    this.compositionHandler = new CompositionHandler();
 
     this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
@@ -160,9 +167,19 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     }
 
     logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
-    return vscode.commands.executeCommand("default:type", {
-      text,
-    });
+    return this.compositionHandler.onType({ text });
+  }
+
+  public compositionStart(...args: any[]) {
+    return this.compositionHandler.onCompositionStart(...args);
+  }
+
+  public compositionEnd(...args: any[]) {
+    return this.compositionHandler.onCompositionEnd(...args);
+  }
+
+  public replacePreviousChar(...args: any[]) {
+    return this.compositionHandler.onReplacePreviousChar(...args);
   }
 
   public universalArgument() {
