@@ -1468,7 +1468,7 @@
 		"mocha": "^7.2.0",
 		"prettier": "^2.0.5",
 		"strip-json-comments": "^3.1.0",
-		"ts-loader": "^7.0.4",
+		"ts-loader": "^7.0.5",
 		"ts-mocha": "^7.0.0",
 		"ts-node": "^8.10.2",
 		"typescript": "^3.9.3",
