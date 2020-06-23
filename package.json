@@ -1479,7 +1479,7 @@
 	"dependencies": {
 		"clipboardy": "^2.3.0",
 		"paredit.js": "^0.3.4",
-		"winston": "^3.2.1",
+		"winston": "^3.3.2",
 		"winston-console-for-electron": "^0.0.6"
 	}
 }
