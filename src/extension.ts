@@ -77,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
       // Capture typing charactors for prefix argument functionality.
       logger.debug(`[type command]\t args.text = "${args.text}"`);
 
-      emulator.type(args.text);
+      return emulator.type(args.text);
     },
     (args) => vscode.commands.executeCommand("default:type", args)
   );
