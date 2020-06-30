@@ -61,12 +61,12 @@ export function activate(context: vscode.ExtensionContext) {
       const emulator = getAndUpdateEmulator();
       if (!emulator) {
         if (typeof onNoEmulator === "function") {
-          onNoEmulator(...args);
+          return onNoEmulator(...args);
         }
         return;
       }
 
-      callback(emulator, ...args);
+      return callback(emulator, ...args);
     });
     context.subscriptions.push(disposable);
   }
