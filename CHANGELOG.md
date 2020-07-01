@@ -12,6 +12,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.19.8] - Unreleased
+- Internal package updates.
+
 ## [0.19.7] - Unreleased
 ### Fixed
 - Fix `forwardSexp` and `backwardSexp` to reveal the primary active cursor.
