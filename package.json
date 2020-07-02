@@ -867,19 +867,31 @@
 			},
 			{
 				"key": "alt+w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.copyRegion"
+				]
 			},
 			{
 				"key": "alt+w",
 				"mac": "cmd+w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.copyRegion"
+				]
 			},
 			{
 				"key": "escape w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.copyRegion"
+				]
 			},
 			{
 				"key": "ctrl+y",

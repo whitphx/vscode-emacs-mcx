@@ -317,8 +317,12 @@
     },
     {
       "key": "meta+w",
-      "command": "closeFindWidget",
-      "when": "editorFocus && findWidgetVisible"
+      "command": "emacs-mcx.executeCommands",
+      "when": "editorFocus && findWidgetVisible",
+      "args": [
+        "closeFindWidget",
+        "emacs-mcx.copyRegion"
+      ]
     },
     {
       "key": "ctrl+y",
