@@ -12,10 +12,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
-## [0.19.8] - Unreleased
+## [0.19.9] - 2020-07-02
+- Fix `M-w` behavior when the find widget is visible. @youyuanwu
+
+## [0.19.8] - 2020-07-01
 - Internal package updates.
 
-## [0.19.7] - Unreleased
 ### Fixed
 - Fix `forwardSexp` and `backwardSexp` to reveal the primary active cursor.
 - Internal fix of Configuration and Message implementations.
