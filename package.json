@@ -867,19 +867,31 @@
 			},
 			{
 				"key": "alt+w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.copyRegion"
+				]
 			},
 			{
 				"key": "alt+w",
 				"mac": "cmd+w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.copyRegion"
+				]
 			},
 			{
 				"key": "escape w",
-				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.copyRegion"
+				]
 			},
 			{
 				"key": "ctrl+y",
@@ -1471,7 +1483,7 @@
 		"ts-loader": "^7.0.5",
 		"ts-mocha": "^7.0.0",
 		"ts-node": "^8.10.2",
-		"typescript": "^3.9.5",
+		"typescript": "^3.9.6",
 		"vscode-test": "^1.4.0",
 		"webpack": "^4.43.0",
 		"webpack-cli": "^3.3.12"
