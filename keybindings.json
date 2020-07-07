@@ -508,7 +508,7 @@
       "when": "editorTextFocus"
     },
     {
-      "key": "ctrl+g",
+      "keys": ["ctrl+g", "enter"],
       "command": "closeFindWidget",
       "when": "editorFocus && findWidgetVisible"
     },
