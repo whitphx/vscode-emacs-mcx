@@ -17,6 +17,8 @@ import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
+import { Configuration } from "./configuration/configuration";
+import { MarkRing } from "./mark-ring";
 
 export interface IEmacsCommandRunner {
   runCommand(commandName: string): undefined | Thenable<{} | undefined | void>;
@@ -32,6 +34,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
   private commandRegistry: EmacsCommandRegistry;
 
+  private markRing: MarkRing;
+
   // tslint:disable-next-line:variable-name
   private _isInMarkMode = false;
   public get isInMarkMode() {
@@ -43,6 +47,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
   constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
     this.textEditor = textEditor;
+
+    this.markRing = new MarkRing(Configuration.instance.markRingMax);
 
     this.prefixArgumentHandler = new PrefixArgumentHandler();
 
@@ -225,6 +231,24 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471
     // TODO: How to write unittest for `setContext`?
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
+
+    this.markRing.push(this.textEditor.selections.map((selection) => selection.active));
+  }
+
+  public exchangePointAndMark() {
+    const prevMarks = this.markRing.getTop();
+    this.enterMarkMode();
+
+    if (prevMarks) {
+      const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);
+      const affectedSelections = this.textEditor.selections.slice(0, affectedLen).map((selection, i) => {
+        const prevMark = prevMarks[i];
+        return new vscode.Selection(selection.active, prevMark);
+      });
+      const newSelections = affectedSelections.concat(this.textEditor.selections.slice(affectedLen));
+      this.textEditor.selections = newSelections;
+      this.textEditor.revealRange(this.textEditor.selection);
+    }
   }
 
   public exitMarkMode() {

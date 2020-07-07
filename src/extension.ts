@@ -144,6 +144,10 @@ export function activate(context: vscode.ExtensionContext) {
     emulator.setMarkCommand();
   });
 
+  registerEmulatorCommand("emacs-mcx.exchangePointAndMark", (emulator) => {
+    emulator.exchangePointAndMark();
+  });
+
   registerEmulatorCommand("emacs-mcx.addSelectionToNextFindMatch", (emulator) => {
     emulator.runCommand("addSelectionToNextFindMatch");
   });

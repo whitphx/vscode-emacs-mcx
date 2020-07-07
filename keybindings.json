@@ -583,6 +583,11 @@
       "command": "emacs-mcx.setMarkCommand",
       "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
     },
+    {
+      "key": "ctrl+x ctrl+x",
+      "command": "emacs-mcx.exchangePointAndMark",
+      "when": "editorTextFocus"
+    },
     // Suggestion
     {
       "key": "ctrl+'",

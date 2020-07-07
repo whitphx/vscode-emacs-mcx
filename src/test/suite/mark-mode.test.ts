@@ -1,8 +1,9 @@
 import * as assert from "assert";
+import * as expect from "expect";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace } from "./utils";
+import { cleanUpWorkspace, setupWorkspace, setEmptyCursors } from "./utils";
 
 suite("mark-mode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -50,5 +51,35 @@ ABCDEFGHIJ`;
       await emulator.runCommand("forwardChar");
       assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
     });
+  });
+});
+
+suite("exchangePointAndMark", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("it swaps active and anchor", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
   });
 });
