@@ -1468,7 +1468,7 @@
 		"@types/expect": "^24.3.0",
 		"@types/glob": "^7.1.2",
 		"@types/mocha": "^7.0.2",
-		"@types/node": "^14.0.14",
+		"@types/node": "^14.0.18",
 		"@types/vscode": "^1.46.0",
 		"@typescript-eslint/eslint-plugin": "^2.34.0",
 		"@typescript-eslint/parser": "^2.34.0",
