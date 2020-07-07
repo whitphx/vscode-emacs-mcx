@@ -12,6 +12,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.19.10] - Unreleased
+- Assign `Enter` key to close the find widget, which is like the original Emacs' behavior.
+
 ## [0.19.9] - 2020-07-02
 - Fix `M-w` behavior when the find widget is visible. @youyuanwu
 
