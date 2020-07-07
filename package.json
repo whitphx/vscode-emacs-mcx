@@ -1186,6 +1186,11 @@
 				"when": "editorFocus && findWidgetVisible"
 			},
 			{
+				"key": "enter",
+				"command": "closeFindWidget",
+				"when": "editorFocus && findWidgetVisible"
+			},
+			{
 				"key": "ctrl+g",
 				"command": "closeReferenceSearchEditor",
 				"when": "inReferenceSearchEditor && !config.editor.stablePeek"
