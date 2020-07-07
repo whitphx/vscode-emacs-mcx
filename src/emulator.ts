@@ -176,11 +176,9 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
       throw Error(`command ${commandName} is not found`);
     }
 
-    if (command !== undefined) {
-      const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
 
-      return command.run(this.textEditor, this.isInMarkMode, prefixArgument);
-    }
+    return command.run(this.textEditor, this.isInMarkMode, prefixArgument);
   }
 
   public setMarkCommand() {
