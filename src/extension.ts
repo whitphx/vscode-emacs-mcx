@@ -61,12 +61,12 @@ export function activate(context: vscode.ExtensionContext) {
       const emulator = getAndUpdateEmulator();
       if (!emulator) {
         if (typeof onNoEmulator === "function") {
-          onNoEmulator(...args);
+          return onNoEmulator(...args);
         }
         return;
       }
 
-      callback(emulator, ...args);
+      return callback(emulator, ...args);
     });
     context.subscriptions.push(disposable);
   }
@@ -77,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
       // Capture typing charactors for prefix argument functionality.
       logger.debug(`[type command]\t args.text = "${args.text}"`);
 
-      emulator.type(args.text);
+      return emulator.type(args.text);
     },
     (args) => vscode.commands.executeCommand("default:type", args)
   );
