@@ -31,7 +31,7 @@ export class KillRing implements Disposable {
     return this.killRing[this.pointer];
   }
 
-  public pop(): IKillRingEntity | null {
+  public popNext(): IKillRingEntity | null {
     if (this.pointer === null || this.killRing.length === 0) {
       return null;
     }
