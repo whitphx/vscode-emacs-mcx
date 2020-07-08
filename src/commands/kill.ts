@@ -134,7 +134,7 @@ export class KillLine extends KillYankCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = textEditor.selections.map((selection) => {
-      const cursor = selection.anchor;
+      const cursor = selection.active;
       const lineAtCursor = textEditor.document.lineAt(cursor.line);
 
       if (prefixArgument !== undefined) {
@@ -163,7 +163,7 @@ export class KillWholeLine extends KillYankCommand {
     const ranges = textEditor.selections.map(
       (selection) =>
         // From the beginning of the line to the beginning of the next line
-        new Range(new Position(selection.anchor.line, 0), new Position(selection.anchor.line + 1, 0))
+        new Range(new Position(selection.active.line, 0), new Position(selection.active.line + 1, 0))
     );
     this.emacsController.exitMarkMode();
     return this.killYanker.kill(ranges);
