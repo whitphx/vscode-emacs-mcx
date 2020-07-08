@@ -19,6 +19,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ### Fixed
 - Fix `kill` and `kill-whole-line` to work based on active cursors, not anchors.
+- Async commands behavior including kill, yank, and type.
 
 ## [0.19.9] - 2020-07-02
 - Fix `M-w` behavior when the find widget is visible. @youyuanwu
