@@ -98,6 +98,9 @@ ABCDEFGHIJ`;
     await emulator.setMarkCommand();
 
     await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [2, 6]);
+
+    await emulator.popMark();
     assertCursorsEqual(activeTextEditor, [1, 4]);
 
     await emulator.popMark();
@@ -122,6 +125,10 @@ ABCDEFGHIJ`;
     await emulator.setMarkCommand();
 
     // C-u C-<SPC>.
+    await emulator.universalArgument();
+    await emulator.setMarkCommand();
+    assertCursorsEqual(activeTextEditor, [2, 6]);
+
     await emulator.universalArgument();
     await emulator.setMarkCommand();
     assertCursorsEqual(activeTextEditor, [1, 4]);

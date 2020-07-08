@@ -35,7 +35,10 @@ export class MarkRing {
       return null;
     }
 
+    const ret = this.ring[this.pointer];
+
     this.pointer = (this.pointer + 1) % this.ring.length;
-    return this.ring[this.pointer];
+
+    return ret;
   }
 }
