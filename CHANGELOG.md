@@ -15,6 +15,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ## [0.19.10] - Unreleased
 ### Added
 - Assign `Enter` key to close the find widget, which is like the original Emacs' behavior.
+- `killWholeLine` config option.
 
 ### Fixed
 - Fix `kill` and `kill-whole-line` to work based on active cursors, not anchors.

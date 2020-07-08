@@ -22,6 +22,11 @@ export interface IConfiguration {
   killRingMax: number;
 
   /**
+   * Same to kill-whole-line variable in Emacs.
+   */
+  killWholeLine: boolean;
+
+  /**
    * Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones
    */
   strictEmacsMove: boolean;

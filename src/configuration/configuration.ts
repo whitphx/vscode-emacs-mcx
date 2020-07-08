@@ -33,11 +33,17 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
   public strictEmacsMove = false;
 
+  public killWholeLine = false;
+
   public debug: IDebugConfiguration = {
     silent: false,
     loggingLevelForAlert: "error",
     loggingLevelForConsole: "error",
   };
+
+  public static reload() {
+    this.instance.reload();
+  }
 
   /**
    * Instance methods

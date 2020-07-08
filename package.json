@@ -41,6 +41,11 @@
 					"default": 60,
 					"description": "Maximum number of Kill ring entries"
 				},
+				"emacs-mcx.killWholeLine": {
+					"type": "boolean",
+					"default": false,
+					"description": "Same to kill-whole-line variable in Emacs"
+				},
 				"emacs-mcx.strictEmacsMove": {
 					"type": "boolean",
 					"default": false,

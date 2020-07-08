@@ -1,10 +1,18 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
-import { Position, Range, Selection } from "vscode";
+import { Position, Range } from "vscode";
+import { Configuration } from "../../../../configuration/configuration";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace } from "../../utils";
+import {
+  assertTextEqual,
+  assertCursorsEqual,
+  cleanUpWorkspace,
+  clearTextEditor,
+  setEmptyCursors,
+  setupWorkspace,
+} from "../../utils";
 
 suite("killLine", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -198,7 +206,7 @@ abcdefghij
       emulator = new EmacsEmulator(activeTextEditor);
     });
 
-    test("it kills multiple lines and does not leave a blank line", async () => {
+    test("it kills multiple lines and does not leave a blank line (in case the cursor is at the beginning of the line)", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
@@ -208,7 +216,7 @@ abcdefghij
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
       assert.equal(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selection.isEqual(new Selection(new Position(0, 0), new Position(0, 0))));
+      assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
 
@@ -216,6 +224,145 @@ abcdefghij
       assertTextEqual(
         activeTextEditor,
         `0123456789
+abcdefghij
+`
+      );
+    });
+
+    test("it works in the same way to the default (in case the cursor is NOT at the beginning of the line)", async () => {
+      setEmptyCursors(activeTextEditor, [0, 1]);
+
+      emulator.universalArgument();
+      await emulator.type("2");
+
+      await emulator.runCommand("killLine");
+
+      assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [0, 1]);
+
+      await clearTextEditor(activeTextEditor);
+
+      await emulator.runCommand("yank");
+      assertTextEqual(
+        activeTextEditor,
+        `123456789
+abcdefghij
+`
+      );
+    });
+  });
+});
+
+suite("killLine with kill-whole-line option", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+    activeTextEditor = await setupWorkspace(initialText);
+
+    Configuration.instance.killWholeLine = true;
+  });
+
+  teardown(() => {
+    Configuration.reload();
+    return cleanUpWorkspace();
+  });
+
+  suite("without KillRing", () => {
+    setup(() => {
+      emulator = new EmacsEmulator(activeTextEditor);
+    });
+
+    test("it cuts the current line with RET if the cursor is the the beginning of the line", async () => {
+      setEmptyCursors(activeTextEditor, [1, 0]); // the beginning of Line_1
+
+      await emulator.runCommand("killLine");
+
+      assert.equal(
+        activeTextEditor.document.getText(),
+        `0123456789
+ABCDEFGHIJ`
+      );
+
+      clearTextEditor(activeTextEditor);
+
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yank");
+
+      assertTextEqual(activeTextEditor, "abcdefghij\n");
+    });
+
+    test("it works in the same way to the default if the cursor is not the the beginning of the line", async () => {
+      setEmptyCursors(activeTextEditor, [1, 1]); // the beginning of Line_1
+
+      await emulator.runCommand("killLine");
+
+      assert.equal(
+        activeTextEditor.document.getText(),
+        `0123456789
+a
+ABCDEFGHIJ`
+      );
+
+      clearTextEditor(activeTextEditor);
+
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yank");
+
+      assertTextEqual(activeTextEditor, "bcdefghij");
+    });
+  });
+
+  suite("when prefix argument specified", () => {
+    setup(() => {
+      emulator = new EmacsEmulator(activeTextEditor);
+    });
+
+    test("it works in the same way to the default (in case the cursor is at the beginning of the line)", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
+
+      emulator.universalArgument();
+      await emulator.type("2");
+
+      await emulator.runCommand("killLine");
+
+      assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [0, 0]);
+
+      await clearTextEditor(activeTextEditor);
+
+      await emulator.runCommand("yank");
+      assertTextEqual(
+        activeTextEditor,
+        `0123456789
+abcdefghij
+`
+      );
+    });
+
+    test("it works in the same way to the default (in case the cursor is NOT at the beginning of the line)", async () => {
+      setEmptyCursors(activeTextEditor, [0, 1]);
+
+      emulator.universalArgument();
+      await emulator.type("2");
+
+      await emulator.runCommand("killLine");
+
+      assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [0, 1]);
+
+      await clearTextEditor(activeTextEditor);
+
+      await emulator.runCommand("yank");
+      assertTextEqual(
+        activeTextEditor,
+        `123456789
 abcdefghij
 `
       );

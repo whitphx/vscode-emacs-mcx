@@ -2,6 +2,7 @@ import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
+import { Configuration } from "../configuration/configuration";
 
 abstract class KillYankCommand extends EmacsCommand {
   protected killYanker: KillYanker;
@@ -133,12 +134,18 @@ export class KillLine extends KillYankCommand {
   public readonly id = "killLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const killWholeLine = Configuration.instance.killWholeLine;
+
     const ranges = textEditor.selections.map((selection) => {
       const cursor = selection.active;
       const lineAtCursor = textEditor.document.lineAt(cursor.line);
 
       if (prefixArgument !== undefined) {
         return new Range(cursor, new Position(cursor.line + prefixArgument, 0));
+      }
+
+      if (killWholeLine && cursor.character === 0) {
+        return new Range(cursor, new Position(cursor.line + 1, 0));
       }
 
       const lineEnd = lineAtCursor.range.end;
