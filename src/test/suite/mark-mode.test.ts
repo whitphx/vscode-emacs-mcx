@@ -3,7 +3,7 @@ import * as expect from "expect";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace, setEmptyCursors } from "./utils";
+import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual } from "./utils";
 
 suite("mark-mode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -54,7 +54,7 @@ ABCDEFGHIJ`;
   });
 });
 
-suite("exchangePointAndMark", () => {
+suite("MarkRing", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
@@ -68,7 +68,7 @@ ABCDEFGHIJ`;
 
   teardown(cleanUpWorkspace);
 
-  test("it swaps active and anchor", async () => {
+  test("exchangePointAndMark swaps active and anchor", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.setMarkCommand();
@@ -81,5 +81,57 @@ ABCDEFGHIJ`;
 
     await emulator.exchangePointAndMark();
     expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+  });
+
+  test("set and pop marks", async () => {
+    setEmptyCursors(activeTextEditor, [0, 2]);
+    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+
+    setEmptyCursors(activeTextEditor, [1, 4]);
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+
+    setEmptyCursors(activeTextEditor, [2, 6]);
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+
+    await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [1, 4]);
+
+    await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [0, 2]);
+
+    await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [2, 6]);
+  });
+
+  test("Ctrl-u Ctrl-Space works as pop-mark", async () => {
+    setEmptyCursors(activeTextEditor, [0, 2]);
+    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+
+    setEmptyCursors(activeTextEditor, [1, 4]);
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+
+    setEmptyCursors(activeTextEditor, [2, 6]);
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+
+    // C-u C-<SPC>.
+    await emulator.universalArgument();
+    await emulator.setMarkCommand();
+    assertCursorsEqual(activeTextEditor, [1, 4]);
+
+    await emulator.universalArgument();
+    await emulator.setMarkCommand();
+    assertCursorsEqual(activeTextEditor, [0, 2]);
+
+    await emulator.universalArgument();
+    await emulator.setMarkCommand();
+    assertCursorsEqual(activeTextEditor, [2, 6]);
   });
 });

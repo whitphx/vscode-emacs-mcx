@@ -171,6 +171,9 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     });
   }
 
+  /**
+   * C-u
+   */
   public universalArgument() {
     this.prefixArgumentHandler.universalArgument();
   }
@@ -187,7 +190,16 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     return command.run(this.textEditor, this.isInMarkMode, prefixArgument);
   }
 
+  /**
+   * C-<SPC>
+   */
   public setMarkCommand() {
+    if (this.prefixArgumentHandler.precedingSingleCtrlU()) {
+      // C-u C-<SPC>
+      this.prefixArgumentHandler.cancel();
+      return this.popMark();
+    }
+
     if (this.isInMarkMode && !this.hasNonEmptySelection()) {
       // Toggle if enterMarkMode is invoked continuously without any cursor move.
       this.exitMarkMode();
@@ -233,6 +245,13 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
 
     this.markRing.push(this.textEditor.selections.map((selection) => selection.active));
+  }
+
+  public popMark() {
+    const prevMark = this.markRing.pop();
+    if (prevMark) {
+      this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
+    }
   }
 
   public exchangePointAndMark() {
