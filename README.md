@@ -53,6 +53,10 @@ This option only works on macOS.
 Configures the maximum number of kill ring entries.
 The default is 60.
 
+### `emacs-mcx.killWholeLine`
+This simulates the original Emacs' [`kill-whole-line` variable](https://www.gnu.org/software/emacs/manual/html_node/emacs/Killing-by-Lines.html).
+The default is false.
+
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
 
