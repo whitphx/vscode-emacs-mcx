@@ -34,7 +34,8 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
 
   private commandRegistry: EmacsCommandRegistry;
 
-  private markRing: MarkRing;
+  public markRing: MarkRing;
+  private prevExchangedMarks: vscode.Position[] | null;
 
   // tslint:disable-next-line:variable-name
   private _isInMarkMode = false;
@@ -49,6 +50,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     this.textEditor = textEditor;
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
+    this.prevExchangedMarks = null;
 
     this.prefixArgumentHandler = new PrefixArgumentHandler();
 
@@ -236,7 +238,7 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     delete this.killYanker;
   }
 
-  public enterMarkMode() {
+  public enterMarkMode(pushMark = true) {
     this._isInMarkMode = true;
 
     // At this moment, the only way to set the context for `when` conditions is `setContext` command.
@@ -244,6 +246,13 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     // TODO: How to write unittest for `setContext`?
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
 
+    if (pushMark) {
+      this.pushMark();
+    }
+  }
+
+  public pushMark() {
+    this.prevExchangedMarks = null;
     this.markRing.push(this.textEditor.selections.map((selection) => selection.active));
   }
 
@@ -255,8 +264,9 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
   }
 
   public exchangePointAndMark() {
-    const prevMarks = this.markRing.getTop();
-    this.enterMarkMode();
+    const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
+    this.enterMarkMode(false);
+    this.prevExchangedMarks = this.textEditor.selections.map((selection) => selection.active);
 
     if (prevMarks) {
       const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);

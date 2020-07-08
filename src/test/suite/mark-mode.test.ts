@@ -68,10 +68,43 @@ ABCDEFGHIJ`;
 
   teardown(cleanUpWorkspace);
 
-  test("exchangePointAndMark swaps active and anchor", async () => {
+  [true, false].forEach((deactivateMark) => {
+    test(`exchangePointAndMark swaps active and anchor (markMode is ${
+      deactivateMark ? "deactivated" : "activated"
+    })`, async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
+
+      await emulator.setMarkCommand();
+      if (deactivateMark) {
+        await emulator.setMarkCommand();
+      }
+      await emulator.runCommand("forwardChar");
+      await emulator.runCommand("nextLine");
+      if (deactivateMark) {
+        expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(1, 1))]);
+      } else {
+        expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+      }
+
+      await emulator.exchangePointAndMark();
+      expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+
+      await emulator.exchangePointAndMark();
+      expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    });
+  });
+
+  test("exchangePointAndMark does not push duplicated marks", async () => {
+    setEmptyCursors(activeTextEditor, [2, 2]);
+    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+    // Now, [2, 2] was pushed to the mark ring.
+
     setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.setMarkCommand();
+    // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
     expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
@@ -81,6 +114,80 @@ ABCDEFGHIJ`;
 
     await emulator.exchangePointAndMark();
     expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+
+    await emulator.cancel();
+    assertCursorsEqual(activeTextEditor, [1, 1]);
+
+    await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+
+    await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [2, 2]);
+    // See, [1, 1] has never been pushed by exchange-point-and-mark
+  });
+
+  test("setMarkCommands resets mark ring pointer and exchangePointAndMark respects it", async () => {
+    setEmptyCursors(activeTextEditor, [2, 2]);
+    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+    // Now, [2, 2] was pushed to the mark ring.
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.setMarkCommand();
+    // [0, 0] was pushed to the mark ring.
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+    // Pointer was exchanged, but [1, 1] was NOT pushed.
+
+    await emulator.cancel();
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+
+    setEmptyCursors(activeTextEditor, [0, 9]);
+
+    await emulator.setMarkCommand();
+    // Now, [0, 0] was pushed to the mark ring and the pointer was reset.
+    await emulator.runCommand("backwardChar");
+    await emulator.runCommand("nextLine");
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 9), new Position(1, 8))]);
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 8), new Position(0, 9))]);
+  });
+
+  test("Successive exchangePointAndMark works correctly", async () => {
+    setEmptyCursors(activeTextEditor, [2, 2]);
+    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    await emulator.setMarkCommand();
+    await emulator.setMarkCommand();
+    // Now, [2, 2] was pushed to the mark ring.
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.setMarkCommand();
+    // [0, 0] was pushed to the mark ring.
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+    // Pointer was exchanged, but [1, 1] was NOT pushed.
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    // [0, 0] was NOT pushed either.
+
+    await emulator.cancel();
+    assertCursorsEqual(activeTextEditor, [1, 1]);
+
+    await emulator.exchangePointAndMark();
+    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
   });
 
   test("set and pop marks", async () => {
