@@ -94,9 +94,9 @@ ABCDEFGHIJ`;
     });
   });
 
-  test("exchangePointAndMark does not push duplicated marks", async () => {
+  test("exchangePointAndMark does not push marks", async () => {
     setEmptyCursors(activeTextEditor, [2, 2]);
-    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    // C-<SPC> C-<SPC> to push and deactivate mark.
     await emulator.setMarkCommand();
     await emulator.setMarkCommand();
     // Now, [2, 2] was pushed to the mark ring.
@@ -123,12 +123,15 @@ ABCDEFGHIJ`;
 
     await emulator.popMark();
     assertCursorsEqual(activeTextEditor, [2, 2]);
+
+    await emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [0, 0]);
     // See, [1, 1] has never been pushed by exchange-point-and-mark
   });
 
   test("setMarkCommands resets mark ring pointer and exchangePointAndMark respects it", async () => {
     setEmptyCursors(activeTextEditor, [2, 2]);
-    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    // C-<SPC> C-<SPC> to push and deactivate mark.
     await emulator.setMarkCommand();
     await emulator.setMarkCommand();
     // Now, [2, 2] was pushed to the mark ring.
@@ -162,7 +165,7 @@ ABCDEFGHIJ`;
 
   test("Successive exchangePointAndMark works correctly", async () => {
     setEmptyCursors(activeTextEditor, [2, 2]);
-    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    // C-<SPC> C-<SPC> to push and deactivate mark.
     await emulator.setMarkCommand();
     await emulator.setMarkCommand();
     // Now, [2, 2] was pushed to the mark ring.
@@ -192,7 +195,7 @@ ABCDEFGHIJ`;
 
   test("set and pop marks", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
-    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    // C-<SPC> C-<SPC> to push and deactivate mark.
     await emulator.setMarkCommand();
     await emulator.setMarkCommand();
 
@@ -219,7 +222,7 @@ ABCDEFGHIJ`;
 
   test("Ctrl-u Ctrl-Space works as pop-mark", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
-    // Continuous double C-<SPC> (C-<SPC> C-<SPC>).
+    // C-<SPC> C-<SPC> to push and deactivate mark.
     await emulator.setMarkCommand();
     await emulator.setMarkCommand();
 
