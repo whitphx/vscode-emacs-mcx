@@ -11,6 +11,7 @@ This extension aims
 * to provide emacs-like keybindings
 * to be fully compatible with multi cursor
 * to support kill-ring integrated with the system clipboard
+* to support mark-ring
 * to support prefix argument
 * to support sexp
 * to fix some bugs in the existing extensions such as
@@ -125,11 +126,20 @@ Alt key is mapped to a meta prefix (`M`) by default though you can change it to 
 | `M-c` |  | Convert to title case |
 | `M-S-6` (`M-^` with US keyboard) |  | Merge the previous and the current line (delete-indentation) |
 
+## Mark Commands
+|Command | Desc |
+|--------|------|
+| `C-space` | Set the mark at point, and activate it (set-mark-command). |
+| `C-space C-space` | Set the mark, pushing it onto the mark ring, without activating it. |
+| `C-u C-space` | Move point to where the mark was, and restore the mark from the ring of former marks. |
+| `C-x C-x` | Set the mark at point, and activate it; then move point where the mark used to be (exchange-point-and-mark). |
+
+See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Setting-Mark.html) and [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark-Ring.html) about the mark and the mark ring.
+
 ### Other Commands
 |Command | Desc |
 |--------|------|
 | `C-g` (`ESC`) | Cancel |
-| `C-space` | Set mark |
 | `C-quote` | IntelliSense Suggestion |
 | `M-x` | Open command palette |
 | `C-M-SPC` | Toggle SideBar visibility |

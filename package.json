@@ -39,7 +39,12 @@
 				"emacs-mcx.killRingMax": {
 					"type": "number",
 					"default": 60,
-					"description": "Maximum number of Kill ring entries"
+					"description": "Maximum number of Kill Ring entries"
+				},
+				"emacs-mcx.markRingMax": {
+					"type": "number",
+					"default": 16,
+					"description": "Maximum number of Mark Ring entries"
 				},
 				"emacs-mcx.killWholeLine": {
 					"type": "boolean",
@@ -1264,6 +1269,11 @@
 				"key": "escape space",
 				"command": "emacs-mcx.setMarkCommand",
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+x ctrl+x",
+				"command": "emacs-mcx.exchangePointAndMark",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+'",

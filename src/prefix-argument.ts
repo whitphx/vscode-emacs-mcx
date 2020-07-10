@@ -61,4 +61,14 @@ export class PrefixArgumentHandler {
     }
     return prefixArgument;
   }
+
+  /**
+   * This can be used to detect keyboard inputs starting with C-u.
+   * Since C-u is assigned to universal-argument,
+   * all multi-key keybindings starting with C-u can't be detected by VSCode
+   * and have to be handled by this extension in its own way.
+   */
+  public precedingSingleCtrlU(): boolean {
+    return this.isInPrefixArgumentMode && this.cuCount === 1;
+  }
 }

@@ -55,6 +55,10 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
   assert.equal(textEditor.selections.length, positions.length);
   textEditor.selections.forEach((selection, idx) => {
     const pos = positions[idx];
-    assert.ok(selection.isEqual(new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]))));
+    const expectedRange = new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]));
+    assert.ok(
+      selection.isEqual(expectedRange),
+      `${JSON.stringify(selection)} is not equal to ${JSON.stringify(expectedRange)}`
+    );
   });
 }

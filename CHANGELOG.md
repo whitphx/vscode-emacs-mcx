@@ -14,6 +14,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [0.19.10] - Unreleased
 ### Added
+- Implement the Mark Ring and its related commands:
+  - `set-mark-command` is updated to push mark positions to the Mark Ring.
+  - `exchange-point-and-mark` is added.
 - Assign `Enter` key to close the find widget, which is like the original Emacs' behavior.
 - `killWholeLine` config option.
 

@@ -132,7 +132,7 @@ export class KillYanker {
 
     const prevKillRingEntity = this.killRing.getTop();
 
-    const killRingEntity = this.killRing.pop();
+    const killRingEntity = this.killRing.popNext();
     if (killRingEntity === null) {
       return;
     }

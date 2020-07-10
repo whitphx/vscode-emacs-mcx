@@ -20,6 +20,7 @@ export interface IDebugConfiguration {
 
 export interface IConfiguration {
   killRingMax: number;
+  markRingMax: number;
 
   /**
    * Same to kill-whole-line variable in Emacs.
