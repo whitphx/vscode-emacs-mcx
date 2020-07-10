@@ -25,7 +25,7 @@ suite("KillRing", () => {
     assert.equal(killRing.pop()?.asString(), "bar");
   });
 
-  test("less data than max", () => {
+  test.only("less data than max", () => {
     const killRing = new KillRing(4);
 
     const entities = [
