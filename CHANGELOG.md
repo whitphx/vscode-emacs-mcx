@@ -12,7 +12,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
-## [0.19.10] - Unreleased
+## [0.20.0] - 2020-07-11
 ### Added
 - Implement the Mark Ring and its related commands:
   - `set-mark-command` is updated to push mark positions to the Mark Ring.
