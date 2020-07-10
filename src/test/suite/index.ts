@@ -6,7 +6,7 @@ export function run(): Promise<void> {
   // Create the mocha test
   const mocha = new Mocha({
     ui: "tdd",
-    forbidOnly: true,
+    forbidOnly: !!process.env.CI,
   });
   mocha.useColors(true);
 
