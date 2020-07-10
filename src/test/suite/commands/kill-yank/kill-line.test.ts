@@ -124,7 +124,7 @@ abcdefghij
     });
 
     // Test kill appending is not enabled after cursorMove or some other commands
-    const otherInterruptingCommands = ["selectAll"];
+    const otherInterruptingCommands = ["editor.action.selectAll"];
 
     const interruptingCommands: string[] = [...otherInterruptingCommands];
     interruptingCommands.forEach((interruptingCommand) => {
