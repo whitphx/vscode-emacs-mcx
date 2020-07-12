@@ -695,7 +695,8 @@
 			},
 			{
 				"key": "ctrl+x `",
-				"command": "editor.action.marker.next"
+				"command": "editor.action.marker.next",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+g p",
@@ -1319,11 +1320,13 @@
 			},
 			{
 				"key": "ctrl+x z",
-				"command": "workbench.action.toggleZenMode"
+				"command": "workbench.action.toggleZenMode",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x ctrl+f",
-				"command": "workbench.action.quickOpen"
+				"command": "workbench.action.quickOpen",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x ctrl+s",
@@ -1337,43 +1340,53 @@
 			},
 			{
 				"key": "ctrl+x ctrl+n",
-				"command": "workbench.action.newWindow"
+				"command": "workbench.action.newWindow",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x b",
-				"command": "workbench.action.showAllEditorsByMostRecentlyUsed"
+				"command": "workbench.action.showAllEditorsByMostRecentlyUsed",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x k",
-				"command": "workbench.action.closeActiveEditor"
+				"command": "workbench.action.closeActiveEditor",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x ctrl-k",
-				"command": "workbench.action.closeAllEditors"
+				"command": "workbench.action.closeAllEditors",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x 0",
-				"command": "workbench.action.closeEditorsInGroup"
+				"command": "workbench.action.closeEditorsInGroup",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x 1",
-				"command": "workbench.action.closeEditorsInOtherGroups"
+				"command": "workbench.action.closeEditorsInOtherGroups",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x 2",
-				"command": "workbench.action.splitEditorDown"
+				"command": "workbench.action.splitEditorDown",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x 3",
-				"command": "workbench.action.splitEditorRight"
+				"command": "workbench.action.splitEditorRight",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x 4",
-				"command": "workbench.action.toggleEditorGroupLayout"
+				"command": "workbench.action.toggleEditorGroupLayout",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+x o",
-				"command": "workbench.action.navigateEditorGroups"
+				"command": "workbench.action.navigateEditorGroups",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+u",
@@ -1459,7 +1472,8 @@
 			},
 			{
 				"key": "ctrl+x j",
-				"command": "workbench.action.togglePanel"
+				"command": "workbench.action.togglePanel",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+i",
