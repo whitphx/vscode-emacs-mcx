@@ -71,16 +71,18 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
   }
 
-  registerEmulatorCommand(
-    "type",
-    (emulator, args) => {
-      // Capture typing charactors for prefix argument functionality.
-      logger.debug(`[type command]\t args.text = "${args.text}"`);
+  if (!Configuration.instance.disableOverridingTypeCommand) {
+    registerEmulatorCommand(
+      "type",
+      (emulator, args) => {
+        // Capture typing charactors for prefix argument functionality.
+        logger.debug(`[type command]\t args.text = "${args.text}"`);
 
-      return emulator.type(args.text);
-    },
-    (args) => vscode.commands.executeCommand("default:type", args)
-  );
+        return emulator.type(args.text);
+      },
+      (args) => vscode.commands.executeCommand("default:type", args)
+    );
+  }
 
   moveCommandIds.map((commandName) => {
     registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {

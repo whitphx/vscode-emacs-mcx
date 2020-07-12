@@ -32,6 +32,8 @@ export interface IConfiguration {
    */
   strictEmacsMove: boolean;
 
+  disableOverridingTypeCommand: boolean;
+
   /**
    * Extension debugging settings
    */
