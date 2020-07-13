@@ -7,8 +7,8 @@ export function run(): Promise<void> {
   const mocha = new Mocha({
     ui: "tdd",
     forbidOnly: true,
+    color: true,
   });
-  mocha.useColors(true);
 
   const testsRoot = path.resolve(__dirname, "..");
 
