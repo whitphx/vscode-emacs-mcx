@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.20.2] - Unreleased
+### Fixed
+- Keybindings starting with `C-x` are still disabled in the terminals, but enabled in other focuses such as sidebar.
+
 ## [0.20.1] - 2020-07-12
 ### Fixed
 - Keybindings starting with `C-x` are disabled in integrated terminals. @youyuanwu
