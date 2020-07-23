@@ -82,6 +82,14 @@ export function activate(context: vscode.ExtensionContext) {
     (args) => vscode.commands.executeCommand("default:type", args)
   );
 
+  // Simply override replacePreviousChar command without any effects in order for overridden `type` command to work correctly.
+  // See https://github.com/microsoft/vscode/issues/102291#issuecomment-661758632
+  context.subscriptions.push(
+    vscode.commands.registerCommand("replacePreviousChar", (...args) =>
+      vscode.commands.executeCommand("default:replacePreviousChar", ...args)
+    )
+  );
+
   moveCommandIds.map((commandName) => {
     registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
       emulator.runCommand(commandName);
