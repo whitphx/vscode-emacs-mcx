@@ -12,7 +12,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
-## [0.20.2] - Unreleased
+## [0.20.2] - 2020-07-23
 ### Fixed
 - Keybindings starting with `C-x` are still disabled in the terminals, but enabled in other focuses such as sidebar.
 - `C-p` and `C-n` are fixed to work as cursor movement when intelli-sense is visible the number of whose items is just one.
