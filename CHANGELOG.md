@@ -15,6 +15,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ## [0.20.2] - Unreleased
 ### Fixed
 - Keybindings starting with `C-x` are still disabled in the terminals, but enabled in other focuses such as sidebar.
+- `C-p` and `C-n` are fixed to work as cursor movement when intelli-sense is visible the number of whose items is just one.
 
 ## [0.20.1] - 2020-07-12
 ### Fixed

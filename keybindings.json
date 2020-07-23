@@ -40,6 +40,16 @@
     },
     {
       "keys": ["up", "ctrl+p"],
+      "command": "selectPrevSuggestion",
+      "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+      "keys": ["up", "ctrl+p"],
+      "command": "showPrevParameterHint",
+      "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
+    },
+    {
+      "keys": ["up", "ctrl+p"],
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible",
       "args": [
@@ -52,7 +62,17 @@
     {
       "keys": ["down", "ctrl+n"],
       "command": "emacs-mcx.nextLine",
-      "whens": ["editorTextFocus && !suggestWidgetVisible", "terminalFocus"]
+      "whens": ["editorTextFocus", "terminalFocus"]
+    },
+    {
+      "keys": ["down", "ctrl+n"],
+      "command": "selectNextSuggestion",
+      "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+      "keys": ["down", "ctrl+n"],
+      "command": "showNextParameterHint",
+      "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
     },
     {
       "keys": ["down", "ctrl+n"],
@@ -698,16 +718,6 @@
     },
     {
       "key": "ctrl+p",
-      "command": "showPrevParameterHint",
-      "when": "editorTextFocus && parameterHintsVisible"
-    },
-    {
-      "key": "ctrl+n",
-      "command": "showNextParameterHint",
-      "when": "editorTextFocus && parameterHintsVisible"
-    },
-    {
-      "key": "ctrl+p",
       "command": "selectPrevQuickFix",
       "when": "editorFocus && quickFixWidgetVisible"
     },
@@ -715,16 +725,6 @@
       "key": "ctrl+n",
       "command": "selectNextQuickFix",
       "when": "editorFocus && quickFixWidgetVisible"
-    },
-    {
-      "key": "ctrl+p",
-      "command": "selectPrevSuggestion",
-      "when": "editorTextFocus && suggestWidgetVisible"
-    },
-    {
-      "key": "ctrl+n",
-      "command": "selectNextSuggestion",
-      "when": "editorTextFocus && suggestWidgetVisible"
     },
     {
       "key": "ctrl+p",
