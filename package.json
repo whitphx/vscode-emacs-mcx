@@ -202,6 +202,26 @@
 			},
 			{
 				"key": "up",
+				"command": "selectPrevSuggestion",
+				"when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+			},
+			{
+				"key": "ctrl+p",
+				"command": "selectPrevSuggestion",
+				"when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+			},
+			{
+				"key": "up",
+				"command": "showPrevParameterHint",
+				"when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
+			},
+			{
+				"key": "ctrl+p",
+				"command": "showPrevParameterHint",
+				"when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
+			},
+			{
+				"key": "up",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible",
 				"args": [
@@ -223,12 +243,12 @@
 			{
 				"key": "down",
 				"command": "emacs-mcx.nextLine",
-				"when": "editorTextFocus && !suggestWidgetVisible"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+n",
 				"command": "emacs-mcx.nextLine",
-				"when": "editorTextFocus && !suggestWidgetVisible"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "down",
@@ -239,6 +259,26 @@
 				"key": "ctrl+n",
 				"command": "emacs-mcx.nextLine",
 				"when": "terminalFocus"
+			},
+			{
+				"key": "down",
+				"command": "selectNextSuggestion",
+				"when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+			},
+			{
+				"key": "ctrl+n",
+				"command": "selectNextSuggestion",
+				"when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+			},
+			{
+				"key": "down",
+				"command": "showNextParameterHint",
+				"when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
+			},
+			{
+				"key": "ctrl+n",
+				"command": "showNextParameterHint",
+				"when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
 			},
 			{
 				"key": "down",
@@ -1427,16 +1467,6 @@
 			},
 			{
 				"key": "ctrl+p",
-				"command": "showPrevParameterHint",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "showNextParameterHint",
-				"when": "editorTextFocus && parameterHintsVisible"
-			},
-			{
-				"key": "ctrl+p",
 				"command": "selectPrevQuickFix",
 				"when": "editorFocus && quickFixWidgetVisible"
 			},
@@ -1444,16 +1474,6 @@
 				"key": "ctrl+n",
 				"command": "selectNextQuickFix",
 				"when": "editorFocus && quickFixWidgetVisible"
-			},
-			{
-				"key": "ctrl+p",
-				"command": "selectPrevSuggestion",
-				"when": "editorTextFocus && suggestWidgetVisible"
-			},
-			{
-				"key": "ctrl+n",
-				"command": "selectNextSuggestion",
-				"when": "editorTextFocus && suggestWidgetVisible"
 			},
 			{
 				"key": "ctrl+p",
