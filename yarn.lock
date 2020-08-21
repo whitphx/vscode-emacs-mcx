@@ -1520,15 +1520,15 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-expect@*, expect@^26.4.0:
-  version "26.4.0"
-  resolved "https://registry.yarnpkg.com/expect/-/expect-26.4.0.tgz#34a0aae523343b0931ff1cf0aa972dfe40edfab4"
-  integrity sha512-dbYDJhFcqQsamlos6nEwAMe+ahdckJBk5fmw1DYGLQGabGSlUuT+Fm2jHYw5119zG3uIhP+lCQbjJhFEdZMJtg==
+expect@*, expect@^26.4.1:
+  version "26.4.1"
+  resolved "https://registry.yarnpkg.com/expect/-/expect-26.4.1.tgz#6ed3dc218e6a9ffce16c15edc518f44bad9a6731"
+  integrity sha512-PnsyF/VmPRH/HAWELjrIAgQ5h+4JLTiomA1A2djx+jXrCQzQ/4egZYBOEx9hShoX+mQLS4enYk6Ouxk8b4kcEw==
   dependencies:
     "@jest/types" "^26.3.0"
     ansi-styles "^4.0.0"
     jest-get-type "^26.3.0"
-    jest-matcher-utils "^26.4.0"
+    jest-matcher-utils "^26.4.1"
     jest-message-util "^26.3.0"
     jest-regex-util "^26.0.0"
 
@@ -2366,10 +2366,10 @@ jest-get-type@^26.3.0:
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-26.3.0.tgz#e97dc3c3f53c2b406ca7afaed4493b1d099199e0"
   integrity sha512-TpfaviN1R2pQWkIihlfEanwOXK0zcxrKEE4MlU6Tn7keoXdN6/3gK/xl0yEh8DOunn5pOVGKf8hB4R9gVh04ig==
 
-jest-matcher-utils@^26.4.0:
-  version "26.4.0"
-  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-26.4.0.tgz#2bce9a939e008b894faf1bd4b5bb58facd00c252"
-  integrity sha512-u+xdCdq+F262DH+PutJKXLGr2H5P3DImdJCir51PGSfi3TtbLQ5tbzKaN8BkXbiTIU6ayuAYBWTlU1nyckVdzA==
+jest-matcher-utils@^26.4.1:
+  version "26.4.1"
+  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-26.4.1.tgz#f9f2d1d37d301e328eb22e9df09e7343d6cc1b25"
+  integrity sha512-nmHWaOz54R/w6zJju5tuW0bw6+m38Rb1jnDKehKM/bOngDDL0UwtN634cRxpFoUNVRUrX8Wa0Z34xq/f8iuP5A==
   dependencies:
     chalk "^4.0.0"
     jest-diff "^26.4.0"
