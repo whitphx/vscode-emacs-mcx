@@ -25,6 +25,8 @@ This extension has some custom settings named with a prefix `emacs-mcx`.
 You can configure those settings.
 (See [this page](https://code.visualstudio.com/docs/getstarted/settings#_settings-editor) to know how to change the settings.)
 
+After updating the settings, reload VSCode to enable the changes.
+
 Configurable options of this extension are the followings.
 
 ### `emacs-mcx.strictEmacsMove`
@@ -57,6 +59,14 @@ The default is 60.
 ### `emacs-mcx.killWholeLine`
 This simulates the original Emacs' [`kill-whole-line` variable](https://www.gnu.org/software/emacs/manual/html_node/emacs/Killing-by-Lines.html).
 The default is false.
+
+### `emacs-mcx.disableOverridingTypeCommand`
+This extension makes use of VSCode API's `type` command under the hood, for `C-u` (universal-argument) to work, but it can cause problems in some cases.
+* If you are using IME, text input may sometimes fail.
+* If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
+
+To avoid such problems, you can configure this extension not to use the `type` command by setting `emacs-mcx.disableOverridingTypeCommand` to `false`.
+The only drawback of this option is unavailability of `C-u`.
 
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
