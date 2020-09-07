@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Disposable, Selection, TextEditor } from "vscode";
+import { Selection, TextEditor } from "vscode";
 import { instanceOfIEmacsCommandInterrupted } from "./commands";
 import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
@@ -29,7 +29,7 @@ export interface IMarkModeController {
   exitMarkMode(): void;
 }
 
-export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkModeController {
+export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   private textEditor: TextEditor;
 
   private commandRegistry: EmacsCommandRegistry;
@@ -232,10 +232,6 @@ export class EmacsEmulator implements Disposable, IEmacsCommandRunner, IMarkMode
     this.prefixArgumentHandler.cancel();
 
     MessageManager.showMessage("Quit");
-  }
-
-  public dispose() {
-    delete this.killYanker;
   }
 
   public enterMarkMode(pushMark = true) {

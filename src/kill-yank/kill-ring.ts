@@ -1,7 +1,6 @@
-import { Disposable } from "vscode";
 import { IKillRingEntity } from "./kill-ring-entity/kill-ring-entity";
 
-export class KillRing implements Disposable {
+export class KillRing {
   private maxNum = 60;
   private killRing: IKillRingEntity[];
   private pointer: number | null;
@@ -38,9 +37,5 @@ export class KillRing implements Disposable {
 
     this.pointer = (this.pointer + 1) % this.killRing.length;
     return this.killRing[this.pointer];
-  }
-
-  public dispose() {
-    delete this.killRing;
   }
 }

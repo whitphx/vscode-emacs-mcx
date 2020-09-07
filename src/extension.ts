@@ -15,10 +15,8 @@ export function activate(context: vscode.ExtensionContext) {
   initializeLogger(Configuration.instance);
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
-  context.subscriptions.push(killRing);
 
   const emulatorMap = new EmacsEmulatorMap(killRing);
-  context.subscriptions.push(emulatorMap);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -26,10 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
       return undefined;
     }
 
-    const [curEmulator, isNew] = emulatorMap.getOrCreate(activeTextEditor);
-    if (isNew) {
-      context.subscriptions.push(curEmulator);
-    }
+    const [curEmulator] = emulatorMap.getOrCreate(activeTextEditor);
 
     return curEmulator;
   }

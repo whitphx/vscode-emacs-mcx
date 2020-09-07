@@ -61,7 +61,6 @@ export class MessageManager implements vscode.Disposable {
     }
 
     this.disposable.dispose();
-    delete this.disposable;
     this.disposable = null;
   }
 
