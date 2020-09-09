@@ -1,8 +1,23 @@
+import * as vscode from "vscode";
 import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
+import {
+  WordCharacterClassifier,
+  getMapForWordSeparators,
+} from "../vs/editor/common/controller/wordCharacterClassifier";
+import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
+
+function getWordSeparators(): WordCharacterClassifier {
+  // Ref: https://github.com/VSCodeVim/Vim/blob/91ca71f8607458c0558f9aff61e230c6917d4b51/src/configuration/configuration.ts#L155
+  const activeTextEditor = vscode.window.activeTextEditor;
+  const resource = activeTextEditor ? activeTextEditor.document.uri : null;
+  const maybeWordSeparators = vscode.workspace.getConfiguration("editor", resource).wordSeparators;
+  // Ref: https://github.com/microsoft/vscode/blob/bc9f2577cd8e297b003e5ca652e19685504a1e50/src/vs/editor/contrib/wordOperations/wordOperations.ts#L45
+  return getMapForWordSeparators(typeof maybeWordSeparators === "string" ? maybeWordSeparators : "");
+}
 
 abstract class KillYankCommand extends EmacsCommand {
   protected killYanker: KillYanker;
@@ -19,34 +34,19 @@ abstract class KillYankCommand extends EmacsCommand {
 }
 
 function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
-  const doclen = doc.getText().length;
-  let idx = doc.offsetAt(position) + 1;
-
-  let foundWords = 0;
-  const killRanges = [];
-
-  while (idx <= doclen && foundWords < repeat) {
-    const wordRange = doc.getWordRangeAtPosition(doc.positionAt(idx));
-    if (wordRange !== undefined) {
-      killRanges.push(wordRange);
-      foundWords++;
-      idx = doc.offsetAt(wordRange.end);
-    }
-    idx++;
+  if (repeat <= 0) {
+    throw new Error(`Invalid repeat ${repeat}`);
   }
 
-  // If there are spaces (or some non-word characters)
-  // between the current position and the end of the document,
-  // it should be killed too.
-  if (foundWords < repeat) {
-    killRanges.push(new Range(doc.positionAt(idx), doc.positionAt(doclen)));
+  const wordSeparators = getWordSeparators();
+
+  let wordEnd = position;
+  for (let i = 0; i < repeat; ++i) {
+    wordEnd = findNextWordEnd(doc, wordSeparators, wordEnd);
   }
 
-  if (killRanges.length === 0) {
-    return undefined;
-  }
-
-  return new Range(killRanges[0].start, killRanges[killRanges.length - 1].end);
+  const range = new Range(position, wordEnd);
+  return range.isEmpty ? undefined : range;
 }
 
 export class KillWord extends KillYankCommand {
@@ -58,51 +58,28 @@ export class KillWord extends KillYankCommand {
       return;
     }
 
-    const nextWordRanges = textEditor.selections.map((selection) =>
-      findNextKillWordRange(textEditor.document, selection.active, repeat)
-    );
-    const killRanges: Range[] = nextWordRanges
-      .map((nextWordRange, i) => {
-        if (nextWordRange === undefined) {
-          return undefined;
-        }
-
-        return new Range(textEditor.selections[i].active, nextWordRange.end);
-      })
-      .filter((range): range is Range => range !== undefined);
+    const killRanges = textEditor.selections
+      .map((selection) => findNextKillWordRange(textEditor.document, selection.active, repeat))
+      .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
     await this.killYanker.kill(killRanges);
   }
 }
 
 function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
-  // const doclen = doc.getText().length;
-  let idx = doc.offsetAt(position) - 1;
-
-  let foundWords = 0;
-  const killRanges = [];
-
-  while (0 <= idx && foundWords < repeat) {
-    const wordRange = doc.getWordRangeAtPosition(doc.positionAt(idx));
-    if (wordRange !== undefined) {
-      killRanges.push(wordRange);
-      foundWords++;
-      idx = doc.offsetAt(wordRange.start);
-    }
-    idx--;
+  if (repeat <= 0) {
+    throw new Error(`Invalid repeat ${repeat}`);
   }
 
-  // If there are spaces (or some non-word characters)
-  // between the current position and the beginning of the document,
-  // it should be killed too.
-  if (foundWords < repeat) {
-    killRanges.push(new Range(new Position(0, 0), doc.positionAt(idx)));
+  const wordSeparators = getWordSeparators();
+
+  let wordStart = position;
+  for (let i = 0; i < repeat; ++i) {
+    wordStart = findPreviousWordStart(doc, wordSeparators, wordStart);
   }
 
-  if (killRanges.length === 0) {
-    return undefined;
-  }
+  const range = new Range(wordStart, position);
 
-  return new Range(killRanges[killRanges.length - 1].start, killRanges[0].end);
+  return range.isEmpty ? undefined : range;
 }
 
 export class BackwardKillWord extends KillYankCommand {
@@ -114,18 +91,9 @@ export class BackwardKillWord extends KillYankCommand {
       return;
     }
 
-    const previousWordRanges = textEditor.selections.map((selection) =>
-      findPreviousKillWordRange(textEditor.document, selection.active, repeat)
-    );
-    const killRanges: Range[] = previousWordRanges
-      .map((previousWordRange, i) => {
-        if (previousWordRange === undefined) {
-          return undefined;
-        }
-
-        return new Range(previousWordRange.start, textEditor.selections[i].active);
-      })
-      .filter((range): range is Range => range !== undefined);
+    const killRanges = textEditor.selections
+      .map((selection) => findPreviousKillWordRange(textEditor.document, selection.active, repeat))
+      .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
     await this.killYanker.kill(killRanges, AppendDirection.Backward);
   }
 }

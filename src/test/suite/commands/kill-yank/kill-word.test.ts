@@ -10,6 +10,75 @@ import {
   setupWorkspace,
 } from "../../utils";
 
+suite("killWord and backwardKillWord with JSON document", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `{
+  "foo": "hoge"
+  "bar": "fuga"
+  "baz": "piyo"
+}
+`;
+    activeTextEditor = await setupWorkspace(initialText, { language: "json" });
+    const killRing = new KillRing(3);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  suite("killWord", () => {
+    test("it respects editor.wordSeparators instead of language specific word definitions", async () => {
+      setEmptyCursors(activeTextEditor, [2, 10]); // Right to 'f' of 'fuga.
+
+      await emulator.runCommand("killWord");
+
+      assertTextEqual(
+        activeTextEditor,
+        `{
+  "foo": "hoge"
+  "bar": ""
+  "baz": "piyo"
+}
+`
+      );
+      assertCursorsEqual(activeTextEditor, [2, 10]);
+
+      await clearTextEditor(activeTextEditor);
+
+      await emulator.runCommand("yank");
+
+      assertTextEqual(activeTextEditor, "fuga");
+    });
+  });
+
+  suite("BackwardKillWord", () => {
+    test("it respects editor.wordSeparators instead of language specific word definitions", async () => {
+      setEmptyCursors(activeTextEditor, [2, 14]); // Left to 'a' of 'fuga'.
+
+      await emulator.runCommand("backwardKillWord");
+
+      assertTextEqual(
+        activeTextEditor,
+        `{
+  "foo": "hoge"
+  "bar": ""
+  "baz": "piyo"
+}
+`
+      );
+      assertCursorsEqual(activeTextEditor, [2, 10]);
+
+      await clearTextEditor(activeTextEditor);
+
+      await emulator.runCommand("yank");
+
+      assertTextEqual(activeTextEditor, "fuga");
+    });
+  });
+});
+
 suite("killWord and backwardKillWord with Lorem ipsum", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
@@ -203,7 +272,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
     });
 
     test("handling word separator and line break", async () => {
-      setEmptyCursors(activeTextEditor, [1, 11]); // Right to 'r' of 'nconsectetur'.
+      setEmptyCursors(activeTextEditor, [1, 11]); // Right to 'r' of 'consectetur'.
 
       await emulator.runCommand("backwardKillWord");
 
