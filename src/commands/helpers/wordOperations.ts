@@ -1,6 +1,5 @@
 import { TextDocument, Position } from "vscode";
-// import { WordCharacterClass, WordCharacterClassifier, getMapForWordSeparators } from 'vs/editor/common/controller/wordCharacterClassifier';
-import { WordCharacterClass, WordCharacterClassifier } from "../../vs/editor/common/controller/wordCharacterClassifier";
+import { WordCharacterClass, WordCharacterClassifier } from "vs/editor/common/controller/wordCharacterClassifier";
 
 // Derived from https://github.com/microsoft/vscode/blob/246aab4a05c5f314b1711dac9e775921e93e786e/src/vs/editor/common/controller/cursorWordOperations.ts
 

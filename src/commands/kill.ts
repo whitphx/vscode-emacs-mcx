@@ -4,10 +4,7 @@ import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
-import {
-  WordCharacterClassifier,
-  getMapForWordSeparators,
-} from "../vs/editor/common/controller/wordCharacterClassifier";
+import { WordCharacterClassifier, getMapForWordSeparators } from "vs/editor/common/controller/wordCharacterClassifier";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
 
 function getWordSeparators(): WordCharacterClassifier {

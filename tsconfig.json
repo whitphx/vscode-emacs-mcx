@@ -8,6 +8,11 @@
 		],
 		"sourceMap": true,
 		"rootDir": "src",
+		"baseUrl": "./",
+		"paths": {
+			"vs/*": ["src/vs/*"]
+		},
+		"plugins": [{ "transform": "typescript-transform-paths" }],
 		"strict": true   /* enable all strict type-checking options */
 		/* Additional Checks */
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
