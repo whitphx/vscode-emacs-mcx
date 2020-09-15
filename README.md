@@ -65,7 +65,7 @@ This extension makes use of VSCode API's `type` command under the hood, for `C-u
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
 
-To avoid such problems, you can configure this extension not to use the `type` command by setting `emacs-mcx.disableOverridingTypeCommand` to `false`.
+To avoid such problems, you can configure this extension not to use the `type` command by setting `emacs-mcx.disableOverridingTypeCommand` to `true`.
 The only drawback of this option is unavailability of `C-u`.
 
 ### `emacs-mcx.debug.*`
