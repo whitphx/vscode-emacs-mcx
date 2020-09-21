@@ -15,6 +15,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ## [0.20.5] - Unreleased
 ### Fixed
 - Fix not to close the find widget by Enter key if replace input is focussed.
+- Internal package updates.
 
 ## [0.20.4] - 2020-09-12
 ### Fixed
