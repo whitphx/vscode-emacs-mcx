@@ -12,7 +12,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
-## [0.20.5] - Unreleased
+## [0.20.5] - 2020-09-22
 ### Fixed
 - Fix not to close the find widget by Enter key if replace input is focussed.
 - Internal package updates.
