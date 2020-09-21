@@ -529,9 +529,14 @@
       "when": "editorTextFocus"
     },
     {
-      "keys": ["ctrl+g", "enter"],
+      "key": "ctrl+g",
       "command": "closeFindWidget",
       "when": "editorFocus && findWidgetVisible"
+    },
+    {
+      "key":  "enter",
+      "command": "closeFindWidget",
+      "when": "editorFocus && findWidgetVisible && !replaceInputFocussed"
     },
     {
       "key": "ctrl+g",
