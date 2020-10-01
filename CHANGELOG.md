@@ -12,6 +12,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.21.0] - 2020-10-01
+### Fixed
+- Use VS Code clipboard API instead of clipboardy.
+- Add "workspace" to "extensionKind" manifest to work in remote.
+
 ## [0.20.5] - 2020-09-22
 ### Fixed
 - Fix not to close the find widget by Enter key if replace input is focussed.
