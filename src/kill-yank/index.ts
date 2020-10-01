@@ -1,4 +1,3 @@
-import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { EditorIdentity } from "../editorIdentity";
@@ -84,13 +83,13 @@ export class KillYanker {
       const currentKill = this.killRing.getTop();
       if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
         currentKill.append(newKillEntity, appendDirection);
-        await clipboardy.write(currentKill.asString());
+        await vscode.env.clipboard.writeText(currentKill.asString());
       } else {
         this.killRing.push(newKillEntity);
-        await clipboardy.write(newKillEntity.asString());
+        await vscode.env.clipboard.writeText(newKillEntity.asString());
       }
     } else {
-      await clipboardy.write(newKillEntity.asString());
+      await vscode.env.clipboard.writeText(newKillEntity.asString());
     }
   }
 
@@ -103,7 +102,7 @@ export class KillYanker {
       return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
     }
 
-    const clipboardText = await clipboardy.read();
+    const clipboardText = await vscode.env.clipboard.readText();
     const killRingEntity = this.killRing.getTop();
 
     let pasteText: string;

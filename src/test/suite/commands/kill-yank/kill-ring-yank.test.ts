@@ -1,5 +1,4 @@
 import * as assert from "assert";
-import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
@@ -13,7 +12,7 @@ suite("kill, yank, yank-pop", () => {
   suite("with empty initial text", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace();
-      await clipboardy.write("");
+      await vscode.env.clipboard.writeText("");
     });
 
     teardown(cleanUpWorkspace);
@@ -130,7 +129,7 @@ ABCDEFGHIJ`
       await emulator.runCommand("killRegion");
 
       // Then, copy to clipboard
-      clipboardy.writeSync("12345");
+      await vscode.env.clipboard.writeText("12345");
 
       // Initialize with non-empty text
       const initialText = `0123456789
@@ -420,7 +419,7 @@ ABCDEFGHIJ`
     setup(async () => {
       const initialText = "aaa";
       activeTextEditor = await setupWorkspace(initialText);
-      await clipboardy.write("");
+      await vscode.env.clipboard.writeText("");
     });
 
     teardown(cleanUpWorkspace);
@@ -462,7 +461,7 @@ ABCDEFGHIJ`
     setup(async () => {
       const initialText = "aaa\nbbb\nccc";
       activeTextEditor = await setupWorkspace(initialText);
-      await clipboardy.write("");
+      await vscode.env.clipboard.writeText("");
     });
 
     teardown(cleanUpWorkspace);
@@ -511,7 +510,7 @@ ABCDEFGHIJ`
 
 suite("With not only single text editor", () => {
   setup(async () => {
-    await clipboardy.write("");
+    await vscode.env.clipboard.writeText("");
   });
 
   test("shares killRing amoung multiple editors", async () => {
