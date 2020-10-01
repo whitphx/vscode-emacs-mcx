@@ -28,7 +28,8 @@
 		"*"
 	],
 	"extensionKind": [
-		"ui"
+		"ui",
+		"workspace"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
