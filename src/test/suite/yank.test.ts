@@ -1,4 +1,3 @@
-import * as clipboardy from "clipboardy";
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
@@ -16,8 +15,8 @@ suite("Emulator with yank", () => {
     teardown(cleanUpWorkspace);
 
     suite("with a single line text in clipboard", () => {
-      setup(() => {
-        clipboardy.writeSync("Lorem ipsum");
+      setup(async () => {
+        await vscode.env.clipboard.writeText("Lorem ipsum");
       });
 
       test("it works with single cursor", async () => {
@@ -46,8 +45,8 @@ suite("Emulator with yank", () => {
     });
 
     suite("with a multiple lines text in clipboard", () => {
-      setup(() => {
-        clipboardy.writeSync("Lorem ipsum\ndolor sit amet,");
+      setup(async () => {
+        await vscode.env.clipboard.writeText("Lorem ipsum\ndolor sit amet,");
       });
 
       test("it works with single cursor", async () => {
@@ -121,8 +120,8 @@ ABCDEFGHIJ`;
     teardown(cleanUpWorkspace);
 
     suite("with a single line text in clipboard", () => {
-      setup(() => {
-        clipboardy.writeSync("Lorem ipsum");
+      setup(async () => {
+        await vscode.env.clipboard.writeText("Lorem ipsum");
       });
 
       test("it works with single non-empty cursor (selected text are removed)", async () => {
