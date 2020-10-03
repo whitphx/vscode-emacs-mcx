@@ -90,6 +90,7 @@ Alt key is mapped to a meta prefix (`M`) by default though you can change it to 
 | `C-e` | ✓ | Move to the end of line (move-end-of-line) |
 | `M-f` | ✓ | Move forward by one word unit (forward-word) |
 | `M-b` | ✓ | Move backward by one word unit (backward-word) |
+| `M-m` |   | Move (forward or back) to the first non-whitespace character on the current line (back-to-indentation) |
 | `C-v` | ✓ | Scroll down by one screen unit (scroll-up-command) |
 | `M-v` | ✓ | Scroll up by one screen unit (scroll-down-command) |
 | `M-S-[` (`M-{` with US keyboard) | ✓ | Move back to previous paragraph beginning (backward-paragraph) |
