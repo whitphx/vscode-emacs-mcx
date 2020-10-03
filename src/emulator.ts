@@ -70,6 +70,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this.afterCommand, this));
     this.commandRegistry.register(new MoveCommands.ForwardWord(this.afterCommand, this));
     this.commandRegistry.register(new MoveCommands.BackwardWord(this.afterCommand, this));
+    this.commandRegistry.register(new MoveCommands.BackToIndentation(this.afterCommand, this));
     this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this.afterCommand, this));
     this.commandRegistry.register(new MoveCommands.EndOfBuffer(this.afterCommand, this));
     this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this.afterCommand, this));

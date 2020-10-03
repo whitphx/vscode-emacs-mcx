@@ -144,6 +144,21 @@
         "emacs-mcx.backwardWord"
       ]
     },
+    // back-to-indentation (meta + m)
+    {
+      "key": "meta+m",
+      "command": "emacs-mcx.backToIndentation",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "meta+m",
+      "command": "emacs-mcx.backToIndentation",
+      "when": "editorFocus && findWidgetVisible",
+      "args": [
+        "closeFindWidget",
+        "emacs-mcx.backwardWord"
+      ]
+    },
     // page down (ctrl + v)
     {
       "keys": ["pagedown", "ctrl+v"],

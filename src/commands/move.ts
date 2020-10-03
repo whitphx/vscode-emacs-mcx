@@ -23,6 +23,7 @@ export const moveCommandIds = [
   "scrollDownCommand",
   "forwardParagraph",
   "backwardParagraph",
+  "backToIndentation",
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -166,6 +167,22 @@ export class BackwardWord extends EmacsCommand {
     return createParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft")
     );
+  }
+}
+
+export class BackToIndentation extends EmacsCommand {
+  public readonly id = "backToIndentation";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const doc = textEditor.document;
+    const newSelections = textEditor.selections.map((selection) => {
+      const activeLine = doc.lineAt(selection.active.line);
+      const charIdxToMove = activeLine.firstNonWhitespaceCharacterIndex;
+      const newActive = new vscode.Position(activeLine.lineNumber, charIdxToMove);
+      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
+    });
+    textEditor.selections = newSelections;
+    textEditor.revealRange(textEditor.selection);
   }
 }
 
