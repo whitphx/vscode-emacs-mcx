@@ -471,6 +471,50 @@
 				]
 			},
 			{
+				"key": "alt+m",
+				"command": "emacs-mcx.backToIndentation",
+				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "alt+m",
+				"mac": "cmd+m",
+				"command": "emacs-mcx.backToIndentation",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape m",
+				"command": "emacs-mcx.backToIndentation",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "alt+m",
+				"command": "emacs-mcx.backToIndentation",
+				"when": "editorFocus && findWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.backwardWord"
+				]
+			},
+			{
+				"key": "alt+m",
+				"mac": "cmd+m",
+				"command": "emacs-mcx.backToIndentation",
+				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.backwardWord"
+				]
+			},
+			{
+				"key": "escape m",
+				"command": "emacs-mcx.backToIndentation",
+				"when": "editorFocus && findWidgetVisible && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					"closeFindWidget",
+					"emacs-mcx.backwardWord"
+				]
+			},
+			{
 				"key": "pagedown",
 				"command": "emacs-mcx.scrollUpCommand",
 				"when": "editorTextFocus && !suggestWidgetVisible"
