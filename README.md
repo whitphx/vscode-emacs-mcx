@@ -17,7 +17,7 @@ This extension aims
 * to fix some bugs in the existing extensions such as
     * mark-mode states are shared amoung all editors
 
-This extension makes use of code in the existent extensions listed above and, in addition, [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
+This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
 ## Configs
@@ -25,7 +25,7 @@ This extension has some custom settings named with a prefix `emacs-mcx`.
 You can configure those settings.
 (See [this page](https://code.visualstudio.com/docs/getstarted/settings#_settings-editor) to know how to change the settings.)
 
-After updating the settings, reload VSCode to enable the changes.
+**After updating the settings, reload VSCode to enable the changes.**
 
 Configurable options of this extension are the followings.
 
