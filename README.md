@@ -61,12 +61,12 @@ This simulates the original Emacs' [`kill-whole-line` variable](https://www.gnu.
 The default is false.
 
 ### `emacs-mcx.disableOverridingTypeCommand`
-This extension makes use of VSCode API's `type` command under the hood, for `C-u` (universal-argument) to work, but it can cause problems in some cases.
+This extension makes use of VSCode API's `type` command under the hood, for `C-u` (universal-argument) to accept following numeric arguments, but it can cause problems in some cases.
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
 
 To avoid such problems, you can configure this extension not to use the `type` command by setting `emacs-mcx.disableOverridingTypeCommand` to `true`.
-The only drawback of this option is unavailability of `C-u`.
+The only drawback of this option is that `C-u` become unable to accept following numeric arguments.
 
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
