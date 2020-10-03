@@ -9,14 +9,12 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
   public abstract readonly pareditNavigatorFn: (ast: paredit.AST, idx: number) => number;
 
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const preserveSelect = isInMarkMode;
-
-    const doc = textEditor.document;
-
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
+
+    const doc = textEditor.document;
 
     let src = doc.getText();
     if (!languagesSemicolonComment.has(doc.languageId)) {
@@ -29,16 +27,18 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
     }
     const ast = paredit.parse(src);
 
-    for (let i = 0; i < repeat; ++i) {
-      const newSelections = textEditor.selections.map((selection) => {
-        const idx = doc.offsetAt(selection.active);
-        const newIdx = this.pareditNavigatorFn(ast, idx);
-        const newActivePosition = doc.positionAt(newIdx);
-        return new Selection(preserveSelect ? selection.anchor : newActivePosition, newActivePosition);
-      });
+    const newSelections = textEditor.selections.map((selection) => {
+      let idx = doc.offsetAt(selection.active);
 
-      textEditor.selections = newSelections;
-    }
+      for (let i = 0; i < repeat; ++i) {
+        idx = this.pareditNavigatorFn(ast, idx);
+      }
+
+      const newActivePosition = doc.positionAt(idx);
+      return new Selection(isInMarkMode ? selection.anchor : newActivePosition, newActivePosition);
+    });
+
+    textEditor.selections = newSelections;
 
     const primaryActiveCursor = new Selection(textEditor.selection.active, textEditor.selection.active);
     textEditor.revealRange(primaryActiveCursor, TextEditorRevealType.InCenterIfOutsideViewport);
