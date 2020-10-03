@@ -12,6 +12,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.22.0] - Unreleased
+### Added
+- `M-m` (`back-to-indentation`)
+
 ## [0.21.0] - 2020-10-01
 ### Fixed
 - Use VS Code clipboard API instead of clipboardy.
