@@ -185,8 +185,9 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 ### sexp
 |Command |Prefix argument | Desc |
 |--------|----------------|------|
-| `C-M-f` | ✓ | Move forward by one s-exp |
-| `C-M-b` | ✓ | Move backward by one s-exp |
+| `C-M-f` | ✓ | Move forward over a balanced expression (forward-sexp) |
+| `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
+| `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
