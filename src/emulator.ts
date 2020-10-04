@@ -84,11 +84,6 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this));
     this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
 
-    this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
-    this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));
-    this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this.afterCommand, this));
-    this.commandRegistry.register(new PareditCommands.BackwardUpSexp(this.afterCommand, this));
-
     this.commandRegistry.register(new RecenterTopBottom(this.afterCommand, this));
 
     const killYanker = new KillYanker(textEditor, killRing);
@@ -101,6 +96,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.commandRegistry.register(new KillCommands.Yank(this.afterCommand, this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this.afterCommand, this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
+
+    this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.BackwardUpSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.KillSexp(this.afterCommand, this, killYanker));
 
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));

@@ -1,12 +1,38 @@
 import * as paredit from "paredit.js";
-import { Selection, TextEditor, TextEditorRevealType } from "vscode";
+import { TextDocument, Selection, Range, TextEditor, TextEditorRevealType, Position } from "vscode";
 import { EmacsCommand } from ".";
+import { KillYankCommand } from "./kill";
+
+type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
 
 // Languages in which semicolon represents comment
 const languagesSemicolonComment = new Set(["clojure", "lisp", "scheme"]);
 
+const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNavigatorFn) => {
+  let src = doc.getText();
+  if (!languagesSemicolonComment.has(doc.languageId)) {
+    // paredit.js treats semicolon as comment in a manner of lisp and this behavior is not configurable
+    // (a literal ";" is hard coded in paredit.js).
+    // However, in other languages, semicolon should be treated as one entity, but not comment for convenience.
+    // To do so, ";" is replaced with another character which is not treated as comment by paredit.js
+    // if the document is not lisp or lisp-like languages.
+    src = src.split(";").join("_"); // split + join = replaceAll
+  }
+  const ast = paredit.parse(src);
+
+  return (position: Position, repeat: number): Position => {
+    let idx = doc.offsetAt(position);
+
+    for (let i = 0; i < repeat; ++i) {
+      idx = pareditNavigatorFn(ast, idx);
+    }
+
+    return doc.positionAt(idx);
+  };
+};
+
 abstract class PareditNavigatorCommand extends EmacsCommand {
-  public abstract readonly pareditNavigatorFn: (ast: paredit.AST, idx: number) => number;
+  public abstract readonly pareditNavigatorFn: PareditNavigatorFn;
 
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -16,25 +42,9 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
 
     const doc = textEditor.document;
 
-    let src = doc.getText();
-    if (!languagesSemicolonComment.has(doc.languageId)) {
-      // paredit.js treats semicolon as comment in a manner of lisp and this behavior is not configurable
-      // (a literal ";" is hard coded in paredit.js).
-      // However, in other languages, semicolon should be treated as one entity, but not comment for convenience.
-      // To do so, ";" is replaced with another character which is not treated as comment by paredit.js
-      // if the document is not lisp or lisp-like languages.
-      src = src.split(";").join("_"); // split + join = replaceAll
-    }
-    const ast = paredit.parse(src);
-
+    const travelSexp = makeSexpTravelFunc(doc, this.pareditNavigatorFn);
     const newSelections = textEditor.selections.map((selection) => {
-      let idx = doc.offsetAt(selection.active);
-
-      for (let i = 0; i < repeat; ++i) {
-        idx = this.pareditNavigatorFn(ast, idx);
-      }
-
-      const newActivePosition = doc.positionAt(idx);
+      const newActivePosition = travelSexp(selection.active, repeat);
       return new Selection(isInMarkMode ? selection.anchor : newActivePosition, newActivePosition);
     });
 
@@ -63,4 +73,28 @@ export class ForwardDownSexp extends PareditNavigatorCommand {
 export class BackwardUpSexp extends PareditNavigatorCommand {
   public readonly id = "paredit.backwardUpSexp";
   public readonly pareditNavigatorFn = paredit.navigator.backwardUpSexp;
+}
+
+export class KillSexp extends KillYankCommand {
+  public readonly id = "paredit.killSexp";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+    if (repeat <= 0) {
+      return;
+    }
+
+    const doc = textEditor.document;
+
+    const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.forwardSexp);
+    const killRanges = textEditor.selections.map((selection) => {
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Range(selection.anchor, newActivePosition);
+    });
+
+    await this.killYanker.kill(killRanges);
+
+    const primaryActiveCursor = new Selection(textEditor.selection.active, textEditor.selection.active);
+    textEditor.revealRange(primaryActiveCursor, TextEditorRevealType.InCenterIfOutsideViewport);
+  }
 }

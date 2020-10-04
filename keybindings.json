@@ -737,6 +737,11 @@
       "when": "editorTextFocus"
     },
     {
+      "key": "ctrl+meta+k",
+      "command": "emacs-mcx.paredit.killSexp",
+      "when": "editorTextFocus"
+    },
+    {
       "key": "ctrl+p",
       "command": "selectPrevQuickFix",
       "when": "editorFocus && quickFixWidgetVisible"

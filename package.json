@@ -1516,6 +1516,22 @@
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
 			},
 			{
+				"key": "ctrl+alt+k",
+				"command": "emacs-mcx.paredit.killSexp",
+				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "ctrl+alt+k",
+				"mac": "ctrl+cmd+k",
+				"command": "emacs-mcx.paredit.killSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape ctrl+k",
+				"command": "emacs-mcx.paredit.killSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
 				"key": "ctrl+p",
 				"command": "selectPrevQuickFix",
 				"when": "editorFocus && quickFixWidgetVisible"
