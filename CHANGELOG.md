@@ -15,6 +15,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ## [0.22.0] - Unreleased
 ### Added
 - `M-m` (`back-to-indentation`)
+- `C-M-k` (`kill-sexp`)
 
 ## [0.21.0] - 2020-10-01
 ### Fixed
