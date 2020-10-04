@@ -1,7 +1,8 @@
 import * as assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { setEmptyCursors, setupWorkspace } from "../utils";
+import { KillRing } from "../../../kill-yank/kill-ring";
+import { setEmptyCursors, setupWorkspace, assertCursorsEqual, assertTextEqual, clearTextEditor } from "../utils";
 
 suite("paredit commands", () => {
   let activeTextEditor: TextEditor;
@@ -54,6 +55,111 @@ suite("paredit commands", () => {
       assert.equal(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 0))));
     });
+  });
+});
+
+suite("paredit.kill-sexp", () => {
+  const initialText = `(
+  (
+    a b
+  )
+  (
+    c d
+  )
+)`;
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  test("killing outer parentheses", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.runCommand("paredit.killSexp");
+
+    assertTextEqual(activeTextEditor, "");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+
+    await clearTextEditor(activeTextEditor);
+
+    await emulator.runCommand("yank");
+
+    assertTextEqual(activeTextEditor, initialText);
+  });
+
+  test("killing inner parentheses continuously", async () => {
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    await emulator.runCommand("paredit.killSexp");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+
+  (
+    c d
+  )
+)`
+    );
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+
+    await emulator.runCommand("paredit.killSexp");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+
+)`
+    );
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+
+    await clearTextEditor(activeTextEditor);
+
+    await emulator.runCommand("yank");
+
+    assertTextEqual(
+      activeTextEditor,
+      `  (
+    a b
+  )
+  (
+    c d
+  )`
+    );
+  });
+
+  test("killing inner parentheses with prefix argument", async () => {
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    emulator.universalArgument();
+    await emulator.type("2");
+    await emulator.runCommand("paredit.killSexp");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+
+)`
+    );
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+
+    await clearTextEditor(activeTextEditor);
+
+    await emulator.runCommand("yank");
+
+    assertTextEqual(
+      activeTextEditor,
+      `  (
+    a b
+  )
+  (
+    c d
+  )`
+    );
   });
 });
 

@@ -16,7 +16,7 @@ function getWordSeparators(): WordCharacterClassifier {
   return getMapForWordSeparators(typeof maybeWordSeparators === "string" ? maybeWordSeparators : "");
 }
 
-abstract class KillYankCommand extends EmacsCommand {
+export abstract class KillYankCommand extends EmacsCommand {
   protected killYanker: KillYanker;
 
   public constructor(
