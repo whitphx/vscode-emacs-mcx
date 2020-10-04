@@ -7,12 +7,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - To support more kinds of kill command
     - `C-x DEL`: (backward-kill-sentence)
     - `M-k`: (kill-sentence)
-    - `C-M-k`: (kill-sexp)  # Maybe ignored
     - `M-z char`: (zap-to-char)  # Maybe ignored
-- To support prefix argument with various commands
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
-## [0.22.0] - Unreleased
+## [0.22.0] - 2020-10-04
 ### Added
 - `M-m` (`back-to-indentation`)
 - `C-M-k` (`kill-sexp`)
