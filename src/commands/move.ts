@@ -6,6 +6,7 @@ import {
   travelForward as travelForwardParagraph,
   travelBackward as travelBackwardParagraph,
 } from "./helpers/paragraph";
+import { revealPrimaryActive } from "./helpers/reveal";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -31,7 +32,9 @@ export class ForwardChar extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     if (prefixArgument === undefined || prefixArgument === 1) {
-      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
+      return vscode.commands
+        .executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight")
+        .then(() => revealPrimaryActive(textEditor));
     } else if (prefixArgument > 0) {
       const doc = textEditor.document;
       const newSelections = textEditor.selections.map((selection) => {
@@ -41,6 +44,7 @@ export class ForwardChar extends EmacsCommand {
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
       textEditor.selections = newSelections;
+      revealPrimaryActive(textEditor);
     }
   }
 }
@@ -50,7 +54,9 @@ export class BackwardChar extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     if (prefixArgument === undefined || prefixArgument === 1) {
-      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
+      return vscode.commands
+        .executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft")
+        .then(() => revealPrimaryActive(textEditor));
     } else if (prefixArgument > 0) {
       const doc = textEditor.document;
       const newSelections = textEditor.selections.map((selection) => {
@@ -60,6 +66,7 @@ export class BackwardChar extends EmacsCommand {
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
       textEditor.selections = newSelections;
+      revealPrimaryActive(textEditor);
     }
   }
 }
@@ -111,8 +118,10 @@ export class MoveBeginningOfLine extends EmacsCommand {
       }
     };
 
+    const moveHomeAndRevealCommandFunc = () => moveHomeCommandFunc().then(() => revealPrimaryActive(textEditor));
+
     if (prefixArgument === undefined || prefixArgument === 1) {
-      return moveHomeCommandFunc();
+      return moveHomeAndRevealCommandFunc();
     } else if (prefixArgument > 1) {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
@@ -121,7 +130,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
           value: prefixArgument - 1,
           isInMarkMode,
         })
-        .then(moveHomeCommandFunc);
+        .then(moveHomeAndRevealCommandFunc);
     }
   }
 }
@@ -133,8 +142,10 @@ export class MoveEndOfLine extends EmacsCommand {
     const moveEndCommandFunc = () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
 
+    const moveEndAndRevealCommandFunc = () => moveEndCommandFunc().then(() => revealPrimaryActive(textEditor));
+
     if (prefixArgument === undefined || prefixArgument === 1) {
-      return moveEndCommandFunc();
+      return moveEndAndRevealCommandFunc();
     } else if (prefixArgument > 1) {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
@@ -143,7 +154,7 @@ export class MoveEndOfLine extends EmacsCommand {
           value: prefixArgument - 1,
           isInMarkMode,
         })
-        .then(moveEndCommandFunc);
+        .then(moveEndAndRevealCommandFunc);
     }
   }
 }
