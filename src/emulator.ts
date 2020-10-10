@@ -162,16 +162,13 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     });
   }
 
-  // tslint:disable-next-line:max-line-length
   // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
   public type(text: string) {
-    const handled = this.prefixArgumentHandler.handleType(text);
-    if (handled) {
-      logger.debug(`[EmacsEmulator.type]\t prefix argument is handled.`);
-      return;
-    }
-
     // Single character input with prefix argument
+    // NOTE: This single character handling should be replaced with `EmacsEmulator.typeChar` directly bound to relevant keystrokes,
+    // however, it's difficult to cover all characters without `type` event registration,
+    // then this method can be used to handle single character inputs other than ASCII characters,
+    // for those who want it as an option.
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 
