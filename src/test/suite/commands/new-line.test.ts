@@ -118,21 +118,23 @@ suite("newLine", () => {
           assert.equal(activeTextEditor.selection.active.character, 4);
         });
 
-        test("newLine does not disable the language specific control", async () => {
-          const initialText = "/** */";
-          activeTextEditor = await setupWorkspace(initialText, {
-            eol,
-            language: "cpp",
+        ["c", "cpp", "javascript", "javascriptreact", "typescript", "typescriptreact"].forEach((language) => {
+          test(`newLine does not disable the language specific control in case of ${language}`, async () => {
+            const initialText = "/** */";
+            activeTextEditor = await setupWorkspace(initialText, {
+              eol,
+              language,
+            });
+            emulator = new EmacsEmulator(activeTextEditor);
+
+            setEmptyCursors(activeTextEditor, [0, 3]);
+
+            await emulator.runCommand("newLine");
+
+            assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} */`);
+            assert.equal(activeTextEditor.selection.active.line, 1);
+            assert.equal(activeTextEditor.selection.active.character, 3);
           });
-          emulator = new EmacsEmulator(activeTextEditor);
-
-          setEmptyCursors(activeTextEditor, [0, 3]);
-
-          await emulator.runCommand("newLine");
-
-          assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} */`);
-          assert.equal(activeTextEditor.selection.active.line, 1);
-          assert.equal(activeTextEditor.selection.active.character, 3);
         });
       });
 
