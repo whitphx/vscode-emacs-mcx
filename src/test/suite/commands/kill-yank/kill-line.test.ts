@@ -153,11 +153,11 @@ abcdefghij
     });
 
     // Test kill appending is not enabled after cursorMoves, editing, or some other ops
-    const moves = moveCommandIds.map((commandName): [string, () => Thenable<any> | undefined] => [
+    const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | undefined] => [
       commandName,
       () => emulator.runCommand(commandName),
     ]);
-    const edits: Array<[string, () => Thenable<any>]> = [
+    const edits: Array<[string, () => Thenable<unknown>]> = [
       ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
       [
         "delete",
@@ -172,9 +172,9 @@ abcdefghij
           ),
       ],
     ];
-    const otherOps: Array<[string, () => Thenable<any>]> = [["cancel", async () => await emulator.cancel()]];
+    const otherOps: Array<[string, () => Thenable<unknown>]> = [["cancel", async () => await emulator.cancel()]];
 
-    const ops: Array<[string, () => Thenable<any> | undefined]> = [...moves, ...edits, ...otherOps];
+    const ops: Array<[string, () => Thenable<unknown> | undefined]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {
       test(`it does not append the killed text after ${label}`, async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
