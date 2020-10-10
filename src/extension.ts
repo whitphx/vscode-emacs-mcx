@@ -79,6 +79,22 @@ export function activate(context: vscode.ExtensionContext) {
     );
   }
 
+  registerEmulatorCommand("emacs-mcx.universalArgumentDigit", (emulator, args) => {
+    const arg = args[0];
+    if (typeof arg !== "number") {
+      return;
+    }
+    emulator.universalArgumentDigit(arg);
+  });
+
+  registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
+    const arg = args[0];
+    if (typeof arg !== "string") {
+      return;
+    }
+    emulator.typeChar(arg);
+  });
+
   moveCommandIds.map((commandName) => {
     registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
       emulator.runCommand(commandName);

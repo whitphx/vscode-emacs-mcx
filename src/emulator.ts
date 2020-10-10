@@ -52,7 +52,10 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
-    this.prefixArgumentHandler = new PrefixArgumentHandler();
+    this.prefixArgumentHandler = new PrefixArgumentHandler(
+      this.onPrefixArgumentChange,
+      this.onPrefixArgumentAcceptingStateChange
+    );
 
     this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
@@ -143,6 +146,22 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     }
   }
 
+  public typeChar(char: string) {
+    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    this.prefixArgumentHandler.cancel();
+
+    const repeat = prefixArgument == null ? 1 : prefixArgument;
+    if (repeat < 0) {
+      return;
+    }
+
+    return this.textEditor.edit((editBuilder) => {
+      this.textEditor.selections.forEach((selection) => {
+        editBuilder.insert(selection.active, char.repeat(repeat));
+      });
+    });
+  }
+
   // tslint:disable-next-line:max-line-length
   // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
   public type(text: string) {
@@ -180,6 +199,28 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
    */
   public universalArgument() {
     this.prefixArgumentHandler.universalArgument();
+  }
+
+  /**
+   * digits following C-u
+   */
+  public universalArgumentDigit(arg: number): void {
+    this.prefixArgumentHandler.universalArgumentDigit(arg);
+  }
+
+  public onPrefixArgumentChange(newPrefixArgument: number | undefined): void {
+    logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
+    vscode.commands.executeCommand(
+      "setContext",
+      "emacs-mcx.prefixArgumentExists",
+      typeof newPrefixArgument === "number"
+    );
+    vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument);
+  }
+
+  public onPrefixArgumentAcceptingStateChange(newState: boolean): void {
+    logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   }
 
   public runCommand(commandName: string) {

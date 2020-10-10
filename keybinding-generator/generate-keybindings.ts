@@ -4,7 +4,7 @@ export interface KeyBindingSource {
   command: string;
   when?: string;
   whens?: string[];
-  args?: string[];
+  args?: (string | number)[];
 }
 
 export interface KeyBinding {
@@ -12,7 +12,7 @@ export interface KeyBinding {
   mac?: string;
   command: string;
   when?: string;
-  args?: string[];
+  args?: (string | number)[];
 }
 
 export function isValidKey(key: string): boolean {
@@ -177,10 +177,72 @@ export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc i
     if (!Array.isArray(maybeSrc.args)) {
       return false;
     }
-    if (maybeSrc.args.some((a) => typeof a !== "string")) {
+    if (maybeSrc.args.some((a) => typeof a !== "string" && typeof a !== "number")) {
       return false;
     }
   }
 
   return true;
+}
+
+export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
+  const keybindings: KeyBinding[] = [];
+
+  // Generate keybindings for numeric characters.
+  for (let num = 0; num <= 9; ++num) {
+    keybindings.push({
+      key: num.toString(),
+      when: "emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly",
+      command: "emacs-mcx.universalArgumentDigit",
+      args: [num],
+    });
+    keybindings.push({
+      key: num.toString(),
+      command: "emacs-mcx.typeChar",
+      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
+      args: [num.toString()],
+    });
+  }
+
+  // Ascii all printable characters excluding space, delete, and numeric characters.
+  // Ref: https://www.ascii-code.com/
+  const asciiPrintableChars: string[] = [];
+  // '!' ~ '/'
+  for (let charCode = 0x21; charCode <= 0x2f; charCode++) {
+    asciiPrintableChars.push(String.fromCharCode(charCode));
+  }
+  // 0x30 - 0x39 are numeric, '0' ~ '9', and so skipped.
+  // ':' ~ '~'
+  for (let charCode = 0x3a; charCode <= 0x7e; charCode++) {
+    asciiPrintableChars.push(String.fromCharCode(charCode));
+  }
+
+  for (const char of asciiPrintableChars) {
+    keybindings.push({
+      key: char,
+      when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
+      command: "emacs-mcx.typeChar",
+      args: [char],
+    });
+  }
+
+  // In addition, special characters.
+  keybindings.push({
+    key: "space",
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
+    command: "emacs-mcx.typeChar",
+    args: [" "],
+  });
+  keybindings.push({
+    key: "enter",
+    command: "emacs-mcx.newLine",
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly"
+  });
+  keybindings.push({
+    key: "backspace",
+    command: "emacs-mcx.deleteBackwardChar",
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly"
+  });
+
+  return keybindings;
 }
