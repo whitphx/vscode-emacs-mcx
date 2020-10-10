@@ -818,12 +818,12 @@
 			{
 				"key": "ctrl+s",
 				"command": "emacs-mcx.isearchForward",
-				"when": "!findWidgetVisible"
+				"when": "!findInputFocussed"
 			},
 			{
 				"key": "ctrl+s",
 				"command": "editor.action.nextMatchFindAction",
-				"when": "findWidgetVisible"
+				"when": "findInputFocussed"
 			},
 			{
 				"key": "ctrl+r",
