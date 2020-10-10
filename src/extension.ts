@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
     onNoEmulator?: (...args: any[]) => any
   ) {
     const disposable = vscode.commands.registerCommand(commandName, (...args) => {
-      logger.debug(`[command]\t Command executed: "${commandName}"`);
+      logger.debug(`[command]\t Command "${commandName}" executed with args (${args})`);
 
       const emulator = getAndUpdateEmulator();
       if (!emulator) {
