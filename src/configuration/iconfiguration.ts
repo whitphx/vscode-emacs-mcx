@@ -32,7 +32,7 @@ export interface IConfiguration {
    */
   strictEmacsMove: boolean;
 
-  disableOverridingTypeCommand: boolean;
+  enableOverridingTypeCommand: boolean;
 
   /**
    * Extension debugging settings

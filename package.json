@@ -67,10 +67,10 @@
 					"default": false,
 					"description": "If true, Command (⌘) key works as the Meta prefix (macOS only)."
 				},
-				"emacs-mcx.disableOverridingTypeCommand": {
+				"emacs-mcx.enableOverridingTypeCommand": {
 					"type": "boolean",
 					"default": false,
-					"description": "If true, overriding `type` command is disabled. Try this option if you have some trouble such as conflict with another extension or text input failure with IME, while this setting has a side effect that disables universal argument."
+					"description": "If true, overriding `type` command is enabled to use prefix arguments on character inputs by IME."
 				},
 				"emacs-mcx.debug.silent": {
 					"type": "boolean",

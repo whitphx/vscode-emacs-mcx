@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
   }
 
-  if (!Configuration.instance.disableOverridingTypeCommand) {
+  if (Configuration.instance.enableOverridingTypeCommand) {
     registerEmulatorCommand(
       "type",
       (emulator, args) => {
