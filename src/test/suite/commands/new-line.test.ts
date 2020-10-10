@@ -122,7 +122,7 @@ suite("newLine", () => {
           const initialText = "/** */";
           activeTextEditor = await setupWorkspace(initialText, {
             eol,
-            language: "typescript",
+            language: "cpp",
           });
           emulator = new EmacsEmulator(activeTextEditor);
 
