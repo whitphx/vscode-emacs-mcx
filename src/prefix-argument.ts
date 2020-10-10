@@ -1,11 +1,15 @@
 import { logger } from "./logger";
 import { MessageManager } from "./message";
 
+interface PrefixArgumentHandlerState {
+  isInPrefixArgumentMode: boolean;
+  isAcceptingPrefixArgument: boolean;
+  cuCount: number; // How many C-u are input continuously
+  prefixArgumentStr: string; // Prefix argument string input after C-u
+}
+
 export class PrefixArgumentHandler {
-  private isInPrefixArgumentMode = false;
-  private isAcceptingPrefixArgument = false;
-  private cuCount = 0; // How many C-u are input continuously
-  private prefixArgumentStr = ""; // Prefix argument string input after C-u
+  private state: PrefixArgumentHandlerState;
   private onPrefixArgumentChange: (newPrefixArgument: number | undefined) => void;
   private onAcceptingStateChange: (newState: boolean) => void;
 
@@ -13,23 +17,38 @@ export class PrefixArgumentHandler {
     onPrefixArgumentChange: (newPrefixArgument: number | undefined) => void,
     onAcceptingStateChange: (newState: boolean) => void
   ) {
+    this.state = {
+      isInPrefixArgumentMode: false,
+      isAcceptingPrefixArgument: false,
+      cuCount: 0,
+      prefixArgumentStr: "",
+    };
     this.onPrefixArgumentChange = onPrefixArgumentChange;
     this.onAcceptingStateChange = onAcceptingStateChange;
   }
 
+  private updateState(newState: Partial<PrefixArgumentHandlerState>): void {
+    this.state = {
+      ...this.state,
+      ...newState,
+    };
+  }
+
   public appendPrefixArgumentStr(text: string): void {
-    this.prefixArgumentStr += text;
-    MessageManager.showMessage(`C-u ${this.prefixArgumentStr}-`);
+    this.updateState({
+      prefixArgumentStr: this.state.prefixArgumentStr + text,
+    });
+    MessageManager.showMessage(`C-u ${this.state.prefixArgumentStr}-`);
     this.callOnPrefixArgumentChange();
   }
 
   public universalArgumentDigit(arg: number): boolean {
-    if (!this.isInPrefixArgumentMode) {
+    if (!this.state.isInPrefixArgumentMode) {
       logger.debug(`[PrefixArgumentHandler.handleType]\t Not in prefix argument mode. exit.`);
       return false;
     }
 
-    if (!this.isAcceptingPrefixArgument) {
+    if (!this.state.isAcceptingPrefixArgument) {
       logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument input is not accepted.`);
       return false;
     }
@@ -45,16 +64,16 @@ export class PrefixArgumentHandler {
   }
 
   public handleType(text: string): boolean {
-    if (!this.isInPrefixArgumentMode) {
+    if (!this.state.isInPrefixArgumentMode) {
       logger.debug(`[PrefixArgumentHandler.handleType]\t Not in prefix argument mode. exit.`);
       return false;
     }
 
-    if (this.isAcceptingPrefixArgument && !isNaN(+text)) {
+    if (this.state.isAcceptingPrefixArgument && !isNaN(+text)) {
       // If `text` is a numeric charactor
       this.appendPrefixArgumentStr(text);
 
-      logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument is "${this.prefixArgumentStr}"`);
+      logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument is "${this.state.prefixArgumentStr}"`);
       return true;
     }
 
@@ -66,17 +85,21 @@ export class PrefixArgumentHandler {
    * Emacs' ctrl-u
    */
   public universalArgument() {
-    if (this.isInPrefixArgumentMode && this.prefixArgumentStr.length > 0) {
+    if (this.state.isInPrefixArgumentMode && this.state.prefixArgumentStr.length > 0) {
       logger.debug(`[PrefixArgumentHandler.universalArgument]\t Stop accepting prefix argument.`);
-      this.isAcceptingPrefixArgument = false;
+      this.updateState({
+        isAcceptingPrefixArgument: false,
+      });
       this.callOnAcceptingStateChange();
       this.callOnPrefixArgumentChange();
     } else {
       logger.debug(`[PrefixArgumentHandler.universalArgument]\t Start prefix argument or count up C-u.`);
-      this.isInPrefixArgumentMode = true;
-      this.isAcceptingPrefixArgument = true;
-      this.cuCount++;
-      this.prefixArgumentStr = "";
+      this.updateState({
+        isInPrefixArgumentMode: true,
+        isAcceptingPrefixArgument: true,
+        cuCount: this.state.cuCount + 1,
+        prefixArgumentStr: "",
+      });
       this.callOnAcceptingStateChange();
       this.callOnPrefixArgumentChange();
     }
@@ -84,22 +107,24 @@ export class PrefixArgumentHandler {
 
   public cancel() {
     logger.debug(`[PrefixArgumentHandler.cancel]`);
-    this.isInPrefixArgumentMode = false;
-    this.isAcceptingPrefixArgument = false;
-    this.cuCount = 0;
-    this.prefixArgumentStr = "";
+    this.updateState({
+      isInPrefixArgumentMode: false,
+      isAcceptingPrefixArgument: false,
+      cuCount: 0,
+      prefixArgumentStr: "",
+    });
     this.callOnAcceptingStateChange();
     this.callOnPrefixArgumentChange();
   }
 
   public getPrefixArgument(): number | undefined {
-    if (!this.isInPrefixArgumentMode) {
+    if (!this.state.isInPrefixArgumentMode) {
       return undefined;
     }
 
-    const prefixArgument = parseInt(this.prefixArgumentStr, 10);
+    const prefixArgument = parseInt(this.state.prefixArgumentStr, 10);
     if (isNaN(prefixArgument)) {
-      return 4 ** this.cuCount;
+      return 4 ** this.state.cuCount;
     }
     return prefixArgument;
   }
@@ -111,11 +136,11 @@ export class PrefixArgumentHandler {
    * and have to be handled by this extension in its own way.
    */
   public precedingSingleCtrlU(): boolean {
-    return this.isInPrefixArgumentMode && this.cuCount === 1;
+    return this.state.isInPrefixArgumentMode && this.state.cuCount === 1;
   }
 
   private callOnAcceptingStateChange() {
-    this.onAcceptingStateChange(this.isAcceptingPrefixArgument);
+    this.onAcceptingStateChange(this.state.isAcceptingPrefixArgument);
   }
 
   private callOnPrefixArgumentChange() {
