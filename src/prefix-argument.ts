@@ -21,10 +21,23 @@ export class PrefixArgumentHandler {
   }
 
   private updateState(newState: Partial<PrefixArgumentHandlerState>): void {
+    const oldState = this.state;
     this.state = {
       ...this.state,
       ...newState,
     };
+    if (oldState.isAcceptingPrefixArgument !== this.state.isAcceptingPrefixArgument) {
+      logger.debug(
+        `[PrefixArgumentHandler]\t isAcceptingPrefixArgument changed: ${this.state.isAcceptingPrefixArgument}.`
+      );
+    }
+    if (
+      oldState.isInPrefixArgumentMode !== this.state.isInPrefixArgumentMode ||
+      oldState.prefixArgumentStr !== this.state.prefixArgumentStr ||
+      oldState.cuCount !== this.state.cuCount
+    ) {
+      logger.debug(`[PrefixArgumentHandler]\t prefix argument changed: ${this.getPrefixArgument()}.`);
+    }
   }
 
   public handleType(text: string): boolean {
