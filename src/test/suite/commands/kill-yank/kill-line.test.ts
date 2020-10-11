@@ -210,7 +210,7 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
@@ -233,7 +233,7 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 1]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
@@ -326,7 +326,7 @@ ABCDEFGHIJ`
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
@@ -349,7 +349,7 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 1]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
