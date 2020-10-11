@@ -194,30 +194,33 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   /**
    * C-u
    */
-  public universalArgument() {
-    this.prefixArgumentHandler.universalArgument();
+  public universalArgument(): Promise<unknown> {
+    return this.prefixArgumentHandler.universalArgument();
   }
 
   /**
    * digits following C-u
    */
-  public universalArgumentDigit(arg: number): void {
-    this.prefixArgumentHandler.universalArgumentDigit(arg);
+  public universalArgumentDigit(arg: number): Promise<unknown> {
+    return this.prefixArgumentHandler.universalArgumentDigit(arg);
   }
 
-  public onPrefixArgumentChange(newPrefixArgument: number | undefined): void {
+  public onPrefixArgumentChange(newPrefixArgument: number | undefined): Promise<unknown> {
     logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
-    vscode.commands.executeCommand(
-      "setContext",
-      "emacs-mcx.prefixArgumentExists",
-      typeof newPrefixArgument === "number"
-    );
-    vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument);
+
+    return Promise.all([
+      vscode.commands.executeCommand(
+        "setContext",
+        "emacs-mcx.prefixArgumentExists",
+        typeof newPrefixArgument === "number"
+      ),
+      vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument),
+    ]);
   }
 
-  public onPrefixArgumentAcceptingStateChange(newState: boolean): void {
+  public onPrefixArgumentAcceptingStateChange(newState: boolean): Promise<unknown> {
     logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
+    return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState) as Promise<unknown>;
   }
 
   public runCommand(commandName: string) {
