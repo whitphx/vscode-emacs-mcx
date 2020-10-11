@@ -299,7 +299,7 @@ ABCDEFGHIJ`
     suite("yankPop is not executed after editing or cursorMove commands", () => {
       let emulator: EmacsEmulator;
 
-      const edits: Array<[string, () => Thenable<any>]> = [
+      const edits: Array<[string, () => Thenable<unknown>]> = [
         ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
         [
           "delete",
@@ -317,7 +317,7 @@ ABCDEFGHIJ`
         ],
       ];
 
-      const moves = moveCommandIds.map((commandName): [string, () => Thenable<any> | undefined] => [
+      const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | undefined] => [
         commandName,
         () => emulator.runCommand(commandName),
       ]);

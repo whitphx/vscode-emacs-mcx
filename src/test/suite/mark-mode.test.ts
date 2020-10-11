@@ -19,7 +19,7 @@ ABCDEFGHIJ`;
 
   teardown(cleanUpWorkspace);
 
-  const edits: Array<[string, () => Thenable<any>]> = [
+  const edits: Array<[string, () => Thenable<unknown>]> = [
     ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
     [
       "delete",
