@@ -17,13 +17,13 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
     test("repeating charactor input for the given argument", async () => {
       emulator.universalArgument();
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(2);
       await emulator.typeChar("a");
 
       assertTextEqual(activeTextEditor, "aa");
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(2);
       await emulator.typeChar("b");
 
       assertTextEqual(activeTextEditor, "aa2b");
@@ -32,27 +32,27 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     test("repeating charactor input for the given argument 0", async () => {
       emulator.universalArgument();
 
-      emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(0);
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "");
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(0);
       await emulator.typeChar("b");
       assertTextEqual(activeTextEditor, "0b");
     });
 
     test("repeating charactor input for the given argument prefixed by 0", async () => {
       emulator.universalArgument();
-      emulator.universalArgumentDigit(0);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(2);
       await emulator.typeChar("a");
 
       assertTextEqual(activeTextEditor, "aa");
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(0);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(2);
       await emulator.typeChar("b");
 
       assertTextEqual(activeTextEditor, "aa02b");
@@ -60,15 +60,15 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
     test("repeating charactor input for the given argument with multiple digits", async () => {
       emulator.universalArgument();
-      emulator.universalArgumentDigit(1);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(1);
+      await emulator.universalArgumentDigit(2);
       await emulator.typeChar("a");
 
       assertTextEqual(activeTextEditor, "aaaaaaaaaaaa");
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(1);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(1);
+      await emulator.universalArgumentDigit(2);
       await emulator.typeChar("b");
 
       assertTextEqual(activeTextEditor, "aaaaaaaaaaaa12b");
@@ -104,15 +104,15 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
     test("c-u stops prefix argument input", async () => {
       emulator.universalArgument();
-      emulator.universalArgumentDigit(1);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(1);
+      await emulator.universalArgumentDigit(2);
       emulator.universalArgument();
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
 
       assertTextEqual(activeTextEditor, "333333333333");
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(4);
+      await emulator.universalArgumentDigit(4);
       await emulator.typeChar("b");
 
       assertTextEqual(activeTextEditor, "3333333333334b");
@@ -122,13 +122,13 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       emulator.universalArgument();
       emulator.universalArgument();
       emulator.universalArgument();
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.typeChar("a");
 
       assertTextEqual(activeTextEditor, "aaa");
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.typeChar("b");
 
       assertTextEqual(activeTextEditor, "aaa3b");
@@ -147,14 +147,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 3), new Position(0, 3))));
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assertTextEqual(activeTextEditor, "abc3defghijklmnopqrst\nabcdefghijklmnopqrst");
@@ -166,14 +166,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(0);
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 0))));
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(0);
       await emulator.runCommand("forwardChar");
 
       assertTextEqual(activeTextEditor, "0abcdefghijklmnopqrst\nabcdefghijklmnopqrst");
@@ -185,16 +185,16 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      emulator.universalArgumentDigit(0);
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 3), new Position(0, 3))));
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(0);
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(0);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assertTextEqual(activeTextEditor, "abc03defghijklmnopqrst\nabcdefghijklmnopqrst");
@@ -206,16 +206,16 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      emulator.universalArgumentDigit(1);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(1);
+      await emulator.universalArgumentDigit(2);
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 12), new Position(0, 12))));
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(1);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(1);
+      await emulator.universalArgumentDigit(2);
       await emulator.runCommand("forwardChar");
 
       assertTextEqual(activeTextEditor, "abcdefghijkl12mnopqrst\nabcdefghijklmnopqrst");
@@ -260,8 +260,8 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      emulator.universalArgumentDigit(1);
-      emulator.universalArgumentDigit(2);
+      await emulator.universalArgumentDigit(1);
+      await emulator.universalArgumentDigit(2);
       emulator.universalArgument();
       await emulator.runCommand("forwardChar");
 
@@ -281,7 +281,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       emulator.universalArgument();
       emulator.universalArgument();
       emulator.universalArgument();
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 1);
@@ -298,7 +298,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
 
       emulator.universalArgument();
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assert.equal(activeTextEditor.selections.length, 2);
@@ -306,7 +306,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       assert.ok(activeTextEditor.selections[1].isEqual(new Range(new Position(1, 3), new Position(1, 3))));
 
       // exitied from universal argument mode
-      emulator.universalArgumentDigit(3);
+      await emulator.universalArgumentDigit(3);
       await emulator.runCommand("forwardChar");
 
       assertTextEqual(activeTextEditor, "abc3defghijklmnopqrst\nabc3defghijklmnopqrst");

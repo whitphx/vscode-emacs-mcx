@@ -10,12 +10,12 @@ interface PrefixArgumentHandlerState {
 
 export class PrefixArgumentHandler {
   private state: PrefixArgumentHandlerState;
-  private onPrefixArgumentChange: (newPrefixArgument: number | undefined) => void;
-  private onAcceptingStateChange: (newState: boolean) => void;
+  private onPrefixArgumentChange: (newPrefixArgument: number | undefined) => Promise<unknown>;
+  private onAcceptingStateChange: (newState: boolean) => Promise<unknown>;
 
   public constructor(
-    onPrefixArgumentChange: (newPrefixArgument: number | undefined) => void,
-    onAcceptingStateChange: (newState: boolean) => void
+    onPrefixArgumentChange: (newPrefixArgument: number | undefined) => Promise<unknown>,
+    onAcceptingStateChange: (newState: boolean) => Promise<unknown>
   ) {
     this.state = {
       isInPrefixArgumentMode: false,
@@ -27,50 +27,57 @@ export class PrefixArgumentHandler {
     this.onAcceptingStateChange = onAcceptingStateChange;
   }
 
-  private updateState(newState: Partial<PrefixArgumentHandlerState>): void {
+  private updateState(newState: Partial<PrefixArgumentHandlerState>): Promise<unknown> {
     const oldState = this.state;
     this.state = {
       ...this.state,
       ...newState,
     };
-    if (oldState.isAcceptingPrefixArgument !== this.state.isAcceptingPrefixArgument) {
-      this.onAcceptingStateChange(this.state.isAcceptingPrefixArgument);
-    }
-    if (
+    const acceptingStateChanged = oldState.isAcceptingPrefixArgument !== this.state.isAcceptingPrefixArgument;
+    const prefixArgumentChanged =
       oldState.isInPrefixArgumentMode !== this.state.isInPrefixArgumentMode ||
       oldState.prefixArgumentStr !== this.state.prefixArgumentStr ||
-      oldState.cuCount !== this.state.cuCount
-    ) {
-      this.onPrefixArgumentChange(this.getPrefixArgument());
+      oldState.cuCount !== this.state.cuCount;
+
+    const promises = [];
+    if (acceptingStateChanged) {
+      const promise = this.onAcceptingStateChange(this.state.isAcceptingPrefixArgument);
+      promises.push(promise);
     }
+    if (prefixArgumentChanged) {
+      const promise = this.onPrefixArgumentChange(this.getPrefixArgument());
+      promises.push(promise);
+    }
+
+    return Promise.all(promises);
   }
 
-  public appendPrefixArgumentStr(text: string): void {
-    this.updateState({
+  public appendPrefixArgumentStr(text: string): Promise<unknown> {
+    const promise = this.updateState({
       prefixArgumentStr: this.state.prefixArgumentStr + text,
     });
     MessageManager.showMessage(`C-u ${this.state.prefixArgumentStr}-`);
+    return promise;
   }
 
-  public universalArgumentDigit(arg: number): boolean {
+  public universalArgumentDigit(arg: number): Promise<unknown> {
     if (!this.state.isInPrefixArgumentMode) {
       logger.debug(`[PrefixArgumentHandler.handleType]\t Not in prefix argument mode. exit.`);
-      return false;
+      return Promise.resolve();
     }
 
     if (!this.state.isAcceptingPrefixArgument) {
       logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument input is not accepted.`);
-      return false;
+      return Promise.resolve();
     }
 
     if (isNaN(arg) || arg < 0) {
       logger.debug(`[PrefixArgumentHandler.handleType]\t Input digit is NaN or negative. Ignore it.`);
-      return false;
+      return Promise.resolve();
     }
 
     const text = arg.toString();
-    this.appendPrefixArgumentStr(text);
-    return true;
+    return this.appendPrefixArgumentStr(text);
   }
 
   public handleType(text: string): boolean {
@@ -94,15 +101,15 @@ export class PrefixArgumentHandler {
   /**
    * Emacs' ctrl-u
    */
-  public universalArgument() {
+  public universalArgument(): Promise<unknown> {
     if (this.state.isInPrefixArgumentMode && this.state.prefixArgumentStr.length > 0) {
       logger.debug(`[PrefixArgumentHandler.universalArgument]\t Stop accepting prefix argument.`);
-      this.updateState({
+      return this.updateState({
         isAcceptingPrefixArgument: false,
       });
     } else {
       logger.debug(`[PrefixArgumentHandler.universalArgument]\t Start prefix argument or count up C-u.`);
-      this.updateState({
+      return this.updateState({
         isInPrefixArgumentMode: true,
         isAcceptingPrefixArgument: true,
         cuCount: this.state.cuCount + 1,
@@ -111,9 +118,9 @@ export class PrefixArgumentHandler {
     }
   }
 
-  public cancel() {
+  public cancel(): Promise<unknown> {
     logger.debug(`[PrefixArgumentHandler.cancel]`);
-    this.updateState({
+    return this.updateState({
       isInPrefixArgumentMode: false,
       isAcceptingPrefixArgument: false,
       cuCount: 0,
