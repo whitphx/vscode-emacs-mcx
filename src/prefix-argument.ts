@@ -34,16 +34,14 @@ export class PrefixArgumentHandler {
       ...newState,
     };
     if (oldState.isAcceptingPrefixArgument !== this.state.isAcceptingPrefixArgument) {
-      logger.debug(
-        `[PrefixArgumentHandler]\t isAcceptingPrefixArgument changed: ${this.state.isAcceptingPrefixArgument}.`
-      );
+      this.onAcceptingStateChange(this.state.isAcceptingPrefixArgument);
     }
     if (
       oldState.isInPrefixArgumentMode !== this.state.isInPrefixArgumentMode ||
       oldState.prefixArgumentStr !== this.state.prefixArgumentStr ||
       oldState.cuCount !== this.state.cuCount
     ) {
-      logger.debug(`[PrefixArgumentHandler]\t prefix argument changed: ${this.getPrefixArgument()}.`);
+      this.onPrefixArgumentChange(this.getPrefixArgument());
     }
   }
 
@@ -52,7 +50,6 @@ export class PrefixArgumentHandler {
       prefixArgumentStr: this.state.prefixArgumentStr + text,
     });
     MessageManager.showMessage(`C-u ${this.state.prefixArgumentStr}-`);
-    this.callOnPrefixArgumentChange();
   }
 
   public universalArgumentDigit(arg: number): boolean {
@@ -103,8 +100,6 @@ export class PrefixArgumentHandler {
       this.updateState({
         isAcceptingPrefixArgument: false,
       });
-      this.callOnAcceptingStateChange();
-      this.callOnPrefixArgumentChange();
     } else {
       logger.debug(`[PrefixArgumentHandler.universalArgument]\t Start prefix argument or count up C-u.`);
       this.updateState({
@@ -113,8 +108,6 @@ export class PrefixArgumentHandler {
         cuCount: this.state.cuCount + 1,
         prefixArgumentStr: "",
       });
-      this.callOnAcceptingStateChange();
-      this.callOnPrefixArgumentChange();
     }
   }
 
@@ -126,8 +119,6 @@ export class PrefixArgumentHandler {
       cuCount: 0,
       prefixArgumentStr: "",
     });
-    this.callOnAcceptingStateChange();
-    this.callOnPrefixArgumentChange();
   }
 
   public getPrefixArgument(): number | undefined {
@@ -150,13 +141,5 @@ export class PrefixArgumentHandler {
    */
   public precedingSingleCtrlU(): boolean {
     return this.state.isInPrefixArgumentMode && this.state.cuCount === 1;
-  }
-
-  private callOnAcceptingStateChange() {
-    this.onAcceptingStateChange(this.state.isAcceptingPrefixArgument);
-  }
-
-  private callOnPrefixArgumentChange() {
-    this.onPrefixArgumentChange(this.getPrefixArgument());
   }
 }
