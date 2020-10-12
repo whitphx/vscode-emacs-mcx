@@ -10,6 +10,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.23.0] - Unreleased
+### Fixed
+- `C-u` (prefix-argument) is reimplemented not to use VSCode API's `type` command by default.
+
 ## [0.22.0] - 2020-10-04
 ### Added
 - `M-m` (`back-to-indentation`)
