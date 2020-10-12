@@ -21,7 +21,7 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 
 export interface IEmacsCommandRunner {
-  runCommand(commandName: string): undefined | Thenable<{} | undefined | void>;
+  runCommand(commandName: string): undefined | Thenable<unknown>;
 }
 
 export interface IMarkModeController {
