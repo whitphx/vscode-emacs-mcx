@@ -9,7 +9,7 @@ export abstract class EmacsCommand {
   public abstract readonly id: string;
 
   protected emacsController: IMarkModeController & IEmacsCommandRunner;
-  private afterExecute: () => void;
+  private afterExecute: () => void | Promise<unknown>;
 
   public constructor(afterExecute: () => void, markModeController: IMarkModeController & IEmacsCommandRunner) {
     this.afterExecute = afterExecute;
@@ -20,13 +20,12 @@ export abstract class EmacsCommand {
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined
-  ): undefined | Thenable<unknown> {
+  ): void | Thenable<unknown> {
     const ret = this.execute(textEditor, isInMarkMode, prefixArgument);
-    if (ret !== undefined && (ret as Thenable<any>).then !== undefined) {
-      return (ret as Thenable<any>).then(() => this.afterExecute());
+    if (ret != null) {
+      return ret.then(this.afterExecute);
     } else {
-      this.afterExecute();
-      return;
+      return this.afterExecute();
     }
   }
 
@@ -34,7 +33,7 @@ export abstract class EmacsCommand {
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined
-  ): void | undefined | Thenable<unknown> | Promise<void>;
+  ): void | Thenable<unknown>;
 }
 
 export interface IEmacsCommandInterrupted {

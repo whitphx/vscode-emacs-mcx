@@ -317,7 +317,7 @@ ABCDEFGHIJ`
         ],
       ];
 
-      const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | undefined] => [
+      const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | void] => [
         commandName,
         () => emulator.runCommand(commandName),
       ]);

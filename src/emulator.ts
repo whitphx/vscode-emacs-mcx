@@ -21,7 +21,7 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 
 export interface IEmacsCommandRunner {
-  runCommand(commandName: string): undefined | Thenable<unknown>;
+  runCommand(commandName: string): void | Thenable<unknown>;
 }
 
 export interface IMarkModeController {
@@ -343,7 +343,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   }
 
   private afterCommand() {
-    this.prefixArgumentHandler.cancel();
+    return this.prefixArgumentHandler.cancel();
   }
 
   private onDidInterruptTextEditor() {
