@@ -10,6 +10,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.22.1] - 2020-10-14
+### Fixed
+- Allow navigation within query replace prompt. @ANorwell
+- Internal package updates.
+
 ## [0.22.0] - 2020-10-04
 ### Added
 - `M-m` (`back-to-indentation`)
