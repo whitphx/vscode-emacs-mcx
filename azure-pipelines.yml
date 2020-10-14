@@ -31,7 +31,9 @@ steps:
   env:
     DISPLAY: ':99.0'
 
-- bash: yarn gen-keys
+- bash: |
+    yarn gen-keys
+    git diff --quiet || (echo "You have to run 'yarn gen-keys' and commit the updated package.json" && exit -1)
   displayName: Keybinding generator test
 
 - bash: |
