@@ -52,6 +52,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     test("repeating charactor input for the given argument", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -61,12 +62,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aa");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input for the given argument 0", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -76,12 +79,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input for the given argument prefixed by 0", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -94,12 +99,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aa");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input for the given argument with multiple digits", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -113,17 +120,20 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aaaaaaaaaaaa");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input with default argument (4)", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aaaa");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
@@ -133,11 +143,13 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         for (let i = 0; i < times; ++i) {
           await emulator.universalArgument();
         }
+        assertAcceptingArgumentContext(true);
         assertPrefixArgumentContext(4 ** times);
 
         resetExecuteCommandSpy();
         await emulator.typeChar("a");
         assertTextEqual(activeTextEditor, "a".repeat(4 ** times));
+        assertAcceptingArgumentContext(false);
         assertPrefixArgumentContext(undefined);
       });
     });
@@ -145,6 +157,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     test("c-u stops prefix argument input", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -161,11 +174,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
       await emulator.typeChar("3");
       assertTextEqual(activeTextEditor, "333333333333");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("numerical input cancels previous repeated c-u", async () => {
+      resetExecuteCommandSpy();
       await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       await emulator.universalArgument();
 
       resetExecuteCommandSpy();
@@ -179,6 +195,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aaa");
+      assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
   });
@@ -287,6 +304,7 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
       resetExecuteCommandSpy();
       emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
       await emulator.universalArgumentDigit(1);
       await emulator.universalArgumentDigit(2);
       emulator.universalArgument();
