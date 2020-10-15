@@ -205,22 +205,15 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     return this.prefixArgumentHandler.universalArgumentDigit(arg);
   }
 
-  public onPrefixArgumentChange(newPrefixArgument: number | undefined): Promise<unknown> {
+  public onPrefixArgumentChange(newPrefixArgument: number | undefined): Thenable<unknown> {
     logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
 
-    return Promise.all([
-      vscode.commands.executeCommand(
-        "setContext",
-        "emacs-mcx.prefixArgumentExists",
-        typeof newPrefixArgument === "number"
-      ),
-      vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument),
-    ]);
+    return vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument);
   }
 
-  public onPrefixArgumentAcceptingStateChange(newState: boolean): Promise<unknown> {
+  public onPrefixArgumentAcceptingStateChange(newState: boolean): Thenable<unknown> {
     logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
-    return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState) as Promise<unknown>;
+    return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   }
 
   public runCommand(commandName: string) {
