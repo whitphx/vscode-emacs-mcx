@@ -17,15 +17,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     sinon.restore();
   });
 
-  const assertPrefixArgumentExistsContext = (expected: boolean) => {
-    assert(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      vscode.commands.executeCommand.calledWithExactly("setContext", "emacs-mcx.prefixArgumentExists", expected),
-      `Assertion failed that emacs-mcx.prefixArgumentExists context has been set to ${expected}`
-    );
-  };
-
   const assertPrefixArgumentContext = (expected: number | undefined) => {
     assert(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -61,7 +52,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     test("repeating charactor input for the given argument", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -71,14 +61,12 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aa");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input for the given argument 0", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -88,14 +76,12 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input for the given argument prefixed by 0", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -108,14 +94,12 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aa");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input for the given argument with multiple digits", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
@@ -129,20 +113,17 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aaaaaaaaaaaa");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
     test("repeating charactor input with default argument (4)", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aaaa");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
@@ -157,7 +138,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
         resetExecuteCommandSpy();
         await emulator.typeChar("a");
         assertTextEqual(activeTextEditor, "a".repeat(4 ** times));
-        assertPrefixArgumentExistsContext(false);
         assertPrefixArgumentContext(undefined);
       });
     });
@@ -165,17 +145,14 @@ suite("Prefix argument (Universal argument: C-u)", () => {
     test("c-u stops prefix argument input", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(4);
 
       resetExecuteCommandSpy();
       await emulator.universalArgumentDigit(1);
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(1);
 
       resetExecuteCommandSpy();
       await emulator.universalArgumentDigit(2);
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(12);
 
       resetExecuteCommandSpy();
@@ -184,7 +161,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
       await emulator.typeChar("3");
       assertTextEqual(activeTextEditor, "333333333333");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
@@ -194,18 +170,15 @@ suite("Prefix argument (Universal argument: C-u)", () => {
 
       resetExecuteCommandSpy();
       await emulator.universalArgument();
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(64);
 
       resetExecuteCommandSpy();
       await emulator.universalArgumentDigit(3);
-      assertPrefixArgumentExistsContext(true);
       assertPrefixArgumentContext(3);
 
       resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, "aaa");
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
     });
   });
@@ -227,7 +200,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 3]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -243,7 +215,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 0]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -260,7 +231,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 3]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -277,7 +247,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 12]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -292,7 +261,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 4]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -308,7 +276,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 16]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -329,7 +296,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 12]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -347,7 +313,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 3]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
@@ -363,7 +328,6 @@ suite("Prefix argument (Universal argument: C-u)", () => {
       await emulator.runCommand("forwardChar");
 
       assertCursorsEqual(activeTextEditor, [0, 3], [1, 3]);
-      assertPrefixArgumentExistsContext(false);
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
