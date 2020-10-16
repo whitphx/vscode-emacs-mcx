@@ -142,9 +142,9 @@ Alt key is mapped to a meta prefix (`M`) by default though you can change it to 
 ## Mark Commands
 |Command | Desc |
 |--------|------|
-| `C-space` | Set the mark at point, and activate it (set-mark-command). |
-| `C-space C-space` | Set the mark, pushing it onto the mark ring, without activating it. |
-| `C-u C-space` | Move point to where the mark was, and restore the mark from the ring of former marks. |
+| `C-SPC` | Set the mark at point, and activate it (set-mark-command). |
+| `C-SPC C-SPC` | Set the mark, pushing it onto the mark ring, without activating it. |
+| `C-u C-SPC` | Move point to where the mark was, and restore the mark from the ring of former marks. |
 | `C-x C-x` | Set the mark at point, and activate it; then move point where the mark used to be (exchange-point-and-mark). |
 
 See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Setting-Mark.html) and [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark-Ring.html) about the mark and the mark ring.
