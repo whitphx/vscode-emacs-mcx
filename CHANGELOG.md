@@ -10,6 +10,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.22.2] - 2020-10-16
+### Added
+- `M-\` is assigned to IntelliSense suggestion. @vaelen
+
 ## [0.22.1] - 2020-10-14
 ### Fixed
 - Allow navigation within query replace prompt. @ANorwell
