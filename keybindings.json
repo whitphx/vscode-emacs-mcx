@@ -640,6 +640,16 @@
       "command": "toggleSuggestionDetails",
       "when": "editorTextFocus && suggestWidgetVisible"
     },
+    {
+      "key": "meta+/",
+      "command": "editor.action.triggerSuggest",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "meta+/",
+      "command": "toggleSuggestionDetails",
+      "when": "editorTextFocus && suggestWidgetVisible"
+    },
     // Show commands
     {
       "key": "meta+x",
