@@ -1377,6 +1377,38 @@
 				"when": "editorTextFocus && suggestWidgetVisible"
 			},
 			{
+				"key": "alt+/",
+				"command": "editor.action.triggerSuggest",
+				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "alt+/",
+				"mac": "cmd+/",
+				"command": "editor.action.triggerSuggest",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape /",
+				"command": "editor.action.triggerSuggest",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "alt+/",
+				"command": "toggleSuggestionDetails",
+				"when": "editorTextFocus && suggestWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "alt+/",
+				"mac": "cmd+/",
+				"command": "toggleSuggestionDetails",
+				"when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape /",
+				"command": "toggleSuggestionDetails",
+				"when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
 				"key": "alt+x",
 				"command": "workbench.action.showCommands",
 				"when": "!config.emacs-mcx.useMetaPrefixMacCmd"
