@@ -10,6 +10,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.23.1] - 2020-10-17
+### Fixed
+- Bug fix to invoke features such as auto-completion reacting to character inputs.
+
 ## [0.23.0] - 2020-10-17
 ### Fixed
 - `C-u` (universal-argument) is reimplemented not to use VSCode API's `type` command by default.
