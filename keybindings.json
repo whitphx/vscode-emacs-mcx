@@ -767,12 +767,12 @@
     },
     {
       "key": "ctrl+p",
-      "command": "workbench.action.quickOpenNavigatePrevious",
+      "command": "workbench.action.quickOpenSelectPrevious",
       "when": "inQuickOpen"
     },
     {
       "key": "ctrl+n",
-      "command": "workbench.action.quickOpenNavigateNext",
+      "command": "workbench.action.quickOpenSelectNext",
       "when": "inQuickOpen"
     },
     {
