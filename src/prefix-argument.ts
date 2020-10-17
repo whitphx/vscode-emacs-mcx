@@ -62,17 +62,17 @@ export class PrefixArgumentHandler {
 
   public universalArgumentDigit(arg: number): Promise<unknown> {
     if (!this.state.isInPrefixArgumentMode) {
-      logger.debug(`[PrefixArgumentHandler.handleType]\t Not in prefix argument mode. exit.`);
+      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Not in prefix argument mode. exit.`);
       return Promise.resolve();
     }
 
     if (!this.state.isAcceptingPrefixArgument) {
-      logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument input is not accepted.`);
+      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Prefix argument input is not accepted.`);
       return Promise.resolve();
     }
 
     if (isNaN(arg) || arg < 0) {
-      logger.debug(`[PrefixArgumentHandler.handleType]\t Input digit is NaN or negative. Ignore it.`);
+      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Input digit is NaN or negative. Ignore it.`);
       return Promise.resolve();
     }
 
