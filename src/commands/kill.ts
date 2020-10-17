@@ -6,6 +6,7 @@ import { AppendDirection, KillYanker } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
 import { WordCharacterClassifier, getMapForWordSeparators } from "vs/editor/common/controller/wordCharacterClassifier";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
+import { revealPrimaryActive } from "./helpers/reveal";
 
 function getWordSeparators(): WordCharacterClassifier {
   // Ref: https://github.com/VSCodeVim/Vim/blob/91ca71f8607458c0558f9aff61e230c6917d4b51/src/configuration/configuration.ts#L155
@@ -59,6 +60,7 @@ export class KillWord extends KillYankCommand {
       .map((selection) => findNextKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
     await this.killYanker.kill(killRanges);
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -92,6 +94,7 @@ export class BackwardKillWord extends KillYankCommand {
       .map((selection) => findPreviousKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
     await this.killYanker.kill(killRanges, AppendDirection.Backward);
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -124,7 +127,7 @@ export class KillLine extends KillYankCommand {
       }
     });
     this.emacsController.exitMarkMode();
-    return this.killYanker.kill(ranges);
+    return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
   }
 }
 
@@ -138,7 +141,7 @@ export class KillWholeLine extends KillYankCommand {
         new Range(new Position(selection.active.line, 0), new Position(selection.active.line + 1, 0))
     );
     this.emacsController.exitMarkMode();
-    return this.killYanker.kill(ranges);
+    return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
   }
 }
 
@@ -156,6 +159,7 @@ export class KillRegion extends KillYankCommand {
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const ranges = getNonEmptySelections(textEditor);
     await this.killYanker.kill(ranges);
+    revealPrimaryActive(textEditor);
     this.emacsController.exitMarkMode();
     this.killYanker.cancelKillAppend();
   }
