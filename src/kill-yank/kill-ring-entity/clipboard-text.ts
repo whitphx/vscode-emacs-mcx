@@ -1,6 +1,7 @@
 import { IKillRingEntity } from "./kill-ring-entity";
 
 export class ClipboardTextKillRingEntity implements IKillRingEntity {
+  public readonly type = "clipboard";
   private text: string;
 
   constructor(clipboardText: string) {
