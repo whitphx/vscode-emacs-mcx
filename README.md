@@ -84,6 +84,12 @@ This indicates whether mark-mode is enabled.
 
 This indicates the editor is accepting argument input following `C-u`.
 
+### `emacs-mcx.prefixArgumentExists` (experimental)
+*boolean*
+
+This indicates if a prefix argument exists.
+Use this boolean context to check the existence of a prefix argument, instead of using `emacs-mcx.prefixArgument` with null check.
+
 ### `emacs-mcx.prefixArgument` (experimental)
 *number | undefined*
 
