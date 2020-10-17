@@ -153,7 +153,7 @@ abcdefghij
     });
 
     // Test kill appending is not enabled after cursorMoves, editing, or some other ops
-    const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | void] => [
+    const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | undefined] => [
       commandName,
       () => emulator.runCommand(commandName),
     ]);
@@ -172,10 +172,9 @@ abcdefghij
           ),
       ],
     ];
+    const otherOps: Array<[string, () => Thenable<unknown>]> = [["cancel", async () => await emulator.cancel()]];
 
-    const otherOps: Array<[string, () => Thenable<void>]> = [["cancel", async () => await emulator.cancel()]];
-
-    const ops: Array<[string, () => Thenable<unknown> | void]> = [...moves, ...edits, ...otherOps];
+    const ops: Array<[string, () => Thenable<unknown> | undefined]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {
       test(`it does not append the killed text after ${label}`, async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
@@ -211,7 +210,7 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      await emulator.universalArgumentDigit(2);
+      await emulator.type("2");
 
       await emulator.runCommand("killLine");
 
@@ -234,7 +233,7 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 1]);
 
       emulator.universalArgument();
-      await emulator.universalArgumentDigit(2);
+      await emulator.type("2");
 
       await emulator.runCommand("killLine");
 
@@ -327,7 +326,7 @@ ABCDEFGHIJ`
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      await emulator.universalArgumentDigit(2);
+      await emulator.type("2");
 
       await emulator.runCommand("killLine");
 
@@ -350,7 +349,7 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 1]);
 
       emulator.universalArgument();
-      await emulator.universalArgumentDigit(2);
+      await emulator.type("2");
 
       await emulator.runCommand("killLine");
 

@@ -62,33 +62,21 @@ The default is 60.
 This simulates the original Emacs' [`kill-whole-line` variable](https://www.gnu.org/software/emacs/manual/html_node/emacs/Killing-by-Lines.html).
 The default is false.
 
-### `emacs-mcx.enableOverridingTypeCommand`
-Prefix arguments do not work on character inputs with IMEs by default and you can set this config to `true` in order to enable it.
-Note that this config makes use of VSCode API's `type` command under the hood and can cause problems in some cases.
+### `emacs-mcx.disableOverridingTypeCommand`
+This extension makes use of VSCode API's `type` command under the hood, for `C-u` (universal-argument) to accept following numeric arguments, but it can cause problems in some cases.
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
+
+To avoid such problems, you can configure this extension not to use the `type` command by setting `emacs-mcx.disableOverridingTypeCommand` to `true`.
+The only drawback of this option is that `C-u` become unable to accept following numeric arguments.
 
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
 
 ## 'when' clause context
-This extension provides some contexts that you can refer to in `"when"` clauses of your `keybindings.json`.
-
-### `emacs-mcx.inMarkMode`
-*boolean*
-
-This indicates whether mark-mode is enabled.
-
-### `emacs-mcx.acceptingArgument`
-*boolean*
-
-This indicates the editor is accepting argument input following `C-u`.
-
-### `emacs-mcx.prefixArgument` (experimental)
-*number | undefined*
-
-This is a currently input prefix argument.
-
+This extension provides mark-mode functionality and
+you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
+in order to check whether or not mark-mode is enabled.
 
 ## Keymaps
 Alt key is mapped to a meta prefix (`M`) by default though you can change it to Escape or Command key (macOS only) by the settings above.

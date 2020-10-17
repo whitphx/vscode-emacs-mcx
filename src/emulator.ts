@@ -21,7 +21,7 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 
 export interface IEmacsCommandRunner {
-  runCommand(commandName: string): void | Thenable<unknown>;
+  runCommand(commandName: string): undefined | Thenable<unknown>;
 }
 
 export interface IMarkModeController {
@@ -52,10 +52,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
-    this.prefixArgumentHandler = new PrefixArgumentHandler(
-      this.onPrefixArgumentChange,
-      this.onPrefixArgumentAcceptingStateChange
-    );
+    this.prefixArgumentHandler = new PrefixArgumentHandler();
 
     this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
@@ -146,29 +143,16 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     }
   }
 
-  public typeChar(char: string) {
-    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
-    this.prefixArgumentHandler.cancel();
-
-    const repeat = prefixArgument == null ? 1 : prefixArgument;
-    if (repeat < 0) {
+  // tslint:disable-next-line:max-line-length
+  // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
+  public type(text: string) {
+    const handled = this.prefixArgumentHandler.handleType(text);
+    if (handled) {
+      logger.debug(`[EmacsEmulator.type]\t prefix argument is handled.`);
       return;
     }
 
-    return this.textEditor.edit((editBuilder) => {
-      this.textEditor.selections.forEach((selection) => {
-        editBuilder.insert(selection.active, char.repeat(repeat));
-      });
-    });
-  }
-
-  // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
-  public type(text: string) {
     // Single character input with prefix argument
-    // NOTE: This single character handling should be replaced with `EmacsEmulator.typeChar` directly bound to relevant keystrokes,
-    // however, it's difficult to cover all characters without `type` event registration,
-    // then this method can be used to handle single character inputs other than ASCII characters,
-    // for those who want it as an option.
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 
@@ -194,26 +178,8 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   /**
    * C-u
    */
-  public universalArgument(): Promise<unknown> {
-    return this.prefixArgumentHandler.universalArgument();
-  }
-
-  /**
-   * digits following C-u
-   */
-  public universalArgumentDigit(arg: number): Promise<unknown> {
-    return this.prefixArgumentHandler.universalArgumentDigit(arg);
-  }
-
-  public onPrefixArgumentChange(newPrefixArgument: number | undefined): Thenable<unknown> {
-    logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
-
-    return vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument);
-  }
-
-  public onPrefixArgumentAcceptingStateChange(newState: boolean): Thenable<unknown> {
-    logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
-    return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
+  public universalArgument() {
+    this.prefixArgumentHandler.universalArgument();
   }
 
   public runCommand(commandName: string) {
@@ -336,7 +302,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   }
 
   private afterCommand() {
-    return this.prefixArgumentHandler.cancel();
+    this.prefixArgumentHandler.cancel();
   }
 
   private onDidInterruptTextEditor() {

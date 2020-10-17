@@ -1,14 +1,5 @@
 {
   "keybindings": [
-    // prefix argument
-    {
-      "key": "ctrl+u",
-      "command": "emacs-mcx.universalArgument",
-      "when": "editorTextFocus"
-    },
-    {
-      "$special": "universalArgumentTypes"
-    },
     // right
     {
       "keys": ["right", "ctrl+f"],
@@ -321,7 +312,7 @@
       "when": "editorTextFocus && !editorReadonly"
     },
     {
-      "key": "ctrl+h",
+      "keys": ["backspace", "ctrl+h"],
       "command": "emacs-mcx.deleteBackwardChar",
       "when": "editorTextFocus && !editorReadonly"
     },
@@ -739,6 +730,11 @@
       "key": "ctrl+x o",
       "command": "workbench.action.navigateEditorGroups",
       "when": "!terminalFocus"
+    },
+    {
+      "key": "ctrl+u",
+      "command": "emacs-mcx.universalArgument",
+      "when": "editorTextFocus"
     },
     {
       "key": "ctrl+meta+f",
