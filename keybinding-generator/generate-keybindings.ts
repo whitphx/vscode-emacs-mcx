@@ -199,7 +199,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     keybindings.push({
       key: num.toString(),
       command: "emacs-mcx.typeChar",
-      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgument != null && editorTextFocus && !editorReadonly",
+      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
       args: [num.toString()],
     });
   }
@@ -220,7 +220,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   for (const char of asciiPrintableChars) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.prefixArgument != null && editorTextFocus && !editorReadonly",
+      when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
       command: "emacs-mcx.typeChar",
       args: [char],
     });
@@ -229,19 +229,19 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   // In addition, special characters.
   keybindings.push({
     key: "space",
-    when: "emacs-mcx.prefixArgument != null && editorTextFocus && !editorReadonly",
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
     command: "emacs-mcx.typeChar",
     args: [" "],
   });
   keybindings.push({
     key: "enter",
     command: "emacs-mcx.newLine",
-    when: "emacs-mcx.prefixArgument != null && editorTextFocus && !editorReadonly"
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly"
   });
   keybindings.push({
     key: "backspace",
     command: "emacs-mcx.deleteBackwardChar",
-    when: "emacs-mcx.prefixArgument != null && editorTextFocus && !editorReadonly"
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly"
   });
 
   return keybindings;
