@@ -80,24 +80,6 @@ export class PrefixArgumentHandler {
     return this.appendPrefixArgumentStr(text);
   }
 
-  public handleType(text: string): boolean {
-    if (!this.state.isInPrefixArgumentMode) {
-      logger.debug(`[PrefixArgumentHandler.handleType]\t Not in prefix argument mode. exit.`);
-      return false;
-    }
-
-    if (this.state.isAcceptingPrefixArgument && !isNaN(+text)) {
-      // If `text` is a numeric charactor
-      this.appendPrefixArgumentStr(text);
-
-      logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument is "${this.state.prefixArgumentStr}"`);
-      return true;
-    }
-
-    logger.debug(`[PrefixArgumentHandler.handleType]\t Prefix argument input is not accepted.`);
-    return false;
-  }
-
   /**
    * Emacs' ctrl-u
    */
