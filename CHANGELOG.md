@@ -10,9 +10,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
-## [0.23.2] - Unreleased
+## [0.23.2] - 2020-10-18
 ### Fixed
 - `C-p` and `C-n` on the quick open widget are fixed to only select items but not navigate.
+- Kill commands are fixed to reveal the cursor after execution.
 
 ## [0.23.1] - 2020-10-17
 ### Fixed
