@@ -155,6 +155,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
       return;
     }
 
+    if (repeat == 1) {
+      // It's better to use `type` command than `TextEditor.edit` method
+      // because `type` command invokes features like auto-completion reacting to character inputs.
+      return vscode.commands.executeCommand("type", { text: char });
+    }
+
     return this.textEditor.edit((editBuilder) => {
       this.textEditor.selections.forEach((selection) => {
         editBuilder.insert(selection.active, char.repeat(repeat));
