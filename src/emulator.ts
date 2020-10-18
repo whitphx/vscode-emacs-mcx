@@ -101,6 +101,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new KillCommands.Yank(this.afterCommand, this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this.afterCommand, this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
+    this.disposables.push(killYanker);
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));

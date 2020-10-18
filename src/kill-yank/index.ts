@@ -12,7 +12,7 @@ export enum AppendDirection {
   Backward,
 }
 
-export class KillYanker {
+export class KillYanker implements vscode.Disposable {
   private textEditor: TextEditor;
   private killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
 
@@ -23,6 +23,8 @@ export class KillYanker {
 
   private textChangeCount: number;
   private prevYankChanges: number;
+
+  private disposables: vscode.Disposable[];
 
   constructor(textEditor: TextEditor, killRing: KillRing | null) {
     this.textEditor = textEditor;
@@ -35,10 +37,10 @@ export class KillYanker {
     this.textChangeCount = 0; // This is used in yank and yankPop to set `this.prevYankChanges`.
     this.prevYankChanges = 0; // Indicates how many document changes happened in the previous yank or yankPop. This is usually 1, but can be 2 if auto-indent occurred by formatOnPaste setting.
 
-    this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
-    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument); // TODO: Handle the returned disposable
-    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
-    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection); // TODO: Handle the returned disposable
+    this.disposables = [];
+
+    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
+    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
   }
 
   public setTextEditor(textEditor: TextEditor) {
@@ -47,6 +49,12 @@ export class KillYanker {
 
   public getTextEditor(): TextEditor {
     return this.textEditor;
+  }
+
+  public dispose() {
+    for (const disposable of this.disposables) {
+      disposable.dispose();
+    }
   }
 
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
