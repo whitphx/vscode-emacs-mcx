@@ -29,7 +29,7 @@ export interface IMarkModeController {
   exitMarkMode(): void;
 }
 
-export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
+export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {
   private textEditor: TextEditor;
 
   private commandRegistry: EmacsCommandRegistry;
@@ -46,6 +46,8 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   private killYanker: KillYanker;
   private prefixArgumentHandler: PrefixArgumentHandler;
 
+  private disposables: vscode.Disposable[];
+
   constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
     this.textEditor = textEditor;
 
@@ -57,10 +59,10 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
       this.onPrefixArgumentAcceptingStateChange
     );
 
-    this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
-    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
-    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
-    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
+    this.disposables = [];
+
+    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
+    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
 
     this.commandRegistry = new EmacsCommandRegistry();
     this.afterCommand = this.afterCommand.bind(this);
@@ -121,6 +123,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
 
   public getTextEditor(): TextEditor {
     return this.textEditor;
+  }
+
+  public dispose() {
+    for (const disposable of this.disposables) {
+      disposable.dispose();
+    }
   }
 
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
