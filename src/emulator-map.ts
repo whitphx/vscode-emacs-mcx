@@ -36,6 +36,10 @@ export class EmacsEmulatorMap {
   }
 
   public delete(key: string) {
+    const emulator = this.emacsEmulatorMap.get(key);
+    if (emulator) {
+      emulator.dispose();
+    }
     return this.emacsEmulatorMap.delete(key);
   }
 }
