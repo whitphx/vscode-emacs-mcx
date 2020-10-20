@@ -21,6 +21,9 @@ export class KillYanker {
   private docChangedAfterYank = false;
   private prevYankPositions: Position[];
 
+  private textChangeCount: number;
+  private prevYankChanges: number;
+
   constructor(textEditor: TextEditor, killRing: KillRing | null) {
     this.textEditor = textEditor;
     this.killRing = killRing;
@@ -29,10 +32,13 @@ export class KillYanker {
     this.prevKillPositions = [];
     this.prevYankPositions = [];
 
+    this.textChangeCount = 0; // This is used in yank and yankPop to set `this.prevYankChanges`.
+    this.prevYankChanges = 0; // Indicates how many document changes happened in the previous yank or yankPop. This is usually 1, but can be 2 if auto-indent occurred by formatOnPaste setting.
+
     this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
-    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
+    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument); // TODO: Handle the returned disposable
     this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
-    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
+    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection); // TODO: Handle the returned disposable
   }
 
   public setTextEditor(textEditor: TextEditor) {
@@ -49,6 +55,8 @@ export class KillYanker {
       this.docChangedAfterYank = true;
       this.isAppending = false;
     }
+
+    this.textChangeCount++;
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
@@ -113,7 +121,9 @@ export class KillYanker {
       pasteText = killRingEntity.asString();
     }
 
+    this.textChangeCount = 0;
     await vscode.commands.executeCommand("paste", { text: pasteText });
+    this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
@@ -137,10 +147,15 @@ export class KillYanker {
     }
     const text = killRingEntity.asString();
 
-    if (prevKillRingEntity !== null && !prevKillRingEntity.isEmpty()) {
-      await vscode.commands.executeCommand("undo");
+    if (prevKillRingEntity !== null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
+      for (let i = 0; i < this.prevYankChanges; ++i) {
+        await vscode.commands.executeCommand("undo");
+      }
     }
+
+    this.textChangeCount = 0;
     await vscode.commands.executeCommand("paste", { text });
+    this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
