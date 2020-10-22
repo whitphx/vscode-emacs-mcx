@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
-import { EmacsEmulator } from "../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "./utils";
+import { EmacsEmulator } from "../../../../emulator";
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../../utils";
 
-suite("Emulator with yank", () => {
+suite("Yank from clipboard, without kill-ring", () => {
   let activeTextEditor: vscode.TextEditor;
 
   suite("with empty initial text", () => {
