@@ -555,7 +555,9 @@ suite("With not only single text editor", () => {
     await vscode.env.clipboard.writeText("");
   });
 
-  test("shares killRing amoung multiple editors", async () => {
+  test("shares killRing amoung multiple editors", async function () {
+    this.timeout(5000); // This test case takes longer time somehow
+
     const killRing = new KillRing(3);
 
     const activeTextEditor0 = await setupWorkspace();
