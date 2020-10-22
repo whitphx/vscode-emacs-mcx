@@ -4,7 +4,14 @@ import { Position, Range, Selection } from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace } from "../../utils";
+import {
+  assertCursorsEqual,
+  assertTextEqual,
+  cleanUpWorkspace,
+  clearTextEditor,
+  setEmptyCursors,
+  setupWorkspace,
+} from "../../utils";
 
 suite("kill, yank, yank-pop", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -547,6 +554,178 @@ suite("yank pop with auto-indent", () => {
     // yankPop again
     await emulator.runCommand("yankPop");
     assertTextEqual(activeTextEditor, "{\n    bar\n}");
+  });
+});
+
+suite("Kill and yank with multi cursor, killing at 2 cursors in different lines", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace();
+
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+    await clearTextEditor(activeTextEditor, "hoge\nfuga\npiyo");
+    // Kill texts from multiple selections
+    activeTextEditor.selections = [
+      new Selection(new Position(0, 0), new Position(0, 4)),
+      new Selection(new Position(1, 0), new Position(1, 4)),
+    ];
+    await emulator.runCommand("killRegion");
+    assertCursorsEqual(activeTextEditor, [0, 0], [1, 0]);
+
+    await clearTextEditor(activeTextEditor, "foo\nbar\nbaz");
+    // Again, kill texts from multiple selections, with different contents.
+    activeTextEditor.selections = [
+      new Selection(new Position(0, 0), new Position(0, 3)),
+      new Selection(new Position(1, 0), new Position(1, 3)),
+    ];
+    await emulator.runCommand("killRegion");
+    assertCursorsEqual(activeTextEditor, [0, 0], [1, 0]);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("Yank with the same number of cursors", async () => {
+    // Yank pastes the killed texts to each cursor
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foo\nbar\nbaz");
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foofoo\nbarbar\nbaz");
+
+    // Yank pop works in the same way
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foohoge\nbarfuga\nbaz");
+
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foofoo\nbarbar\nbaz");
+  });
+
+  test("Yank at 1 cursor", async () => {
+    await clearTextEditor(activeTextEditor, "");
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    // Yank pastes the killed texts with concatenation
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foo\nbar");
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foo\nbarfoo\nbar");
+
+    // Yank pop works in the same way
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foo\nbarhoge\nfuga");
+
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foo\nbarfoo\nbar");
+  });
+
+  test("Yank at 3 cursors", async () => {
+    await clearTextEditor(activeTextEditor, "\n\n");
+    setEmptyCursors(activeTextEditor, [0, 0], [1, 0], [2, 0]);
+
+    // Yank pastes the killed texts with concatenation
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foo\nbar\nfoo\nbar\nfoo\nbar");
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foo\nbarfoo\nbar\nfoo\nbarfoo\nbar\nfoo\nbarfoo\nbar");
+
+    // Yank pop works in the same way
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foo\nbarhoge\nfuga\nfoo\nbarhoge\nfuga\nfoo\nbarhoge\nfuga");
+
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foo\nbarfoo\nbar\nfoo\nbarfoo\nbar\nfoo\nbarfoo\nbar");
+  });
+});
+
+suite("Kill and yank with multi cursor, killing at 2 cursors in one line", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace();
+
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+    await clearTextEditor(activeTextEditor, "hoge fuga piyo");
+    // Kill texts from multiple selections
+    activeTextEditor.selections = [
+      new Selection(new Position(0, 0), new Position(0, 4)),
+      new Selection(new Position(0, 5), new Position(0, 9)),
+    ];
+    await emulator.runCommand("killRegion");
+    assertCursorsEqual(activeTextEditor, [0, 0], [0, 1]);
+
+    await clearTextEditor(activeTextEditor, "foo bar baz");
+    // Again, kill texts from multiple selections, with different contents.
+    activeTextEditor.selections = [
+      new Selection(new Position(0, 0), new Position(0, 3)),
+      new Selection(new Position(0, 4), new Position(0, 7)),
+    ];
+    await emulator.runCommand("killRegion");
+    assertCursorsEqual(activeTextEditor, [0, 0], [0, 1]);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("Yank with the same number of cursors", async () => {
+    // Yank pastes the killed texts to each cursor
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foo bar baz");
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foofoo barbar baz");
+
+    // Yank pop works in the same way
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foohoge barfuga baz");
+
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foofoo barbar baz");
+  });
+
+  test("Yank at 1 cursor", async () => {
+    await clearTextEditor(activeTextEditor, "");
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    // Yank pastes the killed texts with concatenation
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foobar");
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foobarfoobar");
+
+    // Yank pop works in the same way
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foobarhogefuga");
+
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foobarfoobar");
+  });
+
+  test("Yank at 3 cursors", async () => {
+    await clearTextEditor(activeTextEditor, "\n\n");
+    setEmptyCursors(activeTextEditor, [0, 0], [1, 0], [2, 0]);
+
+    // Yank pastes the killed texts with concatenation
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foobar\nfoobar\nfoobar");
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "foobarfoobar\nfoobarfoobar\nfoobarfoobar");
+
+    // Yank pop works in the same way
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foobarhogefuga\nfoobarhogefuga\nfoobarhogefuga");
+
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "foobarfoobar\nfoobarfoobar\nfoobarfoobar");
   });
 });
 

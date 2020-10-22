@@ -3,7 +3,7 @@ import { Position, Range, TextEditor } from "vscode";
 import { EditorIdentity } from "../editorIdentity";
 import { MessageManager } from "../message";
 import { equalPositons } from "../utils";
-import { KillRing } from "./kill-ring";
+import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 
@@ -105,24 +105,45 @@ export class KillYanker {
     this.isAppending = false;
   }
 
+  private async paste(killRingEntity: KillRingEntity) {
+    const selections = this.textEditor.selections;
+
+    const flattenedText = killRingEntity.asString();
+
+    if (killRingEntity.type === "editor") {
+      const regionTexts = killRingEntity.getRegionTextsList();
+      const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
+      if (shouldPasteSeparately && regionTexts.length === selections.length) {
+        return this.textEditor.edit((editBuilder) => {
+          selections.forEach((selection, i) => {
+            if (!selection.isEmpty) {
+              editBuilder.delete(selection);
+            }
+            editBuilder.insert(selection.start, regionTexts[i].getAppendedText());
+          });
+        });
+      }
+    }
+
+    await vscode.commands.executeCommand("paste", { text: flattenedText });
+  }
+
   public async yank() {
     if (this.killRing === null) {
       return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
     }
 
     const clipboardText = await vscode.env.clipboard.readText();
-    const killRingEntity = this.killRing.getTop();
+    let killRingEntityToPaste = this.killRing.getTop();
 
-    let pasteText: string;
-    if (killRingEntity === null || !killRingEntity.isSameClipboardText(clipboardText)) {
-      this.killRing.push(new ClipboardTextKillRingEntity(clipboardText));
-      pasteText = clipboardText;
-    } else {
-      pasteText = killRingEntity.asString();
+    if (killRingEntityToPaste == null || !killRingEntityToPaste.isSameClipboardText(clipboardText)) {
+      const newClipboardTextKillRingEntity = new ClipboardTextKillRingEntity(clipboardText);
+      this.killRing.push(newClipboardTextKillRingEntity);
+      killRingEntityToPaste = newClipboardTextKillRingEntity;
     }
 
     this.textChangeCount = 0;
-    await vscode.commands.executeCommand("paste", { text: pasteText });
+    await this.paste(killRingEntityToPaste);
     this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
@@ -145,7 +166,6 @@ export class KillYanker {
     if (killRingEntity === null) {
       return;
     }
-    const text = killRingEntity.asString();
 
     if (prevKillRingEntity !== null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
       for (let i = 0; i < this.prevYankChanges; ++i) {
@@ -154,7 +174,7 @@ export class KillYanker {
     }
 
     this.textChangeCount = 0;
-    await vscode.commands.executeCommand("paste", { text });
+    await this.paste(killRingEntity);
     this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;

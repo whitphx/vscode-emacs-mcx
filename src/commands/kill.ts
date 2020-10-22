@@ -175,6 +175,7 @@ export class CopyRegion extends KillYankCommand {
     this.emacsController.exitMarkMode();
     this.killYanker.cancelKillAppend();
     makeSelectionsEmpty(textEditor);
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -184,6 +185,7 @@ export class Yank extends KillYankCommand {
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     await this.killYanker.yank();
     this.emacsController.exitMarkMode();
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -193,5 +195,6 @@ export class YankPop extends KillYankCommand {
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     await this.killYanker.yankPop();
     this.emacsController.exitMarkMode();
+    revealPrimaryActive(textEditor);
   }
 }
