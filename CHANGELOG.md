@@ -14,6 +14,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ### Added
 - `C-m` to pick the selected item in the quick open widget.
 
+### Fixed
+- Internal implementation has been fixed to dispose resources such as registered event listeners.
+
 ## [0.23.4] - 2020-10-22
 ### Fixed
 - `yank` and `yankPop` are fixed to work in the same way as VSCode's `paste` command, in the case of multi-cursors in a single line.
