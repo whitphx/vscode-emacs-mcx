@@ -24,7 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
       return undefined;
     }
 
-    const [curEmulator] = emulatorMap.getOrCreate(activeTextEditor);
+    const [curEmulator, isNew] = emulatorMap.getOrCreate(activeTextEditor);
+    if (isNew) {
+      context.subscriptions.push(curEmulator);
+    }
 
     return curEmulator;
   }
