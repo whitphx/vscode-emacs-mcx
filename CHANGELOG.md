@@ -10,6 +10,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.23.5] - Unreleased
+### Added
+- `C-m` to pick the selected item in the quick open widget.
+
 ## [0.23.4] - 2020-10-22
 ### Fixed
 - `yank` and `yankPop` are fixed to work in the same way as VSCode's `paste` command, in the case of multi-cursors in a single line.

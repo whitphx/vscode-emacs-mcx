@@ -2429,6 +2429,11 @@
 				"when": "inQuickOpen"
 			},
 			{
+				"key": "ctrl+m",
+				"command": "workbench.action.acceptSelectedQuickOpenItem",
+				"when": "inQuickOpen"
+			},
+			{
 				"key": "ctrl+shift+'",
 				"command": "editor.action.triggerParameterHints",
 				"when": "editorTextFocus"
