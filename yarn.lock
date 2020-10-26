@@ -2650,10 +2650,10 @@ ts-loader@^8.0.7:
     micromatch "^4.0.0"
     semver "^6.0.0"
 
-ts-mocha@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/ts-mocha/-/ts-mocha-7.0.0.tgz#f1549b48b46f53d7ae1dccbb26313c7879acb190"
-  integrity sha512-7WfkQw1W6JZXG5m4E1w2e945uWzBoZqmnOHvpMu0v+zvyKLdUQeTtRMfcQsVEKsUnYL6nTyH4okRt2PZucmFXQ==
+ts-mocha@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ts-mocha/-/ts-mocha-8.0.0.tgz#962d0fa12eeb6468aa1a6b594bb3bbc818da3ef0"
+  integrity sha512-Kou1yxTlubLnD5C3unlCVO7nh0HERTezjoVhVw/M5S1SqoUec0WgllQvPk3vzPMc6by8m6xD1uR1yRf8lnVUbA==
   dependencies:
     ts-node "7.0.1"
   optionalDependencies:
