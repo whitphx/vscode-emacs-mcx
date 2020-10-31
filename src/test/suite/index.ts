@@ -8,6 +8,7 @@ export function run(): Promise<void> {
     ui: "tdd",
     forbidOnly: true,
     color: true,
+    parallel: false,
   });
 
   const testsRoot = path.resolve(__dirname, "..");
