@@ -9,7 +9,7 @@
 		"url": "https://github.com/tuttieee/vscode-emacs-mcx"
 	},
 	"engines": {
-		"vscode": "^1.50.0"
+		"vscode": "^1.51.0"
 	},
 	"categories": [
 		"Other",
@@ -2139,7 +2139,7 @@
 			{
 				"key": "enter",
 				"command": "closeFindWidget",
-				"when": "editorFocus && findWidgetVisible && !replaceInputFocussed"
+				"when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+g",
