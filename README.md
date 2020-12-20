@@ -2,6 +2,8 @@
 
 [![Build Status](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_apis/build/status/tuttieee.vscode-emacs-mcx?branchName=master)](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_build/latest?definitionId=1?branchName=master)
 
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/tuttieee?style=social)](https://github.com/sponsors/tuttieee)
+
 <a href="https://www.buymeacoffee.com/tuttieee" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
 
 This Visual Studio Code extension provides emacs-like keybindings and operations.
