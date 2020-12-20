@@ -2,7 +2,15 @@
 
 [![Build Status](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_apis/build/status/tuttieee.vscode-emacs-mcx?branchName=master)](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_build/latest?definitionId=1?branchName=master)
 
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/tuttieee?style=social)](https://github.com/sponsors/tuttieee)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/tuttieee.emacs-mcx?label=Visual%20Studio%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx)
+[![Visual Studio Marketplace Installs - Azure DevOps Extension](https://img.shields.io/visual-studio-marketplace/azure-devops/installs/total/tuttieee.emacs-mcx)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx)
+[![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/tuttieee.emacs-mcx)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx&ssr=false#review-details)
+
+[![Open VSX Version](https://img.shields.io/open-vsx/v/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx)
+[![Open VSX Downloads](https://img.shields.io/open-vsx/dt/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx)
+[![Open VSX Rating](https://img.shields.io/open-vsx/rating/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx/reviews)
+
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/tuttieee?label=Sponsor%20me%20on%20GitHub%20Sponsors&style=social)](https://github.com/sponsors/tuttieee)
 
 <a href="https://www.buymeacoffee.com/tuttieee" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
 
