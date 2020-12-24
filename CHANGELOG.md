@@ -10,6 +10,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.23.7] - 2020-12-24
+### Fixed
+- Internal package updates.
+- Release steps are automated by GitHub actions
+
 ## [0.23.6] - 2020-11-12
 ### Fixed
 - Keybindings are ignored on the find widget during IME composition.
