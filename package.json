@@ -2460,6 +2460,7 @@
 		"webpack": "yarn webpack:dev",
 		"test-compile": "ttsc -p ./",
 		"gen-keys": "ts-node ./keybinding-generator/cli.ts",
+		"test-gen-keys": "ts-mocha keybinding-generator/*.test.ts",
 		"prettier": "prettier --write 'src/**/*.ts'",
 		"lint": "eslint src --ext ts",
 		"pretest": "yarn run test-compile",
