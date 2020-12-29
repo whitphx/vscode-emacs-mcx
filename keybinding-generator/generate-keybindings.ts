@@ -108,20 +108,28 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
           args: src.args,
         });
 
-        // Generate a keybinding using ESC as meta for macOS.
+        // Generate keybindings using ESC and Ctrl+[ as meta.
         const keystrokes = key.split(" ").filter((k) => k);
         if (keystrokes.length === 1) {
+          const keyWithEscapeMeta = replaceMetaWithEscape(key)
           keybindings.push({
-            key: replaceMetaWithEscape(key),
+            key: keyWithEscapeMeta,
             command: src.command,
             when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
             args: src.args,
           });
+          keybindings.push({
+            key: keyWithEscapeMeta.replace("escape", "ctrl+["),
+            command: src.command,
+            when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"),
+            args: src.args,
+          });
         } else {
           console.warn(
-            `${key} includes more than one key strokes then it cannot be converted to a keybinding with ESC key.`
+            `"${key}" includes more than one key strokes then it's meta key specification cannot be converted to "ESC" and "ctrl+[".`
           );
         }
+
       } else {
         keybindings.push({
           key,

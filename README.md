@@ -42,15 +42,15 @@ You can configure those settings.
 Configurable options of this extension are the followings.
 
 ### `emacs-mcx.strictEmacsMove`
-If set to true, the original emacs's cursor movements are strictly simulated.
-If set to false, the VSCode's native cursor movements are preserved.
-For example, if set to true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
-If set to false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
+If set as true, the original emacs's cursor movements are strictly simulated.
+If set as false, the VSCode's native cursor movements are preserved.
+For example, if set as true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
+If set as false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
 
 ### `emacs-mcx.useMetaPrefixEscape`
-If set to true, Escape key works as the Meta prefix like original emacs.
-If set to false, Escape key works as cancel, the VSCode's native behavior.
-For example, if set to true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
+If set as true, Escape key works as the Meta prefix like original Emacs.
+If set as false, Escape key works as cancel, the VSCode's native behavior.
+For example, if set as true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
 
 The only exception is the commands which begin with `M-g` (`M-g g`, `M-g n`, `M-g p`).
 It is because VSCode can handle only up to two key strokes as the key bindings.
@@ -60,8 +60,11 @@ So, as the special case, `Escape g` works as follows.
 |--------|------|
 | `Escape g` | Jump to line (command palette) |
 
+### `emacs-mcx.useMetaPrefixCtrlLeftBracket`
+If set as true, `ctrl+[` works as the Meta prefix like original Emacs.
+
 ### `emacs-mcx.useMetaPrefixMacCmd`
-If set to true, Command (⌘) key works as the Meta prefix like original emacs on macOS.
+If set as true, Command (⌘) key works as the Meta prefix like original Emacs on macOS.
 This option only works on macOS.
 
 ### `emacs-mcx.killRingMax`
