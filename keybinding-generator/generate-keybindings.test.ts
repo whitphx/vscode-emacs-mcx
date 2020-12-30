@@ -51,6 +51,11 @@ describe("generateKeybindings", () => {
         command: "emacs-mcx.forwardWord",
         when: "config.emacs-mcx.useMetaPrefixEscape",
       },
+      {
+        key: "ctrl+[ f",
+        command: "emacs-mcx.forwardWord",
+        when: "config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+      },
     ];
     expect(generateKeybindings(src)).toEqual(expected);
   });
@@ -78,6 +83,11 @@ describe("generateKeybindings", () => {
         command: "emacs-mcx.forwardWord",
         when: "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
       },
+      {
+        key: "ctrl+[ f",
+        command: "emacs-mcx.forwardWord",
+        when: "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+      }
     ];
     expect(generateKeybindings(src)).toEqual(expected);
   });
@@ -105,6 +115,11 @@ describe("generateKeybindings", () => {
         when: "config.emacs-mcx.useMetaPrefixEscape",
       },
       {
+        key: "ctrl+[ f",
+        command: "emacs-mcx.forwardWord",
+        when: "config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+      },
+      {
         key: "alt+j",
         command: "emacs-mcx.forwardWord",
         when: "!config.emacs-mcx.useMetaPrefixMacCmd",
@@ -119,6 +134,11 @@ describe("generateKeybindings", () => {
         key: "escape j",
         command: "emacs-mcx.forwardWord",
         when: "config.emacs-mcx.useMetaPrefixEscape",
+      },
+      {
+        key: "ctrl+[ j",
+        command: "emacs-mcx.forwardWord",
+        when: "config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
       },
     ];
     expect(generateKeybindings(src)).toEqual(expected);
