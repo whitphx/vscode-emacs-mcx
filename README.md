@@ -110,7 +110,7 @@ This is a currently input prefix argument.
 
 
 ## Keymaps
-Alt key is mapped to a meta prefix (`M`) by default though you can change it to Escape or Command key (macOS only) by the settings above.
+Alt key is mapped to the Meta prefix (`M`) by default and you can configure for Escape, `ctrl+[`, or Command (⌘) key (macOS only) to work as it with the settings above.
 
 ### Move commands
 |Command |Prefix argument |Desc |
