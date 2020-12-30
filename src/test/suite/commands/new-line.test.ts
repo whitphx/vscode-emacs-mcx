@@ -126,7 +126,9 @@ suite("newLine", () => {
           "typescriptreact",
         ];
         languagesAutoDoc.forEach((language) => {
-          test(`newLine does not disable the language specific control in case of ${language}`, async () => {
+          test(`newLine does not disable the language specific control in case of ${language}`, async function () {
+            this.timeout(5000); // A test with language features can take more time than usual
+
             const initialText = "/** */";
 
             // XXX: First, trigger the language's auto-indent feature without any assertion before the main test execution.
