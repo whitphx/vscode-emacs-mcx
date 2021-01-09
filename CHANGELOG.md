@@ -10,6 +10,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
     - `M-z char`: (zap-to-char)  # Maybe ignored
 - Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
+## [0.24.1] - 2021-01-09
+### Fix
+- Change the maintainer's username.
+
 ## [0.24.0] - 2020-12-30
 ### Added
 - `useMetaPrefixCtrlLeftBracket` option to use `ctrl+[` as a meta key.
