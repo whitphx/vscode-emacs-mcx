@@ -2,13 +2,6 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
-- Improvements of kill-ring
-    - to browse kill-ring contents
-- To support more kinds of kill command
-    - `C-x DEL`: (backward-kill-sentence)
-    - `M-k`: (kill-sentence)
-    - `M-z char`: (zap-to-char)  # Maybe ignored
-- Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
 
 ## [0.24.1] - 2021-01-09
 ### Fix
