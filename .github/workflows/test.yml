@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+    - name: Lint
+      run: yarn lint
+    - name: Test keybinding generator
+      run: |
+        yarn test-gen-keys
+        yarn gen-keys
+        git diff --quiet || (echo "You have to run 'yarn gen-keys' and commit the updated package.json" && exit -1)
+    - name: Test
+      run: xvfb-run -a npm test
+      if: runner.os == 'Linux'
+    - name: Test
+      run: npm test
+      if: runner.os != 'Linux'
+    - name: Test packaging
+      run: |
+        npm install -g vsce
+        vsce package
