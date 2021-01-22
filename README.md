@@ -162,7 +162,7 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 | `C-m` | ✓ | New line |
 | `C-x C-o` |  | Delete blank lines around (delete-blank-lines) |
 | `C-x h` |  | Select All |
-| `C-x u` (`C-/`)|  | Undo |
+| `C-x u`, `C-/`, `C-S--` (`C-_` with US keyboard) |  | Undo |
 | `C-;` |  | Toggle line comment in and out |
 | `M-;` |  | Toggle region comment in and out |
 | `C-x C-l` (`M-l`) |  | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Upper case and title case (below) are same) |
@@ -173,7 +173,7 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 ## Mark Commands
 |Command | Desc |
 |--------|------|
-| `C-SPC` | Set the mark at point, and activate it (set-mark-command). |
+| `C-SPC`, `C-S-2` (`C-@` with US keyboard) | Set the mark at point, and activate it (set-mark-command). |
 | `C-SPC C-SPC` | Set the mark, pushing it onto the mark ring, without activating it. |
 | `C-u C-SPC` | Move point to where the mark was, and restore the mark from the ring of former marks. |
 | `C-x C-x` | Set the mark at point, and activate it; then move point where the mark used to be (exchange-point-and-mark). |

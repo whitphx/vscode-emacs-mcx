@@ -447,26 +447,12 @@
       ]
     },
     {
-      "key": "ctrl+x u",
+      "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
       "command": "undo",
       "when": "editorTextFocus && !editorReadonly"
     },
     {
-      "key": "ctrl+x u",
-      "command": "emacs-mcx.executeCommands",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": [
-        "closeFindWidget",
-        "undo"
-      ]
-    },
-    {
-      "key": "ctrl+/",
-      "command": "undo",
-      "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-      "key": "ctrl+/",
+      "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
@@ -624,7 +610,7 @@
     },
     // Mark mode
     {
-      "key": "ctrl+space",
+      "keys": ["ctrl+space", "ctrl+shift+2"],
       "command": "emacs-mcx.setMarkCommand",
       "when": "editorTextFocus"
     },

@@ -2094,6 +2094,16 @@
 				"when": "editorTextFocus && !editorReadonly"
 			},
 			{
+				"key": "ctrl+/",
+				"command": "undo",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
+				"key": "ctrl+shift+-",
+				"command": "undo",
+				"when": "editorTextFocus && !editorReadonly"
+			},
+			{
 				"key": "ctrl+x u",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible && !isComposing",
@@ -2104,11 +2114,15 @@
 			},
 			{
 				"key": "ctrl+/",
-				"command": "undo",
-				"when": "editorTextFocus && !editorReadonly"
+				"command": "emacs-mcx.executeCommands",
+				"when": "editorFocus && findWidgetVisible && !isComposing",
+				"args": [
+					"closeFindWidget",
+					"undo"
+				]
 			},
 			{
-				"key": "ctrl+/",
+				"key": "ctrl+shift+-",
 				"command": "emacs-mcx.executeCommands",
 				"when": "editorFocus && findWidgetVisible && !isComposing",
 				"args": [
@@ -2385,6 +2399,11 @@
 			},
 			{
 				"key": "ctrl+space",
+				"command": "emacs-mcx.setMarkCommand",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+shift+2",
 				"command": "emacs-mcx.setMarkCommand",
 				"when": "editorTextFocus"
 			},
