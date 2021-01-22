@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Added
+- `C-@` for mark and `C-_` for undo.
 
 ## [0.24.1] - 2021-01-09
 ### Fix
