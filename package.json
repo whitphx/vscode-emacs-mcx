@@ -2701,7 +2701,7 @@
 		"prettier": "^2.2.1",
 		"sinon": "^9.2.3",
 		"strip-json-comments": "^3.1.1",
-		"ts-loader": "^8.0.12",
+		"ts-loader": "^8.0.14",
 		"ts-mocha": "^8.0.0",
 		"ts-node": "^9.1.1",
 		"tsconfig-paths-webpack-plugin": "^3.3.0",
