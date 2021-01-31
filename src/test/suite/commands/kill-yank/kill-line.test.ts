@@ -44,7 +44,7 @@ a
 ABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -62,7 +62,7 @@ ABCDEFGHIJ`
 abcdefghijABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -82,7 +82,7 @@ a
 A`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -110,7 +110,7 @@ BCDEFGHIJ`
       await emulator.runCommand("killLine"); // 2nd line
       await emulator.runCommand("killLine"); // EOL of 2nd
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -289,7 +289,7 @@ ABCDEFGHIJ`;
 ABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -309,7 +309,7 @@ a
 ABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
