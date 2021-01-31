@@ -40,7 +40,7 @@ ABCDEFGHIJ`
           await clearTextEditor(activeTextEditor);
           activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
           await emulator.runCommand("yank");
-          assert.equal(activeTextEditor.document.getText(), "abcdefghij\n");
+          assert.strictEqual(activeTextEditor.document.getText(), "abcdefghij\n");
         });
       });
     });
@@ -69,7 +69,7 @@ abcdefghij
           await clearTextEditor(activeTextEditor);
           activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
           await emulator.runCommand("yank");
-          assert.equal(activeTextEditor.document.getText(), "ABCDEFGHIJ");
+          assert.strictEqual(activeTextEditor.document.getText(), "ABCDEFGHIJ");
         });
       });
     });

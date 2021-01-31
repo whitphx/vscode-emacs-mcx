@@ -21,7 +21,7 @@ suite("paredit commands", () => {
 
       await emulator.runCommand("paredit.forwardSexp");
 
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
     });
 
@@ -31,7 +31,7 @@ suite("paredit commands", () => {
       emulator.setMarkCommand();
       await emulator.runCommand("paredit.forwardSexp");
 
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 5))));
     });
   });
@@ -42,7 +42,7 @@ suite("paredit commands", () => {
 
       await emulator.runCommand("paredit.backwardSexp");
 
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 0))));
     });
 
@@ -52,7 +52,7 @@ suite("paredit commands", () => {
       emulator.setMarkCommand();
       await emulator.runCommand("paredit.backwardSexp");
 
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 0))));
     });
   });
@@ -182,10 +182,10 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    assert.equal(activeTextEditor.selections.length, 1);
-    assert.equal(activeTextEditor.selection.active.line, 1000);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.strictEqual(activeTextEditor.selection.active.line, 1000);
     const visibleRange = activeTextEditor.visibleRanges[0];
-    assert.equal(visibleRange.end.line, 1000);
+    assert.strictEqual(visibleRange.end.line, 1000);
   });
 
   test("backwardSexp: the selection is revealed at the active cursor", async () => {
@@ -196,10 +196,10 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    assert.equal(activeTextEditor.selections.length, 1);
-    assert.equal(activeTextEditor.selection.active.line, 0);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.strictEqual(activeTextEditor.selection.active.line, 0);
     const visibleRange = activeTextEditor.visibleRanges[0];
-    assert.equal(visibleRange.start.line, 0);
+    assert.strictEqual(visibleRange.start.line, 0);
   });
 });
 
@@ -221,7 +221,7 @@ suite("paredit commands with prefix argument", () => {
     await emulator.universalArgumentDigit(2);
     await emulator.runCommand("paredit.forwardSexp");
 
-    assert.equal(activeTextEditor.selections.length, 1);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
     assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 6), new Position(0, 6))));
   });
 
@@ -232,7 +232,7 @@ suite("paredit commands with prefix argument", () => {
     await emulator.universalArgumentDigit(2);
     await emulator.runCommand("paredit.backwardSexp");
 
-    assert.equal(activeTextEditor.selections.length, 1);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
     assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 15), new Position(0, 15))));
   });
 });
@@ -256,7 +256,7 @@ suite("with semicolon", () => {
 
       await emulator.runCommand("paredit.forwardSexp");
 
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       // The cursor at the beginning of the next line
       assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(1, 0), new Position(1, 0))));
     });
@@ -276,7 +276,7 @@ suite("with semicolon", () => {
 
         await emulator.runCommand("paredit.forwardSexp");
 
-        assert.equal(activeTextEditor.selections.length, 1);
+        assert.strictEqual(activeTextEditor.selections.length, 1);
         // The cursor is right to ";"
         assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(line, 4), new Position(line, 4))));
       });

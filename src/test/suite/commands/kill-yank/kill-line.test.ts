@@ -37,7 +37,7 @@ ABCDEFGHIJ`;
 
       await emulator.runCommand("killLine");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
 a
@@ -148,7 +148,7 @@ abcdefghij
           !activeTextEditor.document.getText().includes("fghij\n") // First 2 kills does not appear here
         );
         await emulator.runCommand("yankPop");
-        assert.equal(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
+        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
       });
     });
 
@@ -197,7 +197,7 @@ abcdefghij
           !activeTextEditor.document.getText().includes("fghij\n") // First 2 kills does not appear here
         );
         await emulator.runCommand("yankPop");
-        assert.equal(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
+        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
       });
     });
   });
@@ -216,7 +216,7 @@ abcdefghij
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
@@ -239,7 +239,7 @@ abcdefghij
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 1]);
 
       await clearTextEditor(activeTextEditor);
@@ -283,7 +283,7 @@ ABCDEFGHIJ`;
 
       await emulator.runCommand("killLine");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
 ABCDEFGHIJ`
@@ -302,7 +302,7 @@ ABCDEFGHIJ`
 
       await emulator.runCommand("killLine");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
 a
@@ -332,7 +332,7 @@ ABCDEFGHIJ`
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
@@ -355,7 +355,7 @@ abcdefghij
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 1]);
 
       await clearTextEditor(activeTextEditor);

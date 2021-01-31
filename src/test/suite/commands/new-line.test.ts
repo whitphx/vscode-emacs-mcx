@@ -114,8 +114,8 @@ suite("newLine", () => {
           await emulator.runCommand("newLine");
 
           assertTextEqual(activeTextEditor, `(${eolStr}    ${eolStr})`);
-          assert.equal(activeTextEditor.selection.active.line, 1);
-          assert.equal(activeTextEditor.selection.active.character, 4);
+          assert.strictEqual(activeTextEditor.selection.active.line, 1);
+          assert.strictEqual(activeTextEditor.selection.active.character, 4);
         });
 
         const languagesAutoDoc = [
@@ -156,8 +156,8 @@ suite("newLine", () => {
             await emulator.runCommand("newLine");
 
             assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} */`);
-            assert.equal(activeTextEditor.selection.active.line, 1);
-            assert.equal(activeTextEditor.selection.active.character, 3);
+            assert.strictEqual(activeTextEditor.selection.active.line, 1);
+            assert.strictEqual(activeTextEditor.selection.active.character, 3);
           });
         });
       });
@@ -173,8 +173,8 @@ suite("newLine", () => {
           await emulator.runCommand("newLine");
 
           assertTextEqual(activeTextEditor, `(a${eolStr})`);
-          assert.equal(activeTextEditor.selection.active.line, 1);
-          assert.equal(activeTextEditor.selection.active.character, 0);
+          assert.strictEqual(activeTextEditor.selection.active.line, 1);
+          assert.strictEqual(activeTextEditor.selection.active.character, 0);
         });
       });
 
@@ -189,8 +189,8 @@ suite("newLine", () => {
         await emulator.runCommand("newLine");
 
         assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);
-        assert.equal(activeTextEditor.selection.active.line, 4);
-        assert.equal(activeTextEditor.selection.active.character, 0);
+        assert.strictEqual(activeTextEditor.selection.active.line, 4);
+        assert.strictEqual(activeTextEditor.selection.active.character, 0);
       });
     });
   });
