@@ -521,8 +521,6 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
-    this.timeout(5000); // A test with language features can take more time than usual
-
     activeTextEditor = await setupWorkspace("", { language: "typescript" });
     activeTextEditor.options.tabSize = 4;
 
@@ -735,8 +733,6 @@ suite("With not only single text editor", () => {
   });
 
   test("shares killRing amoung multiple editors", async function () {
-    this.timeout(5000); // This test case takes longer time somehow
-
     const killRing = new KillRing(3);
 
     const activeTextEditor0 = await setupWorkspace();
