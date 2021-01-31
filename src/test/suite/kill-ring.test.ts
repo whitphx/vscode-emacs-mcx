@@ -17,12 +17,12 @@ suite("KillRing", () => {
       killRing.push(entity);
     });
 
-    assert.equal(killRing.getTop()?.asString(), "qux"); // Equivalent to yank
-    assert.equal(killRing.popNext()?.asString(), "baz"); // Equivalent to yankPop
-    assert.equal(killRing.popNext()?.asString(), "bar");
-    assert.equal(killRing.popNext()?.asString(), "qux");
-    assert.equal(killRing.popNext()?.asString(), "baz");
-    assert.equal(killRing.popNext()?.asString(), "bar");
+    assert.strictEqual(killRing.getTop()?.asString(), "qux"); // Equivalent to yank
+    assert.strictEqual(killRing.popNext()?.asString(), "baz"); // Equivalent to yankPop
+    assert.strictEqual(killRing.popNext()?.asString(), "bar");
+    assert.strictEqual(killRing.popNext()?.asString(), "qux");
+    assert.strictEqual(killRing.popNext()?.asString(), "baz");
+    assert.strictEqual(killRing.popNext()?.asString(), "bar");
   });
 
   test("less data than max", () => {
@@ -38,12 +38,12 @@ suite("KillRing", () => {
       killRing.push(entity);
     });
 
-    assert.equal(killRing.getTop()?.asString(), "baz");
-    assert.equal(killRing.popNext()?.asString(), "bar");
-    assert.equal(killRing.popNext()?.asString(), "foo");
-    assert.equal(killRing.popNext()?.asString(), "baz");
-    assert.equal(killRing.popNext()?.asString(), "bar");
-    assert.equal(killRing.popNext()?.asString(), "foo");
+    assert.strictEqual(killRing.getTop()?.asString(), "baz");
+    assert.strictEqual(killRing.popNext()?.asString(), "bar");
+    assert.strictEqual(killRing.popNext()?.asString(), "foo");
+    assert.strictEqual(killRing.popNext()?.asString(), "baz");
+    assert.strictEqual(killRing.popNext()?.asString(), "bar");
+    assert.strictEqual(killRing.popNext()?.asString(), "foo");
   });
 
   test("just single data", () => {
@@ -55,16 +55,16 @@ suite("KillRing", () => {
       killRing.push(entity);
     });
 
-    assert.equal(killRing.getTop()?.asString(), "foo");
-    assert.equal(killRing.popNext()?.asString(), "foo");
-    assert.equal(killRing.popNext()?.asString(), "foo");
+    assert.strictEqual(killRing.getTop()?.asString(), "foo");
+    assert.strictEqual(killRing.popNext()?.asString(), "foo");
+    assert.strictEqual(killRing.popNext()?.asString(), "foo");
   });
 
   test("zero data", () => {
     const killRing = new KillRing(3);
 
-    assert.equal(killRing.getTop(), null);
-    assert.equal(killRing.popNext(), null);
-    assert.equal(killRing.popNext(), null);
+    assert.strictEqual(killRing.getTop(), null);
+    assert.strictEqual(killRing.popNext(), null);
+    assert.strictEqual(killRing.popNext(), null);
   });
 });
