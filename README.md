@@ -75,6 +75,9 @@ The default is 60.
 This simulates the original Emacs' [`kill-whole-line` variable](https://www.gnu.org/software/emacs/manual/html_node/emacs/Killing-by-Lines.html).
 The default is false.
 
+### `emacs-mcx.cursorMoveOnFindWidget`
+If set to true, cursor move commands of this extension (`C-f`, `C-b`, `C-p`, `C-n`, `C-a`, `C-e`, `M-f`, `M-b`, and `M-m`) are disabled when the find widget is focused, to allow the widget to keep open and the cursor to move on it.
+
 ### `emacs-mcx.enableOverridingTypeCommand`
 Prefix arguments do not work on character inputs with IMEs by default and you can set this config to `true` in order to enable it.
 Note that this config makes use of VSCode API's `type` command under the hood and can cause problems in some cases.
