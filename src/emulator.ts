@@ -27,6 +27,7 @@ export interface IEmacsCommandRunner {
 export interface IMarkModeController {
   enterMarkMode(): void;
   exitMarkMode(): void;
+  pushMark(): void;
 }
 
 export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {

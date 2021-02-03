@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../../utils";
+import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../../utils";
 
 suite("Yank from clipboard, without kill-ring", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -41,6 +41,24 @@ suite("Yank from clipboard, without kill-ring", () => {
         await emulator.runCommand("yank");
 
         assertTextEqual(activeTextEditor, "Lorem ipsum\nLorem ipsum\nLorem ipsum");
+      });
+
+      test("marks are set when yank", async () => {
+        const emulator = new EmacsEmulator(activeTextEditor);
+
+        setEmptyCursors(activeTextEditor, [0, 0])
+        await emulator.runCommand("yank")
+
+        setEmptyCursors(activeTextEditor, [1, 0])
+        await emulator.runCommand("yank")
+
+        assertCursorsEqual(activeTextEditor, [1, 11])
+
+        emulator.popMark()
+        assertCursorsEqual(activeTextEditor, [1, 0])
+
+        emulator.popMark()
+        assertCursorsEqual(activeTextEditor, [0, 0])
       });
     });
 

@@ -183,6 +183,7 @@ export class Yank extends KillYankCommand {
   public readonly id = "yank";
 
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    this.emacsController.pushMark()
     await this.killYanker.yank();
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
