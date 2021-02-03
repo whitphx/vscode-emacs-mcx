@@ -2555,10 +2555,10 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typescript-transform-paths@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-2.2.2.tgz#d5290cb30a532f187f5f3a8dcde3eef2358ed54b"
-  integrity sha512-775A+BHIJDf4VosEJ1gZKMptdyP/6yS3AO4gGxkk17AYPUbuoAubi0bcmgcga6vtfso6YRLWTTFjcyC0BBuIVA==
+typescript-transform-paths@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-2.2.3.tgz#a22e4227978ab85cd54b5344d43ecc796460d3aa"
+  integrity sha512-jF63/iDnjKfLANZK1F8HhNgRv+v6R3vqpoPrx6KJWYtq9Ch7hPvefmb0HtbUfYaAMqUW3ol+w29wEYa7HNKBcA==
   dependencies:
     minimatch "^3.0.4"
 
