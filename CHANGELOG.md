@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.26.0] - 2021-02-04
 ### Added
 - `emacs-mcx.cursorMoveOnFindWidget` option.
 
