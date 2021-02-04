@@ -22,7 +22,7 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("it works with single cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        setEmptyCursors(activeTextEditor, [1, 0])
+        setEmptyCursors(activeTextEditor, [1, 0]);
 
         await emulator.runCommand("yank");
 
@@ -32,7 +32,7 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("it works with multi cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        setEmptyCursors(activeTextEditor, [1, 0], [0, 0], [2, 0])
+        setEmptyCursors(activeTextEditor, [1, 0], [0, 0], [2, 0]);
 
         await emulator.runCommand("yank");
 
@@ -42,19 +42,19 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("marks are set when yank", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        setEmptyCursors(activeTextEditor, [0, 0])
-        await emulator.runCommand("yank")
+        setEmptyCursors(activeTextEditor, [0, 0]);
+        await emulator.runCommand("yank");
 
-        setEmptyCursors(activeTextEditor, [1, 0])
-        await emulator.runCommand("yank")
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("yank");
 
-        assertCursorsEqual(activeTextEditor, [1, 11])
+        assertCursorsEqual(activeTextEditor, [1, 11]);
 
-        emulator.popMark()
-        assertCursorsEqual(activeTextEditor, [1, 0])
+        emulator.popMark();
+        assertCursorsEqual(activeTextEditor, [1, 0]);
 
-        emulator.popMark()
-        assertCursorsEqual(activeTextEditor, [0, 0])
+        emulator.popMark();
+        assertCursorsEqual(activeTextEditor, [0, 0]);
       });
     });
 
@@ -66,7 +66,7 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("it works with single cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        setEmptyCursors(activeTextEditor, [1, 0])
+        setEmptyCursors(activeTextEditor, [1, 0]);
 
         await emulator.runCommand("yank");
 
@@ -82,7 +82,7 @@ dolor sit amet,
       test("it works with multi cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        setEmptyCursors(activeTextEditor, [1, 0], [0, 0], [2, 0])
+        setEmptyCursors(activeTextEditor, [1, 0], [0, 0], [2, 0]);
 
         await emulator.runCommand("yank");
 
@@ -101,7 +101,7 @@ dolor sit amet,`
         const emulator = new EmacsEmulator(activeTextEditor);
 
         // 2 selections: the same line number to the text on clipboard
-        setEmptyCursors(activeTextEditor, [1, 0], [0, 0])
+        setEmptyCursors(activeTextEditor, [1, 0], [0, 0]);
 
         await emulator.runCommand("yank");
 
