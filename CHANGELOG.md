@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.27.0] - 2021-02-13
 ### Fixed
 - Fix yank to set the mark at the beginning of the inserted text.
 - Fix i-search to add the original value of point to the mark ring when exiting.
