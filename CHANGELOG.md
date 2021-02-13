@@ -8,6 +8,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ### Fixed
 - Fix yank to set the mark at the beginning of the inserted text.
 - Fix i-search to add the original value of point to the mark ring when exiting.
+- Fix beginning-of-buffer and end-of-buffer to set the mark.
 
 ## [0.25.0] - 2021-01-29
 ### Added
