@@ -8,7 +8,7 @@ export interface SearchState {
   startSelections: vscode.Selection[] | undefined;
 }
 
-abstract class ISearchCommand extends EmacsCommand {
+abstract class IsearchCommand extends EmacsCommand {
   protected searchState: SearchState;
 
   public constructor(
@@ -22,7 +22,7 @@ abstract class ISearchCommand extends EmacsCommand {
   }
 }
 
-export class IsearchForward extends ISearchCommand {
+export class IsearchForward extends IsearchCommand {
   public readonly id = "isearchForward";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
@@ -33,7 +33,7 @@ export class IsearchForward extends ISearchCommand {
   }
 }
 
-export class IsearchBackward extends ISearchCommand {
+export class IsearchBackward extends IsearchCommand {
   public readonly id = "isearchBackward";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
@@ -47,7 +47,7 @@ export class IsearchBackward extends ISearchCommand {
 /**
  * C-g
  */
-export class IsearchAbort extends ISearchCommand {
+export class IsearchAbort extends IsearchCommand {
   public readonly id = "isearchAbort";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
@@ -62,7 +62,7 @@ export class IsearchAbort extends ISearchCommand {
 /**
  * Enter, etc
  */
-export class IsearchExit extends ISearchCommand {
+export class IsearchExit extends IsearchCommand {
   public readonly id = "isearchExit";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
