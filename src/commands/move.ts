@@ -6,6 +6,7 @@ import {
   travelForward as travelForwardParagraph,
   travelBackward as travelBackwardParagraph,
 } from "./helpers/paragraph";
+import { MessageManager } from "../message";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -189,22 +190,20 @@ export class BackToIndentation extends EmacsCommand {
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop")
-    );
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+    MessageManager.showMessage("Mark set");
+    return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop");
   }
 }
 
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom")
-    );
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+    MessageManager.showMessage("Mark set");
+    return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom");
   }
 }
 

@@ -131,8 +131,8 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 | `M-v` | ✓ | Scroll up by one screen unit (scroll-down-command) |
 | `M-S-[` (`M-{` with US keyboard) | ✓ | Move back to previous paragraph beginning (backward-paragraph) |
 | `M-S-]` (`M-}` with US keyboard) | ✓ | Move forward to next paragraph end (forward-paragraph) |
-| `M-S-,` (`M-<` with US keyboard) | ✓ | Move to the top of the buffer (beginning-of-buffer) |
-| `M-S-.` (`M->` with US keyboard) | ✓ | Move to the end of the buffer (end-of-buffer) |
+| `M-S-,` (`M-<` with US keyboard) |   | Move to the top of the buffer (beginning-of-buffer) |
+| `M-S-.` (`M->` with US keyboard) |   | Move to the end of the buffer (end-of-buffer) |
 | `M-g g` (`M-g M-g`) | | Jump to line (command palette) |
 | `M-g n` (`M-g M-n`, ``C-x ` ``) | | Jump to next error |
 | `M-g p` (`M-g M-p`) | | Jump to previous error |

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../../utils";
+import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../../utils";
 
 suite("Yank from clipboard, without kill-ring", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -22,7 +22,7 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("it works with single cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 0))];
+        setEmptyCursors(activeTextEditor, [1, 0]);
 
         await emulator.runCommand("yank");
 
@@ -32,15 +32,29 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("it works with multi cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [
-          new Selection(new Position(1, 0), new Position(1, 0)),
-          new Selection(new Position(0, 0), new Position(0, 0)),
-          new Selection(new Position(2, 0), new Position(2, 0)),
-        ];
+        setEmptyCursors(activeTextEditor, [1, 0], [0, 0], [2, 0]);
 
         await emulator.runCommand("yank");
 
         assertTextEqual(activeTextEditor, "Lorem ipsum\nLorem ipsum\nLorem ipsum");
+      });
+
+      test("marks are set when yank", async () => {
+        const emulator = new EmacsEmulator(activeTextEditor);
+
+        setEmptyCursors(activeTextEditor, [0, 0]);
+        await emulator.runCommand("yank");
+
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("yank");
+
+        assertCursorsEqual(activeTextEditor, [1, 11]);
+
+        emulator.popMark();
+        assertCursorsEqual(activeTextEditor, [1, 0]);
+
+        emulator.popMark();
+        assertCursorsEqual(activeTextEditor, [0, 0]);
       });
     });
 
@@ -52,7 +66,7 @@ suite("Yank from clipboard, without kill-ring", () => {
       test("it works with single cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 0))];
+        setEmptyCursors(activeTextEditor, [1, 0]);
 
         await emulator.runCommand("yank");
 
@@ -68,11 +82,7 @@ dolor sit amet,
       test("it works with multi cursor", async () => {
         const emulator = new EmacsEmulator(activeTextEditor);
 
-        activeTextEditor.selections = [
-          new Selection(new Position(1, 0), new Position(1, 0)),
-          new Selection(new Position(0, 0), new Position(0, 0)),
-          new Selection(new Position(2, 0), new Position(2, 0)),
-        ];
+        setEmptyCursors(activeTextEditor, [1, 0], [0, 0], [2, 0]);
 
         await emulator.runCommand("yank");
 
@@ -91,10 +101,7 @@ dolor sit amet,`
         const emulator = new EmacsEmulator(activeTextEditor);
 
         // 2 selections: the same line number to the text on clipboard
-        activeTextEditor.selections = [
-          new Selection(new Position(1, 0), new Position(1, 0)),
-          new Selection(new Position(0, 0), new Position(0, 0)),
-        ];
+        setEmptyCursors(activeTextEditor, [1, 0], [0, 0]);
 
         await emulator.runCommand("yank");
 
