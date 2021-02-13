@@ -316,6 +316,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     const prevMark = this.markRing.pop();
     if (prevMark) {
       this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
+      this.textEditor.revealRange(this.textEditor.selection);
     }
   }
 
