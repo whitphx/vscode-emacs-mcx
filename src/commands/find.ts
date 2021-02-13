@@ -25,7 +25,7 @@ abstract class ISearchCommand extends EmacsCommand {
 export class IsearchForward extends ISearchCommand {
   public readonly id = "isearchForward";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
       .executeCommand("actions.find")
@@ -36,7 +36,7 @@ export class IsearchForward extends ISearchCommand {
 export class IsearchBackward extends ISearchCommand {
   public readonly id = "isearchBackward";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
       .executeCommand("actions.find")
@@ -50,7 +50,7 @@ export class IsearchBackward extends ISearchCommand {
 export class IsearchAbort extends ISearchCommand {
   public readonly id = "isearchAbort";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     if (this.searchState.startSelections) {
       textEditor.selections = this.searchState.startSelections;
     }
@@ -65,7 +65,7 @@ export class IsearchAbort extends ISearchCommand {
 export class IsearchExit extends ISearchCommand {
   public readonly id = "isearchExit";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     if (this.searchState.startSelections) {
       this.emacsController.pushMark(this.searchState.startSelections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark saved where search started");
