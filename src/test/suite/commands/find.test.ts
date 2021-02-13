@@ -12,26 +12,26 @@ suite("isearch", () => {
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
-  test("isearchAbort returns to where the search started", () => {
+  test("isearchAbort returns to where the search started", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
-    emulator.runCommand("isearchForward");
+    await emulator.runCommand("isearchForward");
 
     setEmptyCursors(activeTextEditor, [2, 0]);
 
-    emulator.runCommand("isearchAbort");
+    await emulator.runCommand("isearchAbort");
 
     assertCursorsEqual(activeTextEditor, [1, 1]);
   });
 
-  test("isearchExit sets a new mark at where the search started", () => {
+  test("isearchExit sets a new mark at where the search started", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
-    emulator.runCommand("isearchForward");
+    await emulator.runCommand("isearchForward");
 
     setEmptyCursors(activeTextEditor, [2, 0]);
 
-    emulator.runCommand("isearchExit");
+    await emulator.runCommand("isearchExit");
 
     assertCursorsEqual(activeTextEditor, [2, 0]);
 
