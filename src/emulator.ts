@@ -27,7 +27,7 @@ export interface IEmacsCommandRunner {
 export interface IMarkModeController {
   enterMarkMode(): void;
   exitMarkMode(): void;
-  pushMark(): void;
+  pushMark(positions: vscode.Position[]): void;
 }
 
 export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {
@@ -86,11 +86,16 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand, this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand, this));
     this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand, this));
-    this.commandRegistry.register(new FindCommands.IsearchForward(this.afterCommand, this));
-    this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this));
     this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
-
     this.commandRegistry.register(new RecenterTopBottom(this.afterCommand, this));
+
+    const searchState: FindCommands.SearchState = {
+      startSelections: undefined,
+    };
+    this.commandRegistry.register(new FindCommands.IsearchForward(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchAbort(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchExit(this.afterCommand, this, searchState));
 
     const killYanker = new KillYanker(textEditor, killRing);
     this.commandRegistry.register(new KillCommands.KillWord(this.afterCommand, this, killYanker));
@@ -298,13 +303,13 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
 
     if (pushMark) {
-      this.pushMark();
+      this.pushMark(this.textEditor.selections.map((selection) => selection.active));
     }
   }
 
-  public pushMark() {
+  public pushMark(positions: vscode.Position[]) {
     this.prevExchangedMarks = null;
-    this.markRing.push(this.textEditor.selections.map((selection) => selection.active));
+    this.markRing.push(positions);
   }
 
   public popMark() {

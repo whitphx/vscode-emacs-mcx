@@ -20,7 +20,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.forwardChar",
         "emacs-mcx.forwardChar"
       ]
@@ -36,7 +36,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.forwardChar",
         "emacs-mcx.backwardChar"
       ]
@@ -62,7 +62,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.forwardChar",
         "emacs-mcx.previousLine"
       ]
@@ -88,7 +88,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.forwardChar",
         "emacs-mcx.nextLine"
       ]
@@ -104,7 +104,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.moveBeginningOfLine"
       ]
     },
@@ -119,7 +119,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.moveEndOfLine"
       ]
     },
@@ -134,7 +134,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.forwardWord"
       ]
     },
@@ -149,7 +149,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.backwardWord"
       ]
     },
@@ -164,7 +164,7 @@
       "command": "emacs-mcx.backToIndentation",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.backwardWord"
       ]
     },
@@ -176,7 +176,7 @@
     },
     {
       "keys": ["pagedown", "ctrl+v"],
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     // page up (meta + v)
@@ -187,7 +187,7 @@
     },
     {
       "keys": ["pageup", "meta+v"],
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     // backward paragraph (meta + shift + [)
@@ -213,7 +213,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.endOfBuffer"
       ]
     },
@@ -228,7 +228,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.beginningOfBuffer"
       ]
     },
@@ -242,7 +242,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "workbench.action.gotoLine"
       ]
     },
@@ -352,7 +352,7 @@
     },
     {
       "key": "ctrl+w",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
@@ -365,7 +365,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.copyRegion"
       ]
     },
@@ -376,7 +376,7 @@
     },
     {
       "key": "ctrl+y",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
@@ -386,7 +386,7 @@
     },
     {
       "key": "meta+y",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },{
       "key": "ctrl+o",
@@ -395,7 +395,7 @@
     },
     {
       "key": "ctrl+o",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
@@ -405,7 +405,7 @@
     },
     {
       "key": "ctrl+m",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
@@ -415,7 +415,7 @@
     },
     {
       "key": "ctrl+j",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
@@ -428,7 +428,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "emacs-mcx.deleteBlankLines"
       ]
     },
@@ -442,7 +442,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "editor.action.selectAll"
       ]
     },
@@ -456,7 +456,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "undo"
       ]
     },
@@ -470,7 +470,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "editor.action.commentLine"
       ]
     },
@@ -484,7 +484,7 @@
       "command": "emacs-mcx.executeCommands",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": [
-        "closeFindWidget",
+        "emacs-mcx.isearchExit",
         "editor.action.blockComment"
       ]
     },
@@ -540,12 +540,12 @@
     },
     {
       "key": "ctrl+g",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchAbort",
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
       "key":  "enter",
-      "command": "closeFindWidget",
+      "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing"
     },
     {
