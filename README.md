@@ -32,7 +32,10 @@ This extension aims
 This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
-## Configs
+## Recommended VSCode settings
+* `editor.find.seedSearchStringFromSelection` should be set to `false` in order for the search widget to work in a similar way to Emacs. See https://github.com/whitphx/vscode-emacs-mcx/issues/107 for the details.
+
+## Extension settings
 This extension has some custom settings named with a prefix `emacs-mcx`.
 You can configure those settings.
 (See [this page](https://code.visualstudio.com/docs/getstarted/settings#_settings-editor) to know how to change the settings.)
