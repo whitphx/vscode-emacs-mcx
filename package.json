@@ -2721,7 +2721,7 @@
 		"eslint-plugin-prettier": "^3.3.1",
 		"expect": "^26.6.2",
 		"glob": "^7.1.6",
-		"mocha": "^8.3.0",
+		"mocha": "^8.3.1",
 		"prettier": "^2.2.1",
 		"sinon": "^9.2.4",
 		"strip-json-comments": "^3.1.1",
