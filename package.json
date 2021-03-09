@@ -2733,7 +2733,7 @@
 		"typescript": "^4.1.5",
 		"typescript-transform-paths": "^2.2.3",
 		"vscode-test": "^1.5.1",
-		"webpack": "^5.24.0",
+		"webpack": "^5.24.4",
 		"webpack-cli": "^4.5.0"
 	},
 	"dependencies": {
