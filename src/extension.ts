@@ -73,7 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
     registerEmulatorCommand(
       "type",
       (emulator, args) => {
-        // Capture typing charactors for prefix argument functionality.
+        // Capture typing characters for prefix argument functionality.
         logger.debug(`[type command]\t args.text = "${args.text}"`);
 
         return emulator.type(args.text);
