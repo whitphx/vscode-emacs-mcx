@@ -107,7 +107,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
           select: isInMarkMode,
         });
       } else {
-        // VSCode behavior: Move to the first non-empty charactor (indentation).
+        // VSCode behavior: Move to the first non-empty character (indentation).
         return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
       }
     };

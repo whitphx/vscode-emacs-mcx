@@ -2,15 +2,12 @@ import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { EditorIdentity } from "../editorIdentity";
 import { MessageManager } from "../message";
-import { equalPositons } from "../utils";
+import { equalPositions } from "../utils";
 import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
-import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 
-export enum AppendDirection {
-  Forward,
-  Backward,
-}
+export { AppendDirection };
 
 export class KillYanker implements vscode.Disposable {
   private textEditor: TextEditor;
@@ -75,7 +72,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public async kill(ranges: Range[], appendDirection: AppendDirection = AppendDirection.Forward) {
-    if (!equalPositons(this.getCursorPositions(), this.prevKillPositions)) {
+    if (!equalPositions(this.getCursorPositions(), this.prevKillPositions)) {
       this.isAppending = false;
     }
 
@@ -163,7 +160,7 @@ export class KillYanker implements vscode.Disposable {
       return;
     }
 
-    if (this.isYankInterupted()) {
+    if (this.isYankInterrupted()) {
       MessageManager.showMessage("Previous command was not a yank");
       return;
     }
@@ -204,13 +201,13 @@ export class KillYanker implements vscode.Disposable {
     return success;
   }
 
-  private isYankInterupted(): boolean {
+  private isYankInterrupted(): boolean {
     if (this.docChangedAfterYank) {
       return true;
     }
 
     const currentActives = this.getCursorPositions();
-    return !equalPositons(currentActives, this.prevYankPositions);
+    return !equalPositions(currentActives, this.prevYankPositions);
   }
 
   private getCursorPositions(): Position[] {

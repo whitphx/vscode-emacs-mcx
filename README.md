@@ -27,7 +27,7 @@ This extension aims
 * to support prefix argument
 * to support sexp
 * to fix some bugs in the existing extensions such as
-    * mark-mode states are shared amoung all editors
+    * mark-mode states are shared among all editors
 
 This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
