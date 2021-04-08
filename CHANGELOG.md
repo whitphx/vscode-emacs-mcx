@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
+## [Unreleased]
+### Fixed
+- Internal fixes by @a-stewart.
+
 ## [0.27.0] - 2021-02-13
 ### Fixed
 - Fix yank to set the mark at the beginning of the inserted text.
