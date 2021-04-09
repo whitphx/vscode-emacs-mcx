@@ -301,6 +301,38 @@
       "command": "editor.action.startFindReplaceAction",
       "when": "editorFocus"
     },
+    // Disable Emacs-like keybindings on the find and replace widgets (native UI).
+    // See https://github.com/whitphx/vscode-emacs-mcx/issues/55
+    {
+      "keys": [
+        "ctrl+f",
+        "ctrl+b",
+        "ctrl+p",
+        "ctrl+n",
+        "ctrl+a",
+        "ctrl+e",
+        "alt+f",
+        "alt+b",
+        "alt+m",
+        "ctrl+d",
+        "ctrl+h",
+        "alt+d",
+        "ctrl+k",
+        "ctrl+w",
+        "alt+w",
+        "ctrl+y",
+        "alt+y",
+        "ctrl+m",
+        "ctrl+j",
+        "alt+l",
+        "alt+u",
+        "alt+backspace"
+      ],
+      "whens": [
+        "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing",
+        "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && replaceInputFocussed && !isComposing"
+      ]
+    },
     // addSelectionToNext/PreviousFindMatch
     {
       "key": "ctrl+meta+n",
