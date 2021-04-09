@@ -194,6 +194,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `M-x` | Open command palette |
 | `C-M-SPC` | Toggle SideBar visibility |
 | `C-x z` | Toggle Zen Mode |
+| `C-x C-c` | Close window (save-buffers-kill-terminal) |
 
 ### File Commands
 |Command | Desc |

@@ -4,6 +4,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ## [Unreleased]
 ### Fixed
 - Internal fixes by @a-stewart.
+- Add `C-x C-c`.
 
 ## [0.27.0] - 2021-02-13
 ### Fixed
