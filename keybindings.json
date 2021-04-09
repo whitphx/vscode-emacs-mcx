@@ -657,6 +657,10 @@
     },
     // Workspace
     {
+      "key": "ctrl+x ctrl+c",
+      "command": "workbench.action.closeWindow"
+    },
+    {
       "key": "ctrl+x z",
       "command": "workbench.action.toggleZenMode",
       "when": "!terminalFocus"
