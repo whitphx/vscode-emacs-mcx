@@ -34,8 +34,10 @@ jobs:
     - name: Install dependencies
       run: yarn --frozen-lockfile
 
-    - name: Lint
-      run: yarn lint
+    - name: ESLint & Prettier
+      run: |
+        yarn check:eslint
+        yarn check:prettier
 
     - name: Test keybinding generator
       run: |

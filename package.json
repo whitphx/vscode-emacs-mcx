@@ -2702,8 +2702,10 @@
 		"test-compile": "ttsc -p ./",
 		"gen-keys": "ts-node ./keybinding-generator/cli.ts",
 		"test-gen-keys": "ts-mocha keybinding-generator/*.test.ts",
-		"prettier": "prettier --write 'src/**/*.ts'",
-		"lint": "eslint src --ext ts",
+		"fix:prettier": "prettier --write 'src/**/*.ts'",
+		"fix:eslint": "eslint src --ext ts --fix",
+		"check:prettier": "prettier --check 'src/**/*.ts'",
+		"check:eslint": "eslint src --ext ts",
 		"pretest": "yarn run test-compile",
 		"test": "node ./out/test/runTest.js"
 	},
