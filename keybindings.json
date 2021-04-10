@@ -330,7 +330,7 @@
       ],
       "whens": [
         "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing",
-        "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && replaceInputFocussed && !isComposing"
+        "isWindows && replaceInputFocussed && !isComposing"
       ]
     },
     // addSelectionToNext/PreviousFindMatch
