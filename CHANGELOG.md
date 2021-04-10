@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.29.0] - 2021-04-10
 ### Fixed
 - Disable Emacs-like cursor movements when the find or replace widgets are focused on Windows, because the cursor on the OS native UIs cannot be controlled by extensions.
 
