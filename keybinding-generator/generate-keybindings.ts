@@ -1,7 +1,7 @@
 export interface KeyBindingSource {
   key?: string;
   keys?: string[];
-  command: string;
+  command?: string;
   when?: string;
   whens?: string[];
   args?: (string | number)[];
@@ -10,7 +10,7 @@ export interface KeyBindingSource {
 export interface KeyBinding {
   key?: string;
   mac?: string;
-  command: string;
+  command?: string;
   when?: string;
   args?: (string | number)[];
 }
@@ -111,7 +111,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         // Generate keybindings using ESC and Ctrl+[ as meta.
         const keystrokes = key.split(" ").filter((k) => k);
         if (keystrokes.length === 1) {
-          const keyWithEscapeMeta = replaceMetaWithEscape(key)
+          const keyWithEscapeMeta = replaceMetaWithEscape(key);
           keybindings.push({
             key: keyWithEscapeMeta,
             command: src.command,
@@ -129,7 +129,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
             `"${key}" includes more than one key strokes then it's meta key specification cannot be converted to "ESC" and "ctrl+[".`
           );
         }
-
       } else {
         keybindings.push({
           key,
@@ -161,7 +160,7 @@ export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc i
   }
 
   // Check for .command
-  if (typeof maybeSrc.command !== "string") {
+  if (typeof maybeSrc.command !== "undefined" && typeof maybeSrc.command !== "string") {
     return false;
   }
 
@@ -244,12 +243,12 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   keybindings.push({
     key: "enter",
     command: "emacs-mcx.newLine",
-    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly"
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
   });
   keybindings.push({
     key: "backspace",
     command: "emacs-mcx.deleteBackwardChar",
-    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly"
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
   });
 
   return keybindings;
