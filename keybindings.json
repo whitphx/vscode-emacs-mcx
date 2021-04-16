@@ -287,12 +287,12 @@
     {
       "key": "ctrl+r",
       "command": "emacs-mcx.isearchBackward",
-      "when": "!findWidgetVisible"
+      "when": "!findInputFocussed"
     },
     {
       "key": "ctrl+r",
       "command": "editor.action.previousMatchFindAction",
-      "when": "findWidgetVisible"
+      "when": "findInputFocussed"
     },
     // replace
     // TODO: Check if this works
