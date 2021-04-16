@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.30.0] - 2021-04-16
 ### Added
 - `C-x s` for `workbench.action.files.saveAll`, #770.
 ### Fixed
