@@ -5,6 +5,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ### Fixed
 - Revealing cursor behaviors are fixed for some commands (forward/backward-char/paragraph), #766, #768.
 - Promise execution of `executeCommands` command is fixed, #767.
+- When-clause conditions of `C-s` and `C-r` are changed from `findWidgetVisible` to `findInputFocussed`.
 
 ## [0.29.0] - 2021-04-10
 ### Fixed

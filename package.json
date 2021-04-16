@@ -1773,22 +1773,22 @@
 			{
 				"key": "ctrl+s",
 				"command": "emacs-mcx.isearchForward",
-				"when": "!findWidgetVisible"
+				"when": "!findInputFocussed"
 			},
 			{
 				"key": "ctrl+s",
 				"command": "editor.action.nextMatchFindAction",
-				"when": "findWidgetVisible"
+				"when": "findInputFocussed"
 			},
 			{
 				"key": "ctrl+r",
 				"command": "emacs-mcx.isearchBackward",
-				"when": "!findWidgetVisible"
+				"when": "!findInputFocussed"
 			},
 			{
 				"key": "ctrl+r",
 				"command": "editor.action.previousMatchFindAction",
-				"when": "findWidgetVisible"
+				"when": "findInputFocussed"
 			},
 			{
 				"key": "alt+shift+5",
