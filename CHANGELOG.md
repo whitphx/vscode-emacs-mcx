@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Added
+- `C-x s` for `workbench.action.files.saveAll`, #770.
 ### Fixed
 - Revealing cursor behaviors are fixed for some commands (forward/backward-char/paragraph), #766, #768.
 - Promise execution of `executeCommands` command is fixed, #767.

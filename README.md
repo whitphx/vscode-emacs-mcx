@@ -202,6 +202,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-x C-f` | QuickOpen a file |
 | `C-x C-s` | Save |
 | `C-x C-w` | Save as |
+| `C-x s`   | Save all files |
 | `C-x C-n` | Open new window |
 
 ### Tab / Buffer Manipulation Commands
