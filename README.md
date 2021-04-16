@@ -1,8 +1,18 @@
 # Awesome Emacs Keymap (emacs-mcx)
 
-[![Build Status](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_apis/build/status/tuttieee.vscode-emacs-mcx?branchName=master)](https://dev.azure.com/tyicyt/vscode-emacs-mcx/_build/latest?definitionId=1?branchName=master)
+[![CI Status](https://github.com/whitphx/vscode-emacs-mcx/workflows/Test/badge.svg?branch=master)](https://github.com/whitphx/vscode-emacs-mcx/actions?query=workflow%3ATest+branch%3Amaster)
 
-<a href="https://www.buymeacoffee.com/tuttieee" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/tuttieee.emacs-mcx?label=Visual%20Studio%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx)
+[![Visual Studio Marketplace Installs - Azure DevOps Extension](https://img.shields.io/visual-studio-marketplace/azure-devops/installs/total/tuttieee.emacs-mcx)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx)
+[![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/tuttieee.emacs-mcx)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx&ssr=false#review-details)
+
+[![Open VSX Version](https://img.shields.io/open-vsx/v/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx)
+[![Open VSX Downloads](https://img.shields.io/open-vsx/dt/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx)
+[![Open VSX Rating](https://img.shields.io/open-vsx/rating/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx/reviews)
+
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/whitphx?label=Sponsor%20me%20on%20GitHub%20Sponsors&style=social)](https://github.com/sponsors/whitphx)
+
+<a href="https://www.buymeacoffee.com/whitphx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
 
 This Visual Studio Code extension provides emacs-like keybindings and operations.
 This is inspired by [the great vscode extension by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [vscode-emacs-improved by rkwan94](https://github.com/rkwan94/vscode-emacs) and [vscode-emacs-neon by NotKyon](https://github.com/NotKyon/vscode-emacs-neon).
@@ -17,12 +27,15 @@ This extension aims
 * to support prefix argument
 * to support sexp
 * to fix some bugs in the existing extensions such as
-    * mark-mode states are shared amoung all editors
+    * mark-mode states are shared among all editors
 
 This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
-## Configs
+## Recommended VSCode settings
+* `editor.find.seedSearchStringFromSelection` should be set to `false` in order for the search widget to work in a similar way to Emacs. See https://github.com/whitphx/vscode-emacs-mcx/issues/107 for the details.
+
+## Extension settings
 This extension has some custom settings named with a prefix `emacs-mcx`.
 You can configure those settings.
 (See [this page](https://code.visualstudio.com/docs/getstarted/settings#_settings-editor) to know how to change the settings.)
@@ -32,15 +45,15 @@ You can configure those settings.
 Configurable options of this extension are the followings.
 
 ### `emacs-mcx.strictEmacsMove`
-If set to true, the original emacs's cursor movements are strictly simulated.
-If set to false, the VSCode's native cursor movements are preserved.
-For example, if set to true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
-If set to false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
+If set as true, the original emacs's cursor movements are strictly simulated.
+If set as false, the VSCode's native cursor movements are preserved.
+For example, if set as true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
+If set as false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
 
 ### `emacs-mcx.useMetaPrefixEscape`
-If set to true, Escape key works as the Meta prefix like original emacs.
-If set to false, Escape key works as cancel, the VSCode's native behavior.
-For example, if set to true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
+If set as true, Escape key works as the Meta prefix like original Emacs.
+If set as false, Escape key works as cancel, the VSCode's native behavior.
+For example, if set as true, `M-f` (forward-word) can be issued by both `alt+f` and `escape f`.
 
 The only exception is the commands which begin with `M-g` (`M-g g`, `M-g n`, `M-g p`).
 It is because VSCode can handle only up to two key strokes as the key bindings.
@@ -50,8 +63,11 @@ So, as the special case, `Escape g` works as follows.
 |--------|------|
 | `Escape g` | Jump to line (command palette) |
 
+### `emacs-mcx.useMetaPrefixCtrlLeftBracket`
+If set as true, `ctrl+[` works as the Meta prefix like original Emacs.
+
 ### `emacs-mcx.useMetaPrefixMacCmd`
-If set to true, Command (⌘) key works as the Meta prefix like original emacs on macOS.
+If set as true, Command (⌘) key works as the Meta prefix like original Emacs on macOS.
 This option only works on macOS.
 
 ### `emacs-mcx.killRingMax`
@@ -62,24 +78,45 @@ The default is 60.
 This simulates the original Emacs' [`kill-whole-line` variable](https://www.gnu.org/software/emacs/manual/html_node/emacs/Killing-by-Lines.html).
 The default is false.
 
-### `emacs-mcx.disableOverridingTypeCommand`
-This extension makes use of VSCode API's `type` command under the hood, for `C-u` (universal-argument) to accept following numeric arguments, but it can cause problems in some cases.
+### `emacs-mcx.cursorMoveOnFindWidget`
+If set to true, cursor move commands of this extension (`C-f`, `C-b`, `C-p`, `C-n`, `C-a`, `C-e`, `M-f`, `M-b`, and `M-m`) are disabled when the find widget is focused, to allow the widget to keep open and the cursor to move on it.
+
+### `emacs-mcx.enableOverridingTypeCommand`
+Prefix arguments do not work on character inputs with IMEs by default and you can set this config to `true` in order to enable it.
+Note that this config makes use of VSCode API's `type` command under the hood and can cause problems in some cases.
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
-
-To avoid such problems, you can configure this extension not to use the `type` command by setting `emacs-mcx.disableOverridingTypeCommand` to `true`.
-The only drawback of this option is that `C-u` become unable to accept following numeric arguments.
 
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
 
 ## 'when' clause context
-This extension provides mark-mode functionality and
-you can use `emacs-mcx.inMarkMode` in `when` clause of your keybinding settings
-in order to check whether or not mark-mode is enabled.
+This extension provides some contexts that you can refer to in `"when"` clauses of your `keybindings.json`.
+
+### `emacs-mcx.inMarkMode`
+*boolean*
+
+This indicates whether mark-mode is enabled.
+
+### `emacs-mcx.acceptingArgument`
+*boolean*
+
+This indicates the editor is accepting argument input following `C-u`.
+
+### `emacs-mcx.prefixArgumentExists` (experimental)
+*boolean*
+
+This indicates if a prefix argument exists.
+Use this boolean context to check the existence of a prefix argument, instead of using `emacs-mcx.prefixArgument` with null check.
+
+### `emacs-mcx.prefixArgument` (experimental)
+*number | undefined*
+
+This is a currently input prefix argument.
+
 
 ## Keymaps
-Alt key is mapped to a meta prefix (`M`) by default though you can change it to Escape or Command key (macOS only) by the settings above.
+Alt key is mapped to the Meta prefix (`M`) by default and you can configure for Escape, `ctrl+[`, or Command (⌘) key (macOS only) to work as it with the settings above.
 
 ### Move commands
 |Command |Prefix argument |Desc |
@@ -97,8 +134,8 @@ Alt key is mapped to a meta prefix (`M`) by default though you can change it to 
 | `M-v` | ✓ | Scroll up by one screen unit (scroll-down-command) |
 | `M-S-[` (`M-{` with US keyboard) | ✓ | Move back to previous paragraph beginning (backward-paragraph) |
 | `M-S-]` (`M-}` with US keyboard) | ✓ | Move forward to next paragraph end (forward-paragraph) |
-| `M-S-,` (`M-<` with US keyboard) | ✓ | Move to the top of the buffer (beginning-of-buffer) |
-| `M-S-.` (`M->` with US keyboard) | ✓ | Move to the end of the buffer (end-of-buffer) |
+| `M-S-,` (`M-<` with US keyboard) |   | Move to the top of the buffer (beginning-of-buffer) |
+| `M-S-.` (`M->` with US keyboard) |   | Move to the end of the buffer (end-of-buffer) |
 | `M-g g` (`M-g M-g`) | | Jump to line (command palette) |
 | `M-g n` (`M-g M-n`, ``C-x ` ``) | | Jump to next error |
 | `M-g p` (`M-g M-p`) | | Jump to previous error |
@@ -131,7 +168,7 @@ Alt key is mapped to a meta prefix (`M`) by default though you can change it to 
 | `C-m` | ✓ | New line |
 | `C-x C-o` |  | Delete blank lines around (delete-blank-lines) |
 | `C-x h` |  | Select All |
-| `C-x u` (`C-/`)|  | Undo |
+| `C-x u`, `C-/`, `C-S--` (`C-_` with US keyboard) |  | Undo |
 | `C-;` |  | Toggle line comment in and out |
 | `M-;` |  | Toggle region comment in and out |
 | `C-x C-l` (`M-l`) |  | Convert to lower case (On the Emacs' original behavior, `C-x C-l` and `M-l` are assigned to the different functionalities. However, this extension assigns these keys to the same `emacs-mcx.transformToLowercase` command which calls `editor.action.transformToLowercase` command internally and works similarly to both the original Emacs' functionalities based on the context. Upper case and title case (below) are same) |
@@ -142,9 +179,9 @@ Alt key is mapped to a meta prefix (`M`) by default though you can change it to 
 ## Mark Commands
 |Command | Desc |
 |--------|------|
-| `C-space` | Set the mark at point, and activate it (set-mark-command). |
-| `C-space C-space` | Set the mark, pushing it onto the mark ring, without activating it. |
-| `C-u C-space` | Move point to where the mark was, and restore the mark from the ring of former marks. |
+| `C-SPC`, `C-S-2` (`C-@` with US keyboard) | Set the mark at point, and activate it (set-mark-command). |
+| `C-SPC C-SPC` | Set the mark, pushing it onto the mark ring, without activating it. |
+| `C-u C-SPC` | Move point to where the mark was, and restore the mark from the ring of former marks. |
 | `C-x C-x` | Set the mark at point, and activate it; then move point where the mark used to be (exchange-point-and-mark). |
 
 See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Setting-Mark.html) and [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark-Ring.html) about the mark and the mark ring.
@@ -153,10 +190,11 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |Command | Desc |
 |--------|------|
 | `C-g` (`ESC`) | Cancel |
-| `C-quote` | IntelliSense Suggestion |
+| `C-'` (`M-/`) | IntelliSense Suggestion |
 | `M-x` | Open command palette |
 | `C-M-SPC` | Toggle SideBar visibility |
 | `C-x z` | Toggle Zen Mode |
+| `C-x C-c` | Close window (save-buffers-kill-terminal) |
 
 ### File Commands
 |Command | Desc |

@@ -1,8 +1,12 @@
 // tslint:disable:max-classes-per-file
 
 import { Range } from "vscode";
-import { AppendDirection } from "../";
 import { IKillRingEntity } from "./kill-ring-entity";
+
+export enum AppendDirection {
+  Forward,
+  Backward,
+}
 
 interface IRegionText {
   text: string;
@@ -42,6 +46,7 @@ class AppendedRegionTexts {
 }
 
 export class EditorTextKillRingEntity implements IKillRingEntity {
+  public readonly type = "editor";
   private regionTextsList: AppendedRegionTexts[];
 
   constructor(regionTexts: IRegionText[]) {
@@ -84,12 +89,12 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     return allText;
   }
 
-  public getregionTextsList() {
+  public getRegionTextsList() {
     return this.regionTextsList;
   }
 
   public append(entity: EditorTextKillRingEntity, appendDirection: AppendDirection = AppendDirection.Forward) {
-    const additional = entity.getregionTextsList();
+    const additional = entity.getRegionTextsList();
     if (additional.length !== this.regionTextsList.length) {
       throw Error("Not appendable");
     }

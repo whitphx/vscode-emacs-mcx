@@ -1,11 +1,13 @@
 import * as vscode from "vscode";
-import { TextEditor, TextEditorRevealType } from "vscode";
+import { TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 import { Configuration } from "../configuration/configuration";
 import {
   travelForward as travelForwardParagraph,
   travelBackward as travelBackwardParagraph,
 } from "./helpers/paragraph";
+import { MessageManager } from "../message";
+import { revealPrimaryActive } from "./helpers/reveal";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -106,7 +108,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
           select: isInMarkMode,
         });
       } else {
-        // VSCode behavior: Move to the first non-empty charactor (indentation).
+        // VSCode behavior: Move to the first non-empty character (indentation).
         return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
       }
     };
@@ -182,29 +184,27 @@ export class BackToIndentation extends EmacsCommand {
       return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
-    textEditor.revealRange(textEditor.selection);
+    revealPrimaryActive(textEditor);
   }
 }
 
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop")
-    );
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+    MessageManager.showMessage("Mark set");
+    return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop");
   }
 }
 
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom")
-    );
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+    MessageManager.showMessage("Mark set");
+    return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom");
   }
 }
 
@@ -245,7 +245,7 @@ export class ScrollUpCommand extends EmacsCommand {
         value: repeat,
         select: isInMarkMode,
       })
-      .then(() => textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport));
+      .then(() => revealPrimaryActive(textEditor));
   }
 }
 
@@ -286,7 +286,7 @@ export class ScrollDownCommand extends EmacsCommand {
         value: repeat,
         select: isInMarkMode,
       })
-      .then(() => textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenterIfOutsideViewport));
+      .then(() => revealPrimaryActive(textEditor));
   }
 }
 
@@ -305,7 +305,7 @@ export class ForwardParagraph extends EmacsCommand {
       return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
     });
     textEditor.selections = newSelections;
-    textEditor.revealRange(textEditor.selection);
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -324,6 +324,6 @@ export class BackwardParagraph extends EmacsCommand {
       return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
     });
     textEditor.selections = newSelections;
-    textEditor.revealRange(textEditor.selection);
+    revealPrimaryActive(textEditor);
   }
 }

@@ -37,14 +37,14 @@ ABCDEFGHIJ`;
 
       await emulator.runCommand("killLine");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
 a
 ABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -62,7 +62,7 @@ ABCDEFGHIJ`
 abcdefghijABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -82,7 +82,7 @@ a
 A`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -110,7 +110,7 @@ BCDEFGHIJ`
       await emulator.runCommand("killLine"); // 2nd line
       await emulator.runCommand("killLine"); // EOL of 2nd
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -148,12 +148,12 @@ abcdefghij
           !activeTextEditor.document.getText().includes("fghij\n") // First 2 kills does not appear here
         );
         await emulator.runCommand("yankPop");
-        assert.equal(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
+        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
       });
     });
 
     // Test kill appending is not enabled after cursorMoves, editing, or some other ops
-    const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | undefined] => [
+    const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | void] => [
       commandName,
       () => emulator.runCommand(commandName),
     ]);
@@ -172,9 +172,10 @@ abcdefghij
           ),
       ],
     ];
-    const otherOps: Array<[string, () => Thenable<unknown>]> = [["cancel", async () => await emulator.cancel()]];
 
-    const ops: Array<[string, () => Thenable<unknown> | undefined]> = [...moves, ...edits, ...otherOps];
+    const otherOps: Array<[string, () => Thenable<void>]> = [["cancel", async () => await emulator.cancel()]];
+
+    const ops: Array<[string, () => Thenable<unknown> | void]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {
       test(`it does not append the killed text after ${label}`, async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
@@ -196,7 +197,7 @@ abcdefghij
           !activeTextEditor.document.getText().includes("fghij\n") // First 2 kills does not appear here
         );
         await emulator.runCommand("yankPop");
-        assert.equal(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
+        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
       });
     });
   });
@@ -210,12 +211,12 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      await emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
@@ -233,12 +234,12 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 1]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      await emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 1]);
 
       await clearTextEditor(activeTextEditor);
@@ -282,13 +283,13 @@ ABCDEFGHIJ`;
 
       await emulator.runCommand("killLine");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
 ABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -301,14 +302,14 @@ ABCDEFGHIJ`
 
       await emulator.runCommand("killLine");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
 a
 ABCDEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
@@ -326,12 +327,12 @@ ABCDEFGHIJ`
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      await emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
@@ -349,12 +350,12 @@ abcdefghij
       setEmptyCursors(activeTextEditor, [0, 1]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      await emulator.universalArgumentDigit(2);
 
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
-      assert.equal(activeTextEditor.selections.length, 1);
+      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 1]);
 
       await clearTextEditor(activeTextEditor);

@@ -3,11 +3,11 @@ import * as vscode from "vscode";
 import { executeCommands } from "../../execute-commands";
 
 suite("executeCommands", () => {
-  test("executing commands sequentially", async () => {
+  test("executing commands in parallel", async () => {
     const disposables: vscode.Disposable[] = [];
     const results: number[] = [];
 
-    function registerCommand(commandName: string, callback: (...args: any[]) => void) {
+    function registerCommand(commandName: string, callback: (...args: any[]) => Promise<void>) {
       disposables.push(vscode.commands.registerCommand(commandName, callback));
     }
     registerCommand(

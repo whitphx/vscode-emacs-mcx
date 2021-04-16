@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-The license below is applied to some parts of emacs-mcx that are derived from
-https://github.com/microsoft/vscode repository:
+The license below is applied to some parts of emacs-mcx derived from
+https://github.com/microsoft/vscode repository, that include but are not limited to files in `src/vs`.
 ```
 MIT License
 
@@ -51,8 +51,8 @@ SOFTWARE.
 ```
 
 
-The license below is applied to some parts of emacs-mcx that are derived from
-https://github.com/VSCodeVim/Vim repository:
+The license below is applied to some parts of emacs-mcx derived from
+https://github.com/VSCodeVim/Vim repository, that include but are not limited to `src/editoridentity.ts`:
 
 ```
 The MIT License (MIT)
@@ -79,8 +79,8 @@ SOFTWARE.
 ```
 
 
-The license below is applied to some parts of emacs-mcx that are derived from
-https://github.com/SebastianZaha/vscode-emacs-friendly repository:
+The license below is applied to some parts of emacs-mcx derived from
+https://github.com/SebastianZaha/vscode-emacs-friendly repository, that include but are not limited to keybindings defined in `package.json` and `keybindings.json`:
 ```
                                  Apache License
                            Version 2.0, January 2004
@@ -284,3 +284,6 @@ https://github.com/SebastianZaha/vscode-emacs-friendly repository:
    See the License for the specific language governing permissions and
    limitations under the License.
 ```
+
+The logo images, that include but are not limited to `images/icon.svg` and `images/icon.png` are licensed under GPL (GNU General Public License).
+See `images/icon.svg` for the license.

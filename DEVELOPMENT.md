@@ -36,9 +36,12 @@ Make sure that **CI has passed all coding style checks and unit tests** before r
 Keybindings of a VSCode extension must be defined in its `contributes.keybindings` section in `package.json` as described in [the doc](https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings),
 but you MUST NOT edit it directly in case of this extension.
 
-Instead, to change the keybindings, you have to edit `keybindings.json` and run `yarn gen-keys` to generate a resultant keybindings definition and update `package.json` with it.
+Instead, to change the keybindings, you have to edit `keybindings.json` and run `yarn gen-keys` to generate resultant keybinding definitions and update `package.json` with them.
 
-In `keybindings.json`, you can use some extended syntax.
+After that, you have to commit the auto-updated `package.json` in addition to `keybindings.json`.
+Please also edit the keybindings list in `README.md`.
+
+In `keybindings.json`, you can use some extended syntax described below.
 
 #### `keys`, `whens`
 You can define multiple `key` combinations and/or `when` conditions for one command.

@@ -1,14 +1,84 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
-- Improvements of kill-ring
-    - to browse kill-ring contents
-- To support more kinds of kill command
-    - `C-x DEL`: (backward-kill-sentence)
-    - `M-k`: (kill-sentence)
-    - `M-z char`: (zap-to-char)  # Maybe ignored
-- Improvement of `emacs-mcx.transformTo(Upper|Lower)case` to handle the mixture of empty and non-empty selections.
+## [0.29.0] - 2021-04-10
+### Fixed
+- Disable Emacs-like cursor movements when the find or replace widgets are focused on Windows, because the cursor on the OS native UIs cannot be controlled by extensions.
+
+## [0.28.0] - 2021-04-09
+### Added
+- Add `C-x C-c`.
+
+### Fixed
+- Internal fixes by @a-stewart.
+
+## [0.27.0] - 2021-02-13
+### Fixed
+- Fix yank to set the mark at the beginning of the inserted text.
+- Fix i-search to add the original value of point to the mark ring when exiting.
+- Fix beginning-of-buffer and end-of-buffer to set the mark.
+
+## [0.26.0] - 2021-02-04
+### Added
+- `emacs-mcx.cursorMoveOnFindWidget` option.
+
+## [0.25.0] - 2021-01-29
+### Added
+- `C-@` for mark and `C-_` for undo.
+
+## [0.24.1] - 2021-01-09
+### Fix
+- Change the maintainer's username.
+
+## [0.24.0] - 2020-12-30
+### Added
+- `useMetaPrefixCtrlLeftBracket` option to use `ctrl+[` as a meta key.
+
+## [0.23.7] - 2020-12-24
+### Fixed
+- Internal package updates.
+- Release steps are automated by GitHub actions
+
+## [0.23.6] - 2020-11-12
+### Fixed
+- Keybindings are ignored on the find widget during IME composition.
+
+## [0.23.5] - 2020-10-23
+### Added
+- `C-m` to pick the selected item in the quick open widget.
+
+### Fixed
+- Internal implementation has been fixed to dispose resources such as registered event listeners.
+
+## [0.23.4] - 2020-10-22
+### Fixed
+- `yank` and `yankPop` are fixed to work in the same way as VSCode's `paste` command, in the case of multi-cursors in a single line.
+
+## [0.23.3] - 2020-10-20
+### Fixed
+- `yank` and `yankPop` are fixed to work with auto formatting on paste.
+
+## [0.23.2] - 2020-10-18
+### Fixed
+- `C-p` and `C-n` on the quick open widget are fixed to only select items but not navigate.
+- Kill commands are fixed to reveal the cursor after execution.
+
+## [0.23.1] - 2020-10-17
+### Fixed
+- Bug fix to invoke features such as auto-completion reacting to character inputs.
+
+## [0.23.0] - 2020-10-17
+### Fixed
+- `C-u` (universal-argument) is reimplemented not to use VSCode API's `type` command by default.
+
+## [0.22.2] - 2020-10-16
+### Added
+- `M-\` is assigned to IntelliSense suggestion. @vaelen
+
+## [0.22.1] - 2020-10-14
+### Fixed
+- Allow navigation within query replace prompt. @ANorwell
+- Internal package updates.
 
 ## [0.22.0] - 2020-10-04
 ### Added

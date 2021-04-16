@@ -12,15 +12,12 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:prettier/recommended",
-        "prettier/@typescript-eslint"
+        "prettier"
     ],
     "env": {
         "mocha": true
     },
     "rules": {
-        "@typescript-eslint/interface-name-prefix": ["warn", { "prefixWithI": "always" }],
-        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-unused-vars": ["error", {
             "argsIgnorePattern": "textEditor|isInMarkMode|prefixArgument"
         }]

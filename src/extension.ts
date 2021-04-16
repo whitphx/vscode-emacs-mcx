@@ -24,7 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
       return undefined;
     }
 
-    const [curEmulator] = emulatorMap.getOrCreate(activeTextEditor);
+    const [curEmulator, isNew] = emulatorMap.getOrCreate(activeTextEditor);
+    if (isNew) {
+      context.subscriptions.push(curEmulator);
+    }
 
     return curEmulator;
   }
@@ -66,11 +69,11 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
   }
 
-  if (!Configuration.instance.disableOverridingTypeCommand) {
+  if (Configuration.instance.enableOverridingTypeCommand) {
     registerEmulatorCommand(
       "type",
       (emulator, args) => {
-        // Capture typing charactors for prefix argument functionality.
+        // Capture typing characters for prefix argument functionality.
         logger.debug(`[type command]\t args.text = "${args.text}"`);
 
         return emulator.type(args.text);
@@ -78,6 +81,22 @@ export function activate(context: vscode.ExtensionContext) {
       (args) => vscode.commands.executeCommand("default:type", args)
     );
   }
+
+  registerEmulatorCommand("emacs-mcx.universalArgumentDigit", (emulator, args) => {
+    const arg = args[0];
+    if (typeof arg !== "number") {
+      return;
+    }
+    emulator.universalArgumentDigit(arg);
+  });
+
+  registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
+    const arg = args[0];
+    if (typeof arg !== "string") {
+      return;
+    }
+    emulator.typeChar(arg);
+  });
 
   moveCommandIds.map((commandName) => {
     registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
@@ -91,6 +110,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   registerEmulatorCommand("emacs-mcx.isearchBackward", (emulator) => {
     emulator.runCommand("isearchBackward");
+  });
+
+  registerEmulatorCommand("emacs-mcx.isearchAbort", (emulator) => {
+    emulator.runCommand("isearchAbort");
+  });
+
+  registerEmulatorCommand("emacs-mcx.isearchExit", (emulator) => {
+    emulator.runCommand("isearchExit");
   });
 
   registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {

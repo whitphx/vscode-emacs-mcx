@@ -1,4 +1,6 @@
+import * as vscode from "vscode";
 import * as assert from "assert";
+import * as expect from "expect";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
@@ -31,7 +33,7 @@ suite("scroll-up/down-command", () => {
       setEmptyCursors(activeTextEditor, [0, 0]); // The first line
 
       emulator.universalArgument();
-      await emulator.type("2");
+      await emulator.universalArgumentDigit(2);
       await emulator.runCommand("scrollUpCommand");
 
       assertCursorsEqual(activeTextEditor, [2, 0]); // 2 lines down
@@ -52,7 +54,7 @@ suite("scroll-up/down-command", () => {
       setEmptyCursors(activeTextEditor, [10, 0]);
 
       emulator.universalArgument();
-      await emulator.type("2");
+      await emulator.universalArgumentDigit(2);
       await emulator.runCommand("scrollDownCommand");
 
       assertCursorsEqual(activeTextEditor, [8, 0]); // 2 lines up
@@ -113,5 +115,40 @@ fff`;
     assertCursorsEqual(activeTextEditor, [2, 0]);
     await emulator.runCommand("backwardParagraph");
     assertCursorsEqual(activeTextEditor, [0, 0]);
+  });
+});
+
+suite("beginning/endOfBuffer", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = "aaa" + "\n".repeat(100) + "bbb";
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  test("beginningOfBuffer sets a new mark", async () => {
+    setEmptyCursors(activeTextEditor, [101, 1]);
+
+    await emulator.runCommand("beginningOfBuffer");
+
+    expect(activeTextEditor.selection.active.line).not.toEqual(101);
+
+    emulator.popMark();
+
+    assertCursorsEqual(activeTextEditor, [101, 1]);
+  });
+
+  test("endOfBuffer sets a new mark", async () => {
+    setEmptyCursors(activeTextEditor, [0, 1]);
+
+    await emulator.runCommand("endOfBuffer");
+
+    expect(activeTextEditor.selection.active.line).not.toEqual(0);
+
+    emulator.popMark();
+
+    assertCursorsEqual(activeTextEditor, [0, 1]);
   });
 });

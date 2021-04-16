@@ -1,7 +1,8 @@
 import * as paredit from "paredit.js";
-import { TextDocument, Selection, Range, TextEditor, TextEditorRevealType, Position } from "vscode";
+import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
 import { EmacsCommand } from ".";
 import { KillYankCommand } from "./kill";
+import { revealPrimaryActive } from "./helpers/reveal";
 
 type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
 
@@ -50,8 +51,7 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
 
     textEditor.selections = newSelections;
 
-    const primaryActiveCursor = new Selection(textEditor.selection.active, textEditor.selection.active);
-    textEditor.revealRange(primaryActiveCursor, TextEditorRevealType.InCenterIfOutsideViewport);
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -94,7 +94,6 @@ export class KillSexp extends KillYankCommand {
 
     await this.killYanker.kill(killRanges);
 
-    const primaryActiveCursor = new Selection(textEditor.selection.active, textEditor.selection.active);
-    textEditor.revealRange(primaryActiveCursor, TextEditorRevealType.InCenterIfOutsideViewport);
+    revealPrimaryActive(textEditor);
   }
 }

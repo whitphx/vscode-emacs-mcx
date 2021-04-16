@@ -36,7 +36,7 @@ export async function clearTextEditor(textEditor: TextEditor, initializeWith = "
   await textEditor.edit((editBuilder) => {
     editBuilder.insert(new Position(0, 0), initializeWith);
   });
-  assert.equal(doc.getText(), initializeWith);
+  assert.strictEqual(doc.getText(), initializeWith);
 }
 
 export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>) {
@@ -48,11 +48,11 @@ export async function cleanUpWorkspace() {
 }
 
 export function assertTextEqual(textEditor: TextEditor, expectedText: string) {
-  assert.equal(textEditor.document.getText(), expectedText);
+  assert.strictEqual(textEditor.document.getText(), expectedText);
 }
 
 export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[number, number]>) {
-  assert.equal(textEditor.selections.length, positions.length);
+  assert.strictEqual(textEditor.selections.length, positions.length);
   textEditor.selections.forEach((selection, idx) => {
     const pos = positions[idx];
     const expectedRange = new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]));

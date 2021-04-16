@@ -28,19 +28,19 @@ ABCDEFGHIJ`;
       ];
       await emulator.runCommand("killRegion");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `3456789
 defghij
 DEFGHIJ`
       );
 
-      clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
       activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
       await emulator.runCommand("yank");
 
-      assert.equal(
+      assert.strictEqual(
         activeTextEditor.document.getText(),
         `012
 abc

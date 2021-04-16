@@ -21,15 +21,16 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 
 export interface IEmacsCommandRunner {
-  runCommand(commandName: string): undefined | Thenable<{} | undefined | void>;
+  runCommand(commandName: string): void | Thenable<unknown>;
 }
 
 export interface IMarkModeController {
   enterMarkMode(): void;
   exitMarkMode(): void;
+  pushMark(positions: vscode.Position[]): void;
 }
 
-export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
+export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {
   private textEditor: TextEditor;
 
   private commandRegistry: EmacsCommandRegistry;
@@ -46,18 +47,23 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   private killYanker: KillYanker;
   private prefixArgumentHandler: PrefixArgumentHandler;
 
+  private disposables: vscode.Disposable[];
+
   constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
     this.textEditor = textEditor;
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
-    this.prefixArgumentHandler = new PrefixArgumentHandler();
+    this.prefixArgumentHandler = new PrefixArgumentHandler(
+      this.onPrefixArgumentChange,
+      this.onPrefixArgumentAcceptingStateChange
+    );
 
-    this.onDidChangeTextDocument = this.onDidChangeTextDocument.bind(this);
-    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument);
-    this.onDidChangeTextEditorSelection = this.onDidChangeTextEditorSelection.bind(this);
-    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection);
+    this.disposables = [];
+
+    vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
+    vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
 
     this.commandRegistry = new EmacsCommandRegistry();
     this.afterCommand = this.afterCommand.bind(this);
@@ -80,11 +86,16 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this.afterCommand, this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this.afterCommand, this));
     this.commandRegistry.register(new EditCommands.NewLine(this.afterCommand, this));
-    this.commandRegistry.register(new FindCommands.IsearchForward(this.afterCommand, this));
-    this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this));
     this.commandRegistry.register(new DeleteBlankLines(this.afterCommand, this));
-
     this.commandRegistry.register(new RecenterTopBottom(this.afterCommand, this));
+
+    const searchState: FindCommands.SearchState = {
+      startSelections: undefined,
+    };
+    this.commandRegistry.register(new FindCommands.IsearchForward(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchAbort(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchExit(this.afterCommand, this, searchState));
 
     const killYanker = new KillYanker(textEditor, killRing);
     this.commandRegistry.register(new KillCommands.KillWord(this.afterCommand, this, killYanker));
@@ -96,6 +107,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     this.commandRegistry.register(new KillCommands.Yank(this.afterCommand, this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this.afterCommand, this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
+    this.disposables.push(killYanker);
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));
@@ -118,6 +130,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
 
   public getTextEditor(): TextEditor {
     return this.textEditor;
+  }
+
+  public dispose() {
+    for (const disposable of this.disposables) {
+      disposable.dispose();
+    }
   }
 
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
@@ -143,16 +161,35 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     }
   }
 
-  // tslint:disable-next-line:max-line-length
-  // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
-  public type(text: string) {
-    const handled = this.prefixArgumentHandler.handleType(text);
-    if (handled) {
-      logger.debug(`[EmacsEmulator.type]\t prefix argument is handled.`);
+  public typeChar(char: string) {
+    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    this.prefixArgumentHandler.cancel();
+
+    const repeat = prefixArgument == null ? 1 : prefixArgument;
+    if (repeat < 0) {
       return;
     }
 
+    if (repeat == 1) {
+      // It's better to use `type` command than `TextEditor.edit` method
+      // because `type` command invokes features like auto-completion reacting to character inputs.
+      return vscode.commands.executeCommand("type", { text: char });
+    }
+
+    return this.textEditor.edit((editBuilder) => {
+      this.textEditor.selections.forEach((selection) => {
+        editBuilder.insert(selection.active, char.repeat(repeat));
+      });
+    });
+  }
+
+  // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
+  public type(text: string) {
     // Single character input with prefix argument
+    // NOTE: This single character handling should be replaced with `EmacsEmulator.typeChar` directly bound to relevant keystrokes,
+    // however, it's difficult to cover all characters without `type` event registration,
+    // then this method can be used to handle single character inputs other than ASCII characters,
+    // for those who want it as an option.
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 
@@ -178,8 +215,29 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   /**
    * C-u
    */
-  public universalArgument() {
-    this.prefixArgumentHandler.universalArgument();
+  public universalArgument(): Promise<unknown> {
+    return this.prefixArgumentHandler.universalArgument();
+  }
+
+  /**
+   * digits following C-u
+   */
+  public universalArgumentDigit(arg: number): Promise<unknown> {
+    return this.prefixArgumentHandler.universalArgumentDigit(arg);
+  }
+
+  public onPrefixArgumentChange(newPrefixArgument: number | undefined): Thenable<unknown> {
+    logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
+
+    return Promise.all([
+      vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument),
+      vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgumentExists", newPrefixArgument != null),
+    ]);
+  }
+
+  public onPrefixArgumentAcceptingStateChange(newState: boolean): Thenable<unknown> {
+    logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
+    return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   }
 
   public runCommand(commandName: string) {
@@ -245,19 +303,20 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
 
     if (pushMark) {
-      this.pushMark();
+      this.pushMark(this.textEditor.selections.map((selection) => selection.active));
     }
   }
 
-  public pushMark() {
+  public pushMark(positions: vscode.Position[]) {
     this.prevExchangedMarks = null;
-    this.markRing.push(this.textEditor.selections.map((selection) => selection.active));
+    this.markRing.push(positions);
   }
 
   public popMark() {
     const prevMark = this.markRing.pop();
     if (prevMark) {
       this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
+      this.textEditor.revealRange(this.textEditor.selection);
     }
   }
 
@@ -302,7 +361,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController {
   }
 
   private afterCommand() {
-    this.prefixArgumentHandler.cancel();
+    return this.prefixArgumentHandler.cancel();
   }
 
   private onDidInterruptTextEditor() {
