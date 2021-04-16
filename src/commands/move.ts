@@ -43,6 +43,7 @@ export class ForwardChar extends EmacsCommand {
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
       textEditor.selections = newSelections;
+      revealPrimaryActive(textEditor);
     }
   }
 }
@@ -62,6 +63,7 @@ export class BackwardChar extends EmacsCommand {
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
       textEditor.selections = newSelections;
+      revealPrimaryActive(textEditor);
     }
   }
 }
