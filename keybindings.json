@@ -295,7 +295,6 @@
       "when": "findInputFocussed"
     },
     // replace
-    // TODO: Check if this works
     {
       "key": "meta+shift+5",
       "command": "editor.action.startFindReplaceAction",
