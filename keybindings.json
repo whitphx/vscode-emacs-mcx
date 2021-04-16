@@ -712,6 +712,11 @@
       "when": "!terminalFocus"
     },
     {
+      "key": "ctrl+x s",
+      "command": "workbench.action.files.saveAll",
+      "when": "!terminalFocus"
+    },
+    {
       "key": "ctrl+x ctrl+n",
       "command": "workbench.action.newWindow",
       "when": "!terminalFocus"
