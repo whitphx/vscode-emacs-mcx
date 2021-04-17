@@ -4,7 +4,7 @@ export interface KeyBindingSource {
   command?: string;
   when?: string;
   whens?: string[];
-  args?: (string | number)[];
+  args?: unknown;
 }
 
 export interface KeyBinding {
@@ -12,7 +12,7 @@ export interface KeyBinding {
   mac?: string;
   command?: string;
   when?: string;
-  args?: (string | number)[];
+  args?: unknown;
 }
 
 export function isValidKey(key: string): boolean {
@@ -175,16 +175,6 @@ export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc i
       return false;
     }
     if (maybeSrc.whens.some((w) => typeof w !== "string")) {
-      return false;
-    }
-  }
-
-  // Checks for .args
-  if (typeof maybeSrc.args !== "undefined") {
-    if (!Array.isArray(maybeSrc.args)) {
-      return false;
-    }
-    if (maybeSrc.args.some((a) => typeof a !== "string" && typeof a !== "number")) {
       return false;
     }
   }

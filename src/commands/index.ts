@@ -16,16 +16,12 @@ export abstract class EmacsCommand {
     this.emacsController = markModeController;
   }
 
-  public run(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined
-  ): void | Thenable<unknown> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     const ret = this.execute(textEditor, isInMarkMode, prefixArgument);
     if (ret != null) {
       return ret.then(this.afterExecute);
     } else {
-      return this.afterExecute();
+      return Promise.resolve(this.afterExecute());
     }
   }
 

@@ -70,6 +70,8 @@ export class IsearchExit extends IsearchCommand {
       this.emacsController.pushMark(this.searchState.startSelections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark saved where search started");
     }
-    return vscode.commands.executeCommand("closeFindWidget");
+    return vscode.commands
+      .executeCommand("closeFindWidget")
+      .then(() => vscode.commands.executeCommand("cancelSelection"));
   }
 }
