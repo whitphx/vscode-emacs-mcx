@@ -164,7 +164,10 @@
     {
       "keys": ["pagedown", "ctrl+v"],
       "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
+      "when": "editorFocus && findWidgetVisible && !isComposing",
+      "args": {
+        "then": "emacs-mcx.scrollUpCommand"
+      }
     },
     // page up (meta + v)
     {
@@ -175,7 +178,10 @@
     {
       "keys": ["pageup", "meta+v"],
       "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
+      "when": "editorFocus && findWidgetVisible && !isComposing",
+      "args": {
+        "then": "emacs-mcx.scrollDownCommand"
+      }
     },
     // backward paragraph (meta + shift + [)
     {
@@ -379,10 +385,7 @@
       // TODO: This behavior is different from the original one.
       "key": "meta+w",
       "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.copyRegion"
-      }
+      "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
       "key": "ctrl+y",
