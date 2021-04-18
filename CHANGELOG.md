@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
+## [Unreleased]
+### Fixed
+- Use `isearchExit` with `then` arg instead of `executeCommands` to quit the find widget with key press.
+
 ## [0.30.0] - 2021-04-16
 ### Added
 - `C-x s` for `workbench.action.files.saveAll`, #770.
