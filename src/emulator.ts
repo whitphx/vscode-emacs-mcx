@@ -240,7 +240,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   }
 
-  public runCommand(commandName: string) {
+  public runCommand(commandName: string): Thenable<unknown> {
     const command = this.commandRegistry.get(commandName);
 
     if (command === undefined) {
