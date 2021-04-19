@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.31.0] - 2021-04-20
 ### Fixed
 - Use `isearchExit` with `then` arg instead of `executeCommands` to quit the find widget with key press.
 
