@@ -2876,6 +2876,6 @@
 	"dependencies": {
 		"paredit.js": "^0.3.4",
 		"winston": "^3.3.3",
-		"winston-console-for-electron": "^0.0.6"
+		"winston-console-for-electron": "^0.0.7"
 	}
 }
