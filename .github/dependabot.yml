@@ -1,0 +1,81 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: webpack
+    versions:
+    - 5.20.1
+    - 5.24.1
+    - 5.24.2
+    - 5.24.3
+    - 5.24.4
+    - 5.25.1
+    - 5.26.0
+    - 5.26.2
+    - 5.26.3
+    - 5.27.1
+    - 5.27.2
+    - 5.28.0
+    - 5.34.0
+    - 5.35.1
+    - 5.36.0
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.24
+    - 14.14.30
+    - 14.14.32
+    - 14.14.33
+    - 14.14.34
+    - 14.14.35
+    - 14.14.36
+    - 14.14.39
+    - 15.0.0
+  - dependency-name: ts-loader
+    versions:
+    - 8.0.16
+    - 9.0.0
+  - dependency-name: sinon
+    versions:
+    - 10.0.1
+  - dependency-name: vscode-test
+    versions:
+    - 1.5.2
+  - dependency-name: eslint-config-prettier
+    versions:
+    - 8.0.0
+    - 8.1.0
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.15.2
+    - 4.16.1
+    - 4.17.0
+    - 4.18.0
+    - 4.19.0
+    - 4.20.0
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.16.1
+    - 4.17.0
+    - 4.18.0
+    - 4.19.0
+    - 4.20.0
+  - dependency-name: eslint
+    versions:
+    - 7.21.0
+    - 7.22.0
+  - dependency-name: mocha
+    versions:
+    - 8.3.1
+  - dependency-name: "@types/vscode"
+    versions:
+    - 1.52.0
+    - 1.53.0
+    - 1.54.0
+  - dependency-name: typescript
+    versions:
+    - 4.1.4
+    - 4.2.2
