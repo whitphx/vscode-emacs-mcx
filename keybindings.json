@@ -643,6 +643,9 @@
       "command": "emacs-mcx.rectangleMarkMode",
       "when": "editorTextFocus"
     },
+    {
+      "$special": "rectMarkModeTypes"
+    },
     // Suggestion
     {
       "key": "ctrl+'",

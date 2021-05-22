@@ -5,6 +5,7 @@ import {
   isKeyBindingSource,
   generateKeybindings,
   generateKeybindingsForPrefixArgument,
+  generateKeybindingsForTypeCharInRectMarkMode,
 } from "./generate-keybindings";
 
 const srcFilePath = "./keybindings.json";
@@ -22,6 +23,11 @@ keybindingSrcs.forEach((keybindingSrc) => {
   if (keybindingSrc.$special === "universalArgumentTypes") {
     console.log("Adding keybindings for types following universal argument");
     dstKeybindings.push(...generateKeybindingsForPrefixArgument());
+    return;
+  }
+  if (keybindingSrc.$special === "rectMarkModeTypes") {
+    console.log("Adding keybindings for types in rectangle-mark-mode");
+    dstKeybindings.push(...generateKeybindingsForTypeCharInRectMarkMode());
     return;
   }
 

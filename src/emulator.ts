@@ -185,6 +185,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   public typeChar(char: string) {
+    if (this.inRectMarkMode) {
+      this.textEditor.selections = this.markSelections.map(
+        (selection) => new vscode.Selection(selection.active, selection.active)
+      );
+    }
+
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 
@@ -312,11 +318,17 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
     this._isInMarkMode = true;
     this.rectMode = true;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
     this.syncMarkSelectionsToRect();
   }
 
   private exitRectangleMarkMode(): void {
+    if (!this.rectMode) {
+      return;
+    }
+
     this.rectMode = false;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", false);
     if (this.isInMarkMode) {
       this.textEditor.selections = this.markSelections;
     } else {
@@ -399,7 +411,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   public exitMarkMode() {
     this._isInMarkMode = false;
-    this.exitRectangleMarkMode();
+    if (this.inRectMarkMode) {
+      this.exitRectangleMarkMode();
+    }
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
