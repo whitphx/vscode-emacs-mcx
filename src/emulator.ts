@@ -19,6 +19,7 @@ import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
+import { convertSelectionToRectSelections } from "./rectangle";
 
 export interface IEmacsCommandRunner {
   runCommand(commandName: string): void | Thenable<unknown>;
@@ -28,6 +29,10 @@ export interface IMarkModeController {
   enterMarkMode(): void;
   exitMarkMode(): void;
   pushMark(positions: vscode.Position[]): void;
+
+  readonly inRectMarkMode: boolean;
+  markSelections: vscode.Selection[];
+  syncMarkSelectionsToRect: () => void;
 }
 
 export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {
@@ -38,10 +43,24 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   public markRing: MarkRing;
   private prevExchangedMarks: vscode.Position[] | null;
 
-  // tslint:disable-next-line:variable-name
   private _isInMarkMode = false;
   public get isInMarkMode() {
     return this._isInMarkMode;
+  }
+
+  public markSelections: vscode.Selection[] = [];
+  public syncMarkSelectionsToRect(): void {
+    if (this.inRectMarkMode) {
+      const rectSelections = this.markSelections
+        .map(convertSelectionToRectSelections.bind(null, this.textEditor.document))
+        .reduce((a, b) => a.concat(b), []);
+      this.textEditor.selections = rectSelections;
+    }
+  }
+  private rectMode = false;
+
+  public get inRectMarkMode(): boolean {
+    return this._isInMarkMode && this.rectMode;
   }
 
   private killYanker: KillYanker;
@@ -158,6 +177,10 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
     if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
       this.onDidInterruptTextEditor();
+
+      if (this.isInMarkMode && !this.rectMode) {
+        this.markSelections = this.textEditor.selections;
+      }
     }
   }
 
@@ -273,9 +296,35 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   /**
+   * C-x <SPC>
+   */
+  public rectangleMarkMode(): void {
+    if (this.isInMarkMode) {
+      if (this.rectMode) {
+        // From rect mark mode to normal mark model
+        this.rectMode = false;
+        this.textEditor.selections = this.markSelections;
+      } else {
+        // From normal mark mode to rect mark model
+        this.rectMode = true;
+        this.syncMarkSelectionsToRect();
+      }
+    } else {
+      this.markSelections = this.textEditor.selections;
+      this._isInMarkMode = true;
+      this.rectMode = true;
+    }
+  }
+
+  /**
    * Invoked by C-g
    */
   public cancel() {
+    if (this.rectMode) {
+      this.rectMode = false;
+      this.textEditor.selections = this.markSelections;
+    }
+
     if (this.hasMultipleSelections() && !this.hasNonEmptySelection()) {
       this.stopMultiCursor();
     } else {
@@ -295,7 +344,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   public enterMarkMode(pushMark = true) {
+    this.markSelections = this.textEditor.selections;
     this._isInMarkMode = true;
+    this.rectMode = false;
 
     // At this moment, the only way to set the context for `when` conditions is `setContext` command.
     // The discussion is ongoing in https://github.com/Microsoft/vscode/issues/10471

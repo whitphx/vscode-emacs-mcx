@@ -174,6 +174,10 @@ export function activate(context: vscode.ExtensionContext) {
     emulator.setMarkCommand();
   });
 
+  registerEmulatorCommand("emacs-mcx.rectangleMarkMode", (emulator) => {
+    emulator.rectangleMarkMode();
+  });
+
   registerEmulatorCommand("emacs-mcx.popMark", (emulator) => {
     emulator.popMark();
   });

@@ -637,6 +637,12 @@
       "command": "emacs-mcx.exchangePointAndMark",
       "when": "editorTextFocus"
     },
+    // Rectangle Mark Mode
+    {
+      "key": "ctrl+x space",
+      "command": "emacs-mcx.rectangleMarkMode",
+      "when": "editorTextFocus"
+    },
     // Suggestion
     {
       "key": "ctrl+'",

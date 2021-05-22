@@ -2550,6 +2550,11 @@
 				"when": "editorTextFocus"
 			},
 			{
+				"key": "ctrl+x space",
+				"command": "emacs-mcx.rectangleMarkMode",
+				"when": "editorTextFocus"
+			},
+			{
 				"key": "ctrl+'",
 				"command": "editor.action.triggerSuggest",
 				"when": "editorTextFocus"

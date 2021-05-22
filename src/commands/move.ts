@@ -32,6 +32,15 @@ export class ForwardChar extends EmacsCommand {
   public readonly id = "forwardChar";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      const newMarkSelections = this.emacsController.markSelections.map(
+        (selection) => new vscode.Selection(selection.anchor, selection.active.translate(0, 1))
+      );
+      this.emacsController.markSelections = newMarkSelections;
+      this.emacsController.syncMarkSelectionsToRect();
+      return;
+    }
+
     if (prefixArgument === undefined || prefixArgument === 1) {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
     } else if (prefixArgument > 0) {
@@ -52,6 +61,19 @@ export class BackwardChar extends EmacsCommand {
   public readonly id = "backwardChar";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      const newMarkSelections = this.emacsController.markSelections.map(
+        (selection) =>
+          new vscode.Selection(
+            selection.anchor,
+            selection.active.character > 0 ? selection.active.translate(0, -1) : selection.active
+          )
+      );
+      this.emacsController.markSelections = newMarkSelections;
+      this.emacsController.syncMarkSelectionsToRect();
+      return;
+    }
+
     if (prefixArgument === undefined || prefixArgument === 1) {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
     } else if (prefixArgument > 0) {
@@ -74,6 +96,17 @@ export class NextLine extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const value = prefixArgument === undefined ? 1 : prefixArgument;
 
+    if (this.emacsController.inRectMarkMode) {
+      // return vscode.commands.executeCommand("editor.action.insertCursorBelow");
+
+      const newMarkSelections = this.emacsController.markSelections.map(
+        (selection) => new vscode.Selection(selection.anchor, selection.active.translate(1, 0))
+      );
+      this.emacsController.markSelections = newMarkSelections;
+      this.emacsController.syncMarkSelectionsToRect();
+      return;
+    }
+
     return vscode.commands.executeCommand<void>("cursorMove", {
       to: "down",
       by: "wrappedLine",
@@ -88,6 +121,20 @@ export class PreviousLine extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const value = prefixArgument === undefined ? 1 : prefixArgument;
+
+    if (this.emacsController.inRectMarkMode) {
+      // return vscode.commands.executeCommand("editor.action.insertCursorAbove");
+      const newMarkSelections = this.emacsController.markSelections.map(
+        (selection) =>
+          new vscode.Selection(
+            selection.anchor,
+            selection.active.line > 0 ? selection.active.translate(-1, 0) : selection.active
+          )
+      );
+      this.emacsController.markSelections = newMarkSelections;
+      this.emacsController.syncMarkSelectionsToRect();
+      return;
+    }
 
     return vscode.commands.executeCommand<void>("cursorMove", {
       to: "up",
