@@ -299,20 +299,30 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
    * C-x <SPC>
    */
   public rectangleMarkMode(): void {
-    if (this.isInMarkMode) {
-      if (this.rectMode) {
-        // From rect mark mode to normal mark model
-        this.rectMode = false;
-        this.textEditor.selections = this.markSelections;
-      } else {
-        // From normal mark mode to rect mark model
-        this.rectMode = true;
-        this.syncMarkSelectionsToRect();
-      }
+    if (this.inRectMarkMode) {
+      this.exitRectangleMarkMode();
     } else {
+      this.enterRectangleMarkMode();
+    }
+  }
+
+  private enterRectangleMarkMode(): void {
+    if (!this.isInMarkMode) {
       this.markSelections = this.textEditor.selections;
-      this._isInMarkMode = true;
-      this.rectMode = true;
+    }
+    this._isInMarkMode = true;
+    this.rectMode = true;
+    this.syncMarkSelectionsToRect();
+  }
+
+  private exitRectangleMarkMode(): void {
+    this.rectMode = false;
+    if (this.isInMarkMode) {
+      this.textEditor.selections = this.markSelections;
+    } else {
+      this.textEditor.selections = this.markSelections.map(
+        (selection) => new vscode.Selection(selection.active, selection.active)
+      );
     }
   }
 
@@ -321,8 +331,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
    */
   public cancel() {
     if (this.rectMode) {
-      this.rectMode = false;
-      this.textEditor.selections = this.markSelections;
+      this.exitRectangleMarkMode();
     }
 
     if (this.hasMultipleSelections() && !this.hasNonEmptySelection()) {
@@ -390,6 +399,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   public exitMarkMode() {
     this._isInMarkMode = false;
+    this.exitRectangleMarkMode();
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
