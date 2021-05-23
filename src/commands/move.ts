@@ -32,19 +32,19 @@ export class ForwardChar extends EmacsCommand {
   public readonly id = "forwardChar";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
-      const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
       this.emacsController.moveRectActives((curActives) => curActives.map((a) => a.translate(0, charDelta)));
       return;
     }
 
-    if (prefixArgument === undefined || prefixArgument === 1) {
+    if (charDelta === 1) {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
-    } else if (prefixArgument > 0) {
+    } else if (charDelta > 0) {
       const doc = textEditor.document;
       const newSelections = textEditor.selections.map((selection) => {
         const offset = doc.offsetAt(selection.active);
-        const newActivePos = doc.positionAt(offset + prefixArgument);
+        const newActivePos = doc.positionAt(offset + charDelta);
         const newAnchorPos = isInMarkMode ? selection.anchor : newActivePos;
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
@@ -58,21 +58,21 @@ export class BackwardChar extends EmacsCommand {
   public readonly id = "backwardChar";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
-      const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
       this.emacsController.moveRectActives((curActives) =>
         curActives.map((a) => new vscode.Position(a.line, Math.max(a.character - charDelta, 0)))
       );
       return;
     }
 
-    if (prefixArgument === undefined || prefixArgument === 1) {
+    if (charDelta === 1) {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
-    } else if (prefixArgument > 0) {
+    } else if (charDelta > 0) {
       const doc = textEditor.document;
       const newSelections = textEditor.selections.map((selection) => {
         const offset = doc.offsetAt(selection.active);
-        const newActivePos = doc.positionAt(offset - prefixArgument);
+        const newActivePos = doc.positionAt(offset - charDelta);
         const newAnchorPos = isInMarkMode ? selection.anchor : newActivePos;
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
@@ -86,10 +86,9 @@ export class NextLine extends EmacsCommand {
   public readonly id = "nextLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const value = prefixArgument === undefined ? 1 : prefixArgument;
+    const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
-      const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
       const maxLine = textEditor.document.lineCount - 1;
       this.emacsController.moveRectActives((curActives) =>
         curActives.map((a) => new vscode.Position(Math.min(a.line + lineDelta, maxLine), a.character))
@@ -100,7 +99,7 @@ export class NextLine extends EmacsCommand {
     return vscode.commands.executeCommand<void>("cursorMove", {
       to: "down",
       by: "wrappedLine",
-      value,
+      value: lineDelta,
       select: isInMarkMode,
     });
   }
@@ -110,10 +109,9 @@ export class PreviousLine extends EmacsCommand {
   public readonly id = "previousLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const value = prefixArgument === undefined ? 1 : prefixArgument;
+    const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
-      const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
       this.emacsController.moveRectActives((curActives) =>
         curActives.map((a) => new vscode.Position(Math.max(a.line - lineDelta, 0), a.character))
       );
@@ -123,7 +121,7 @@ export class PreviousLine extends EmacsCommand {
     return vscode.commands.executeCommand<void>("cursorMove", {
       to: "up",
       by: "wrappedLine",
-      value,
+      value: lineDelta,
       select: isInMarkMode,
     });
   }
