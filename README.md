@@ -186,6 +186,11 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 
 See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Setting-Mark.html) and [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark-Ring.html) about the mark and the mark ring.
 
+## Rectangles
+|Command | Desc |
+|--------|------|
+| `C-x SPC` | Toggle Rectangle Mark mode (rectangle-mark-mode). |
+
 ### Other Commands
 |Command | Desc |
 |--------|------|
