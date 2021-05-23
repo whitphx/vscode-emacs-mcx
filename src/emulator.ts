@@ -190,9 +190,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   public typeChar(char: string) {
     if (this.inRectMarkMode) {
-      this.textEditor.selections = this.nonRectSelections.map(
-        (selection) => new vscode.Selection(selection.active, selection.active)
-      );
+      this.makeSelectionsEmpty();
     }
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
@@ -412,9 +410,8 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   private makeSelectionsEmpty() {
-    this.textEditor.selections = this.textEditor.selections.map(
-      (selection) => new Selection(selection.active, selection.active)
-    );
+    const srcSelections = this.rectMode ? this.nonRectSelections : this.textEditor.selections;
+    this.textEditor.selections = srcSelections.map((selection) => new Selection(selection.active, selection.active));
   }
 
   private stopMultiCursor() {
