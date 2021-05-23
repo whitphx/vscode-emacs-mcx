@@ -318,7 +318,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   private enterRectangleMarkMode(): void {
-    if (!this.isInMarkMode) {
+    if (!this.rectMode) {
       this.markSelections = this.textEditor.selections;
     }
     this._isInMarkMode = true;
