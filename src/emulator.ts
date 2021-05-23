@@ -47,6 +47,10 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     return this._isInMarkMode;
   }
 
+  private rectMode = false;
+  public get inRectMarkMode(): boolean {
+    return this._isInMarkMode && this.rectMode;
+  }
   private markSelections: vscode.Selection[] = [];
   private syncMarkSelectionsToRect(): void {
     if (this.inRectMarkMode) {
@@ -61,11 +65,6 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     const newMarkSelections = this.markSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
     this.markSelections = newMarkSelections;
     this.syncMarkSelectionsToRect();
-  }
-  private rectMode = false;
-
-  public get inRectMarkMode(): boolean {
-    return this._isInMarkMode && this.rectMode;
   }
 
   private killYanker: KillYanker;
