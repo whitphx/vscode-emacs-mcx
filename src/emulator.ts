@@ -317,7 +317,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   private enterRectangleMarkMode(): void {
-    this._isInMarkMode = true;
+    this.enterMarkMode();
     this.rectMode = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
     this.applyNonRectSelectionsAsRect();
