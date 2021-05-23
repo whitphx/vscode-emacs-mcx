@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as expect from "expect";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "./utils";
+import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay } from "./utils";
 
 suite("RectangleMarkMode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -85,6 +85,8 @@ KLMNOPQRST`;
     expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 4), new vscode.Selection(2, 2, 2, 4)]);
 
     await emulator.typeChar("x");
+
+    await delay(); // Wait for all related event listeners to have been called
 
     expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 5, 2, 5)]);
     expect(activeTextEditor.document.getText()).toEqual(`0123456789
