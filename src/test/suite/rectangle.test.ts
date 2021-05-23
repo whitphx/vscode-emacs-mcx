@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as expect from "expect";
-import { setupWorkspace } from "./utils";
+import { cleanUpWorkspace, setupWorkspace } from "./utils";
 import { convertSelectionToRectSelections } from "../../rectangle";
 
 suite("convertSelectionToRectSelections", () => {
@@ -11,6 +11,8 @@ suite("convertSelectionToRectSelections", () => {
     const activeTextEditor = await setupWorkspace(initialText);
     document = activeTextEditor.document;
   });
+
+  teardown(cleanUpWorkspace);
 
   interface TestCase {
     title: string;
