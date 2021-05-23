@@ -51,7 +51,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   public get inRectMarkMode(): boolean {
     return this._isInMarkMode && this.rectMode;
   }
-  private nonRectSelections: vscode.Selection[] = [];
+  private nonRectSelections: vscode.Selection[];
   private applyNonRectSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
       const rectSelections = this.nonRectSelections
@@ -74,6 +74,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
     this.textEditor = textEditor;
+    this.nonRectSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;

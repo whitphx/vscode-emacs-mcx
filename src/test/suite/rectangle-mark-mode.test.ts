@@ -5,7 +5,6 @@ import { cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "./utils";
 
 suite("RectangleMarkMode", () => {
   let activeTextEditor: vscode.TextEditor;
-  let emulator: EmacsEmulator;
 
   setup(async () => {
     const initialText = `0123456789
@@ -14,15 +13,17 @@ ABCDEFGHIJ
 klmnopqrst
 KLMNOPQRST`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
 
   test("expanding the rect from top left to right bottom and toggling and cancelling rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
+    const emulator = new EmacsEmulator(activeTextEditor);
 
     emulator.rectangleMarkMode();
+
+    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 2)]);
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -45,8 +46,11 @@ KLMNOPQRST`;
 
   test("expanding the rect from right bottom to left top and toggling rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [2, 4]);
+    const emulator = new EmacsEmulator(activeTextEditor);
 
     emulator.rectangleMarkMode();
+
+    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 4, 2, 4)]);
 
     await emulator.runCommand("backwardChar");
     await emulator.runCommand("backwardChar");
@@ -68,8 +72,11 @@ KLMNOPQRST`;
 
   test("typing a character in rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
+    const emulator = new EmacsEmulator(activeTextEditor);
 
     emulator.rectangleMarkMode();
+
+    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 2)]);
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
