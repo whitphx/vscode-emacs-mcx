@@ -31,8 +31,7 @@ export interface IMarkModeController {
   pushMark(positions: vscode.Position[]): void;
 
   readonly inRectMarkMode: boolean;
-  markSelections: vscode.Selection[];
-  syncMarkSelectionsToRect: () => void;
+  moveRectActives: (navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]) => void;
 }
 
 export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {
@@ -48,14 +47,20 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     return this._isInMarkMode;
   }
 
-  public markSelections: vscode.Selection[] = [];
-  public syncMarkSelectionsToRect(): void {
+  private markSelections: vscode.Selection[] = [];
+  private syncMarkSelectionsToRect(): void {
     if (this.inRectMarkMode) {
       const rectSelections = this.markSelections
         .map(convertSelectionToRectSelections.bind(null, this.textEditor.document))
         .reduce((a, b) => a.concat(b), []);
       this.textEditor.selections = rectSelections;
     }
+  }
+  public moveRectActives(navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]): void {
+    const newActives = navigateFn(this.markSelections.map((s) => s.active));
+    const newMarkSelections = this.markSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
+    this.markSelections = newMarkSelections;
+    this.syncMarkSelectionsToRect();
   }
   private rectMode = false;
 

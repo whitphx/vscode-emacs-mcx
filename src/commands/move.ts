@@ -34,11 +34,7 @@ export class ForwardChar extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     if (this.emacsController.inRectMarkMode) {
       const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
-      const newMarkSelections = this.emacsController.markSelections.map(
-        (selection) => new vscode.Selection(selection.anchor, selection.active.translate(0, charDelta))
-      );
-      this.emacsController.markSelections = newMarkSelections;
-      this.emacsController.syncMarkSelectionsToRect();
+      this.emacsController.moveRectActives((curActives) => curActives.map((a) => a.translate(0, charDelta)));
       return;
     }
 
@@ -64,15 +60,9 @@ export class BackwardChar extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     if (this.emacsController.inRectMarkMode) {
       const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
-      const newMarkSelections = this.emacsController.markSelections.map(
-        (selection) =>
-          new vscode.Selection(
-            selection.anchor,
-            new vscode.Position(selection.active.line, Math.max(selection.active.character - charDelta, 0))
-          )
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(a.line, Math.max(a.character - charDelta, 0)))
       );
-      this.emacsController.markSelections = newMarkSelections;
-      this.emacsController.syncMarkSelectionsToRect();
       return;
     }
 
@@ -101,15 +91,9 @@ export class NextLine extends EmacsCommand {
     if (this.emacsController.inRectMarkMode) {
       const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
       const maxLine = textEditor.document.lineCount - 1;
-      const newMarkSelections = this.emacsController.markSelections.map(
-        (selection) =>
-          new vscode.Selection(
-            selection.anchor,
-            new vscode.Position(Math.min(selection.active.line + lineDelta, maxLine), selection.active.character)
-          )
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(Math.min(a.line + lineDelta, maxLine), a.character))
       );
-      this.emacsController.markSelections = newMarkSelections;
-      this.emacsController.syncMarkSelectionsToRect();
       return;
     }
 
@@ -130,15 +114,9 @@ export class PreviousLine extends EmacsCommand {
 
     if (this.emacsController.inRectMarkMode) {
       const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
-      const newMarkSelections = this.emacsController.markSelections.map(
-        (selection) =>
-          new vscode.Selection(
-            selection.anchor,
-            new vscode.Position(Math.max(selection.active.line - lineDelta, 0), selection.active.character)
-          )
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(Math.max(a.line - lineDelta, 0), a.character))
       );
-      this.emacsController.markSelections = newMarkSelections;
-      this.emacsController.syncMarkSelectionsToRect();
       return;
     }
 
