@@ -52,7 +52,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     return this._isInMarkMode && this.rectMode;
   }
   private nonRectSelections: vscode.Selection[] = [];
-  private syncNonRectSelectionsToRect(): void {
+  private applyNonRectSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
       const rectSelections = this.nonRectSelections
         .map(convertSelectionToRectSelections.bind(null, this.textEditor.document))
@@ -64,7 +64,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     const newActives = navigateFn(this.nonRectSelections.map((s) => s.active));
     const newNonRectSelections = this.nonRectSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
     this.nonRectSelections = newNonRectSelections;
-    this.syncNonRectSelectionsToRect();
+    this.applyNonRectSelectionsAsRect();
   }
 
   private killYanker: KillYanker;
@@ -320,7 +320,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this._isInMarkMode = true;
     this.rectMode = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
-    this.syncNonRectSelectionsToRect();
+    this.applyNonRectSelectionsAsRect();
   }
 
   private exitRectangleMarkMode(): void {
