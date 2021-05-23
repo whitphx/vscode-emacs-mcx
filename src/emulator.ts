@@ -330,13 +330,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
     this.rectMode = false;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", false);
-    if (this.isInMarkMode) {
-      this.textEditor.selections = this.nonRectSelections;
-    } else {
-      this.textEditor.selections = this.nonRectSelections.map(
-        (selection) => new vscode.Selection(selection.active, selection.active)
-      );
-    }
+    this.textEditor.selections = this.nonRectSelections;
   }
 
   /**
