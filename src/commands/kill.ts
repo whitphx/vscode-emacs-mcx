@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Position, Range, Selection, TextDocument, TextEditor } from "vscode";
+import { Position, Range, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
@@ -7,6 +7,7 @@ import { Configuration } from "../configuration/configuration";
 import { WordCharacterClassifier, getMapForWordSeparators } from "vs/editor/common/controller/wordCharacterClassifier";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 
 function getWordSeparators(): WordCharacterClassifier {
   // Ref: https://github.com/VSCodeVim/Vim/blob/91ca71f8607458c0558f9aff61e230c6917d4b51/src/configuration/configuration.ts#L155
@@ -143,14 +144,6 @@ export class KillWholeLine extends KillYankCommand {
     this.emacsController.exitMarkMode();
     return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
   }
-}
-
-function getNonEmptySelections(textEditor: TextEditor): Selection[] {
-  return textEditor.selections.filter((selection) => !selection.isEmpty);
-}
-
-function makeSelectionsEmpty(textEditor: TextEditor) {
-  textEditor.selections = textEditor.selections.map((selection) => new Selection(selection.active, selection.active));
 }
 
 export class KillRegion extends KillYankCommand {

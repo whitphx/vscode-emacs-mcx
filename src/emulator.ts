@@ -9,6 +9,7 @@ import * as FindCommands from "./commands/find";
 import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import * as PareditCommands from "./commands/paredit";
+import * as RectangleCommands from "./commands/rectangle";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { EditorIdentity } from "./editorIdentity";
@@ -132,6 +133,11 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new KillCommands.YankPop(this.afterCommand, this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
     this.disposables.push(killYanker);
+
+    const rectangleState: RectangleCommands.RectangleState = {
+      latestKilledRectangles: [],
+    };
+    this.commandRegistry.register(new RectangleCommands.KillRectangle(this.afterCommand, this, rectangleState));
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));
