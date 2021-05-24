@@ -243,3 +243,26 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
 
   return keybindings;
 }
+
+export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
+  const keybindings: KeyBinding[] = [];
+
+  // Ascii all printable characters excluding delete.
+  // Ref: https://www.ascii-code.com/
+  const asciiPrintableChars: string[] = [];
+  // ' ' ~ '~'
+  for (let charCode = 0x20; charCode <= 0x7e; charCode++) {
+    asciiPrintableChars.push(String.fromCharCode(charCode));
+  }
+
+  for (const char of asciiPrintableChars) {
+    keybindings.push({
+      key: char,
+      when: "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
+      command: "emacs-mcx.typeChar",
+      args: [char],
+    });
+  }
+
+  return keybindings;
+}

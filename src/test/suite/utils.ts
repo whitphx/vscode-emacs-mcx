@@ -62,3 +62,7 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
     );
   });
 }
+
+export function delay(time?: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
