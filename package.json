@@ -2555,9 +2555,14 @@
 				"when": "editorTextFocus"
 			},
 			{
-				"key": "ctrl+x r k",
-				"command": "emacs-mcx.killRectangle",
+				"key": "ctrl+x r",
+				"command": "emacs-mcx.startRectCommand",
 				"when": "editorTextFocus"
+			},
+			{
+				"key": "k",
+				"command": "emacs-mcx.killRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
 			},
 			{
 				"key": " ",

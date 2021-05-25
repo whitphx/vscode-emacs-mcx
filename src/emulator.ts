@@ -339,6 +339,20 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   /**
+   * C-x r
+   */
+  private acceptingRectCommand = false;
+  public startAcceptingRectCommand(): void {
+    this.acceptingRectCommand = true;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", true);
+  }
+
+  private stopAcceptingRectCommand(): void {
+    this.acceptingRectCommand = false;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
+  }
+
+  /**
    * Invoked by C-g
    */
   public cancel() {
@@ -443,5 +457,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
         command.onDidInterruptTextEditor();
       }
     });
+
+    if (this.acceptingRectCommand) {
+      this.stopAcceptingRectCommand();
+    }
   }
 }

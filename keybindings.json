@@ -644,9 +644,14 @@
       "when": "editorTextFocus"
     },
     {
-      "key": "ctrl+x r k", // TODO: This keybinding is not handled with VSCode
-      "command": "emacs-mcx.killRectangle",
+      "key": "ctrl+x r",
+      "command": "emacs-mcx.startRectCommand",
       "when": "editorTextFocus"
+    },
+    {
+      "key": "k",  // ctrl+x r k
+      "command": "emacs-mcx.killRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "$special": "rectMarkModeTypes"

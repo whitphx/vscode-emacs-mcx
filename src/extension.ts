@@ -170,6 +170,10 @@ export function activate(context: vscode.ExtensionContext) {
     return emulator.runCommand("yankPop");
   });
 
+  registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator) => {
+    return emulator.startAcceptingRectCommand();
+  });
+
   registerEmulatorCommand("emacs-mcx.killRectangle", (emulator) => {
     return emulator.runCommand("killRectangle");
   });
