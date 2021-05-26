@@ -1,10 +1,44 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, IEmacsCommandInterrupted } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections } from "../rectangle";
 import { revealPrimaryActive } from "./helpers/reveal";
+
+/**
+ * This command is assigned to `C-x r` and sets `emacs-mcx.acceptingRectCommand` context
+ * to simulate the original keybindings like `C-x r k` as VSCode does not natively support
+ * such continuous key sequences without modifiers.
+ * In the example above, `kill-rectangle` command is assigned to a single `k` key
+ * with `{ "when": "emacs-mcx.acceptingRectCommand" }` condition.
+ * Then, `kill-rectangle` can be executed through `C-x r k`.
+ */
+export class StartAcceptingRectCommand extends EmacsCommand implements IEmacsCommandInterrupted {
+  public readonly id = "startAcceptingRectCommand";
+
+  private acceptingRectCommand = false;
+
+  public startAcceptingRectCommand(): void {
+    this.acceptingRectCommand = true;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", true);
+  }
+
+  private stopAcceptingRectCommand(): void {
+    this.acceptingRectCommand = false;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
+  }
+
+  public execute(): void {
+    this.startAcceptingRectCommand();
+  }
+
+  public onDidInterruptTextEditor(): void {
+    if (this.acceptingRectCommand) {
+      this.stopAcceptingRectCommand();
+    }
+  }
+}
 
 export interface RectangleState {
   latestKilledRectangles: string[]; // VSCode supports multi-cursor

@@ -171,7 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator) => {
-    return emulator.startAcceptingRectCommand();
+    return emulator.runCommand("startAcceptingRectCommand");
   });
 
   registerEmulatorCommand("emacs-mcx.killRectangle", (emulator) => {

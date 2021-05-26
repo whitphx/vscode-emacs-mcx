@@ -137,6 +137,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangles: [],
     };
+    this.commandRegistry.register(new RectangleCommands.StartAcceptingRectCommand(this.afterCommand, this));
     this.commandRegistry.register(new RectangleCommands.KillRectangle(this.afterCommand, this, rectangleState));
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
@@ -339,20 +340,6 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   /**
-   * C-x r
-   */
-  private acceptingRectCommand = false;
-  public startAcceptingRectCommand(): void {
-    this.acceptingRectCommand = true;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", true);
-  }
-
-  private stopAcceptingRectCommand(): void {
-    this.acceptingRectCommand = false;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-  }
-
-  /**
    * Invoked by C-g
    */
   public cancel() {
@@ -454,12 +441,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   private onDidInterruptTextEditor() {
     this.commandRegistry.forEach((command) => {
       if (instanceOfIEmacsCommandInterrupted(command)) {
+        // TODO: Cache the array of IEmacsCommandInterrupted instances
         command.onDidInterruptTextEditor();
       }
     });
-
-    if (this.acceptingRectCommand) {
-      this.stopAcceptingRectCommand();
-    }
   }
 }
