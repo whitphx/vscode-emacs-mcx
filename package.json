@@ -3636,7 +3636,7 @@
 		"typescript-transform-paths": "^2.2.4",
 		"vscode-test": "^1.5.2",
 		"webpack": "^5.38.1",
-		"webpack-cli": "^4.6.0"
+		"webpack-cli": "^4.7.0"
 	},
 	"dependencies": {
 		"paredit.js": "^0.3.4",
