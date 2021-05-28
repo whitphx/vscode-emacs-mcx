@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as expect from "expect";
 import { EmacsEmulator } from "../../../emulator";
 import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
 
@@ -104,6 +105,24 @@ KLMNOPQRST`
       `3456012789
 defgabchij
 DEFGABCHIJ
+klmnopqrst
+KLMNOPQRST`
+    );
+  });
+
+  test("copy and yank a rectangle", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+    await emulator.runCommand("copyRectangleAsKill");
+    assertTextEqual(activeTextEditor, initialText);
+    expect(activeTextEditor.selections).toEqual([new vscode.Selection(0, 3, 2, 7)]); // The selection is not changed
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.runCommand("yankRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `34560123456789
+defgabcdefghij
+DEFGABCDEFGHIJ
 klmnopqrst
 KLMNOPQRST`
     );
