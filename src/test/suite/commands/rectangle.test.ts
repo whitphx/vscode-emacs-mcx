@@ -85,6 +85,31 @@ KLMNO3456P3456QRST
     );
   });
 
+  test("deleting a rectangle", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+    await emulator.runCommand("deleteRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `012789
+abchij
+ABCHIJ
+klmnopqrst
+KLMNOPQRST`
+    );
+    assertCursorsEqual(activeTextEditor, [2, 3]);
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.runCommand("yankRectangle"); // Nothing yanked as there is no killed rectangle.
+    assertTextEqual(
+      activeTextEditor,
+      `012789
+abchij
+ABCHIJ
+klmnopqrst
+KLMNOPQRST`
+    );
+  });
+
   test("kill and yank with reversed range", async () => {
     activeTextEditor.selections = [new vscode.Selection(2, 7, 0, 3)]; // Rigth bottom to top left
     await emulator.runCommand("killRectangle");
