@@ -131,6 +131,12 @@ export class MoveBeginningOfLine extends EmacsCommand {
   public readonly id = "moveBeginningOfLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => textEditor.document.lineAt(a).range.start)
+      );
+    }
+
     const moveHomeCommandFunc = () => {
       if (Configuration.instance.strictEmacsMove) {
         // Emacs behavior: Move to the beginning of the line.
@@ -163,6 +169,13 @@ export class MoveEndOfLine extends EmacsCommand {
   public readonly id = "moveEndOfLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => textEditor.document.lineAt(a.line).range.end)
+      );
+      return;
+    }
+
     const moveEndCommandFunc = () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
 
