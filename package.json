@@ -3635,7 +3635,7 @@
 		"typescript": "^4.2.4",
 		"typescript-transform-paths": "^2.2.3",
 		"vscode-test": "^1.5.2",
-		"webpack": "^5.35.0",
+		"webpack": "^5.38.1",
 		"webpack-cli": "^4.6.0"
 	},
 	"dependencies": {
