@@ -191,6 +191,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |--------|------|
 | `C-x r k` | Kill the text of the region-rectangle, saving its contents as the last killed rectangle (kill-rectangle). |
 | `C-x r M-w` | Save the text of the region-rectangle as the last killed rectangle (copy-rectangle-as-kill). |
+| `C-x r d` | Delete the text of the region-rectangle (delete-rectangle). |
 | `C-x r y` | Yank the last killed rectangle with its upper left corner at point (yank-rectangle). |
 | `C-x SPC` | Toggle Rectangle Mark mode (rectangle-mark-mode). |
 
