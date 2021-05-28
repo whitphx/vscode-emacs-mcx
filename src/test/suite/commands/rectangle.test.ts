@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
 
-suite("killRectangle", () => {
+suite("Kill, copy, and yank rectangle", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
@@ -95,7 +95,7 @@ ABCHIJ
 klmnopqrst
 KLMNOPQRST`
     );
-    assertCursorsEqual(activeTextEditor, [2, 3]);
+    assertCursorsEqual(activeTextEditor, [0, 3]);
 
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("yankRectangle");
