@@ -223,8 +223,10 @@ export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
-    MessageManager.showMessage("Mark set");
+    if (!isInMarkMode) {
+      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+      MessageManager.showMessage("Mark set");
+    }
     return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop");
   }
 }
@@ -233,8 +235,10 @@ export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
-    MessageManager.showMessage("Mark set");
+    if (!isInMarkMode) {
+      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+      MessageManager.showMessage("Mark set");
+    }
     return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom");
   }
 }
