@@ -135,10 +135,11 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.disposables.push(killYanker);
 
     const rectangleState: RectangleCommands.RectangleState = {
-      latestKilledRectangles: [],
+      latestKilledRectangle: [],
     };
     this.commandRegistry.register(new RectangleCommands.StartAcceptingRectCommand(this.afterCommand, this));
     this.commandRegistry.register(new RectangleCommands.KillRectangle(this.afterCommand, this, rectangleState));
+    this.commandRegistry.register(new RectangleCommands.YankRectangle(this.afterCommand, this, rectangleState));
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));

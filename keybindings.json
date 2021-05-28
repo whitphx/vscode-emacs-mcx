@@ -654,6 +654,11 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "y",  // ctrl+x r y
+      "command": "emacs-mcx.yankRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "$special": "rectMarkModeTypes"
     },
     // Suggestion

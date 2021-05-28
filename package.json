@@ -2565,6 +2565,11 @@
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
 			},
 			{
+				"key": "y",
+				"command": "emacs-mcx.yankRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
 				"key": " ",
 				"when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
 				"command": "emacs-mcx.typeChar",

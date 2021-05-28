@@ -40,8 +40,9 @@ export class StartAcceptingRectCommand extends EmacsCommand implements IEmacsCom
   }
 }
 
+type KilledRectangle = string[];
 export interface RectangleState {
-  latestKilledRectangles: string[]; // VSCode supports multi-cursor
+  latestKilledRectangle: KilledRectangle; // multi-cursor is not supported
 }
 
 export abstract class RectangleKillYankCommand extends EmacsCommand {
@@ -57,17 +58,6 @@ export abstract class RectangleKillYankCommand extends EmacsCommand {
     this.rectangleState = rectangleState;
   }
 }
-
-const getEolChar = (eol: vscode.EndOfLine): string | undefined => {
-  switch (eol) {
-    case vscode.EndOfLine.CRLF:
-      return "\r\n";
-    case vscode.EndOfLine.LF:
-      return "\n";
-    default:
-      return "\n";
-  }
-};
 
 async function deleteRanges(textEditor: vscode.TextEditor, ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
   let success = false;
@@ -93,26 +83,94 @@ export class KillRectangle extends RectangleKillYankCommand {
     prefixArgument: number | undefined
   ): Promise<void> {
     const ranges = getNonEmptySelections(textEditor);
+    if (ranges.length === 0) {
+      return;
+    }
 
-    const eol = getEolChar(textEditor.document.eol);
+    const range = ranges[0]; // multi-cursor is not supported
 
-    const rectSelectionsList = ranges.map(convertSelectionToRectSelections.bind(null, textEditor.document));
+    const rectSelections = convertSelectionToRectSelections(textEditor.document, range);
 
     // Copy
-    const rectTexts = rectSelectionsList.map((rectSelections) => {
-      const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection)).join(eol);
-      return rectText;
-    });
+    const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
 
-    this.rectangleState.latestKilledRectangles = rectTexts;
+    this.rectangleState.latestKilledRectangle = rectText;
 
     // Delete
-    const flattenedRanges = rectSelectionsList.reduce((a, b) => a.concat(b), []);
-    await deleteRanges(textEditor, flattenedRanges).then();
+    await deleteRanges(textEditor, rectSelections).then();
 
     revealPrimaryActive(textEditor);
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
+  }
+}
+
+const getEolChar = (eol: vscode.EndOfLine): string | undefined => {
+  switch (eol) {
+    case vscode.EndOfLine.CRLF:
+      return "\r\n";
+    case vscode.EndOfLine.LF:
+      return "\n";
+    default:
+      return "\n";
+  }
+};
+
+export class YankRectangle extends RectangleKillYankCommand {
+  public readonly id = "yankRectangle";
+
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
+    const killedRect = this.rectangleState.latestKilledRectangle;
+
+    if (killedRect.length === 0) {
+      return;
+    }
+
+    const rectHeight = killedRect.length - 1;
+    const rectWidth = killedRect[rectHeight].length;
+
+    const active = textEditor.selection.active; // Multi-cursor is not supported
+    await textEditor.edit((edit) => {
+      const maxLine = textEditor.document.lineCount - 1;
+
+      const insertColumn = active.character;
+
+      const eolChar = getEolChar(textEditor.document.eol);
+
+      let rectLine = 0;
+      while (rectLine <= rectHeight) {
+        const insertLine = active.line + rectLine;
+        if (insertLine > maxLine) {
+          break;
+        }
+
+        const additionalColumns = Math.max(
+          0,
+          insertColumn - textEditor.document.lineAt(insertLine).range.end.character
+        );
+
+        const insertText = " ".repeat(additionalColumns) + killedRect[rectLine];
+        edit.insert(new vscode.Position(insertLine, insertColumn), insertText);
+
+        ++rectLine;
+      }
+
+      if (rectLine <= rectHeight) {
+        const additionalText = killedRect
+          .slice(rectLine)
+          .map((lineText) => eolChar + " ".repeat(insertColumn) + lineText)
+          .join("");
+        const lastPoint = textEditor.document.lineAt(maxLine).range.end;
+        edit.insert(lastPoint, additionalText);
+      }
+    });
+
+    const newActive = active.translate(rectHeight, rectWidth);
+    textEditor.selection = new vscode.Selection(newActive, newActive);
   }
 }
