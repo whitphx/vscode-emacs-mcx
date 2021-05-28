@@ -3633,7 +3633,7 @@
 		"tsconfig-paths-webpack-plugin": "^3.5.1",
 		"ttypescript": "^1.5.12",
 		"typescript": "^4.2.4",
-		"typescript-transform-paths": "^2.2.3",
+		"typescript-transform-paths": "^2.2.4",
 		"vscode-test": "^1.5.2",
 		"webpack": "^5.38.1",
 		"webpack-cli": "^4.6.0"
