@@ -299,6 +299,21 @@ export class ScrollUpCommand extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
+    if (this.emacsController.inRectMarkMode) {
+      if (textEditor.visibleRanges.length === 0) {
+        return;
+      }
+      const visibleRange = textEditor.visibleRanges[0];
+      const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
+      const lineDelta = pageSize * repeat;
+
+      const maxLine = textEditor.document.lineCount - 1;
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(Math.min(a.line + lineDelta, maxLine), a.character))
+      );
+      return;
+    }
+
     if (repeat === 1) {
       if (Configuration.instance.strictEmacsMove) {
         return vscode.commands
@@ -339,6 +354,20 @@ export class ScrollDownCommand extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+
+    if (this.emacsController.inRectMarkMode) {
+      if (textEditor.visibleRanges.length === 0) {
+        return;
+      }
+      const visibleRange = textEditor.visibleRanges[0];
+      const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
+      const lineDelta = pageSize * repeat;
+
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(Math.max(a.line - lineDelta, 0), a.character))
+      );
+      return;
+    }
 
     if (repeat === 1) {
       if (Configuration.instance.strictEmacsMove) {
