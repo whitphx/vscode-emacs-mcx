@@ -170,6 +170,26 @@ export function activate(context: vscode.ExtensionContext) {
     return emulator.runCommand("yankPop");
   });
 
+  registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator) => {
+    return emulator.runCommand("startAcceptingRectCommand");
+  });
+
+  registerEmulatorCommand("emacs-mcx.killRectangle", (emulator) => {
+    return emulator.runCommand("killRectangle");
+  });
+
+  registerEmulatorCommand("emacs-mcx.copyRectangleAsKill", (emulator) => {
+    return emulator.runCommand("copyRectangleAsKill");
+  });
+
+  registerEmulatorCommand("emacs-mcx.deleteRectangle", (emulator) => {
+    return emulator.runCommand("deleteRectangle");
+  });
+
+  registerEmulatorCommand("emacs-mcx.yankRectangle", (emulator) => {
+    return emulator.runCommand("yankRectangle");
+  });
+
   registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
     emulator.setMarkCommand();
   });

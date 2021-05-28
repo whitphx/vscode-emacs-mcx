@@ -644,6 +644,31 @@
       "when": "editorTextFocus"
     },
     {
+      "key": "ctrl+x r",
+      "command": "emacs-mcx.startRectCommand",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "k",  // ctrl+x r k
+      "command": "emacs-mcx.killRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
+      "key": "y",  // ctrl+x r y
+      "command": "emacs-mcx.yankRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
+      "key": "d",  // ctrl+x r d
+      "command": "emacs-mcx.deleteRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
+      "key": "meta+w",  // ctrl+x r M-w
+      "command": "emacs-mcx.copyRectangleAsKill",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "$special": "rectMarkModeTypes"
     },
     // Suggestion

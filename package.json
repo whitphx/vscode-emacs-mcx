@@ -2555,6 +2555,47 @@
 				"when": "editorTextFocus"
 			},
 			{
+				"key": "ctrl+x r",
+				"command": "emacs-mcx.startRectCommand",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "k",
+				"command": "emacs-mcx.killRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
+				"key": "y",
+				"command": "emacs-mcx.yankRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
+				"key": "d",
+				"command": "emacs-mcx.deleteRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
+				"key": "alt+w",
+				"command": "emacs-mcx.copyRectangleAsKill",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "alt+w",
+				"mac": "cmd+w",
+				"command": "emacs-mcx.copyRectangleAsKill",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape w",
+				"command": "emacs-mcx.copyRectangleAsKill",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+[ w",
+				"command": "emacs-mcx.copyRectangleAsKill",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+			},
+			{
 				"key": " ",
 				"when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
 				"command": "emacs-mcx.typeChar",
