@@ -82,14 +82,15 @@ export class KillRectangle extends RectangleKillYankCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined
   ): Promise<void> {
-    const ranges = getNonEmptySelections(textEditor);
-    if (ranges.length === 0) {
+    const selections = getNonEmptySelections(textEditor);
+    if (selections.length === 0) {
       return;
     }
 
-    const range = ranges[0]; // multi-cursor is not supported
+    const selection = selections[0]; // multi-cursor is not supported
+    const notReversedSelection = new vscode.Selection(selection.start, selection.end);
 
-    const rectSelections = convertSelectionToRectSelections(textEditor.document, range);
+    const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
 
     // Copy
     const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));

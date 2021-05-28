@@ -73,8 +73,8 @@ defgabchij
 DEFGABCHIJ
 klmnopqrst
 KLMNO3456PQRST
-     abcd
-     ABCD`
+     defg
+     DEFG`
     );
 
     setEmptyCursors(activeTextEditor, [4, 10]);
@@ -86,8 +86,33 @@ defgabchij
 DEFGABCHIJ
 klmnopqrst
 KLMNO3456P3456QRST
-     abcd abcd
-     ABCD ABCD`
+     defg defg
+     DEFG DEFG`
+    );
+  });
+
+  test("kill and yank with reversed range", async () => {
+    activeTextEditor.selections = [new vscode.Selection(2, 7, 0, 3)]; // Rigth bottom to top left
+    await emulator.runCommand("killRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `012789
+abchij
+ABCHIJ
+klmnopqrst
+KLMNOPQRST`
+    );
+    assertCursorsEqual(activeTextEditor, [2, 3]);
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.runCommand("yankRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `3456012789
+defgabchij
+DEFGABCHIJ
+klmnopqrst
+KLMNOPQRST`
     );
   });
 });
