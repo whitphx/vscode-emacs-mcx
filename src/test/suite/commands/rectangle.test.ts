@@ -1,13 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import {
-  assertTextEqual,
-  cleanUpWorkspace,
-  setEmptyCursors,
-  assertCursorsEqual,
-  setupWorkspace,
-  delay,
-} from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
 
 suite("killRectangle", () => {
   let activeTextEditor: vscode.TextEditor;
