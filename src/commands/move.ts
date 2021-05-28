@@ -198,6 +198,11 @@ export class ForwardWord extends EmacsCommand {
   public readonly id = "forwardWord";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      // TODO: Not supported
+      return;
+    }
+
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight")
@@ -209,6 +214,11 @@ export class BackwardWord extends EmacsCommand {
   public readonly id = "backwardWord";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      // TODO: Not supported
+      return;
+    }
+
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft")
@@ -221,10 +231,21 @@ export class BackToIndentation extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const doc = textEditor.document;
-    const newSelections = textEditor.selections.map((selection) => {
-      const activeLine = doc.lineAt(selection.active.line);
+
+    const moveActiveFunc = (active: vscode.Position): vscode.Position => {
+      const activeLine = doc.lineAt(active.line);
       const charIdxToMove = activeLine.firstNonWhitespaceCharacterIndex;
       const newActive = new vscode.Position(activeLine.lineNumber, charIdxToMove);
+      return newActive;
+    };
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) => curActives.map(moveActiveFunc));
+      return;
+    }
+
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActive = moveActiveFunc(selection.active);
       return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
