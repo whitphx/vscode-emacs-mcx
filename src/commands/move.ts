@@ -256,7 +256,17 @@ export class BackToIndentation extends EmacsCommand {
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): void | Thenable<void> {
+    if (this.emacsController.inRectMarkMode) {
+      const beginning = textEditor.document.positionAt(0);
+      this.emacsController.moveRectActives((curActives) => curActives.map(() => beginning));
+      return;
+    }
+
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
     MessageManager.showMessage("Mark set");
     return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop");
@@ -266,7 +276,17 @@ export class BeginningOfBuffer extends EmacsCommand {
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): void | Thenable<void> {
+    if (this.emacsController.inRectMarkMode) {
+      const end = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
+      this.emacsController.moveRectActives((curActives) => curActives.map(() => end));
+      return;
+    }
+
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
     MessageManager.showMessage("Mark set");
     return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom");
