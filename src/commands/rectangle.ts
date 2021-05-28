@@ -74,7 +74,8 @@ async function deleteRanges(textEditor: vscode.TextEditor, ranges: vscode.Range[
   return success;
 }
 
-abstract class CopyRectangle extends RectangleKillYankCommand {
+abstract class EditRectangle extends RectangleKillYankCommand {
+  protected copy = false;
   protected delete = false;
 
   public async execute(
@@ -93,9 +94,11 @@ abstract class CopyRectangle extends RectangleKillYankCommand {
     const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
 
     // Copy
-    const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
+    if (this.copy) {
+      const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
 
-    this.rectangleState.latestKilledRectangle = rectText;
+      this.rectangleState.latestKilledRectangle = rectText;
+    }
 
     // Delete
     if (this.delete) {
@@ -109,14 +112,22 @@ abstract class CopyRectangle extends RectangleKillYankCommand {
   }
 }
 
-export class CopyRectangleAsKill extends CopyRectangle {
-  public readonly id = "copyRectangleAsKill";
-  protected delete = false;
+export class DeleteRectangle extends EditRectangle {
+  public readonly id = "deleteRectangle";
+  protected delete = true;
+  protected copy = false;
 }
 
-export class KillRectangle extends CopyRectangle {
+export class CopyRectangleAsKill extends EditRectangle {
+  public readonly id = "copyRectangleAsKill";
+  protected delete = false;
+  protected copy = true;
+}
+
+export class KillRectangle extends EditRectangle {
   public readonly id = "killRectangle";
   protected delete = true;
+  protected copy = true;
 }
 
 const getEolChar = (eol: vscode.EndOfLine): string | undefined => {

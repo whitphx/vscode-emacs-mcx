@@ -2570,6 +2570,11 @@
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
 			},
 			{
+				"key": "d",
+				"command": "emacs-mcx.deleteRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
 				"key": "alt+w",
 				"command": "emacs-mcx.copyRectangleAsKill",
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
