@@ -178,6 +178,10 @@ export function activate(context: vscode.ExtensionContext) {
     return emulator.runCommand("killRectangle");
   });
 
+  registerEmulatorCommand("emacs-mcx.copyRectangleAsKill", (emulator) => {
+    return emulator.runCommand("copyRectangleAsKill");
+  });
+
   registerEmulatorCommand("emacs-mcx.yankRectangle", (emulator) => {
     return emulator.runCommand("yankRectangle");
   });

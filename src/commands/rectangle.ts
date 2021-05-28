@@ -74,8 +74,8 @@ async function deleteRanges(textEditor: vscode.TextEditor, ranges: vscode.Range[
   return success;
 }
 
-export class KillRectangle extends RectangleKillYankCommand {
-  public readonly id = "killRectangle";
+abstract class CopyRectangle extends RectangleKillYankCommand {
+  protected delete = false;
 
   public async execute(
     textEditor: TextEditor,
@@ -98,13 +98,25 @@ export class KillRectangle extends RectangleKillYankCommand {
     this.rectangleState.latestKilledRectangle = rectText;
 
     // Delete
-    await deleteRanges(textEditor, rectSelections).then();
+    if (this.delete) {
+      await deleteRanges(textEditor, rectSelections).then();
 
-    revealPrimaryActive(textEditor);
+      revealPrimaryActive(textEditor);
 
-    this.emacsController.exitMarkMode();
-    makeSelectionsEmpty(textEditor);
+      this.emacsController.exitMarkMode();
+      makeSelectionsEmpty(textEditor);
+    }
   }
+}
+
+export class CopyRectangleAsKill extends CopyRectangle {
+  public readonly id = "copyRectangleAsKill";
+  protected delete = false;
+}
+
+export class KillRectangle extends CopyRectangle {
+  public readonly id = "killRectangle";
+  protected delete = true;
 }
 
 const getEolChar = (eol: vscode.EndOfLine): string | undefined => {

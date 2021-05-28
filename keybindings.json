@@ -659,6 +659,11 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "meta+w",  // ctrl+x r M-w
+      "command": "emacs-mcx.copyRectangleAsKill",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "$special": "rectMarkModeTypes"
     },
     // Suggestion
