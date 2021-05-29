@@ -198,18 +198,17 @@ KLMNOPQRST`
     assertCursorsEqual(activeTextEditor, [2, 7]);
   });
 
-  test("clearing overlapping rectangles", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    activeTextEditor.selections = [new vscode.Selection(1, 5, 3, 9)];
+  test("clearing rectangles", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 5), new vscode.Selection(2, 7, 3, 9)];
     await emulator.runCommand("clearRectangle");
     assertTextEqual(
       activeTextEditor,
-      `012    789
-abc      j
-ABC      J
-klmno    t
+      `012  56789
+abc  fghij
+ABC  FG  J
+klmnopq  t
 KLMNOPQRST`
     );
-    assertCursorsEqual(activeTextEditor, [2, 7], [3, 9]);
+    assertCursorsEqual(activeTextEditor, [2, 5], [3, 9]);
   });
 });

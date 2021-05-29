@@ -202,7 +202,7 @@ export class YankRectangle extends RectangleKillYankCommand {
 export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const selections = getNonEmptySelections(textEditor);
     if (selections.length === 0) {
       return;
@@ -211,11 +211,14 @@ export class ClearRectangle extends EmacsCommand {
     const rectSelections = selections
       .map(convertSelectionToRectSelections.bind(null, textEditor.document))
       .reduce((a, b) => a.concat(b), []);
-    textEditor.edit((edit) => {
+    await textEditor.edit((edit) => {
       rectSelections.forEach((rectSelection) => {
         const length = rectSelection.end.character - rectSelection.start.character;
         edit.replace(rectSelection, " ".repeat(length));
       });
     });
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
   }
 }
