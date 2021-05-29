@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { Range } from "vscode";
 import { IKillRingEntity } from "./kill-ring-entity";
 
