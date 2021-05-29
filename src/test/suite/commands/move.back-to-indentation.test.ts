@@ -16,12 +16,14 @@ non-indented-line with space
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
-  ([
-    [1, 0], // At the beginning of the line
-    [1, 2], // At the middle of the indentation
-    [1, 4], // At the indentation
-    [1, 6], // After the indentation
-  ] as [number, number][]).forEach((startPosition) => {
+  (
+    [
+      [1, 0], // At the beginning of the line
+      [1, 2], // At the middle of the indentation
+      [1, 4], // At the indentation
+      [1, 6], // After the indentation
+    ] as [number, number][]
+  ).forEach((startPosition) => {
     test(`moving from ${startPosition} to the indented text ([1, 4])`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
@@ -31,12 +33,14 @@ non-indented-line with space
     });
   });
 
-  ([
-    [3, 0], // At the beginning of the line
-    [3, 2], // At the middle of the indentation
-    [3, 4], // At the indentation
-    [3, 6], // After the indentation
-  ] as [number, number][]).forEach((startPosition) => {
+  (
+    [
+      [3, 0], // At the beginning of the line
+      [3, 2], // At the middle of the indentation
+      [3, 4], // At the indentation
+      [3, 6], // After the indentation
+    ] as [number, number][]
+  ).forEach((startPosition) => {
     test(`moving from ${startPosition} to the indented text ([1, 4]) with a line containing another white space`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
@@ -46,10 +50,12 @@ non-indented-line with space
     });
   });
 
-  ([
-    [0, 0],
-    [0, 2],
-  ] as [number, number][]).forEach((startPosition) => {
+  (
+    [
+      [0, 0],
+      [0, 2],
+    ] as [number, number][]
+  ).forEach((startPosition) => {
     test(`moving from ${startPosition} to the beginning of the line ([0, 0]) if there is no indentation`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
@@ -59,10 +65,12 @@ non-indented-line with space
     });
   });
 
-  ([
-    [2, 0],
-    [2, 2],
-  ] as [number, number][]).forEach((startPosition) => {
+  (
+    [
+      [2, 0],
+      [2, 2],
+    ] as [number, number][]
+  ).forEach((startPosition) => {
     test(`moving from ${startPosition} to the beginning of the line ([2, 0]) if there is no indentation`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
@@ -72,10 +80,12 @@ non-indented-line with space
     });
   });
 
-  ([
-    [4, 0],
-    [4, 2],
-  ] as [number, number][]).forEach((startPosition) => {
+  (
+    [
+      [4, 0],
+      [4, 2],
+    ] as [number, number][]
+  ).forEach((startPosition) => {
     test(`moving from ${startPosition} to the end of the line ([4, 4]) if there is indentation but no content`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
