@@ -409,14 +409,23 @@ export class ForwardParagraph extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-
     const doc = textEditor.document;
-    const newSelections = textEditor.selections.map((selection) => {
-      let active = selection.active;
+
+    const repeatedTravelForwardParagraph = (pos: vscode.Position): vscode.Position => {
       for (let i = 0; i < repeat; ++i) {
-        active = travelForwardParagraph(doc, active);
+        pos = travelForwardParagraph(doc, pos);
       }
-      return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
+      return pos;
+    };
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) => curActives.map(repeatedTravelForwardParagraph));
+      return;
+    }
+
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActive = repeatedTravelForwardParagraph(selection.active);
+      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
     revealPrimaryActive(textEditor);
@@ -428,14 +437,23 @@ export class BackwardParagraph extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-
     const doc = textEditor.document;
-    const newSelections = textEditor.selections.map((selection) => {
-      let active = selection.active;
+
+    const repeatedTravelBackwardParagraph = (pos: vscode.Position): vscode.Position => {
       for (let i = 0; i < repeat; ++i) {
-        active = travelBackwardParagraph(doc, active);
+        pos = travelBackwardParagraph(doc, pos);
       }
-      return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
+      return pos;
+    };
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) => curActives.map(repeatedTravelBackwardParagraph));
+      return;
+    }
+
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActive = repeatedTravelBackwardParagraph(selection.active);
+      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
     revealPrimaryActive(textEditor);
