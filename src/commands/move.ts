@@ -133,7 +133,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => textEditor.document.lineAt(a).range.start)
+        curActives.map((a) => textEditor.document.lineAt(a.line).range.start)
       );
     }
 
