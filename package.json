@@ -2596,6 +2596,11 @@
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
 			},
 			{
+				"key": "c",
+				"command": "emacs-mcx.clearRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
 				"key": " ",
 				"when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
 				"command": "emacs-mcx.typeChar",
