@@ -267,8 +267,10 @@ export class BeginningOfBuffer extends EmacsCommand {
       return;
     }
 
-    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
-    MessageManager.showMessage("Mark set");
+    if (!isInMarkMode) {
+      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+      MessageManager.showMessage("Mark set");
+    }
     return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop");
   }
 }
@@ -287,8 +289,10 @@ export class EndOfBuffer extends EmacsCommand {
       return;
     }
 
-    this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
-    MessageManager.showMessage("Mark set");
+    if (!isInMarkMode) {
+      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+      MessageManager.showMessage("Mark set");
+    }
     return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom");
   }
 }
