@@ -131,6 +131,12 @@ export class MoveBeginningOfLine extends EmacsCommand {
   public readonly id = "moveBeginningOfLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => textEditor.document.lineAt(a.line).range.start)
+      );
+    }
+
     const moveHomeCommandFunc = () => {
       if (Configuration.instance.strictEmacsMove) {
         // Emacs behavior: Move to the beginning of the line.
@@ -163,6 +169,13 @@ export class MoveEndOfLine extends EmacsCommand {
   public readonly id = "moveEndOfLine";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => textEditor.document.lineAt(a.line).range.end)
+      );
+      return;
+    }
+
     const moveEndCommandFunc = () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
 
@@ -185,6 +198,11 @@ export class ForwardWord extends EmacsCommand {
   public readonly id = "forwardWord";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      // TODO: Not supported
+      return;
+    }
+
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight")
@@ -196,6 +214,11 @@ export class BackwardWord extends EmacsCommand {
   public readonly id = "backwardWord";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    if (this.emacsController.inRectMarkMode) {
+      // TODO: Not supported
+      return;
+    }
+
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft")
@@ -208,10 +231,21 @@ export class BackToIndentation extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const doc = textEditor.document;
-    const newSelections = textEditor.selections.map((selection) => {
-      const activeLine = doc.lineAt(selection.active.line);
+
+    const moveActiveFunc = (active: vscode.Position): vscode.Position => {
+      const activeLine = doc.lineAt(active.line);
       const charIdxToMove = activeLine.firstNonWhitespaceCharacterIndex;
       const newActive = new vscode.Position(activeLine.lineNumber, charIdxToMove);
+      return newActive;
+    };
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) => curActives.map(moveActiveFunc));
+      return;
+    }
+
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActive = moveActiveFunc(selection.active);
       return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
@@ -222,7 +256,17 @@ export class BackToIndentation extends EmacsCommand {
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): void | Thenable<void> {
+    if (this.emacsController.inRectMarkMode) {
+      const beginning = textEditor.document.positionAt(0);
+      this.emacsController.moveRectActives((curActives) => curActives.map(() => beginning));
+      return;
+    }
+
     if (!isInMarkMode) {
       this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark set");
@@ -234,7 +278,17 @@ export class BeginningOfBuffer extends EmacsCommand {
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): void | Thenable<void> {
+    if (this.emacsController.inRectMarkMode) {
+      const end = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
+      this.emacsController.moveRectActives((curActives) => curActives.map(() => end));
+      return;
+    }
+
     if (!isInMarkMode) {
       this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark set");
@@ -248,6 +302,21 @@ export class ScrollUpCommand extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+
+    if (this.emacsController.inRectMarkMode) {
+      if (textEditor.visibleRanges.length === 0) {
+        return;
+      }
+      const visibleRange = textEditor.visibleRanges[0];
+      const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
+      const lineDelta = pageSize * repeat;
+
+      const maxLine = textEditor.document.lineCount - 1;
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(Math.min(a.line + lineDelta, maxLine), a.character))
+      );
+      return;
+    }
 
     if (repeat === 1) {
       if (Configuration.instance.strictEmacsMove) {
@@ -290,6 +359,20 @@ export class ScrollDownCommand extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
+    if (this.emacsController.inRectMarkMode) {
+      if (textEditor.visibleRanges.length === 0) {
+        return;
+      }
+      const visibleRange = textEditor.visibleRanges[0];
+      const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
+      const lineDelta = pageSize * repeat;
+
+      this.emacsController.moveRectActives((curActives) =>
+        curActives.map((a) => new vscode.Position(Math.max(a.line - lineDelta, 0), a.character))
+      );
+      return;
+    }
+
     if (repeat === 1) {
       if (Configuration.instance.strictEmacsMove) {
         return vscode.commands
@@ -330,14 +413,23 @@ export class ForwardParagraph extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-
     const doc = textEditor.document;
-    const newSelections = textEditor.selections.map((selection) => {
-      let active = selection.active;
+
+    const repeatedTravelForwardParagraph = (pos: vscode.Position): vscode.Position => {
       for (let i = 0; i < repeat; ++i) {
-        active = travelForwardParagraph(doc, active);
+        pos = travelForwardParagraph(doc, pos);
       }
-      return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
+      return pos;
+    };
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) => curActives.map(repeatedTravelForwardParagraph));
+      return;
+    }
+
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActive = repeatedTravelForwardParagraph(selection.active);
+      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
     revealPrimaryActive(textEditor);
@@ -349,14 +441,23 @@ export class BackwardParagraph extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-
     const doc = textEditor.document;
-    const newSelections = textEditor.selections.map((selection) => {
-      let active = selection.active;
+
+    const repeatedTravelBackwardParagraph = (pos: vscode.Position): vscode.Position => {
       for (let i = 0; i < repeat; ++i) {
-        active = travelBackwardParagraph(doc, active);
+        pos = travelBackwardParagraph(doc, pos);
       }
-      return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
+      return pos;
+    };
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActives) => curActives.map(repeatedTravelBackwardParagraph));
+      return;
+    }
+
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActive = repeatedTravelBackwardParagraph(selection.active);
+      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
     });
     textEditor.selections = newSelections;
     revealPrimaryActive(textEditor);
