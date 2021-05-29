@@ -7,7 +7,6 @@ suite("transformToUppercase", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
 
-  // tslint:disable:object-literal-sort-keys
   const testCases = [
     {
       initialText: "aaa bbb ccc",
@@ -53,7 +52,6 @@ suite("transformToUppercase", () => {
 
       teardown(cleanUpWorkspace);
 
-      // tslint:disable-next-line:max-line-length
       test("cursor moves with upcasing which enables continuous transformation when the selection is empty", async () => {
         activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
 
@@ -72,7 +70,6 @@ suite("transformToLowercase", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
 
-  // tslint:disable:object-literal-sort-keys
   const testCases = [
     {
       initialText: "AAA BBB CCC",
@@ -118,7 +115,6 @@ suite("transformToLowercase", () => {
 
       teardown(cleanUpWorkspace);
 
-      // tslint:disable-next-line:max-line-length
       test("cursor moves with downcasing which enables continuous transformation when the selection is empty", async () => {
         activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
 

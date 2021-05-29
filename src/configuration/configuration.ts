@@ -2,8 +2,6 @@
  * This file is derived from VSCodeVim/Vim.
  */
 
-// tslint:disable: object-literal-sort-keys
-
 import * as vscode from "vscode";
 import { IConfiguration, IDebugConfiguration } from "./iconfiguration";
 
@@ -64,7 +62,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   private reload() {
     const emacsConfigs = vscode.workspace.getConfiguration("emacs-mcx");
 
-    /* tslint:disable:forin */
     // Disable forin rule here as we make accessors enumerable.`
     for (const option in this) {
       let val = emacsConfigs[option] as any;
@@ -77,7 +74,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     }
   }
 
-  // tslint:disable-next-line: member-ordering
   private static unproxify(obj: { [key: string]: any }) {
     const result: { [key: string]: any } = {};
     for (const key in obj) {
