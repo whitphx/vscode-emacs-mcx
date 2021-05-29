@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as expect from "expect";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay } from "./utils";
+import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay, assertTextEqual } from "./utils";
 
 suite("RectangleMarkMode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -68,6 +68,37 @@ KLMNOPQRST`;
     emulator.cancel();
 
     expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 2)]);
+  });
+
+  test("killing and yanking in rectangle-mark-mode", async () => {
+    setEmptyCursors(activeTextEditor, [1, 2]);
+    const emulator = new EmacsEmulator(activeTextEditor);
+
+    emulator.rectangleMarkMode();
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+
+    expect(activeTextEditor.selections).toEqual([
+      new vscode.Selection(1, 2, 1, 4),
+      new vscode.Selection(2, 2, 2, 4),
+      new vscode.Selection(3, 2, 3, 4),
+    ]);
+
+    await emulator.runCommand("killRegion");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+klopqrst
+KLMNOPQRST`
+    );
+
+    // expect(activeTextEditor.selections).toEqual([new vscode.Selection(3, 2, 3, 2)]); // TODO: Now not supported
   });
 
   test("typing a character in rectangle-mark-mode", async () => {

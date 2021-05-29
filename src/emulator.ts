@@ -200,8 +200,8 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   public typeChar(char: string) {
-    if (this.inRectMarkMode) {
-      this.makeSelectionsEmpty();
+    if (this.isInMarkMode) {
+      this.exitMarkMode();
     }
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
@@ -325,11 +325,21 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
+  private normalCursorStyle?: vscode.TextEditorCursorStyle = undefined;
   private enterRectangleMarkMode(): void {
+    if (this.isInMarkMode) {
+      MessageManager.showMessage("Rectangle-Mark mode enabled in current buffer");
+    } else {
+      MessageManager.showMessage("Mark set (rectangle-mode)");
+    }
+
     this.enterMarkMode();
     this.rectMode = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
     this.applyNonRectSelectionsAsRect();
+
+    this.normalCursorStyle = this.textEditor.options.cursorStyle;
+    this.textEditor.options.cursorStyle = vscode.TextEditorCursorStyle.LineThin;
   }
 
   private exitRectangleMarkMode(): void {
@@ -340,6 +350,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.rectMode = false;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", false);
     this.textEditor.selections = this.nonRectSelections;
+
+    if (!this.isInMarkMode) {
+      this.makeSelectionsEmpty();
+    }
+
+    this.textEditor.options.cursorStyle = this.normalCursorStyle;
   }
 
   /**
@@ -414,9 +430,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   public exitMarkMode() {
     this._isInMarkMode = false;
-    if (this.inRectMarkMode) {
-      this.exitRectangleMarkMode();
-    }
+    this.exitRectangleMarkMode();
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
