@@ -669,6 +669,11 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "o",  // ctrl+x r o
+      "command": "emacs-mcx.openRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "key": "c",  // ctrl+x r c
       "command": "emacs-mcx.clearRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"

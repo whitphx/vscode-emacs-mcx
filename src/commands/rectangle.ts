@@ -199,6 +199,32 @@ export class YankRectangle extends RectangleKillYankCommand {
   }
 }
 
+export class OpenRectangle extends EmacsCommand {
+  public readonly id = "openRectangle";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const selections = getNonEmptySelections(textEditor);
+    if (selections.length === 0) {
+      return;
+    }
+
+    const starts = textEditor.selections.map((selection) => selection.start);
+
+    const rectSelections = selections
+      .map(convertSelectionToRectSelections.bind(null, textEditor.document))
+      .reduce((a, b) => a.concat(b), []);
+    await textEditor.edit((edit) => {
+      rectSelections.forEach((rectSelection) => {
+        const length = rectSelection.end.character - rectSelection.start.character;
+        edit.insert(rectSelection.start, " ".repeat(length));
+      });
+    });
+
+    this.emacsController.exitMarkMode();
+    textEditor.selections = starts.map((s) => new vscode.Selection(s, s));
+  }
+}
+
 export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
