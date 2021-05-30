@@ -153,3 +153,62 @@ KLMNOPQRST`
     );
   });
 });
+
+suite("clear rectangle", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ
+klmnopqrst
+KLMNOPQRST`;
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("nothing happens when the selection is empty", async () => {
+    setEmptyCursors(activeTextEditor, [1, 5]);
+    await emulator.runCommand("clearRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertCursorsEqual(activeTextEditor, [1, 5]);
+  });
+
+  test("nothing happens when the selections are empty", async () => {
+    setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
+    await emulator.runCommand("clearRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
+  });
+
+  test("clearing a rectangle", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+    await emulator.runCommand("clearRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `012    789
+abc    hij
+ABC    HIJ
+klmnopqrst
+KLMNOPQRST`
+    );
+    assertCursorsEqual(activeTextEditor, [2, 7]);
+  });
+
+  test("clearing rectangles", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 5), new vscode.Selection(2, 7, 3, 9)];
+    await emulator.runCommand("clearRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `012  56789
+abc  fghij
+ABC  FG  J
+klmnopq  t
+KLMNOPQRST`
+    );
+    assertCursorsEqual(activeTextEditor, [2, 5], [3, 9]);
+  });
+});
