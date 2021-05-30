@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.32.0] - 2021-05-30
 ### Add
 - (Experimental) `C-x <SPC>` (rectangle-mark-mode), #819.
 - Rectangle kill, copy, delete and yank commands (`C-x r k`, `C-x r M-w`, `C-x r d`, `C-x r y`), #825.
