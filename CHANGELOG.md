@@ -5,6 +5,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ### Add
 - (Experimental) `C-x <SPC>` (rectangle-mark-mode), #819.
 - Rectangle kill, copy, delete and yank commands (`C-x r k`, `C-x r M-w`, `C-x r d`, `C-x r y`), #825.
+- open-rectangle command (`C-x r o`), #845.
+- clear-rectangle command (`C-x r c`), #844.
 
 ### Fix
 - Fix beginning-of-buffer and end-of-buffer not to push mark if mark-mode has already been started, #839.
