@@ -213,7 +213,7 @@ KLMNOPQRST`
   });
 });
 
-suite.only("open-rectangle", () => {
+suite("open-rectangle", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
