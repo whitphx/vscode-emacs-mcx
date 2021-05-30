@@ -102,7 +102,7 @@ abstract class EditRectangle extends RectangleKillYankCommand {
 
     // Delete
     if (this.delete) {
-      await deleteRanges(textEditor, rectSelections).then();
+      await deleteRanges(textEditor, rectSelections);
 
       revealPrimaryActive(textEditor);
 
