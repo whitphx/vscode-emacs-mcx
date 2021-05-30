@@ -8,7 +8,7 @@ import { KillRing } from "./kill-yank/kill-ring";
 import { initializeLogger, logger } from "./logger";
 import { MessageManager } from "./message";
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
   Configuration.registerDispose(context);
 
