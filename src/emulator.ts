@@ -44,7 +44,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   private prevExchangedMarks: vscode.Position[] | null;
 
   private _isInMarkMode = false;
-  public get isInMarkMode() {
+  public get isInMarkMode(): boolean {
     return this._isInMarkMode;
   }
 
@@ -159,7 +159,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this.afterCommand, this));
   }
 
-  public setTextEditor(textEditor: TextEditor) {
+  public setTextEditor(textEditor: TextEditor): void {
     this.textEditor = textEditor;
     this.killYanker.setTextEditor(textEditor);
   }
@@ -168,13 +168,13 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     return this.textEditor;
   }
 
-  public dispose() {
+  public dispose(): void {
     for (const disposable of this.disposables) {
       disposable.dispose();
     }
   }
 
-  public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
+  public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
       if (
@@ -191,7 +191,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent) {
+  public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
     if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
       this.onDidInterruptTextEditor();
 
@@ -201,7 +201,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public typeChar(char: string) {
+  public typeChar(char: string): void | Thenable<unknown> {
     if (this.isInMarkMode) {
       this.exitMarkMode();
     }
@@ -228,7 +228,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
-  public type(text: string) {
+  public type(text: string): Thenable<unknown> {
     // Single character input with prefix argument
     // NOTE: This single character handling should be replaced with `EmacsEmulator.typeChar` directly bound to relevant keystrokes,
     // however, it's difficult to cover all characters without `type` event registration,
@@ -299,7 +299,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   /**
    * C-<SPC>
    */
-  public setMarkCommand() {
+  public setMarkCommand(): void {
     if (this.prefixArgumentHandler.precedingSingleCtrlU()) {
       // C-u C-<SPC>
       this.prefixArgumentHandler.cancel();
@@ -363,7 +363,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   /**
    * Invoked by C-g
    */
-  public cancel() {
+  public cancel(): void {
     if (this.rectMode) {
       this.exitRectangleMarkMode();
     }
@@ -386,7 +386,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     MessageManager.showMessage("Quit");
   }
 
-  public enterMarkMode(pushMark = true) {
+  public enterMarkMode(pushMark = true): void {
     this._isInMarkMode = true;
     this.rectMode = false;
 
@@ -400,12 +400,12 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public pushMark(positions: vscode.Position[]) {
+  public pushMark(positions: vscode.Position[]): void {
     this.prevExchangedMarks = null;
     this.markRing.push(positions);
   }
 
-  public popMark() {
+  public popMark(): void {
     const prevMark = this.markRing.pop();
     if (prevMark) {
       this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
@@ -413,7 +413,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public exchangePointAndMark() {
+  public exchangePointAndMark(): void {
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
     this.enterMarkMode(false);
     this.prevExchangedMarks = this.textEditor.selections.map((selection) => selection.active);
@@ -430,7 +430,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public exitMarkMode() {
+  public exitMarkMode(): void {
     this._isInMarkMode = false;
     this.exitRectangleMarkMode();
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
