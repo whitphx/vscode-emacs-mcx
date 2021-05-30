@@ -5,9 +5,9 @@ import { createParallel, EmacsCommand } from ".";
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () => vscode.commands.executeCommand<void>("deleteLeft"));
+    return createParallel(repeat, () => vscode.commands.executeCommand("deleteLeft"));
   }
 }
 
