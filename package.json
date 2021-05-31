@@ -3672,7 +3672,7 @@
 		"@typescript-eslint/parser": "^4.25.0",
 		"eslint": "^7.27.0",
 		"eslint-config-prettier": "^8.3.0",
-		"expect": "^27.0.1",
+		"expect": "^27.0.2",
 		"glob": "^7.1.7",
 		"mocha": "^8.4.0",
 		"prettier": "^2.3.0",
