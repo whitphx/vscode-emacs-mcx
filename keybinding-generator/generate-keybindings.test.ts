@@ -1,4 +1,4 @@
-import * as expect from "expect";
+import expect from "expect";
 import {
   generateKeybindings,
   isValidKey,
@@ -87,7 +87,7 @@ describe("generateKeybindings", () => {
         key: "ctrl+[ f",
         command: "emacs-mcx.forwardWord",
         when: "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-      }
+      },
     ];
     expect(generateKeybindings(src)).toEqual(expected);
   });
