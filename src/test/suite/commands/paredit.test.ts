@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import assert from "assert";
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { KillRing } from "../../../kill-yank/kill-ring";

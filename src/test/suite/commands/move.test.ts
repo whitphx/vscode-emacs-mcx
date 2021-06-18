@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import * as assert from "assert";
-import * as expect from "expect";
+import assert from "assert";
+import expect from "expect";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";

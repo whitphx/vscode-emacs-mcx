@@ -5,7 +5,7 @@
 import * as vscode from "vscode";
 import * as winston from "winston";
 import { ConsoleForElectron } from "winston-console-for-electron";
-import * as TransportStream from "winston-transport";
+import TransportStream from "winston-transport";
 import { IConfiguration } from "./configuration/iconfiguration";
 
 /**

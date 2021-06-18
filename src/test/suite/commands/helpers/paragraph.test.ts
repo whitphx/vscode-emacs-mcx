@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import assert from "assert";
 import * as vscode from "vscode";
 import { Position } from "vscode";
 import { travelForward, travelBackward } from "../../../../commands/helpers/paragraph";

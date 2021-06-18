@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import assert from "assert";
 import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../utils";

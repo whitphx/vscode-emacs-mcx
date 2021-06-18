@@ -1,5 +1,5 @@
-import * as assert from "assert";
-import * as expect from "expect";
+import assert from "assert";
+import expect from "expect";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";

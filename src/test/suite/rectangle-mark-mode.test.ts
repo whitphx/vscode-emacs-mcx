@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import * as expect from "expect";
+import expect from "expect";
 import { EmacsEmulator } from "../../emulator";
 import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay, assertTextEqual } from "./utils";
 
