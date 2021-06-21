@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import * as expect from "expect";
+import expect from "expect";
 import { cleanUpWorkspace, setupWorkspace } from "./utils";
 import { convertSelectionToRectSelections } from "../../rectangle";
 

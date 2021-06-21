@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import assert from "assert";
 import { KillRing } from "../../kill-yank/kill-ring";
 import { ClipboardTextKillRingEntity } from "../../kill-yank/kill-ring-entity/clipboard-text";
 

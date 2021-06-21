@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import * as stripJsonComments from "strip-json-comments";
+import stripJsonComments from "strip-json-comments";
 import {
   KeyBinding,
   isKeyBindingSource,

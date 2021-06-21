@@ -1,5 +1,5 @@
 import { Position } from "vscode";
-import * as expect from "expect";
+import expect from "expect";
 import { MarkRing } from "../../mark-ring";
 
 suite("MarkRing", () => {
