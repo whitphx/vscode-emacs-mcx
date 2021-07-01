@@ -2529,10 +2529,10 @@ type-fest@^0.20.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
 
-typescript-transform-paths@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.0.0.tgz#1654749703ecfe0142160fcb5958030a89ee8747"
-  integrity sha512-GecTkLq+X1/5RhNI8pFsaJgfKcZDXRSJTpVlyr2UqpjG12TmuicFssE7wb9W3yLqm1d6sCCWBOdpzDOanYhFlA==
+typescript-transform-paths@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.0.2.tgz#2a8bc2cd21241982043199e98ed6dd21b2e2cd14"
+  integrity sha512-rl20tb9uDLWIj0faJY8IjPCldVgnKMElhXxkkAl+RCg+B+TLGxO+kRWB6mZw2Zufh5Ske2sQ9NbuIx8GqDspgg==
   dependencies:
     minimatch "^3.0.4"
 
