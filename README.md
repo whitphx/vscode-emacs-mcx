@@ -14,13 +14,13 @@
 
 <a href="https://www.buymeacoffee.com/whitphx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
 
-This Visual Studio Code extension provides emacs-like keybindings and operations.
-This is inspired by [the great vscode extension by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [vscode-emacs-improved by rkwan94](https://github.com/rkwan94/vscode-emacs) and [vscode-emacs-neon by NotKyon](https://github.com/NotKyon/vscode-emacs-neon).
+This Visual Studio Code extension provides Emacs-like keybindings and operations.
+This is inspired by [the great VSCcode extension by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [vscode-emacs-improved by rkwan94](https://github.com/rkwan94/vscode-emacs), and [vscode-emacs-neon by NotKyon](https://github.com/NotKyon/vscode-emacs-neon).
 
-Though there were such great extensions, this extension is written from scratch because it was hard to achieve the goal listed below by extending the existent code base.
+Though there were such great extensions, this extension is written from scratch because it was hard to achieve the goal listed below by extending the existent codebase.
 
 This extension aims
-* to provide emacs-like keybindings
+* to provide Emacs-like keybindings
 * to be fully compatible with multi cursor
 * to support kill-ring integrated with the system clipboard
 * to support mark-ring
@@ -29,19 +29,19 @@ This extension aims
 * to fix some bugs in the existing extensions such as
     * mark-mode states are shared among all editors
 
-This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks to all these great works.
+This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks for all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
 ## FAQ
 ### The cursor cannot be moved on the find widget as the widget closes with movement keys
-It's an intended design which simulates the original Emacs' behavior.
+It's an intended design that simulates the original Emacs' behavior.
 You can disable it with `emacs-mcx.cursorMoveOnFindWidget` option described below.
 See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about this topic.
 
 ### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed
 This is VSCode's design that an extension cannot control.
 To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false`.
-That makes the find widget work in a similar way as Emacs. See https://github.com/whitphx/vscode-emacs-mcx/issues/107 for the details.
+That makes the find widget work similarly to Emacs. See https://github.com/whitphx/vscode-emacs-mcx/issues/107 for the details.
 
 ## Extension settings
 This extension has some custom settings named with a prefix `emacs-mcx`.
