@@ -2606,6 +2606,11 @@
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
 			},
 			{
+				"key": "p",
+				"command": "emacs-mcx.replaceKillRingToRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
 				"key": " ",
 				"when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
 				"command": "emacs-mcx.typeChar",

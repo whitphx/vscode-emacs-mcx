@@ -63,6 +63,14 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
   });
 }
 
+export function assertSelectionsEqual(textEditor: TextEditor, ...selections: Array<Selection>) {
+  assert.strictEqual(textEditor.selections.length, selections.length);
+  textEditor.selections.forEach((actualSelection, idx) => {
+    const expectSelection = selections[idx];
+    assert.deepStrictEqual(actualSelection, expectSelection);
+  });
+}
+
 export function delay(time?: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, time));
 }

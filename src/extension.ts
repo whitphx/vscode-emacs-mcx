@@ -198,6 +198,10 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("clearRectangle");
   });
 
+  registerEmulatorCommand("emacs-mcx.replaceKillRingToRectangle", (emulator) => {
+    return emulator.runCommand("replaceKillRingToRectangle");
+  });
+
   registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
     emulator.setMarkCommand();
   });
