@@ -3673,7 +3673,7 @@
 		"@types/node": "^16.4.12",
 		"@types/sinon": "^10.0.2",
 		"@types/vscode": "^1.51.0",
-		"@typescript-eslint/eslint-plugin": "^4.27.0",
+		"@typescript-eslint/eslint-plugin": "^4.29.0",
 		"@typescript-eslint/parser": "^4.27.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
