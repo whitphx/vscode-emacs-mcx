@@ -679,6 +679,11 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "p", // ctrl+x r p
+      "command": "emacs-mcx.replaceKillRingToRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "$special": "rectMarkModeTypes"
     },
     // Suggestion

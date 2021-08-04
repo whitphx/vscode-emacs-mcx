@@ -5,6 +5,7 @@ import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections } from "../rectangle";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { KillRing } from "../kill-yank/kill-ring";
 
 /**
  * This command is assigned to `C-x r` and sets `emacs-mcx.acceptingRectCommand` context
@@ -246,5 +247,76 @@ export class ClearRectangle extends EmacsCommand {
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
+  }
+}
+
+export class ReplaceKillRingToRectangle extends EmacsCommand {
+  public readonly id = "replaceKillRingToRectangle";
+  private killring: KillRing | null;
+
+  public constructor(
+    afterExecute: () => void,
+    emacsController: IMarkModeController & IEmacsCommandRunner,
+    killring: KillRing | null
+  ) {
+    super(afterExecute, emacsController);
+    this.killring = killring;
+  }
+
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
+    if (this.killring === null) {
+      return;
+    }
+    const top = this.killring.getTop();
+    if (top === null) {
+      return;
+    }
+    const text = top.asString();
+    // only support one line which isn't empty
+    if (text === "" || text.indexOf("\n") !== -1) {
+      return;
+    }
+
+    const selections = getNonEmptySelections(textEditor);
+    if (selections.length !== 1) {
+      // multiple cursor not supported
+      return;
+    }
+    const insertChar = Math.min(selections[0].start.character, selections[0].end.character);
+    const finalCursorLine = selections[0].active.line;
+    let finalCursorChar = insertChar;
+    if (selections[0].active.character >= selections[0].anchor.character) {
+      finalCursorChar = insertChar + text.length;
+    }
+
+    const currentRect = convertSelectionToRectSelections(textEditor.document, selections[0]);
+    // rect is reversed in previous convert,
+    // so we reverse it again as we need to traverse from smaller line number
+    if (selections[0].active.line < selections[0].anchor.line) {
+      currentRect.reverse();
+    }
+
+    const lineStart = Math.max(selections[0].start.line, 0);
+    const lineEnd = Math.min(selections[0].end.line, textEditor.document.lineCount - 1);
+    await textEditor.edit((edit) => {
+      for (let i = lineStart; i <= lineEnd; i++) {
+        const rgn = currentRect[i - lineStart];
+        if (rgn.end.character < insertChar) {
+          const fill = insertChar - rgn.end.character;
+          edit.insert(new vscode.Position(i, rgn.end.character), " ".repeat(fill) + text);
+        } else {
+          edit.replace(rgn, text);
+        }
+      }
+    });
+
+    this.emacsController.exitMarkMode();
+
+    const finalCursor = new vscode.Position(finalCursorLine, finalCursorChar);
+    textEditor.selections = [new vscode.Selection(finalCursor, finalCursor)];
   }
 }

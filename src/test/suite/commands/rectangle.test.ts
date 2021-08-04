@@ -1,7 +1,16 @@
 import * as vscode from "vscode";
 import expect from "expect";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
+import {
+  assertTextEqual,
+  cleanUpWorkspace,
+  setEmptyCursors,
+  assertCursorsEqual,
+  setupWorkspace,
+  assertSelectionsEqual,
+} from "../utils";
+import { KillRing } from "../../../kill-yank/kill-ring";
+import assert from "assert";
 
 suite("Kill, copy, and yank rectangle", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -269,5 +278,254 @@ klmnopq  rst
 KLMNOPQRST`
     );
     assertCursorsEqual(activeTextEditor, [0, 3], [2, 7]);
+  });
+});
+
+suite("replace-killring-to-rectangle", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let killring: KillRing;
+  let emulator_no_killring: EmacsEmulator;
+  let emulator_has_killring: EmacsEmulator;
+
+  const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ
+abc
+klmnopqrst
+KLMNOPQRST
+<r>`;
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator_no_killring = new EmacsEmulator(activeTextEditor, null);
+    killring = new KillRing(3);
+    emulator_has_killring = new EmacsEmulator(activeTextEditor, killring);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("nothing happens if no killring", async () => {
+    const selection = new vscode.Selection(0, 4, 4, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_no_killring.runCommand("replaceKillRingToRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertSelectionsEqual(activeTextEditor, selection);
+  });
+
+  test("nothing happens if killring is empty", async () => {
+    const selection = new vscode.Selection(0, 4, 4, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertSelectionsEqual(activeTextEditor, selection);
+  });
+
+  test("nothing happens if killring has newline", async () => {
+    const wholeFirstLine = `0123456789
+`;
+    const copySelection = new vscode.Selection(0, 0, 1, 0);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), wholeFirstLine);
+
+    const selection = new vscode.Selection(0, 4, 4, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertSelectionsEqual(activeTextEditor, selection);
+
+    assert.strictEqual(killring.getTop()?.asString(), wholeFirstLine);
+  });
+
+  test("nothing happens if selection is empty", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    setEmptyCursors(activeTextEditor, [1, 5]);
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertCursorsEqual(activeTextEditor, [1, 5]);
+
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("nothing happens if selections are empty", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
+
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("multi selection are not supported", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection1 = new vscode.Selection(0, 4, 1, 4);
+    const selection2 = new vscode.Selection(4, 4, 5, 4);
+    activeTextEditor.selections = [selection1, selection2];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assertSelectionsEqual(activeTextEditor, selection1, selection2);
+  });
+
+  test("replace-killring-to-rectangle, cursor bottom-right", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection = new vscode.Selection(0, 4, 4, 5);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123<r>56789
+abcd<r>fghij
+ABCD<r>FGHIJ
+abc <r>
+klmn<r>pqrst
+KLMNOPQRST
+<r>`
+    );
+
+    assertCursorsEqual(activeTextEditor, [4, 7]);
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("replace-killring-to-rectangle, cursor bottom-left", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection = new vscode.Selection(0, 5, 4, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123<r>56789
+abcd<r>fghij
+ABCD<r>FGHIJ
+abc <r>
+klmn<r>pqrst
+KLMNOPQRST
+<r>`
+    );
+
+    assertCursorsEqual(activeTextEditor, [4, 4]);
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("replace-killring-to-rectangle, cursor upper-right", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection = new vscode.Selection(4, 4, 0, 5);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123<r>56789
+abcd<r>fghij
+ABCD<r>FGHIJ
+abc <r>
+klmn<r>pqrst
+KLMNOPQRST
+<r>`
+    );
+
+    assertCursorsEqual(activeTextEditor, [0, 7]);
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("replace-killring-to-rectangle, cursor upper-left", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection = new vscode.Selection(4, 5, 0, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123<r>56789
+abcd<r>fghij
+ABCD<r>FGHIJ
+abc <r>
+klmn<r>pqrst
+KLMNOPQRST
+<r>`
+    );
+
+    assertCursorsEqual(activeTextEditor, [0, 4]);
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("replace-killring-to-0-width-rectangle, cursor upper-left", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection = new vscode.Selection(4, 4, 0, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123<r>456789
+abcd<r>efghij
+ABCD<r>EFGHIJ
+abc <r>
+klmn<r>opqrst
+KLMNOPQRST
+<r>`
+    );
+
+    assertCursorsEqual(activeTextEditor, [0, 7]);
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+  });
+
+  test("replace-killring-to-0-width-rectangle, cursor bottom-right", async () => {
+    const copySelection = new vscode.Selection(6, 0, 6, 3);
+    activeTextEditor.selections = [copySelection];
+    await emulator_has_killring.runCommand("copyRegion");
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
+
+    const selection = new vscode.Selection(0, 4, 4, 4);
+    activeTextEditor.selections = [selection];
+    await emulator_has_killring.runCommand("replaceKillRingToRectangle");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123<r>456789
+abcd<r>efghij
+ABCD<r>EFGHIJ
+abc <r>
+klmn<r>opqrst
+KLMNOPQRST
+<r>`
+    );
+
+    assertCursorsEqual(activeTextEditor, [4, 7]);
+    assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 });
