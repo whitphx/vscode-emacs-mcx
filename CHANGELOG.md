@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
+## [Unreleased]
+### Add
+- `C-x r p` as an alternative to `C-x r t`. See https://github.com/whitphx/vscode-emacs-mcx/issues/924 for the details. #923. @shengofsun
+
 ## [0.32.0] - 2021-05-30
 ### Add
 - (Experimental) `C-x <SPC>` (rectangle-mark-mode), #819.
