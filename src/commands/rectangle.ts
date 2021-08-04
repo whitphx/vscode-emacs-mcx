@@ -254,12 +254,20 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
   public readonly id = "replaceKillRingToRectangle";
   private killring: KillRing | null;
 
-  public constructor(afterExecute: () => void, emacsController: IMarkModeController & IEmacsCommandRunner, killring: KillRing | null) {
-    super(afterExecute, emacsController)
+  public constructor(
+    afterExecute: () => void,
+    emacsController: IMarkModeController & IEmacsCommandRunner,
+    killring: KillRing | null
+  ) {
+    super(afterExecute, emacsController);
     this.killring = killring;
   }
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     if (this.killring === null) {
       return;
     }
@@ -269,12 +277,13 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     }
     const text = top.asString();
     // only support one line which isn't empty
-    if (text === "" || text.indexOf("\n") !== -1 ) {
+    if (text === "" || text.indexOf("\n") !== -1) {
       return;
     }
 
     const selections = getNonEmptySelections(textEditor);
-    if (selections.length !== 1) { // multiple cursor not supported
+    if (selections.length !== 1) {
+      // multiple cursor not supported
       return;
     }
     const insertChar = Math.min(selections[0].start.character, selections[0].end.character);

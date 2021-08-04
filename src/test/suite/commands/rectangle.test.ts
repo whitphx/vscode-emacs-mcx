@@ -1,7 +1,14 @@
 import * as vscode from "vscode";
 import expect from "expect";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace, assertSelectionsEqual } from "../utils";
+import {
+  assertTextEqual,
+  cleanUpWorkspace,
+  setEmptyCursors,
+  assertCursorsEqual,
+  setupWorkspace,
+  assertSelectionsEqual,
+} from "../utils";
 import { KillRing } from "../../../kill-yank/kill-ring";
 import assert from "assert";
 
@@ -343,7 +350,7 @@ KLMNOPQRST
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("nothing happens if selections are empty", async() => {
+  test("nothing happens if selections are empty", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -357,7 +364,7 @@ KLMNOPQRST
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("multi selection are not supported", async() => {
+  test("multi selection are not supported", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -372,7 +379,7 @@ KLMNOPQRST
     assertSelectionsEqual(activeTextEditor, selection1, selection2);
   });
 
-  test("replace-killring-to-rectangle, cursor bottom-right", async() => {
+  test("replace-killring-to-rectangle, cursor bottom-right", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -382,20 +389,22 @@ KLMNOPQRST
     activeTextEditor.selections = [selection];
     await emulator_has_killring.runCommand("replaceKillRingToRectangle");
 
-    assertTextEqual(activeTextEditor,
+    assertTextEqual(
+      activeTextEditor,
       `0123<r>56789
 abcd<r>fghij
 ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`);
+<r>`
+    );
 
     assertCursorsEqual(activeTextEditor, [4, 7]);
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("replace-killring-to-rectangle, cursor bottom-left", async() => {
+  test("replace-killring-to-rectangle, cursor bottom-left", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -405,20 +414,22 @@ KLMNOPQRST
     activeTextEditor.selections = [selection];
     await emulator_has_killring.runCommand("replaceKillRingToRectangle");
 
-    assertTextEqual(activeTextEditor,
+    assertTextEqual(
+      activeTextEditor,
       `0123<r>56789
 abcd<r>fghij
 ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`);
+<r>`
+    );
 
     assertCursorsEqual(activeTextEditor, [4, 4]);
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("replace-killring-to-rectangle, cursor upper-right", async() => {
+  test("replace-killring-to-rectangle, cursor upper-right", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -428,20 +439,22 @@ KLMNOPQRST
     activeTextEditor.selections = [selection];
     await emulator_has_killring.runCommand("replaceKillRingToRectangle");
 
-    assertTextEqual(activeTextEditor,
+    assertTextEqual(
+      activeTextEditor,
       `0123<r>56789
 abcd<r>fghij
 ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`);
+<r>`
+    );
 
     assertCursorsEqual(activeTextEditor, [0, 7]);
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("replace-killring-to-rectangle, cursor upper-left", async() => {
+  test("replace-killring-to-rectangle, cursor upper-left", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -451,20 +464,22 @@ KLMNOPQRST
     activeTextEditor.selections = [selection];
     await emulator_has_killring.runCommand("replaceKillRingToRectangle");
 
-    assertTextEqual(activeTextEditor,
+    assertTextEqual(
+      activeTextEditor,
       `0123<r>56789
 abcd<r>fghij
 ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`);
+<r>`
+    );
 
     assertCursorsEqual(activeTextEditor, [0, 4]);
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("replace-killring-to-0-width-rectangle, cursor upper-left", async() => {
+  test("replace-killring-to-0-width-rectangle, cursor upper-left", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -474,20 +489,22 @@ KLMNOPQRST
     activeTextEditor.selections = [selection];
     await emulator_has_killring.runCommand("replaceKillRingToRectangle");
 
-    assertTextEqual(activeTextEditor,
+    assertTextEqual(
+      activeTextEditor,
       `0123<r>456789
 abcd<r>efghij
 ABCD<r>EFGHIJ
 abc <r>
 klmn<r>opqrst
 KLMNOPQRST
-<r>`);
+<r>`
+    );
 
     assertCursorsEqual(activeTextEditor, [0, 7]);
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
   });
 
-  test("replace-killring-to-0-width-rectangle, cursor bottom-right", async() => {
+  test("replace-killring-to-0-width-rectangle, cursor bottom-right", async () => {
     const copySelection = new vscode.Selection(6, 0, 6, 3);
     activeTextEditor.selections = [copySelection];
     await emulator_has_killring.runCommand("copyRegion");
@@ -497,14 +514,16 @@ KLMNOPQRST
     activeTextEditor.selections = [selection];
     await emulator_has_killring.runCommand("replaceKillRingToRectangle");
 
-    assertTextEqual(activeTextEditor,
+    assertTextEqual(
+      activeTextEditor,
       `0123<r>456789
 abcd<r>efghij
 ABCD<r>EFGHIJ
 abc <r>
 klmn<r>opqrst
 KLMNOPQRST
-<r>`);
+<r>`
+    );
 
     assertCursorsEqual(activeTextEditor, [4, 7]);
     assert.strictEqual(killring.getTop()?.asString(), "<r>");
