@@ -3685,7 +3685,7 @@
 		"strip-json-comments": "^3.1.1",
 		"ts-loader": "^9.2.5",
 		"ts-mocha": "^8.0.0",
-		"ts-node": "^10.0.0",
+		"ts-node": "^10.1.0",
 		"tsconfig-paths-webpack-plugin": "^3.5.1",
 		"ttypescript": "^1.5.12",
 		"typescript": "^4.3.5",
