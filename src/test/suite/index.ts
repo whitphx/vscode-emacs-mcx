@@ -8,7 +8,7 @@ export function run(): Promise<void> {
     ui: "tdd",
     forbidOnly: true,
     color: true,
-    timeout: 5000,
+    timeout: 10000,
   });
 
   const testsRoot = path.resolve(__dirname, "..");
