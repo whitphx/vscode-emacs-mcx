@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.33.0] - 2021-08-09
 ### Add
 - `C-x r p` as an alternative to `C-x r t`. See https://github.com/whitphx/vscode-emacs-mcx/issues/924 for the details. #923. @shengofsun
 
