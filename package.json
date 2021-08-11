@@ -3670,7 +3670,7 @@
 		"@types/expect": "^24.3.0",
 		"@types/glob": "^7.1.4",
 		"@types/mocha": "^9.0.0",
-		"@types/node": "^16.4.13",
+		"@types/node": "^16.4.14",
 		"@types/sinon": "^10.0.2",
 		"@types/vscode": "^1.51.0",
 		"@typescript-eslint/eslint-plugin": "^4.29.0",
