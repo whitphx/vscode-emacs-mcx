@@ -2,6 +2,7 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+## [0.33.2] - 2021-08-16
 ### Fix
 - Add "web" to "extensionKind" field in `package.json`, #967.
 
