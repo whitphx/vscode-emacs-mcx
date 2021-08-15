@@ -29,6 +29,7 @@
 	],
 	"extensionKind": [
 		"ui",
+		"web",
 		"workspace"
 	],
 	"main": "./dist/extension.js",
