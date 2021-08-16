@@ -33,6 +33,7 @@
 		"workspace"
 	],
 	"main": "./dist/extension.js",
+	"browser": "./dist/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
