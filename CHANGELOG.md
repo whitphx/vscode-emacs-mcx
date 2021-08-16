@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.33.3] - 2021-08-16
 ### Fix
 - Add "browser" field in `package.json`, #969.
 
