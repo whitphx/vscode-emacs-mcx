@@ -54,5 +54,4 @@ jobs:
 
     - name: Test packaging
       run: |
-        npm install -g vsce
-        vsce package
+        yarn run vsce package
