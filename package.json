@@ -33,7 +33,7 @@
 		"workspace"
 	],
 	"main": "./dist/extension.js",
-	"browser": "./dist/extension.js",
+	"browser": "./dist/web/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -3666,7 +3666,13 @@
 		"check:prettier": "prettier --check \"src/**/*.ts\"",
 		"check:eslint": "eslint src --ext ts",
 		"pretest": "yarn run test-compile",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"test:web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+		"pretest:web": "yarn run compile-web",
+		"vscode-web:prepublish": " yarn run package-web",
+		"compile-web": "webpack --config ./build/web-extension.webpack.config.js",
+		"watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
+		"package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js"
 	},
 	"devDependencies": {
 		"@types/expect": "^24.3.0",
@@ -3675,8 +3681,10 @@
 		"@types/node": "^16.6.1",
 		"@types/sinon": "^10.0.2",
 		"@types/vscode": "^1.59.0",
+		"@types/webpack-env": "^1.16.2",
 		"@typescript-eslint/eslint-plugin": "^4.29.1",
 		"@typescript-eslint/parser": "^4.29.1",
+		"@vscode/test-web": "^0.0.8",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"expect": "^27.0.6",
