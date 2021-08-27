@@ -5,6 +5,8 @@
 import { IConfiguration } from "../../configuration/iconfiguration";
 import { ILogger } from "src/platform/common/logger";
 
+const logPriorities: string[] = ["error", "warn", "info", "verbose", "debug", "silly"];
+
 /**
  * Displays VSCode message to user
  */
@@ -12,9 +14,11 @@ export class VsCodeMessage implements ILogger {
   actionMessages = ["Dismiss", "Suppress Errors"];
   private prefix: string;
   configuration?: IConfiguration;
+  priorityThreshold: number;
 
   constructor(prefix: string) {
     this.prefix = prefix;
+    this.priorityThreshold = -1;
   }
 
   error(errorMessage: string): void {
@@ -33,10 +37,24 @@ export class VsCodeMessage implements ILogger {
     this.log({ level: "verbose", message: verboseMessage });
   }
 
+  private isSevere(logLevel: string): boolean {
+    const priority = logPriorities.indexOf(logLevel);
+    if (priority < 0 || this.priorityThreshold < 0) {
+      return true; // Unexpected severity is considered severe tentatively.
+    }
+
+    return priority <= this.priorityThreshold;
+  }
+
   private async log(info: { level: string; message: string }) {
     if (this.configuration && this.configuration.debug.silent) {
       return;
     }
+
+    if (!this.isSevere(info.level)) {
+      return;
+    }
+
     let showMessage: (message: string, ...items: string[]) => void;
     switch (info.level) {
       case "error":
@@ -46,9 +64,11 @@ export class VsCodeMessage implements ILogger {
         showMessage = console.warn;
         break;
       case "info":
+        showMessage = console.log;
+        break;
       case "verbose":
       case "debug":
-        showMessage = console.log;
+        showMessage = console.debug;
         break;
       default:
         throw Error(`Unsupported log level ${info.level}`);
@@ -59,6 +79,7 @@ export class VsCodeMessage implements ILogger {
 
   public configChanged(configuration: IConfiguration): void {
     this.configuration = configuration;
+    this.priorityThreshold = logPriorities.indexOf(this.configuration?.debug.loggingLevelForConsole);
   }
 }
 
