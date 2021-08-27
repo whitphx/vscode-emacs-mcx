@@ -2,6 +2,7 @@
  * This file is derived from VSCodeVim/Vim.
  */
 
+import { Logger } from "../logger";
 import * as vscode from "vscode";
 import { IConfiguration, IDebugConfiguration } from "./iconfiguration";
 
@@ -72,6 +73,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
         this[option] = val;
       }
     }
+
+    Logger.configChanged(this);
   }
 
   private static unproxify(obj: { [key: string]: any }) {

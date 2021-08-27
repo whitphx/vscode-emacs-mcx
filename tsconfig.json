@@ -10,7 +10,8 @@
 		"rootDir": "src",
 		"baseUrl": "./",
 		"paths": {
-			"vs/*": ["src/vs/*"]
+			"vs/*": ["src/vs/*"],
+      "platform/*": ["src/platform/node/*"]
 		},
 		"plugins": [{ "transform": "typescript-transform-paths" }],
 		"strict": true,   /* enable all strict type-checking options */

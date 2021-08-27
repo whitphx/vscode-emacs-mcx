@@ -1,70 +1,30 @@
-/**
- * This file is derived from VSCodeVim/Vim.
- */
+import { ILogger } from "src/platform/common/logger";
+import { LoggerImpl } from "platform/loggerImpl";
+import { IConfiguration } from "src/configuration/iconfiguration";
 
-// import * as vscode from "vscode";
-// import * as winston from "winston";
-// import { ConsoleForElectron } from "winston-console-for-electron";
-// import TransportStream from "winston-transport";
-// import { IConfiguration } from "./configuration/iconfiguration";
+export class Logger {
+  private static readonly cache = new Map<string, ILogger>();
+  private static configuration: IConfiguration | undefined = undefined;
 
-// /**
-//  * Implementation of Winston transport
-//  * Displays VS Code message to user
-//  */
-// class VsCodeMessage extends TransportStream {
-//   public log(info: { level: string; message: string }, callback: () => void) {
-//     switch (info.level) {
-//       case "error":
-//         vscode.window.showErrorMessage(info.message, "Dismiss");
-//         break;
-//       case "warn":
-//         vscode.window.showWarningMessage(info.message, "Dismiss");
-//         break;
-//       case "info":
-//       case "verbose":
-//       case "debug":
-//         vscode.window.showInformationMessage(info.message, "Dismiss");
-//         break;
-//     }
+  static get(prefix: string): ILogger {
+    let logger = Logger.cache.get(prefix);
+    if (logger === undefined) {
+      logger = LoggerImpl.get(prefix);
+      if (Logger.configuration) {
+        logger.configChanged(Logger.configuration);
+      }
+      Logger.cache.set(prefix, logger);
+    }
 
-//     if (callback) {
-//       callback();
-//     }
-//   }
-// }
+    return logger;
+  }
 
-export const logger = console;
-// export let logger = winston.createLogger({
-//   format: winston.format.simple(),
-//   transports: [
-//     new ConsoleForElectron({
-//       level: "error",
-//       silent: false,
-//     }),
-//     new VsCodeMessage({
-//       level: "error",
-//       silent: false,
-//     }),
-//   ],
-// });
-
-export function initializeLogger(config: any) {
-  console.log(config);
-  return null;
+  static configChanged(configuration: IConfiguration): void {
+    Logger.configuration = configuration;
+    for (const logger of this.cache.values()) {
+      logger.configChanged(configuration);
+    }
+  }
 }
-// export function initializeLogger(configuration: IConfiguration) {
-//   logger = winston.createLogger({
-//     format: winston.format.simple(),
-//     transports: [
-//       new ConsoleForElectron({
-//         level: configuration.debug.loggingLevelForConsole,
-//         silent: configuration.debug.silent,
-//       }),
-//       new VsCodeMessage({
-//         level: configuration.debug.loggingLevelForAlert,
-//         silent: configuration.debug.silent,
-//       }),
-//     ],
-//   });
-// }
+
+export const logger = Logger.get(""); // Default logger, which is not recommended to use. Prefixed loggers should be used instead.

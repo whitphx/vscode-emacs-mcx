@@ -11,7 +11,6 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = /** @type WebpackConfig */ {
 	context: path.dirname(__dirname),
@@ -26,6 +25,8 @@ module.exports = /** @type WebpackConfig */ {
 		extensions: ['.ts', '.js'], // support ts-files and js-files
 		alias: {
 			// provides alternate implementation for node module and source files
+			vs: path.resolve(__dirname, '..', 'src', 'vs'),
+			platform: path.resolve(__dirname, '..', 'src', 'platform', 'browser'),
 		},
 		fallback: {
 			// Webpack 5 no longer polyfills Node.js core modules automatically.
@@ -33,7 +34,6 @@ module.exports = /** @type WebpackConfig */ {
 			// for the list of Node.js core module polyfills.
 			'assert': require.resolve('assert')
 		},
-    plugins: [new TsconfigPathsPlugin()],
 	},
 	module: {
 		rules: [{

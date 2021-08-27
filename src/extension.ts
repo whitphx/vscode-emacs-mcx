@@ -5,14 +5,12 @@ import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { executeCommands } from "./execute-commands";
 import { KillRing } from "./kill-yank/kill-ring";
-import { initializeLogger, logger } from "./logger";
+import { logger } from "./logger";
 import { MessageManager } from "./message";
 
 export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
   Configuration.registerDispose(context);
-
-  initializeLogger(Configuration.instance);
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
 
