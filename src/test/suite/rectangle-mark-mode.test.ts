@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import expect from "expect";
+import assert from "assert";
 import { EmacsEmulator } from "../../emulator";
 import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay, assertTextEqual } from "./utils";
 
@@ -23,25 +23,31 @@ KLMNOPQRST`;
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 2)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 1, 2)]);
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 4), new vscode.Selection(2, 2, 2, 4)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(1, 2, 1, 4),
+      new vscode.Selection(2, 2, 2, 4),
+    ]);
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 2, 4)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 2, 4)]);
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 4), new vscode.Selection(2, 2, 2, 4)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(1, 2, 1, 4),
+      new vscode.Selection(2, 2, 2, 4),
+    ]);
 
     emulator.cancel();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 4, 2, 4)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 4, 2, 4)]);
   });
 
   test("expanding the rect from right bottom to left top and toggling rectangle-mark-mode", async () => {
@@ -50,24 +56,30 @@ KLMNOPQRST`;
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 4, 2, 4)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 4, 2, 4)]);
 
     await emulator.runCommand("backwardChar");
     await emulator.runCommand("backwardChar");
     await emulator.runCommand("previousLine");
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 4, 2, 2), new vscode.Selection(1, 4, 1, 2)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(2, 4, 2, 2),
+      new vscode.Selection(1, 4, 1, 2),
+    ]);
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 4, 1, 2)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 4, 1, 2)]);
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 4, 2, 2), new vscode.Selection(1, 4, 1, 2)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(2, 4, 2, 2),
+      new vscode.Selection(1, 4, 1, 2),
+    ]);
     emulator.cancel();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 2)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 1, 2)]);
   });
 
   test("killing and yanking in rectangle-mark-mode", async () => {
@@ -81,7 +93,7 @@ KLMNOPQRST`;
     await emulator.runCommand("nextLine");
     await emulator.runCommand("nextLine");
 
-    expect(activeTextEditor.selections).toEqual([
+    assert.deepStrictEqual(activeTextEditor.selections, [
       new vscode.Selection(1, 2, 1, 4),
       new vscode.Selection(2, 2, 2, 4),
       new vscode.Selection(3, 2, 3, 4),
@@ -98,7 +110,7 @@ klopqrst
 KLMNOPQRST`
     );
 
-    // expect(activeTextEditor.selections).toEqual([new vscode.Selection(3, 2, 3, 2)]); // TODO: Now not supported
+    // assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]); // TODO: Now not supported
   });
 
   test("typing a character in rectangle-mark-mode", async () => {
@@ -107,23 +119,29 @@ KLMNOPQRST`
 
     emulator.rectangleMarkMode();
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 2)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 1, 2)]);
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(1, 2, 1, 4), new vscode.Selection(2, 2, 2, 4)]);
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(1, 2, 1, 4),
+      new vscode.Selection(2, 2, 2, 4),
+    ]);
 
     await emulator.typeChar("x");
 
     await delay(); // Wait for all related event listeners to have been called
 
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(2, 5, 2, 5)]);
-    expect(activeTextEditor.document.getText()).toEqual(`0123456789
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 5, 2, 5)]);
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `0123456789
 abcdefghij
 ABCDxEFGHIJ
 klmnopqrst
-KLMNOPQRST`);
+KLMNOPQRST`
+    );
   });
 });

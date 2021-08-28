@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import expect from "expect";
+import assert from "assert";
 import { EmacsEmulator } from "../../../emulator";
 import {
   assertTextEqual,
@@ -10,7 +10,6 @@ import {
   assertSelectionsEqual,
 } from "../utils";
 import { KillRing } from "../../../kill-yank/kill-ring";
-import assert from "assert";
 
 suite("Kill, copy, and yank rectangle", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -148,7 +147,7 @@ KLMNOPQRST`
     activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
     await emulator.runCommand("copyRectangleAsKill");
     assertTextEqual(activeTextEditor, initialText);
-    expect(activeTextEditor.selections).toEqual([new vscode.Selection(0, 3, 2, 7)]); // The selection is not changed
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(0, 3, 2, 7)]); // The selection is not changed
 
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("yankRectangle");

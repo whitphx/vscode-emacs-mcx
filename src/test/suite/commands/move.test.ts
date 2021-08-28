@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import assert from "assert";
-import expect from "expect";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
@@ -133,7 +132,7 @@ suite("beginning/endOfBuffer", () => {
 
     await emulator.runCommand("beginningOfBuffer");
 
-    expect(activeTextEditor.selection.active.line).not.toEqual(101);
+    assert.notStrictEqual(activeTextEditor.selection.active.line, 101);
 
     emulator.popMark();
 
@@ -145,7 +144,7 @@ suite("beginning/endOfBuffer", () => {
 
     await emulator.runCommand("endOfBuffer");
 
-    expect(activeTextEditor.selection.active.line).not.toEqual(0);
+    assert.notStrictEqual(activeTextEditor.selection.active.line, 0);
 
     emulator.popMark();
 
