@@ -5,6 +5,7 @@ node_modules
 .vscode-test-web/
 *.vsix
 
+
 # Logs
 logs
 *.log
