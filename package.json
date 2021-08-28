@@ -3669,7 +3669,6 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/expect": "^24.3.0",
 		"@types/glob": "^7.1.4",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^16.7.4",
@@ -3679,7 +3678,6 @@
 		"@typescript-eslint/parser": "^4.29.3",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
-		"expect": "^27.0.6",
 		"glob": "^7.1.7",
 		"mocha": "^8.4.0",
 		"prettier": "^2.3.2",

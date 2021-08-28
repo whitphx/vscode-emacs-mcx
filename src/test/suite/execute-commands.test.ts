@@ -43,7 +43,7 @@ suite("executeCommands", () => {
 
     await executeCommands(["mockCommand1", "mockCommand2", "mockCommand3"]);
 
-    assert.deepEqual(results, [3, 2, 1]);
+    assert.deepStrictEqual(results, [3, 2, 1]);
 
     for (const disposable of disposables) {
       disposable.dispose();
