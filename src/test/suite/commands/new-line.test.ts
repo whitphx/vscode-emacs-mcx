@@ -107,6 +107,7 @@ suite("newLine", () => {
         test("newLine preserves the indent", async () => {
           const initialText = "()";
           activeTextEditor = await setupWorkspace(initialText, { eol });
+          activeTextEditor.options.tabSize = 4;
           emulator = new EmacsEmulator(activeTextEditor);
 
           setEmptyCursors(activeTextEditor, [0, 1]);
@@ -166,6 +167,7 @@ suite("newLine", () => {
         test("newLine preserves the indent", async () => {
           const initialText = "(a)";
           activeTextEditor = await setupWorkspace(initialText, { eol });
+          activeTextEditor.options.tabSize = 4;
           emulator = new EmacsEmulator(activeTextEditor);
 
           setEmptyCursors(activeTextEditor, [0, 2]);
