@@ -1,4 +1,5 @@
 import expect from "expect";
+import assert from "assert";
 import {
   generateKeybindings,
   isValidKey,
@@ -26,7 +27,7 @@ describe("generateKeybindings", () => {
         when: "editorTextFocus",
       },
     ];
-    expect(generateKeybindings(src)).toEqual(expected);
+    assert.deepStrictEqual(generateKeybindings(src), expected);
   });
 
   it("converts src with meta key not including 'when'", () => {
@@ -57,7 +58,7 @@ describe("generateKeybindings", () => {
         when: "config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
       },
     ];
-    expect(generateKeybindings(src)).toEqual(expected);
+    assert.deepStrictEqual(generateKeybindings(src), expected);
   });
 
   it("converts src with meta key including 'when'", () => {
@@ -89,7 +90,7 @@ describe("generateKeybindings", () => {
         when: "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
       },
     ];
-    expect(generateKeybindings(src)).toEqual(expected);
+    assert.deepStrictEqual(generateKeybindings(src), expected);
   });
 
   it("converts src with meta key not including multiple 'keys'", () => {
@@ -141,7 +142,7 @@ describe("generateKeybindings", () => {
         when: "config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
       },
     ];
-    expect(generateKeybindings(src)).toEqual(expected);
+    assert.deepStrictEqual(generateKeybindings(src), expected);
   });
 
   it("converts src with meta key with multiple key strokes", () => {
@@ -162,7 +163,7 @@ describe("generateKeybindings", () => {
         when: "config.emacs-mcx.useMetaPrefixMacCmd",
       },
     ];
-    expect(generateKeybindings(src)).toEqual(expected);
+    assert.deepStrictEqual(generateKeybindings(src), expected);
   });
 
   it("converts src including 'whens'", () => {
@@ -193,7 +194,7 @@ describe("generateKeybindings", () => {
         when: "terminalFocus",
       },
     ];
-    expect(generateKeybindings(src)).toEqual(expected);
+    assert.deepStrictEqual(generateKeybindings(src), expected);
   });
 });
 
@@ -210,7 +211,7 @@ describe("isValidKey", () => {
   ];
   testcases.forEach(({ key, expected }) => {
     it(`returns ${expected} given "${key}"`, () => {
-      expect(isValidKey(key)).toEqual(expected);
+      assert.deepStrictEqual(isValidKey(key), expected);
     });
   });
 });
@@ -226,7 +227,7 @@ describe("replaceMetaWithEscape", () => {
       if (!isValidKey(key)) {
         throw new Error("Invalid key");
       }
-      expect(replaceMetaWithEscape(key)).toEqual(expected);
+      assert.deepStrictEqual(replaceMetaWithEscape(key), expected);
     });
   });
 });

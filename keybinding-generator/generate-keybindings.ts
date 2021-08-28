@@ -96,7 +96,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
           key: replaceAll(key, "meta", "alt"),
           command: src.command,
           when: addWhenCond(when, "!config.emacs-mcx.useMetaPrefixMacCmd"),
-          args: src.args,
+          ...(src.args ? { args: src.args } : {}),
         });
 
         // Generate a keybinding using CMD as meta for macOS.
@@ -105,7 +105,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
           mac: replaceAll(key, "meta", "cmd"),
           command: src.command,
           when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
-          args: src.args,
+          ...(src.args ? { args: src.args } : {}),
         });
 
         // Generate keybindings using ESC and Ctrl+[ as meta.
@@ -116,13 +116,13 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
             key: keyWithEscapeMeta,
             command: src.command,
             when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
-            args: src.args,
+            ...(src.args ? { args: src.args } : {}),
           });
           keybindings.push({
             key: keyWithEscapeMeta.replace("escape", "ctrl+["),
             command: src.command,
             when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"),
-            args: src.args,
+            ...(src.args ? { args: src.args } : {}),
           });
         } else {
           console.warn(
@@ -134,7 +134,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
           key,
           command: src.command,
           when,
-          args: src.args,
+          ...(src.args ? { args: src.args } : {}),
         });
       }
     });
