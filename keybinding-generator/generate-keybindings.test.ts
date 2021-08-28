@@ -1,4 +1,3 @@
-import expect from "expect";
 import assert from "assert";
 import {
   generateKeybindings,
