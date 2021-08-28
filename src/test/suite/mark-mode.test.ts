@@ -1,5 +1,4 @@
 import assert from "assert";
-import expect from "expect";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
@@ -81,16 +80,16 @@ ABCDEFGHIJ`;
       await emulator.runCommand("forwardChar");
       await emulator.runCommand("nextLine");
       if (deactivateMark) {
-        expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(1, 1))]);
+        assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(1, 1))]);
       } else {
-        expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+        assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
       }
 
       await emulator.exchangePointAndMark();
-      expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+      assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
 
       await emulator.exchangePointAndMark();
-      expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+      assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
     });
   });
 
@@ -107,13 +106,13 @@ ABCDEFGHIJ`;
     // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
     await emulator.cancel();
     assertCursorsEqual(activeTextEditor, [1, 1]);
@@ -142,10 +141,10 @@ ABCDEFGHIJ`;
     // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
     // Pointer was exchanged, but [1, 1] was NOT pushed.
 
     await emulator.cancel();
@@ -157,10 +156,10 @@ ABCDEFGHIJ`;
     // Now, [0, 0] was pushed to the mark ring and the pointer was reset.
     await emulator.runCommand("backwardChar");
     await emulator.runCommand("nextLine");
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 9), new Position(1, 8))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 9), new Position(1, 8))]);
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 8), new Position(0, 9))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 8), new Position(0, 9))]);
   });
 
   test("Successive exchangePointAndMark works correctly", async () => {
@@ -176,21 +175,21 @@ ABCDEFGHIJ`;
     // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
     // Pointer was exchanged, but [1, 1] was NOT pushed.
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(0, 0), new Position(1, 1))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
     // [0, 0] was NOT pushed either.
 
     await emulator.cancel();
     assertCursorsEqual(activeTextEditor, [1, 1]);
 
     await emulator.exchangePointAndMark();
-    expect(activeTextEditor.selections).toEqual([new Selection(new Position(1, 1), new Position(0, 0))]);
+    assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
   });
 
   test("set and pop marks", async () => {

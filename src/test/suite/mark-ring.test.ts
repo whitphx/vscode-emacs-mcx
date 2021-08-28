@@ -1,5 +1,5 @@
 import { Position } from "vscode";
-import expect from "expect";
+import assert from "assert";
 import { MarkRing } from "../../mark-ring";
 
 suite("MarkRing", () => {
@@ -12,12 +12,12 @@ suite("MarkRing", () => {
       markRing.push(entity);
     });
 
-    expect(markRing.getTop()).toEqual([new Position(6, 7)]);
-    expect(markRing.pop()).toEqual([new Position(6, 7)]);
-    expect(markRing.pop()).toEqual([new Position(4, 5)]);
-    expect(markRing.pop()).toEqual([new Position(2, 3)]);
-    expect(markRing.pop()).toEqual([new Position(6, 7)]);
-    expect(markRing.pop()).toEqual([new Position(4, 5)]);
+    assert.deepStrictEqual(markRing.getTop(), [new Position(6, 7)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(6, 7)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(4, 5)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(2, 3)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(6, 7)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(4, 5)]);
   });
 
   test("less data than max", () => {
@@ -29,13 +29,13 @@ suite("MarkRing", () => {
       markRing.push(entity);
     });
 
-    expect(markRing.getTop()).toEqual([new Position(4, 5)]);
-    expect(markRing.pop()).toEqual([new Position(4, 5)]);
-    expect(markRing.pop()).toEqual([new Position(2, 3)]);
-    expect(markRing.pop()).toEqual([new Position(0, 1)]);
-    expect(markRing.pop()).toEqual([new Position(4, 5)]);
-    expect(markRing.pop()).toEqual([new Position(2, 3)]);
-    expect(markRing.pop()).toEqual([new Position(0, 1)]);
+    assert.deepStrictEqual(markRing.getTop(), [new Position(4, 5)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(4, 5)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(2, 3)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(0, 1)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(4, 5)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(2, 3)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(0, 1)]);
   });
 
   test("just single data", () => {
@@ -47,16 +47,16 @@ suite("MarkRing", () => {
       markRing.push(entity);
     });
 
-    expect(markRing.getTop()).toEqual([new Position(0, 1)]);
-    expect(markRing.pop()).toEqual([new Position(0, 1)]);
-    expect(markRing.pop()).toEqual([new Position(0, 1)]);
+    assert.deepStrictEqual(markRing.getTop(), [new Position(0, 1)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(0, 1)]);
+    assert.deepStrictEqual(markRing.pop(), [new Position(0, 1)]);
   });
 
   test("zero data", () => {
     const markRing = new MarkRing(3);
 
-    expect(markRing.getTop()).toBe(null);
-    expect(markRing.pop()).toBe(null);
-    expect(markRing.pop()).toBe(null);
+    assert.strictEqual(markRing.getTop(), null);
+    assert.strictEqual(markRing.pop(), null);
+    assert.strictEqual(markRing.pop(), null);
   });
 });

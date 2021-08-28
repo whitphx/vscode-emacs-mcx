@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import expect from "expect";
+import assert from "assert";
 import { cleanUpWorkspace, setupWorkspace } from "./utils";
 import { convertSelectionToRectSelections } from "../../rectangle";
 
@@ -109,7 +109,7 @@ suite("convertSelectionToRectSelections", () => {
   ];
   testcases.forEach(({ title, markSelection, expected }) => {
     test(title, () => {
-      expect(convertSelectionToRectSelections(document, markSelection)).toEqual(expected);
+      assert.deepStrictEqual(convertSelectionToRectSelections(document, markSelection), expected);
     });
   });
 });
