@@ -52,6 +52,13 @@ jobs:
       run: yarn test
       if: runner.os != 'Linux'
 
+    - name: Test Web
+      run: xvfb-run -a yarn test:web
+      if: runner.os == 'Linux'
+    - name: Test Web
+      run: yarn test:web
+      if: runner.os != 'Linux'
+
     - name: Test packaging
       run: |
         yarn run vsce package
