@@ -9,7 +9,7 @@
 		"url": "https://github.com/whitphx/vscode-emacs-mcx"
 	},
 	"engines": {
-		"vscode": "^1.59.0"
+		"vscode": "^1.51.0"
 	},
 	"categories": [
 		"Other",
@@ -3678,7 +3678,7 @@
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^16.7.4",
 		"@types/sinon": "^10.0.2",
-		"@types/vscode": "^1.59.0",
+		"@types/vscode": "^1.51.0",
 		"@types/webpack-env": "^1.16.2",
 		"@typescript-eslint/eslint-plugin": "^4.29.3",
 		"@typescript-eslint/parser": "^4.29.3",
