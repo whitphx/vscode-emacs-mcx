@@ -3654,7 +3654,7 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod",
+		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod && yarn run package-web",
 		"webpack:dev": "webpack --mode development",
 		"webpack:prod": "webpack --mode production",
 		"webpack": "yarn webpack:dev",
@@ -3669,7 +3669,6 @@
 		"test": "node ./out/test/runTest.js",
 		"test:web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
 		"pretest:web": "yarn run compile-web",
-		"vscode-web:prepublish": "yarn && yarn gen-keys && yarn run package-web",
 		"compile-web": "webpack --config ./build/web-extension.webpack.config.js",
 		"watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
 		"package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js"
