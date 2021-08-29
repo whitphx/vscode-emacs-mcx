@@ -12,13 +12,12 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = /** @type WebpackConfig */ {
+const config = /** @type WebpackConfig */ {
 	context: path.dirname(__dirname),
 	mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 	target: 'webworker', // extensions run in a webworker context
 	entry: {
 		'extension': './src/web/extension.ts',
-		'test/suite/index': './src/web/test/suite/index.ts'
 	},
 	resolve: {
 		mainFields: ['browser', 'module', 'main'], // look for `browser` entry point in imported node modules
@@ -61,4 +60,12 @@ module.exports = /** @type WebpackConfig */ {
 		libraryTarget: 'commonjs'
 	},
 	devtool: 'nosources-source-map' // create a source map that points to the original source file
+};
+
+module.exports = (env, argv) => {
+	if (argv.mode !== 'production') {
+		config.entry['test/suite/index'] = './src/web/test/suite/index.ts'
+	}
+
+	return config;
 };
