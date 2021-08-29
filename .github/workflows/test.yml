@@ -18,7 +18,7 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v2.4.0
       with:
-        node-version: 12.x
+        node-version: 16.x
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
@@ -46,10 +46,10 @@ jobs:
         git diff --quiet || (echo "You have to run 'yarn gen-keys' and commit the updated package.json" && exit -1)
 
     - name: Test
-      run: xvfb-run -a npm test
+      run: xvfb-run -a yarn test
       if: runner.os == 'Linux'
     - name: Test
-      run: npm test
+      run: yarn test
       if: runner.os != 'Linux'
 
     - name: Test packaging
