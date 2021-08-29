@@ -33,7 +33,7 @@
 		"workspace"
 	],
 	"main": "./dist/extension.js",
-	"browser": "./dist/extension.js",
+	"browser": "./dist/web/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -3654,7 +3654,7 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod",
+		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod && yarn run package-web",
 		"webpack:dev": "webpack --mode development",
 		"webpack:prod": "webpack --mode production",
 		"webpack": "yarn webpack:dev",
@@ -3666,7 +3666,12 @@
 		"check:prettier": "prettier --check \"src/**/*.ts\"",
 		"check:eslint": "eslint src --ext ts",
 		"pretest": "yarn run test-compile",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"test:web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+		"pretest:web": "yarn run compile-web",
+		"compile-web": "webpack --config ./build/web-extension.webpack.config.js",
+		"watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
+		"package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.4",
@@ -3674,13 +3679,17 @@
 		"@types/node": "^16.7.4",
 		"@types/sinon": "^10.0.2",
 		"@types/vscode": "^1.59.0",
+		"@types/webpack-env": "^1.16.2",
 		"@typescript-eslint/eslint-plugin": "^4.29.3",
 		"@typescript-eslint/parser": "^4.29.3",
+		"@vscode/test-web": "^0.0.8",
+		"assert": "^2.0.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"glob": "^7.1.7",
 		"mocha": "^8.4.0",
 		"prettier": "^2.3.2",
+		"process": "^0.11.10",
 		"sinon": "^11.1.2",
 		"strip-json-comments": "^3.1.1",
 		"ts-loader": "^9.2.5",

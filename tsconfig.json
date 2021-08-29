@@ -4,13 +4,14 @@
 		"target": "es6",
 		"outDir": "out",
 		"lib": [
-			"es6"
+			"es6", "WebWorker"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
 		"baseUrl": "./",
 		"paths": {
-			"vs/*": ["src/vs/*"]
+			"vs/*": ["src/vs/*"],
+      "platform/*": ["src/platform/node/*"]
 		},
 		"plugins": [{ "transform": "typescript-transform-paths" }],
 		"strict": true,   /* enable all strict type-checking options */
