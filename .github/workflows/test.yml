@@ -46,10 +46,17 @@ jobs:
         git diff --quiet || (echo "You have to run 'yarn gen-keys' and commit the updated package.json" && exit -1)
 
     - name: Test
-      run: xvfb-run -a npm test
+      run: xvfb-run -a yarn test
       if: runner.os == 'Linux'
     - name: Test
-      run: npm test
+      run: yarn test
+      if: runner.os != 'Linux'
+
+    - name: Test web
+      run: xvfb-run -a yarn test:web
+      if: runner.os == 'Linux'
+    - name: Test web
+      run: yarn test:web
       if: runner.os != 'Linux'
 
     - name: Test packaging
