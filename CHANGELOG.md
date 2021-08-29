@@ -3,6 +3,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## Fix
+- Revert VSCode upgrade in 0.33.1, #995.
+
 ## [0.33.3] - 2021-08-16
 ### Fix
 - Add "browser" field in `package.json`, #969.
