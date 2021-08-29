@@ -3654,7 +3654,7 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod && yarn run package-web",
+		"vscode:prepublish": "yarn && yarn gen-keys && rimraf dist && yarn webpack:prod && yarn run package-web",
 		"webpack:dev": "webpack --mode development",
 		"webpack:prod": "webpack --mode production --devtool hidden-source-map",
 		"webpack": "yarn webpack:dev",
@@ -3690,6 +3690,7 @@
 		"mocha": "^8.4.0",
 		"prettier": "^2.3.2",
 		"process": "^0.11.10",
+		"rimraf": "^3.0.2",
 		"sinon": "^11.1.2",
 		"strip-json-comments": "^3.1.1",
 		"ts-loader": "^9.2.5",
