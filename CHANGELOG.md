@@ -1,9 +1,11 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
-## [Unreleased]
+## [0.34.0] - 2021-08-29
+### Add
+- VSCode Web support.
 
-## Fix
+### Fix
 - Revert VSCode upgrade in 0.33.1, #995.
 
 ## [0.33.3] - 2021-08-16
