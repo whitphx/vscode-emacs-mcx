@@ -3656,7 +3656,7 @@
 	"scripts": {
 		"vscode:prepublish": "yarn && yarn gen-keys && yarn webpack:prod && yarn run package-web",
 		"webpack:dev": "webpack --mode development",
-		"webpack:prod": "webpack --mode production",
+		"webpack:prod": "webpack --mode production --devtool hidden-source-map",
 		"webpack": "yarn webpack:dev",
 		"test-compile": "ttsc -p ./",
 		"gen-keys": "ts-node ./keybinding-generator/cli.ts",
