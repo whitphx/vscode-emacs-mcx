@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
+## [0.35.0] - 2021-09-02
+### Fix
+- Remove `web` and `workspace` from the `extensionKind` field and set only `ui`, #1002. @sandy081
+
 ## [0.34.0] - 2021-08-29
 ### Add
 - VSCode Web support.
