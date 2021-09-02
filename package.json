@@ -28,9 +28,7 @@
 		"*"
 	],
 	"extensionKind": [
-		"ui",
-		"web",
-		"workspace"
+		"ui"
 	],
 	"main": "./dist/extension.js",
 	"browser": "./dist/web/extension.js",
