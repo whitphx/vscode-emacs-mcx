@@ -3674,7 +3674,7 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.4",
 		"@types/mocha": "^9.0.0",
-		"@types/node": "^16.7.4",
+		"@types/node": "^16.7.10",
 		"@types/sinon": "^10.0.2",
 		"@types/vscode": "^1.51.0",
 		"@types/webpack-env": "^1.16.2",
