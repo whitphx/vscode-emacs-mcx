@@ -3678,7 +3678,7 @@
 		"@types/sinon": "^10.0.2",
 		"@types/vscode": "^1.51.0",
 		"@types/webpack-env": "^1.16.2",
-		"@typescript-eslint/eslint-plugin": "^4.30.0",
+		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.30.0",
 		"@vscode/test-web": "^0.0.8",
 		"assert": "^2.0.0",
