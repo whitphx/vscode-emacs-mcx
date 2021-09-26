@@ -5,7 +5,7 @@ import { KillRing } from "../../../../kill-yank/kill-ring";
 import { assertTextEqual, clearTextEditor, setupWorkspace } from "../../utils";
 
 [true, false].forEach((withKillRing) => {
-  suite("copyRegion", () => {
+  suite(`copyRegion, ${withKillRing ? "with" : "without"} killRing`, () => {
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
 
