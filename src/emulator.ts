@@ -40,7 +40,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   private commandRegistry: EmacsCommandRegistry;
 
-  public markRing: MarkRing;
+  private markRing: MarkRing;
   private prevExchangedMarks: vscode.Position[] | null;
 
   private _isInMarkMode = false;
