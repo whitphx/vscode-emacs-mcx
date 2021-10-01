@@ -2127,6 +2127,11 @@
 			},
 			{
 				"key": "ctrl+y",
+				"command": "emacs-mcx.yank",
+				"when": "emacs-mcx.minibufferReading"
+			},
+			{
+				"key": "ctrl+y",
 				"command": "emacs-mcx.isearchExit",
 				"when": "editorFocus && findWidgetVisible && !isComposing"
 			},

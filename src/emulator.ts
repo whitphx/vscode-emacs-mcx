@@ -127,7 +127,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new FindCommands.IsearchAbort(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchExit(this.afterCommand, this, searchState));
 
-    const killYanker = new KillYanker(textEditor, killRing);
+    const killYanker = new KillYanker(textEditor, killRing, minibuffer);
     this.commandRegistry.register(new KillCommands.KillWord(this.afterCommand, this, killYanker));
     this.commandRegistry.register(new KillCommands.BackwardKillWord(this.afterCommand, this, killYanker));
     this.commandRegistry.register(new KillCommands.KillLine(this.afterCommand, this, killYanker));
