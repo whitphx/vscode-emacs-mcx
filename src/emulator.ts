@@ -144,6 +144,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new RectangleCommands.YankRectangle(this.afterCommand, this, rectangleState));
     this.commandRegistry.register(new RectangleCommands.OpenRectangle(this.afterCommand, this));
     this.commandRegistry.register(new RectangleCommands.ClearRectangle(this.afterCommand, this));
+    this.commandRegistry.register(new RectangleCommands.StringRectangle(this.afterCommand, this));
     this.commandRegistry.register(new RectangleCommands.ReplaceKillRingToRectangle(this.afterCommand, this, killRing));
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));

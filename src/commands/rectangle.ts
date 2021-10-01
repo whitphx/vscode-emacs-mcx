@@ -250,6 +250,34 @@ export class ClearRectangle extends EmacsCommand {
   }
 }
 
+export class StringRectangle extends EmacsCommand {
+  public readonly id = "stringRectangle";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const replaceString = await vscode.window.showInputBox({ title: "String rectangle" });
+    if (replaceString == null) {
+      return;
+    }
+
+    const selections = getNonEmptySelections(textEditor);
+    if (selections.length === 0) {
+      return;
+    }
+
+    const rectSelections = selections
+      .map(convertSelectionToRectSelections.bind(null, textEditor.document))
+      .reduce((a, b) => a.concat(b), []);
+    await textEditor.edit((edit) => {
+      rectSelections.forEach((rectSelection) => {
+        edit.replace(rectSelection, replaceString);
+      });
+    });
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+  }
+}
+
 export class ReplaceKillRingToRectangle extends EmacsCommand {
   public readonly id = "replaceKillRingToRectangle";
   private killring: KillRing | null;

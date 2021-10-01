@@ -679,6 +679,11 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "t",  // ctrl+x r t
+      "command": "emacs-mcx.stringRectangle",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "key": "p", // ctrl+x r p
       "command": "emacs-mcx.replaceKillRingToRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
