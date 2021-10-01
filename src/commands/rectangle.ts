@@ -6,6 +6,7 @@ import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection"
 import { convertSelectionToRectSelections } from "../rectangle";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { KillRing } from "../kill-yank/kill-ring";
+import { Minibuffer } from "src/minibuffer";
 
 /**
  * This command is assigned to `C-x r` and sets `emacs-mcx.acceptingRectCommand` context
@@ -253,8 +254,21 @@ export class ClearRectangle extends EmacsCommand {
 export class StringRectangle extends EmacsCommand {
   public readonly id = "stringRectangle";
 
+  private minibuffer: Minibuffer;
+
+  constructor(
+    afterExecute: () => void,
+    markModeController: IMarkModeController & IEmacsCommandRunner,
+    minibuffer: Minibuffer
+  ) {
+    super(afterExecute, markModeController);
+    this.minibuffer = minibuffer;
+  }
+
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const replaceString = await vscode.window.showInputBox({ title: "String rectangle" });
+    const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
+
+    // const replaceString = await vscode.window.showInputBox({ title: "String rectangle" });
     if (replaceString == null) {
       return;
     }

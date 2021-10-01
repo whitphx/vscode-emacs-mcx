@@ -21,6 +21,7 @@ import { PrefixArgumentHandler } from "./prefix-argument";
 import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
+import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
 
 export interface IEmacsCommandRunner {
   runCommand(commandName: string): void | Thenable<unknown>;
@@ -73,7 +74,11 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
   private disposables: vscode.Disposable[];
 
-  constructor(textEditor: TextEditor, killRing: KillRing | null = null) {
+  constructor(
+    textEditor: TextEditor,
+    killRing: KillRing | null = null,
+    minibuffer: Minibuffer | undefined = new InputBoxMinibuffer()
+  ) {
     this.textEditor = textEditor;
     this.nonRectSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
 
@@ -144,7 +149,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new RectangleCommands.YankRectangle(this.afterCommand, this, rectangleState));
     this.commandRegistry.register(new RectangleCommands.OpenRectangle(this.afterCommand, this));
     this.commandRegistry.register(new RectangleCommands.ClearRectangle(this.afterCommand, this));
-    this.commandRegistry.register(new RectangleCommands.StringRectangle(this.afterCommand, this));
+    this.commandRegistry.register(new RectangleCommands.StringRectangle(this.afterCommand, this, minibuffer));
     this.commandRegistry.register(new RectangleCommands.ReplaceKillRingToRectangle(this.afterCommand, this, killRing));
 
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this.afterCommand, this));
