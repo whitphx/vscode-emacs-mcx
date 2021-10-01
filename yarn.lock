@@ -330,10 +330,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@vscode/test-web@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.14.tgz#99314cf0f35fae126b7726c88aa7ee760fbd201d"
-  integrity sha512-UtQUTscSVNtRTShuWkrHP5AFOvZvZq1V4cyGs8B+d6BYbvQe5gaqGoYC3OT+m/gNFtGYwHBKj5mBUs+n54teVw==
+"@vscode/test-web@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.15.tgz#8caca6d902d5b9e18b8e0c4cc0f6a69d467dd39c"
+  integrity sha512-jYuDcoG66xXEnZnmrHuRkOdZj4BAk/BFzsqa8c/ASFP4Rkua6bCHIDUqii7sVOdmtf2YuTbI3nSqzmn4YvTUfw==
   dependencies:
     "@koa/router" "^10.1.1"
     decompress "^4.2.1"

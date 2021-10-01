@@ -2,7 +2,7 @@
 	"name": "emacs-mcx",
 	"displayName": "Awesome Emacs Keymap",
 	"description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
-	"version": "0.35.1",
+	"version": "0.35.2",
 	"publisher": "tuttieee",
 	"repository": {
 		"type": "git",
@@ -3680,7 +3680,7 @@
 		"@types/webpack-env": "^1.16.2",
 		"@typescript-eslint/eslint-plugin": "^4.31.2",
 		"@typescript-eslint/parser": "^4.31.2",
-		"@vscode/test-web": "^0.0.14",
+		"@vscode/test-web": "^0.0.15",
 		"assert": "^2.0.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
