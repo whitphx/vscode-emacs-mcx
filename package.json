@@ -2127,6 +2127,11 @@
 			},
 			{
 				"key": "ctrl+y",
+				"command": "emacs-mcx.yank",
+				"when": "emacs-mcx.minibufferReading"
+			},
+			{
+				"key": "ctrl+y",
 				"command": "emacs-mcx.isearchExit",
 				"when": "editorFocus && findWidgetVisible && !isComposing"
 			},
@@ -2603,6 +2608,11 @@
 			{
 				"key": "c",
 				"command": "emacs-mcx.clearRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
+				"key": "t",
+				"command": "emacs-mcx.stringRectangle",
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
 			},
 			{

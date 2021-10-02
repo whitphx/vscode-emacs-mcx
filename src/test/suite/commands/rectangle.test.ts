@@ -10,6 +10,7 @@ import {
   assertSelectionsEqual,
 } from "../utils";
 import { KillRing } from "../../../kill-yank/kill-ring";
+import { Minibuffer } from "src/minibuffer";
 
 suite("Kill, copy, and yank rectangle", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -218,6 +219,87 @@ klmnopq  t
 KLMNOPQRST`
     );
     assertCursorsEqual(activeTextEditor, [2, 5], [3, 9]);
+  });
+});
+
+suite("string-rectangle", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  class MockMinibuffer implements Minibuffer {
+    returnValue: string | undefined;
+
+    constructor(returnValue: string | undefined) {
+      this.returnValue = returnValue;
+    }
+
+    public get isReading(): boolean {
+      return true;
+    }
+
+    public paste(): void {
+      return;
+    }
+
+    public readFromMinibuffer(): Promise<string | undefined> {
+      return Promise.resolve(this.returnValue);
+    }
+  }
+
+  const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ
+klmnopqrst
+KLMNOPQRST`;
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor, null, new MockMinibuffer("foo"));
+  });
+
+  teardown(cleanUpWorkspace);
+
+  // XXX: The behavior is different from the original Emacs when the selections are empty.
+  test("nothing happens when the selection is empty", async () => {
+    setEmptyCursors(activeTextEditor, [1, 5]);
+    await emulator.runCommand("stringRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertCursorsEqual(activeTextEditor, [1, 5]);
+  });
+
+  // XXX: The behavior is different from the original Emacs when the selections are empty.
+  test("nothing happens when the selections are empty", async () => {
+    setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
+    await emulator.runCommand("stringRectangle");
+    assertTextEqual(activeTextEditor, initialText);
+    assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
+  });
+
+  test("replacing the rectangle with a text input from minibuffer", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+    await emulator.runCommand("stringRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `012foo789
+abcfoohij
+ABCfooHIJ
+klmnopqrst
+KLMNOPQRST`
+    );
+    assertCursorsEqual(activeTextEditor, [2, 6]);
+  });
+
+  test("replacing the rectangles with a text input from minibuffer", async () => {
+    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 5), new vscode.Selection(2, 7, 3, 9)];
+    await emulator.runCommand("stringRectangle");
+    assertTextEqual(
+      activeTextEditor,
+      `012foo56789
+abcfoofghij
+ABCfooFGfooJ
+klmnopqfoot
+KLMNOPQRST`
+    );
+    assertCursorsEqual(activeTextEditor, [2, 6], [3, 10]);
   });
 });
 

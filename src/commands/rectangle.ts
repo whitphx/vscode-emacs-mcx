@@ -6,6 +6,7 @@ import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection"
 import { convertSelectionToRectSelections } from "../rectangle";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { KillRing } from "../kill-yank/kill-ring";
+import { Minibuffer } from "src/minibuffer";
 
 /**
  * This command is assigned to `C-x r` and sets `emacs-mcx.acceptingRectCommand` context
@@ -242,6 +243,46 @@ export class ClearRectangle extends EmacsCommand {
       rectSelections.forEach((rectSelection) => {
         const length = rectSelection.end.character - rectSelection.start.character;
         edit.replace(rectSelection, " ".repeat(length));
+      });
+    });
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+  }
+}
+
+export class StringRectangle extends EmacsCommand {
+  public readonly id = "stringRectangle";
+
+  private minibuffer: Minibuffer;
+
+  constructor(
+    afterExecute: () => void,
+    markModeController: IMarkModeController & IEmacsCommandRunner,
+    minibuffer: Minibuffer
+  ) {
+    super(afterExecute, markModeController);
+    this.minibuffer = minibuffer;
+  }
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
+
+    if (replaceString == null) {
+      return;
+    }
+
+    const selections = getNonEmptySelections(textEditor);
+    if (selections.length === 0) {
+      return;
+    }
+
+    const rectSelections = selections
+      .map(convertSelectionToRectSelections.bind(null, textEditor.document))
+      .reduce((a, b) => a.concat(b), []);
+    await textEditor.edit((edit) => {
+      rectSelections.forEach((rectSelection) => {
+        edit.replace(rectSelection, replaceString);
       });
     });
 
