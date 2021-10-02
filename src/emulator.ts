@@ -77,7 +77,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   constructor(
     textEditor: TextEditor,
     killRing: KillRing | null = null,
-    minibuffer: Minibuffer | undefined = new InputBoxMinibuffer()
+    minibuffer: Minibuffer = new InputBoxMinibuffer()
   ) {
     this.textEditor = textEditor;
     this.nonRectSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
