@@ -268,7 +268,6 @@ export class StringRectangle extends EmacsCommand {
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
 
-    // const replaceString = await vscode.window.showInputBox({ title: "String rectangle" });
     if (replaceString == null) {
       return;
     }
