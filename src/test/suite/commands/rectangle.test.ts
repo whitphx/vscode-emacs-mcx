@@ -288,7 +288,7 @@ KLMNOPQRST`
     assertCursorsEqual(activeTextEditor, [2, 6]);
   });
 
-  test("clearing rectangles", async () => {
+  test("replacing the rectangles with a text input from minibuffer", async () => {
     activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 5), new vscode.Selection(2, 7, 3, 9)];
     await emulator.runCommand("stringRectangle");
     assertTextEqual(
