@@ -3,6 +3,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Fix
+- Set empty strings to the command field to disable the keybindings instead of leaving the field undefined, #1081.
+
 ## [0.36.0] - 2021-10-04
 ## Add
 - `C-x r t` (string-rectangle), #1049.

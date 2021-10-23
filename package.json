@@ -1790,178 +1790,222 @@
 			},
 			{
 				"key": "ctrl+f",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+b",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+p",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+n",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+a",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+e",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+f",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+b",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+m",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+d",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+h",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+d",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+k",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+w",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+w",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+y",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+y",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+m",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+j",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+l",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+u",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+backspace",
+				"command": "",
 				"when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+f",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+b",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+p",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+n",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+a",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+e",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+f",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+b",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+m",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+d",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+h",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+d",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+k",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+w",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+w",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+y",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+y",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+m",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "ctrl+j",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+l",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+u",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
 				"key": "alt+backspace",
+				"command": "",
 				"when": "isWindows && replaceInputFocussed && !isComposing"
 			},
 			{
