@@ -3682,7 +3682,7 @@
 		"package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.4",
+		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^16.11.4",
 		"@types/sinon": "^10.0.4",
