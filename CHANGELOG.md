@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
+## [Unreleased]
+
+## [0.36.0] - 2021-10-04
+## Add
+- `C-x r t` (string-rectangle), #1049.
+
 ## [0.35.2] - 2021-09-26
 ### Fix
 - Internal package updates and fixes.

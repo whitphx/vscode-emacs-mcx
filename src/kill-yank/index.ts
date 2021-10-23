@@ -1,3 +1,4 @@
+import { Minibuffer } from "src/minibuffer";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { EditorIdentity } from "../editorIdentity";
@@ -12,6 +13,7 @@ export { AppendDirection };
 export class KillYanker implements vscode.Disposable {
   private textEditor: TextEditor;
   private killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
+  private minibuffer: Minibuffer;
 
   private isAppending = false;
   private prevKillPositions: Position[];
@@ -23,9 +25,10 @@ export class KillYanker implements vscode.Disposable {
 
   private disposables: vscode.Disposable[];
 
-  constructor(textEditor: TextEditor, killRing: KillRing | null) {
+  constructor(textEditor: TextEditor, killRing: KillRing | null, minibuffer: Minibuffer) {
     this.textEditor = textEditor;
     this.killRing = killRing;
+    this.minibuffer = minibuffer;
 
     this.docChangedAfterYank = false;
     this.prevKillPositions = [];
@@ -111,11 +114,15 @@ export class KillYanker implements vscode.Disposable {
   }
 
   private async paste(killRingEntity: KillRingEntity) {
-    const selections = this.textEditor.selections;
-
     const flattenedText = killRingEntity.asString();
 
+    if (this.minibuffer.isReading) {
+      this.minibuffer.paste(flattenedText);
+      return;
+    }
+
     if (killRingEntity.type === "editor") {
+      const selections = this.textEditor.selections;
       const regionTexts = killRingEntity.getRegionTextsList();
       const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
       if (shouldPasteSeparately && regionTexts.length === selections.length) {

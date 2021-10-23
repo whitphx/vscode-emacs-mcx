@@ -2,14 +2,17 @@ import { TextEditor } from "vscode";
 import { EditorIdentity } from "./editorIdentity";
 import { EmacsEmulator } from "./emulator";
 import { KillRing } from "./kill-yank/kill-ring";
+import { Minibuffer } from "./minibuffer";
 
 export class EmacsEmulatorMap {
   private emacsEmulatorMap: Map<string, EmacsEmulator>;
   private killRing: KillRing;
+  private minibuffer: Minibuffer;
 
-  constructor(killRing: KillRing) {
+  constructor(killRing: KillRing, minibuffer: Minibuffer) {
     this.emacsEmulatorMap = new Map();
     this.killRing = killRing;
+    this.minibuffer = minibuffer;
   }
 
   public getOrCreate(textEditor: TextEditor): [EmacsEmulator, boolean] {
@@ -22,7 +25,7 @@ export class EmacsEmulatorMap {
       return [existentEmulator, false];
     }
 
-    const newEmulator = new EmacsEmulator(textEditor, this.killRing);
+    const newEmulator = new EmacsEmulator(textEditor, this.killRing, this.minibuffer);
     this.emacsEmulatorMap.set(key, newEmulator);
     return [newEmulator, true];
   }

@@ -2,7 +2,7 @@
 	"name": "emacs-mcx",
 	"displayName": "Awesome Emacs Keymap",
 	"description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
-	"version": "0.35.2",
+	"version": "0.36.0",
 	"publisher": "tuttieee",
 	"repository": {
 		"type": "git",
@@ -2127,6 +2127,11 @@
 			},
 			{
 				"key": "ctrl+y",
+				"command": "emacs-mcx.yank",
+				"when": "emacs-mcx.minibufferReading"
+			},
+			{
+				"key": "ctrl+y",
 				"command": "emacs-mcx.isearchExit",
 				"when": "editorFocus && findWidgetVisible && !isComposing"
 			},
@@ -2603,6 +2608,11 @@
 			{
 				"key": "c",
 				"command": "emacs-mcx.clearRectangle",
+				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+			},
+			{
+				"key": "t",
+				"command": "emacs-mcx.stringRectangle",
 				"when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
 			},
 			{
@@ -3672,14 +3682,14 @@
 		"package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.4",
+		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.0.0",
-		"@types/node": "^16.10.0",
+		"@types/node": "^16.11.4",
 		"@types/sinon": "^10.0.4",
 		"@types/vscode": "^1.51.0",
-		"@types/webpack-env": "^1.16.2",
-		"@typescript-eslint/eslint-plugin": "^4.31.2",
-		"@typescript-eslint/parser": "^4.31.2",
+		"@types/webpack-env": "^1.16.3",
+		"@typescript-eslint/eslint-plugin": "^4.33.0",
+		"@typescript-eslint/parser": "^4.33.0",
 		"@vscode/test-web": "^0.0.15",
 		"assert": "^2.0.0",
 		"eslint": "^7.32.0",
@@ -3693,15 +3703,15 @@
 		"strip-json-comments": "^3.1.1",
 		"ts-loader": "^9.2.6",
 		"ts-mocha": "^8.0.0",
-		"ts-node": "^10.2.1",
+		"ts-node": "^10.4.0",
 		"tsconfig-paths-webpack-plugin": "^3.5.1",
 		"ttypescript": "^1.5.12",
-		"typescript": "^4.4.3",
+		"typescript": "^4.4.4",
 		"typescript-transform-paths": "^3.3.1",
-		"vsce": "^1.100.0",
+		"vsce": "^1.100.2",
 		"vscode-test": "^1.6.1",
-		"webpack": "^5.54.0",
-		"webpack-cli": "^4.8.0"
+		"webpack": "^5.58.2",
+		"webpack-cli": "^4.9.1"
 	},
 	"dependencies": {
 		"paredit.js": "^0.3.4",

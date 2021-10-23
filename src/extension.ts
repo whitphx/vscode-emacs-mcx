@@ -7,14 +7,16 @@ import { executeCommands } from "./execute-commands";
 import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
 import { MessageManager } from "./message";
+import { InputBoxMinibuffer } from "./minibuffer";
 
 export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
   Configuration.registerDispose(context);
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
+  const minibuffer = new InputBoxMinibuffer();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -194,6 +196,10 @@ export function activate(context: vscode.ExtensionContext): void {
 
   registerEmulatorCommand("emacs-mcx.clearRectangle", (emulator) => {
     return emulator.runCommand("clearRectangle");
+  });
+
+  registerEmulatorCommand("emacs-mcx.stringRectangle", (emulator) => {
+    return emulator.runCommand("stringRectangle");
   });
 
   registerEmulatorCommand("emacs-mcx.replaceKillRingToRectangle", (emulator) => {
