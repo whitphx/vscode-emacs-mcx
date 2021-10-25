@@ -3729,7 +3729,7 @@
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^16.11.4",
-		"@types/sinon": "^10.0.4",
+		"@types/sinon": "^10.0.5",
 		"@types/vscode": "^1.51.0",
 		"@types/webpack-env": "^1.16.3",
 		"@typescript-eslint/eslint-plugin": "^4.33.0",
