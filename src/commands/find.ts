@@ -3,6 +3,7 @@ import { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
 import { MessageManager } from "../message";
+import { revealPrimaryActive } from "./helpers/reveal";
 
 export interface SearchState {
   startSelections: vscode.Selection[] | undefined;
@@ -55,6 +56,7 @@ export class IsearchAbort extends IsearchCommand {
       textEditor.selections = this.searchState.startSelections;
     }
     MessageManager.showMessage("Quit");
+    revealPrimaryActive(textEditor)
     return vscode.commands.executeCommand("closeFindWidget");
   }
 }
