@@ -56,7 +56,7 @@ export class IsearchAbort extends IsearchCommand {
       textEditor.selections = this.searchState.startSelections;
     }
     MessageManager.showMessage("Quit");
-    revealPrimaryActive(textEditor)
+    revealPrimaryActive(textEditor);
     return vscode.commands.executeCommand("closeFindWidget");
   }
 }
