@@ -3,6 +3,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.36.2] - 2021-11-03
+### Fix
+- Reset viewport to search start on cancel, #1090. @GregoryBL
+
 ## [0.36.1] - 2021-10-23
 ### Fix
 - Set empty strings to the command field to disable the keybindings instead of leaving the field undefined, #1081.
