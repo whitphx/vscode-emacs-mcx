@@ -33,7 +33,6 @@ ABCDEFGHIJ`;
         ),
     ],
   ];
-
   edits.forEach(([label, editOp]) => {
     test(`exit mark-mode when ${label} occurs`, async () => {
       // Enter mark-mode and select some characters
@@ -50,6 +49,33 @@ ABCDEFGHIJ`;
       await emulator.runCommand("forwardChar");
       assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
     });
+  });
+
+  test("successive set-mark-command resets the region to be empty", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    emulator.setMarkCommand();
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+
+    // The selected region has been expanded as mark-mode is enabled.
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(activeTextEditor.selection.isEqual(new Selection(0, 0, 1, 2)));
+
+    // set-mark-mode is called again.
+    emulator.setMarkCommand();
+
+    // The selected region has been reset to be empty when set-mark-command was called.
+    assertCursorsEqual(activeTextEditor, [1, 2]);
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+
+    // Assert that mark-mode is still enabled by checking the region has been expanded.
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(activeTextEditor.selection.isEqual(new Selection(1, 2, 2, 4)));
   });
 });
 
