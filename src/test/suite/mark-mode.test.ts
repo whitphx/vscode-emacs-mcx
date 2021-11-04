@@ -67,8 +67,7 @@ ABCDEFGHIJ`;
     emulator.setMarkCommand();
 
     // The selected region has been reset to be empty when set-mark-command was called.
-    assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(activeTextEditor.selection.isEqual(new Selection(1, 2, 1, 2)));
+    assertCursorsEqual(activeTextEditor, [1, 2]);
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
