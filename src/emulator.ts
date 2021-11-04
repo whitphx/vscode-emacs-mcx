@@ -28,7 +28,7 @@ export interface IEmacsCommandRunner {
 }
 
 export interface IMarkModeController {
-  enterMarkMode(): void;
+  enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
   pushMark(positions: vscode.Position[]): void;
 
@@ -404,6 +404,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
     if (pushMark) {
       this.pushMark(this.textEditor.selections.map((selection) => selection.active));
+      this.textEditor.selections = this.textEditor.selections.map(
+        (selection) => new Selection(selection.active, selection.active)
+      );
     }
   }
 
