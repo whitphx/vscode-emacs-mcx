@@ -28,7 +28,7 @@ export interface IEmacsCommandRunner {
 }
 
 export interface IMarkModeController {
-  enterMarkMode(): void;
+  enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
   pushMark(positions: vscode.Position[]): void;
 
