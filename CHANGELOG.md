@@ -3,6 +3,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.36.3] - 2021-11-05
+### Fix
+- Reset active region(s) on set mark when non-empty, #1089. @GregoryBL
+
 ## [0.36.2] - 2021-11-03
 ### Fix
 - Reset viewport to search start on cancel, #1090. @GregoryBL
