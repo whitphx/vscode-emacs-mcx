@@ -160,10 +160,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
     const moveHomeCommandFunc = () => {
       if (Configuration.instance.strictEmacsMove) {
         // Emacs behavior: Move to the beginning of the line.
-        return vscode.commands.executeCommand<void>("cursorMove", {
-          to: "wrappedLineStart",
-          select: isInMarkMode,
-        });
+        return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart");
       } else {
         // VSCode behavior: Move to the first non-empty character (indentation).
         return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
@@ -200,8 +197,13 @@ export class MoveEndOfLine extends EmacsCommand {
       return;
     }
 
-    const moveEndCommandFunc = () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+    let moveEndCommandFunc: () => Thenable<void>;
+    if (Configuration.instance.strictEmacsMove) {
+      moveEndCommandFunc = () =>
+        vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
+    } else {
+      moveEndCommandFunc = () => vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+    }
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveEndCommandFunc();
