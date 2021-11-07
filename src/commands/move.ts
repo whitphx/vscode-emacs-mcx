@@ -157,15 +157,16 @@ export class MoveBeginningOfLine extends EmacsCommand {
       );
     }
 
-    const moveHomeCommandFunc = () => {
-      if (Configuration.instance.strictEmacsMove) {
-        // Emacs behavior: Move to the beginning of the line.
-        return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart");
-      } else {
-        // VSCode behavior: Move to the first non-empty character (indentation).
-        return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
-      }
-    };
+    let moveHomeCommand: string;
+    if (Configuration.instance.strictEmacsMove) {
+      // Emacs behavior: Move to the beginning of the line.
+      moveHomeCommand = isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart";
+    } else {
+      // VSCode behavior: Move to the first non-empty character (indentation).
+      moveHomeCommand = isInMarkMode ? "cursorHomeSelect" : "cursorHome";
+    }
+
+    const moveHomeCommandFunc = () => vscode.commands.executeCommand<void>(moveHomeCommand);
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveHomeCommandFunc();
@@ -197,13 +198,15 @@ export class MoveEndOfLine extends EmacsCommand {
       return;
     }
 
-    let moveEndCommandFunc: () => Thenable<void>;
+    let moveEndCommand: string;
     if (Configuration.instance.strictEmacsMove) {
-      moveEndCommandFunc = () =>
-        vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
+      // Emacs behavior: Move to the end of the line.
+      moveEndCommand = isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd";
     } else {
-      moveEndCommandFunc = () => vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+      // VSCode behavior: Move to the end of the wrapped line.
+      moveEndCommand = isInMarkMode ? "cursorEndSelect" : "cursorEnd";
     }
+    const moveEndCommandFunc = () => vscode.commands.executeCommand<void>(moveEndCommand);
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveEndCommandFunc();
