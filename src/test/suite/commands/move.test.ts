@@ -3,6 +3,52 @@ import assert from "assert";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
+import { Configuration } from "../../../configuration/configuration";
+
+suite("beginning/endOfBuffer with strictEmacsMove config", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    Configuration.instance.strictEmacsMove = true;
+
+    const initialText = "a".repeat(1000);
+    activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  suite("beginningOfBuffer", () => {
+    test("normal", async () => {
+      setEmptyCursors(activeTextEditor, [0, 1000]);
+      await emulator.runCommand("beginningOfBuffer");
+      assertCursorsEqual(activeTextEditor, [0, 0]);
+    });
+
+    test("with mark", async () => {
+      setEmptyCursors(activeTextEditor, [0, 1000]);
+      emulator.setMarkCommand();
+      await emulator.runCommand("beginningOfBuffer");
+      assert.strictEqual(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(0, 1000, 0, 0)));
+    });
+  });
+
+  suite("endOfBuffer", () => {
+    test("normal", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("endOfBuffer");
+      assertCursorsEqual(activeTextEditor, [0, 1000]);
+    });
+
+    test("with mark", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      emulator.setMarkCommand();
+      await emulator.runCommand("endOfBuffer");
+      assert.strictEqual(activeTextEditor.selections.length, 1);
+      assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(0, 0, 0, 1000)));
+    });
+  });
+});
 
 suite("scroll-up/down-command", () => {
   let activeTextEditor: TextEditor;
