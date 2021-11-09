@@ -5,7 +5,7 @@ import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
-suite("beginning/endOfBuffer with strictEmacsMove config", () => {
+suite("moveBeginning/EndOfLine with strictEmacsMove config", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
 
@@ -17,33 +17,33 @@ suite("beginning/endOfBuffer with strictEmacsMove config", () => {
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
-  suite("beginningOfBuffer", () => {
+  suite("moveBeginningOfLine", () => {
     test("normal", async () => {
       setEmptyCursors(activeTextEditor, [0, 1000]);
-      await emulator.runCommand("beginningOfBuffer");
+      await emulator.runCommand("moveBeginningOfLine");
       assertCursorsEqual(activeTextEditor, [0, 0]);
     });
 
     test("with mark", async () => {
       setEmptyCursors(activeTextEditor, [0, 1000]);
       emulator.setMarkCommand();
-      await emulator.runCommand("beginningOfBuffer");
+      await emulator.runCommand("moveBeginningOfLine");
       assert.strictEqual(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(0, 1000, 0, 0)));
     });
   });
 
-  suite("endOfBuffer", () => {
+  suite("moveEndOfLine", () => {
     test("normal", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
-      await emulator.runCommand("endOfBuffer");
+      await emulator.runCommand("moveEndOfLine");
       assertCursorsEqual(activeTextEditor, [0, 1000]);
     });
 
     test("with mark", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
       emulator.setMarkCommand();
-      await emulator.runCommand("endOfBuffer");
+      await emulator.runCommand("moveEndOfLine");
       assert.strictEqual(activeTextEditor.selections.length, 1);
       assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(0, 0, 0, 1000)));
     });
