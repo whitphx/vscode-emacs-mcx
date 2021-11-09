@@ -3,6 +3,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Fix
+- `C-a` and `C-e` move the cursor to the beginning or the end of the entire, not wrapped line, when `emacs-mcx.strictEmacsMove` flag is set, #1104.
+
 ## [0.36.3] - 2021-11-05
 ### Fix
 - Reset active region(s) on set mark when non-empty, #1089. @GregoryBL
