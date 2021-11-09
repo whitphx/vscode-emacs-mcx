@@ -3,6 +3,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.36.4] - 2021-11-09
 ### Fix
 - `C-a` and `C-e` move the cursor to the beginning or the end of the entire, not wrapped line, when `emacs-mcx.strictEmacsMove` flag is set, #1104.
 
