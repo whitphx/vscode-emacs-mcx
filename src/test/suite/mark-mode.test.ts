@@ -33,12 +33,11 @@ ABCDEFGHIJ`;
         ),
     ],
   ];
-
   edits.forEach(([label, editOp]) => {
     test(`exit mark-mode when ${label} occurs`, async () => {
       // Enter mark-mode and select some characters
       activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
-      await emulator.setMarkCommand();
+      emulator.setMarkCommand();
       await emulator.runCommand("forwardChar");
 
       // Edit occurs
@@ -50,6 +49,33 @@ ABCDEFGHIJ`;
       await emulator.runCommand("forwardChar");
       assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
     });
+  });
+
+  test("successive set-mark-command resets the region to be empty", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    emulator.setMarkCommand();
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+
+    // The selected region has been expanded as mark-mode is enabled.
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(activeTextEditor.selection.isEqual(new Selection(0, 0, 1, 2)));
+
+    // set-mark-mode is called again.
+    emulator.setMarkCommand();
+
+    // The selected region has been reset to be empty when set-mark-command was called.
+    assertCursorsEqual(activeTextEditor, [1, 2]);
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+
+    // Assert that mark-mode is still enabled by checking the region has been expanded.
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(activeTextEditor.selection.isEqual(new Selection(1, 2, 2, 4)));
   });
 });
 
@@ -73,9 +99,9 @@ ABCDEFGHIJ`;
     })`, async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
-      await emulator.setMarkCommand();
+      emulator.setMarkCommand();
       if (deactivateMark) {
-        await emulator.setMarkCommand();
+        emulator.setMarkCommand();
       }
       await emulator.runCommand("forwardChar");
       await emulator.runCommand("nextLine");
@@ -85,10 +111,10 @@ ABCDEFGHIJ`;
         assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
       }
 
-      await emulator.exchangePointAndMark();
+      emulator.exchangePointAndMark();
       assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
 
-      await emulator.exchangePointAndMark();
+      emulator.exchangePointAndMark();
       assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
     });
   });
@@ -96,34 +122,34 @@ ABCDEFGHIJ`;
   test("exchangePointAndMark does not push marks", async () => {
     setEmptyCursors(activeTextEditor, [2, 2]);
     // C-<SPC> C-<SPC> to push and deactivate mark.
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // Now, [2, 2] was pushed to the mark ring.
 
     setEmptyCursors(activeTextEditor, [0, 0]);
 
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
-    await emulator.cancel();
+    emulator.cancel();
     assertCursorsEqual(activeTextEditor, [1, 1]);
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [2, 2]);
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [0, 0]);
     // See, [1, 1] has never been pushed by exchange-point-and-mark
   });
@@ -131,123 +157,123 @@ ABCDEFGHIJ`;
   test("setMarkCommands resets mark ring pointer and exchangePointAndMark respects it", async () => {
     setEmptyCursors(activeTextEditor, [2, 2]);
     // C-<SPC> C-<SPC> to push and deactivate mark.
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // Now, [2, 2] was pushed to the mark ring.
 
     setEmptyCursors(activeTextEditor, [0, 0]);
 
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
     // Pointer was exchanged, but [1, 1] was NOT pushed.
 
-    await emulator.cancel();
+    emulator.cancel();
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
     setEmptyCursors(activeTextEditor, [0, 9]);
 
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // Now, [0, 0] was pushed to the mark ring and the pointer was reset.
     await emulator.runCommand("backwardChar");
     await emulator.runCommand("nextLine");
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 9), new Position(1, 8))]);
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 8), new Position(0, 9))]);
   });
 
   test("Successive exchangePointAndMark works correctly", async () => {
     setEmptyCursors(activeTextEditor, [2, 2]);
     // C-<SPC> C-<SPC> to push and deactivate mark.
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // Now, [2, 2] was pushed to the mark ring.
 
     setEmptyCursors(activeTextEditor, [0, 0]);
 
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     // [0, 0] was pushed to the mark ring.
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
     // Pointer was exchanged, but [1, 1] was NOT pushed.
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(0, 0), new Position(1, 1))]);
     // [0, 0] was NOT pushed either.
 
-    await emulator.cancel();
+    emulator.cancel();
     assertCursorsEqual(activeTextEditor, [1, 1]);
 
-    await emulator.exchangePointAndMark();
+    emulator.exchangePointAndMark();
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
   });
 
   test("set and pop marks", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
     // C-<SPC> C-<SPC> to push and deactivate mark.
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
 
     setEmptyCursors(activeTextEditor, [1, 4]);
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
 
     setEmptyCursors(activeTextEditor, [2, 6]);
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [2, 6]);
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [1, 4]);
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [0, 2]);
 
-    await emulator.popMark();
+    emulator.popMark();
     assertCursorsEqual(activeTextEditor, [2, 6]);
   });
 
   test("Ctrl-u Ctrl-Space works as pop-mark", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
     // C-<SPC> C-<SPC> to push and deactivate mark.
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
 
     setEmptyCursors(activeTextEditor, [1, 4]);
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
 
     setEmptyCursors(activeTextEditor, [2, 6]);
-    await emulator.setMarkCommand();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
+    emulator.setMarkCommand();
 
     // C-u C-<SPC>.
     await emulator.universalArgument();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     assertCursorsEqual(activeTextEditor, [2, 6]);
 
     await emulator.universalArgument();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     assertCursorsEqual(activeTextEditor, [1, 4]);
 
     await emulator.universalArgument();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     assertCursorsEqual(activeTextEditor, [0, 2]);
 
     await emulator.universalArgument();
-    await emulator.setMarkCommand();
+    emulator.setMarkCommand();
     assertCursorsEqual(activeTextEditor, [2, 6]);
   });
 });

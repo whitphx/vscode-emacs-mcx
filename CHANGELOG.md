@@ -3,6 +3,26 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.36.5] - 2021-11-09
+### Fix
+- `C-a` and `C-e` move the cursor to the beginning or the end of the entire, not wrapped line, when `emacs-mcx.strictEmacsMove` flag is set, #1104.
+
+## [0.36.5] - skipped
+### Fix
+- Release flow.
+
+## [0.36.3] - 2021-11-05
+### Fix
+- Reset active region(s) on set mark when non-empty, #1089. @GregoryBL
+
+## [0.36.2] - 2021-11-03
+### Fix
+- Reset viewport to search start on cancel, #1090. @GregoryBL
+
+## [0.36.1] - 2021-10-23
+### Fix
+- Set empty strings to the command field to disable the keybindings instead of leaving the field undefined, #1081.
+
 ## [0.36.0] - 2021-10-04
 ## Add
 - `C-x r t` (string-rectangle), #1049.
