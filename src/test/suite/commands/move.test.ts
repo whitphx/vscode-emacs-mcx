@@ -3,6 +3,109 @@ import assert from "assert";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
+import { Configuration } from "../../../configuration/configuration";
+
+suite("moveBeginning/EndOfLine", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = "x".repeat(1000) + "\n" + "a".repeat(1000) + "\n" + "x".repeat(1000);
+    activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  suite("strictEmacsMove=true", () => {
+    setup(() => {
+      Configuration.instance.strictEmacsMove = true;
+    });
+
+    suite("moveBeginningOfLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 1000]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [1, 0]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 1000]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("moveBeginningOfLine");
+        assert.strictEqual(activeTextEditor.selections.length, 1);
+        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 1000, 1, 0)));
+      });
+    });
+
+    suite("moveEndOfLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("moveEndOfLine");
+        assertCursorsEqual(activeTextEditor, [1, 1000]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("moveEndOfLine");
+        assert.strictEqual(activeTextEditor.selections.length, 1);
+        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 0, 1, 1000)));
+      });
+    });
+  });
+
+  suite("strictEmacsMove=false", () => {
+    let wrappedLineWidth: number;
+
+    setup(async () => {
+      Configuration.instance.strictEmacsMove = false;
+
+      // Get wrapped line width
+      setEmptyCursors(activeTextEditor, [1, 0]);
+      await vscode.commands.executeCommand<void>("cursorMove", {
+        to: "wrappedLineEnd",
+        value: 1,
+      });
+      wrappedLineWidth = activeTextEditor.selection.active.character;
+    });
+
+    suite("moveBeginningOfLine", () => {
+      let lastWrappedLineStart: number;
+      setup(() => {
+        lastWrappedLineStart = 1000 - (1000 % wrappedLineWidth);
+      });
+
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 1000]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [1, lastWrappedLineStart]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 1000]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("moveBeginningOfLine");
+        assert.strictEqual(activeTextEditor.selections.length, 1);
+        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 1000, 1, lastWrappedLineStart)));
+      });
+    });
+
+    suite("moveEndOfLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("moveEndOfLine");
+        assertCursorsEqual(activeTextEditor, [1, wrappedLineWidth]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("moveEndOfLine");
+        assert.strictEqual(activeTextEditor.selections.length, 1);
+        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 0, 1, wrappedLineWidth)));
+      });
+    });
+  });
+});
 
 suite("scroll-up/down-command", () => {
   let activeTextEditor: TextEditor;

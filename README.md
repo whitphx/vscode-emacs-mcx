@@ -33,15 +33,18 @@ This extension makes use of code in the existent extensions listed above and, in
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
 ## FAQ
-### The cursor cannot be moved on the find widget as the widget closes with movement keys
+### The cursor cannot be moved on the find widget as the widget closes with movement keys.
 It's an intended design that simulates the original Emacs' behavior.
 You can disable it with `emacs-mcx.cursorMoveOnFindWidget` option described below.
 See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about this topic.
 
-### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed
+### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed.
 This is VSCode's design that an extension cannot control.
 To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false`.
 That makes the find widget work similarly to Emacs. See https://github.com/whitphx/vscode-emacs-mcx/issues/107 for the details.
+
+### I find a bug. I want a feature X to be implemented. I have a question.
+Post a bug report or a feature request to [GitHub Issues](https://github.com/whitphx/vscode-emacs-mcx/issues).
 
 ## Extension settings
 This extension has some custom settings named with a prefix `emacs-mcx`.
