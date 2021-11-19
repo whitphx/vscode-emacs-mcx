@@ -23,7 +23,7 @@ export async function setupWorkspace(
   assert.ok(activeTextEditor);
 
   // Set EOL to LF for the tests to work even on Windows
-  (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
+  await (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
 
   return activeTextEditor as TextEditor;
 }
