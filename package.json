@@ -3740,7 +3740,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"glob": "^7.2.0",
 		"mocha": "^8.4.0",
-		"prettier": "^2.4.1",
+		"prettier": "^2.5.0",
 		"process": "^0.11.10",
 		"rimraf": "^3.0.2",
 		"sinon": "^12.0.1",
