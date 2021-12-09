@@ -246,10 +246,10 @@
   dependencies:
     "@sinonjs/fake-timers" "^7.1.0"
 
-"@types/vscode@^1.51.0":
-  version "1.59.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.59.0.tgz#11c93f5016926126bf30b47b9ece3bd617eeef31"
-  integrity sha512-Zg38rusx2nU6gy6QdF7v4iqgxNfxzlBlDhrRCjOiPQp+sfaNrp3f9J6OHIhpGNN1oOAca4+9Hq0+8u3jwzPMlQ==
+"@types/vscode@^1.63.0":
+  version "1.63.0"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.63.0.tgz#3bddb5b79a93e8fcdd420bb00f7066658c79c70c"
+  integrity sha512-iePu1axOi5WSThV6l2TYcciBIpAlMarjBC8H0y8L8ocsZLxh7MttzwFU3pjoItF5fRVGxHS0Hsvje9jO3yJsfw==
 
 "@types/webpack-env@^1.16.3":
   version "1.16.3"
