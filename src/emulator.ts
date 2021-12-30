@@ -446,15 +446,15 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
-  public async executeCommandWithPrefixArgument(
+  public executeCommandWithPrefixArgument<T>(
     command: string,
     args: any = null,
     prefixArgumentKey = "prefixArgument"
-  ): Promise<unknown> {
+  ): Thenable<T | undefined> {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 
-    return vscode.commands.executeCommand(command, { ...args, [prefixArgumentKey]: prefixArgument });
+    return vscode.commands.executeCommand<T>(command, { ...args, [prefixArgumentKey]: prefixArgument });
   }
 
   public getPrefixArgument(): number | undefined {
