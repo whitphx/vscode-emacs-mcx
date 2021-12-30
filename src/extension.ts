@@ -283,6 +283,16 @@ export function activate(context: vscode.ExtensionContext): void {
       executeCommands(args[0]);
     }
   });
+
+  registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {
+    if (typeof args === "object" && args != null) {
+      if ("command" in args) {
+        emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
+      }
+    } else if (Array.isArray(args) && args.length >= 1) {
+      emulator.executeCommandWithPrefixArgument(args[0], args[1], args[2]);
+    }
+  });
 }
 
 // this method is called when your extension is deactivated
