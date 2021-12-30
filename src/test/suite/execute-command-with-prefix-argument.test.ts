@@ -28,6 +28,7 @@ suite("executeCommandWithPrefixArgument", () => {
     await emulator.executeCommandWithPrefixArgument("emacs-mcx-test.foo");
 
     assert.ok(commandMock.calledWith({ prefixArgument: undefined }));
+    assert.strictEqual(emulator.getPrefixArgument(), undefined);
   });
 
   test("executing another command with the prefix argument", async () => {
@@ -36,12 +37,14 @@ suite("executeCommandWithPrefixArgument", () => {
     await emulator.executeCommandWithPrefixArgument("emacs-mcx-test.foo");
 
     assert.ok(commandMock.calledWith({ prefixArgument: 4 }));
+    assert.strictEqual(emulator.getPrefixArgument(), undefined);
   });
 
   test("executing another command with arguments", async () => {
     await emulator.executeCommandWithPrefixArgument("emacs-mcx-test.foo", { foo: "bar", baz: 42 });
 
     assert.ok(commandMock.calledWith({ foo: "bar", baz: 42, prefixArgument: undefined }));
+    assert.strictEqual(emulator.getPrefixArgument(), undefined);
   });
 
   test("executing another command with the passed arguments and the prefix argument", async () => {
@@ -50,6 +53,7 @@ suite("executeCommandWithPrefixArgument", () => {
     await emulator.executeCommandWithPrefixArgument("emacs-mcx-test.foo", { foo: "bar", baz: 42 });
 
     assert.ok(commandMock.calledWith({ foo: "bar", baz: 42, prefixArgument: 4 }));
+    assert.strictEqual(emulator.getPrefixArgument(), undefined);
   });
 
   test("executing another command with the customized prefix argument key", async () => {

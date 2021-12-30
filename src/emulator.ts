@@ -452,8 +452,13 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     prefixArgumentKey = "prefixArgument"
   ): Promise<unknown> {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    this.prefixArgumentHandler.cancel();
 
     return vscode.commands.executeCommand(command, { ...args, [prefixArgumentKey]: prefixArgument });
+  }
+
+  public getPrefixArgument(): number | undefined {
+    return this.prefixArgumentHandler.getPrefixArgument();
   }
 
   private makeSelectionsEmpty() {
