@@ -3,6 +3,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.37.0] - 2021-12-30
 ### Add
 - `emacs-mcx.executeCommandWithPrefixArgument` command, #1150.
 
