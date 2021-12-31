@@ -860,11 +860,7 @@
     },
     {
       "key": "ctrl+i",
-      "command": "emacs-mcx.executeCommands",
-      "args": [
-        "emacs-mcx.forwardChar",
-        "emacs-mcx.nextLine"
-      ]
+      "command": "tab"
     }
   ]
 }
