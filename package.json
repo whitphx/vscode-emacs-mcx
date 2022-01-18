@@ -3730,7 +3730,7 @@
 		"@types/webpack-env": "^1.16.3",
 		"@typescript-eslint/eslint-plugin": "^4.33.0",
 		"@typescript-eslint/parser": "^4.33.0",
-		"@vscode/test-web": "^0.0.15",
+		"@vscode/test-web": "^0.0.17",
 		"assert": "^2.0.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
