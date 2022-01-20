@@ -3,6 +3,18 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.37.1] - 2021-01-01
+### Fix
+- Assign `C-i` to TAB, #1151.
+
+## [0.37.0] - 2021-12-30
+### Add
+- `emacs-mcx.executeCommandWithPrefixArgument` command, #1150.
+
+## [0.36.6] - 2021-12-18
+### Fix
+- Internal package updates.
+
 ## [0.36.5] - 2021-11-09
 ### Fix
 - `C-a` and `C-e` move the cursor to the beginning or the end of the entire, not wrapped line, when `emacs-mcx.strictEmacsMove` flag is set, #1104.
@@ -24,7 +36,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - Set empty strings to the command field to disable the keybindings instead of leaving the field undefined, #1081.
 
 ## [0.36.0] - 2021-10-04
-## Add
+### Add
 - `C-x r t` (string-rectangle), #1049.
 
 ## [0.35.2] - 2021-09-26

@@ -256,6 +256,55 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
+## Other commands
+### `emacs-mcx.executeCommandWithPrefixArgument`
+This command calls another command with the prefix argument.
+This is mainly for extension developers who want to make the extensions collaborative with this extension's prefix argument. See [the issue #1146](https://github.com/whitphx/vscode-emacs-mcx/issues/1146) for the discussion about it.
+
+For example, if you define the keybinding below,
+* `C-x e` will call the command `foo` with the argument `{}`.
+* `C-u C-x e` will call the command `foo` with the argument `{ prefixArgument: 4 }`.
+```json
+{
+  "key": "ctrl+x e",
+  "command": "emacs-mcx.executeCommandWithPrefixArgument",
+  "args": {
+    "command": "foo"
+  }
+}
+```
+
+You can pass the arguments to the target command as below. In this case,
+* `C-x e` will call the command `foo` with the argument `{ baz: 42 }`.
+* `C-u C-x e` will call the command `foo` with the argument `{ prefixArgument: 4, baz: 42 }`.
+```json
+{
+  "key": "ctrl+x e",
+  "command": "emacs-mcx.executeCommandWithPrefixArgument",
+  "args": {
+    "command": "foo",
+    "args": {
+      "baz": 42
+    }
+  }
+}
+```
+
+You can change the key name of the prefix argument.
+```json
+{
+  "key": "ctrl+x e",
+  "command": "emacs-mcx.executeCommandWithPrefixArgument",
+  "args": {
+    "command": "foo",
+    "prefixArgumentKey": "repeat"
+  }
+}
+```
+* `C-x e` will call the command `foo` with the argument `{}`.
+* `C-u C-x e` will call the command `foo` with the argument `{ repeat: 4 }`.
+
+
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;
 - `ctrl+g`: workbench.action.gotoLine => **Use `alt+g g` instead**;

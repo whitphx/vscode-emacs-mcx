@@ -446,6 +446,21 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
+  public executeCommandWithPrefixArgument<T>(
+    command: string,
+    args: any = null,
+    prefixArgumentKey = "prefixArgument"
+  ): Thenable<T | undefined> {
+    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    this.prefixArgumentHandler.cancel();
+
+    return vscode.commands.executeCommand<T>(command, { ...args, [prefixArgumentKey]: prefixArgument });
+  }
+
+  public getPrefixArgument(): number | undefined {
+    return this.prefixArgumentHandler.getPrefixArgument();
+  }
+
   private makeSelectionsEmpty() {
     const srcSelections = this.rectMode ? this.nonRectSelections : this.textEditor.selections;
     this.textEditor.selections = srcSelections.map((selection) => new Selection(selection.active, selection.active));
