@@ -40,7 +40,7 @@ See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about
 
 ### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed.
 This is VSCode's design that an extension cannot control.
-To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false` or `"never"` (since [`1.59`](https://github.com/microsoft/vscode-docs/commit/a27b0efea3c05b4e06548dba1ad6b58979f1a79a#diff-d432cc9e616a920ea35cfeddb72b780f663270fd96f6871ec99dc8bda5b8cfb5R350)).
+To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false` or `"never"` (since [`vscode@1.59`](https://github.com/microsoft/vscode-docs/commit/a27b0efea3c05b4e06548dba1ad6b58979f1a79a#diff-d432cc9e616a920ea35cfeddb72b780f663270fd96f6871ec99dc8bda5b8cfb5R350)).
 It makes the find widget work similarly to Emacs.
 
 Refs:
