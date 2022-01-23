@@ -257,6 +257,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-M-f` | ✓ | Move forward over a balanced expression (forward-sexp) |
 | `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
 | `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
+| `C-M-Bksp` | ✓ | Kill balanced expression backward (backward-kill-sexp) |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
