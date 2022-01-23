@@ -3661,6 +3661,27 @@
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
 			},
 			{
+				"key": "ctrl+alt+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "ctrl+alt+backspace",
+				"mac": "ctrl+cmd+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape ctrl+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+[ ctrl+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+			},
+			{
 				"key": "ctrl+p",
 				"command": "selectPrevQuickFix",
 				"when": "editorFocus && quickFixWidgetVisible"

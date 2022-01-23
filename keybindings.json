@@ -824,6 +824,11 @@
       "when": "editorTextFocus"
     },
     {
+      "key": "ctrl+meta+backspace",
+      "command": "emacs-mcx.paredit.backwardKillSexp",
+      "when": "editorTextFocus"
+    },
+    {
       "key": "ctrl+p",
       "command": "selectPrevQuickFix",
       "when": "editorFocus && quickFixWidgetVisible"
