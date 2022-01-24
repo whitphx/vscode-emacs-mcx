@@ -238,7 +238,6 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |--------|------|
 | `C-x b` | Switch to another open buffer |
 | `C-x k` | Close current tab (buffer) |
-| `C-x C-k` | Close all tabs |
 | `C-x 0` | Close editors in the current group.  |
 | `C-x 1` | Close editors in other (split) group.  |
 | `C-x 2` | Split editor horizontal |

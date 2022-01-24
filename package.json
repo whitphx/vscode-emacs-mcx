@@ -3563,11 +3563,6 @@
 				"when": "!terminalFocus"
 			},
 			{
-				"key": "ctrl+x ctrl-k",
-				"command": "workbench.action.closeAllEditors",
-				"when": "!terminalFocus"
-			},
-			{
 				"key": "ctrl+x 0",
 				"command": "workbench.action.closeEditorsInGroup",
 				"when": "!terminalFocus"
