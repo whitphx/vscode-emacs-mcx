@@ -119,7 +119,7 @@ suite("newLine", () => {
           assert.strictEqual(activeTextEditor.selection.active.character, 4);
         });
 
-        const languagesAutoDoc = ["c", "cpp", "javascript", "javascriptreact", "typescript", "typescriptreact"];
+        const languagesAutoDoc = ["javascript", "javascriptreact", "typescript", "typescriptreact"];
         languagesAutoDoc.forEach((language) => {
           test(`newLine does not disable the language specific control in case of ${language}`, async function () {
             const initialText = "/** */";
