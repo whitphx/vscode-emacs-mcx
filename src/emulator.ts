@@ -30,7 +30,7 @@ export interface IEmacsCommandRunner {
 export interface IMarkModeController {
   enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
-  pushMark(positions: vscode.Position[]): void;
+  pushMark(positions: vscode.Position[], replace?: boolean): void;
 
   readonly inRectMarkMode: boolean;
   moveRectActives: (navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]) => void;
@@ -411,9 +411,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public pushMark(positions: vscode.Position[]): void {
+  public pushMark(positions: vscode.Position[], replace = false): void {
     this.prevExchangedMarks = null;
-    this.markRing.push(positions);
+    this.markRing.push(positions, replace);
   }
 
   public popMark(): void {

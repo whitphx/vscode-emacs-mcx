@@ -14,10 +14,15 @@ export class MarkRing {
     this.ring = [];
   }
 
-  public push(marks: Position[]) {
-    this.ring = [marks].concat(this.ring);
-    if (this.ring.length > this.maxNum) {
-      this.ring = this.ring.slice(0, this.maxNum);
+  public push(marks: Position[], replace = false) {
+    if (replace) {
+      // TODO: Write tests
+      this.ring[0] = marks;
+    } else {
+      this.ring = [marks].concat(this.ring);
+      if (this.ring.length > this.maxNum) {
+        this.ring = this.ring.slice(0, this.maxNum);
+      }
     }
     this.pointer = 0;
   }

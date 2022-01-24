@@ -199,6 +199,37 @@ suite("paredit.mark-sexp", () => {
     emulator.popMark();
     assertCursorsEqual(activeTextEditor, [7, 1]);
   });
+
+  test("mark inner parentheses continuously", async () => {
+    setEmptyCursors(activeTextEditor, [1, 0]);
+    emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
+
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(
+      activeTextEditor.selection.isEqual(new Selection(1, 0, 3, 3)),
+      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 3, 3))}`
+    );
+
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(
+      activeTextEditor.selection.isEqual(new Selection(1, 0, 6, 3)),
+      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 6, 3))}`
+    );
+
+    emulator.exitMarkMode();
+    activeTextEditor.selection = new Selection(0, 0, 0, 0);
+
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [6, 3]);
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+  });
 });
 
 suite("paredit commands with a long text that requires revealing", () => {

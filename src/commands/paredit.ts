@@ -77,6 +77,7 @@ export class BackwardUpSexp extends PareditNavigatorCommand {
 
 export class MarkSexp extends EmacsCommand {
   public readonly id = "paredit.markSexp";
+  private continuing = false;
 
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -97,9 +98,21 @@ export class MarkSexp extends EmacsCommand {
     if (newSelections.some((newSelection) => !newSelection.isEmpty)) {
       this.emacsController.enterMarkMode(false);
     }
-    this.emacsController.pushMark(newSelections.map((newSelection) => newSelection.active));
+
+    // TODO: Print "Mark set" message
+
+    this.emacsController.pushMark(
+      newSelections.map((newSelection) => newSelection.active),
+      this.continuing
+    );
 
     revealPrimaryActive(textEditor);
+
+    this.continuing = true;
+  }
+
+  public onDidInterruptTextEditor() {
+    this.continuing = false;
   }
 }
 
