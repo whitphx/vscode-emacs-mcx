@@ -75,6 +75,34 @@ export class BackwardUpSexp extends PareditNavigatorCommand {
   public readonly pareditNavigatorFn = paredit.navigator.backwardUpSexp;
 }
 
+export class MarkSexp extends EmacsCommand {
+  public readonly id = "paredit.markSexp";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+    if (repeat <= 0) {
+      // TODO: Support negative repeats as backward navigation.
+      return;
+    }
+
+    const doc = textEditor.document;
+
+    const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.forwardSexp);
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Selection(selection.anchor, newActivePosition);
+    });
+
+    textEditor.selections = newSelections;
+    if (newSelections.some((newSelection) => !newSelection.isEmpty)) {
+      this.emacsController.enterMarkMode(false);
+    }
+    this.emacsController.pushMark(newSelections.map((newSelection) => newSelection.active));
+
+    revealPrimaryActive(textEditor);
+  }
+}
+
 export class KillSexp extends KillYankCommand {
   public readonly id = "paredit.killSexp";
 
