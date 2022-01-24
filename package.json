@@ -3751,7 +3751,7 @@
 		"vsce": "^2.6.3",
 		"vscode-test": "^1.6.1",
 		"webpack": "^5.67.0",
-		"webpack-cli": "^4.9.1"
+		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
 		"paredit.js": "^0.3.4",
