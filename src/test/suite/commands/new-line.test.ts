@@ -119,13 +119,7 @@ suite("newLine", () => {
           assert.strictEqual(activeTextEditor.selection.active.character, 4);
         });
 
-        const languagesAutoDoc = [
-          // "c", "cpp"  // Auto-indent for doc comments does not work with these languages in test env while I don't know why...
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
-        ];
+        const languagesAutoDoc = ["c", "cpp", "javascript", "javascriptreact", "typescript", "typescriptreact"];
         languagesAutoDoc.forEach((language) => {
           test(`newLine does not disable the language specific control in case of ${language}`, async function () {
             const initialText = "/** */";
