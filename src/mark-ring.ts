@@ -16,7 +16,6 @@ export class MarkRing {
 
   public push(marks: Position[], replace = false) {
     if (replace) {
-      // TODO: Write tests
       this.ring[0] = marks;
     } else {
       this.ring = [marks].concat(this.ring);
