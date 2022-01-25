@@ -2,11 +2,11 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
-### Fix
-- Drop `C-x C-k`, #1180.
-
 ### Add
 - `emacs-mcx.paredit.backwardKillSexp`, #1175.
+- `emacs-mcx.paredit.markSexp`, #1181.
+### Fix
+- Drop `C-x C-k`, #1180.
 
 ## [0.37.1] - 2021-01-01
 ### Fix
