@@ -3,6 +3,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Add
+- `emacs-mcx.paredit.backwardKillSexp`, #1175.
+
 ## [0.37.1] - 2021-01-01
 ### Fix
 - Assign `C-i` to TAB, #1151.
