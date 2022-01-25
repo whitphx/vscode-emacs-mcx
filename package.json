@@ -3640,6 +3640,27 @@
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
 			},
 			{
+				"key": "ctrl+alt+shift+2",
+				"command": "emacs-mcx.paredit.markSexp",
+				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "ctrl+alt+shift+2",
+				"mac": "ctrl+cmd+shift+2",
+				"command": "emacs-mcx.paredit.markSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape ctrl+shift+2",
+				"command": "emacs-mcx.paredit.markSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+[ ctrl+shift+2",
+				"command": "emacs-mcx.paredit.markSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+			},
+			{
 				"key": "ctrl+alt+k",
 				"command": "emacs-mcx.paredit.killSexp",
 				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
