@@ -227,7 +227,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 ### File Commands
 |Command | Desc |
 |--------|------|
-| `C-x C-f` | QuickOpen a file |
+| `C-x C-f` | QuickOpen a file (Tips: This extension assigns `C-x C-f` to the VSCode's native [quick file navigation](https://code.visualstudio.com/docs/editor/editingevolved#_quick-file-navigation). If you prefer more Emacs-like behavior, [The "File Browser" extension by Bodil Stokke (`bodil.file-browser`)](https://marketplace.visualstudio.com/items?itemName=bodil.file-browser) may help.) |
 | `C-x C-s` | Save |
 | `C-x C-w` | Save as |
 | `C-x s`   | Save all files |
