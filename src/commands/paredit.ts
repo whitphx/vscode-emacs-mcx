@@ -2,6 +2,7 @@ import * as paredit from "paredit.js";
 import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
 import { EmacsCommand } from ".";
 import { KillYankCommand } from "./kill";
+import { AppendDirection } from "../kill-yank";
 import { revealPrimaryActive } from "./helpers/reveal";
 
 type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
@@ -134,6 +135,29 @@ export class KillSexp extends KillYankCommand {
     });
 
     await this.killYanker.kill(killRanges);
+
+    revealPrimaryActive(textEditor);
+  }
+}
+
+export class BackwardKillSexp extends KillYankCommand {
+  public readonly id = "paredit.backwardKillSexp";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+    if (repeat <= 0) {
+      return;
+    }
+
+    const doc = textEditor.document;
+
+    const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.backwardSexp);
+    const killRanges = textEditor.selections.map((selection) => {
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Range(selection.anchor, newActivePosition);
+    });
+
+    await this.killYanker.kill(killRanges, AppendDirection.Backward);
 
     revealPrimaryActive(textEditor);
   }

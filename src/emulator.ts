@@ -158,6 +158,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new PareditCommands.BackwardUpSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.MarkSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.KillSexp(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this.afterCommand, this, killYanker));
 
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));

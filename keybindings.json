@@ -774,11 +774,6 @@
       "when": "!terminalFocus"
     },
     {
-      "key": "ctrl+x ctrl-k",
-      "command": "workbench.action.closeAllEditors",
-      "when": "!terminalFocus"
-    },
-    {
       "key": "ctrl+x 0",
       "command": "workbench.action.closeEditorsInGroup",
       "when": "!terminalFocus"
@@ -826,6 +821,11 @@
     {
       "key": "ctrl+meta+k",
       "command": "emacs-mcx.paredit.killSexp",
+      "when": "editorTextFocus"
+    },
+    {
+      "key": "ctrl+meta+backspace",
+      "command": "emacs-mcx.paredit.backwardKillSexp",
       "when": "editorTextFocus"
     },
     {

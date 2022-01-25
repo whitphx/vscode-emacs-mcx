@@ -3563,11 +3563,6 @@
 				"when": "!terminalFocus"
 			},
 			{
-				"key": "ctrl+x ctrl-k",
-				"command": "workbench.action.closeAllEditors",
-				"when": "!terminalFocus"
-			},
-			{
 				"key": "ctrl+x 0",
 				"command": "workbench.action.closeEditorsInGroup",
 				"when": "!terminalFocus"
@@ -3682,6 +3677,27 @@
 				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
 			},
 			{
+				"key": "ctrl+alt+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "ctrl+alt+backspace",
+				"mac": "ctrl+cmd+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape ctrl+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+[ ctrl+backspace",
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+			},
+			{
 				"key": "ctrl+p",
 				"command": "selectPrevQuickFix",
 				"when": "editorFocus && quickFixWidgetVisible"
@@ -3756,7 +3772,7 @@
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"glob": "^7.2.0",
-		"mocha": "^9.1.4",
+		"mocha": "^9.2.0",
 		"prettier": "^2.5.1",
 		"process": "^0.11.10",
 		"rimraf": "^3.0.2",
@@ -3772,7 +3788,7 @@
 		"vsce": "^2.6.3",
 		"vscode-test": "^1.6.1",
 		"webpack": "^5.67.0",
-		"webpack-cli": "^4.9.1"
+		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
 		"paredit.js": "^0.3.4",

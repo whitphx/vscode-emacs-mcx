@@ -238,7 +238,6 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |--------|------|
 | `C-x b` | Switch to another open buffer |
 | `C-x k` | Close current tab (buffer) |
-| `C-x C-k` | Close all tabs |
 | `C-x 0` | Close editors in the current group.  |
 | `C-x 1` | Close editors in other (split) group.  |
 | `C-x 2` | Split editor horizontal |
@@ -258,6 +257,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
 | `C-M-S-2` (`C-M-@` with US keyboard) | ✓ (Positive values are only supported) | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
 | `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
+| `C-M-Bksp` | ✓ | Kill balanced expression backward (backward-kill-sexp) |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 

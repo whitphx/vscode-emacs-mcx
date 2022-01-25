@@ -163,6 +163,111 @@ suite("paredit.kill-sexp", () => {
   });
 });
 
+suite("paredit.backward-kill-sexp", () => {
+  const initialText = `(
+  (
+    a b
+  )
+  (
+    c d
+  )
+)`;
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  test("killing outer parentheses", async () => {
+    setEmptyCursors(activeTextEditor, [7, 1]);
+
+    await emulator.runCommand("paredit.backwardKillSexp");
+
+    assertTextEqual(activeTextEditor, "");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+
+    await clearTextEditor(activeTextEditor);
+
+    await emulator.runCommand("yank");
+
+    assertTextEqual(activeTextEditor, initialText);
+  });
+
+  test("killing inner parentheses continuously", async () => {
+    setEmptyCursors(activeTextEditor, [6, 3]);
+
+    await emulator.runCommand("paredit.backwardKillSexp");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+  (
+    a b
+  )
+  
+)`
+    );
+    assertCursorsEqual(activeTextEditor, [4, 2]);
+
+    await emulator.runCommand("paredit.backwardKillSexp");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+  
+)`
+    );
+    assertCursorsEqual(activeTextEditor, [1, 2]);
+
+    await clearTextEditor(activeTextEditor);
+
+    await emulator.runCommand("yank");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+    a b
+  )
+  (
+    c d
+  )`
+    );
+  });
+
+  test("killing inner parentheses with prefix argument", async () => {
+    setEmptyCursors(activeTextEditor, [6, 3]);
+
+    emulator.universalArgument();
+    await emulator.universalArgumentDigit(2);
+    await emulator.runCommand("paredit.backwardKillSexp");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+  
+)`
+    );
+    assertCursorsEqual(activeTextEditor, [1, 2]);
+
+    await clearTextEditor(activeTextEditor);
+
+    await emulator.runCommand("yank");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(
+    a b
+  )
+  (
+    c d
+  )`
+    );
+  });
+});
+
 suite("paredit.mark-sexp", () => {
   const initialText = `(
   (
