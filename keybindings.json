@@ -814,6 +814,11 @@
       "when": "editorTextFocus"
     },
     {
+      "key": "ctrl+meta+shift+2",
+      "command": "emacs-mcx.paredit.markSexp",
+      "when": "editorTextFocus"
+    },
+    {
       "key": "ctrl+meta+k",
       "command": "emacs-mcx.paredit.killSexp",
       "when": "editorTextFocus"

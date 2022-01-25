@@ -255,6 +255,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |--------|----------------|------|
 | `C-M-f` | ✓ | Move forward over a balanced expression (forward-sexp) |
 | `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
+| `C-M-S-2` (`C-M-@` with US keyboard) | ✓ (Positive values are only supported) | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
 | `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
 | `C-M-Bksp` | ✓ | Kill balanced expression backward (backward-kill-sexp) |
 

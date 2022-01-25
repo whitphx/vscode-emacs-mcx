@@ -1,5 +1,5 @@
 import assert from "assert";
-import { Position, Range, TextEditor } from "vscode";
+import { Position, Range, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { KillRing } from "../../../kill-yank/kill-ring";
 import { setEmptyCursors, setupWorkspace, assertCursorsEqual, assertTextEqual, clearTextEditor } from "../utils";
@@ -265,6 +265,99 @@ suite("paredit.backward-kill-sexp", () => {
     c d
   )`
     );
+  });
+});
+
+suite("paredit.mark-sexp", () => {
+  const initialText = `(
+  (
+    a b
+  )
+  (
+    c d
+  )
+)`;
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  test("set mark at the outer parentheses", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(
+      activeTextEditor.selection.isEqual(new Selection(0, 0, 7, 1)),
+      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(0, 0, 7, 1))}`
+    );
+    assert.ok(emulator.isInMarkMode);
+
+    emulator.exitMarkMode();
+    activeTextEditor.selection = new Selection(0, 0, 0, 0);
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [7, 1]);
+  });
+
+  test("mark inner parentheses continuously", async () => {
+    setEmptyCursors(activeTextEditor, [1, 0]);
+    emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
+
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(
+      activeTextEditor.selection.isEqual(new Selection(1, 0, 3, 3)),
+      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 3, 3))}`
+    );
+
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(
+      activeTextEditor.selection.isEqual(new Selection(1, 0, 6, 3)),
+      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 6, 3))}`
+    );
+
+    emulator.exitMarkMode();
+    activeTextEditor.selection = new Selection(0, 0, 0, 0);
+
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [6, 3]);
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+  });
+
+  test("mark inner parentheses with prefix argument", async () => {
+    setEmptyCursors(activeTextEditor, [1, 0]);
+    emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
+
+    emulator.universalArgument();
+    await emulator.universalArgumentDigit(2);
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assert.ok(
+      activeTextEditor.selection.isEqual(new Selection(1, 0, 6, 3)),
+      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 6, 3))}`
+    );
+
+    emulator.exitMarkMode();
+    activeTextEditor.selection = new Selection(0, 0, 0, 0);
+
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [6, 3]);
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [1, 0]);
   });
 });
 

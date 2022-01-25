@@ -76,6 +76,47 @@ export class BackwardUpSexp extends PareditNavigatorCommand {
   public readonly pareditNavigatorFn = paredit.navigator.backwardUpSexp;
 }
 
+export class MarkSexp extends EmacsCommand {
+  public readonly id = "paredit.markSexp";
+  private continuing = false;
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+    if (repeat <= 0) {
+      // TODO: Support negative repeats as backward navigation.
+      return;
+    }
+
+    const doc = textEditor.document;
+
+    const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.forwardSexp);
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Selection(selection.anchor, newActivePosition);
+    });
+
+    textEditor.selections = newSelections;
+    if (newSelections.some((newSelection) => !newSelection.isEmpty)) {
+      this.emacsController.enterMarkMode(false);
+    }
+
+    // TODO: Print "Mark set" message. With the current implementation, the message will disappear just after showing because MessageManager.onInterupt() is asynchronously called for setting the new selections and revealPrimaryActive() below.
+
+    this.emacsController.pushMark(
+      newSelections.map((newSelection) => newSelection.active),
+      this.continuing
+    );
+
+    revealPrimaryActive(textEditor);
+
+    this.continuing = true;
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.continuing = false;
+  }
+}
+
 export class KillSexp extends KillYankCommand {
   public readonly id = "paredit.killSexp";
 
