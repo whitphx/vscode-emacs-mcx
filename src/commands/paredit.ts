@@ -100,7 +100,7 @@ export class MarkSexp extends EmacsCommand {
       this.emacsController.enterMarkMode(false);
     }
 
-    // TODO: Print "Mark set" message
+    // TODO: Print "Mark set" message. With the current implementation, the message will disappear just after showing because MessageManager.onInterupt() is asynchronously called for setting the new selections and revealPrimaryActive() below.
 
     this.emacsController.pushMark(
       newSelections.map((newSelection) => newSelection.active),
@@ -112,7 +112,7 @@ export class MarkSexp extends EmacsCommand {
     this.continuing = true;
   }
 
-  public onDidInterruptTextEditor() {
+  public onDidInterruptTextEditor(): void {
     this.continuing = false;
   }
 }
