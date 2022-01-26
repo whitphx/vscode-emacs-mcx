@@ -13,6 +13,11 @@ export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
   Configuration.registerDispose(context);
 
+  // For Emacs-like search behavior. See https://github.com/whitphx/vscode-emacs-mcx/issues/107
+  vscode.workspace
+    .getConfiguration()
+    .update("editor.find.seedSearchStringFromSelection", false, vscode.ConfigurationTarget.Global);
+
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
 
