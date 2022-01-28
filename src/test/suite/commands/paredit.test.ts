@@ -2,7 +2,14 @@ import assert from "assert";
 import { Position, Range, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { KillRing } from "../../../kill-yank/kill-ring";
-import { setEmptyCursors, setupWorkspace, assertCursorsEqual, assertTextEqual, clearTextEditor } from "../utils";
+import {
+  setEmptyCursors,
+  setupWorkspace,
+  assertCursorsEqual,
+  assertTextEqual,
+  clearTextEditor,
+  assertSelectionsEqual,
+} from "../utils";
 
 suite("paredit commands", () => {
   let activeTextEditor: TextEditor;
@@ -293,10 +300,7 @@ suite("paredit.mark-sexp", () => {
 
     assertTextEqual(activeTextEditor, initialText);
     assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(
-      activeTextEditor.selection.isEqual(new Selection(0, 0, 7, 1)),
-      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(0, 0, 7, 1))}`
-    );
+    assertSelectionsEqual(activeTextEditor, new Selection(0, 0, 7, 1));
     assert.ok(emulator.isInMarkMode);
 
     emulator.exitMarkMode();
@@ -313,19 +317,13 @@ suite("paredit.mark-sexp", () => {
 
     assertTextEqual(activeTextEditor, initialText);
     assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(
-      activeTextEditor.selection.isEqual(new Selection(1, 0, 3, 3)),
-      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 3, 3))}`
-    );
+    assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 3, 3));
 
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
     assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(
-      activeTextEditor.selection.isEqual(new Selection(1, 0, 6, 3)),
-      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 6, 3))}`
-    );
+    assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 6, 3));
 
     emulator.exitMarkMode();
     activeTextEditor.selection = new Selection(0, 0, 0, 0);
@@ -346,10 +344,7 @@ suite("paredit.mark-sexp", () => {
 
     assertTextEqual(activeTextEditor, initialText);
     assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(
-      activeTextEditor.selection.isEqual(new Selection(1, 0, 6, 3)),
-      `Cursor mismatch: ${JSON.stringify(activeTextEditor.selection)} !== ${JSON.stringify(new Selection(1, 0, 6, 3))}`
-    );
+    assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 6, 3));
 
     emulator.exitMarkMode();
     activeTextEditor.selection = new Selection(0, 0, 0, 0);
