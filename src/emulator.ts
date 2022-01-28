@@ -33,6 +33,7 @@ export interface IMarkModeController {
   pushMark(positions: vscode.Position[], replace?: boolean): void;
 
   readonly inRectMarkMode: boolean;
+  readonly nativeSelections: vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]) => void;
 }
 
@@ -53,20 +54,29 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   public get inRectMarkMode(): boolean {
     return this._isInMarkMode && this.rectMode;
   }
-  private nonRectSelections: vscode.Selection[];
-  private applyNonRectSelectionsAsRect(): void {
+
+  /**
+   * It is usually synced to `textEditor.selections`.
+   * Specially in rect-mark-mode, it is used to manage the underlying selections which the move commands directly manipulate
+   * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
+   */
+  private _nativeSelections: vscode.Selection[];
+  public get nativeSelections(): vscode.Selection[] {
+    return this._nativeSelections;
+  }
+  private applyNativeSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
-      const rectSelections = this.nonRectSelections
+      const rectSelections = this._nativeSelections
         .map(convertSelectionToRectSelections.bind(null, this.textEditor.document))
         .reduce((a, b) => a.concat(b), []);
       this.textEditor.selections = rectSelections;
     }
   }
   public moveRectActives(navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]): void {
-    const newActives = navigateFn(this.nonRectSelections.map((s) => s.active));
-    const newNonRectSelections = this.nonRectSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
-    this.nonRectSelections = newNonRectSelections;
-    this.applyNonRectSelectionsAsRect();
+    const newActives = navigateFn(this._nativeSelections.map((s) => s.active));
+    const newNativeSelections = this._nativeSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
+    this._nativeSelections = newNativeSelections;
+    this.applyNativeSelectionsAsRect();
   }
 
   private killYanker: KillYanker;
@@ -80,7 +90,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     minibuffer: Minibuffer = new InputBoxMinibuffer()
   ) {
     this.textEditor = textEditor;
-    this.nonRectSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
+    this._nativeSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
@@ -205,7 +215,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
       this.onDidInterruptTextEditor();
 
       if (!this.rectMode) {
-        this.nonRectSelections = this.textEditor.selections;
+        this._nativeSelections = this.textEditor.selections;
       }
     }
   }
@@ -347,7 +357,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.enterMarkMode();
     this.rectMode = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
-    this.applyNonRectSelectionsAsRect();
+    this.applyNativeSelectionsAsRect();
 
     this.normalCursorStyle = this.textEditor.options.cursorStyle;
     this.textEditor.options.cursorStyle = vscode.TextEditorCursorStyle.LineThin;
@@ -360,7 +370,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
     this.rectMode = false;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", false);
-    this.textEditor.selections = this.nonRectSelections;
+    this.textEditor.selections = this._nativeSelections;
 
     if (!this.isInMarkMode) {
       this.makeSelectionsEmpty();
@@ -464,7 +474,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   private makeSelectionsEmpty() {
-    const srcSelections = this.rectMode ? this.nonRectSelections : this.textEditor.selections;
+    const srcSelections = this.rectMode ? this._nativeSelections : this.textEditor.selections;
     this.textEditor.selections = srcSelections.map((selection) => new Selection(selection.active, selection.active));
   }
 
