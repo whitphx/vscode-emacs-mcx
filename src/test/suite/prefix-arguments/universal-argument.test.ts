@@ -2,10 +2,10 @@ import assert from "assert";
 import * as vscode from "vscode";
 import * as sinon from "sinon";
 import { TextEditor } from "vscode";
-import { EmacsEmulator } from "../../emulator";
-import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "./utils";
+import { EmacsEmulator } from "../../../emulator";
+import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../utils";
 
-suite("Prefix argument (Universal argument: C-u)", () => {
+suite("Universal argument (C-u)", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
 
