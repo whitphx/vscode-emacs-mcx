@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Fix
+- Assign `C-g` to all the commands which are assigned to "escape" by default, #1198.
 
 ## [0.38.0] - 2022-01-29
 ### Add
