@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.38.0] - 2022-01-29
 ### Add
 - `emacs-mcx.paredit.backwardKillSexp`, #1175.
 - `emacs-mcx.paredit.markSexp`, #1181.
@@ -10,7 +12,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - Drop `C-x C-k`, #1180.
 - Cursor positions after `kill-region` in rect-mark-mode, #1187.
 
-## [0.37.1] - 2021-01-01
+## [0.37.1] - 2022-01-01
 ### Fix
 - Assign `C-i` to TAB, #1151.
 
