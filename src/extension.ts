@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext): void {
     if (typeof arg !== "number") {
       return;
     }
-    emulator.subsequentArgumentDigit(arg);
+    return emulator.subsequentArgumentDigit(arg);
   });
 
   registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
@@ -95,7 +95,7 @@ export function activate(context: vscode.ExtensionContext): void {
     if (typeof arg !== "number") {
       return;
     }
-    emulator.digitArgument(arg);
+    return emulator.digitArgument(arg);
   });
 
   registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
@@ -103,29 +103,29 @@ export function activate(context: vscode.ExtensionContext): void {
     if (typeof arg !== "string") {
       return;
     }
-    emulator.typeChar(arg);
+    return emulator.typeChar(arg);
   });
 
   moveCommandIds.map((commandName) => {
     registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator) => {
-      emulator.runCommand(commandName);
+      return emulator.runCommand(commandName);
     });
   });
 
   registerEmulatorCommand("emacs-mcx.isearchForward", (emulator) => {
-    emulator.runCommand("isearchForward");
+    return emulator.runCommand("isearchForward");
   });
 
   registerEmulatorCommand("emacs-mcx.isearchBackward", (emulator) => {
-    emulator.runCommand("isearchBackward");
+    return emulator.runCommand("isearchBackward");
   });
 
   registerEmulatorCommand("emacs-mcx.isearchAbort", (emulator) => {
-    emulator.runCommand("isearchAbort");
+    return emulator.runCommand("isearchAbort");
   });
 
   registerEmulatorCommand("emacs-mcx.isearchExit", (emulator, args) => {
-    emulator.runCommand("isearchExit").then(() => {
+    return emulator.runCommand("isearchExit").then(() => {
       const secondCommand = args.then;
 
       if (typeof secondCommand === "string") {
@@ -135,15 +135,15 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {
-    emulator.runCommand("deleteBackwardChar");
+    return emulator.runCommand("deleteBackwardChar");
   });
 
   registerEmulatorCommand("emacs-mcx.deleteForwardChar", (emulator) => {
-    emulator.runCommand("deleteForwardChar");
+    return emulator.runCommand("deleteForwardChar");
   });
 
   registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
-    emulator.universalArgument();
+    return emulator.universalArgument();
   });
 
   registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
@@ -215,27 +215,27 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
-    emulator.setMarkCommand();
+    return emulator.setMarkCommand();
   });
 
   registerEmulatorCommand("emacs-mcx.rectangleMarkMode", (emulator) => {
-    emulator.rectangleMarkMode();
+    return emulator.rectangleMarkMode();
   });
 
   registerEmulatorCommand("emacs-mcx.popMark", (emulator) => {
-    emulator.popMark();
+    return emulator.popMark();
   });
 
   registerEmulatorCommand("emacs-mcx.exchangePointAndMark", (emulator) => {
-    emulator.exchangePointAndMark();
+    return emulator.exchangePointAndMark();
   });
 
   registerEmulatorCommand("emacs-mcx.addSelectionToNextFindMatch", (emulator) => {
-    emulator.runCommand("addSelectionToNextFindMatch");
+    return emulator.runCommand("addSelectionToNextFindMatch");
   });
 
   registerEmulatorCommand("emacs-mcx.addSelectionToPreviousFindMatch", (emulator) => {
-    emulator.runCommand("addSelectionToPreviousFindMatch");
+    return emulator.runCommand("addSelectionToPreviousFindMatch");
   });
 
   registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {
@@ -243,70 +243,70 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   registerEmulatorCommand("emacs-mcx.newLine", (emulator) => {
-    emulator.runCommand("newLine");
+    return emulator.runCommand("newLine");
   });
 
   registerEmulatorCommand("emacs-mcx.transformToUppercase", (emulator) => {
-    emulator.runCommand("transformToUppercase");
+    return emulator.runCommand("transformToUppercase");
   });
 
   registerEmulatorCommand("emacs-mcx.transformToLowercase", (emulator) => {
-    emulator.runCommand("transformToLowercase");
+    return emulator.runCommand("transformToLowercase");
   });
 
   registerEmulatorCommand("emacs-mcx.transformToTitlecase", (emulator) => {
-    emulator.runCommand("transformToTitlecase");
+    return emulator.runCommand("transformToTitlecase");
   });
 
   registerEmulatorCommand("emacs-mcx.deleteBlankLines", (emulator) => {
-    emulator.runCommand("deleteBlankLines");
+    return emulator.runCommand("deleteBlankLines");
   });
 
   registerEmulatorCommand("emacs-mcx.recenterTopBottom", (emulator) => {
-    emulator.runCommand("recenterTopBottom");
+    return emulator.runCommand("recenterTopBottom");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {
-    emulator.runCommand("paredit.forwardSexp");
+    return emulator.runCommand("paredit.forwardSexp");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.forwardDownSexp", (emulator) => {
-    emulator.runCommand("paredit.forwardDownSexp");
+    return emulator.runCommand("paredit.forwardDownSexp");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.backwardSexp", (emulator) => {
-    emulator.runCommand("paredit.backwardSexp");
+    return emulator.runCommand("paredit.backwardSexp");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.backwardUpSexp", (emulator) => {
-    emulator.runCommand("paredit.backwardUpSexp");
+    return emulator.runCommand("paredit.backwardUpSexp");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.markSexp", (emulator) => {
-    emulator.runCommand("paredit.markSexp");
+    return emulator.runCommand("paredit.markSexp");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.killSexp", (emulator) => {
-    emulator.runCommand("paredit.killSexp");
+    return emulator.runCommand("paredit.killSexp");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.backwardKillSexp", (emulator) => {
-    emulator.runCommand("paredit.backwardKillSexp");
+    return emulator.runCommand("paredit.backwardKillSexp");
   });
 
   vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
     if (1 <= args.length) {
-      executeCommands(args[0]);
+      return executeCommands(args[0]);
     }
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {
     if (typeof args === "object" && args != null) {
       if ("command" in args) {
-        emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
+        return emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
       }
     } else if (Array.isArray(args) && args.length >= 1) {
-      emulator.executeCommandWithPrefixArgument(args[0], args[1], args[2]);
+      return emulator.executeCommandWithPrefixArgument(args[0], args[1], args[2]);
     }
   });
 }
