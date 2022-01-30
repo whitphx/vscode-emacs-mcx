@@ -56,19 +56,19 @@ export class PrefixArgumentHandler {
     MessageManager.showMessage(`C-u ${this.state.prefixArgumentStr}-`);
   }
 
-  public universalArgumentDigit(arg: number): Promise<unknown> {
+  public subsequentArgumentDigit(arg: number): Promise<unknown> {
     if (!this.state.isInPrefixArgumentMode) {
-      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Not in prefix argument mode. exit.`);
+      logger.debug(`[PrefixArgumentHandler.subsequentArgumentDigit]\t Not in prefix argument mode. exit.`);
       return Promise.resolve();
     }
 
     if (!this.state.isAcceptingPrefixArgument) {
-      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Prefix argument input is not accepted.`);
+      logger.debug(`[PrefixArgumentHandler.subsequentArgumentDigit]\t Prefix argument input is not accepted.`);
       return Promise.resolve();
     }
 
     if (isNaN(arg) || arg < 0) {
-      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Input digit is NaN or negative. Ignore it.`);
+      logger.debug(`[PrefixArgumentHandler.subsequentArgumentDigit]\t Input digit is NaN or negative. Ignore it.`);
       return Promise.resolve();
     }
 
@@ -102,7 +102,7 @@ export class PrefixArgumentHandler {
 
   public digitArgument(arg: number): Promise<unknown> {
     if (isNaN(arg) || arg < 0) {
-      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Input digit is NaN or negative. Ignore it.`);
+      logger.debug(`[PrefixArgumentHandler.digitArgument]\t Input digit is NaN or negative. Ignore it.`);
       return Promise.resolve();
     }
 

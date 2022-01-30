@@ -143,7 +143,7 @@ suite("paredit.kill-sexp", () => {
     setEmptyCursors(activeTextEditor, [1, 0]);
 
     emulator.universalArgument();
-    await emulator.universalArgumentDigit(2);
+    await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.killSexp");
 
     assertTextEqual(
@@ -248,7 +248,7 @@ suite("paredit.backward-kill-sexp", () => {
     setEmptyCursors(activeTextEditor, [6, 3]);
 
     emulator.universalArgument();
-    await emulator.universalArgumentDigit(2);
+    await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.backwardKillSexp");
 
     assertTextEqual(
@@ -339,7 +339,7 @@ suite("paredit.mark-sexp", () => {
     emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
 
     emulator.universalArgument();
-    await emulator.universalArgumentDigit(2);
+    await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
@@ -411,7 +411,7 @@ suite("paredit commands with prefix argument", () => {
     setEmptyCursors(activeTextEditor, [0, 2]); // the right to `0`
 
     emulator.universalArgument();
-    await emulator.universalArgumentDigit(2);
+    await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.forwardSexp");
 
     assert.strictEqual(activeTextEditor.selections.length, 1);
@@ -422,7 +422,7 @@ suite("paredit commands with prefix argument", () => {
     setEmptyCursors(activeTextEditor, [0, 19]); // the left to `9`
 
     emulator.universalArgument();
-    await emulator.universalArgumentDigit(2);
+    await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.backwardSexp");
 
     assert.strictEqual(activeTextEditor.selections.length, 1);

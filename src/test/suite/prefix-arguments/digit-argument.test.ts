@@ -56,7 +56,7 @@ suite("Digit argument (M-<number>)", () => {
       assertPrefixArgumentContext(3);
 
       resetExecuteCommandSpy();
-      await emulator.universalArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(2);
       assertPrefixArgumentContext(32);
 
       resetExecuteCommandSpy();
@@ -86,11 +86,11 @@ suite("Digit argument (M-<number>)", () => {
       assertPrefixArgumentContext(3);
 
       resetExecuteCommandSpy();
-      await emulator.universalArgumentDigit(1);
+      await emulator.subsequentArgumentDigit(1);
       assertPrefixArgumentContext(31);
 
       resetExecuteCommandSpy();
-      await emulator.universalArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(2);
       assertPrefixArgumentContext(312);
 
       resetExecuteCommandSpy();

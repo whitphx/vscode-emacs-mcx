@@ -82,12 +82,12 @@ export function activate(context: vscode.ExtensionContext): void {
     );
   }
 
-  registerEmulatorCommand("emacs-mcx.universalArgumentDigit", (emulator, args) => {
+  registerEmulatorCommand("emacs-mcx.subsequentArgumentDigit", (emulator, args) => {
     const arg = args[0];
     if (typeof arg !== "number") {
       return;
     }
-    emulator.universalArgumentDigit(arg);
+    emulator.subsequentArgumentDigit(arg);
   });
 
   registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
