@@ -283,7 +283,14 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   /**
-   * digits following C-u
+   * M-<number>
+   */
+  public digitArgument(digit: number): Promise<unknown> {
+    return this.prefixArgumentHandler.digitArgument(digit);
+  }
+
+  /**
+   * Digits following C-u or M-<number>
    */
   public universalArgumentDigit(arg: number): Promise<unknown> {
     return this.prefixArgumentHandler.universalArgumentDigit(arg);
