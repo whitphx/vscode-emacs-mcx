@@ -249,6 +249,8 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |Command | Desc |
 |--------|------|
 | `C-u` | universal-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
+| `M-<number>` | digit-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
+
 
 ### sexp
 |Command |Prefix argument | Desc |
