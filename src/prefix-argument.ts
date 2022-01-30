@@ -117,6 +117,26 @@ export class PrefixArgumentHandler {
     return promise;
   }
 
+  public negativeArgument(): Promise<unknown> {
+    if (this.state.prefixArgumentStr !== "") {
+      logger.warn(`[PrefixArgumentHandler.negativeArgument]\t Invalid invocation of negative-argument.`);
+      return Promise.resolve();
+    }
+
+    const promise = this.updateState({
+      isInPrefixArgumentMode: true,
+      isAcceptingPrefixArgument: true,
+      cuCount: 0,
+      prefixArgumentStr: "-",
+    });
+    this.showPrefixArgumentMessage();
+    return promise;
+  }
+
+  public get minusSignAcceptable(): boolean {
+    return this.state.isAcceptingPrefixArgument && this.state.prefixArgumentStr === "";
+  }
+
   public cancel(): Promise<unknown> {
     logger.debug(`[PrefixArgumentHandler.cancel]`);
     return this.updateState({
@@ -130,6 +150,10 @@ export class PrefixArgumentHandler {
   public getPrefixArgument(): number | undefined {
     if (!this.state.isInPrefixArgumentMode) {
       return undefined;
+    }
+
+    if (this.state.prefixArgumentStr === "-") {
+      return -1;
     }
 
     const prefixArgument = parseInt(this.state.prefixArgumentStr, 10);

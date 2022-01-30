@@ -190,8 +190,8 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     keybindings.push(
       ...generateKeybindings({
         keys: [num.toString(), `meta+${num.toString()}`],
-        when: "emacs-mcx.acceptingArgument && editorTextFocus",
         command: "emacs-mcx.subsequentArgumentDigit",
+        when: "emacs-mcx.acceptingArgument && editorTextFocus",
         args: [num],
       })
     );
@@ -210,6 +210,15 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
       args: [num.toString()],
     });
   }
+
+  // M--
+  keybindings.push(
+    ...generateKeybindings({
+      key: "meta+-",
+      when: "!emacs-mcx.acceptingArgument && editorTextFocus",
+      command: "emacs-mcx.negativeArgument",
+    })
+  );
 
   // Ascii all printable characters excluding space, delete, and numeric characters.
   // Ref: https://www.ascii-code.com/
