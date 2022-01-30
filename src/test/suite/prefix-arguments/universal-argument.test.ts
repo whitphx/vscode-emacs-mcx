@@ -49,7 +49,7 @@ suite("Universal argument (C-u)", () => {
 
     teardown(cleanUpWorkspace);
 
-    test("repeating charactor input for the given argument", async () => {
+    test("repeating character input for the given argument", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -66,7 +66,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
     });
 
-    test("repeating charactor input for the given argument 0", async () => {
+    test("repeating character input for the given argument 0", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -83,7 +83,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
     });
 
-    test("repeating charactor input for the given argument prefixed by 0", async () => {
+    test("repeating character input for the given argument prefixed by 0", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -103,7 +103,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
     });
 
-    test("repeating charactor input for the given argument with multiple digits", async () => {
+    test("repeating character input for the given argument with multiple digits", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -124,7 +124,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
     });
 
-    test("repeating charactor input with default argument (4)", async () => {
+    test("repeating character input with default argument (4)", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -138,7 +138,7 @@ suite("Universal argument (C-u)", () => {
     });
 
     [2, 3].forEach((times) => {
-      test(`repeating charactor input with ${times} C-u`, async () => {
+      test(`repeating character input with ${times} C-u`, async () => {
         resetExecuteCommandSpy();
         for (let i = 0; i < times; ++i) {
           await emulator.universalArgument();
@@ -154,7 +154,7 @@ suite("Universal argument (C-u)", () => {
       });
     });
 
-    test("c-u stops prefix argument input", async () => {
+    test("C-u stops prefix argument input", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -178,7 +178,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
     });
 
-    test("numerical input cancels previous repeated c-u", async () => {
+    test("numerical input cancels previous repeated C-u", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -284,7 +284,7 @@ suite("Universal argument (C-u)", () => {
       assertCursorsEqual(activeTextEditor, [0, 5]); // The command normaly worked since it has exited from universal argument mode.
     });
 
-    test("repeating charactor input with double C-u", async () => {
+    test("repeating character input with double C-u", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       resetExecuteCommandSpy();
@@ -299,7 +299,7 @@ suite("Universal argument (C-u)", () => {
       assertCursorsEqual(activeTextEditor, [0, 17]); // The command normaly worked since it has exited from universal argument mode.
     });
 
-    test("c-u stops prefix argument input", async () => {
+    test("C-u stops prefix argument input", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       resetExecuteCommandSpy();
@@ -320,7 +320,7 @@ suite("Universal argument (C-u)", () => {
       assertCursorsEqual(activeTextEditor, [0, 13]); // The command normaly worked since it has exited from universal argument mode.
     });
 
-    test("numerical input cancels previous repeated c-u", async () => {
+    test("numerical input cancels previous repeated C-u", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
       resetExecuteCommandSpy();
