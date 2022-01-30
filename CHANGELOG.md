@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Add
+- `M--` (negative-argument) and `-` after `C-u`, #1204.
 
 ## [0.39.0] - 2022-01-30
 ### Add
