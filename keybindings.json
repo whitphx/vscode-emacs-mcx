@@ -607,6 +607,8 @@
                                          "when": "notificationToastsVisible" },
     { "key": "ctrl+g",                "command": "closeParameterHints",
                                          "when": "editorFocus && parameterHintsVisible" },
+    { "key": "ctrl+g",                "command": "hideSuggestWidget",
+                                         "when": "suggestWidgetVisible && textInputFocus" },
     { "key": "ctrl+g",                "command": "cancelLinkedEditingInput",
                                          "when": "LinkedEditingInputVisible && editorTextFocus" },
     { "key": "ctrl+g",                "command": "cancelRenameInput",

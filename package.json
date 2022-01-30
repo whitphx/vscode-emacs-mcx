@@ -2615,6 +2615,11 @@
 			},
 			{
 				"key": "ctrl+g",
+				"command": "hideSuggestWidget",
+				"when": "suggestWidgetVisible && textInputFocus"
+			},
+			{
+				"key": "ctrl+g",
 				"command": "cancelLinkedEditingInput",
 				"when": "LinkedEditingInputVisible && editorTextFocus"
 			},
