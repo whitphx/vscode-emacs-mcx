@@ -191,7 +191,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
       ...generateKeybindings({
         keys: [num.toString(), `meta+${num.toString()}`],
         when: "emacs-mcx.acceptingArgument && editorTextFocus",
-        command: "emacs-mcx.universalArgumentDigit",
+        command: "emacs-mcx.subsequentArgumentDigit",
         args: [num],
       })
     );

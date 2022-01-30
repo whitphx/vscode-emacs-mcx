@@ -135,7 +135,7 @@ suite("scroll-up/down-command", () => {
       setEmptyCursors(activeTextEditor, [0, 0]); // The first line
 
       emulator.universalArgument();
-      await emulator.universalArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(2);
       await emulator.runCommand("scrollUpCommand");
 
       assertCursorsEqual(activeTextEditor, [2, 0]); // 2 lines down
@@ -156,7 +156,7 @@ suite("scroll-up/down-command", () => {
       setEmptyCursors(activeTextEditor, [10, 0]);
 
       emulator.universalArgument();
-      await emulator.universalArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(2);
       await emulator.runCommand("scrollDownCommand");
 
       assertCursorsEqual(activeTextEditor, [8, 0]); // 2 lines up
