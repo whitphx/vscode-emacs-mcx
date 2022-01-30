@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.39.0] - 2022-01-30
 ### Add
 - `M-<number>` (digit-argument), #1199.
 ### Fix
