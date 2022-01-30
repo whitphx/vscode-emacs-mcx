@@ -90,6 +90,14 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.universalArgumentDigit(arg);
   });
 
+  registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
+    const arg = args[0];
+    if (typeof arg !== "number") {
+      return;
+    }
+    emulator.digitArgument(arg);
+  });
+
   registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
     const arg = args[0];
     if (typeof arg !== "string") {

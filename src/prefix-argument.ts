@@ -5,7 +5,7 @@ interface PrefixArgumentHandlerState {
   isInPrefixArgumentMode: boolean;
   isAcceptingPrefixArgument: boolean;
   cuCount: number; // How many C-u are input continuously
-  prefixArgumentStr: string; // Prefix argument string input after C-u
+  prefixArgumentStr: string; // Prefix argument string
 }
 
 export class PrefixArgumentHandler {
@@ -52,12 +52,8 @@ export class PrefixArgumentHandler {
     return Promise.all(promises);
   }
 
-  public appendPrefixArgumentStr(text: string): Promise<unknown> {
-    const promise = this.updateState({
-      prefixArgumentStr: this.state.prefixArgumentStr + text,
-    });
+  private showPrefixArgumentMessage() {
     MessageManager.showMessage(`C-u ${this.state.prefixArgumentStr}-`);
-    return promise;
   }
 
   public universalArgumentDigit(arg: number): Promise<unknown> {
@@ -77,7 +73,11 @@ export class PrefixArgumentHandler {
     }
 
     const text = arg.toString();
-    return this.appendPrefixArgumentStr(text);
+    const promise = this.updateState({
+      prefixArgumentStr: this.state.prefixArgumentStr + text,
+    });
+    this.showPrefixArgumentMessage();
+    return promise;
   }
 
   /**
@@ -98,6 +98,23 @@ export class PrefixArgumentHandler {
         prefixArgumentStr: "",
       });
     }
+  }
+
+  public digitArgument(arg: number): Promise<unknown> {
+    if (isNaN(arg) || arg < 0) {
+      logger.debug(`[PrefixArgumentHandler.universalArgumentDigit]\t Input digit is NaN or negative. Ignore it.`);
+      return Promise.resolve();
+    }
+
+    const text = arg.toString();
+    const promise = this.updateState({
+      isInPrefixArgumentMode: true,
+      isAcceptingPrefixArgument: true,
+      cuCount: 0,
+      prefixArgumentStr: text,
+    });
+    this.showPrefixArgumentMessage();
+    return promise;
   }
 
   public cancel(): Promise<unknown> {

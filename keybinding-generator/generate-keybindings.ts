@@ -187,16 +187,26 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
 
   // Generate keybindings for numeric characters.
   for (let num = 0; num <= 9; ++num) {
-    keybindings.push({
-      key: num.toString(),
-      when: "emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly",
-      command: "emacs-mcx.universalArgumentDigit",
-      args: [num],
-    });
+    keybindings.push(
+      ...generateKeybindings({
+        keys: [num.toString(), `meta+${num.toString()}`],
+        when: "emacs-mcx.acceptingArgument && editorTextFocus",
+        command: "emacs-mcx.universalArgumentDigit",
+        args: [num],
+      })
+    );
+    keybindings.push(
+      ...generateKeybindings({
+        key: `meta+${num.toString()}`,
+        command: "emacs-mcx.digitArgument",
+        when: "!emacs-mcx.acceptingArgument && editorTextFocus",
+        args: [num],
+      })
+    );
     keybindings.push({
       key: num.toString(),
       command: "emacs-mcx.typeChar",
-      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
+      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus",
       args: [num.toString()],
     });
   }
