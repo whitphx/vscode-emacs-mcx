@@ -66,7 +66,7 @@ suite("Negative argument (M--)", () => {
       assertPrefixArgumentContext(undefined);
     });
 
-    test("C-u -", async () => {
+    test("C-u - 3", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -77,13 +77,17 @@ suite("Negative argument (M--)", () => {
       assertPrefixArgumentContext(-1);
 
       resetExecuteCommandSpy();
+      await emulator.subsequentArgumentDigit(3);
+      assertPrefixArgumentContext(-3);
+
+      resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, ""); // Nothing happens
       assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
 
-    test("C-u C-u -", async () => {
+    test("C-u C-u - 3", async () => {
       resetExecuteCommandSpy();
       await emulator.universalArgument();
       assertAcceptingArgumentContext(true);
@@ -98,8 +102,50 @@ suite("Negative argument (M--)", () => {
       assertPrefixArgumentContext(-1);
 
       resetExecuteCommandSpy();
+      await emulator.subsequentArgumentDigit(3);
+      assertPrefixArgumentContext(-3);
+
+      resetExecuteCommandSpy();
       await emulator.typeChar("a");
       assertTextEqual(activeTextEditor, ""); // Nothing happens
+      assertAcceptingArgumentContext(false);
+      assertPrefixArgumentContext(undefined);
+    });
+
+    test("C-u M-- 3", async () => {
+      resetExecuteCommandSpy();
+      await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
+      assertPrefixArgumentContext(4);
+
+      resetExecuteCommandSpy();
+      await emulator.negativeArgument();
+      assertPrefixArgumentContext(-1);
+
+      resetExecuteCommandSpy();
+      await emulator.subsequentArgumentDigit(3);
+      assertPrefixArgumentContext(-3);
+
+      resetExecuteCommandSpy();
+      await emulator.typeChar("a");
+      assertTextEqual(activeTextEditor, ""); // Nothing happens
+      assertAcceptingArgumentContext(false);
+      assertPrefixArgumentContext(undefined);
+    });
+
+    test("C-u 3 - ('-' is not handled as a minus sign)", async () => {
+      resetExecuteCommandSpy();
+      await emulator.universalArgument();
+      assertAcceptingArgumentContext(true);
+      assertPrefixArgumentContext(4);
+
+      resetExecuteCommandSpy();
+      await emulator.subsequentArgumentDigit(3);
+      assertPrefixArgumentContext(3);
+
+      resetExecuteCommandSpy();
+      await emulator.typeChar("-");
+      assertTextEqual(activeTextEditor, "---");
       assertAcceptingArgumentContext(false);
       assertPrefixArgumentContext(undefined);
     });
