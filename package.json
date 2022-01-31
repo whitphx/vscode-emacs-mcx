@@ -942,6 +942,27 @@
 				]
 			},
 			{
+				"key": "alt+-",
+				"command": "emacs-mcx.negativeArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "alt+-",
+				"mac": "cmd+-",
+				"command": "emacs-mcx.negativeArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape -",
+				"command": "emacs-mcx.negativeArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+[ -",
+				"command": "emacs-mcx.negativeArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+			},
+			{
 				"key": "!",
 				"when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
 				"command": "emacs-mcx.typeChar",
