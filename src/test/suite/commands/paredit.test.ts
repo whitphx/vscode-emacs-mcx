@@ -334,11 +334,11 @@ suite("paredit.mark-sexp", () => {
     assertCursorsEqual(activeTextEditor, [1, 0]);
   });
 
-  test("mark inner parentheses with prefix argument", async () => {
+  test("mark inner parentheses with a positive prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [1, 0]);
     emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
 
-    emulator.universalArgument();
+    await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.markSexp");
 
@@ -353,6 +353,27 @@ suite("paredit.mark-sexp", () => {
     assertCursorsEqual(activeTextEditor, [6, 3]);
     emulator.popMark();
     assertCursorsEqual(activeTextEditor, [1, 0]);
+  });
+
+  test("mark inner parentheses with a negative prefix argument", async () => {
+    setEmptyCursors(activeTextEditor, [6, 3]);
+    emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
+
+    await emulator.negativeArgument();
+    await emulator.subsequentArgumentDigit(2);
+    await emulator.runCommand("paredit.markSexp");
+
+    assertTextEqual(activeTextEditor, initialText);
+    assert.strictEqual(activeTextEditor.selections.length, 1);
+    assertSelectionsEqual(activeTextEditor, new Selection(6, 3, 1, 2));
+
+    emulator.exitMarkMode();
+    activeTextEditor.selection = new Selection(0, 0, 0, 0);
+
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [1, 2]);
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [6, 3]);
   });
 });
 

@@ -23,6 +23,10 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
   const ast = paredit.parse(src);
 
   return (position: Position, repeat: number): Position => {
+    if (repeat < 0) {
+      throw new Error(`Invalid repetition ${repeat}`);
+    }
+
     let idx = doc.offsetAt(position);
 
     for (let i = 0; i < repeat; ++i) {
@@ -81,15 +85,14 @@ export class MarkSexp extends EmacsCommand {
   private continuing = false;
 
   public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    if (repeat <= 0) {
-      // TODO: Support negative repeats as backward navigation.
-      return;
-    }
+    const arg = prefixArgument === undefined ? 1 : prefixArgument;
+
+    const repeat = Math.abs(arg);
+    const navigatorFn = arg > 0 ? paredit.navigator.forwardSexp : paredit.navigator.backwardSexp;
 
     const doc = textEditor.document;
 
-    const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.forwardSexp);
+    const travelSexp = makeSexpTravelFunc(doc, navigatorFn);
     const newSelections = textEditor.selections.map((selection) => {
       const newActivePosition = travelSexp(selection.active, repeat);
       return new Selection(selection.anchor, newActivePosition);
