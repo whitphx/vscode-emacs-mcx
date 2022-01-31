@@ -187,7 +187,7 @@ suite("newLine", () => {
 
         setEmptyCursors(activeTextEditor, [0, 0]);
 
-        emulator.universalArgument();
+        await emulator.universalArgument();
         await emulator.runCommand("newLine");
 
         assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);

@@ -210,7 +210,7 @@ abcdefghij
     test("it kills multiple lines and does not leave a blank line (in case the cursor is at the beginning of the line)", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
-      emulator.universalArgument();
+      await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
 
       await emulator.runCommand("killLine");
@@ -233,7 +233,7 @@ abcdefghij
     test("it works in the same way to the default (in case the cursor is NOT at the beginning of the line)", async () => {
       setEmptyCursors(activeTextEditor, [0, 1]);
 
-      emulator.universalArgument();
+      await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
 
       await emulator.runCommand("killLine");
@@ -326,7 +326,7 @@ ABCDEFGHIJ`
     test("it works in the same way to the default (in case the cursor is at the beginning of the line)", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
-      emulator.universalArgument();
+      await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
 
       await emulator.runCommand("killLine");
@@ -349,7 +349,7 @@ abcdefghij
     test("it works in the same way to the default (in case the cursor is NOT at the beginning of the line)", async () => {
       setEmptyCursors(activeTextEditor, [0, 1]);
 
-      emulator.universalArgument();
+      await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
 
       await emulator.runCommand("killLine");
