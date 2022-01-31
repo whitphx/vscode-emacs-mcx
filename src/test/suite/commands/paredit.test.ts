@@ -142,7 +142,7 @@ suite("paredit.kill-sexp", () => {
   test("killing inner parentheses with prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [1, 0]);
 
-    emulator.universalArgument();
+    await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.killSexp");
 
@@ -247,7 +247,7 @@ suite("paredit.backward-kill-sexp", () => {
   test("killing inner parentheses with prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [6, 3]);
 
-    emulator.universalArgument();
+    await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.backwardKillSexp");
 
@@ -338,7 +338,7 @@ suite("paredit.mark-sexp", () => {
     setEmptyCursors(activeTextEditor, [1, 0]);
     emulator.pushMark(activeTextEditor.selections.map((s) => s.active));
 
-    emulator.universalArgument();
+    await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.markSexp");
 
@@ -410,7 +410,7 @@ suite("paredit commands with prefix argument", () => {
   test("forwardSexp", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]); // the right to `0`
 
-    emulator.universalArgument();
+    await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.forwardSexp");
 
@@ -421,7 +421,7 @@ suite("paredit commands with prefix argument", () => {
   test("backwardSexp", async () => {
     setEmptyCursors(activeTextEditor, [0, 19]); // the left to `9`
 
-    emulator.universalArgument();
+    await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.backwardSexp");
 
