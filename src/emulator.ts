@@ -221,7 +221,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   /**
-   * Extended version of the native command `type` with prefix argument integration.
+   * An extended version of the native `type` command with prefix argument integration.
    */
   public typeChar(char: string): void | Thenable<unknown> {
     if (this.isInMarkMode) {
