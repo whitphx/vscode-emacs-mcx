@@ -2,6 +2,7 @@ import * as paredit from "paredit.js";
 import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
 import { EmacsCommand } from ".";
 import { KillYankCommand } from "./kill";
+import { AppendDirection } from "../kill-yank";
 import { revealPrimaryActive } from "./helpers/reveal";
 
 type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
@@ -22,6 +23,10 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
   const ast = paredit.parse(src);
 
   return (position: Position, repeat: number): Position => {
+    if (repeat < 0) {
+      throw new Error(`Invalid repetition ${repeat}`);
+    }
+
     let idx = doc.offsetAt(position);
 
     for (let i = 0; i < repeat; ++i) {
@@ -75,6 +80,46 @@ export class BackwardUpSexp extends PareditNavigatorCommand {
   public readonly pareditNavigatorFn = paredit.navigator.backwardUpSexp;
 }
 
+export class MarkSexp extends EmacsCommand {
+  public readonly id = "paredit.markSexp";
+  private continuing = false;
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const arg = prefixArgument === undefined ? 1 : prefixArgument;
+
+    const repeat = Math.abs(arg);
+    const navigatorFn = arg > 0 ? paredit.navigator.forwardSexp : paredit.navigator.backwardSexp;
+
+    const doc = textEditor.document;
+
+    const travelSexp = makeSexpTravelFunc(doc, navigatorFn);
+    const newSelections = textEditor.selections.map((selection) => {
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Selection(selection.anchor, newActivePosition);
+    });
+
+    textEditor.selections = newSelections;
+    if (newSelections.some((newSelection) => !newSelection.isEmpty)) {
+      this.emacsController.enterMarkMode(false);
+    }
+
+    // TODO: Print "Mark set" message. With the current implementation, the message will disappear just after showing because MessageManager.onInterupt() is asynchronously called for setting the new selections and revealPrimaryActive() below.
+
+    this.emacsController.pushMark(
+      newSelections.map((newSelection) => newSelection.active),
+      this.continuing
+    );
+
+    revealPrimaryActive(textEditor);
+
+    this.continuing = true;
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.continuing = false;
+  }
+}
+
 export class KillSexp extends KillYankCommand {
   public readonly id = "paredit.killSexp";
 
@@ -93,6 +138,29 @@ export class KillSexp extends KillYankCommand {
     });
 
     await this.killYanker.kill(killRanges);
+
+    revealPrimaryActive(textEditor);
+  }
+}
+
+export class BackwardKillSexp extends KillYankCommand {
+  public readonly id = "paredit.backwardKillSexp";
+
+  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+    if (repeat <= 0) {
+      return;
+    }
+
+    const doc = textEditor.document;
+
+    const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.backwardSexp);
+    const killRanges = textEditor.selections.map((selection) => {
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Range(selection.anchor, newActivePosition);
+    });
+
+    await this.killYanker.kill(killRanges, AppendDirection.Backward);
 
     revealPrimaryActive(textEditor);
   }

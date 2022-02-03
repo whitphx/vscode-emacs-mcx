@@ -110,7 +110,7 @@ klopqrst
 KLMNOPQRST`
     );
 
-    // assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]); // TODO: Now not supported
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]);
   });
 
   test("typing a character in rectangle-mark-mode", async () => {

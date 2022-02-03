@@ -40,8 +40,12 @@ See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about
 
 ### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed.
 This is VSCode's design that an extension cannot control.
-To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false`.
-That makes the find widget work similarly to Emacs. See https://github.com/whitphx/vscode-emacs-mcx/issues/107 for the details.
+To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false` or `"never"` (since [`vscode@1.59`](https://github.com/microsoft/vscode-docs/commit/a27b0efea3c05b4e06548dba1ad6b58979f1a79a#diff-d432cc9e616a920ea35cfeddb72b780f663270fd96f6871ec99dc8bda5b8cfb5R350)).
+It makes the find widget work similarly to Emacs.
+
+Refs:
+* [The official doc about `editor.find.seedSearchStringFromSelection` setting](basics#_seed-search-string-from-selection)
+* [The GitHub issue where we discuss about it](https://github.com/whitphx/vscode-emacs-mcx/issues/107)
 
 ### I find a bug. I want a feature X to be implemented. I have a question.
 Post a bug report or a feature request to [GitHub Issues](https://github.com/whitphx/vscode-emacs-mcx/issues).
@@ -223,7 +227,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 ### File Commands
 |Command | Desc |
 |--------|------|
-| `C-x C-f` | QuickOpen a file |
+| `C-x C-f` | QuickOpen a file (Tips: This extension assigns `C-x C-f` to the VSCode's native [quick file navigation](https://code.visualstudio.com/docs/editor/editingevolved#_quick-file-navigation). If you prefer more Emacs-like behavior, [The "File Browser" extension by Bodil Stokke (`bodil.file-browser`)](https://marketplace.visualstudio.com/items?itemName=bodil.file-browser) may help.) |
 | `C-x C-s` | Save |
 | `C-x C-w` | Save as |
 | `C-x s`   | Save all files |
@@ -234,7 +238,6 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |--------|------|
 | `C-x b` | Switch to another open buffer |
 | `C-x k` | Close current tab (buffer) |
-| `C-x C-k` | Close all tabs |
 | `C-x 0` | Close editors in the current group.  |
 | `C-x 1` | Close editors in other (split) group.  |
 | `C-x 2` | Split editor horizontal |
@@ -243,18 +246,73 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-x o` | Focus other split editor |
 
 ### Prefix argument
+See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail
+
 |Command | Desc |
 |--------|------|
-| `C-u` | universal-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
+| `C-u` | universal-argument |
+| `M-<number>` | digit-argument |
+| `M--` | negative-argument |
 
 ### sexp
 |Command |Prefix argument | Desc |
 |--------|----------------|------|
 | `C-M-f` | ✓ | Move forward over a balanced expression (forward-sexp) |
 | `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
+| `C-M-S-2` (`C-M-@` with US keyboard) | ✓ | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
 | `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
+| `C-M-Bksp` | ✓ | Kill balanced expression backward (backward-kill-sexp) |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
+
+## Other commands
+### `emacs-mcx.executeCommandWithPrefixArgument`
+This command calls another command with the prefix argument.
+This is mainly for extension developers who want to make the extensions collaborative with this extension's prefix argument. See [the issue #1146](https://github.com/whitphx/vscode-emacs-mcx/issues/1146) for the discussion about it.
+
+For example, if you define the keybinding below,
+* `C-x e` will call the command `foo` with the argument `{}`.
+* `C-u C-x e` will call the command `foo` with the argument `{ prefixArgument: 4 }`.
+```json
+{
+  "key": "ctrl+x e",
+  "command": "emacs-mcx.executeCommandWithPrefixArgument",
+  "args": {
+    "command": "foo"
+  }
+}
+```
+
+You can pass the arguments to the target command as below. In this case,
+* `C-x e` will call the command `foo` with the argument `{ baz: 42 }`.
+* `C-u C-x e` will call the command `foo` with the argument `{ prefixArgument: 4, baz: 42 }`.
+```json
+{
+  "key": "ctrl+x e",
+  "command": "emacs-mcx.executeCommandWithPrefixArgument",
+  "args": {
+    "command": "foo",
+    "args": {
+      "baz": 42
+    }
+  }
+}
+```
+
+You can change the key name of the prefix argument.
+```json
+{
+  "key": "ctrl+x e",
+  "command": "emacs-mcx.executeCommandWithPrefixArgument",
+  "args": {
+    "command": "foo",
+    "prefixArgumentKey": "repeat"
+  }
+}
+```
+* `C-x e` will call the command `foo` with the argument `{}`.
+* `C-u C-x e` will call the command `foo` with the argument `{ repeat: 4 }`.
+
 
 ## Conflicts with default key bindings
 - `ctrl+d`: editor.action.addSelectionToNextFindMatch => **Use `ctrl+alt+n` instead**;
