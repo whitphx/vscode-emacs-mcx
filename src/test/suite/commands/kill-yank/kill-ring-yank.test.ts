@@ -523,7 +523,7 @@ suite("yank pop with auto-indent", () => {
 
   test("Yank in a language that has auto-indent support", async function () {
     await vscode.workspace.getConfiguration().update("editor.autoIndent", "full", vscode.ConfigurationTarget.Global);
-    await delay(3000);
+    await delay(1000);
 
     activeTextEditor = await setupWorkspace("", { language: "typescript" });
     activeTextEditor.options.tabSize = 4;
@@ -552,14 +552,17 @@ suite("yank pop with auto-indent", () => {
 
     // Yank pastes "bar" with auto-indentation
     await emulator.runCommand("yank");
+    await delay(1000);
     assertTextEqual(activeTextEditor, "{\n    bar\n}");
 
     // YankPop pastes "foo" with auto-indentation
     await emulator.runCommand("yankPop");
+    await delay(1000);
     assertTextEqual(activeTextEditor, "{\n    foo\n}");
 
     // yankPop again
     await emulator.runCommand("yankPop");
+    await delay(1000);
     assertTextEqual(activeTextEditor, "{\n    bar\n}");
   });
 });
