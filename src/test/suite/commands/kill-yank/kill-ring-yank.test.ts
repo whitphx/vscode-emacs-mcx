@@ -522,11 +522,11 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
-    await vscode.workspace.getConfiguration().update("editor.autoIndent", "full", vscode.ConfigurationTarget.Global);
-    await delay(1000); // Necessary for the config update to be actually reflected.
-
     activeTextEditor = await setupWorkspace("", { language: "typescript" });
     activeTextEditor.options.tabSize = 4;
+
+    await vscode.workspace.getConfiguration().update("editor.autoIndent", "full", vscode.ConfigurationTarget.Global);
+    await delay(1000); // Necessary for the config update to be actually reflected.
 
     const killRing = new KillRing(60);
     const emulator = new EmacsEmulator(activeTextEditor, killRing);
