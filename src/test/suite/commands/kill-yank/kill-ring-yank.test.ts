@@ -526,7 +526,7 @@ suite("yank pop with auto-indent", () => {
     activeTextEditor.options.tabSize = 4;
 
     await vscode.workspace.getConfiguration().update("editor.autoIndent", "full", vscode.ConfigurationTarget.Global);
-    await delay(1000); // Necessary for the config update to be actually reflected.
+    await delay(2000); // Necessary for the config update to be actually reflected.
 
     const killRing = new KillRing(60);
     const emulator = new EmacsEmulator(activeTextEditor, killRing);
