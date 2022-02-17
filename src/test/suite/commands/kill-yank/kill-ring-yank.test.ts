@@ -521,6 +521,8 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
+    await vscode.workspace.getConfiguration().update("editor.autoIndent", "full", vscode.ConfigurationTarget.Global);
+
     activeTextEditor = await setupWorkspace("", { language: "json" });
     activeTextEditor.options.tabSize = 4;
 
