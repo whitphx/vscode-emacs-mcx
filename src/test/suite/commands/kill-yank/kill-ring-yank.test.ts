@@ -1,4 +1,5 @@
 import assert from "assert";
+import os from "os";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
@@ -522,7 +523,7 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
-    activeTextEditor = await setupWorkspace("", { language: "json" });
+    activeTextEditor = await setupWorkspace("", { language: os.platform() === "darwin" ? "typescript" : "json" });
     activeTextEditor.options.tabSize = 4;
 
     await vscode.workspace.getConfiguration().update("editor.autoIndent", "full", vscode.ConfigurationTarget.Global);
