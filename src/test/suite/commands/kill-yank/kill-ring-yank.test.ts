@@ -522,6 +522,8 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
+    await setupWorkspace("", { language: "json" });
+    await delay(2000);
     activeTextEditor = await setupWorkspace("", { language: "json" });
     activeTextEditor.options.tabSize = 4;
 
@@ -552,12 +554,12 @@ suite("yank pop with auto-indent", () => {
 
     // YankPop pastes "foo" with auto-indentation
     await emulator.runCommand("yankPop");
-    await delay(2000);
+    await delay(1000);
     assertTextEqual(activeTextEditor, "{\n    foo\n}");
 
     // yankPop again
     await emulator.runCommand("yankPop");
-    await delay(2000);
+    await delay(1000);
     assertTextEqual(activeTextEditor, "{\n    bar\n}");
   });
 });
