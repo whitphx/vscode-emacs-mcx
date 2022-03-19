@@ -82,12 +82,20 @@ export function activate(context: vscode.ExtensionContext): void {
     );
   }
 
-  registerEmulatorCommand("emacs-mcx.universalArgumentDigit", (emulator, args) => {
+  registerEmulatorCommand("emacs-mcx.subsequentArgumentDigit", (emulator, args) => {
     const arg = args[0];
     if (typeof arg !== "number") {
       return;
     }
-    emulator.universalArgumentDigit(arg);
+    emulator.subsequentArgumentDigit(arg);
+  });
+
+  registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
+    const arg = args[0];
+    if (typeof arg !== "number") {
+      return;
+    }
+    emulator.digitArgument(arg);
   });
 
   registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
@@ -136,6 +144,10 @@ export function activate(context: vscode.ExtensionContext): void {
 
   registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
     emulator.universalArgument();
+  });
+
+  registerEmulatorCommand("emacs-mcx.negativeArgument", (emulator) => {
+    return emulator.negativeArgument();
   });
 
   registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
@@ -274,8 +286,16 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("paredit.backwardUpSexp");
   });
 
+  registerEmulatorCommand("emacs-mcx.paredit.markSexp", (emulator) => {
+    emulator.runCommand("paredit.markSexp");
+  });
+
   registerEmulatorCommand("emacs-mcx.paredit.killSexp", (emulator) => {
     emulator.runCommand("paredit.killSexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.paredit.backwardKillSexp", (emulator) => {
+    emulator.runCommand("paredit.backwardKillSexp");
   });
 
   vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {

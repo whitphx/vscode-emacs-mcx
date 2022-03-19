@@ -227,7 +227,7 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 ### File Commands
 |Command | Desc |
 |--------|------|
-| `C-x C-f` | QuickOpen a file |
+| `C-x C-f` | QuickOpen a file (Tips: This extension assigns `C-x C-f` to the VSCode's native [quick file navigation](https://code.visualstudio.com/docs/editor/editingevolved#_quick-file-navigation). If you prefer more Emacs-like behavior, [The "File Browser" extension by Bodil Stokke (`bodil.file-browser`)](https://marketplace.visualstudio.com/items?itemName=bodil.file-browser) may help.) |
 | `C-x C-s` | Save |
 | `C-x C-w` | Save as |
 | `C-x s`   | Save all files |
@@ -238,7 +238,6 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 |--------|------|
 | `C-x b` | Switch to another open buffer |
 | `C-x k` | Close current tab (buffer) |
-| `C-x C-k` | Close all tabs |
 | `C-x 0` | Close editors in the current group.  |
 | `C-x 1` | Close editors in other (split) group.  |
 | `C-x 2` | Split editor horizontal |
@@ -247,16 +246,22 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-x o` | Focus other split editor |
 
 ### Prefix argument
+See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail
+
 |Command | Desc |
 |--------|------|
-| `C-u` | universal-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
+| `C-u` | universal-argument |
+| `M-<number>` | digit-argument |
+| `M--` | negative-argument |
 
 ### sexp
 |Command |Prefix argument | Desc |
 |--------|----------------|------|
 | `C-M-f` | ✓ | Move forward over a balanced expression (forward-sexp) |
 | `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
+| `C-M-S-2` (`C-M-@` with US keyboard) | ✓ | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
 | `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
+| `C-M-Bksp` | ✓ | Kill balanced expression backward (backward-kill-sexp) |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 

@@ -2,8 +2,28 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Add
+- `M--` (negative-argument) and `-` after `C-u`, #1204.
 
-## [0.37.1] - 2021-01-01
+### Fix
+- `emacs-mcx.paredit.markSexp` supports a negative prefix argument, #1206.
+
+## [0.39.0] - 2022-01-30
+### Add
+- `M-<number>` (digit-argument), #1199.
+### Fix
+- Assign `C-g` to all the commands which are assigned to "escape" by default, #1198.
+
+## [0.38.0] - 2022-01-29
+### Add
+- `emacs-mcx.paredit.backwardKillSexp`, #1175.
+- `emacs-mcx.paredit.markSexp`, #1181.
+
+### Fix
+- Drop `C-x C-k`, #1180.
+- Cursor positions after `kill-region` in rect-mark-mode, #1187.
+
+## [0.37.1] - 2022-01-01
 ### Fix
 - Assign `C-i` to TAB, #1151.
 
