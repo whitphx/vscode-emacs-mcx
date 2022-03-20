@@ -52,6 +52,16 @@ jobs:
       run: yarn test
       if: runner.os != 'Linux'
 
-    - name: Test packaging
+    # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
+    - name: Test packaging on Linux
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        yarn run vsce package
+        VERSION=$(node -p "require('./package.json').version")
+        yarn run vsce package -o emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix
+
+    - name: Upload linux-built vsix
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: emacs-mcx
+        path: emacs-mcx*.vsix
