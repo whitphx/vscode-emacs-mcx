@@ -4603,12 +4603,12 @@
 		"@types/webpack-env": "^1.16.3",
 		"@typescript-eslint/eslint-plugin": "^4.33.0",
 		"@typescript-eslint/parser": "^4.33.0",
-		"@vscode/test-web": "^0.0.21",
+		"@vscode/test-web": "^0.0.22",
 		"assert": "^2.0.0",
 		"eslint": "^7.32.0",
-		"eslint-config-prettier": "^8.3.0",
+		"eslint-config-prettier": "^8.5.0",
 		"glob": "^7.2.0",
-		"mocha": "^9.2.0",
+		"mocha": "^9.2.2",
 		"prettier": "^2.5.1",
 		"process": "^0.11.10",
 		"rimraf": "^3.0.2",
@@ -4621,14 +4621,14 @@
 		"ttypescript": "^1.5.13",
 		"typescript": "^4.5.5",
 		"typescript-transform-paths": "^3.3.1",
-		"vsce": "^2.6.6",
+		"vsce": "^2.7.0",
 		"vscode-test": "^1.6.1",
-		"webpack": "^5.68.0",
+		"webpack": "^5.70.0",
 		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
 		"paredit.js": "^0.3.4",
-		"winston": "^3.5.1",
+		"winston": "^3.6.0",
 		"winston-console-for-electron": "^0.0.7"
 	}
 }
