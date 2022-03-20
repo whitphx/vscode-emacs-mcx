@@ -284,6 +284,28 @@
       "command": "editor.action.previousMatchFindAction",
       "when": "findInputFocussed"
     },
+    // i-search forward regexp
+    {
+      "key": "ctrl+meta+s",
+      "command": "emacs-mcx.isearchForwardRegexp",
+      "when": "!findInputFocussed"
+    },
+    {
+      "key": "ctrl+meta+s",
+      "command": "editor.action.nextMatchFindAction",
+      "when": "findInputFocussed"
+    },
+    // i-search backward regexp
+    {
+      "key": "ctrl+meta+r",
+      "command": "emacs-mcx.isearchBackwardRegexp",
+      "when": "!findInputFocussed"
+    },
+    {
+      "key": "ctrl+meta+r",
+      "command": "editor.action.previousMatchFindAction",
+      "when": "findInputFocussed"
+    },
     // replace
     {
       "key": "meta+shift+5",

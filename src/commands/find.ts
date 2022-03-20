@@ -29,7 +29,14 @@ export class IsearchForward extends IsearchCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
-      .executeCommand("actions.find")
+      .executeCommand("editor.actions.findWithArgs", {
+        searchString: "",
+        replaceString: undefined,
+        isRegex: false,
+        matchWholeWord: false,
+        isCaseSensitive: false,
+        preserveCase: false,
+      })
       .then(() => vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"));
   }
 }
@@ -40,7 +47,50 @@ export class IsearchBackward extends IsearchCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
-      .executeCommand("actions.find")
+      .executeCommand("editor.actions.findWithArgs", {
+        searchString: "",
+        replaceString: undefined,
+        isRegex: false,
+        matchWholeWord: false,
+        isCaseSensitive: false,
+        preserveCase: false,
+      })
+      .then(() => vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"));
+  }
+}
+
+export class IsearchForwardRegexp extends IsearchCommand {
+  public readonly id = "isearchForwardRegexp";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = textEditor.selections;
+    return vscode.commands
+      .executeCommand("editor.actions.findWithArgs", {
+        searchString: "",
+        replaceString: undefined,
+        isRegex: true,
+        matchWholeWord: false,
+        isCaseSensitive: false,
+        preserveCase: false,
+      })
+      .then(() => vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"));
+  }
+}
+
+export class IsearchBackwardRegexp extends IsearchCommand {
+  public readonly id = "isearchBackwardRegexp";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = textEditor.selections;
+    return vscode.commands
+      .executeCommand("editor.actions.findWithArgs", {
+        searchString: "",
+        replaceString: undefined,
+        isRegex: true,
+        matchWholeWord: false,
+        isCaseSensitive: false,
+        preserveCase: false,
+      })
       .then(() => vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"));
   }
 }
