@@ -2,6 +2,9 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Fix
+- Return promises from all command functions, #1205.
+
 ## [0.40.1] - 2022-03-20
 ### Fix
 - Release process, #1254.
@@ -14,9 +17,6 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - `emacs-mcx.paredit.markSexp` supports a negative prefix argument, #1206.
 - Internal package updates.
 - Fix README about `editor.find.seedSearchStringFromSelection`, #1252.
-
-### Fix
-- Return promises from all command functions, #1205.
 
 ## [0.39.0] - 2022-01-30
 ### Add
