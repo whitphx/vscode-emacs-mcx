@@ -3,6 +3,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Fix
+- Return promises from all command functions, #1205.
+
 ## [0.39.0] - 2022-01-30
 ### Add
 - `M-<number>` (digit-argument), #1199.
