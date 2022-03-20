@@ -146,6 +146,10 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.universalArgument();
   });
 
+  registerEmulatorCommand("emacs-mcx.negativeArgument", (emulator) => {
+    return emulator.negativeArgument();
+  });
+
   registerEmulatorCommand("emacs-mcx.killLine", (emulator) => {
     return emulator.runCommand("killLine");
   });

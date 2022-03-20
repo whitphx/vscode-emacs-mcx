@@ -2,6 +2,11 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Add
+- `M--` (negative-argument) and `-` after `C-u`, #1204.
+
+### Fix
+- `emacs-mcx.paredit.markSexp` supports a negative prefix argument, #1206.
 
 ### Fix
 - Return promises from all command functions, #1205.

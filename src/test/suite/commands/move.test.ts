@@ -134,7 +134,7 @@ suite("scroll-up/down-command", () => {
     test("it scrolls with the speficied number of lines by the prefix argument", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]); // The first line
 
-      emulator.universalArgument();
+      await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
       await emulator.runCommand("scrollUpCommand");
 
@@ -155,7 +155,7 @@ suite("scroll-up/down-command", () => {
     test("it scrolls with the speficied number of lines by the prefix argument", async () => {
       setEmptyCursors(activeTextEditor, [10, 0]);
 
-      emulator.universalArgument();
+      await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
       await emulator.runCommand("scrollDownCommand");
 

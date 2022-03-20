@@ -40,7 +40,7 @@ See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about
 
 ### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed.
 This is VSCode's design that an extension cannot control.
-To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false` or `"never"` (since [`vscode@1.59`](https://github.com/microsoft/vscode-docs/commit/a27b0efea3c05b4e06548dba1ad6b58979f1a79a#diff-d432cc9e616a920ea35cfeddb72b780f663270fd96f6871ec99dc8bda5b8cfb5R350)).
+To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting as `"never"`.
 It makes the find widget work similarly to Emacs.
 
 Refs:
@@ -246,18 +246,20 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-x o` | Focus other split editor |
 
 ### Prefix argument
+See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail
+
 |Command | Desc |
 |--------|------|
-| `C-u` | universal-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
-| `M-<number>` | digit-argument (See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail) |
-
+| `C-u` | universal-argument |
+| `M-<number>` | digit-argument |
+| `M--` | negative-argument |
 
 ### sexp
 |Command |Prefix argument | Desc |
 |--------|----------------|------|
 | `C-M-f` | ✓ | Move forward over a balanced expression (forward-sexp) |
 | `C-M-b` | ✓ | Move backward over a balanced expression (backward-sexp) |
-| `C-M-S-2` (`C-M-@` with US keyboard) | ✓ (Positive values are only supported) | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
+| `C-M-S-2` (`C-M-@` with US keyboard) | ✓ | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
 | `C-M-k` | ✓ | Kill balanced expression forward (kill-sexp) |
 | `C-M-Bksp` | ✓ | Kill balanced expression backward (backward-kill-sexp) |
 

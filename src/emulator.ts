@@ -220,9 +220,16 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
+  /**
+   * An extended version of the native `type` command with prefix argument integration.
+   */
   public typeChar(char: string): void | Thenable<unknown> {
     if (this.isInMarkMode) {
       this.exitMarkMode();
+    }
+
+    if (char === "-" && this.prefixArgumentHandler.minusSignAcceptable) {
+      return this.prefixArgumentHandler.negativeArgument();
     }
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
@@ -230,6 +237,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
     const repeat = prefixArgument == null ? 1 : prefixArgument;
     if (repeat < 0) {
+      MessageManager.showMessage(`Negative repetition argument ${repeat}`);
       return;
     }
 
@@ -287,6 +295,13 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
    */
   public digitArgument(digit: number): Promise<unknown> {
     return this.prefixArgumentHandler.digitArgument(digit);
+  }
+
+  /**
+   * M--
+   */
+  public negativeArgument(): Promise<unknown> {
+    return this.prefixArgumentHandler.negativeArgument();
   }
 
   /**
