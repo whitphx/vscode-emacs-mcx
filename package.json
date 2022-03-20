@@ -82,6 +82,11 @@
 					"default": false,
 					"description": "If true, overriding `type` command is enabled to use prefix arguments on character inputs by IME."
 				},
+				"emacs-mcx.enableDigitArgument": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether M-<digit> (the `emacs-mcx.digitArgument` command) is enabled."
+				},
 				"emacs-mcx.debug.silent": {
 					"type": "boolean",
 					"description": "If true, all logs are suppressed.",
@@ -124,7 +129,7 @@
 			{
 				"key": "0",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					0
 				]
@@ -132,40 +137,7 @@
 			{
 				"key": "alt+0",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					0
-				]
-			},
-			{
-				"key": "alt+0",
-				"mac": "cmd+0",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					0
-				]
-			},
-			{
-				"key": "escape 0",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					0
-				]
-			},
-			{
-				"key": "ctrl+[ 0",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					0
-				]
-			},
-			{
-				"key": "alt+0",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					0
 				]
@@ -173,8 +145,41 @@
 			{
 				"key": "alt+0",
 				"mac": "cmd+0",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					0
+				]
+			},
+			{
+				"key": "escape 0",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					0
+				]
+			},
+			{
+				"key": "ctrl+[ 0",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					0
+				]
+			},
+			{
+				"key": "alt+0",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					0
+				]
+			},
+			{
+				"key": "alt+0",
+				"mac": "cmd+0",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					0
 				]
@@ -182,7 +187,7 @@
 			{
 				"key": "escape 0",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					0
 				]
@@ -190,7 +195,7 @@
 			{
 				"key": "ctrl+[ 0",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					0
 				]
@@ -206,7 +211,7 @@
 			{
 				"key": "1",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					1
 				]
@@ -214,40 +219,7 @@
 			{
 				"key": "alt+1",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					1
-				]
-			},
-			{
-				"key": "alt+1",
-				"mac": "cmd+1",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					1
-				]
-			},
-			{
-				"key": "escape 1",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					1
-				]
-			},
-			{
-				"key": "ctrl+[ 1",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					1
-				]
-			},
-			{
-				"key": "alt+1",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					1
 				]
@@ -255,8 +227,41 @@
 			{
 				"key": "alt+1",
 				"mac": "cmd+1",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					1
+				]
+			},
+			{
+				"key": "escape 1",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					1
+				]
+			},
+			{
+				"key": "ctrl+[ 1",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					1
+				]
+			},
+			{
+				"key": "alt+1",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					1
+				]
+			},
+			{
+				"key": "alt+1",
+				"mac": "cmd+1",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					1
 				]
@@ -264,7 +269,7 @@
 			{
 				"key": "escape 1",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					1
 				]
@@ -272,7 +277,7 @@
 			{
 				"key": "ctrl+[ 1",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					1
 				]
@@ -288,7 +293,7 @@
 			{
 				"key": "2",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					2
 				]
@@ -296,40 +301,7 @@
 			{
 				"key": "alt+2",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					2
-				]
-			},
-			{
-				"key": "alt+2",
-				"mac": "cmd+2",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					2
-				]
-			},
-			{
-				"key": "escape 2",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					2
-				]
-			},
-			{
-				"key": "ctrl+[ 2",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					2
-				]
-			},
-			{
-				"key": "alt+2",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					2
 				]
@@ -337,8 +309,41 @@
 			{
 				"key": "alt+2",
 				"mac": "cmd+2",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					2
+				]
+			},
+			{
+				"key": "escape 2",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					2
+				]
+			},
+			{
+				"key": "ctrl+[ 2",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					2
+				]
+			},
+			{
+				"key": "alt+2",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					2
+				]
+			},
+			{
+				"key": "alt+2",
+				"mac": "cmd+2",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					2
 				]
@@ -346,7 +351,7 @@
 			{
 				"key": "escape 2",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					2
 				]
@@ -354,7 +359,7 @@
 			{
 				"key": "ctrl+[ 2",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					2
 				]
@@ -370,7 +375,7 @@
 			{
 				"key": "3",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					3
 				]
@@ -378,40 +383,7 @@
 			{
 				"key": "alt+3",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					3
-				]
-			},
-			{
-				"key": "alt+3",
-				"mac": "cmd+3",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					3
-				]
-			},
-			{
-				"key": "escape 3",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					3
-				]
-			},
-			{
-				"key": "ctrl+[ 3",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					3
-				]
-			},
-			{
-				"key": "alt+3",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					3
 				]
@@ -419,8 +391,41 @@
 			{
 				"key": "alt+3",
 				"mac": "cmd+3",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					3
+				]
+			},
+			{
+				"key": "escape 3",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					3
+				]
+			},
+			{
+				"key": "ctrl+[ 3",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					3
+				]
+			},
+			{
+				"key": "alt+3",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					3
+				]
+			},
+			{
+				"key": "alt+3",
+				"mac": "cmd+3",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					3
 				]
@@ -428,7 +433,7 @@
 			{
 				"key": "escape 3",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					3
 				]
@@ -436,7 +441,7 @@
 			{
 				"key": "ctrl+[ 3",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					3
 				]
@@ -452,7 +457,7 @@
 			{
 				"key": "4",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					4
 				]
@@ -460,40 +465,7 @@
 			{
 				"key": "alt+4",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					4
-				]
-			},
-			{
-				"key": "alt+4",
-				"mac": "cmd+4",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					4
-				]
-			},
-			{
-				"key": "escape 4",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					4
-				]
-			},
-			{
-				"key": "ctrl+[ 4",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					4
-				]
-			},
-			{
-				"key": "alt+4",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					4
 				]
@@ -501,8 +473,41 @@
 			{
 				"key": "alt+4",
 				"mac": "cmd+4",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					4
+				]
+			},
+			{
+				"key": "escape 4",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					4
+				]
+			},
+			{
+				"key": "ctrl+[ 4",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					4
+				]
+			},
+			{
+				"key": "alt+4",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					4
+				]
+			},
+			{
+				"key": "alt+4",
+				"mac": "cmd+4",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					4
 				]
@@ -510,7 +515,7 @@
 			{
 				"key": "escape 4",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					4
 				]
@@ -518,7 +523,7 @@
 			{
 				"key": "ctrl+[ 4",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					4
 				]
@@ -534,7 +539,7 @@
 			{
 				"key": "5",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					5
 				]
@@ -542,40 +547,7 @@
 			{
 				"key": "alt+5",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					5
-				]
-			},
-			{
-				"key": "alt+5",
-				"mac": "cmd+5",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					5
-				]
-			},
-			{
-				"key": "escape 5",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					5
-				]
-			},
-			{
-				"key": "ctrl+[ 5",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					5
-				]
-			},
-			{
-				"key": "alt+5",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					5
 				]
@@ -583,8 +555,41 @@
 			{
 				"key": "alt+5",
 				"mac": "cmd+5",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					5
+				]
+			},
+			{
+				"key": "escape 5",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					5
+				]
+			},
+			{
+				"key": "ctrl+[ 5",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					5
+				]
+			},
+			{
+				"key": "alt+5",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					5
+				]
+			},
+			{
+				"key": "alt+5",
+				"mac": "cmd+5",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					5
 				]
@@ -592,7 +597,7 @@
 			{
 				"key": "escape 5",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					5
 				]
@@ -600,7 +605,7 @@
 			{
 				"key": "ctrl+[ 5",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					5
 				]
@@ -616,7 +621,7 @@
 			{
 				"key": "6",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					6
 				]
@@ -624,40 +629,7 @@
 			{
 				"key": "alt+6",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					6
-				]
-			},
-			{
-				"key": "alt+6",
-				"mac": "cmd+6",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					6
-				]
-			},
-			{
-				"key": "escape 6",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					6
-				]
-			},
-			{
-				"key": "ctrl+[ 6",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					6
-				]
-			},
-			{
-				"key": "alt+6",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					6
 				]
@@ -665,8 +637,41 @@
 			{
 				"key": "alt+6",
 				"mac": "cmd+6",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					6
+				]
+			},
+			{
+				"key": "escape 6",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					6
+				]
+			},
+			{
+				"key": "ctrl+[ 6",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					6
+				]
+			},
+			{
+				"key": "alt+6",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					6
+				]
+			},
+			{
+				"key": "alt+6",
+				"mac": "cmd+6",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					6
 				]
@@ -674,7 +679,7 @@
 			{
 				"key": "escape 6",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					6
 				]
@@ -682,7 +687,7 @@
 			{
 				"key": "ctrl+[ 6",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					6
 				]
@@ -698,7 +703,7 @@
 			{
 				"key": "7",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					7
 				]
@@ -706,40 +711,7 @@
 			{
 				"key": "alt+7",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					7
-				]
-			},
-			{
-				"key": "alt+7",
-				"mac": "cmd+7",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					7
-				]
-			},
-			{
-				"key": "escape 7",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					7
-				]
-			},
-			{
-				"key": "ctrl+[ 7",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					7
-				]
-			},
-			{
-				"key": "alt+7",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					7
 				]
@@ -747,8 +719,41 @@
 			{
 				"key": "alt+7",
 				"mac": "cmd+7",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					7
+				]
+			},
+			{
+				"key": "escape 7",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					7
+				]
+			},
+			{
+				"key": "ctrl+[ 7",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					7
+				]
+			},
+			{
+				"key": "alt+7",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					7
+				]
+			},
+			{
+				"key": "alt+7",
+				"mac": "cmd+7",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					7
 				]
@@ -756,7 +761,7 @@
 			{
 				"key": "escape 7",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					7
 				]
@@ -764,7 +769,7 @@
 			{
 				"key": "ctrl+[ 7",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					7
 				]
@@ -780,7 +785,7 @@
 			{
 				"key": "8",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					8
 				]
@@ -788,40 +793,7 @@
 			{
 				"key": "alt+8",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					8
-				]
-			},
-			{
-				"key": "alt+8",
-				"mac": "cmd+8",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					8
-				]
-			},
-			{
-				"key": "escape 8",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					8
-				]
-			},
-			{
-				"key": "ctrl+[ 8",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					8
-				]
-			},
-			{
-				"key": "alt+8",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					8
 				]
@@ -829,8 +801,41 @@
 			{
 				"key": "alt+8",
 				"mac": "cmd+8",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					8
+				]
+			},
+			{
+				"key": "escape 8",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					8
+				]
+			},
+			{
+				"key": "ctrl+[ 8",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					8
+				]
+			},
+			{
+				"key": "alt+8",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					8
+				]
+			},
+			{
+				"key": "alt+8",
+				"mac": "cmd+8",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					8
 				]
@@ -838,7 +843,7 @@
 			{
 				"key": "escape 8",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					8
 				]
@@ -846,7 +851,7 @@
 			{
 				"key": "ctrl+[ 8",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					8
 				]
@@ -862,7 +867,7 @@
 			{
 				"key": "9",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
 				"args": [
 					9
 				]
@@ -870,40 +875,7 @@
 			{
 				"key": "alt+9",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					9
-				]
-			},
-			{
-				"key": "alt+9",
-				"mac": "cmd+9",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-				"args": [
-					9
-				]
-			},
-			{
-				"key": "escape 9",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
-				"args": [
-					9
-				]
-			},
-			{
-				"key": "ctrl+[ 9",
-				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-				"args": [
-					9
-				]
-			},
-			{
-				"key": "alt+9",
-				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					9
 				]
@@ -911,8 +883,41 @@
 			{
 				"key": "alt+9",
 				"mac": "cmd+9",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					9
+				]
+			},
+			{
+				"key": "escape 9",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
+				"args": [
+					9
+				]
+			},
+			{
+				"key": "ctrl+[ 9",
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"args": [
+					9
+				]
+			},
+			{
+				"key": "alt+9",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && !config.emacs-mcx.useMetaPrefixMacCmd",
+				"args": [
+					9
+				]
+			},
+			{
+				"key": "alt+9",
+				"mac": "cmd+9",
+				"command": "emacs-mcx.digitArgument",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixMacCmd",
 				"args": [
 					9
 				]
@@ -920,7 +925,7 @@
 			{
 				"key": "escape 9",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixEscape",
 				"args": [
 					9
 				]
@@ -928,7 +933,7 @@
 			{
 				"key": "ctrl+[ 9",
 				"command": "emacs-mcx.digitArgument",
-				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+				"when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
 				"args": [
 					9
 				]
