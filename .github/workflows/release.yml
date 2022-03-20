@@ -9,7 +9,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
+  marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install --frozen-lockfile
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          registryUrl: https://marketplace.visualstudio.com
+
+  openvsx:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,12 +33,5 @@ jobs:
       - run: yarn install --frozen-lockfile
       - name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
-        id: publishToOpenVSX
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
-      - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v1
-        with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
-          extensionFile: ${{ steps.publishToOpenVSX.outputs.vsixPath }}
