@@ -190,7 +190,15 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   for (let num = 0; num <= 9; ++num) {
     keybindings.push(
       ...generateKeybindings({
-        keys: [num.toString(), `meta+${num.toString()}`],
+        key: num.toString(),
+        command: "emacs-mcx.subsequentArgumentDigit",
+        when: "emacs-mcx.acceptingArgument && editorTextFocus",
+        args: [num],
+      })
+    );
+    keybindings.push(
+      ...generateKeybindings({
+        key: `meta+${num.toString()}`,
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
         args: [num],

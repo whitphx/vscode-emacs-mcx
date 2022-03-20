@@ -129,7 +129,7 @@
 			{
 				"key": "0",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					0
 				]
@@ -211,7 +211,7 @@
 			{
 				"key": "1",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					1
 				]
@@ -293,7 +293,7 @@
 			{
 				"key": "2",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					2
 				]
@@ -375,7 +375,7 @@
 			{
 				"key": "3",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					3
 				]
@@ -457,7 +457,7 @@
 			{
 				"key": "4",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					4
 				]
@@ -539,7 +539,7 @@
 			{
 				"key": "5",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					5
 				]
@@ -621,7 +621,7 @@
 			{
 				"key": "6",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					6
 				]
@@ -703,7 +703,7 @@
 			{
 				"key": "7",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					7
 				]
@@ -785,7 +785,7 @@
 			{
 				"key": "8",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					8
 				]
@@ -867,7 +867,7 @@
 			{
 				"key": "9",
 				"command": "emacs-mcx.subsequentArgumentDigit",
-				"when": "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+				"when": "emacs-mcx.acceptingArgument && editorTextFocus",
 				"args": [
 					9
 				]
