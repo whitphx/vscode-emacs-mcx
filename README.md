@@ -102,6 +102,10 @@ Note that this config makes use of VSCode API's `type` command under the hood an
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
 
+### `emacs-mcx.enableDigitArgument`
+Indicates whether `M-<digit>` (the `emacs-mcx.digitArgument` command) is enabled.
+Set `false` when `M-<digit>` conflicts with some other  necessary commands. See https://github.com/whitphx/vscode-emacs-mcx/issues/1208 for the background.
+
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
 
