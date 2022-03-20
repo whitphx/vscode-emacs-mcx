@@ -2539,23 +2539,44 @@
 			},
 			{
 				"key": "alt+shift+5",
-				"command": "editor.action.startFindReplaceAction",
+				"command": "emacs-mcx.queryReplace",
 				"when": "editorFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
 			},
 			{
 				"key": "alt+shift+5",
 				"mac": "cmd+shift+5",
-				"command": "editor.action.startFindReplaceAction",
+				"command": "emacs-mcx.queryReplace",
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixMacCmd"
 			},
 			{
 				"key": "escape shift+5",
-				"command": "editor.action.startFindReplaceAction",
+				"command": "emacs-mcx.queryReplace",
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixEscape"
 			},
 			{
 				"key": "ctrl+[ shift+5",
-				"command": "editor.action.startFindReplaceAction",
+				"command": "emacs-mcx.queryReplace",
+				"when": "editorFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+			},
+			{
+				"key": "ctrl+alt+shift+5",
+				"command": "emacs-mcx.queryReplaceRegexp",
+				"when": "editorFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "ctrl+alt+shift+5",
+				"mac": "ctrl+cmd+shift+5",
+				"command": "emacs-mcx.queryReplaceRegexp",
+				"when": "editorFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+			},
+			{
+				"key": "escape ctrl+shift+5",
+				"command": "emacs-mcx.queryReplaceRegexp",
+				"when": "editorFocus && config.emacs-mcx.useMetaPrefixEscape"
+			},
+			{
+				"key": "ctrl+[ ctrl+shift+5",
+				"command": "emacs-mcx.queryReplaceRegexp",
 				"when": "editorFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
 			},
 			{

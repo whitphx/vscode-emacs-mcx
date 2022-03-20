@@ -128,6 +128,14 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("isearchBackwardRegexp");
   });
 
+  registerEmulatorCommand("emacs-mcx.queryReplace", (emulator) => {
+    emulator.runCommand("queryReplace");
+  });
+
+  registerEmulatorCommand("emacs-mcx.queryReplaceRegexp", (emulator) => {
+    emulator.runCommand("queryReplaceRegexp");
+  });
+
   registerEmulatorCommand("emacs-mcx.isearchAbort", (emulator) => {
     emulator.runCommand("isearchAbort");
   });

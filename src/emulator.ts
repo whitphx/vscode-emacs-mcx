@@ -136,6 +136,8 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchForwardRegexp(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchBackwardRegexp(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.QueryReplace(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.QueryReplaceRegexp(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchAbort(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchExit(this.afterCommand, this, searchState));
 

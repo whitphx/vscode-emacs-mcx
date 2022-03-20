@@ -95,6 +95,38 @@ export class IsearchBackwardRegexp extends IsearchCommand {
   }
 }
 
+export class QueryReplace extends IsearchCommand {
+  public readonly id = "queryReplace";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = textEditor.selections;
+    return vscode.commands.executeCommand("editor.actions.findWithArgs", {
+      searchString: "",
+      replaceString: "",
+      isRegex: false,
+      matchWholeWord: false,
+      isCaseSensitive: false,
+      preserveCase: false,
+    });
+  }
+}
+
+export class QueryReplaceRegexp extends IsearchCommand {
+  public readonly id = "queryReplaceRegexp";
+
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = textEditor.selections;
+    return vscode.commands.executeCommand("editor.actions.findWithArgs", {
+      searchString: "",
+      replaceString: "",
+      isRegex: true,
+      matchWholeWord: false,
+      isCaseSensitive: false,
+      preserveCase: false,
+    });
+  }
+}
+
 /**
  * C-g
  */
