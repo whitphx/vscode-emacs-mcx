@@ -23,11 +23,9 @@ import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
 
-export interface IEmacsCommandRunner {
+export interface IEmacsController {
   runCommand(commandName: string): void | Thenable<unknown>;
-}
 
-export interface IMarkModeController {
   enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
   pushMark(positions: vscode.Position[], replace?: boolean): void;
@@ -37,7 +35,7 @@ export interface IMarkModeController {
   moveRectActives: (navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]) => void;
 }
 
-export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, vscode.Disposable {
+export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private textEditor: TextEditor;
 
   private commandRegistry: EmacsCommandRegistry;
