@@ -102,6 +102,10 @@ Note that this config makes use of VSCode API's `type` command under the hood an
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
 
+### `emacs-mcx.enableDigitArgument`
+Indicates whether `M-<digit>` (the `emacs-mcx.digitArgument` command) is enabled.
+Set `false` when `M-<digit>` conflicts with some other  necessary commands. See https://github.com/whitphx/vscode-emacs-mcx/issues/1208 for the background.
+
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
 
@@ -159,9 +163,12 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 ### Search Commands
 |Command | Desc |
 |--------|------|
-| `C-s` | Search forward |
-| `C-r` | Search backward |
-| `M-S-5` (`M-%` with US keyboard) | Replace |
+| `C-s` | Incremental search forward (isearch-forward). |
+| `C-r` | Incremental search backward (isearch-backward). |
+| `C-M-s` | Begin incremental regexp search (isearch-forward-regexp). |
+| `C-M-r` | Begin reverse incremental regexp search (isearch-backward-regexp). |
+| `M-S-5` (`M-%` with US keyboard) | Replace (query-replace) |
+| `C-M-S-5` (`C-M-%` with US keyboard) | Replace with regexp (query-replace-regexp) |
 | `C-M-n` | Add selection to next find match |
 | `C-M-p` | Add selection to previous find match |
 

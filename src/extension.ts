@@ -120,6 +120,22 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("isearchBackward");
   });
 
+  registerEmulatorCommand("emacs-mcx.isearchForwardRegexp", (emulator) => {
+    emulator.runCommand("isearchForwardRegexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.isearchBackwardRegexp", (emulator) => {
+    emulator.runCommand("isearchBackwardRegexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.queryReplace", (emulator) => {
+    emulator.runCommand("queryReplace");
+  });
+
+  registerEmulatorCommand("emacs-mcx.queryReplaceRegexp", (emulator) => {
+    emulator.runCommand("queryReplaceRegexp");
+  });
+
   registerEmulatorCommand("emacs-mcx.isearchAbort", (emulator) => {
     return emulator.runCommand("isearchAbort");
   });

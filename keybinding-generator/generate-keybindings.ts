@@ -143,6 +143,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   return keybindings;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc is KeyBindingSource {
   // Check for .key
   if (typeof maybeSrc.key !== "undefined" && typeof maybeSrc.key !== "string") {
@@ -189,7 +190,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   for (let num = 0; num <= 9; ++num) {
     keybindings.push(
       ...generateKeybindings({
-        keys: [num.toString(), `meta+${num.toString()}`],
+        key: num.toString(),
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus",
         args: [num],
@@ -198,8 +199,16 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     keybindings.push(
       ...generateKeybindings({
         key: `meta+${num.toString()}`,
+        command: "emacs-mcx.subsequentArgumentDigit",
+        when: "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+        args: [num],
+      })
+    );
+    keybindings.push(
+      ...generateKeybindings({
+        key: `meta+${num.toString()}`,
         command: "emacs-mcx.digitArgument",
-        when: "!emacs-mcx.acceptingArgument && editorTextFocus",
+        when: "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
         args: [num],
       })
     );

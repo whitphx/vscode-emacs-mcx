@@ -5,6 +5,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ### Fix
 - Return promises from all command functions, #1205.
 
+## [0.41.0] - 2022-03-21
+### Add
+- `emacs-mcx.enableDigitArgument` config, #1256.
+- Regexp search and replace commands, #1257.
+
 ## [0.40.1] - 2022-03-20
 ### Fix
 - Release process, #1254.
