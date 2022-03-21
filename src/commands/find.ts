@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
-import { IEmacsCommandRunner, IMarkModeController } from "../emulator";
+import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 
@@ -12,7 +12,7 @@ export interface SearchState {
 abstract class IsearchCommand extends EmacsCommand {
   protected searchState: SearchState;
 
-  public constructor(emacsController: IMarkModeController & IEmacsCommandRunner, searchState: SearchState) {
+  public constructor(emacsController: IEmacsController, searchState: SearchState) {
     super(emacsController);
 
     this.searchState = searchState;
