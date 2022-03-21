@@ -143,6 +143,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   return keybindings;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc is KeyBindingSource {
   // Check for .key
   if (typeof maybeSrc.key !== "undefined" && typeof maybeSrc.key !== "string") {
@@ -187,19 +188,46 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
 
   // Generate keybindings for numeric characters.
   for (let num = 0; num <= 9; ++num) {
-    keybindings.push({
-      key: num.toString(),
-      when: "emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly",
-      command: "emacs-mcx.universalArgumentDigit",
-      args: [num],
-    });
+    keybindings.push(
+      ...generateKeybindings({
+        key: num.toString(),
+        command: "emacs-mcx.subsequentArgumentDigit",
+        when: "emacs-mcx.acceptingArgument && editorTextFocus",
+        args: [num],
+      })
+    );
+    keybindings.push(
+      ...generateKeybindings({
+        key: `meta+${num.toString()}`,
+        command: "emacs-mcx.subsequentArgumentDigit",
+        when: "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+        args: [num],
+      })
+    );
+    keybindings.push(
+      ...generateKeybindings({
+        key: `meta+${num.toString()}`,
+        command: "emacs-mcx.digitArgument",
+        when: "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
+        args: [num],
+      })
+    );
     keybindings.push({
       key: num.toString(),
       command: "emacs-mcx.typeChar",
-      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
+      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus",
       args: [num.toString()],
     });
   }
+
+  // M--
+  keybindings.push(
+    ...generateKeybindings({
+      key: "meta+-",
+      when: "!emacs-mcx.acceptingArgument && editorTextFocus",
+      command: "emacs-mcx.negativeArgument",
+    })
+  );
 
   // Ascii all printable characters excluding space, delete, and numeric characters.
   // Ref: https://www.ascii-code.com/

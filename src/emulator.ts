@@ -30,9 +30,10 @@ export interface IEmacsCommandRunner {
 export interface IMarkModeController {
   enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
-  pushMark(positions: vscode.Position[]): void;
+  pushMark(positions: vscode.Position[], replace?: boolean): void;
 
   readonly inRectMarkMode: boolean;
+  readonly nativeSelections: vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]) => void;
 }
 
@@ -53,20 +54,29 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   public get inRectMarkMode(): boolean {
     return this._isInMarkMode && this.rectMode;
   }
-  private nonRectSelections: vscode.Selection[];
-  private applyNonRectSelectionsAsRect(): void {
+
+  /**
+   * It is usually synced to `textEditor.selections`.
+   * Specially in rect-mark-mode, it is used to manage the underlying selections which the move commands directly manipulate
+   * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
+   */
+  private _nativeSelections: vscode.Selection[];
+  public get nativeSelections(): vscode.Selection[] {
+    return this._nativeSelections;
+  }
+  private applyNativeSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
-      const rectSelections = this.nonRectSelections
+      const rectSelections = this._nativeSelections
         .map(convertSelectionToRectSelections.bind(null, this.textEditor.document))
         .reduce((a, b) => a.concat(b), []);
       this.textEditor.selections = rectSelections;
     }
   }
   public moveRectActives(navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]): void {
-    const newActives = navigateFn(this.nonRectSelections.map((s) => s.active));
-    const newNonRectSelections = this.nonRectSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
-    this.nonRectSelections = newNonRectSelections;
-    this.applyNonRectSelectionsAsRect();
+    const newActives = navigateFn(this._nativeSelections.map((s) => s.active));
+    const newNativeSelections = this._nativeSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
+    this._nativeSelections = newNativeSelections;
+    this.applyNativeSelectionsAsRect();
   }
 
   private killYanker: KillYanker;
@@ -80,7 +90,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     minibuffer: Minibuffer = new InputBoxMinibuffer()
   ) {
     this.textEditor = textEditor;
-    this.nonRectSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
+    this._nativeSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
@@ -124,6 +134,10 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     };
     this.commandRegistry.register(new FindCommands.IsearchForward(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchBackward(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchForwardRegexp(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.IsearchBackwardRegexp(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.QueryReplace(this.afterCommand, this, searchState));
+    this.commandRegistry.register(new FindCommands.QueryReplaceRegexp(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchAbort(this.afterCommand, this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchExit(this.afterCommand, this, searchState));
 
@@ -156,7 +170,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.BackwardUpSexp(this.afterCommand, this));
+    this.commandRegistry.register(new PareditCommands.MarkSexp(this.afterCommand, this));
     this.commandRegistry.register(new PareditCommands.KillSexp(this.afterCommand, this, killYanker));
+    this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this.afterCommand, this, killYanker));
 
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this.afterCommand, this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this.afterCommand, this));
@@ -203,14 +219,21 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
       this.onDidInterruptTextEditor();
 
       if (!this.rectMode) {
-        this.nonRectSelections = this.textEditor.selections;
+        this._nativeSelections = this.textEditor.selections;
       }
     }
   }
 
+  /**
+   * An extended version of the native `type` command with prefix argument integration.
+   */
   public typeChar(char: string): void | Thenable<unknown> {
     if (this.isInMarkMode) {
       this.exitMarkMode();
+    }
+
+    if (char === "-" && this.prefixArgumentHandler.minusSignAcceptable) {
+      return this.prefixArgumentHandler.negativeArgument();
     }
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
@@ -218,6 +241,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
     const repeat = prefixArgument == null ? 1 : prefixArgument;
     if (repeat < 0) {
+      MessageManager.showMessage(`Negative repetition argument ${repeat}`);
       return;
     }
 
@@ -271,10 +295,24 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
   }
 
   /**
-   * digits following C-u
+   * M-<number>
    */
-  public universalArgumentDigit(arg: number): Promise<unknown> {
-    return this.prefixArgumentHandler.universalArgumentDigit(arg);
+  public digitArgument(digit: number): Promise<unknown> {
+    return this.prefixArgumentHandler.digitArgument(digit);
+  }
+
+  /**
+   * M--
+   */
+  public negativeArgument(): Promise<unknown> {
+    return this.prefixArgumentHandler.negativeArgument();
+  }
+
+  /**
+   * Digits following C-u or M-<number>
+   */
+  public subsequentArgumentDigit(arg: number): Promise<unknown> {
+    return this.prefixArgumentHandler.subsequentArgumentDigit(arg);
   }
 
   public onPrefixArgumentChange(newPrefixArgument: number | undefined): Thenable<unknown> {
@@ -345,7 +383,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     this.enterMarkMode();
     this.rectMode = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
-    this.applyNonRectSelectionsAsRect();
+    this.applyNativeSelectionsAsRect();
 
     this.normalCursorStyle = this.textEditor.options.cursorStyle;
     this.textEditor.options.cursorStyle = vscode.TextEditorCursorStyle.LineThin;
@@ -358,7 +396,7 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
 
     this.rectMode = false;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", false);
-    this.textEditor.selections = this.nonRectSelections;
+    this.textEditor.selections = this._nativeSelections;
 
     if (!this.isInMarkMode) {
       this.makeSelectionsEmpty();
@@ -410,9 +448,9 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     }
   }
 
-  public pushMark(positions: vscode.Position[]): void {
+  public pushMark(positions: vscode.Position[], replace = false): void {
     this.prevExchangedMarks = null;
-    this.markRing.push(positions);
+    this.markRing.push(positions, replace);
   }
 
   public popMark(): void {
@@ -446,8 +484,23 @@ export class EmacsEmulator implements IEmacsCommandRunner, IMarkModeController, 
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
+  public executeCommandWithPrefixArgument<T>(
+    command: string,
+    args: any = null,
+    prefixArgumentKey = "prefixArgument"
+  ): Thenable<T | undefined> {
+    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    this.prefixArgumentHandler.cancel();
+
+    return vscode.commands.executeCommand<T>(command, { ...args, [prefixArgumentKey]: prefixArgument });
+  }
+
+  public getPrefixArgument(): number | undefined {
+    return this.prefixArgumentHandler.getPrefixArgument();
+  }
+
   private makeSelectionsEmpty() {
-    const srcSelections = this.rectMode ? this.nonRectSelections : this.textEditor.selections;
+    const srcSelections = this.rectMode ? this._nativeSelections : this.textEditor.selections;
     this.textEditor.selections = srcSelections.map((selection) => new Selection(selection.active, selection.active));
   }
 

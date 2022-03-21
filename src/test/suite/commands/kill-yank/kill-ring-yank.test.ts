@@ -515,45 +515,47 @@ ABCDEFGHIJ`
   });
 });
 
-suite("yank pop with auto-indent", () => {
-  let activeTextEditor: vscode.TextEditor;
+// NOTE: This test suite has been commented out due to https://github.com/whitphx/vscode-emacs-mcx/issues/1249
+// TODO: Fix the problem and enable this test suite again.
+// suite("yank pop with auto-indent", () => {
+//   let activeTextEditor: vscode.TextEditor;
 
-  teardown(cleanUpWorkspace);
+//   teardown(cleanUpWorkspace);
 
-  test("Yank in a language that has auto-indent support", async function () {
-    activeTextEditor = await setupWorkspace("", { language: "typescript" });
-    activeTextEditor.options.tabSize = 4;
+//   test("Yank in a language that has auto-indent support", async function () {
+//     activeTextEditor = await setupWorkspace("", { language: "typescript" });
+//     activeTextEditor.options.tabSize = 4;
 
-    const killRing = new KillRing(60);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+//     const killRing = new KillRing(60);
+//     const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
-    // Kill texts
-    await clearTextEditor(activeTextEditor, "foo"); // No indent
-    await vscode.commands.executeCommand("editor.action.selectAll");
-    await emulator.runCommand("killRegion");
+//     // Kill texts
+//     await clearTextEditor(activeTextEditor, "foo"); // No indent
+//     await vscode.commands.executeCommand("editor.action.selectAll");
+//     await emulator.runCommand("killRegion");
 
-    await clearTextEditor(activeTextEditor, "bar"); // No indent
-    await vscode.commands.executeCommand("editor.action.selectAll");
-    await emulator.runCommand("killRegion");
+//     await clearTextEditor(activeTextEditor, "bar"); // No indent
+//     await vscode.commands.executeCommand("editor.action.selectAll");
+//     await emulator.runCommand("killRegion");
 
-    // Initialize with parentheses, that triggers auto-indent to inner text
-    const initialText = "{\n\n}";
-    await clearTextEditor(activeTextEditor, initialText);
-    setEmptyCursors(activeTextEditor, [1, 0]);
+//     // Initialize with parentheses, that triggers auto-indent to inner text
+//     const initialText = "{\n\n}";
+//     await clearTextEditor(activeTextEditor, initialText);
+//     setEmptyCursors(activeTextEditor, [1, 0]);
 
-    // Yank pastes "bar" with auto-indentation
-    await emulator.runCommand("yank");
-    assertTextEqual(activeTextEditor, "{\n    bar\n}");
+//     // Yank pastes "bar" with auto-indentation
+//     await emulator.runCommand("yank");
+//     assertTextEqual(activeTextEditor, "{\n    bar\n}");
 
-    // YankPop pastes "foo" with auto-indentation
-    await emulator.runCommand("yankPop");
-    assertTextEqual(activeTextEditor, "{\n    foo\n}");
+//     // YankPop pastes "foo" with auto-indentation
+//     await emulator.runCommand("yankPop");
+//     assertTextEqual(activeTextEditor, "{\n    foo\n}");
 
-    // yankPop again
-    await emulator.runCommand("yankPop");
-    assertTextEqual(activeTextEditor, "{\n    bar\n}");
-  });
-});
+//     // yankPop again
+//     await emulator.runCommand("yankPop");
+//     assertTextEqual(activeTextEditor, "{\n    bar\n}");
+//   });
+// });
 
 suite("Kill and yank with multi cursor, killing at 2 cursors in different lines", () => {
   let activeTextEditor: vscode.TextEditor;

@@ -3,6 +3,51 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.41.0] - 2022-03-21
+### Add
+- `emacs-mcx.enableDigitArgument` config, #1256.
+- Regexp search and replace commands, #1257.
+
+## [0.40.1] - 2022-03-20
+### Fix
+- Release process, #1254.
+
+## [0.40.0] - 2022-03-20
+### Add
+- `M--` (negative-argument) and `-` after `C-u`, #1204.
+
+### Fix
+- `emacs-mcx.paredit.markSexp` supports a negative prefix argument, #1206.
+- Internal package updates.
+- Fix README about `editor.find.seedSearchStringFromSelection`, #1252.
+
+## [0.39.0] - 2022-01-30
+### Add
+- `M-<number>` (digit-argument), #1199.
+### Fix
+- Assign `C-g` to all the commands which are assigned to "escape" by default, #1198.
+
+## [0.38.0] - 2022-01-29
+### Add
+- `emacs-mcx.paredit.backwardKillSexp`, #1175.
+- `emacs-mcx.paredit.markSexp`, #1181.
+
+### Fix
+- Drop `C-x C-k`, #1180.
+- Cursor positions after `kill-region` in rect-mark-mode, #1187.
+
+## [0.37.1] - 2022-01-01
+### Fix
+- Assign `C-i` to TAB, #1151.
+
+## [0.37.0] - 2021-12-30
+### Add
+- `emacs-mcx.executeCommandWithPrefixArgument` command, #1150.
+
+## [0.36.6] - 2021-12-18
+### Fix
+- Internal package updates.
+
 ## [0.36.5] - 2021-11-09
 ### Fix
 - `C-a` and `C-e` move the cursor to the beginning or the end of the entire, not wrapped line, when `emacs-mcx.strictEmacsMove` flag is set, #1104.
@@ -24,7 +69,7 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 - Set empty strings to the command field to disable the keybindings instead of leaving the field undefined, #1081.
 
 ## [0.36.0] - 2021-10-04
-## Add
+### Add
 - `C-x r t` (string-rectangle), #1049.
 
 ## [0.35.2] - 2021-09-26

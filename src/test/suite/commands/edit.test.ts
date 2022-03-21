@@ -33,7 +33,7 @@ suite("deleteForwardChar", () => {
   test("it works in multi lines with prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.universalArgument();
-    await emulator.universalArgumentDigit(8);
+    await emulator.subsequentArgumentDigit(8);
     await emulator.runCommand("deleteForwardChar");
     assertTextEqual(activeTextEditor, "0123456789\nabcdeCDEFGHIJ");
   });
@@ -77,7 +77,7 @@ suite("deleteBackwardChar", () => {
   test("it works in multi lines with prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.universalArgument();
-    await emulator.universalArgumentDigit(8);
+    await emulator.subsequentArgumentDigit(8);
     await emulator.runCommand("deleteBackwardChar");
     assertTextEqual(activeTextEditor, "01234567fghij\nABCDEFGHIJ");
   });
