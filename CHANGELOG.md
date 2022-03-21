@@ -3,6 +3,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Fix
+- Internal fix, #1258.
+
 ## [0.41.0] - 2022-03-21
 ### Add
 - `emacs-mcx.enableDigitArgument` config, #1256.

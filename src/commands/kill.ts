@@ -21,12 +21,8 @@ function getWordSeparators(): WordCharacterClassifier {
 export abstract class KillYankCommand extends EmacsCommand {
   protected killYanker: KillYanker;
 
-  public constructor(
-    afterExecute: () => void,
-    emacsController: IMarkModeController & IEmacsCommandRunner,
-    killYanker: KillYanker
-  ) {
-    super(afterExecute, emacsController);
+  public constructor(emacsController: IMarkModeController & IEmacsCommandRunner, killYanker: KillYanker) {
+    super(emacsController);
 
     this.killYanker = killYanker;
   }

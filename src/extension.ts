@@ -140,14 +140,13 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("isearchAbort");
   });
 
-  registerEmulatorCommand("emacs-mcx.isearchExit", (emulator, args) => {
-    emulator.runCommand("isearchExit").then(() => {
-      const secondCommand = args.then;
+  registerEmulatorCommand("emacs-mcx.isearchExit", async (emulator, args) => {
+    await emulator.runCommand("isearchExit");
+    const secondCommand = args.then;
 
-      if (typeof secondCommand === "string") {
-        return vscode.commands.executeCommand(secondCommand);
-      }
-    });
+    if (typeof secondCommand === "string") {
+      await vscode.commands.executeCommand(secondCommand);
+    }
   });
 
   registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {
