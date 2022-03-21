@@ -12,12 +12,8 @@ export interface SearchState {
 abstract class IsearchCommand extends EmacsCommand {
   protected searchState: SearchState;
 
-  public constructor(
-    afterExecute: () => void,
-    emacsController: IMarkModeController & IEmacsCommandRunner,
-    searchState: SearchState
-  ) {
-    super(afterExecute, emacsController);
+  public constructor(emacsController: IMarkModeController & IEmacsCommandRunner, searchState: SearchState) {
+    super(emacsController);
 
     this.searchState = searchState;
   }
