@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Fix
+- An error on `isearch-exit`, #1272.
 
 ## [0.41.1] - 2022-03-21
 ### Fix

@@ -142,8 +142,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   registerEmulatorCommand("emacs-mcx.isearchExit", async (emulator, args) => {
     await emulator.runCommand("isearchExit");
-    const secondCommand = args.then;
 
+    const secondCommand = args?.then;
     if (typeof secondCommand === "string") {
       await vscode.commands.executeCommand(secondCommand);
     }
