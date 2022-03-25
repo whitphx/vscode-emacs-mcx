@@ -83,6 +83,13 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
+"@koa/cors@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@koa/cors/-/cors-3.2.0.tgz#7fb65fbeb7dd841c3edf645efbfa2524dc72916a"
+  integrity sha512-bMjKGAJW2lg2jm7StqedeL/TMra0zl5VMtRyzl+WKbopj3AZEvy+FE8zeWvl1x3pofuU4a7ICuwIK/nr5/PEHg==
+  dependencies:
+    vary "^1.1.2"
+
 "@koa/router@^10.1.1":
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/@koa/router/-/router-10.1.1.tgz#8e5a85c9b243e0bc776802c0de564561e57a5f78"
@@ -346,11 +353,12 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@vscode/test-web@^0.0.22":
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.22.tgz#8767c80e7b16e73e78cf30da93d4dff5d4db148a"
-  integrity sha512-sm4WYidw26eFb1AReC8w5y4aOMdBb5ma5x3ukRJcun9iUB1ajz2nM18rxiYAVimUzrIMQHr9WqC8HYBYP8aNKQ==
+"@vscode/test-web@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.24.tgz#ee9a9249895b5c29f8352e1b13ee01193a795cf8"
+  integrity sha512-gUYgyiBoXP4kQ5LH2mF9zBURja/n93F7WCws5V02WnyKv8YXqSEhcUakT/5kEu/vNv4LJjY/QdZpUnr21ZAzXA==
   dependencies:
+    "@koa/cors" "^3.2.0"
     "@koa/router" "^10.1.1"
     decompress "^4.2.1"
     decompress-targz "^4.1.1"
@@ -360,8 +368,8 @@
     koa-morgan "^1.0.1"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
-    minimist "^1.2.5"
-    playwright "^1.18.1"
+    minimist "^1.2.6"
+    playwright "^1.20.1"
     vscode-uri "^3.0.3"
 
 "@webassemblyjs/ast@1.11.1":
@@ -2630,7 +2638,7 @@ minimatch@^3.0.3, minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5:
+minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
@@ -3049,10 +3057,10 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.20.0:
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.20.0.tgz#57e84d7663cada92fe0d5574e9cd42e5fa2e74e1"
-  integrity sha512-d25IRcdooS278Cijlp8J8A5fLQZ+/aY3dKRJvgX5yjXA69N0huIUdnh3xXSgn+LsQ9DCNmB7Ngof3eY630jgdA==
+playwright-core@1.20.1:
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.20.1.tgz#2d892964dd3ddc93f6e185be4b59621f3a339d4c"
+  integrity sha512-A8ZsZ09gaSbxP0UijoLyzp3LJc0kWMxDooLPi+mm4/5iYnTbd6PF5nKjoFw1a7KwjZIEgdhJduah4BcUIh+IPA==
   dependencies:
     colors "1.4.0"
     commander "8.3.0"
@@ -3073,12 +3081,12 @@ playwright-core@1.20.0:
     yauzl "2.10.0"
     yazl "2.5.1"
 
-playwright@^1.18.1:
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.20.0.tgz#f80b131c0146afc4645fcd5cfcc2ca11895ba58a"
-  integrity sha512-YcFXhXttk9yvpc8PMbfvts6KEopXjxdBh47BdOiA7xhjF/gkXeSM0Hs9CSdbL9mp2xtlB5xqE7+D+F2soQOjbA==
+playwright@^1.20.1:
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.20.1.tgz#2796c7d4de10afd39d2ca741a754565291803d4d"
+  integrity sha512-d/25SFUk6Rkt3h+RU13T7h6o0UTCLKXKYJILWVlC+NmrE7Tvn3LlXxoREfFXVNFikRZWTV60WBCZKgNbj7RfrA==
   dependencies:
-    playwright-core "1.20.0"
+    playwright-core "1.20.1"
 
 pngjs@6.0.0:
   version "6.0.0"
