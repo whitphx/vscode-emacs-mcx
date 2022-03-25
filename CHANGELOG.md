@@ -5,6 +5,9 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 ### Fix
 - An error on `isearch-exit`, #1272.
 
+### Fix
+- Restore the find widget string, #1271.
+
 ## [0.41.1] - 2022-03-21
 ### Fix
 - Internal fix, #1258, #1259.

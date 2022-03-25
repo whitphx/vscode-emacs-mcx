@@ -26,7 +26,7 @@ export class IsearchForward extends IsearchCommand {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
       .executeCommand("editor.actions.findWithArgs", {
-        searchString: "",
+        searchString: undefined,
         replaceString: undefined,
         isRegex: false,
         matchWholeWord: false,
@@ -44,7 +44,7 @@ export class IsearchBackward extends IsearchCommand {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
       .executeCommand("editor.actions.findWithArgs", {
-        searchString: "",
+        searchString: undefined,
         replaceString: undefined,
         isRegex: false,
         matchWholeWord: false,
@@ -62,7 +62,7 @@ export class IsearchForwardRegexp extends IsearchCommand {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
       .executeCommand("editor.actions.findWithArgs", {
-        searchString: "",
+        searchString: undefined,
         replaceString: undefined,
         isRegex: true,
         matchWholeWord: false,
@@ -80,7 +80,7 @@ export class IsearchBackwardRegexp extends IsearchCommand {
     this.searchState.startSelections = textEditor.selections;
     return vscode.commands
       .executeCommand("editor.actions.findWithArgs", {
-        searchString: "",
+        searchString: undefined,
         replaceString: undefined,
         isRegex: true,
         matchWholeWord: false,
@@ -96,14 +96,10 @@ export class QueryReplace extends IsearchCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
-    return vscode.commands.executeCommand("editor.actions.findWithArgs", {
-      searchString: "",
-      replaceString: "",
-      isRegex: false,
-      matchWholeWord: false,
-      isCaseSensitive: false,
-      preserveCase: false,
-    });
+    // I could not find a way to open the find widget with `editor.actions.findWithArgs`
+    // revealing the replace input and restoring the both query and replace strings.
+    // So `editor.action.startFindReplaceAction` is used here.
+    return vscode.commands.executeCommand("editor.action.startFindReplaceAction");
   }
 }
 
@@ -112,8 +108,10 @@ export class QueryReplaceRegexp extends IsearchCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
+    // Like `queryReplace` command, I could not find a way to open the find widget with the desired state.
+    // In this command, setting `isRegex` is the priority and I gave up restoring the replace string by setting ´replaceString=undefined`.
     return vscode.commands.executeCommand("editor.actions.findWithArgs", {
-      searchString: "",
+      searchString: undefined,
       replaceString: "",
       isRegex: true,
       matchWholeWord: false,
