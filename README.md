@@ -251,6 +251,8 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-x 3` | Split editor vertical |
 | `C-x 4` | Toggle split layout (vertical to horizontal) |
 | `C-x o` | Focus other split editor |
+| `C-x LEFT` | Select the previous tab (previous-buffer). |
+| `C-x RIGHT` | Select the next tab (next-buffer). |
 
 ### Prefix argument
 See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail
