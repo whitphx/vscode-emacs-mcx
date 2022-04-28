@@ -3,6 +3,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.42.0] - 2022-04-28
+### Add
+- next/previous buffer by @loadx, #1292.
+
 ## [0.41.2] - 2022-03-26
 ### Fix
 - An error on `isearch-exit`, #1272.
