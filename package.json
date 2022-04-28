@@ -4681,6 +4681,14 @@
 			{
 				"key": "ctrl+i",
 				"command": "tab"
+			},
+			{
+				"key": "ctrl+x left",
+				"command": "workbench.action.previousEditor"
+			},
+			{
+				"key": "ctrl+x right",
+				"command": "workbench.action.nextEditor"
 			}
 		]
 	},
