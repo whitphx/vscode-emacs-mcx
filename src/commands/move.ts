@@ -38,7 +38,7 @@ export class ForwardChar extends EmacsCommand {
   ): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) => curActives.map((a) => a.translate(0, charDelta)));
+      this.emacsController.moveRectActives((curActive) => curActive.translate(0, charDelta));
       return;
     }
 
@@ -68,8 +68,8 @@ export class BackwardChar extends EmacsCommand {
   ): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => new vscode.Position(a.line, Math.max(a.character - charDelta, 0)))
+      this.emacsController.moveRectActives(
+        (curActive) => new vscode.Position(curActive.line, Math.max(curActive.character - charDelta, 0))
       );
       return;
     }
@@ -102,8 +102,8 @@ export class NextLine extends EmacsCommand {
 
     if (this.emacsController.inRectMarkMode) {
       const maxLine = textEditor.document.lineCount - 1;
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => new vscode.Position(Math.min(a.line + lineDelta, maxLine), a.character))
+      this.emacsController.moveRectActives(
+        (curActive) => new vscode.Position(Math.min(curActive.line + lineDelta, maxLine), curActive.character)
       );
       return;
     }
@@ -128,8 +128,8 @@ export class PreviousLine extends EmacsCommand {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => new vscode.Position(Math.max(a.line - lineDelta, 0), a.character))
+      this.emacsController.moveRectActives(
+        (curActive) => new vscode.Position(Math.max(curActive.line - lineDelta, 0), curActive.character)
       );
       return;
     }
@@ -152,9 +152,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
     prefixArgument: number | undefined
   ): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => textEditor.document.lineAt(a.line).range.start)
-      );
+      this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
     }
 
     let moveHomeCommand: string;
@@ -192,9 +190,7 @@ export class MoveEndOfLine extends EmacsCommand {
     prefixArgument: number | undefined
   ): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => textEditor.document.lineAt(a.line).range.end)
-      );
+      this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.end);
       return;
     }
 
@@ -281,7 +277,7 @@ export class BackToIndentation extends EmacsCommand {
     };
 
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) => curActives.map(moveActiveFunc));
+      this.emacsController.moveRectActives(moveActiveFunc);
       return;
     }
 
@@ -304,7 +300,7 @@ export class BeginningOfBuffer extends EmacsCommand {
   ): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       const beginning = textEditor.document.positionAt(0);
-      this.emacsController.moveRectActives((curActives) => curActives.map(() => beginning));
+      this.emacsController.moveRectActives(() => beginning);
       return;
     }
 
@@ -326,7 +322,7 @@ export class EndOfBuffer extends EmacsCommand {
   ): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       const end = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
-      this.emacsController.moveRectActives((curActives) => curActives.map(() => end));
+      this.emacsController.moveRectActives(() => end);
       return;
     }
 
@@ -357,8 +353,8 @@ export class ScrollUpCommand extends EmacsCommand {
       const lineDelta = pageSize * repeat;
 
       const maxLine = textEditor.document.lineCount - 1;
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => new vscode.Position(Math.min(a.line + lineDelta, maxLine), a.character))
+      this.emacsController.moveRectActives(
+        (curActive) => new vscode.Position(Math.min(curActive.line + lineDelta, maxLine), curActive.character)
       );
       return;
     }
@@ -416,8 +412,8 @@ export class ScrollDownCommand extends EmacsCommand {
       const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
       const lineDelta = pageSize * repeat;
 
-      this.emacsController.moveRectActives((curActives) =>
-        curActives.map((a) => new vscode.Position(Math.max(a.line - lineDelta, 0), a.character))
+      this.emacsController.moveRectActives(
+        (curActive) => new vscode.Position(Math.max(curActive.line - lineDelta, 0), curActive.character)
       );
       return;
     }
@@ -472,7 +468,7 @@ export class ForwardParagraph extends EmacsCommand {
     };
 
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) => curActives.map(repeatedTravelForwardParagraph));
+      this.emacsController.moveRectActives(repeatedTravelForwardParagraph);
       return;
     }
 
@@ -500,7 +496,7 @@ export class BackwardParagraph extends EmacsCommand {
     };
 
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActives) => curActives.map(repeatedTravelBackwardParagraph));
+      this.emacsController.moveRectActives(repeatedTravelBackwardParagraph);
       return;
     }
 
