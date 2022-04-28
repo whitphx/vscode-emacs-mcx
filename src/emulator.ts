@@ -471,7 +471,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     if (prevMarks) {
       const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);
       const affectedSelections = this.textEditor.selections.slice(0, affectedLen).map((selection, i) => {
-        const prevMark = prevMarks[i];
+        // `i < affectedLen <= prevMarks.length`,
+        // so the `noUncheckedIndexedAccess` rule can be skipped here.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const prevMark = prevMarks[i]!;
         return new vscode.Selection(selection.active, prevMark);
       });
       const newSelections = affectedSelections.concat(this.textEditor.selections.slice(affectedLen));
