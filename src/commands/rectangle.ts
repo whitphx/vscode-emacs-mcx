@@ -335,7 +335,11 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     const lineEnd = Math.min(selection.end.line, textEditor.document.lineCount - 1);
     await textEditor.edit((edit) => {
       for (let i = lineStart; i <= lineEnd; i++) {
-        const rgn = currentRect[i - lineStart];
+        // Both `currentRect` and (`lineStart`, `lineEnd`) are calculated
+        // based on the same information from the `selection` and the `textEditor`'s range,
+        // so the `noUncheckedIndexedAccess` rule can be skipped here.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const rgn = currentRect[i - lineStart]!;
         if (rgn.end.character < insertChar) {
           const fill = insertChar - rgn.end.character;
           edit.insert(new vscode.Position(i, rgn.end.character), " ".repeat(fill) + text);
