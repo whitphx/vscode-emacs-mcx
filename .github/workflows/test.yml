@@ -62,7 +62,7 @@ jobs:
 
     - name: Upload linux-built vsix
       if: matrix.os == 'ubuntu-latest'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: emacs-mcx
         path: emacs-mcx*.vsix
