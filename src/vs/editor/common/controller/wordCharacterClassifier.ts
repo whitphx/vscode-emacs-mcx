@@ -33,7 +33,7 @@ function once<R>(computeFn: (input: string) => R): (input: string) => R {
 		if (!cache.hasOwnProperty(input)) {
 			cache[input] = computeFn(input);
 		}
-		return cache[input];
+		return cache[input]!;
 	};
 }
 
