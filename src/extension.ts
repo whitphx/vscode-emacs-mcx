@@ -120,18 +120,33 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("isearchBackward");
   });
 
+  registerEmulatorCommand("emacs-mcx.isearchForwardRegexp", (emulator) => {
+    emulator.runCommand("isearchForwardRegexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.isearchBackwardRegexp", (emulator) => {
+    emulator.runCommand("isearchBackwardRegexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.queryReplace", (emulator) => {
+    emulator.runCommand("queryReplace");
+  });
+
+  registerEmulatorCommand("emacs-mcx.queryReplaceRegexp", (emulator) => {
+    emulator.runCommand("queryReplaceRegexp");
+  });
+
   registerEmulatorCommand("emacs-mcx.isearchAbort", (emulator) => {
     emulator.runCommand("isearchAbort");
   });
 
-  registerEmulatorCommand("emacs-mcx.isearchExit", (emulator, args) => {
-    emulator.runCommand("isearchExit").then(() => {
-      const secondCommand = args.then;
+  registerEmulatorCommand("emacs-mcx.isearchExit", async (emulator, args) => {
+    await emulator.runCommand("isearchExit");
 
-      if (typeof secondCommand === "string") {
-        return vscode.commands.executeCommand(secondCommand);
-      }
-    });
+    const secondCommand = args?.then;
+    if (typeof secondCommand === "string") {
+      await vscode.commands.executeCommand(secondCommand);
+    }
   });
 
   registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {

@@ -61,9 +61,11 @@ It is converted basically to `"alt"` key, in addition, `"cmd"`, `"ctrl+["` and `
 Those keybindings except `"alt"` are generated with equivalent when-conditions like `"when": "config.emacs-mcx.useMetaPrefixEscape"`,
 which allows users to switch the keys as meta keys through the config.
 
-
 ### Comments
 You can write comments in `keybindings.json`.
+
+### Update README.md
+Please update [`README.md`](./README.md) about the keybinding you added/updated.
 
 ## How to add a new command
 First you have to create a command class.

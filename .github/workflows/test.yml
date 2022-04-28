@@ -9,6 +9,7 @@ on:
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
@@ -16,14 +17,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Install Node.js
-      uses: actions/setup-node@v2.5.1
+      uses: actions/setup-node@v3
       with:
         node-version: 16.x
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
-    - uses: actions/cache@v2.1.7
+    - uses: actions/cache@v3
       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -60,5 +61,16 @@ jobs:
       if: runner.os != 'Linux'
 
     - name: Test packaging
+    # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
+    - name: Test packaging on Linux
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        yarn run vsce package
+        VERSION=$(node -p "require('./package.json').version")
+        yarn run vsce package -o emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix
+
+    - name: Upload linux-built vsix
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: emacs-mcx
+        path: emacs-mcx*.vsix

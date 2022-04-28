@@ -40,7 +40,7 @@ See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about
 
 ### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed.
 This is VSCode's design that an extension cannot control.
-To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting to `false` or `"never"` (since [`vscode@1.59`](https://github.com/microsoft/vscode-docs/commit/a27b0efea3c05b4e06548dba1ad6b58979f1a79a#diff-d432cc9e616a920ea35cfeddb72b780f663270fd96f6871ec99dc8bda5b8cfb5R350)).
+To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting as `"never"`.
 It makes the find widget work similarly to Emacs.
 
 Refs:
@@ -102,6 +102,10 @@ Note that this config makes use of VSCode API's `type` command under the hood an
 * If you are using IME, text input may sometimes fail.
 * If another extension that also uses the `type` command is installed, an error occurs (See https://github.com/Microsoft/vscode/issues/13441).
 
+### `emacs-mcx.enableDigitArgument`
+Indicates whether `M-<digit>` (the `emacs-mcx.digitArgument` command) is enabled.
+Set `false` when `M-<digit>` conflicts with some other  necessary commands. See https://github.com/whitphx/vscode-emacs-mcx/issues/1208 for the background.
+
 ### `emacs-mcx.debug.*`
 Configurations for debugging.
 
@@ -159,9 +163,12 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 ### Search Commands
 |Command | Desc |
 |--------|------|
-| `C-s` | Search forward |
-| `C-r` | Search backward |
-| `M-S-5` (`M-%` with US keyboard) | Replace |
+| `C-s` | Incremental search forward (isearch-forward). |
+| `C-r` | Incremental search backward (isearch-backward). |
+| `C-M-s` | Begin incremental regexp search (isearch-forward-regexp). |
+| `C-M-r` | Begin reverse incremental regexp search (isearch-backward-regexp). |
+| `M-S-5` (`M-%` with US keyboard) | Replace (query-replace) |
+| `C-M-S-5` (`C-M-%` with US keyboard) | Replace with regexp (query-replace-regexp) |
 | `C-M-n` | Add selection to next find match |
 | `C-M-p` | Add selection to previous find match |
 
@@ -244,6 +251,8 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 | `C-x 3` | Split editor vertical |
 | `C-x 4` | Toggle split layout (vertical to horizontal) |
 | `C-x o` | Focus other split editor |
+| `C-x LEFT` | Select the previous tab (previous-buffer). |
+| `C-x RIGHT` | Select the next tab (next-buffer). |
 
 ### Prefix argument
 See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for detail

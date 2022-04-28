@@ -284,10 +284,37 @@
       "command": "editor.action.previousMatchFindAction",
       "when": "findInputFocussed"
     },
+    // i-search forward regexp
+    {
+      "key": "ctrl+meta+s",
+      "command": "emacs-mcx.isearchForwardRegexp",
+      "when": "!findInputFocussed"
+    },
+    {
+      "key": "ctrl+meta+s",
+      "command": "editor.action.nextMatchFindAction",
+      "when": "findInputFocussed"
+    },
+    // i-search backward regexp
+    {
+      "key": "ctrl+meta+r",
+      "command": "emacs-mcx.isearchBackwardRegexp",
+      "when": "!findInputFocussed"
+    },
+    {
+      "key": "ctrl+meta+r",
+      "command": "editor.action.previousMatchFindAction",
+      "when": "findInputFocussed"
+    },
     // replace
     {
       "key": "meta+shift+5",
-      "command": "editor.action.startFindReplaceAction",
+      "command": "emacs-mcx.queryReplace",
+      "when": "editorFocus"
+    },
+    {
+      "key": "ctrl+meta+shift+5",
+      "command": "emacs-mcx.queryReplaceRegexp",
       "when": "editorFocus"
     },
     // Disable Emacs-like keybindings on the find and replace widgets (native UI).
@@ -894,6 +921,14 @@
     {
       "key": "ctrl+i",
       "command": "tab"
+    },
+    {
+      "key": "ctrl+x left",
+      "command": "workbench.action.previousEditor"
+    },
+    {
+      "key": "ctrl+x right",
+      "command": "workbench.action.nextEditor"
     }
   ]
 }

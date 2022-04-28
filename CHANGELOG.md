@@ -2,11 +2,37 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.42.0] - 2022-04-28
+### Add
+- next/previous buffer by @loadx, #1292.
+
+## [0.41.2] - 2022-03-26
+### Fix
+- An error on `isearch-exit`, #1272.
+- Restore the find widget string, #1271.
+
+## [0.41.1] - 2022-03-21
+### Fix
+- Internal fix, #1258, #1259.
+
+## [0.41.0] - 2022-03-21
+### Add
+- `emacs-mcx.enableDigitArgument` config, #1256.
+- Regexp search and replace commands, #1257.
+
+## [0.40.1] - 2022-03-20
+### Fix
+- Release process, #1254.
+
+## [0.40.0] - 2022-03-20
 ### Add
 - `M--` (negative-argument) and `-` after `C-u`, #1204.
 
 ### Fix
 - `emacs-mcx.paredit.markSexp` supports a negative prefix argument, #1206.
+- Internal package updates.
+- Fix README about `editor.find.seedSearchStringFromSelection`, #1252.
 
 ## [0.39.0] - 2022-01-30
 ### Add
