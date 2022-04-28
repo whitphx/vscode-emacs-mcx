@@ -389,8 +389,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     assert.strictEqual(activeTextEditor.selections.length, 1);
     assert.strictEqual(activeTextEditor.selection.active.line, 1000);
-    const visibleRange = activeTextEditor.visibleRanges[0];
-    assert.strictEqual(visibleRange.end.line, 1000);
+    assert.strictEqual(activeTextEditor.visibleRanges[0]?.end.line, 1000);
   });
 
   test("backwardSexp: the selection is revealed at the active cursor", async () => {
@@ -403,8 +402,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     assert.strictEqual(activeTextEditor.selections.length, 1);
     assert.strictEqual(activeTextEditor.selection.active.line, 0);
-    const visibleRange = activeTextEditor.visibleRanges[0];
-    assert.strictEqual(visibleRange.start.line, 0);
+    assert.strictEqual(activeTextEditor.visibleRanges[0]?.start.line, 0);
   });
 });
 
