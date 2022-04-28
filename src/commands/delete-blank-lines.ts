@@ -13,7 +13,7 @@ export class DeleteBlankLines extends EmacsCommand {
       // therefore, each selection must be obtained
       // by indexing on each iteration.
       // That's why for-of loop is not appropriate here.
-      const selection = textEditor.selections[iSel];
+      const selection = textEditor.selections[iSel]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
       const curLineNum = selection.active.line;
       const curLine = document.lineAt(curLineNum);

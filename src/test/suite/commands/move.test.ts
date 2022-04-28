@@ -114,7 +114,11 @@ suite("scroll-up/down-command", () => {
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
 
-    visibleRange = activeTextEditor.visibleRanges[0];
+    const _visibleRange = activeTextEditor.visibleRanges[0];
+    if (_visibleRange == null) {
+      throw new Error("No visible range available.");
+    }
+    visibleRange = _visibleRange;
     pageLines = visibleRange.end.line - visibleRange.start.line;
   });
 

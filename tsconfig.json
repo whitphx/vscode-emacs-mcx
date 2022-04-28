@@ -18,6 +18,7 @@
 		"esModuleInterop": true,
 		/* Additional Checks */
 		"noImplicitAny": true,
+		"noUncheckedIndexedAccess": true
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
 		// "noUnusedParameters": true,  /* Report errors on unused parameters. */

@@ -131,7 +131,10 @@ export class KillYanker implements vscode.Disposable {
             if (!selection.isEmpty) {
               editBuilder.delete(selection);
             }
-            editBuilder.insert(selection.start, regionTexts[i].getAppendedText());
+            // `regionTexts.length === selections.length` has already been checked,
+            // so noUncheckedIndexedAccess rule can be skipped here.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            editBuilder.insert(selection.start, regionTexts[i]!.getAppendedText());
           });
         });
       }
@@ -175,11 +178,11 @@ export class KillYanker implements vscode.Disposable {
     const prevKillRingEntity = this.killRing.getTop();
 
     const killRingEntity = this.killRing.popNext();
-    if (killRingEntity === null) {
+    if (killRingEntity == null) {
       return;
     }
 
-    if (prevKillRingEntity !== null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
+    if (prevKillRingEntity != null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
       for (let i = 0; i < this.prevYankChanges; ++i) {
         await vscode.commands.executeCommand("undo");
       }

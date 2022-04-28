@@ -345,10 +345,10 @@ export class ScrollUpCommand extends EmacsCommand {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
-      if (textEditor.visibleRanges.length === 0) {
+      const visibleRange = textEditor.visibleRanges[0];
+      if (visibleRange == null) {
         return;
       }
-      const visibleRange = textEditor.visibleRanges[0];
       const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
       const lineDelta = pageSize * repeat;
 
@@ -405,10 +405,10 @@ export class ScrollDownCommand extends EmacsCommand {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
-      if (textEditor.visibleRanges.length === 0) {
+      const visibleRange = textEditor.visibleRanges[0];
+      if (visibleRange == null) {
         return;
       }
-      const visibleRange = textEditor.visibleRanges[0];
       const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
       const lineDelta = pageSize * repeat;
 
