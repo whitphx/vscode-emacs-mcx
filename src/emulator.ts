@@ -31,7 +31,7 @@ export interface IEmacsController {
   pushMark(positions: vscode.Position[], replace?: boolean): void;
 
   readonly inRectMarkMode: boolean;
-  readonly nativeSelections: vscode.Selection[];
+  readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position) => vscode.Position) => void;
 }
 
@@ -58,8 +58,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * Specially in rect-mark-mode, it is used to manage the underlying selections which the move commands directly manipulate
    * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
    */
-  private _nativeSelections: vscode.Selection[];
-  public get nativeSelections(): vscode.Selection[] {
+  private _nativeSelections: readonly vscode.Selection[];
+  public get nativeSelections(): readonly vscode.Selection[] {
     return this._nativeSelections;
   }
   private applyNativeSelectionsAsRect(): void {

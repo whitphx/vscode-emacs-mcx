@@ -6,7 +6,7 @@ import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 
 export interface SearchState {
-  startSelections: vscode.Selection[] | undefined;
+  startSelections: readonly vscode.Selection[] | undefined;
 }
 
 abstract class IsearchCommand extends EmacsCommand {
