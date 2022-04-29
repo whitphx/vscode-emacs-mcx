@@ -88,8 +88,8 @@ suite("MarkRing", () => {
   test("zero data", () => {
     const markRing = new MarkRing(3);
 
-    assert.strictEqual(markRing.getTop(), null);
-    assert.strictEqual(markRing.pop(), null);
-    assert.strictEqual(markRing.pop(), null);
+    assert.strictEqual(markRing.getTop(), undefined);
+    assert.strictEqual(markRing.pop(), undefined);
+    assert.strictEqual(markRing.pop(), undefined);
   });
 });

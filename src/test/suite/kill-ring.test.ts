@@ -63,8 +63,8 @@ suite("KillRing", () => {
   test("zero data", () => {
     const killRing = new KillRing(3);
 
-    assert.strictEqual(killRing.getTop(), null);
-    assert.strictEqual(killRing.popNext(), null);
-    assert.strictEqual(killRing.popNext(), null);
+    assert.strictEqual(killRing.getTop(), undefined);
+    assert.strictEqual(killRing.popNext(), undefined);
+    assert.strictEqual(killRing.popNext(), undefined);
   });
 });
