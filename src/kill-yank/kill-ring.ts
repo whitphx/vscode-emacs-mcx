@@ -5,7 +5,7 @@ export type KillRingEntity = ClipboardTextKillRingEntity | EditorTextKillRingEnt
 
 export class KillRing {
   private maxNum = 60;
-  private killRing: KillRingEntity[];
+  private killRing: Array<KillRingEntity>;
   private pointer: number | null;
 
   constructor(maxNum = 60) {
