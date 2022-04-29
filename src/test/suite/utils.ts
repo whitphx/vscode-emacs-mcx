@@ -81,6 +81,8 @@ export function assertTextEqual(textEditor: TextEditor, expectedText: string) {
 export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[number, number]>) {
   assert.strictEqual(textEditor.selections.length, positions.length);
   textEditor.selections.forEach((selection, idx) => {
+    // `textEditor.selections.length === positions.length` has already been checked,
+    // so noUncheckedIndexedAccess rule can be skipped here.
     const pos = positions[idx]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     const expectedRange = new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]));
     assert.ok(
