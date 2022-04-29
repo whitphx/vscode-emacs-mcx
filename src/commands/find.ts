@@ -21,7 +21,8 @@ interface FindArgs {
 
 abstract class IsearchCommand extends EmacsCommand {
   protected searchState: SearchState;
-  protected seedSearchStringFromSelection: string | undefined;
+
+  private seedSearchStringFromSelection: string | undefined;
 
   public constructor(emacsController: IEmacsController, searchState: SearchState) {
     super(emacsController);
