@@ -30,29 +30,31 @@ export class MessageManager implements vscode.Disposable {
   private timeout: number;
   private messageDisposable: vscode.Disposable | null = null;
 
+  private disposables: vscode.Disposable[] = [];
+
   private constructor(timeout = 10000) {
     this.timeout = timeout;
 
     this.onInterrupt = this.onInterrupt.bind(this);
 
-    vscode.window.onDidChangeActiveTerminal(this.onInterrupt);
-    vscode.window.onDidChangeActiveTextEditor(this.onInterrupt);
-    vscode.window.onDidChangeTextEditorOptions(this.onInterrupt);
-    vscode.window.onDidChangeTextEditorSelection(this.onInterrupt);
-    vscode.window.onDidChangeTextEditorViewColumn(this.onInterrupt);
-    vscode.window.onDidChangeTextEditorVisibleRanges(this.onInterrupt);
-    vscode.window.onDidChangeVisibleTextEditors(this.onInterrupt);
-    vscode.window.onDidChangeWindowState(this.onInterrupt);
-    vscode.window.onDidCloseTerminal(this.onInterrupt);
-    vscode.window.onDidOpenTerminal(this.onInterrupt);
+    vscode.window.onDidChangeActiveTerminal(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeActiveTextEditor(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeTextEditorOptions(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeTextEditorSelection(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeTextEditorViewColumn(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeTextEditorVisibleRanges(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeVisibleTextEditors(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidChangeWindowState(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidCloseTerminal(this.onInterrupt, this, this.disposables);
+    vscode.window.onDidOpenTerminal(this.onInterrupt, this, this.disposables);
 
-    vscode.workspace.onDidChangeConfiguration(this.onInterrupt);
-    vscode.workspace.onDidChangeTextDocument(this.onInterrupt);
-    vscode.workspace.onDidChangeWorkspaceFolders(this.onInterrupt);
-    vscode.workspace.onDidCloseTextDocument(this.onInterrupt);
-    vscode.workspace.onDidOpenTextDocument(this.onInterrupt);
-    vscode.workspace.onDidSaveTextDocument(this.onInterrupt);
-    vscode.workspace.onWillSaveTextDocument(this.onInterrupt);
+    vscode.workspace.onDidChangeConfiguration(this.onInterrupt, this, this.disposables);
+    vscode.workspace.onDidChangeTextDocument(this.onInterrupt, this, this.disposables);
+    vscode.workspace.onDidChangeWorkspaceFolders(this.onInterrupt, this, this.disposables);
+    vscode.workspace.onDidCloseTextDocument(this.onInterrupt, this, this.disposables);
+    vscode.workspace.onDidOpenTextDocument(this.onInterrupt, this, this.disposables);
+    vscode.workspace.onDidSaveTextDocument(this.onInterrupt, this, this.disposables);
+    vscode.workspace.onWillSaveTextDocument(this.onInterrupt, this, this.disposables);
   }
 
   public onInterrupt() {
@@ -74,6 +76,10 @@ export class MessageManager implements vscode.Disposable {
   public dispose() {
     if (this.messageDisposable !== null) {
       this.messageDisposable.dispose();
+    }
+
+    for (const disposable of this.disposables) {
+      disposable.dispose();
     }
   }
 }
