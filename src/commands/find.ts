@@ -28,9 +28,21 @@ abstract class IsearchCommand extends EmacsCommand {
 
     this.searchState = searchState;
 
-    const editorFindConfig = vscode.workspace.getConfiguration("editor.find");
-    const { seedSearchStringFromSelection } = editorFindConfig;
-    this.seedSearchStringFromSelection = seedSearchStringFromSelection;
+    // TODO: To be in a singleton object to avoid instantiate multiple event listeners.
+    const loadConfig = () => {
+      const editorFindConfig = vscode.workspace.getConfiguration("editor.find");
+      const { seedSearchStringFromSelection } = editorFindConfig;
+      this.seedSearchStringFromSelection = seedSearchStringFromSelection;
+    };
+    loadConfig();
+
+    emacsController.registerDisposable(
+      vscode.workspace.onDidChangeConfiguration((e) => {
+        if (e.affectsConfiguration("editor.find")) {
+          loadConfig();
+        }
+      })
+    );
   }
 
   protected openFindWidget(opts: { isRegex: boolean; replaceString?: string }): Thenable<void> {
