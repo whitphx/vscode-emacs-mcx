@@ -2,7 +2,9 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Fix
 - Internal fix, #1277, #1298.
+- Set the required VSCode version as `^1.63.0`, #1303.
 
 ## [0.42.0] - 2022-04-28
 ### Add
