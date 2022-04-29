@@ -2,7 +2,7 @@ import { Position } from "vscode";
 
 export class MarkRing {
   private maxNum = 16;
-  private ring: Position[][];
+  private ring: Array<readonly Position[]>;
   private pointer: number | null;
 
   constructor(maxNum?: number) {
@@ -14,7 +14,7 @@ export class MarkRing {
     this.ring = [];
   }
 
-  public push(marks: Position[], replace = false) {
+  public push(marks: readonly Position[], replace = false) {
     if (replace) {
       this.ring[0] = marks;
     } else {
@@ -26,17 +26,17 @@ export class MarkRing {
     this.pointer = 0;
   }
 
-  public getTop(): Position[] | null {
+  public getTop(): readonly Position[] | undefined {
     if (this.pointer == null || this.ring.length === 0) {
-      return null;
+      return undefined;
     }
 
     return this.ring[this.pointer];
   }
 
-  public pop(): Position[] | null {
+  public pop(): readonly Position[] | undefined {
     if (this.pointer == null || this.ring.length === 0) {
-      return null;
+      return undefined;
     }
 
     const ret = this.ring[this.pointer];
