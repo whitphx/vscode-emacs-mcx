@@ -83,10 +83,11 @@ abstract class EditRectangle extends RectangleKillYankCommand {
   ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
 
-    const selection = selections[0]; // multi-cursor is not supported
-    if (selection == null) {
+    if (selections.length !== 1) {
+      // multiple cursor not supported
       return;
     }
+    const selection = selections[0]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
     const notReversedSelection = new vscode.Selection(selection.start, selection.end);
 
@@ -313,10 +314,12 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
 
     const selections = getNonEmptySelections(textEditor);
 
-    const selection = selections[0]; // multi-cursor is not supported
-    if (selection == null) {
+    if (selections.length !== 1) {
+      // multiple cursor not supported
       return;
     }
+    const selection = selections[0]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+
     const insertChar = Math.min(selection.start.character, selection.end.character);
     const finalCursorLine = selection.active.line;
     let finalCursorChar = insertChar;
