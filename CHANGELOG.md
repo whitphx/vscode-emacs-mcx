@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.43.1] - 2022-04-29
 ### Fix
 - Fix find commands to respect the `editor.find.seedSearchStringFromSelection` config, #1305.
 
