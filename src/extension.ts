@@ -37,21 +37,23 @@ export function activate(context: vscode.ExtensionContext): void {
     return curEmulator;
   }
 
-  vscode.workspace.onDidCloseTextDocument(() => {
-    const documents = vscode.workspace.textDocuments;
+  context.subscriptions.push(
+    vscode.workspace.onDidCloseTextDocument(() => {
+      const documents = vscode.workspace.textDocuments;
 
-    // Delete emulators once all tabs of this document have been closed
-    for (const key of emulatorMap.getKeys()) {
-      const emulator = emulatorMap.get(key);
-      if (
-        emulator === undefined ||
-        emulator.getTextEditor() === undefined ||
-        documents.indexOf(emulator.getTextEditor().document) === -1
-      ) {
-        emulatorMap.delete(key);
+      // Delete emulators once all tabs of this document have been closed
+      for (const key of emulatorMap.getKeys()) {
+        const emulator = emulatorMap.get(key);
+        if (
+          emulator === undefined ||
+          emulator.getTextEditor() === undefined ||
+          documents.indexOf(emulator.getTextEditor().document) === -1
+        ) {
+          emulatorMap.delete(key);
+        }
       }
-    }
-  });
+    })
+  );
 
   function registerEmulatorCommand(
     commandName: string,
