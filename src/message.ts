@@ -28,7 +28,7 @@ export class MessageManager implements vscode.Disposable {
   private static inst: MessageManager;
 
   private timeout: number;
-  private disposable: vscode.Disposable | null = null;
+  private messageDisposable: vscode.Disposable | null = null;
 
   private constructor(timeout = 10000) {
     this.timeout = timeout;
@@ -56,24 +56,24 @@ export class MessageManager implements vscode.Disposable {
   }
 
   public onInterrupt() {
-    if (this.disposable === null) {
+    if (this.messageDisposable === null) {
       return;
     }
 
-    this.disposable.dispose();
-    this.disposable = null;
+    this.messageDisposable.dispose();
+    this.messageDisposable = null;
   }
 
   public showMessage(text: string) {
-    if (this.disposable) {
-      this.disposable.dispose();
+    if (this.messageDisposable) {
+      this.messageDisposable.dispose();
     }
-    this.disposable = vscode.window.setStatusBarMessage(text, this.timeout);
+    this.messageDisposable = vscode.window.setStatusBarMessage(text, this.timeout);
   }
 
   public dispose() {
-    if (this.disposable !== null) {
-      this.disposable.dispose();
+    if (this.messageDisposable !== null) {
+      this.messageDisposable.dispose();
     }
   }
 }
