@@ -55,6 +55,14 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
 
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration("emacs-mcx")) {
+        Configuration.reload();
+      }
+    })
+  );
+
   function registerEmulatorCommand(
     commandName: string,
     callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => any,
