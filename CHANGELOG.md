@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Fix
+- Dispose unused resources, #1307, #1309.
 
 ## [0.43.1] - 2022-04-29
 ### Fix
