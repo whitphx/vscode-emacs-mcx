@@ -55,8 +55,6 @@ This extension has some custom settings named with a prefix `emacs-mcx`.
 You can configure those settings.
 (See [this page](https://code.visualstudio.com/docs/getstarted/settings#_settings-editor) to know how to change the settings.)
 
-**After updating the settings, reload VSCode to enable the changes.**
-
 Configurable options of this extension are the followings.
 
 ### `emacs-mcx.strictEmacsMove`

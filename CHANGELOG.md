@@ -2,6 +2,9 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+### Add
+- Automatically reload the configuration when changed, #1311.
+
 ### Fix
 - Dispose unused resources, #1307, #1309.
 
