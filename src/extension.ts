@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import { Configuration } from "./configuration/configuration";
+import { SynchronizedWorkspaceConfig } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { executeCommands } from "./execute-commands";
@@ -17,6 +18,7 @@ type Unreliable<T> = { [P in keyof T]?: Unreliable<T[P]> } | Array<Unreliable<T>
 export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
   Configuration.registerDispose(context);
+  context.subscriptions.push(SynchronizedWorkspaceConfig.instance);
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();

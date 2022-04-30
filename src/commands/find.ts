@@ -4,6 +4,7 @@ import { EmacsCommand } from ".";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { SynchronizedWorkspaceConfig } from "../workspace-configuration";
 
 export interface SearchState {
   startSelections: readonly vscode.Selection[] | undefined;
@@ -22,28 +23,10 @@ interface FindArgs {
 abstract class IsearchCommand extends EmacsCommand {
   protected searchState: SearchState;
 
-  private seedSearchStringFromSelection: string | undefined;
-
   public constructor(emacsController: IEmacsController, searchState: SearchState) {
     super(emacsController);
 
     this.searchState = searchState;
-
-    // TODO: To be in a singleton object to avoid instantiate multiple event listeners.
-    const loadConfig = () => {
-      const editorFindConfig = vscode.workspace.getConfiguration("editor.find");
-      const { seedSearchStringFromSelection } = editorFindConfig;
-      this.seedSearchStringFromSelection = seedSearchStringFromSelection;
-    };
-    loadConfig();
-
-    emacsController.registerDisposable(
-      vscode.workspace.onDidChangeConfiguration((e) => {
-        if (e.affectsConfiguration("editor.find")) {
-          loadConfig();
-        }
-      })
-    );
   }
 
   protected openFindWidget(opts: { isRegex: boolean; replaceString?: string }): Thenable<void> {
@@ -58,7 +41,9 @@ abstract class IsearchCommand extends EmacsCommand {
       preserveCase: false,
     };
 
-    if (this.seedSearchStringFromSelection === "never") {
+    const { seedSearchStringFromSelection } = SynchronizedWorkspaceConfig.get("editor.find");
+
+    if (seedSearchStringFromSelection === "never") {
       return vscode.commands.executeCommand("editor.actions.findWithArgs", findArgs);
     }
 
