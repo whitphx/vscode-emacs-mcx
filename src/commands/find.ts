@@ -4,7 +4,7 @@ import { EmacsCommand } from ".";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
-import { SynchronizedWorkspaceConfig } from "../workspace-configuration";
+import { WorkspaceConfigCache } from "../workspace-configuration";
 
 export interface SearchState {
   startSelections: readonly vscode.Selection[] | undefined;
@@ -41,7 +41,7 @@ abstract class IsearchCommand extends EmacsCommand {
       preserveCase: false,
     };
 
-    const { seedSearchStringFromSelection } = SynchronizedWorkspaceConfig.get("editor.find");
+    const { seedSearchStringFromSelection } = WorkspaceConfigCache.get("editor.find");
 
     if (seedSearchStringFromSelection === "never") {
       return vscode.commands.executeCommand("editor.actions.findWithArgs", findArgs);

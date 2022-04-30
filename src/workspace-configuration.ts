@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 /**
  * Load and synchronize a specific the workspace configuration section to the .data property.
  */
-export class SynchronizedWorkspaceConfigSection implements vscode.Disposable {
+export class WorkspaceConfigSectionCache implements vscode.Disposable {
   private _data: vscode.WorkspaceConfiguration;
   public get data(): vscode.WorkspaceConfiguration {
     return this._data;
@@ -26,21 +26,18 @@ export class SynchronizedWorkspaceConfigSection implements vscode.Disposable {
   }
 }
 
-export class SynchronizedWorkspaceConfig implements vscode.Disposable {
-  /**
-   * Configuration uses singleton pattern.
-   */
-  public static get instance(): SynchronizedWorkspaceConfig {
+export class WorkspaceConfigCache implements vscode.Disposable {
+  // Singleton pattern
+  public static get instance(): WorkspaceConfigCache {
     if (!this.inst) {
-      this.inst = new SynchronizedWorkspaceConfig();
+      this.inst = new WorkspaceConfigCache();
     }
 
     return this.inst;
   }
+  private static inst: WorkspaceConfigCache;
 
-  private static inst: SynchronizedWorkspaceConfig;
-
-  private configSections: { [section: string]: SynchronizedWorkspaceConfigSection } = {};
+  private configSections: { [section: string]: WorkspaceConfigSectionCache } = {};
 
   public get(section: string): vscode.WorkspaceConfiguration {
     const cachedConfigSection = this.configSections[section];
@@ -48,7 +45,7 @@ export class SynchronizedWorkspaceConfig implements vscode.Disposable {
       return cachedConfigSection.data;
     }
 
-    const configSection = new SynchronizedWorkspaceConfigSection(section);
+    const configSection = new WorkspaceConfigSectionCache(section);
     this.configSections[section] = configSection;
     return configSection.data;
   }
