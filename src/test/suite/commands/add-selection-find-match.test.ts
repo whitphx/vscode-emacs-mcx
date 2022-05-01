@@ -1,7 +1,7 @@
 import assert from "assert";
-import { Position, Range, Selection, TextEditor } from "vscode";
+import { Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { cleanUpWorkspace, setupWorkspace } from "../utils";
+import { assertSelectionsEqual, cleanUpWorkspace, setupWorkspace } from "../utils";
 
 suite("addSelectionTo(Next|Previous)FindMatch", () => {
   let activeTextEditor: TextEditor;
@@ -22,19 +22,18 @@ ccc`;
 
   ["addSelectionToNextFindMatch", "addSelectionToPreviousFindMatch"].forEach((commandName) => {
     test(`mark-mode is enabled when ${commandName} is invoked`, async () => {
-      // 'aaa' appearances
-      const firstRange = new Range(new Position(0, 0), new Position(0, 3));
-      const secondRange = new Range(new Position(3, 0), new Position(3, 3));
-
       // First, select the first 'aaa'
-      activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 3))];
+      activeTextEditor.selections = [new Selection(0, 0, 0, 3)];
 
       // execute command
       await emulator.runCommand(commandName);
 
       // Then, next 'aaa' is selected
-      assert.ok(activeTextEditor.selections[0].isEqual(firstRange));
-      assert.ok(activeTextEditor.selections[1].isEqual(secondRange));
+      assertSelectionsEqual(
+        activeTextEditor,
+        new Selection(0, 0, 0, 3), // The first 'aaa' appearance
+        new Selection(3, 0, 3, 3) // The second one.
+      );
 
       // And mark-mode is still valid
       await emulator.runCommand("backwardChar");

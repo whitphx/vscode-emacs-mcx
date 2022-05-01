@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import { Configuration } from "./configuration/configuration";
+import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { executeCommands } from "./execute-commands";
@@ -9,9 +10,15 @@ import { logger } from "./logger";
 import { MessageManager } from "./message";
 import { InputBoxMinibuffer } from "./minibuffer";
 
+// HACK: Currently there is no official type-safe way to handle
+//       the unsafe inputs such as the arguments of the extensions.
+// See: https://github.com/microsoft/TypeScript/issues/37700#issuecomment-940865298
+type Unreliable<T> = { [P in keyof T]?: Unreliable<T[P]> } | Array<Unreliable<T>> | undefined;
+
 export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
   Configuration.registerDispose(context);
+  context.subscriptions.push(WorkspaceConfigCache.instance);
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
@@ -32,25 +39,35 @@ export function activate(context: vscode.ExtensionContext): void {
     return curEmulator;
   }
 
-  vscode.workspace.onDidCloseTextDocument(() => {
-    const documents = vscode.workspace.textDocuments;
+  context.subscriptions.push(
+    vscode.workspace.onDidCloseTextDocument(() => {
+      const documents = vscode.workspace.textDocuments;
 
-    // Delete emulators once all tabs of this document have been closed
-    for (const key of emulatorMap.getKeys()) {
-      const emulator = emulatorMap.get(key);
-      if (
-        emulator === undefined ||
-        emulator.getTextEditor() === undefined ||
-        documents.indexOf(emulator.getTextEditor().document) === -1
-      ) {
-        emulatorMap.delete(key);
+      // Delete emulators once all tabs of this document have been closed
+      for (const key of emulatorMap.getKeys()) {
+        const emulator = emulatorMap.get(key);
+        if (
+          emulator === undefined ||
+          emulator.getTextEditor() === undefined ||
+          documents.indexOf(emulator.getTextEditor().document) === -1
+        ) {
+          emulatorMap.delete(key);
+        }
       }
-    }
-  });
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration("emacs-mcx")) {
+        Configuration.reload();
+      }
+    })
+  );
 
   function registerEmulatorCommand(
     commandName: string,
-    callback: (emulator: EmacsEmulator, ...args: any[]) => any,
+    callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => any,
     onNoEmulator?: (...args: any[]) => any
   ) {
     const disposable = vscode.commands.registerCommand(commandName, (...args) => {
@@ -73,16 +90,20 @@ export function activate(context: vscode.ExtensionContext): void {
     registerEmulatorCommand(
       "type",
       (emulator, args) => {
+        const text = (args as unknown as { text: string }).text; // XXX: The arguments of `type` is guaranteed to have this signature.
         // Capture typing characters for prefix argument functionality.
-        logger.debug(`[type command]\t args.text = "${args.text}"`);
+        logger.debug(`[type command]\t args.text = "${text}"`);
 
-        return emulator.type(args.text);
+        return emulator.type(text);
       },
       (args) => vscode.commands.executeCommand("default:type", args)
     );
   }
 
   registerEmulatorCommand("emacs-mcx.subsequentArgumentDigit", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
     const arg = args[0];
     if (typeof arg !== "number") {
       return;
@@ -91,6 +112,9 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
     const arg = args[0];
     if (typeof arg !== "number") {
       return;
@@ -99,6 +123,9 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
     const arg = args[0];
     if (typeof arg !== "string") {
       return;
@@ -143,7 +170,10 @@ export function activate(context: vscode.ExtensionContext): void {
   registerEmulatorCommand("emacs-mcx.isearchExit", async (emulator, args) => {
     await emulator.runCommand("isearchExit");
 
-    const secondCommand = args?.then;
+    if (args == null || typeof args !== "object" || Array.isArray(args)) {
+      return;
+    }
+    const secondCommand = args.then;
     if (typeof secondCommand === "string") {
       await vscode.commands.executeCommand(secondCommand);
     }
@@ -320,12 +350,15 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {
-    if (typeof args === "object" && args != null) {
-      if ("command" in args) {
-        emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
-      }
-    } else if (Array.isArray(args) && args.length >= 1) {
-      emulator.executeCommandWithPrefixArgument(args[0], args[1], args[2]);
+    if (typeof args !== "object" || args == null || Array.isArray(args)) {
+      return;
+    }
+
+    if (
+      typeof args?.command === "string" &&
+      (typeof args?.prefixArgumentKey === "string" || args?.prefixArgumentKey == null)
+    ) {
+      emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
     }
   });
 }

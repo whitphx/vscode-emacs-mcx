@@ -26,12 +26,17 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
         break;
       }
       case RecenterPosition.Bottom: {
-        // TextEditor.revealRange does not supprt to set the cursor at the bottom of window.
+        // TextEditor.revealRange does not support to set the cursor at the bottom of window.
         // Therefore, the number of lines to scroll is calculated here.
-        const current = textEditor.selection.active.line;
-        const visibleTop = textEditor.visibleRanges[0].start.line;
-        const visibleBottom = textEditor.visibleRanges[0].end.line;
+        const visibleRange = textEditor.visibleRanges[0];
+        if (visibleRange == null) {
+          return;
+        }
+        const visibleTop = visibleRange.start.line;
+        const visibleBottom = visibleRange.end.line;
         const visibleHeight = visibleBottom - visibleTop;
+
+        const current = textEditor.selection.active.line;
 
         const nextVisibleTop = Math.max(current - visibleHeight, 1);
 

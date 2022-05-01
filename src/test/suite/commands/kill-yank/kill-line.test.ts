@@ -216,7 +216,6 @@ abcdefghij
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
-      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
@@ -239,7 +238,6 @@ abcdefghij
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
-      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 1]);
 
       await clearTextEditor(activeTextEditor);
@@ -332,7 +330,6 @@ ABCDEFGHIJ`
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `ABCDEFGHIJ`);
-      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 0]);
 
       await clearTextEditor(activeTextEditor);
@@ -355,7 +352,6 @@ abcdefghij
       await emulator.runCommand("killLine");
 
       assertTextEqual(activeTextEditor, `0ABCDEFGHIJ`);
-      assert.strictEqual(activeTextEditor.selections.length, 1);
       assertCursorsEqual(activeTextEditor, [0, 1]);
 
       await clearTextEditor(activeTextEditor);

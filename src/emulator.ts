@@ -31,8 +31,10 @@ export interface IEmacsController {
   pushMark(positions: vscode.Position[], replace?: boolean): void;
 
   readonly inRectMarkMode: boolean;
-  readonly nativeSelections: vscode.Selection[];
-  moveRectActives: (navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]) => void;
+  readonly nativeSelections: readonly vscode.Selection[];
+  moveRectActives: (navigateFn: (currentActives: vscode.Position) => vscode.Position) => void;
+
+  registerDisposable: (disposable: vscode.Disposable) => void;
 }
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
@@ -58,8 +60,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * Specially in rect-mark-mode, it is used to manage the underlying selections which the move commands directly manipulate
    * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
    */
-  private _nativeSelections: vscode.Selection[];
-  public get nativeSelections(): vscode.Selection[] {
+  private _nativeSelections: readonly vscode.Selection[];
+  public get nativeSelections(): readonly vscode.Selection[] {
     return this._nativeSelections;
   }
   private applyNativeSelectionsAsRect(): void {
@@ -70,9 +72,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this.textEditor.selections = rectSelections;
     }
   }
-  public moveRectActives(navigateFn: (currentActives: vscode.Position[]) => vscode.Position[]): void {
-    const newActives = navigateFn(this._nativeSelections.map((s) => s.active));
-    const newNativeSelections = this._nativeSelections.map((s, i) => new vscode.Selection(s.anchor, newActives[i]));
+  public moveRectActives(navigateFn: (currentActive: vscode.Position) => vscode.Position): void {
+    const newNativeSelections = this._nativeSelections.map((s) => {
+      const newActive = navigateFn(s.active);
+      return new vscode.Selection(s.anchor, newActive);
+    });
     this._nativeSelections = newNativeSelections;
     this.applyNativeSelectionsAsRect();
   }
@@ -149,7 +153,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
-    this.disposables.push(killYanker);
+    this.registerDisposable(killYanker);
 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
@@ -187,6 +191,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public getTextEditor(): TextEditor {
     return this.textEditor;
+  }
+
+  public registerDisposable(disposable: vscode.Disposable): void {
+    this.disposables.push(disposable);
   }
 
   public dispose(): void {
@@ -469,7 +477,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     if (prevMarks) {
       const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);
       const affectedSelections = this.textEditor.selections.slice(0, affectedLen).map((selection, i) => {
-        const prevMark = prevMarks[i];
+        // `i < affectedLen <= prevMarks.length`,
+        // so the `noUncheckedIndexedAccess` rule can be skipped here.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const prevMark = prevMarks[i]!;
         return new vscode.Selection(selection.active, prevMark);
       });
       const newSelections = affectedSelections.concat(this.textEditor.selections.slice(affectedLen));

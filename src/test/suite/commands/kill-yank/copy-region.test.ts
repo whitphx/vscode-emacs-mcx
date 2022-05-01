@@ -1,8 +1,7 @@
-import assert from "assert";
-import { Position, Range, Selection, TextEditor } from "vscode";
+import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, clearTextEditor, setupWorkspace } from "../../utils";
+import { assertTextEqual, assertSelectionsEqual, clearTextEditor, setupWorkspace } from "../../utils";
 
 [true, false].forEach((withKillRing) => {
   suite(`copyRegion, ${withKillRing ? "with" : "without"} killRing`, () => {
@@ -25,13 +24,11 @@ ABCDEFGHIJ`;
       await emulator.runCommand("copyRegion");
 
       // Selection is unset
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
+      assertSelectionsEqual(activeTextEditor, new Selection(0, 5, 0, 5));
 
       // mark-mode is disabled
       await emulator.runCommand("forwardChar");
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 6), new Position(0, 6)))); // Selection is empty
+      assertSelectionsEqual(activeTextEditor, new Selection(0, 6, 0, 6)); // Selection is empty
 
       await clearTextEditor(activeTextEditor);
 
@@ -49,17 +46,21 @@ ABCDEFGHIJ`;
       await emulator.runCommand("copyRegion");
 
       // Selections are unset
-      assert.strictEqual(activeTextEditor.selections.length, 3);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
-      assert.ok(activeTextEditor.selections[1].isEqual(new Range(new Position(1, 5), new Position(1, 5))));
-      assert.ok(activeTextEditor.selections[2].isEqual(new Range(new Position(2, 5), new Position(2, 5))));
+      assertSelectionsEqual(
+        activeTextEditor,
+        new Selection(0, 5, 0, 5),
+        new Selection(1, 5, 1, 5),
+        new Selection(2, 5, 2, 5)
+      );
 
       // mark-mode is disabled
       await emulator.runCommand("forwardChar");
-      assert.strictEqual(activeTextEditor.selections.length, 3);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 6), new Position(0, 6)))); // Selections are empty
-      assert.ok(activeTextEditor.selections[1].isEqual(new Range(new Position(1, 6), new Position(1, 6))));
-      assert.ok(activeTextEditor.selections[2].isEqual(new Range(new Position(2, 6), new Position(2, 6))));
+      assertSelectionsEqual(
+        activeTextEditor,
+        new Selection(0, 6, 0, 6), // Selections are empty
+        new Selection(1, 6, 1, 6),
+        new Selection(2, 6, 2, 6)
+      );
 
       await clearTextEditor(activeTextEditor);
 

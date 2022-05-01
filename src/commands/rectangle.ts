@@ -82,11 +82,13 @@ abstract class EditRectangle extends RectangleKillYankCommand {
     prefixArgument: number | undefined
   ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
-    if (selections.length === 0) {
+
+    if (selections.length !== 1) {
+      // multiple cursor not supported
       return;
     }
+    const selection = selections[0]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
-    const selection = selections[0]; // multi-cursor is not supported
     const notReversedSelection = new vscode.Selection(selection.start, selection.end);
 
     const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
@@ -154,7 +156,7 @@ export class YankRectangle extends RectangleKillYankCommand {
     }
 
     const rectHeight = killedRect.length - 1;
-    const rectWidth = killedRect[rectHeight].length;
+    const rectWidth = killedRect[rectHeight]!.length; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
     const active = textEditor.selection.active; // Multi-cursor is not supported
     await textEditor.edit((edit) => {
@@ -301,7 +303,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
       return;
     }
     const top = this.killring.getTop();
-    if (top === null) {
+    if (top == null) {
       return;
     }
     const text = top.asString();
@@ -311,29 +313,36 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     }
 
     const selections = getNonEmptySelections(textEditor);
+
     if (selections.length !== 1) {
       // multiple cursor not supported
       return;
     }
-    const insertChar = Math.min(selections[0].start.character, selections[0].end.character);
-    const finalCursorLine = selections[0].active.line;
+    const selection = selections[0]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+
+    const insertChar = Math.min(selection.start.character, selection.end.character);
+    const finalCursorLine = selection.active.line;
     let finalCursorChar = insertChar;
-    if (selections[0].active.character >= selections[0].anchor.character) {
+    if (selection.active.character >= selection.anchor.character) {
       finalCursorChar = insertChar + text.length;
     }
 
-    const currentRect = convertSelectionToRectSelections(textEditor.document, selections[0]);
+    const currentRect = convertSelectionToRectSelections(textEditor.document, selection);
     // rect is reversed in previous convert,
     // so we reverse it again as we need to traverse from smaller line number
-    if (selections[0].active.line < selections[0].anchor.line) {
+    if (selection.active.line < selection.anchor.line) {
       currentRect.reverse();
     }
 
-    const lineStart = Math.max(selections[0].start.line, 0);
-    const lineEnd = Math.min(selections[0].end.line, textEditor.document.lineCount - 1);
+    const lineStart = Math.max(selection.start.line, 0);
+    const lineEnd = Math.min(selection.end.line, textEditor.document.lineCount - 1);
     await textEditor.edit((edit) => {
       for (let i = lineStart; i <= lineEnd; i++) {
-        const rgn = currentRect[i - lineStart];
+        // Both `currentRect` and (`lineStart`, `lineEnd`) are calculated
+        // based on the same information from the `selection` and the `textEditor`'s range,
+        // so the `noUncheckedIndexedAccess` rule can be skipped here.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const rgn = currentRect[i - lineStart]!;
         if (rgn.end.character < insertChar) {
           const fill = insertChar - rgn.end.character;
           edit.insert(new vscode.Position(i, rgn.end.character), " ".repeat(fill) + text);

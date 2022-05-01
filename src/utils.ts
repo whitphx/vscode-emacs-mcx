@@ -4,5 +4,5 @@ export function equalPositions(positions1: Position[], positions2: Position[]): 
   if (positions1.length !== positions2.length) {
     return false;
   }
-  return positions1.every((p1, i) => p1.isEqual(positions2[i]));
+  return positions1.every((p1, i) => p1.isEqual(positions2[i]!)); // eslint-disable-line @typescript-eslint/no-non-null-assertion
 }

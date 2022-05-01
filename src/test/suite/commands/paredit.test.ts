@@ -1,5 +1,5 @@
 import assert from "assert";
-import { Position, Range, Selection, TextEditor } from "vscode";
+import { Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { KillRing } from "../../../kill-yank/kill-ring";
 import {
@@ -28,8 +28,7 @@ suite("paredit commands", () => {
 
       await emulator.runCommand("paredit.forwardSexp");
 
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 5))));
+      assertSelectionsEqual(activeTextEditor, new Selection(0, 5, 0, 5));
     });
 
     test("with mark-mode", async () => {
@@ -38,8 +37,7 @@ suite("paredit commands", () => {
       emulator.setMarkCommand();
       await emulator.runCommand("paredit.forwardSexp");
 
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 5))));
+      assertSelectionsEqual(activeTextEditor, new Selection(0, 0, 0, 5));
     });
   });
 
@@ -49,8 +47,7 @@ suite("paredit commands", () => {
 
       await emulator.runCommand("paredit.backwardSexp");
 
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 0), new Position(0, 0))));
+      assertSelectionsEqual(activeTextEditor, new Selection(0, 0, 0, 0));
     });
 
     test("with mark-mode", async () => {
@@ -59,8 +56,7 @@ suite("paredit commands", () => {
       emulator.setMarkCommand();
       await emulator.runCommand("paredit.backwardSexp");
 
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 5), new Position(0, 0))));
+      assertSelectionsEqual(activeTextEditor, new Selection(0, 5, 0, 0));
     });
   });
 });
@@ -299,7 +295,6 @@ suite("paredit.mark-sexp", () => {
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
-    assert.strictEqual(activeTextEditor.selections.length, 1);
     assertSelectionsEqual(activeTextEditor, new Selection(0, 0, 7, 1));
     assert.ok(emulator.isInMarkMode);
 
@@ -316,13 +311,11 @@ suite("paredit.mark-sexp", () => {
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
-    assert.strictEqual(activeTextEditor.selections.length, 1);
     assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 3, 3));
 
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
-    assert.strictEqual(activeTextEditor.selections.length, 1);
     assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 6, 3));
 
     emulator.exitMarkMode();
@@ -343,7 +336,6 @@ suite("paredit.mark-sexp", () => {
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
-    assert.strictEqual(activeTextEditor.selections.length, 1);
     assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 6, 3));
 
     emulator.exitMarkMode();
@@ -364,7 +356,6 @@ suite("paredit.mark-sexp", () => {
     await emulator.runCommand("paredit.markSexp");
 
     assertTextEqual(activeTextEditor, initialText);
-    assert.strictEqual(activeTextEditor.selections.length, 1);
     assertSelectionsEqual(activeTextEditor, new Selection(6, 3, 1, 2));
 
     emulator.exitMarkMode();
@@ -398,8 +389,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     assert.strictEqual(activeTextEditor.selections.length, 1);
     assert.strictEqual(activeTextEditor.selection.active.line, 1000);
-    const visibleRange = activeTextEditor.visibleRanges[0];
-    assert.strictEqual(visibleRange.end.line, 1000);
+    assert.strictEqual(activeTextEditor.visibleRanges[0]?.end.line, 1000);
   });
 
   test("backwardSexp: the selection is revealed at the active cursor", async () => {
@@ -412,8 +402,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
     assert.strictEqual(activeTextEditor.selections.length, 1);
     assert.strictEqual(activeTextEditor.selection.active.line, 0);
-    const visibleRange = activeTextEditor.visibleRanges[0];
-    assert.strictEqual(visibleRange.start.line, 0);
+    assert.strictEqual(activeTextEditor.visibleRanges[0]?.start.line, 0);
   });
 });
 
@@ -435,8 +424,7 @@ suite("paredit commands with prefix argument", () => {
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.forwardSexp");
 
-    assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 6), new Position(0, 6))));
+    assertSelectionsEqual(activeTextEditor, new Selection(0, 6, 0, 6));
   });
 
   test("backwardSexp", async () => {
@@ -446,8 +434,7 @@ suite("paredit commands with prefix argument", () => {
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("paredit.backwardSexp");
 
-    assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(0, 15), new Position(0, 15))));
+    assertSelectionsEqual(activeTextEditor, new Selection(0, 15, 0, 15));
   });
 });
 
@@ -470,9 +457,8 @@ suite("with semicolon", () => {
 
       await emulator.runCommand("paredit.forwardSexp");
 
-      assert.strictEqual(activeTextEditor.selections.length, 1);
-      // The cursor at the beginning of the next line
-      assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(1, 0), new Position(1, 0))));
+      // The cursor is at the beginning of the next line
+      assertSelectionsEqual(activeTextEditor, new Selection(1, 0, 1, 0));
     });
   });
 
@@ -490,9 +476,8 @@ suite("with semicolon", () => {
 
         await emulator.runCommand("paredit.forwardSexp");
 
-        assert.strictEqual(activeTextEditor.selections.length, 1);
         // The cursor is right to ";"
-        assert.ok(activeTextEditor.selections[0].isEqual(new Range(new Position(line, 4), new Position(line, 4))));
+        assertSelectionsEqual(activeTextEditor, new Selection(line, 4, line, 4));
       });
     });
   });

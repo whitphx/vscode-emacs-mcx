@@ -23,7 +23,7 @@ suite("MarkRing", () => {
   test("push with replace", () => {
     const markRing = new MarkRing(3);
 
-    const entities = [[new Position(0, 1)], [new Position(2, 3)], [new Position(4, 5)], [new Position(6, 7)]];
+    const entities = [[new Position(0, 1)], [new Position(2, 3)], [new Position(4, 5)], [new Position(6, 7)]] as const;
     markRing.push(entities[0], false);
     markRing.push(entities[1], false);
     markRing.push(entities[2], false);
@@ -40,7 +40,7 @@ suite("MarkRing", () => {
   test("push with replace at first", () => {
     const markRing = new MarkRing(3);
 
-    const entities = [[new Position(0, 1)], [new Position(2, 3)], [new Position(4, 5)], [new Position(6, 7)]];
+    const entities = [[new Position(0, 1)], [new Position(2, 3)], [new Position(4, 5)], [new Position(6, 7)]] as const;
     markRing.push(entities[0], true); // Replace the top
     markRing.push(entities[1], false);
     markRing.push(entities[2], false);
@@ -88,8 +88,8 @@ suite("MarkRing", () => {
   test("zero data", () => {
     const markRing = new MarkRing(3);
 
-    assert.strictEqual(markRing.getTop(), null);
-    assert.strictEqual(markRing.pop(), null);
-    assert.strictEqual(markRing.pop(), null);
+    assert.strictEqual(markRing.getTop(), undefined);
+    assert.strictEqual(markRing.pop(), undefined);
+    assert.strictEqual(markRing.pop(), undefined);
   });
 });

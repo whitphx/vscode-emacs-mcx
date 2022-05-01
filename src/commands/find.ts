@@ -4,9 +4,20 @@ import { EmacsCommand } from ".";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { WorkspaceConfigCache } from "../workspace-configuration";
 
 export interface SearchState {
-  startSelections: vscode.Selection[] | undefined;
+  startSelections: readonly vscode.Selection[] | undefined;
+}
+
+interface FindArgs {
+  // See https://github.com/microsoft/vscode/blob/1.64.0/src/vs/editor/contrib/find/browser/findController.ts#L588-L599
+  searchString?: string;
+  replaceString?: string;
+  isRegex: boolean;
+  matchWholeWord: boolean;
+  isCaseSensitive: boolean;
+  preserveCase: boolean;
 }
 
 abstract class IsearchCommand extends EmacsCommand {
@@ -17,6 +28,36 @@ abstract class IsearchCommand extends EmacsCommand {
 
     this.searchState = searchState;
   }
+
+  protected openFindWidget(opts: { isRegex: boolean; replaceString?: string }): Thenable<void> {
+    const { isRegex, replaceString } = opts;
+
+    const findArgs: FindArgs = {
+      searchString: undefined,
+      replaceString,
+      isRegex,
+      matchWholeWord: false,
+      isCaseSensitive: false,
+      preserveCase: false,
+    };
+
+    const { seedSearchStringFromSelection } = WorkspaceConfigCache.get("editor.find");
+
+    if (seedSearchStringFromSelection === "never") {
+      return vscode.commands.executeCommand("editor.actions.findWithArgs", findArgs);
+    }
+
+    // `editor.actions.findWithArgs` respects the `editor.find.seedSearchStringFromSelection` config
+    // when the previous search string is empty; https://github.com/microsoft/vscode/blob/5554b12acf27056905806867f251c859323ff7e9/src/vs/editor/contrib/find/browser/findController.ts#L604
+    // Then we set an empty string once and call the command again
+    // so that the config is effective when it is necessary e.g. not set as "never".
+    return vscode.commands
+      .executeCommand("editor.actions.findWithArgs", {
+        ...findArgs,
+        searchString: "",
+      })
+      .then(() => vscode.commands.executeCommand("editor.actions.findWithArgs", findArgs));
+  }
 }
 
 export class IsearchForward extends IsearchCommand {
@@ -24,16 +65,10 @@ export class IsearchForward extends IsearchCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
-    return vscode.commands
-      .executeCommand("editor.actions.findWithArgs", {
-        searchString: undefined,
-        replaceString: undefined,
-        isRegex: false,
-        matchWholeWord: false,
-        isCaseSensitive: false,
-        preserveCase: false,
-      })
-      .then(() => vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"));
+
+    return this.openFindWidget({ isRegex: false }).then(() =>
+      vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction")
+    );
   }
 }
 
@@ -42,16 +77,9 @@ export class IsearchBackward extends IsearchCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
-    return vscode.commands
-      .executeCommand("editor.actions.findWithArgs", {
-        searchString: undefined,
-        replaceString: undefined,
-        isRegex: false,
-        matchWholeWord: false,
-        isCaseSensitive: false,
-        preserveCase: false,
-      })
-      .then(() => vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"));
+    return this.openFindWidget({ isRegex: false }).then(() =>
+      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction")
+    );
   }
 }
 
@@ -60,16 +88,9 @@ export class IsearchForwardRegexp extends IsearchCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
-    return vscode.commands
-      .executeCommand("editor.actions.findWithArgs", {
-        searchString: undefined,
-        replaceString: undefined,
-        isRegex: true,
-        matchWholeWord: false,
-        isCaseSensitive: false,
-        preserveCase: false,
-      })
-      .then(() => vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"));
+    return this.openFindWidget({ isRegex: true }).then(() =>
+      vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction")
+    );
   }
 }
 
@@ -78,16 +99,9 @@ export class IsearchBackwardRegexp extends IsearchCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
-    return vscode.commands
-      .executeCommand("editor.actions.findWithArgs", {
-        searchString: undefined,
-        replaceString: undefined,
-        isRegex: true,
-        matchWholeWord: false,
-        isCaseSensitive: false,
-        preserveCase: false,
-      })
-      .then(() => vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"));
+    return this.openFindWidget({ isRegex: true }).then(() =>
+      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction")
+    );
   }
 }
 
@@ -110,14 +124,7 @@ export class QueryReplaceRegexp extends IsearchCommand {
     this.searchState.startSelections = textEditor.selections;
     // Like `queryReplace` command, I could not find a way to open the find widget with the desired state.
     // In this command, setting `isRegex` is the priority and I gave up restoring the replace string by setting ´replaceString=undefined`.
-    return vscode.commands.executeCommand("editor.actions.findWithArgs", {
-      searchString: undefined,
-      replaceString: "",
-      isRegex: true,
-      matchWholeWord: false,
-      isCaseSensitive: false,
-      preserveCase: false,
-    });
+    return this.openFindWidget({ isRegex: true, replaceString: "" });
   }
 }
 

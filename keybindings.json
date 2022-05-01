@@ -594,6 +594,10 @@
       "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing"
     },
+    { "key": "ctrl+g",
+      "command": "noop",
+      "when": "sideBarFocus"
+    },
     // Assign "C-g" to the commands which are assigned to "escape" by default.
     // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/1190
     { "key": "ctrl+g",                "command": "closeReferenceSearch",

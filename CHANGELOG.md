@@ -3,6 +3,24 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.44.0] - 2022-05-01
+### Add
+- Automatically reload the configuration when changed, #1311.
+
+### Fix
+- Dispose unused resources, #1307, #1309.
+- Find methods automatically reload the `editor.find.seedSearchStringFromSelection` config when changed, #1310.
+- Set noop command to `C-g` with `sideBarFocus` context, #1314.
+
+## [0.43.1] - 2022-04-29
+### Fix
+- Fix find commands to respect the `editor.find.seedSearchStringFromSelection` config, #1305.
+
+## [0.43.0] - 2022-04-29
+### Fix
+- Internal fix, #1277, #1298, #1304.
+- Set the required VSCode version as `^1.63.0`, #1303.
+
 ## [0.42.0] - 2022-04-28
 ### Add
 - next/previous buffer by @loadx, #1292.

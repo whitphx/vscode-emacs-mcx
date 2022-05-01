@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import assert from "assert";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
+import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("moveBeginning/EndOfLine", () => {
@@ -31,8 +31,7 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
         emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
-        assert.strictEqual(activeTextEditor.selections.length, 1);
-        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 1000, 1, 0)));
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0));
       });
     });
 
@@ -47,8 +46,7 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
         emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
-        assert.strictEqual(activeTextEditor.selections.length, 1);
-        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 0, 1, 1000)));
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, 1000));
       });
     });
   });
@@ -84,8 +82,7 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
         emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
-        assert.strictEqual(activeTextEditor.selections.length, 1);
-        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 1000, 1, lastWrappedLineStart)));
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, lastWrappedLineStart));
       });
     });
 
@@ -100,8 +97,7 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
         emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
-        assert.strictEqual(activeTextEditor.selections.length, 1);
-        assert.ok(activeTextEditor.selection.isEqual(new vscode.Selection(1, 0, 1, wrappedLineWidth)));
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, wrappedLineWidth));
       });
     });
   });
@@ -118,7 +114,11 @@ suite("scroll-up/down-command", () => {
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
 
-    visibleRange = activeTextEditor.visibleRanges[0];
+    const _visibleRange = activeTextEditor.visibleRanges[0];
+    if (_visibleRange == null) {
+      throw new Error("No visible range available.");
+    }
+    visibleRange = _visibleRange;
     pageLines = visibleRange.end.line - visibleRange.start.line;
   });
 
