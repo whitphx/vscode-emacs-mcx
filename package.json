@@ -3311,6 +3311,11 @@
 			},
 			{
 				"key": "ctrl+g",
+				"command": "noop",
+				"when": "sideBarFocus"
+			},
+			{
+				"key": "ctrl+g",
 				"command": "closeReferenceSearch",
 				"when": "inReferenceSearchEditor && !config.editor.stablePeek"
 			},
