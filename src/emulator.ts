@@ -33,6 +33,8 @@ export interface IEmacsController {
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position) => vscode.Position) => void;
+
+  registerDisposable: (disposable: vscode.Disposable) => void;
 }
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
@@ -151,7 +153,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
     this.killYanker = killYanker; // TODO: To be removed
-    this.disposables.push(killYanker);
+    this.registerDisposable(killYanker);
 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
@@ -189,6 +191,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public getTextEditor(): TextEditor {
     return this.textEditor;
+  }
+
+  public registerDisposable(disposable: vscode.Disposable): void {
+    this.disposables.push(disposable);
   }
 
   public dispose(): void {
