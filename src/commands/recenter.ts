@@ -14,14 +14,16 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
   private recenterPosition: RecenterPosition = RecenterPosition.Middle;
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const activeRange = new vscode.Range(textEditor.selection.active, textEditor.selection.active);
+
     switch (this.recenterPosition) {
       case RecenterPosition.Middle: {
-        textEditor.revealRange(textEditor.selection, TextEditorRevealType.InCenter);
+        textEditor.revealRange(activeRange, TextEditorRevealType.InCenter);
         this.recenterPosition = RecenterPosition.Top;
         break;
       }
       case RecenterPosition.Top: {
-        textEditor.revealRange(textEditor.selection, TextEditorRevealType.AtTop);
+        textEditor.revealRange(activeRange, TextEditorRevealType.AtTop);
         this.recenterPosition = RecenterPosition.Bottom;
         break;
       }
