@@ -5,6 +5,7 @@ import { KillRing } from "../../../kill-yank/kill-ring";
 import {
   setEmptyCursors,
   setupWorkspace,
+  cleanUpWorkspace,
   assertCursorsEqual,
   assertTextEqual,
   clearTextEditor,
@@ -21,6 +22,8 @@ suite("paredit commands", () => {
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
   });
+
+  teardown(cleanUpWorkspace);
 
   suite("forwardSexp", () => {
     test("without mark-mode", async () => {
@@ -78,6 +81,8 @@ suite("paredit.kill-sexp", () => {
     const killRing = new KillRing(60);
     emulator = new EmacsEmulator(activeTextEditor, killRing);
   });
+
+  teardown(cleanUpWorkspace);
 
   test("killing outer parentheses", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
@@ -184,6 +189,8 @@ suite("paredit.backward-kill-sexp", () => {
     emulator = new EmacsEmulator(activeTextEditor, killRing);
   });
 
+  teardown(cleanUpWorkspace);
+
   test("killing outer parentheses", async () => {
     setEmptyCursors(activeTextEditor, [7, 1]);
 
@@ -289,6 +296,8 @@ suite("paredit.mark-sexp", () => {
     emulator = new EmacsEmulator(activeTextEditor, killRing);
   });
 
+  teardown(cleanUpWorkspace);
+
   test("set mark at the outer parentheses", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
 
@@ -379,6 +388,8 @@ suite("paredit commands with a long text that requires revealing", () => {
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
+  teardown(cleanUpWorkspace);
+
   test("forwardSexp: the selection is revealed at the active cursor", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
     emulator.setMarkCommand();
@@ -417,6 +428,8 @@ suite("paredit commands with prefix argument", () => {
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
+  teardown(cleanUpWorkspace);
+
   test("forwardSexp", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]); // the right to `0`
 
@@ -452,6 +465,8 @@ suite("with semicolon", () => {
       emulator = new EmacsEmulator(activeTextEditor);
     });
 
+    teardown(cleanUpWorkspace);
+
     test("semicolon is treated as comment", async () => {
       setEmptyCursors(activeTextEditor, [0, 2]);
 
@@ -469,6 +484,8 @@ suite("with semicolon", () => {
       });
       emulator = new EmacsEmulator(activeTextEditor);
     });
+
+    teardown(cleanUpWorkspace);
 
     [0, 1, 2].forEach((line) => {
       test(`semicolon is treated as one entity (line ${line})`, async () => {

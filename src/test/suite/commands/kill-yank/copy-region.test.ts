@@ -1,7 +1,7 @@
 import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, assertSelectionsEqual, clearTextEditor, setupWorkspace } from "../../utils";
+import { assertTextEqual, assertSelectionsEqual, clearTextEditor, setupWorkspace, cleanUpWorkspace } from "../../utils";
 
 [true, false].forEach((withKillRing) => {
   suite(`copyRegion, ${withKillRing ? "with" : "without"} killRing`, () => {
@@ -17,6 +17,8 @@ ABCDEFGHIJ`;
         ? new EmacsEmulator(activeTextEditor, new KillRing())
         : new EmacsEmulator(activeTextEditor);
     });
+
+    teardown(cleanUpWorkspace);
 
     test("mark-mode is disabled and selections are unset after copy region", async () => {
       activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 5))];
