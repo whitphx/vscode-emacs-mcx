@@ -2,6 +2,8 @@
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [0.44.1] - 2022-08-28
 ### Fix
 - `recenterTopBottom` ignores the anchor cursor, #1396.
 
