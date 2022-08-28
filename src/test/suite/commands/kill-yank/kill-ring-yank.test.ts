@@ -734,6 +734,8 @@ suite("With not only single text editor", () => {
     await vscode.env.clipboard.writeText("");
   });
 
+  teardown(cleanUpWorkspace);
+
   test("shares killRing amoung multiple editors", async function () {
     const killRing = new KillRing(3);
 

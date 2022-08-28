@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import assert from "assert";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace } from "../utils";
+import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("moveBeginning/EndOfLine", () => {
@@ -14,6 +14,8 @@ suite("moveBeginning/EndOfLine", () => {
     activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
     emulator = new EmacsEmulator(activeTextEditor);
   });
+
+  teardown(cleanUpWorkspace);
 
   suite("strictEmacsMove=true", () => {
     setup(() => {
@@ -122,6 +124,8 @@ suite("scroll-up/down-command", () => {
     pageLines = visibleRange.end.line - visibleRange.start.line;
   });
 
+  teardown(cleanUpWorkspace);
+
   suite("scroll-up-command", () => {
     test("it scrolls one page", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]); // The first line
@@ -181,6 +185,8 @@ fff`;
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
+  teardown(cleanUpWorkspace);
+
   test("it moves to the next end of the paragraph", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("forwardParagraph");
@@ -209,6 +215,8 @@ fff`;
     emulator = new EmacsEmulator(activeTextEditor);
   });
 
+  teardown(cleanUpWorkspace);
+
   test("it moves to the previous beginning of the paragraph", async () => {
     setEmptyCursors(activeTextEditor, [7, 3]);
     await emulator.runCommand("backwardParagraph");
@@ -229,6 +237,8 @@ suite("beginning/endOfBuffer", () => {
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
   });
+
+  teardown(cleanUpWorkspace);
 
   test("beginningOfBuffer sets a new mark", async () => {
     setEmptyCursors(activeTextEditor, [101, 1]);

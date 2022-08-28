@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace } from "../utils";
+import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
 
 suite("back-to-indentation", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -15,6 +15,8 @@ non-indented-line with space
     activeTextEditor = await setupWorkspace(initialtext);
     emulator = new EmacsEmulator(activeTextEditor);
   });
+
+  teardown(cleanUpWorkspace);
 
   (
     [
