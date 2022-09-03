@@ -177,3 +177,70 @@ export class BackwardKillSexp extends KillYankCommand {
     revealPrimaryActive(textEditor);
   }
 }
+
+export class PareditKill extends KillYankCommand {
+  public readonly id = "paredit.pareditKill";
+
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
+    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+    if (repeat <= 0) {
+      return;
+    }
+
+    const doc = textEditor.document;
+    const src = doc.getText(); // TODO: doc.getText is called a second time, in makeSexpTravelFunc
+
+    const killRanges = textEditor.selections.map((selection) => {
+      const navigatorFn: PareditNavigatorFn = (ast: paredit.AST, idx: number) => {
+        while (src[idx] == " " || src[idx] == "\t") {
+          idx += 1;
+        }
+        const lineNumber = selection.active.line;
+        const line = textEditor.document.lineAt(lineNumber);
+        const lineEnd = doc.offsetAt(line.range.end);
+        if (idx >= lineEnd) {
+          const nextLine = textEditor.document.lineAt(lineNumber + 1);
+          return doc.offsetAt(nextLine.range.start);
+        } else {
+          let curr = idx;
+          let prev;
+          do {
+            prev = curr;
+            curr = this.indexAfterKillSexp(ast, prev);
+          } while (prev < curr && curr < lineEnd);
+          return curr;
+        }
+      };
+      const travelSexp = makeSexpTravelFunc(doc, navigatorFn);
+      const newActivePosition = travelSexp(selection.active, repeat);
+      return new Range(selection.anchor, newActivePosition);
+    });
+
+    await this.killYanker.kill(killRanges.filter((range) => !range.isEmpty));
+
+    revealPrimaryActive(textEditor);
+  }
+
+  private indexAfterKillSexp(ast: paredit.AST, currentIdx: number): number {
+    const src = ""; // src argument is not used by paredit.editor.killSexp
+    const edits = paredit.editor.killSexp(ast, src, currentIdx, { count: 1 });
+    if (edits === null) {
+      return currentIdx;
+    } else if (edits.changes[0] !== undefined) {
+      const [op, at, nChars] = edits.changes[0];
+      if (op == "remove" && at == currentIdx && edits.newIndex == currentIdx && typeof nChars == "number") {
+        return at + nChars;
+      } else {
+        throw new Error(
+          "Expected paredit.editor.killSexp to return a single deletion starting at the current cursor position and leaving the cursor at the same position"
+        );
+      }
+    } else {
+      throw new Error("Expected paredit.editor.killSexp to return a single change");
+    }
+  }
+}

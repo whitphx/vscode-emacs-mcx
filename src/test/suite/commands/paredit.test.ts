@@ -278,6 +278,139 @@ suite("paredit.backward-kill-sexp", () => {
   });
 });
 
+suite("paredit.paredit-kill kill to end-of-line", () => {
+  // https://github.com/emacsmirror/paredit/blob/d0b1a2f42fb47efc8392763d6487fd027e3a2955/paredit.el#L353
+  // ("(foo bar)|     ; Useless comment!"
+  // "(foo bar)|")
+  const initialText = "(foo bar)     ; Useless comment!";
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("kill to end-of-line", async () => {
+    setEmptyCursors(activeTextEditor, [0, 9]);
+
+    await emulator.runCommand("paredit.pareditKill");
+
+    assertTextEqual(activeTextEditor, "(foo bar)");
+    assertCursorsEqual(activeTextEditor, [0, 9]);
+
+    await clearTextEditor(activeTextEditor);
+
+    // TODO
+    // await emulator.runCommand("yank");
+    // assertTextEqual(activeTextEditor, initialText);
+  });
+});
+
+suite("paredit.paredit-kill kill inside sexp", () => {
+  // https://github.com/emacsmirror/paredit/blob/d0b1a2f42fb47efc8392763d6487fd027e3a2955/paredit.el#L353
+  // ("(|foo bar)     ; Useful comment!"
+  // "(|)     ; Useful comment!")
+  const initialText = "(foo bar)     ; Useful comment!";
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("kill inside sexp", async () => {
+    setEmptyCursors(activeTextEditor, [0, 1]);
+
+    await emulator.runCommand("paredit.pareditKill");
+
+    assertTextEqual(activeTextEditor, "()     ; Useful comment!");
+    assertCursorsEqual(activeTextEditor, [0, 1]);
+
+    await clearTextEditor(activeTextEditor);
+
+    // TODO
+    // await emulator.runCommand("yank");
+    // assertTextEqual(activeTextEditor, initialText);
+  });
+});
+
+suite("paredit.paredit-kill kill entire line", () => {
+  // https://github.com/emacsmirror/paredit/blob/d0b1a2f42fb47efc8392763d6487fd027e3a2955/paredit.el#L353
+  // ("|(foo bar)     ; Useless line!"
+  // "|")
+  const initialText = "(foo bar)     ; Useless line!";
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("kill entire line", async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.runCommand("paredit.pareditKill");
+
+    assertTextEqual(activeTextEditor, "");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+
+    await clearTextEditor(activeTextEditor);
+
+    // TODO
+    // await emulator.runCommand("yank");
+    // assertTextEqual(activeTextEditor, initialText);
+  });
+});
+
+suite("paredit.paredit-kill kill inside string", () => {
+  // https://github.com/emacsmirror/paredit/blob/d0b1a2f42fb47efc8392763d6487fd027e3a2955/paredit.el#L353
+  // ("(foo \"|bar baz\"\n     quux)"
+  // "(foo \"|\"\n     quux)"))
+  const initialText = `(foo "bar baz"
+     quux)`;
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace(initialText);
+    const killRing = new KillRing(60);
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("kill inside string", async () => {
+    setEmptyCursors(activeTextEditor, [0, 6]);
+
+    await emulator.runCommand("paredit.pareditKill");
+
+    assertTextEqual(
+      activeTextEditor,
+      `(foo ""
+     quux)`
+    );
+    assertCursorsEqual(activeTextEditor, [0, 6]);
+
+    await clearTextEditor(activeTextEditor);
+
+    // TODO
+    // await emulator.runCommand("yank");
+    // assertTextEqual(activeTextEditor, initialText);
+  });
+});
+
 suite("paredit.mark-sexp", () => {
   const initialText = `(
   (
