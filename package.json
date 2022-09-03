@@ -5001,6 +5001,11 @@
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "ctrl+shift+k",
+        "command": "emacs-mcx.paredit.pareditKill",
+        "when": "editorTextFocus"
+      },
+      {
         "key": "ctrl+alt+k",
         "command": "emacs-mcx.paredit.killSexp",
         "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
