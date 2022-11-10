@@ -17,6 +17,8 @@ export const moveCommandIds = [
   "previousLine",
   "moveBeginningOfLine",
   "moveEndOfLine",
+  "prevBlankLine",
+  "nextBlankLine",
   "forwardWord",
   "backwardWord",
   "beginningOfBuffer",
@@ -216,6 +218,46 @@ export class MoveEndOfLine extends EmacsCommand {
         })
         .then(moveEndCommandFunc);
     }
+  }
+}
+
+export class PrevBlankLine extends EmacsCommand {
+  public readonly id = "prevBlankLine";
+
+  public execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): void | Thenable<void> {
+    if (this.emacsController.inRectMarkMode) {
+      // TODO: not supported
+      return;
+    }
+
+    return vscode.commands.executeCommand<void>("cursorMove", {
+      to: "prevBlankLine",
+      select: isInMarkMode,
+    });
+  }
+}
+
+export class NextBlankLine extends EmacsCommand {
+  public readonly id = "nextBlankLine";
+
+  public execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): void | Thenable<void> {
+    if (this.emacsController.inRectMarkMode) {
+      // TODO: not supported
+      return;
+    }
+
+    return vscode.commands.executeCommand<void>("cursorMove", {
+      to: "nextBlankLine",
+      select: isInMarkMode,
+    });
   }
 }
 
