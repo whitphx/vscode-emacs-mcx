@@ -14,7 +14,7 @@ export class MarkRing {
     this.ring = [];
   }
 
-  public push(marks: readonly Position[], replace = false) {
+  public push(marks: readonly Position[], replace = false): void {
     if (replace) {
       this.ring[0] = marks;
     } else {
