@@ -10,7 +10,7 @@
 [![Open VSX Downloads](https://img.shields.io/open-vsx/dt/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx)
 [![Open VSX Rating](https://img.shields.io/open-vsx/rating/tuttieee/emacs-mcx)](https://open-vsx.org/extension/tuttieee/emacs-mcx/reviews)
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D2ERWFG)
+<a href="https://ko-fi.com/D1D2ERWFG" target="_blank"><img src="https://storage.ko-fi.com/cdn/brandasset/kofi_button_red.png" alt="Support me on Ko-fi" width="180" ></a>
 
 <a href="https://www.buymeacoffee.com/whitphx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
 
