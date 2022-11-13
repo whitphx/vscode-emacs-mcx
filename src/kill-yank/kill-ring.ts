@@ -17,7 +17,7 @@ export class KillRing {
     this.killRing = [];
   }
 
-  public push(entity: KillRingEntity) {
+  public push(entity: KillRingEntity): void {
     this.killRing = [entity].concat(this.killRing);
     if (this.killRing.length > this.maxNum) {
       this.killRing = this.killRing.slice(0, this.maxNum);

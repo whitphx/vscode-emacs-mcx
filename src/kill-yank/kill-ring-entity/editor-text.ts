@@ -87,11 +87,11 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     return allText;
   }
 
-  public getRegionTextsList() {
+  public getRegionTextsList(): AppendedRegionTexts[] {
     return this.regionTextsList;
   }
 
-  public append(entity: EditorTextKillRingEntity, appendDirection: AppendDirection = AppendDirection.Forward) {
+  public append(entity: EditorTextKillRingEntity, appendDirection: AppendDirection = AppendDirection.Forward): void {
     const additional = entity.getRegionTextsList();
     if (additional.length !== this.regionTextsList.length) {
       throw Error("Not appendable");
