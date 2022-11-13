@@ -5,7 +5,11 @@ import { EmacsCommand } from ".";
 export class DeleteBlankLines extends EmacsCommand {
   public readonly id = "deleteBlankLines";
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const document = textEditor.document;
 
     for (let iSel = 0; iSel < textEditor.selections.length; ++iSel) {

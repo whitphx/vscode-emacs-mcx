@@ -202,7 +202,11 @@ export class YankRectangle extends RectangleKillYankCommand {
 export class OpenRectangle extends EmacsCommand {
   public readonly id = "openRectangle";
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
     if (selections.length === 0) {
       return;
@@ -228,7 +232,11 @@ export class OpenRectangle extends EmacsCommand {
 export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
     if (selections.length === 0) {
       return;
@@ -259,7 +267,11 @@ export class StringRectangle extends EmacsCommand {
     this.minibuffer = minibuffer;
   }
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
 
     if (replaceString == null) {

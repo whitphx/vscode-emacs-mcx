@@ -207,7 +207,11 @@ function findNextWordOnLine(
 // Based on `moveWordRight` method with `wordNavigationType = WordNavigationType.WordEnd`
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L252
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L245
-export function findNextWordEnd(doc: TextDocument, wordSeparators: WordCharacterClassifier, position: Position) {
+export function findNextWordEnd(
+  doc: TextDocument,
+  wordSeparators: WordCharacterClassifier,
+  position: Position
+): Position {
   let lineNumber = position.line;
   let character = position.character;
 
@@ -265,7 +269,11 @@ export function findNextWordEnd(doc: TextDocument, wordSeparators: WordCharacter
 // Based on `moveWordLeft` method with `wordNavigationType = WordNavigationType.WordStartFast` that is called via `CursorWordLeft` command.
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L163
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L120
-export function findPreviousWordStart(doc: TextDocument, wordSeparators: WordCharacterClassifier, position: Position) {
+export function findPreviousWordStart(
+  doc: TextDocument,
+  wordSeparators: WordCharacterClassifier,
+  position: Position
+): Position {
   let lineNumber = position.line;
   let character = position.character;
 
