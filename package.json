@@ -4750,7 +4750,7 @@
 		"webpack-cli": "^4.10.0"
 	},
 	"dependencies": {
-		"paredit.js": "^0.3.4",
+		"paredit.js": "^0.4.0",
 		"winston": "^3.8.1",
 		"winston-console-for-electron": "^0.0.7"
 	}
