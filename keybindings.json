@@ -13,7 +13,7 @@
     {
       "keys": ["right", "ctrl+f"],
       "command": "emacs-mcx.forwardChar",
-      "whens": ["editorTextFocus", "terminalFocus"]  // TODO: `!suggestWidgetVisible` should be added like up/down?
+      "whens": ["editorTextFocus", "terminalFocus"] // TODO: `!suggestWidgetVisible` should be added like up/down?
     },
     {
       "keys": ["right", "ctrl+f"],
@@ -206,7 +206,7 @@
       "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": {
-        "then":"emacs-mcx.endOfBuffer"
+        "then": "emacs-mcx.endOfBuffer"
       }
     },
     // beginning of buffer (meta + <)
@@ -439,7 +439,8 @@
       "key": "meta+y",
       "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing"
-    },{
+    },
+    {
       "key": "ctrl+o",
       "command": "lineBreakInsert",
       "when": "editorTextFocus && !editorReadonly"
@@ -492,7 +493,7 @@
       "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": {
-        "then":"editor.action.selectAll"
+        "then": "editor.action.selectAll"
       }
     },
     {
@@ -563,10 +564,7 @@
       "key": "meta+shift+6",
       "command": "emacs-mcx.executeCommands",
       "when": "editorTextFocus && !editorReadOnly",
-      "args": [
-        "emacs-mcx.previousLine",
-        "editor.action.joinLines"
-      ]
+      "args": ["emacs-mcx.previousLine", "editor.action.joinLines"]
     },
     // Cancel
     {
@@ -590,14 +588,11 @@
       "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
-      "key":  "enter",
+      "key": "enter",
       "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing"
     },
-    { "key": "ctrl+g",
-      "command": "noop",
-      "when": "sideBarFocus"
-    },
+    { "key": "ctrl+g", "command": "noop", "when": "sideBarFocus" },
     // Assign "C-g" to the commands which are assigned to "escape" by default.
     // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/1190
     { "key": "ctrl+g",                "command": "closeReferenceSearch",
@@ -714,37 +709,37 @@
       "when": "editorTextFocus"
     },
     {
-      "key": "k",  // ctrl+x r k
+      "key": "k", // ctrl+x r k
       "command": "emacs-mcx.killRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
-      "key": "y",  // ctrl+x r y
+      "key": "y", // ctrl+x r y
       "command": "emacs-mcx.yankRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
-      "key": "d",  // ctrl+x r d
+      "key": "d", // ctrl+x r d
       "command": "emacs-mcx.deleteRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
-      "key": "meta+w",  // ctrl+x r M-w
+      "key": "meta+w", // ctrl+x r M-w
       "command": "emacs-mcx.copyRectangleAsKill",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
-      "key": "o",  // ctrl+x r o
+      "key": "o", // ctrl+x r o
       "command": "emacs-mcx.openRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
-      "key": "c",  // ctrl+x r c
+      "key": "c", // ctrl+x r c
       "command": "emacs-mcx.clearRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
-      "key": "t",  // ctrl+x r t
+      "key": "t", // ctrl+x r t
       "command": "emacs-mcx.stringRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
