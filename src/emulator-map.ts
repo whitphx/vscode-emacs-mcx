@@ -1,11 +1,10 @@
-import { TextEditor } from "vscode";
-import { EditorIdentity } from "./editorIdentity";
+import { TextEditor, Uri } from "vscode";
 import { EmacsEmulator } from "./emulator";
 import { KillRing } from "./kill-yank/kill-ring";
 import { Minibuffer } from "./minibuffer";
 
 export class EmacsEmulatorMap {
-  private emacsEmulatorMap: Map<string, EmacsEmulator>;
+  private emacsEmulatorMap: Map<Uri, EmacsEmulator>;
   private killRing: KillRing;
   private minibuffer: Minibuffer;
 
@@ -15,34 +14,33 @@ export class EmacsEmulatorMap {
     this.minibuffer = minibuffer;
   }
 
-  public getOrCreate(textEditor: TextEditor): [EmacsEmulator, boolean] {
-    const id = new EditorIdentity(textEditor);
-    const key = id.toString();
+  public getOrCreate(editor: TextEditor): [EmacsEmulator, boolean] {
+    const editorId = editor.document.uri;
 
-    const existentEmulator = this.emacsEmulatorMap.get(key);
-    if (existentEmulator) {
-      existentEmulator.setTextEditor(textEditor);
-      return [existentEmulator, false];
+    let isNew = false;
+    let emacsEmulator = this.get(editorId);
+
+    if (!emacsEmulator) {
+      isNew = true;
+      emacsEmulator = new EmacsEmulator(editor, this.killRing, this.minibuffer);
+      this.emacsEmulatorMap.set(editorId, emacsEmulator);
     }
-
-    const newEmulator = new EmacsEmulator(textEditor, this.killRing, this.minibuffer);
-    this.emacsEmulatorMap.set(key, newEmulator);
-    return [newEmulator, true];
+    return [emacsEmulator, isNew];
   }
 
-  public get(key: string): EmacsEmulator | undefined {
-    return this.emacsEmulatorMap.get(key);
+  public get(uri: Uri): EmacsEmulator | undefined {
+    return this.emacsEmulatorMap.get(uri);
   }
 
-  public getKeys(): Iterable<string> {
+  public getKeys(): Iterable<Uri> {
     return this.emacsEmulatorMap.keys();
   }
 
-  public delete(key: string): boolean {
-    const emulator = this.emacsEmulatorMap.get(key);
+  public delete(editorId: Uri): void {
+    const emulator = this.emacsEmulatorMap.get(editorId);
     if (emulator) {
       emulator.dispose();
     }
-    return this.emacsEmulatorMap.delete(key);
+    this.emacsEmulatorMap.delete(editorId);
   }
 }
