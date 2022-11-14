@@ -4965,7 +4965,8 @@
     "pretest:web": "yarn run compile-web",
     "compile-web": "webpack --config ./build/web-extension.webpack.config.js",
     "watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
-    "package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js"
+    "package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
@@ -4981,6 +4982,8 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.5.0",
     "glob": "^8.0.3",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
     "mocha": "^10.0.0",
     "prettier": "^2.7.1",
     "process": "^0.11.10",
