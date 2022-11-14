@@ -1,1 +1,6 @@
+.vscode-test
+.vscode-test-web
+dist
+out
 src/vs/
+keybindings.json

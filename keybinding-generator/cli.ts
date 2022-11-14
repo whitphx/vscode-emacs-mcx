@@ -45,4 +45,4 @@ const packageJson = JSON.parse(packageJsonContent);
 
 console.info(`Overwriting ${packageDotJsonPath} ...`);
 packageJson["contributes"]["keybindings"] = dstKeybindings;
-fs.writeFileSync(packageDotJsonPath, JSON.stringify(packageJson, null, "\t") + "\n");
+fs.writeFileSync(packageDotJsonPath, JSON.stringify(packageJson, null, "  ") + "\n");
