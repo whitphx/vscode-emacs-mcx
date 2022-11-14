@@ -15,11 +15,11 @@ export class MessageManager implements vscode.Disposable {
     return this.inst;
   }
 
-  public static registerDispose(context: vscode.ExtensionContext) {
+  public static registerDispose(context: vscode.ExtensionContext): void {
     context.subscriptions.push(this.instance);
   }
 
-  public static showMessage(text: string) {
+  public static showMessage(text: string): void {
     if (this.instance) {
       this.instance.showMessage(text);
     }
@@ -57,7 +57,7 @@ export class MessageManager implements vscode.Disposable {
     vscode.workspace.onWillSaveTextDocument(this.onInterrupt, this, this.disposables);
   }
 
-  public onInterrupt() {
+  public onInterrupt(): void {
     if (this.messageDisposable === null) {
       return;
     }
@@ -66,14 +66,14 @@ export class MessageManager implements vscode.Disposable {
     this.messageDisposable = null;
   }
 
-  public showMessage(text: string) {
+  public showMessage(text: string): void {
     if (this.messageDisposable) {
       this.messageDisposable.dispose();
     }
     this.messageDisposable = vscode.window.setStatusBarMessage(text, this.timeout);
   }
 
-  public dispose() {
+  public dispose(): void {
     if (this.messageDisposable !== null) {
       this.messageDisposable.dispose();
     }

@@ -18,7 +18,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     return this.inst;
   }
 
-  public static registerDispose(context: vscode.ExtensionContext) {
+  public static registerDispose(context: vscode.ExtensionContext): void {
     context.subscriptions.push(this.instance);
   }
 
@@ -44,7 +44,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     loggingLevelForConsole: "error",
   };
 
-  public static reload() {
+  public static reload(): void {
     this.instance.reload();
   }
 
@@ -56,7 +56,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     this.reload();
   }
 
-  public dispose() {
+  public dispose(): void {
     // Now nothing to be done.
   }
 

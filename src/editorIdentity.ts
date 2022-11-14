@@ -7,7 +7,7 @@ export class EditorIdentity {
     this._fileName = (textEditor && textEditor.document && textEditor.document.fileName) || "";
   }
 
-  get fileName() {
+  get fileName(): string {
     return this._fileName;
   }
 
@@ -15,7 +15,7 @@ export class EditorIdentity {
     return this.fileName === other.fileName;
   }
 
-  public toString() {
+  public toString(): string {
     return this.fileName;
   }
 }

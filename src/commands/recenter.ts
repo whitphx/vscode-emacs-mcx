@@ -13,7 +13,7 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
 
   private recenterPosition: RecenterPosition = RecenterPosition.Middle;
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const activeRange = new vscode.Range(textEditor.selection.active, textEditor.selection.active);
 
     switch (this.recenterPosition) {
@@ -53,7 +53,7 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
     }
   }
 
-  public onDidInterruptTextEditor() {
+  public onDidInterruptTextEditor(): void {
     this.recenterPosition = RecenterPosition.Middle;
   }
 }

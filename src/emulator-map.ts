@@ -30,15 +30,15 @@ export class EmacsEmulatorMap {
     return [newEmulator, true];
   }
 
-  public get(key: string) {
+  public get(key: string): EmacsEmulator | undefined {
     return this.emacsEmulatorMap.get(key);
   }
 
-  public getKeys() {
+  public getKeys(): Iterable<string> {
     return this.emacsEmulatorMap.keys();
   }
 
-  public delete(key: string) {
+  public delete(key: string): boolean {
     const emulator = this.emacsEmulatorMap.get(key);
     if (emulator) {
       emulator.dispose();

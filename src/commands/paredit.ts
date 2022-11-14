@@ -84,7 +84,11 @@ export class MarkSexp extends EmacsCommand {
   public readonly id = "paredit.markSexp";
   private continuing = false;
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const arg = prefixArgument === undefined ? 1 : prefixArgument;
 
     const repeat = Math.abs(arg);
@@ -123,7 +127,11 @@ export class MarkSexp extends EmacsCommand {
 export class KillSexp extends KillYankCommand {
   public readonly id = "paredit.killSexp";
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -146,7 +154,11 @@ export class KillSexp extends KillYankCommand {
 export class BackwardKillSexp extends KillYankCommand {
   public readonly id = "paredit.backwardKillSexp";
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined
+  ): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;

@@ -14,21 +14,25 @@ export class DeleteBackwardChar extends EmacsCommand {
 export class DeleteForwardChar extends EmacsCommand {
   public readonly id = "deleteForwardChar";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () => vscode.commands.executeCommand<void>("deleteRight"));
+    return createParallel(repeat, () =>
+      vscode.commands.executeCommand<void>("deleteRight")
+    ) as Thenable<unknown> as Thenable<void>;
   }
 }
 
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.emacsController.exitMarkMode();
 
     textEditor.selections = textEditor.selections.map((selection) => new Selection(selection.active, selection.active));
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () => vscode.commands.executeCommand<void>("default:type", { text: "\n" }));
+    return createParallel(repeat, () =>
+      vscode.commands.executeCommand<void>("default:type", { text: "\n" })
+    ) as Thenable<unknown> as Thenable<void>;
   }
 }
