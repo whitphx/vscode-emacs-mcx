@@ -120,6 +120,256 @@
 				}
 			}
 		},
+		"commands": [
+			{
+				"command": "emacs-mcx.addSelectionToNextFindMatch",
+				"title": "Emacs-MCX: Add Selection To Next Find Match"
+			},
+			{
+				"command": "emacs-mcx.addSelectionToPreviousFindMatch",
+				"title": "Emacs-MCX: Add Selection To Previous Find Match"
+			},
+			{
+				"command": "emacs-mcx.backToIndentation",
+				"title": "Emacs-MCX: Back To Indentation"
+			},
+			{
+				"command": "emacs-mcx.backwardChar",
+				"title": "Emacs-MCX: Backward Char"
+			},
+			{
+				"command": "emacs-mcx.backwardKillWord",
+				"title": "Emacs-MCX: Backward Kill Word"
+			},
+			{
+				"command": "emacs-mcx.backwardParagraph",
+				"title": "Emacs-MCX: Backward Paragraph"
+			},
+			{
+				"command": "emacs-mcx.backwardWord",
+				"title": "Emacs-MCX: Backward Word"
+			},
+			{
+				"command": "emacs-mcx.beginningOfBuffer",
+				"title": "Emacs-MCX: Beginning Of Buffer"
+			},
+			{
+				"command": "emacs-mcx.cancel",
+				"title": "Emacs-MCX: Cancel"
+			},
+			{
+				"command": "emacs-mcx.clearRectangle",
+				"title": "Emacs-MCX: Clear Rectangle"
+			},
+			{
+				"command": "emacs-mcx.copyRectangleAsKill",
+				"title": "Emacs-MCX: Copy Rectangle As Kill"
+			},
+			{
+				"command": "emacs-mcx.copyRegion",
+				"title": "Emacs-MCX: Copy Region"
+			},
+			{
+				"command": "emacs-mcx.deleteBackwardChar",
+				"title": "Emacs-MCX: Delete Backward Char"
+			},
+			{
+				"command": "emacs-mcx.deleteBlankLines",
+				"title": "Emacs-MCX: Delete Blank Lines"
+			},
+			{
+				"command": "emacs-mcx.deleteForwardChar",
+				"title": "Emacs-MCX: Delete Forward Char"
+			},
+			{
+				"command": "emacs-mcx.deleteRectangle",
+				"title": "Emacs-MCX: Delete Rectangle"
+			},
+			{
+				"command": "emacs-mcx.digitArgument",
+				"title": "Emacs-MCX: Digit Argument"
+			},
+			{
+				"command": "emacs-mcx.endOfBuffer",
+				"title": "Emacs-MCX: End Of Buffer"
+			},
+			{
+				"command": "emacs-mcx.exchangePointAndMark",
+				"title": "Emacs-MCX: Exchange Point And Mark"
+			},
+			{
+				"command": "emacs-mcx.executeCommands",
+				"title": "Emacs-MCX: Execute Commands"
+			},
+			{
+				"command": "emacs-mcx.forwardChar",
+				"title": "Emacs-MCX: Forward Char"
+			},
+			{
+				"command": "emacs-mcx.forwardParagraph",
+				"title": "Emacs-MCX: Forward Paragraph"
+			},
+			{
+				"command": "emacs-mcx.forwardWord",
+				"title": "Emacs-MCX: Forward Word"
+			},
+			{
+				"command": "emacs-mcx.isearchAbort",
+				"title": "Emacs-MCX: Isearch Abort"
+			},
+			{
+				"command": "emacs-mcx.isearchBackward",
+				"title": "Emacs-MCX: Isearch Backward"
+			},
+			{
+				"command": "emacs-mcx.isearchBackwardRegexp",
+				"title": "Emacs-MCX: Isearch Backward Regexp"
+			},
+			{
+				"command": "emacs-mcx.isearchExit",
+				"title": "Emacs-MCX: Isearch Exit"
+			},
+			{
+				"command": "emacs-mcx.isearchForward",
+				"title": "Emacs-MCX: Isearch Forward"
+			},
+			{
+				"command": "emacs-mcx.isearchForwardRegexp",
+				"title": "Emacs-MCX: Isearch Forward Regexp"
+			},
+			{
+				"command": "emacs-mcx.killRegion",
+				"title": "Emacs-MCX: Kill Region"
+			},
+			{
+				"command": "emacs-mcx.killWholeLine",
+				"title": "Emacs-MCX: Kill Whole Line"
+			},
+			{
+				"command": "emacs-mcx.killWord",
+				"title": "Emacs-MCX: Kill Word"
+			},
+			{
+				"command": "emacs-mcx.moveBeginningOfLine",
+				"title": "Emacs-MCX: Move Beginning Of Line"
+			},
+			{
+				"command": "emacs-mcx.moveEndOfLine",
+				"title": "Emacs-MCX: Move End Of Line"
+			},
+			{
+				"command": "emacs-mcx.negativeArgument",
+				"title": "Emacs-MCX: Negative Argument"
+			},
+			{
+				"command": "emacs-mcx.newLine",
+				"title": "Emacs-MCX: New Line"
+			},
+			{
+				"command": "emacs-mcx.nextLine",
+				"title": "Emacs-MCX: Next Line"
+			},
+			{
+				"command": "emacs-mcx.openRectangle",
+				"title": "Emacs-MCX: Open Rectangle"
+			},
+			{
+				"command": "emacs-mcx.paredit.backwardKillSexp",
+				"title": "Emacs-MCX: Paredit Backward Kill Sexp"
+			},
+			{
+				"command": "emacs-mcx.paredit.backwardSexp",
+				"title": "Emacs-MCX: Paredit Backward Sexp"
+			},
+			{
+				"command": "emacs-mcx.paredit.forwardSexp",
+				"title": "Emacs-MCX: Paredit Forward Sexp"
+			},
+			{
+				"command": "emacs-mcx.paredit.killSexp",
+				"title": "Emacs-MCX: Paredit Kill Sexp"
+			},
+			{
+				"command": "emacs-mcx.paredit.markSexp",
+				"title": "Emacs-MCX: Paredit Mark Sexp"
+			},
+			{
+				"command": "emacs-mcx.previousLine",
+				"title": "Emacs-MCX: Previous Line"
+			},
+			{
+				"command": "emacs-mcx.queryReplace",
+				"title": "Emacs-MCX: Query Replace"
+			},
+			{
+				"command": "emacs-mcx.queryReplaceRegexp",
+				"title": "Emacs-MCX: Query Replace Regexp"
+			},
+			{
+				"command": "emacs-mcx.recenterTopBottom",
+				"title": "Emacs-MCX: Recenter Top Bottom"
+			},
+			{
+				"command": "emacs-mcx.rectangleMarkMode",
+				"title": "Emacs-MCX: Rectangle Mark Mode"
+			},
+			{
+				"command": "emacs-mcx.replaceKillRingToRectangle",
+				"title": "Emacs-MCX: Replace Kill Ring To Rectangle"
+			},
+			{
+				"command": "emacs-mcx.scrollDownCommand",
+				"title": "Emacs-MCX: Scroll Down Command"
+			},
+			{
+				"command": "emacs-mcx.scrollUpCommand",
+				"title": "Emacs-MCX: Scroll Up Command"
+			},
+			{
+				"command": "emacs-mcx.setMarkCommand",
+				"title": "Emacs-MCX: Set Mark Command"
+			},
+			{
+				"command": "emacs-mcx.startRectCommand",
+				"title": "Emacs-MCX: Start Rect Command"
+			},
+			{
+				"command": "emacs-mcx.stringRectangle",
+				"title": "Emacs-MCX: String Rectangle"
+			},
+			{
+				"command": "emacs-mcx.subsequentArgumentDigit",
+				"title": "Emacs-MCX: Subsequent Argument Digit"
+			},
+			{
+				"command": "emacs-mcx.transformToLowercase",
+				"title": "Emacs-MCX: Transform To Lowercase"
+			},
+			{
+				"command": "emacs-mcx.transformToTitlecase",
+				"title": "Emacs-MCX: Transform To Titlecase"
+			},
+			{
+				"command": "emacs-mcx.transformToUppercase",
+				"title": "Emacs-MCX: Transform To Uppercase"
+			},
+			{
+				"command": "emacs-mcx.universalArgument",
+				"title": "Emacs-MCX: Universal Argument"
+			},
+			{
+				"command": "emacs-mcx.yank",
+				"title": "Emacs-MCX: Yank"
+			},
+			{
+				"command": "emacs-mcx.yank-pop",
+				"title": "Emacs-MCX: Yank Pop"
+			},
+			{
+				"command": "emacs-mcx.yankRectangle",
+				"title": "Emacs-MCX: Yank Rectangle"
+			}
+		],
 		"keybindings": [
 			{
 				"key": "ctrl+u",
