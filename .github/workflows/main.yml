@@ -53,6 +53,25 @@ jobs:
           name: emacs-mcx.vsix
           path: emacs-mcx*.vsix
 
+  release:
+    if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v3
+        id: download-vsix
+        with:
+          name: emacs-mcx.vsix
+          path: /tmp/emacs-mcx.vsix
+
+      - name: Create a new release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: /tmp/emacs-mcx.vsix
+
+
   publish:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
     needs: [build]
