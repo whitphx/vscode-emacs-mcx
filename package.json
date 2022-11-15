@@ -4970,7 +4970,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
-    "@types/mocha": "^9.1.1",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^17.0.30",
     "@types/sinon": "^10.0.13",
     "@types/vscode": "^1.63.0",
@@ -4984,7 +4984,7 @@
     "glob": "^8.0.3",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
-    "mocha": "^10.0.0",
+    "mocha": "^10.1.0",
     "prettier": "^2.7.1",
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
