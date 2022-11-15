@@ -24,6 +24,8 @@ export class EmacsEmulatorMap {
       isNew = true;
       emacsEmulator = new EmacsEmulator(editor, this.killRing, this.minibuffer);
       this.emacsEmulatorMap.set(editorId, emacsEmulator);
+    } else {
+      emacsEmulator.setTextEditor(editor);
     }
     return [emacsEmulator, isNew];
   }
