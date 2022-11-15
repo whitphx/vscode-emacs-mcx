@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  tests:
+  build:
     strategy:
       fail-fast: false
       matrix:
@@ -54,5 +54,36 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: emacs-mcx
+          name: emacs-mcx.vsix
           path: emacs-mcx*.vsix
+
+  publish:
+    if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [marketplace, openvsx]
+
+    steps:
+      - uses: actions/download-artifact@v3
+        id: download-vsix
+        with:
+          name: emacs-mcx.vsix
+          path: /tmp/emacs-mcx.vsix
+      - if: matrix.target == 'marketplace'
+        name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          extensionFile: /tmp/emacs-mcx.vsix
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          registryUrl: https://marketplace.visualstudio.com
+      - if: matrix.target == 'marketplace'
+        name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          extensionFile: /tmp/emacs-mcx.vsix
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
