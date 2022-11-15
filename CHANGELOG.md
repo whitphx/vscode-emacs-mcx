@@ -4,6 +4,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.45.1] - 2022-11-15
+
 ### Fix
 
 - Manage different editor states for different cells in a single Jupyter notebook, #1455.
