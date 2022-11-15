@@ -220,8 +220,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
-    // If the event target is the one this EmacsEmulator is bound to:
-    if (e.textEditor.document.uri === this.textEditor.document.uri) {
+    const targetEditorId = e.textEditor.document.uri.toString();
+    const thisEditorId = this.textEditor.document.uri.toString();
+    if (targetEditorId === thisEditorId) {
       this.onDidInterruptTextEditor();
 
       if (!this.rectMode) {

@@ -1,10 +1,10 @@
-import { TextEditor, Uri } from "vscode";
+import { TextEditor } from "vscode";
 import { EmacsEmulator } from "./emulator";
 import { KillRing } from "./kill-yank/kill-ring";
 import { Minibuffer } from "./minibuffer";
 
 export class EmacsEmulatorMap {
-  private emacsEmulatorMap: Map<Uri, EmacsEmulator>;
+  private emacsEmulatorMap: Map<string, EmacsEmulator>;
   private killRing: KillRing;
   private minibuffer: Minibuffer;
 
@@ -15,7 +15,7 @@ export class EmacsEmulatorMap {
   }
 
   public getOrCreate(editor: TextEditor): [EmacsEmulator, boolean] {
-    const editorId = editor.document.uri;
+    const editorId = editor.document.uri.toString();
 
     let isNew = false;
     let emacsEmulator = this.get(editorId);
@@ -28,15 +28,15 @@ export class EmacsEmulatorMap {
     return [emacsEmulator, isNew];
   }
 
-  public get(uri: Uri): EmacsEmulator | undefined {
-    return this.emacsEmulatorMap.get(uri);
+  public get(uriString: string): EmacsEmulator | undefined {
+    return this.emacsEmulatorMap.get(uriString);
   }
 
-  public keys(): Iterable<Uri> {
+  public keys(): Iterable<string> {
     return this.emacsEmulatorMap.keys();
   }
 
-  public delete(editorId: Uri): void {
+  public delete(editorId: string): void {
     const emulator = this.emacsEmulatorMap.get(editorId);
     if (emulator) {
       emulator.dispose();
