@@ -68,7 +68,6 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v3
-        id: download-vsix
         with:
           name: emacs-mcx-${{ github.ref_name }}.vsix
           path: /tmp/emacs-mcx.vsix
@@ -77,7 +76,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: /tmp/emacs-mcx.vsix
-
 
   publish:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
@@ -92,7 +90,6 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v3
-        id: download-vsix
         with:
           name: emacs-mcx-${{ github.ref_name }}.vsix
           path: /tmp/emacs-mcx.vsix
