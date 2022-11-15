@@ -12,7 +12,6 @@ import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
-import { EditorIdentity } from "./editorIdentity";
 import { KillYanker } from "./kill-yank";
 import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
@@ -221,7 +220,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
-    if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
+    const targetEditorId = e.textEditor.document.uri.toString();
+    const thisEditorId = this.textEditor.document.uri.toString();
+    if (targetEditorId === thisEditorId) {
       this.onDidInterruptTextEditor();
 
       if (!this.rectMode) {

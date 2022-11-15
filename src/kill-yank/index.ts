@@ -1,7 +1,6 @@
 import { Minibuffer } from "src/minibuffer";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
-import { EditorIdentity } from "../editorIdentity";
 import { MessageManager } from "../message";
 import { equalPositions } from "../utils";
 import { KillRing, KillRingEntity } from "./kill-ring";
@@ -68,7 +67,9 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
-    if (new EditorIdentity(e.textEditor).isEqual(new EditorIdentity(this.textEditor))) {
+    const targetEditorId = e.textEditor.document.uri.toString();
+    const thisEditorId = this.textEditor.document.uri.toString();
+    if (targetEditorId === thisEditorId) {
       this.docChangedAfterYank = true;
       this.isAppending = false;
     }
