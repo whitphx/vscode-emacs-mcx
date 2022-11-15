@@ -32,7 +32,7 @@ export class EmacsEmulatorMap {
     return this.emacsEmulatorMap.get(uri);
   }
 
-  public getKeys(): Iterable<Uri> {
+  public keys(): Iterable<Uri> {
     return this.emacsEmulatorMap.keys();
   }
 
