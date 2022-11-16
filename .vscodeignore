@@ -22,3 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+.husky
+.lintstagedrc.json
+.git-blame-ignore-revs
