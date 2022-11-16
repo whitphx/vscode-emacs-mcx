@@ -83,12 +83,12 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
-          path: /tmp/emacs-mcx.vsix
+          path: /tmp/emacs-mcx${{ steps.package-suffix.outputs.suffix }}
 
       - name: Create a new release
         uses: softprops/action-gh-release@v1
         with:
-          files: /tmp/emacs-mcx.vsix
+          files: /tmp/emacs-mcx${{ steps.package-suffix.outputs.suffix }}
 
   publish:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
