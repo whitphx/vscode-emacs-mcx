@@ -39,26 +39,39 @@ jobs:
         run: yarn test
         if: runner.os != 'Linux'
 
+      - name: Define the package version suffix
+        id: package-suffix
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          if [ $IS_RELEASE -eq 1 ]; then
+            VERSION=$(node -p "require('./package.json').version")
+          else
+            VERSION=${{ github.sha }}
+          fi
+          echo "suffix=-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
+        env:
+          IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
-      - name: Test packaging on Linux
+      - name: Build the vsix package on Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          yarn run vsce package -o emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix
+          yarn run vsce package -o emacs-mcx${{ steps.package-suffix.outputs.suffix }}.vsix
 
       - name: Upload the vsix built on Linux
         uses: actions/upload-artifact@v3
         if: ${{ matrix.os == 'ubuntu-latest' && ! startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
-          name: emacs-mcx-${{ github.sha }}.vsix
+          name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
 
       - name: Upload the vsix built on Linux (when pushed with a version tag)
         uses: actions/upload-artifact@v3
         if: ${{ matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
-          name: emacs-mcx-${{ github.ref_name }}.vsix
+          name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
 
   release:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
@@ -69,7 +82,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: emacs-mcx-${{ github.ref_name }}.vsix
+          name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
           path: /tmp/emacs-mcx.vsix
 
       - name: Create a new release
@@ -91,7 +104,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: emacs-mcx-${{ github.ref_name }}.vsix
+          name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
           path: /tmp/emacs-mcx.vsix
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
