@@ -94,7 +94,6 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v3
-        id: download-vsix
         with:
           name: emacs-mcx
           path: /tmp/artifact
@@ -102,12 +101,12 @@ jobs:
         name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: ${{ steps.download-vsix.outputs.download-path }}
+          extensionFile: /tmp/artifact/emacs-mcx*.vsix
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
       - if: matrix.target == 'openvsx'
         name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: ${{ steps.download-vsix.outputs.download-path }}
+          extensionFile: /tmp/artifact/emacs-mcx*.vsix
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
