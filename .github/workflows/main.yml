@@ -98,7 +98,9 @@ jobs:
           name: emacs-mcx
       - run: |
           files=( emacs-mcx*.vsix )
-          echo "${files[0]}"
+          echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
+      - run: |
+          echo "${{ env.vsix_filename }}"
       # - if: matrix.target == 'marketplace'
       #   name: Publish to Visual Studio Marketplace
       #   uses: HaaLeo/publish-vscode-extension@v1
