@@ -39,8 +39,8 @@ jobs:
         run: yarn test
         if: runner.os != 'Linux'
 
-      - name: Define the package version suffix
-        id: package-suffix
+      # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
+      - name: Build the vsix package on Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
           if [ $IS_RELEASE = true ]; then
@@ -48,32 +48,21 @@ jobs:
           else
             VERSION=${{ github.sha }}
           fi
-          echo "suffix=-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
-        env:
-          IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
-
-      # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
-      - name: Build the vsix package on Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          yarn run vsce package -o emacs-mcx${{ steps.package-suffix.outputs.suffix }}.vsix
+          yarn run vsce package -o emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix
 
       - name: Upload the vsix built on Linux
         uses: actions/upload-artifact@v3
         if: ${{ matrix.os == 'ubuntu-latest' && ! startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
-          name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
+          name: emacs-mcx
 
       - name: Upload the vsix built on Linux (when pushed with a version tag)
         uses: actions/upload-artifact@v3
         if: ${{ matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
-          name: emacs-mcx${{ steps.package-suffix.outputs.suffix }}
-    outputs:
-      package-suffix: ${{ steps.package-suffix.outputs.suffix }}
+          name: emacs-mcx
 
   release:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
@@ -84,13 +73,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: emacs-mcx${{ steps.package-suffix.outputs.package-suffix }}
-          path: /tmp/emacs-mcx${{ needs.build.outputs.suffix }}
+          name: emacs-mcx
+          path: /tmp/artifact
 
       - name: Create a new release
         uses: softprops/action-gh-release@v1
         with:
-          files: /tmp/emacs-mcx${{ steps.package-suffix.outputs.package-suffix }}
+          files: /tmp/artifact/emacs-mcx*.vsix
 
   publish:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
@@ -106,18 +95,18 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: emacs-mcx${{ steps.package-suffix.outputs.package-suffix }}
-          path: /tmp/emacs-mcx.vsix
+          name: emacs-mcx
+          path: /tmp/artifact
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: /tmp/emacs-mcx.vsix
+          extensionFile: /tmp/artifact/emacs-mcx*.vsix
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
       - if: matrix.target == 'marketplace'
         name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: /tmp/emacs-mcx.vsix
+          extensionFile: /tmp/artifact/emacs-mcx*.vsix
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
