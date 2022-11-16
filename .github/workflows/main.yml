@@ -74,12 +74,11 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: emacs-mcx
-          path: /tmp/artifact
 
       - name: Create a new release
         uses: softprops/action-gh-release@v1
         with:
-          files: /tmp/artifact/emacs-mcx*.vsix
+          files: emacs-mcx*.vsix
 
   publish:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
@@ -96,17 +95,16 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: emacs-mcx
-          path: /tmp/artifact
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: /tmp/artifact/emacs-mcx*.vsix
+          extensionFile: emacs-mcx*.vsix
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
       - if: matrix.target == 'openvsx'
         name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: /tmp/artifact/emacs-mcx*.vsix
+          extensionFile: emacs-mcx*.vsix
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
