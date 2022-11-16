@@ -43,7 +43,7 @@ jobs:
         id: package-suffix
         if: matrix.os == 'ubuntu-latest'
         run: |
-          if [ $IS_RELEASE -eq true ]; then
+          if [ $IS_RELEASE = true ]; then
             VERSION=$(node -p "require('./package.json').version")
           else
             VERSION=${{ github.sha }}
