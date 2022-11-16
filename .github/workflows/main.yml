@@ -99,18 +99,16 @@ jobs:
       - run: |
           files=( emacs-mcx*.vsix )
           echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
-      - run: |
-          echo "${{ env.vsix_filename }}"
-      # - if: matrix.target == 'marketplace'
-      #   name: Publish to Visual Studio Marketplace
-      #   uses: HaaLeo/publish-vscode-extension@v1
-      #   with:
-      #     extensionFile: emacs-mcx*.vsix
-      #     pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-      #     registryUrl: https://marketplace.visualstudio.com
-      # - if: matrix.target == 'openvsx'
-      #   name: Publish to Open VSX Registry
-      #   uses: HaaLeo/publish-vscode-extension@v1
-      #   with:
-      #     extensionFile: emacs-mcx*.vsix
-      #     pat: ${{ secrets.OPEN_VSX_TOKEN }}
+      - if: matrix.target == 'marketplace'
+        name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          extensionFile: "${{ env.vsix_filename }}"
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          registryUrl: https://marketplace.visualstudio.com
+      - if: matrix.target == 'openvsx'
+        name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          extensionFile: "${{ env.vsix_filename }}"
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
