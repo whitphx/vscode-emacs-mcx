@@ -95,16 +95,19 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: emacs-mcx
+      - run: |
+          files=( emacs-mcx*.vsix )
+          echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: emacs-mcx*.vsix
+          extensionFile: "${{ env.vsix_filename }}"
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
       - if: matrix.target == 'openvsx'
         name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: emacs-mcx*.vsix
+          extensionFile: "${{ env.vsix_filename }}"
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
