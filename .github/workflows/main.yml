@@ -94,12 +94,12 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v3
+        id: download-vsix
         with:
           name: emacs-mcx
           path: /tmp/artifact
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
-        id: download-vsix
         uses: HaaLeo/publish-vscode-extension@v1
         with:
           extensionFile: ${{ steps.download-vsix.outputs.download-path }}
