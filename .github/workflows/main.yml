@@ -81,8 +81,7 @@ jobs:
           files: emacs-mcx*.vsix
 
   publish:
-    # if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
-    if: ${{ success() }}
+    if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
     needs: [build]
 
     runs-on: ubuntu-latest
