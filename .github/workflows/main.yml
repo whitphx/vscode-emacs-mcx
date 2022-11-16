@@ -96,7 +96,9 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: emacs-mcx
-      - run: ls -la
+      - run: |
+          files=( emacs-mcx*.vsix )
+          echo "${files[0]}"
       # - if: matrix.target == 'marketplace'
       #   name: Publish to Visual Studio Marketplace
       #   uses: HaaLeo/publish-vscode-extension@v1
