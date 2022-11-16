@@ -99,14 +99,15 @@ jobs:
           path: /tmp/artifact
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
+        id: download-vsix
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: /tmp/artifact/emacs-mcx*.vsix
+          extensionFile: ${{ steps.download-vsix.outputs.download-path }}
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
-      - if: matrix.target == 'marketplace'
+      - if: matrix.target == 'openvsx'
         name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          extensionFile: /tmp/artifact/emacs-mcx*.vsix
+          extensionFile: ${{ steps.download-vsix.outputs.download-path }}
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
