@@ -4,6 +4,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.45.2] - 2022-11-17
+
 ### Fix
 
 - Remove unnecessary files from the vsix package, #1458.
