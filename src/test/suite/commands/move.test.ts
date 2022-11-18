@@ -169,12 +169,12 @@ suite("scroll-up/down-command", () => {
       const initVisibleStartLine = visibleRange.start.line;
 
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
-        initVisibleStartLine + 2,
+        initVisibleStartLine + 12,
         "Expected the visibleRange has been scrolled 2 lines"
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
@@ -186,12 +186,12 @@ suite("scroll-up/down-command", () => {
       const initVisibleStartLine = visibleRange.start.line;
 
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
-        initVisibleStartLine + 2,
+        initVisibleStartLine + 12,
         "Expected the visibleRange has been scrolled 2 lines"
       );
       assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
@@ -234,12 +234,12 @@ suite("scroll-up/down-command", () => {
       const initVisibleStartLine = visibleRange.start.line;
 
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
-        initVisibleStartLine - 2,
+        initVisibleStartLine - 12,
         "Expected the visibleRange has been scrolled 2 lines"
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
@@ -251,12 +251,12 @@ suite("scroll-up/down-command", () => {
       const initVisibleStartLine = visibleRange.start.line;
 
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
-        initVisibleStartLine - 2,
+        initVisibleStartLine - 12,
         "Expected the visibleRange has been scrolled 2 lines"
       );
       assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.end.line as number, 0]);
