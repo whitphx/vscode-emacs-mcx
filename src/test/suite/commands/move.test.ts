@@ -181,7 +181,7 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range", async () => {
-      setEmptyCursors(activeTextEditor, [0, 0]); // This line will be outside the visible range after scrolling.
+      setEmptyCursors(activeTextEditor, [visibleRange.start.line, 0]); // This line will be outside the visible range after scrolling.
 
       const initVisibleStartLine = visibleRange.start.line;
 
