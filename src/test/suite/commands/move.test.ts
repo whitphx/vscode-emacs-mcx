@@ -118,8 +118,6 @@ suite("scroll-up/down-command", () => {
   let pageLines: number;
 
   setup(async () => {
-    Configuration.instance.strictEmacsMove = true;
-
     const initialText = "a\n".repeat(400);
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
@@ -133,10 +131,7 @@ suite("scroll-up/down-command", () => {
     visibleRange = _visibleRange;
     pageLines = visibleRange.end.line - visibleRange.start.line;
   });
-  teardown(async () => {
-    Configuration.reload();
-    await cleanUpWorkspace();
-  });
+  teardown(cleanUpWorkspace);
 
   suite("scroll-up-command", () => {
     test("it scrolls one page", async () => {
