@@ -380,19 +380,23 @@ export class ScrollUpCommand extends EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined
   ): void | Thenable<void> {
+    if (prefixArgument != null) {
+      return vscode.commands
+        .executeCommand<void>("editorScroll", {
+          to: "down",
+          by: "wrappedLine",
+          value: prefixArgument,
+        })
+        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+    }
+
     if (Configuration.instance.strictEmacsMove) {
-      return (
-        prefixArgument == null
-          ? vscode.commands.executeCommand<void>("editorScroll", {
-              to: "down",
-              by: "page",
-            })
-          : vscode.commands.executeCommand<void>("editorScroll", {
-              to: "down",
-              by: "wrappedLine",
-              value: prefixArgument,
-            })
-      ).then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+      return vscode.commands
+        .executeCommand<void>("editorScroll", {
+          to: "down",
+          by: "page",
+        })
+        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
     }
@@ -407,19 +411,23 @@ export class ScrollDownCommand extends EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined
   ): void | Thenable<void> {
+    if (prefixArgument != null) {
+      return vscode.commands
+        .executeCommand<void>("editorScroll", {
+          to: "up",
+          by: "wrappedLine",
+          value: prefixArgument,
+        })
+        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+    }
+
     if (Configuration.instance.strictEmacsMove) {
-      return (
-        prefixArgument == null
-          ? vscode.commands.executeCommand<void>("editorScroll", {
-              to: "up",
-              by: "page",
-            })
-          : vscode.commands.executeCommand<void>("editorScroll", {
-              to: "up",
-              by: "wrappedLine",
-              value: prefixArgument,
-            })
-      ).then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+      return vscode.commands
+        .executeCommand<void>("editorScroll", {
+          to: "up",
+          by: "page",
+        })
+        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
     }
