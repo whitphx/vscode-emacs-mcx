@@ -112,6 +112,8 @@ suite("scroll-up/down-command", () => {
   let pageLines: number;
 
   setup(async () => {
+    Configuration.instance.strictEmacsMove = true;
+
     const initialText = "a\n".repeat(400);
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);

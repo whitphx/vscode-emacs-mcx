@@ -31,7 +31,7 @@ export interface IEmacsController {
 
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
-  moveRectActives: (navigateFn: (currentActives: vscode.Position) => vscode.Position) => void;
+  moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
 
   registerDisposable: (disposable: vscode.Disposable) => void;
 }
@@ -71,9 +71,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this.textEditor.selections = rectSelections;
     }
   }
-  public moveRectActives(navigateFn: (currentActive: vscode.Position) => vscode.Position): void {
-    const newNativeSelections = this._nativeSelections.map((s) => {
-      const newActive = navigateFn(s.active);
+  public moveRectActives(navigateFn: (currentActive: vscode.Position, index: number) => vscode.Position): void {
+    const newNativeSelections = this._nativeSelections.map((s, i) => {
+      const newActive = navigateFn(s.active, i);
       return new vscode.Selection(s.anchor, newActive);
     });
     this._nativeSelections = newNativeSelections;

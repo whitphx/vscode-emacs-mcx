@@ -8,6 +8,7 @@ import {
 } from "./helpers/paragraph";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { IEmacsController } from "src/emulator";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -334,7 +335,11 @@ export class EndOfBuffer extends EmacsCommand {
   }
 }
 
-function movePrimaryCursorIntoVisibleRange(textEditor: TextEditor, isInMarkMode: boolean) {
+function movePrimaryCursorIntoVisibleRange(
+  textEditor: TextEditor,
+  isInMarkMode: boolean,
+  emacsController: IEmacsController
+) {
   const visibleRange = textEditor.visibleRanges[0];
   if (visibleRange == null) {
     return;
@@ -344,10 +349,21 @@ function movePrimaryCursorIntoVisibleRange(textEditor: TextEditor, isInMarkMode:
   const primaryActive = textEditor.selection.active;
   let newPrimaryActive: vscode.Position;
   if (primaryActive.isBefore(visibleRange.start)) {
-    newPrimaryActive = visibleRange.start.with(undefined, primaryActive.character);
+    newPrimaryActive = visibleRange.start.with(undefined, 0);
   } else if (primaryActive.isAfter(visibleRange.end)) {
-    newPrimaryActive = visibleRange.end.with(undefined, primaryActive.character);
+    newPrimaryActive = visibleRange.end.with(undefined, 0);
   } else {
+    return;
+  }
+
+  if (emacsController.inRectMarkMode) {
+    emacsController.moveRectActives((curActive, i) => {
+      if (i === 0) {
+        return newPrimaryActive;
+      } else {
+        return curActive;
+      }
+    });
     return;
   }
 
@@ -364,54 +380,22 @@ export class ScrollUpCommand extends EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined
   ): void | Thenable<void> {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-
-    if (this.emacsController.inRectMarkMode) {
-      const visibleRange = textEditor.visibleRanges[0];
-      if (visibleRange == null) {
-        return;
-      }
-      const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
-      const lineDelta = pageSize * repeat;
-
-      const maxLine = textEditor.document.lineCount - 1;
-      this.emacsController.moveRectActives(
-        (curActive) => new vscode.Position(Math.min(curActive.line + lineDelta, maxLine), curActive.character)
-      );
-      return;
-    }
-
-    if (repeat === 1) {
-      if (Configuration.instance.strictEmacsMove) {
-        return vscode.commands
-          .executeCommand<void>("editorScroll", {
-            to: "down",
-            by: "page",
-          })
-          .then(() =>
-            vscode.commands.executeCommand<void>("cursorMove", {
-              to: "viewPortTop",
-              select: isInMarkMode,
+    if (Configuration.instance.strictEmacsMove) {
+      return (
+        prefixArgument == null
+          ? vscode.commands.executeCommand<void>("editorScroll", {
+              to: "down",
+              by: "page",
             })
-          )
-          .then(() =>
-            vscode.commands.executeCommand<void>("cursorMove", {
-              to: "wrappedLineStart",
-              select: isInMarkMode,
+          : vscode.commands.executeCommand<void>("editorScroll", {
+              to: "down",
+              by: "wrappedLine",
+              value: prefixArgument,
             })
-          );
-      } else {
-        return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
-      }
+      ).then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+    } else {
+      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
     }
-
-    return vscode.commands
-      .executeCommand<void>("editorScroll", {
-        to: "down",
-        by: "wrappedLine",
-        value: repeat,
-      })
-      .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode));
   }
 }
 
@@ -423,53 +407,22 @@ export class ScrollDownCommand extends EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined
   ): void | Thenable<void> {
-    const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-
-    if (this.emacsController.inRectMarkMode) {
-      const visibleRange = textEditor.visibleRanges[0];
-      if (visibleRange == null) {
-        return;
-      }
-      const pageSize = Math.max(1, visibleRange.end.line - visibleRange.start.line - 2); // Ad-hoc
-      const lineDelta = pageSize * repeat;
-
-      this.emacsController.moveRectActives(
-        (curActive) => new vscode.Position(Math.max(curActive.line - lineDelta, 0), curActive.character)
-      );
-      return;
-    }
-
-    if (repeat === 1) {
-      if (Configuration.instance.strictEmacsMove) {
-        return vscode.commands
-          .executeCommand<void>("editorScroll", {
-            to: "up",
-            by: "page",
-          })
-          .then(() =>
-            vscode.commands.executeCommand<void>("cursorMove", {
-              to: "viewPortBottom",
-              select: isInMarkMode,
+    if (Configuration.instance.strictEmacsMove) {
+      return (
+        prefixArgument == null
+          ? vscode.commands.executeCommand<void>("editorScroll", {
+              to: "up",
+              by: "page",
             })
-          )
-          .then(() =>
-            vscode.commands.executeCommand<void>("cursorMove", {
-              to: "wrappedLineStart",
-              select: isInMarkMode,
+          : vscode.commands.executeCommand<void>("editorScroll", {
+              to: "up",
+              by: "wrappedLine",
+              value: prefixArgument,
             })
-          );
-      } else {
-        return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
-      }
+      ).then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+    } else {
+      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
     }
-
-    return vscode.commands
-      .executeCommand<void>("editorScroll", {
-        to: "up",
-        by: "wrappedLine",
-        value: repeat,
-      })
-      .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode));
   }
 }
 
