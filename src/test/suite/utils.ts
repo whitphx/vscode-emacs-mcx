@@ -44,12 +44,12 @@ export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[num
 }
 
 export async function cleanUpWorkspace(): Promise<void> {
-  return new Promise<void>((c, e) => {
-    // If the panel is visible, its child editors can appear in `vscode.window.visibleTextEditors` and they cannot be closed with the `workbench.action.closeAllEditors`.
-    // and it leads to timeout during the following polling process.
-    // So we explicitly close the panel here.
-    vscode.commands.executeCommand("workbench.action.closePanel");
+  // If the panel is visible, its child editors can appear in `vscode.window.visibleTextEditors` and they cannot be closed with the `workbench.action.closeAllEditors`.
+  // and it leads to timeout during the following polling process.
+  // So we explicitly close the panel here.
+  await vscode.commands.executeCommand("workbench.action.closePanel");
 
+  return new Promise<void>((c, e) => {
     if (vscode.window.visibleTextEditors.length === 0) {
       return c();
     }
