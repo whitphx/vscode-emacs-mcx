@@ -134,17 +134,37 @@ suite("scroll-up/down-command", () => {
   teardown(cleanUpWorkspace);
 
   suite("scroll-up-command", () => {
-    test("it scrolls one page", async () => {
-      setEmptyCursors(activeTextEditor, [0, 0]); // The first line
+    test("it scrolls one page and moves the cursor to the bottom of the visible range", async () => {
+      const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
+      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
       await emulator.runCommand("scrollUpCommand");
 
-      assert.ok(activeTextEditor.selection.start.line >= pageLines - 1);
+      assertCursorsEqual(activeTextEditor, [(activeTextEditor.visibleRanges[0]?.end.line as number) - 1, 0]);
+    });
+
+    test("it scrolls one page if the cursor remains in the visible range without cursor move with strictEmacsMove = true", async () => {
+      Configuration.instance.strictEmacsMove = true;
+
+      const lastVisibleLine = visibleRange.end.line;
+      setEmptyCursors(activeTextEditor, [lastVisibleLine, 0]);
+
+      const initVisibleStartLine = visibleRange.start.line;
+
+      await emulator.runCommand("scrollUpCommand");
+
+      assertCursorsEqual(activeTextEditor, [lastVisibleLine, 0]);
+      assert.ok(
+        (activeTextEditor.visibleRanges[0]?.start.line as number) >= initVisibleStartLine + pageLines - 1,
+        "Expected the visible range has been scrolled one page"
+      );
+
+      Configuration.reload();
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
       const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
-      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]); // The middle of the visible range
+      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
       const initVisibleStartLine = visibleRange.start.line;
 
@@ -180,17 +200,36 @@ suite("scroll-up/down-command", () => {
 
   suite("scroll-down-command", () => {
     test("it scrolls one page", async () => {
-      const startLine = pageLines * 2;
-      setEmptyCursors(activeTextEditor, [startLine, 0]);
+      const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
+      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
       await emulator.runCommand("scrollDownCommand");
 
-      assert.ok(activeTextEditor.selection.start.line <= startLine - pageLines + 1);
+      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
+    });
+
+    test("it scrolls one page without cursor move if the cursor remains in the visible range with strictEmacsMove = true", async () => {
+      Configuration.instance.strictEmacsMove = true;
+
+      const firstVisibleLine = visibleRange.start.line;
+      setEmptyCursors(activeTextEditor, [firstVisibleLine, 0]);
+
+      const initVisibleStartLine = visibleRange.start.line;
+
+      await emulator.runCommand("scrollDownCommand");
+
+      assertCursorsEqual(activeTextEditor, [firstVisibleLine, 0]);
+      assert.ok(
+        (activeTextEditor.visibleRanges[0]?.start.line as number) <= initVisibleStartLine - pageLines + 1,
+        "Expected the visible range has been scrolled one page"
+      );
+
+      Configuration.reload();
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
       const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
-      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]); // The middle of the visible range
+      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
       const initVisibleStartLine = visibleRange.start.line;
 
