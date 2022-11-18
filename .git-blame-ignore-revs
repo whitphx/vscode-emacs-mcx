@@ -1,2 +1,4 @@
-# Apply Prettier to the files other than src/**/*.ts
+# Apply Prettier to src/**/*
+4539065a4261b3d52a66a6d4c3b897c6f0f51bf1
+# Apply Prettier to the files other than src/**/*
 4f5fc25acd5d5ee01a8ec5249120316fa007438a
