@@ -4,6 +4,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.46.0] - 2022-11-18
+
 ### Fix
 
 - `scrollUpCommand` and `scrollDownCommand` with a prefix argument works in the same manner as the original Emacs, #1471.
