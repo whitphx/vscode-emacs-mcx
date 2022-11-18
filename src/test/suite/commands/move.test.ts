@@ -21,6 +21,9 @@ suite("moveBeginning/EndOfLine", () => {
     setup(() => {
       Configuration.instance.strictEmacsMove = true;
     });
+    teardown(() => {
+      Configuration.reload();
+    });
 
     suite("moveBeginningOfLine", () => {
       test("normal", async () => {
@@ -66,6 +69,9 @@ suite("moveBeginning/EndOfLine", () => {
         value: 1,
       });
       wrappedLineWidth = activeTextEditor.selection.active.character;
+    });
+    teardown(() => {
+      Configuration.reload();
     });
 
     suite("moveBeginningOfLine", () => {
@@ -127,8 +133,10 @@ suite("scroll-up/down-command", () => {
     visibleRange = _visibleRange;
     pageLines = visibleRange.end.line - visibleRange.start.line;
   });
-
-  teardown(cleanUpWorkspace);
+  teardown(async () => {
+    Configuration.reload();
+    await cleanUpWorkspace();
+  });
 
   suite("scroll-up-command", () => {
     test("it scrolls one page", async () => {
