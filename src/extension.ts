@@ -63,8 +63,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   function registerEmulatorCommand(
     commandName: string,
-    callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => any,
-    onNoEmulator?: (...args: any[]) => any
+    callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => unknown,
+    onNoEmulator?: (...args: unknown[]) => unknown
   ) {
     const disposable = vscode.commands.registerCommand(commandName, (...args) => {
       logger.debug(`[command]\t Command "${commandName}" executed with args (${args})`);

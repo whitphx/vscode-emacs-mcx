@@ -7,7 +7,7 @@ suite("executeCommands", () => {
     const disposables: vscode.Disposable[] = [];
     const results: number[] = [];
 
-    function registerCommand(commandName: string, callback: (...args: any[]) => Promise<void>) {
+    function registerCommand(commandName: string, callback: (...args: unknown[]) => Promise<void>) {
       disposables.push(vscode.commands.registerCommand(commandName, callback));
     }
     registerCommand(
