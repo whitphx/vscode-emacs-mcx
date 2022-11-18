@@ -334,6 +334,28 @@ export class EndOfBuffer extends EmacsCommand {
   }
 }
 
+function movePrimaryCursorIntoVisibleRange(textEditor: TextEditor, isInMarkMode: boolean) {
+  const visibleRange = textEditor.visibleRanges[0];
+  if (visibleRange == null) {
+    return;
+  }
+
+  const primaryAnchor = textEditor.selection.anchor;
+  const primaryActive = textEditor.selection.active;
+  let newPrimaryActive: vscode.Position;
+  if (primaryActive.isBefore(visibleRange.start)) {
+    newPrimaryActive = visibleRange.start.with(undefined, primaryActive.character);
+  } else if (primaryActive.isAfter(visibleRange.end)) {
+    newPrimaryActive = visibleRange.end.with(undefined, primaryActive.character);
+  } else {
+    return;
+  }
+
+  const newPrimarySelection = new vscode.Selection(isInMarkMode ? primaryAnchor : newPrimaryActive, newPrimaryActive);
+  const newSelections = [newPrimarySelection, ...textEditor.selections.slice(1)];
+  textEditor.selections = newSelections;
+}
+
 export class ScrollUpCommand extends EmacsCommand {
   public readonly id = "scrollUpCommand";
 
@@ -384,13 +406,12 @@ export class ScrollUpCommand extends EmacsCommand {
     }
 
     return vscode.commands
-      .executeCommand<void>("cursorMove", {
+      .executeCommand<void>("editorScroll", {
         to: "down",
         by: "wrappedLine",
         value: repeat,
-        select: isInMarkMode,
       })
-      .then(() => revealPrimaryActive(textEditor));
+      .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode));
   }
 }
 
@@ -443,13 +464,12 @@ export class ScrollDownCommand extends EmacsCommand {
     }
 
     return vscode.commands
-      .executeCommand<void>("cursorMove", {
+      .executeCommand<void>("editorScroll", {
         to: "up",
         by: "wrappedLine",
         value: repeat,
-        select: isInMarkMode,
       })
-      .then(() => revealPrimaryActive(textEditor));
+      .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode));
   }
 }
 
