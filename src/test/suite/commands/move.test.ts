@@ -199,7 +199,7 @@ suite("scroll-up/down-command", () => {
   });
 
   suite("scroll-down-command", () => {
-    test("it scrolls one page", async () => {
+    test("it scrolls one page and moves the cursor to the top of the visible range", async () => {
       const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
