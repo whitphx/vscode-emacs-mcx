@@ -111,7 +111,7 @@ suite("moveBeginning/EndOfLine", () => {
   });
 });
 
-suite("scroll-up/down-command", () => {
+suite.only("scroll-up/down-command", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
   let visibleRange: Range;
