@@ -2,11 +2,13 @@ import * as path from "path";
 import Mocha from "mocha";
 import glob from "glob";
 
+const isCI = process.env.CI != null && process.env.CI !== "false";
+
 export function run(): Promise<void> {
   // Create the mocha test
   const mocha = new Mocha({
     ui: "tdd",
-    forbidOnly: true,
+    forbidOnly: isCI,
     color: true,
     timeout: 10000,
   });
