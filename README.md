@@ -162,27 +162,29 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 
 ### Move commands
 
-| Command                           | Prefix argument | Desc                                                                                                   |
-| --------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
-| `C-f`                             | ✓               | Move forward (forward-char)                                                                            |
-| `C-b`                             | ✓               | Move backward (backward-char)                                                                          |
-| `C-n`                             | ✓               | Move to the next line (next-line)                                                                      |
-| `C-p`                             | ✓               | Move to the previous line (previous-line)                                                              |
-| `C-a`                             | ✓               | Move to the beginning of line (move-beginning-of-line)                                                 |
-| `C-e`                             | ✓               | Move to the end of line (move-end-of-line)                                                             |
-| `M-f`                             | ✓               | Move forward by one word unit (forward-word)                                                           |
-| `M-b`                             | ✓               | Move backward by one word unit (backward-word)                                                         |
-| `M-m`                             |                 | Move (forward or back) to the first non-whitespace character on the current line (back-to-indentation) |
-| `C-v`                             | ✓               | Scroll down by one screen unit (scroll-up-command)                                                     |
-| `M-v`                             | ✓               | Scroll up by one screen unit (scroll-down-command)                                                     |
-| `M-S-[` (`M-{` with US keyboard)  | ✓               | Move back to previous paragraph beginning (backward-paragraph)                                         |
-| `M-S-]` (`M-}` with US keyboard)  | ✓               | Move forward to next paragraph end (forward-paragraph)                                                 |
-| `M-S-,` (`M-<` with US keyboard)  |                 | Move to the top of the buffer (beginning-of-buffer)                                                    |
-| `M-S-.` (`M->` with US keyboard)  |                 | Move to the end of the buffer (end-of-buffer)                                                          |
-| `M-g g` (`M-g M-g`)               |                 | Jump to line (command palette)                                                                         |
-| `M-g n` (`M-g M-n`, `` C-x `  ``) |                 | Jump to next error                                                                                     |
-| `M-g p` (`M-g M-p`)               |                 | Jump to previous error                                                                                 |
-| `C-l`                             |                 | Center screen on current line (recenter-top-bottom)                                                    |
+| Command                                      | Prefix argument | Desc                                                                                                   |
+| -------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
+| `C-f`                                        | ✓               | Move forward (forward-char)                                                                            |
+| `C-b`                                        | ✓               | Move backward (backward-char)                                                                          |
+| `C-n`                                        | ✓               | Move to the next line (next-line)                                                                      |
+| `C-p`                                        | ✓               | Move to the previous line (previous-line)                                                              |
+| `C-a`                                        | ✓               | Move to the beginning of line (move-beginning-of-line)                                                 |
+| `C-e`                                        | ✓               | Move to the end of line (move-end-of-line)                                                             |
+| `M-f`                                        | ✓               | Move forward by one word unit (forward-word)                                                           |
+| `M-b`                                        | ✓               | Move backward by one word unit (backward-word)                                                         |
+| `C-<right>`, `M-<right>`                     | ✓               | This command (right-word) behaves like `M-f`                                                           |
+| `C-<left>`, `M-<left>`                       | ✓               | This command (left-word) behaves like `M-b`                                                            |
+| `M-m`                                        |                 | Move (forward or back) to the first non-whitespace character on the current line (back-to-indentation) |
+| `C-v`                                        | ✓               | Scroll down by one screen unit (scroll-up-command)                                                     |
+| `M-v`                                        | ✓               | Scroll up by one screen unit (scroll-down-command)                                                     |
+| `M-S-[` (`M-{` with US keyboard), `C-<up>`   | ✓               | Move back to previous paragraph beginning (backward-paragraph)                                         |
+| `M-S-]` (`M-}` with US keyboard), `C-<down>` | ✓               | Move forward to next paragraph end (forward-paragraph)                                                 |
+| `M-S-,` (`M-<` with US keyboard)             |                 | Move to the top of the buffer (beginning-of-buffer)                                                    |
+| `M-S-.` (`M->` with US keyboard)             |                 | Move to the end of the buffer (end-of-buffer)                                                          |
+| `M-g g` (`M-g M-g`)                          |                 | Jump to line (command palette)                                                                         |
+| `M-g n` (`M-g M-n`, `` C-x `  ``)            |                 | Jump to next error                                                                                     |
+| `M-g p` (`M-g M-p`)                          |                 | Jump to previous error                                                                                 |
+| `C-l`                                        |                 | Center screen on current line (recenter-top-bottom)                                                    |
 
 ### Search Commands
 
