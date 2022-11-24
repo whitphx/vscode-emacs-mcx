@@ -141,6 +141,38 @@
         "then": "emacs-mcx.backwardWord"
       }
     },
+    // right-word (ctrl + <right>)
+    // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
+    // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/775#issuecomment-1326595172
+    {
+      "keys": ["ctrl+right", "meta+right"],
+      "command": "emacs-mcx.forwardWord",
+      "when": "editorTextFocus"
+    },
+    {
+      "keys": ["ctrl+right", "meta+right"],
+      "command": "emacs-mcx.isearchExit",
+      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+      "args": {
+        "then": "emacs-mcx.forwardWord"
+      }
+    },
+    // left word (ctrl + <left>)
+    // In left-to-right languages, left-word is same as backward-word, and VSCode is not supporting RTL now.
+    // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/775#issuecomment-1326595172
+    {
+      "keys": ["ctrl+left", "meta+left"],
+      "command": "emacs-mcx.backwardWord",
+      "when": "editorTextFocus"
+    },
+    {
+      "keys": ["ctrl+left", "meta+left"],
+      "command": "emacs-mcx.isearchExit",
+      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+      "args": {
+        "then": "emacs-mcx.backwardWord"
+      }
+    },
     // back-to-indentation (meta + m)
     {
       "key": "meta+m",
