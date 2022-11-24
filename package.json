@@ -2574,6 +2574,11 @@
         "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "ctrl+up",
+        "command": "emacs-mcx.backwardParagraph",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
         "key": "alt+shift+]",
         "command": "emacs-mcx.forwardParagraph",
         "when": "editorTextFocus && !suggestWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd"
@@ -2593,6 +2598,11 @@
         "key": "ctrl+[ shift+]",
         "command": "emacs-mcx.forwardParagraph",
         "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+down",
+        "command": "emacs-mcx.forwardParagraph",
+        "when": "editorTextFocus && !suggestWidgetVisible"
       },
       {
         "key": "alt+shift+.",

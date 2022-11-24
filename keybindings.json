@@ -217,13 +217,13 @@
     },
     // backward paragraph (meta + shift + [)
     {
-      "key": "meta+shift+[",
+      "keys": ["meta+shift+[", "ctrl+up"],
       "command": "emacs-mcx.backwardParagraph",
       "when": "editorTextFocus && !suggestWidgetVisible"
     },
     // forward paragraph (meta + shift + ])
     {
-      "key": "meta+shift+]",
+      "keys": ["meta+shift+]", "ctrl+down"],
       "command": "emacs-mcx.forwardParagraph",
       "when": "editorTextFocus && !suggestWidgetVisible"
     },
