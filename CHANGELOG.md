@@ -4,6 +4,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.47.0] - 2022-11-25
+
 ### Add
 
 - Assign `(C|M)-<right>` and `(C|M)-<left>` to `forwardWord` and `backwardWord` in place of `right-word` and `left-word` which work like `forward-word` and `backward-word` in left-to-right languages (ref: https://www.gnu.org/software/emacs/manual/html_node/emacs/Moving-Point.html#index-C_002dRIGHT), #1479.
