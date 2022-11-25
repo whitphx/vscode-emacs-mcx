@@ -2272,6 +2272,140 @@
         }
       },
       {
+        "key": "ctrl+right",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+right",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+right",
+        "mac": "cmd+right",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape right",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ right",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+right",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "alt+right",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "alt+right",
+        "mac": "cmd+right",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "escape right",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "ctrl+[ right",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "ctrl+left",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+left",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+left",
+        "mac": "cmd+left",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape left",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ left",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+left",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "alt+left",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "alt+left",
+        "mac": "cmd+left",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "escape left",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "ctrl+[ left",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
         "key": "alt+m",
         "command": "emacs-mcx.backToIndentation",
         "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
@@ -2440,6 +2574,11 @@
         "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "ctrl+up",
+        "command": "emacs-mcx.backwardParagraph",
+        "when": "editorTextFocus && !suggestWidgetVisible"
+      },
+      {
         "key": "alt+shift+]",
         "command": "emacs-mcx.forwardParagraph",
         "when": "editorTextFocus && !suggestWidgetVisible && !config.emacs-mcx.useMetaPrefixMacCmd"
@@ -2459,6 +2598,11 @@
         "key": "ctrl+[ shift+]",
         "command": "emacs-mcx.forwardParagraph",
         "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+down",
+        "command": "emacs-mcx.forwardParagraph",
+        "when": "editorTextFocus && !suggestWidgetVisible"
       },
       {
         "key": "alt+shift+.",
