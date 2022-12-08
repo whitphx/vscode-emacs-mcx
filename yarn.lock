@@ -407,10 +407,10 @@
     rimraf "^3.0.2"
     unzipper "^0.10.11"
 
-"@vscode/test-web@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.32.tgz#bbc6af7ff3c8b15df8299352bff4847475540912"
-  integrity sha512-ed9CYHJyzlIU7+jJhXuJwv/CMytV99rmToYhwhmmLiMhSVtAyAo27otVjzA2UTVEu9fETqFKEHnoUQbSNXwj3Q==
+"@vscode/test-web@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.33.tgz#e7d40cb9972499f80185d4b8c244a4f854352438"
+  integrity sha512-bnL5yZZk7fVkQzSxtjXqdVOTOEOhRkrePVCILON8qr2ddmVMRLY1vo4HLmVkmkBRrk1cuZCEgD4+EA9QD+h4oA==
   dependencies:
     "@koa/cors" "^4.0.0"
     "@koa/router" "^12.0.0"
@@ -424,7 +424,7 @@
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
     minimist "^1.2.7"
-    playwright "^1.27.1"
+    playwright "^1.28.1"
     vscode-uri "^3.0.6"
 
 "@webassemblyjs/ast@1.11.1":
@@ -3272,17 +3272,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.27.1:
-  version "1.27.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.27.1.tgz#840ef662e55a3ed759d8b5d3d00a5f885a7184f4"
-  integrity sha512-9EmeXDncC2Pmp/z+teoVYlvmPWUC6ejSSYZUln7YaP89Z6lpAaiaAnqroUt/BoLo8tn7WYShcfaCh+xofZa44Q==
+playwright-core@1.28.1:
+  version "1.28.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.28.1.tgz#8400be9f4a8d1c0489abdb9e75a4cc0ffc3c00cb"
+  integrity sha512-3PixLnGPno0E8rSBJjtwqTwJe3Yw72QwBBBxNoukIj3lEeBNXwbNiKrNuB1oyQgTBw5QHUhNO3SteEtHaMK6ag==
 
-playwright@^1.27.1:
-  version "1.27.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.27.1.tgz#4eecac5899566c589d4220ca8acc16abe8a67450"
-  integrity sha512-xXYZ7m36yTtC+oFgqH0eTgullGztKSRMb4yuwLPl8IYSmgBM88QiB+3IWb1mRIC9/NNwcgbG0RwtFlg+EAFQHQ==
+playwright@^1.28.1:
+  version "1.28.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.28.1.tgz#f23247f1de466ff73d7230d94df96271e5da6583"
+  integrity sha512-92Sz6XBlfHlb9tK5UCDzIFAuIkHHpemA9zwUaqvo+w7sFMSmVMGmvKcbptof/eJObq63PGnMhM75x7qxhTR78Q==
   dependencies:
-    playwright-core "1.27.1"
+    playwright-core "1.28.1"
 
 prebuild-install@^6.0.0:
   version "6.1.4"
