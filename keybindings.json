@@ -173,6 +173,16 @@
         "then": "emacs-mcx.backwardWord"
       }
     },
+    {
+      "keys": ["ctrl+shift+left"],
+      "command": "workbench.action.navigateBack",
+      "when": "editorTextFocus"
+    },
+    {
+      "keys": ["ctrl+shift+right"],
+      "command": "workbench.action.navigateForward",
+      "when": "editorTextFocus"
+    },
     // back-to-indentation (meta + m)
     {
       "key": "meta+m",

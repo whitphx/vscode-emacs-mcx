@@ -2406,6 +2406,16 @@
         }
       },
       {
+        "key": "ctrl+shift+left",
+        "command": "workbench.action.navigateBack",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+shift+right",
+        "command": "workbench.action.navigateForward",
+        "when": "editorTextFocus"
+      },
+      {
         "key": "alt+m",
         "command": "emacs-mcx.backToIndentation",
         "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"

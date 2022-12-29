@@ -382,6 +382,8 @@ You can change the key name of the prefix argument.
 - `ctrl+p` & `ctrl+e`: workbench.action.quickOpen => **Use `ctrl+x b` instead**;
 - `ctrl+p`: workbench.action.quickOpenNavigateNext => **Use `ctrl+n` instead**.
 - `ctrl+o`: workbench.action.files.openFileFolder;
+- `ctrl+left` : workbench.action.navigateBack => **Use `ctrl+shift+left` instead**;
+- `ctrl+right` : workbench.action.navigateForward => **Use `ctrl+shift+right` instead**;
 
 ## Contributions/Development
 
