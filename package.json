@@ -5127,7 +5127,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.6.0",
     "glob": "^8.0.3",
-    "husky": "^8.0.2",
+    "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
     "mocha": "^10.2.0",
     "prettier": "^2.8.1",
