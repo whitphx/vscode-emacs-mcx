@@ -4160,10 +4160,10 @@ typed-rest-client@^1.8.4:
     tunnel "0.0.6"
     underscore "^1.12.1"
 
-typescript-transform-paths@^3.4.4:
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.4.4.tgz#fecb7d441fc96216eb04a17b87847ffbfaeaf54d"
-  integrity sha512-b+6JTpJbO9CxVyt9+fIKXpLNUEyzrKXdflsVo/nXbQqelCYkpSsRdI+ikg3SelyE04rUeKlb+Kdt1D8Doa9JoQ==
+typescript-transform-paths@^3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.4.5.tgz#4cf7055687f308658c87ec05c5478fa4ff0e96fe"
+  integrity sha512-oq3lOQ2Anu25rC1D35ce52EkQDdOqtxApL9HgH077iUMYn40r4nICnfaKP9uUzecTMWY7/ISih8JsaRe5P/qBw==
   dependencies:
     minimatch "^3.0.4"
 
