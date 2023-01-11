@@ -174,14 +174,14 @@
       }
     },
     {
-      "keys": ["ctrl+shift+left"],
+      "keys": ["alt+left"],
       "command": "workbench.action.navigateBack",
-      "when": "editorTextFocus"
+      "when": "canNavigateBack"
     },
     {
-      "keys": ["ctrl+shift+right"],
+      "keys": ["alt+right"],
       "command": "workbench.action.navigateForward",
-      "when": "editorTextFocus"
+      "when": "canNavigateBack"
     },
     // back-to-indentation (meta + m)
     {

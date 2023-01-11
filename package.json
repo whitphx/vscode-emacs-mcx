@@ -2406,14 +2406,14 @@
         }
       },
       {
-        "key": "ctrl+shift+left",
+        "key": "alt+left",
         "command": "workbench.action.navigateBack",
-        "when": "editorTextFocus"
+        "when": "canNavigateBack"
       },
       {
-        "key": "ctrl+shift+right",
+        "key": "alt+right",
         "command": "workbench.action.navigateForward",
-        "when": "editorTextFocus"
+        "when": "canNavigateBack"
       },
       {
         "key": "alt+m",
