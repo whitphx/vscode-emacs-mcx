@@ -5126,7 +5126,7 @@
     "assert": "^2.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.6.0",
-    "glob": "^8.0.3",
+    "glob": "^8.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
     "mocha": "^10.2.0",
