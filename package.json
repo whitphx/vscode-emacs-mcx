@@ -5122,7 +5122,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "@vscode/test-electron": "^2.2.3",
-    "@vscode/test-web": "^0.0.34",
+    "@vscode/test-web": "^0.0.35",
     "assert": "^2.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.6.0",
