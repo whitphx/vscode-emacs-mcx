@@ -5130,7 +5130,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
     "mocha": "^10.2.0",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.7",
     "process": "^0.11.10",
     "rimraf": "^4.1.2",
     "sinon": "^15.0.1",
