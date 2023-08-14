@@ -6,7 +6,7 @@ import {
   generateKeybindings,
   generateKeybindingsForPrefixArgument,
   generateKeybindingsForTypeCharInRectMarkMode,
-} from "./generate-keybindings";
+} from "./generate-keybindings.mjs";
 
 const srcFilePath = "./keybindings.json";
 const packageDotJsonPath = "./package.json";

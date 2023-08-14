@@ -5,7 +5,7 @@ import {
   replaceMetaWithEscape,
   KeyBindingSource,
   KeyBinding,
-} from "./generate-keybindings";
+} from "./generate-keybindings.mjs";
 
 describe("generateKeybindings", () => {
   it("converts src including 'keys'", () => {
