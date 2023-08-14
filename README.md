@@ -306,6 +306,7 @@ See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for
 | `C-M-S-2` (`C-M-@` with US keyboard) | ✓               | Set mark after end of following balanced expression (mark-sexp). This does not move point. |
 | `C-M-k`                              | ✓               | Kill balanced expression forward (kill-sexp)                                               |
 | `C-M-Bksp`                           | ✓               | Kill balanced expression backward (backward-kill-sexp)                                     |
+| `C-S-k`                              | ✓               | Kill a line as if with `kill-line`, but respecting delimiters. (paredit-kill)              |
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
