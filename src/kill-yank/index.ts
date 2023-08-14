@@ -6,6 +6,7 @@ import { equalPositions } from "../utils";
 import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+import { logger } from "../logger";
 
 export { AppendDirection };
 
@@ -127,7 +128,7 @@ export class KillYanker implements vscode.Disposable {
     return vscode.commands.executeCommand("paste", { text });
   }
 
-  private async pasteKillRingEntity(killRingEntity: KillRingEntity) {
+  private async pasteKillRingEntity(killRingEntity: KillRingEntity): Promise<void> {
     const flattenedText = killRingEntity.asString();
 
     if (this.minibuffer.isReading) {
@@ -140,7 +141,7 @@ export class KillYanker implements vscode.Disposable {
       const regionTexts = killRingEntity.getRegionTextsList();
       const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
       if (shouldPasteSeparately && regionTexts.length === selections.length) {
-        return this.textEditor.edit((editBuilder) => {
+        const success = await this.textEditor.edit((editBuilder) => {
           selections.forEach((selection, i) => {
             if (!selection.isEmpty) {
               editBuilder.delete(selection);
@@ -151,6 +152,10 @@ export class KillYanker implements vscode.Disposable {
             editBuilder.insert(selection.start, regionTexts[i]!.getAppendedText());
           });
         });
+        if (!success) {
+          logger.warn("Failed to paste kill ring entity");
+        }
+        return;
       }
     }
 
