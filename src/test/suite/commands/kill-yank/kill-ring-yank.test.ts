@@ -56,7 +56,7 @@ ABCDEFGHIJ`;
         activeTextEditor,
         `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -64,7 +64,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -72,7 +72,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdeLorem ipsumfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       // Repeat
@@ -81,7 +81,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -89,7 +89,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -97,7 +97,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdeLorem ipsumfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       // Repeat again
@@ -106,7 +106,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdesed do eiusmod tempor\nincididunt ut labore et\ndolore magna aliqua.fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -114,7 +114,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdedolor sit amet,\nconsectetur adipiscing elit,fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -122,7 +122,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdeLorem ipsumfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
     });
 
@@ -153,7 +153,7 @@ ABCDEFGHIJ`;
         activeTextEditor,
         `0123456789
 abcde12345fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       // Then, yankPop takes from killRing
@@ -162,7 +162,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdeLorem ipsumfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       // Repeat
@@ -171,7 +171,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcde12345fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -179,7 +179,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdeLorem ipsumfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       // Repeat again
@@ -188,7 +188,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcde12345fghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await emulator.runCommand("yankPop");
@@ -196,7 +196,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdeLorem ipsumfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
     });
 
@@ -233,7 +233,7 @@ ABCDEFGHIJ`;
           activeTextEditor,
           `0123456789
 abcdeBARfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
         );
 
         // Interruption command invoked
@@ -245,7 +245,7 @@ ABCDEFGHIJ`
           activeTextEditor,
           `0123456789
 abcdeBARfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
         );
       });
 
@@ -277,7 +277,7 @@ ABCDEFGHIJ`;
           activeTextEditor,
           `0123456789
 abcdeBARfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
         );
 
         // Then, yankPop
@@ -286,7 +286,7 @@ ABCDEFGHIJ`
           activeTextEditor,
           `0123456789
 abcdeFOOfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
         );
 
         // Interruption command invoked
@@ -298,7 +298,7 @@ ABCDEFGHIJ`
           activeTextEditor,
           `0123456789
 abcdeFOOfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
         );
       });
     });
@@ -312,14 +312,14 @@ ABCDEFGHIJ`
           "delete",
           () =>
             activeTextEditor.edit((editBuilder) =>
-              editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1)))
+              editBuilder.delete(new Range(new Position(0, 0), new Position(0, 1))),
             ),
         ],
         [
           "replace",
           () =>
             activeTextEditor.edit((editBuilder) =>
-              editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
+              editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge"),
             ),
         ],
       ];
@@ -360,7 +360,7 @@ ABCDEFGHIJ`;
             activeTextEditor,
             `0123456789
 abcdeBARfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
           );
 
           // Interruption command invoked
@@ -397,7 +397,7 @@ ABCDEFGHIJ`;
             activeTextEditor,
             `0123456789
 abcdeBARfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
           );
 
           // Then, yankPop
@@ -406,7 +406,7 @@ ABCDEFGHIJ`
             activeTextEditor,
             `0123456789
 abcdeFOOfghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
           );
 
           // Interruption command invoked

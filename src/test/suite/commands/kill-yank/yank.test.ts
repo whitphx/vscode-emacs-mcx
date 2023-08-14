@@ -73,7 +73,7 @@ import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors,
             `
 Lorem ipsum
 dolor sit amet,
-`
+`,
           );
         });
 
@@ -89,7 +89,7 @@ dolor sit amet,
 Lorem ipsum
 dolor sit amet,
 Lorem ipsum
-dolor sit amet,`
+dolor sit amet,`,
           );
         });
 
@@ -104,7 +104,7 @@ dolor sit amet,`
             activeTextEditor,
             `Lorem ipsum
 dolor sit amet,
-`
+`,
           );
         });
       });
@@ -134,7 +134,7 @@ ABCDEFGHIJ`;
             activeTextEditor,
             `0123456789
 Lorem ipsumefghij
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
           );
         });
 
@@ -151,7 +151,7 @@ ABCDEFGHIJ`
             activeTextEditor,
             `012Lorem ipsum6789
 Lorem ipsumdefghij
-ABCDEFLorem ipsumJ`
+ABCDEFLorem ipsumJ`,
           );
         });
       });

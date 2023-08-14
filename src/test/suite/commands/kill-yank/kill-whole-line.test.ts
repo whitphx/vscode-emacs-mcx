@@ -37,7 +37,7 @@ ABCDEFGHIJ`;
             assertTextEqual(
               activeTextEditor,
               `0123456789
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
             );
 
             // Check the cut text
@@ -66,7 +66,7 @@ ABCDEFGHIJ`
               activeTextEditor,
               `0123456789
 abcdefghij
-`
+`,
             );
 
             // Check the cut text

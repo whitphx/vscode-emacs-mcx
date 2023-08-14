@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 
 export function convertSelectionToRectSelections(
   document: vscode.TextDocument,
-  selection: vscode.Selection
+  selection: vscode.Selection,
 ): vscode.Selection[] {
   const rectSelections: vscode.Selection[] = [];
   const lineStart = Math.max(selection.start.line, 0);
@@ -14,8 +14,8 @@ export function convertSelectionToRectSelections(
         line,
         Math.min(selection.anchor.character, maxChar),
         line,
-        Math.min(selection.active.character, maxChar)
-      )
+        Math.min(selection.active.character, maxChar),
+      ),
     );
   }
 

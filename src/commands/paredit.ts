@@ -87,7 +87,7 @@ export class MarkSexp extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const arg = prefixArgument === undefined ? 1 : prefixArgument;
 
@@ -111,7 +111,7 @@ export class MarkSexp extends EmacsCommand {
 
     this.emacsController.pushMark(
       newSelections.map((newSelection) => newSelection.active),
-      this.continuing
+      this.continuing,
     );
 
     revealPrimaryActive(textEditor);
@@ -130,7 +130,7 @@ export class KillSexp extends KillYankCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
@@ -157,7 +157,7 @@ export class BackwardKillSexp extends KillYankCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
@@ -184,7 +184,7 @@ export class PareditKill extends KillYankCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
@@ -236,7 +236,7 @@ export class PareditKill extends KillYankCommand {
         return at + nChars;
       } else {
         throw new Error(
-          "Expected paredit.editor.killSexp to return a single deletion starting at the current cursor position and leaving the cursor at the same position"
+          "Expected paredit.editor.killSexp to return a single deletion starting at the current cursor position and leaving the cursor at the same position",
         );
       }
     } else {

@@ -33,7 +33,7 @@ function createWord(
   wordType: WordType,
   nextCharClass: WordCharacterClass,
   start: number,
-  end: number
+  end: number,
 ): IFindWordResult {
   // console.log('WORD ==> ' + start + ' => ' + end + ':::: <<<' + lineContent.substring(start, end) + '>>>');
   return { start: start, end: end, wordType: wordType, nextCharClass: nextCharClass };
@@ -43,7 +43,7 @@ function findEndOfWord(
   lineContent: string,
   wordSeparators: WordCharacterClassifier,
   wordType: WordType,
-  startIndex: number
+  startIndex: number,
 ): number {
   const len = lineContent.length;
   for (let chIndex = startIndex; chIndex < len; chIndex++) {
@@ -66,7 +66,7 @@ function findEndOfWord(
 function findPreviousWordOnLine(
   lineContent: string,
   wordSeparators: WordCharacterClassifier,
-  position: Position
+  position: Position,
 ): IFindWordResult | null {
   let wordType = WordType.None;
   for (let chIndex = position.character - 1; chIndex >= 0; chIndex--) {
@@ -80,7 +80,7 @@ function findPreviousWordOnLine(
           wordType,
           chClass,
           chIndex + 1,
-          findEndOfWord(lineContent, wordSeparators, wordType, chIndex + 1)
+          findEndOfWord(lineContent, wordSeparators, wordType, chIndex + 1),
         );
       }
       wordType = WordType.Regular;
@@ -91,7 +91,7 @@ function findPreviousWordOnLine(
           wordType,
           chClass,
           chIndex + 1,
-          findEndOfWord(lineContent, wordSeparators, wordType, chIndex + 1)
+          findEndOfWord(lineContent, wordSeparators, wordType, chIndex + 1),
         );
       }
       wordType = WordType.Separator;
@@ -102,7 +102,7 @@ function findPreviousWordOnLine(
           wordType,
           chClass,
           chIndex + 1,
-          findEndOfWord(lineContent, wordSeparators, wordType, chIndex + 1)
+          findEndOfWord(lineContent, wordSeparators, wordType, chIndex + 1),
         );
       }
     }
@@ -114,7 +114,7 @@ function findPreviousWordOnLine(
       wordType,
       WordCharacterClass.Whitespace,
       0,
-      findEndOfWord(lineContent, wordSeparators, wordType, 0)
+      findEndOfWord(lineContent, wordSeparators, wordType, 0),
     );
   }
 
@@ -125,7 +125,7 @@ function findStartOfWord(
   lineContent: string,
   wordSeparators: WordCharacterClassifier,
   wordType: WordType,
-  startIndex: number
+  startIndex: number,
 ): number {
   for (let chIndex = startIndex; chIndex >= 0; chIndex--) {
     const chCode = lineContent.charCodeAt(chIndex);
@@ -147,7 +147,7 @@ function findStartOfWord(
 function findNextWordOnLine(
   lineContent: string,
   wordSeparators: WordCharacterClassifier,
-  position: Position
+  position: Position,
 ): IFindWordResult | null {
   let wordType = WordType.None;
   const len = lineContent.length;
@@ -163,7 +163,7 @@ function findNextWordOnLine(
           wordType,
           chClass,
           findStartOfWord(lineContent, wordSeparators, wordType, chIndex - 1),
-          chIndex
+          chIndex,
         );
       }
       wordType = WordType.Regular;
@@ -174,7 +174,7 @@ function findNextWordOnLine(
           wordType,
           chClass,
           findStartOfWord(lineContent, wordSeparators, wordType, chIndex - 1),
-          chIndex
+          chIndex,
         );
       }
       wordType = WordType.Separator;
@@ -185,7 +185,7 @@ function findNextWordOnLine(
           wordType,
           chClass,
           findStartOfWord(lineContent, wordSeparators, wordType, chIndex - 1),
-          chIndex
+          chIndex,
         );
       }
     }
@@ -197,7 +197,7 @@ function findNextWordOnLine(
       wordType,
       WordCharacterClass.Whitespace,
       findStartOfWord(lineContent, wordSeparators, wordType, len - 1),
-      len
+      len,
     );
   }
 
@@ -210,7 +210,7 @@ function findNextWordOnLine(
 export function findNextWordEnd(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
-  position: Position
+  position: Position,
 ): Position {
   let lineNumber = position.line;
   let character = position.character;
@@ -225,7 +225,7 @@ export function findNextWordEnd(
   let nextWordOnLine = findNextWordOnLine(
     doc.lineAt(lineNumber).text,
     wordSeparators,
-    new Position(lineNumber, character)
+    new Position(lineNumber, character),
   );
 
   // Emacs-like behavior that does not stop word search at line breaks.
@@ -240,7 +240,7 @@ export function findNextWordEnd(
     nextWordOnLine = findNextWordOnLine(
       doc.lineAt(lineNumber).text,
       wordSeparators,
-      new Position(lineNumber, character)
+      new Position(lineNumber, character),
     );
   }
 
@@ -253,7 +253,7 @@ export function findNextWordEnd(
       nextWordOnLine = findNextWordOnLine(
         doc.lineAt(lineNumber).text,
         wordSeparators,
-        new Position(lineNumber, nextWordOnLine.end)
+        new Position(lineNumber, nextWordOnLine.end),
       );
     }
   }
@@ -272,7 +272,7 @@ export function findNextWordEnd(
 export function findPreviousWordStart(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
-  position: Position
+  position: Position,
 ): Position {
   let lineNumber = position.line;
   let character = position.character;
@@ -287,7 +287,7 @@ export function findPreviousWordStart(
   let prevWordOnLine = findPreviousWordOnLine(
     doc.lineAt(lineNumber).text,
     wordSeparators,
-    new Position(lineNumber, character)
+    new Position(lineNumber, character),
   );
 
   // Emacs-like behavior that does not stop word search at line breaks.
@@ -301,7 +301,7 @@ export function findPreviousWordStart(
     prevWordOnLine = findPreviousWordOnLine(
       doc.lineAt(lineNumber).text,
       wordSeparators,
-      doc.lineAt(lineNumber).range.end
+      doc.lineAt(lineNumber).range.end,
     );
   }
 
@@ -315,7 +315,7 @@ export function findPreviousWordStart(
     prevWordOnLine = findPreviousWordOnLine(
       doc.lineAt(lineNumber).text,
       wordSeparators,
-      new Position(lineNumber, prevWordOnLine.start)
+      new Position(lineNumber, prevWordOnLine.start),
     );
   }
 

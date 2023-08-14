@@ -15,7 +15,7 @@ export class PrefixArgumentHandler {
 
   public constructor(
     onPrefixArgumentChange: (newPrefixArgument: number | undefined) => Thenable<unknown>,
-    onAcceptingStateChange: (newState: boolean) => Thenable<unknown>
+    onAcceptingStateChange: (newState: boolean) => Thenable<unknown>,
   ) {
     this.state = {
       isInPrefixArgumentMode: false,

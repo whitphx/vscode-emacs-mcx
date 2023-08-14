@@ -32,7 +32,7 @@ ABCDEFGHIJ`;
         activeTextEditor.document.getText(),
         `3456789
 defghij
-DEFGHIJ`
+DEFGHIJ`,
       );
 
       await clearTextEditor(activeTextEditor);
@@ -44,7 +44,7 @@ DEFGHIJ`
         activeTextEditor.document.getText(),
         `012
 abc
-ABC`
+ABC`,
       );
     });
   });

@@ -92,13 +92,13 @@ export class KillYanker implements vscode.Disposable {
   public async copy(
     ranges: Range[],
     shouldAppend = false,
-    appendDirection: AppendDirection = AppendDirection.Forward
+    appendDirection: AppendDirection = AppendDirection.Forward,
   ): Promise<void> {
     const newKillEntity = new EditorTextKillRingEntity(
       ranges.map((range) => ({
         range,
         text: this.textEditor.document.getText(range),
-      }))
+      })),
     );
 
     if (this.killRing !== null) {

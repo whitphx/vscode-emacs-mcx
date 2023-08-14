@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext): void {
           emulatorMap.delete(uri);
         }
       }
-    })
+    }),
   );
 
   context.subscriptions.push(
@@ -58,13 +58,13 @@ export function activate(context: vscode.ExtensionContext): void {
       if (e.affectsConfiguration("emacs-mcx")) {
         Configuration.reload();
       }
-    })
+    }),
   );
 
   function registerEmulatorCommand(
     commandName: string,
     callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => unknown,
-    onNoEmulator?: (...args: unknown[]) => unknown
+    onNoEmulator?: (...args: unknown[]) => unknown,
   ) {
     const disposable = vscode.commands.registerCommand(commandName, (...args) => {
       logger.debug(`[command]\t Command "${commandName}" executed with args (${args})`);
@@ -92,7 +92,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
         return emulator.type(text);
       },
-      (args) => vscode.commands.executeCommand("default:type", args)
+      (args) => vscode.commands.executeCommand("default:type", args),
     );
   }
 

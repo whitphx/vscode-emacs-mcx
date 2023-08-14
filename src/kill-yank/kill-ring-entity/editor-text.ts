@@ -101,7 +101,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
       // `additional.length === this.regionTextsList.length` has already been checked,
       // so noUncheckedIndexedAccess rule can be skipped here.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      (appendedRegionTexts, i) => appendedRegionTexts.append(additional[i]!, appendDirection)
+      (appendedRegionTexts, i) => appendedRegionTexts.append(additional[i]!, appendDirection),
     );
   }
 }

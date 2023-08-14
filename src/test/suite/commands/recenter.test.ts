@@ -24,14 +24,14 @@ suite("RecenterTopBottom", () => {
     assert.ok(
       activeTextEditor.visibleRanges[0]?.contains(activeTextEditor.selection.active),
       `The active cursor ${JSON.stringify(
-        activeTextEditor.selection.active
-      )} is not contained in the visible range ${JSON.stringify(activeTextEditor.visibleRanges[0])}`
+        activeTextEditor.selection.active,
+      )} is not contained in the visible range ${JSON.stringify(activeTextEditor.visibleRanges[0])}`,
     );
     assert.ok(
       !activeTextEditor.visibleRanges[0]?.contains(activeTextEditor.selection.anchor),
       `The anchor cursor ${JSON.stringify(
-        activeTextEditor.selection.anchor
-      )} is contained in the visible range ${JSON.stringify(activeTextEditor.visibleRanges[0])}`
+        activeTextEditor.selection.anchor,
+      )} is contained in the visible range ${JSON.stringify(activeTextEditor.visibleRanges[0])}`,
     );
   });
 });

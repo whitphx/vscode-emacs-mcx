@@ -10,7 +10,7 @@ export async function setupWorkspace(
   }: {
     eol?: vscode.EndOfLine;
     language?: string;
-  } = {}
+  } = {},
 ): Promise<vscode.TextEditor> {
   const doc = await vscode.workspace.openTextDocument({
     content: initialText,
@@ -71,7 +71,7 @@ export async function cleanUpWorkspace(): Promise<void> {
       (err: any) => {
         clearInterval(interval);
         e(err);
-      }
+      },
     );
   }).then(() => {
     assert.strictEqual(vscode.window.visibleTextEditors.length, 0, "Expected all editors closed.");
@@ -92,7 +92,7 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
     const expectedRange = new Range(new Position(pos[0], pos[1]), new Position(pos[0], pos[1]));
     assert.ok(
       selection.isEqual(expectedRange),
-      `${JSON.stringify(selection)} is not equal to ${JSON.stringify(expectedRange)}`
+      `${JSON.stringify(selection)} is not equal to ${JSON.stringify(expectedRange)}`,
     );
   });
 }

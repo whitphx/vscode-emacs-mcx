@@ -126,7 +126,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
           });
         } else {
           console.warn(
-            `"${key}" includes more than one key strokes then it's meta key specification cannot be converted to "ESC" and "ctrl+[".`
+            `"${key}" includes more than one key strokes then it's meta key specification cannot be converted to "ESC" and "ctrl+[".`,
           );
         }
       } else {
@@ -194,7 +194,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus",
         args: [num],
-      })
+      }),
     );
     keybindings.push(
       ...generateKeybindings({
@@ -202,7 +202,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
         args: [num],
-      })
+      }),
     );
     keybindings.push(
       ...generateKeybindings({
@@ -210,7 +210,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
         command: "emacs-mcx.digitArgument",
         when: "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
         args: [num],
-      })
+      }),
     );
     keybindings.push({
       key: num.toString(),
@@ -226,7 +226,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
       key: "meta+-",
       when: "!emacs-mcx.acceptingArgument && editorTextFocus",
       command: "emacs-mcx.negativeArgument",
-    })
+    }),
   );
 
   // Ascii all printable characters excluding space, delete, and numeric characters.

@@ -17,7 +17,7 @@ export abstract class EmacsCommand {
   public run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Thenable<unknown> | void {
     return this.execute(textEditor, isInMarkMode, prefixArgument);
   }
@@ -25,7 +25,7 @@ export abstract class EmacsCommand {
   public abstract execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): void | Thenable<unknown>;
 }
 
