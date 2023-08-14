@@ -150,7 +150,15 @@ export class KillYanker implements vscode.Disposable {
 
   public async yank(): Promise<void> {
     if (this.killRing === null) {
-      return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+      const text = await vscode.env.clipboard.readText();
+
+      if (this.minibuffer.isReading) {
+        this.minibuffer.paste(text);
+        return;
+      }
+
+      return vscode.commands.executeCommand("paste", { text });
+      // return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
     }
 
     const clipboardText = await vscode.env.clipboard.readText();
