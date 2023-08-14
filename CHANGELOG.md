@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.48.1] - 2023-08-14
+
+### Fix
+
+- Keybindings JSON generator, #1622.
+
 ## [0.48.0] - 2023-08-14
 
 ### Add
