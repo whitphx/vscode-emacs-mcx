@@ -4,6 +4,16 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.48.0] - 2023-08-14
+
+### Add
+
+- `paredit-kill`, #1425, by @dandavison.
+
+### Fix
+
+- Paste command when there is no entry in the kill ring, #1612.
+
 ## [0.47.0] - 2022-11-25
 
 ### Add
