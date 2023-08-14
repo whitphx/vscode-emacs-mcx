@@ -335,6 +335,10 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("paredit.killSexp");
   });
 
+  registerEmulatorCommand("emacs-mcx.paredit.pareditKill", (emulator) => {
+    emulator.runCommand("paredit.pareditKill");
+  });
+
   registerEmulatorCommand("emacs-mcx.paredit.backwardKillSexp", (emulator) => {
     emulator.runCommand("paredit.backwardKillSexp");
   });

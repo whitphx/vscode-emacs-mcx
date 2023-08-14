@@ -174,6 +174,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new PareditCommands.MarkSexp(this));
     this.commandRegistry.register(new PareditCommands.KillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this, killYanker));
+    this.commandRegistry.register(new PareditCommands.PareditKill(this, killYanker));
 
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this));
