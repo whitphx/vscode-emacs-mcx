@@ -32,7 +32,7 @@ ccc`;
       assertSelectionsEqual(
         activeTextEditor,
         new Selection(0, 0, 0, 3), // The first 'aaa' appearance
-        new Selection(3, 0, 3, 3) // The second one.
+        new Selection(3, 0, 3, 3), // The second one.
       );
 
       // And mark-mode is still valid

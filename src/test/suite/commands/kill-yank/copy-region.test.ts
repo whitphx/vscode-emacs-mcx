@@ -52,7 +52,7 @@ ABCDEFGHIJ`;
         activeTextEditor,
         new Selection(0, 5, 0, 5),
         new Selection(1, 5, 1, 5),
-        new Selection(2, 5, 2, 5)
+        new Selection(2, 5, 2, 5),
       );
 
       // mark-mode is disabled
@@ -61,7 +61,7 @@ ABCDEFGHIJ`;
         activeTextEditor,
         new Selection(0, 6, 0, 6), // Selections are empty
         new Selection(1, 6, 1, 6),
-        new Selection(2, 6, 2, 6)
+        new Selection(2, 6, 2, 6),
       );
 
       await clearTextEditor(activeTextEditor);

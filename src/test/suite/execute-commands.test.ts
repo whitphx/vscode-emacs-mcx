@@ -17,8 +17,8 @@ suite("executeCommands", () => {
           setTimeout(() => {
             results.push(1);
             resolve();
-          }, 300)
-        )
+          }, 300),
+        ),
     );
     registerCommand(
       "mockCommand2",
@@ -27,8 +27,8 @@ suite("executeCommands", () => {
           setTimeout(() => {
             results.push(2);
             resolve();
-          }, 200)
-        )
+          }, 200),
+        ),
     );
     registerCommand(
       "mockCommand3",
@@ -37,8 +37,8 @@ suite("executeCommands", () => {
           setTimeout(() => {
             results.push(3);
             resolve();
-          }, 100)
-        )
+          }, 100),
+        ),
     );
 
     await executeCommands(["mockCommand1", "mockCommand2", "mockCommand3"]);

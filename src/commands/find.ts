@@ -67,7 +67,7 @@ export class IsearchForward extends IsearchCommand {
     this.searchState.startSelections = textEditor.selections;
 
     return this.openFindWidget({ isRegex: false }).then(() =>
-      vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction")
+      vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"),
     );
   }
 }
@@ -78,7 +78,7 @@ export class IsearchBackward extends IsearchCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return this.openFindWidget({ isRegex: false }).then(() =>
-      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction")
+      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"),
     );
   }
 }
@@ -89,7 +89,7 @@ export class IsearchForwardRegexp extends IsearchCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return this.openFindWidget({ isRegex: true }).then(() =>
-      vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction")
+      vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"),
     );
   }
 }
@@ -100,7 +100,7 @@ export class IsearchBackwardRegexp extends IsearchCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
     return this.openFindWidget({ isRegex: true }).then(() =>
-      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction")
+      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"),
     );
   }
 }

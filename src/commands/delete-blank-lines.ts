@@ -8,7 +8,7 @@ export class DeleteBlankLines extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const document = textEditor.document;
 
@@ -54,8 +54,8 @@ export class DeleteBlankLines extends EmacsCommand {
           editBuilder.delete(
             new Range(
               new Position(curLineNum + 1, 0),
-              document.lineAt(finalFollowingEmptyLineNum).rangeIncludingLineBreak.end
-            )
+              document.lineAt(finalFollowingEmptyLineNum).rangeIncludingLineBreak.end,
+            ),
           );
         }
 
@@ -66,8 +66,8 @@ export class DeleteBlankLines extends EmacsCommand {
           editBuilder.delete(
             new Range(
               new Position(firstPreviousEmptyLineNum, 0),
-              document.lineAt(curLineNum - 1).rangeIncludingLineBreak.end
-            )
+              document.lineAt(curLineNum - 1).rangeIncludingLineBreak.end,
+            ),
           );
         }
       });

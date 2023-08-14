@@ -29,7 +29,7 @@ ABCDEFGHIJ`;
       "replace",
       () =>
         activeTextEditor.edit((editBuilder) =>
-          editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
+          editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge"),
         ),
     ],
   ];

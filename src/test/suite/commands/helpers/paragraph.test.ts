@@ -45,7 +45,7 @@ suite("travelForward", () => {
   ];
   testcases.forEach(({ cur, next }) => {
     test(`it transforms ${JSON.stringify(cur)} to ${JSON.stringify(next)}, with text ${JSON.stringify(
-      text
+      text,
     )}`, async () => {
       const doc = await vscode.workspace.openTextDocument({
         content: text,
@@ -98,7 +98,7 @@ suite("travelBackward", () => {
   ];
   testcases.forEach(({ cur, next }) => {
     test(`it transforms ${JSON.stringify(cur)} to ${JSON.stringify(next)}, with text ${JSON.stringify(
-      text
+      text,
     )}`, async () => {
       const doc = await vscode.workspace.openTextDocument({
         content: text,

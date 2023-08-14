@@ -17,7 +17,7 @@ export class EmacsCommandRegistry {
 
   public forEach(
     callbackfn: (value: EmacsCommand, key: string, map: Map<string, EmacsCommand>) => void,
-    thisArg?: unknown
+    thisArg?: unknown,
   ): void {
     this.commands.forEach(callbackfn, thisArg);
   }

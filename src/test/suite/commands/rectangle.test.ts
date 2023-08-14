@@ -51,7 +51,7 @@ KLMNOPQRST`;
 abchij
 ABCHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [2, 3]);
 
@@ -63,7 +63,7 @@ KLMNOPQRST`
 defgabchij
 DEFGABCHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
 
     // Yank on an out-of-range area
@@ -77,7 +77,7 @@ DEFGABCHIJ
 klmnopqrst
 KLMNO3456PQRST
      defg
-     DEFG`
+     DEFG`,
     );
 
     setEmptyCursors(activeTextEditor, [4, 10]);
@@ -90,7 +90,7 @@ DEFGABCHIJ
 klmnopqrst
 KLMNO3456P3456QRST
      defg defg
-     DEFG DEFG`
+     DEFG DEFG`,
     );
   });
 
@@ -103,7 +103,7 @@ KLMNO3456P3456QRST
 abchij
 ABCHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [2, 3]);
 
@@ -115,7 +115,7 @@ KLMNOPQRST`
 abchij
 ABCHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
   });
 
@@ -128,7 +128,7 @@ KLMNOPQRST`
 abchij
 ABCHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [0, 3]);
 
@@ -140,7 +140,7 @@ KLMNOPQRST`
 defgabchij
 DEFGABCHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
   });
 
@@ -158,7 +158,7 @@ KLMNOPQRST`
 defgabcdefghij
 DEFGABCDEFGHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
   });
 });
@@ -202,7 +202,7 @@ KLMNOPQRST`;
 abc    hij
 ABC    HIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [2, 7]);
   });
@@ -216,7 +216,7 @@ KLMNOPQRST`
 abc  fghij
 ABC  FG  J
 klmnopq  t
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [2, 5], [3, 9]);
   });
@@ -283,7 +283,7 @@ KLMNOPQRST`;
 abcfoohij
 ABCfooHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [2, 6]);
   });
@@ -297,7 +297,7 @@ KLMNOPQRST`
 abcfoofghij
 ABCfooFGfooJ
 klmnopqfoot
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [2, 6], [3, 10]);
   });
@@ -342,7 +342,7 @@ KLMNOPQRST`;
 abc    defghij
 ABC    DEFGHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [0, 3]);
   });
@@ -356,7 +356,7 @@ KLMNOPQRST`
 abc  defghij
 ABC  DEFG  HIJ
 klmnopq  rst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
     assertCursorsEqual(activeTextEditor, [0, 3], [2, 7]);
   });
@@ -478,7 +478,7 @@ ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`
+<r>`,
     );
 
     assertCursorsEqual(activeTextEditor, [4, 7]);
@@ -503,7 +503,7 @@ ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`
+<r>`,
     );
 
     assertCursorsEqual(activeTextEditor, [4, 4]);
@@ -528,7 +528,7 @@ ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`
+<r>`,
     );
 
     assertCursorsEqual(activeTextEditor, [0, 7]);
@@ -553,7 +553,7 @@ ABCD<r>FGHIJ
 abc <r>
 klmn<r>pqrst
 KLMNOPQRST
-<r>`
+<r>`,
     );
 
     assertCursorsEqual(activeTextEditor, [0, 4]);
@@ -578,7 +578,7 @@ ABCD<r>EFGHIJ
 abc <r>
 klmn<r>opqrst
 KLMNOPQRST
-<r>`
+<r>`,
     );
 
     assertCursorsEqual(activeTextEditor, [0, 7]);
@@ -603,7 +603,7 @@ ABCD<r>EFGHIJ
 abc <r>
 klmn<r>opqrst
 KLMNOPQRST
-<r>`
+<r>`,
     );
 
     assertCursorsEqual(activeTextEditor, [4, 7]);

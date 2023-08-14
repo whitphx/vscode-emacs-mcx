@@ -22,7 +22,7 @@ suite("Universal argument (C-u)", () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       vscode.commands.executeCommand.calledWithExactly("setContext", "emacs-mcx.prefixArgument", expected),
-      `Assertion failed that emacs-mcx.prefixArgument context has been set to ${expected}`
+      `Assertion failed that emacs-mcx.prefixArgument context has been set to ${expected}`,
     );
   };
 
@@ -31,7 +31,7 @@ suite("Universal argument (C-u)", () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       vscode.commands.executeCommand.calledWithExactly("setContext", "emacs-mcx.acceptingArgument", expected),
-      `Assertion failed that emacs-mcx.acceptingArgument context has been set to ${expected}`
+      `Assertion failed that emacs-mcx.acceptingArgument context has been set to ${expected}`,
     );
   };
 

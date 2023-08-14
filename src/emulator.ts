@@ -88,7 +88,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   constructor(
     textEditor: TextEditor,
     killRing: KillRing | null = null,
-    minibuffer: Minibuffer = new InputBoxMinibuffer()
+    minibuffer: Minibuffer = new InputBoxMinibuffer(),
   ) {
     this.textEditor = textEditor;
     this._nativeSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
@@ -98,7 +98,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     this.prefixArgumentHandler = new PrefixArgumentHandler(
       this.onPrefixArgumentChange,
-      this.onPrefixArgumentAcceptingStateChange
+      this.onPrefixArgumentAcceptingStateChange,
     );
 
     this.disposables = [];
@@ -209,8 +209,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       if (
         e.contentChanges.some((contentChange) =>
           this.textEditor.selections.some(
-            (selection) => typeof contentChange.range.intersection(selection) !== "undefined"
-          )
+            (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
+          ),
         )
       ) {
         this.exitMarkMode();
@@ -453,7 +453,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     if (pushMark) {
       this.pushMark(this.textEditor.selections.map((selection) => selection.active));
       this.textEditor.selections = this.textEditor.selections.map(
-        (selection) => new Selection(selection.active, selection.active)
+        (selection) => new Selection(selection.active, selection.active),
       );
     }
   }
@@ -500,7 +500,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   public executeCommandWithPrefixArgument<T>(
     command: string,
     args: any = null,
-    prefixArgumentKey = "prefixArgument"
+    prefixArgumentKey = "prefixArgument",
   ): Thenable<T | undefined> {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();

@@ -41,7 +41,7 @@ ABCDEFGHIJ`;
         activeTextEditor.document.getText(),
         `0123456789
 a
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await clearTextEditor(activeTextEditor);
@@ -59,7 +59,7 @@ ABCDEFGHIJ`
       assertTextEqual(
         activeTextEditor,
         `0123456789
-abcdefghijABCDEFGHIJ`
+abcdefghijABCDEFGHIJ`,
       );
 
       await clearTextEditor(activeTextEditor);
@@ -79,7 +79,7 @@ abcdefghijABCDEFGHIJ`
         activeTextEditor,
         `0
 a
-A`
+A`,
       );
 
       await clearTextEditor(activeTextEditor);
@@ -91,7 +91,7 @@ A`
         activeTextEditor,
         `123456789
 bcdefghij
-BCDEFGHIJ`
+BCDEFGHIJ`,
       );
     });
   });
@@ -119,7 +119,7 @@ BCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdefghij
-`
+`,
       );
     });
 
@@ -145,7 +145,7 @@ abcdefghij
         await emulator.runCommand("yank");
 
         assert.ok(
-          !activeTextEditor.document.getText().includes("fghij\n") // First 2 kills does not appear here
+          !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
         );
         await emulator.runCommand("yankPop");
         assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
@@ -168,7 +168,7 @@ abcdefghij
         "replace",
         () =>
           activeTextEditor.edit((editBuilder) =>
-            editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge")
+            editBuilder.replace(new Range(new Position(0, 0), new Position(0, 1)), "hoge"),
           ),
       ],
     ];
@@ -194,7 +194,7 @@ abcdefghij
         await emulator.runCommand("yank");
 
         assert.ok(
-          !activeTextEditor.document.getText().includes("fghij\n") // First 2 kills does not appear here
+          !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
         );
         await emulator.runCommand("yankPop");
         assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
@@ -225,7 +225,7 @@ abcdefghij
         activeTextEditor,
         `0123456789
 abcdefghij
-`
+`,
       );
     });
 
@@ -247,7 +247,7 @@ abcdefghij
         activeTextEditor,
         `123456789
 abcdefghij
-`
+`,
       );
     });
   });
@@ -284,7 +284,7 @@ ABCDEFGHIJ`;
       assert.strictEqual(
         activeTextEditor.document.getText(),
         `0123456789
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await clearTextEditor(activeTextEditor);
@@ -304,7 +304,7 @@ ABCDEFGHIJ`
         activeTextEditor.document.getText(),
         `0123456789
 a
-ABCDEFGHIJ`
+ABCDEFGHIJ`,
       );
 
       await clearTextEditor(activeTextEditor);
@@ -339,7 +339,7 @@ ABCDEFGHIJ`
         activeTextEditor,
         `0123456789
 abcdefghij
-`
+`,
       );
     });
 
@@ -361,7 +361,7 @@ abcdefghij
         activeTextEditor,
         `123456789
 abcdefghij
-`
+`,
       );
     });
   });

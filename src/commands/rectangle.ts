@@ -79,7 +79,7 @@ abstract class EditRectangle extends RectangleKillYankCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
 
@@ -147,7 +147,7 @@ export class YankRectangle extends RectangleKillYankCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const killedRect = this.rectangleState.latestKilledRectangle;
 
@@ -175,7 +175,7 @@ export class YankRectangle extends RectangleKillYankCommand {
 
         const additionalColumns = Math.max(
           0,
-          insertColumn - textEditor.document.lineAt(insertLine).range.end.character
+          insertColumn - textEditor.document.lineAt(insertLine).range.end.character,
         );
 
         const insertText = " ".repeat(additionalColumns) + killedRect[rectLine];
@@ -205,7 +205,7 @@ export class OpenRectangle extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
     if (selections.length === 0) {
@@ -235,7 +235,7 @@ export class ClearRectangle extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
     if (selections.length === 0) {
@@ -270,7 +270,7 @@ export class StringRectangle extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
 
@@ -309,7 +309,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     if (this.killring === null) {
       return;

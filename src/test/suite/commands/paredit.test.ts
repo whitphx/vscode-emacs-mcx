@@ -111,7 +111,7 @@ suite("paredit.kill-sexp", () => {
   (
     c d
   )
-)`
+)`,
     );
     assertCursorsEqual(activeTextEditor, [1, 0]);
 
@@ -121,7 +121,7 @@ suite("paredit.kill-sexp", () => {
       activeTextEditor,
       `(
 
-)`
+)`,
     );
     assertCursorsEqual(activeTextEditor, [1, 0]);
 
@@ -136,7 +136,7 @@ suite("paredit.kill-sexp", () => {
   )
   (
     c d
-  )`
+  )`,
     );
   });
 
@@ -151,7 +151,7 @@ suite("paredit.kill-sexp", () => {
       activeTextEditor,
       `(
 
-)`
+)`,
     );
     assertCursorsEqual(activeTextEditor, [1, 0]);
 
@@ -166,7 +166,7 @@ suite("paredit.kill-sexp", () => {
   )
   (
     c d
-  )`
+  )`,
     );
   });
 });
@@ -218,7 +218,7 @@ suite("paredit.backward-kill-sexp", () => {
     a b
   )
   
-)`
+)`,
     );
     assertCursorsEqual(activeTextEditor, [4, 2]);
 
@@ -228,7 +228,7 @@ suite("paredit.backward-kill-sexp", () => {
       activeTextEditor,
       `(
   
-)`
+)`,
     );
     assertCursorsEqual(activeTextEditor, [1, 2]);
 
@@ -243,7 +243,7 @@ suite("paredit.backward-kill-sexp", () => {
   )
   (
     c d
-  )`
+  )`,
     );
   });
 
@@ -258,7 +258,7 @@ suite("paredit.backward-kill-sexp", () => {
       activeTextEditor,
       `(
   
-)`
+)`,
     );
     assertCursorsEqual(activeTextEditor, [1, 2]);
 
@@ -273,7 +273,7 @@ suite("paredit.backward-kill-sexp", () => {
   )
   (
     c d
-  )`
+  )`,
     );
   });
 });
@@ -399,7 +399,7 @@ suite("paredit.paredit-kill kill inside string", () => {
     assertTextEqual(
       activeTextEditor,
       `(foo ""
-     quux)`
+     quux)`,
     );
     assertCursorsEqual(activeTextEditor, [0, 6]);
 

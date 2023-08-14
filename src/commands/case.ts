@@ -12,7 +12,7 @@ export class TransformToUppercase extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     if (!hasNonEmptySelection(textEditor)) {
       await this.emacsController.runCommand("forwardWord");
@@ -27,7 +27,7 @@ export class TransformToLowercase extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     if (!hasNonEmptySelection(textEditor)) {
       await this.emacsController.runCommand("forwardWord");
@@ -42,7 +42,7 @@ export class TransformToTitlecase extends EmacsCommand {
   public async execute(
     textEditor: TextEditor,
     isInMarkMode: boolean,
-    prefixArgument: number | undefined
+    prefixArgument: number | undefined,
   ): Promise<void> {
     if (!hasNonEmptySelection(textEditor)) {
       await this.emacsController.runCommand("forwardWord");

@@ -17,7 +17,7 @@ export class DeleteForwardChar extends EmacsCommand {
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () =>
-      vscode.commands.executeCommand<void>("deleteRight")
+      vscode.commands.executeCommand<void>("deleteRight"),
     ) as Thenable<unknown> as Thenable<void>;
   }
 }
@@ -32,7 +32,7 @@ export class NewLine extends EmacsCommand {
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return createParallel(repeat, () =>
-      vscode.commands.executeCommand<void>("default:type", { text: "\n" })
+      vscode.commands.executeCommand<void>("default:type", { text: "\n" }),
     ) as Thenable<unknown> as Thenable<void>;
   }
 }

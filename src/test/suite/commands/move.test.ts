@@ -156,7 +156,7 @@ suite("scroll-up/down-command", () => {
       assertCursorsEqual(activeTextEditor, [lastVisibleLine, 0]);
       assert.ok(
         (activeTextEditor.visibleRanges[0]?.start.line as number) >= initVisibleStartLine + pageLines - 1,
-        "Expected the visible range has been scrolled one page"
+        "Expected the visible range has been scrolled one page",
       );
 
       Configuration.reload();
@@ -175,7 +175,7 @@ suite("scroll-up/down-command", () => {
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
         initVisibleStartLine + 12,
-        "Expected the visibleRange has been scrolled 2 lines"
+        "Expected the visibleRange has been scrolled 2 lines",
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
@@ -192,7 +192,7 @@ suite("scroll-up/down-command", () => {
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
         initVisibleStartLine + 12,
-        "Expected the visibleRange has been scrolled 2 lines"
+        "Expected the visibleRange has been scrolled 2 lines",
       );
       assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
     });
@@ -221,7 +221,7 @@ suite("scroll-up/down-command", () => {
       assertCursorsEqual(activeTextEditor, [firstVisibleLine, 0]);
       assert.ok(
         (activeTextEditor.visibleRanges[0]?.start.line as number) <= initVisibleStartLine - pageLines + 1,
-        "Expected the visible range has been scrolled one page"
+        "Expected the visible range has been scrolled one page",
       );
 
       Configuration.reload();
@@ -240,7 +240,7 @@ suite("scroll-up/down-command", () => {
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
         initVisibleStartLine - 12,
-        "Expected the visibleRange has been scrolled 2 lines"
+        "Expected the visibleRange has been scrolled 2 lines",
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
@@ -257,7 +257,7 @@ suite("scroll-up/down-command", () => {
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
         initVisibleStartLine - 12,
-        "Expected the visibleRange has been scrolled 2 lines"
+        "Expected the visibleRange has been scrolled 2 lines",
       );
       assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.end.line as number, 0]);
     });

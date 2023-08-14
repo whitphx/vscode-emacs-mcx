@@ -107,7 +107,7 @@ KLMNOPQRST`;
 abefghij
 ABEFGHIJ
 klopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]);
@@ -141,7 +141,7 @@ KLMNOPQRST`
 abcdefghij
 ABCDxEFGHIJ
 klmnopqrst
-KLMNOPQRST`
+KLMNOPQRST`,
     );
   });
 });

@@ -41,7 +41,7 @@ suite("killWord and backwardKillWord with JSON document", () => {
   "bar": ""
   "baz": "piyo"
 }
-`
+`,
       );
       assertCursorsEqual(activeTextEditor, [2, 10]);
 
@@ -66,7 +66,7 @@ suite("killWord and backwardKillWord with JSON document", () => {
   "bar": ""
   "baz": "piyo"
 }
-`
+`,
       );
       assertCursorsEqual(activeTextEditor, [2, 10]);
 
