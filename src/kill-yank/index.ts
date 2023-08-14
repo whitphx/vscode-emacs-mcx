@@ -6,6 +6,7 @@ import { equalPositions } from "../utils";
 import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
+import { logger } from "../logger";
 
 export { AppendDirection };
 
@@ -118,7 +119,16 @@ export class KillYanker implements vscode.Disposable {
     this.isAppending = false;
   }
 
-  private async paste(killRingEntity: KillRingEntity) {
+  private async pasteString(text: string): Promise<void> {
+    if (this.minibuffer.isReading) {
+      this.minibuffer.paste(text);
+      return;
+    }
+
+    return vscode.commands.executeCommand("paste", { text });
+  }
+
+  private async pasteKillRingEntity(killRingEntity: KillRingEntity): Promise<void> {
     const flattenedText = killRingEntity.asString();
 
     if (this.minibuffer.isReading) {
@@ -131,7 +141,7 @@ export class KillYanker implements vscode.Disposable {
       const regionTexts = killRingEntity.getRegionTextsList();
       const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
       if (shouldPasteSeparately && regionTexts.length === selections.length) {
-        return this.textEditor.edit((editBuilder) => {
+        const success = await this.textEditor.edit((editBuilder) => {
           selections.forEach((selection, i) => {
             if (!selection.isEmpty) {
               editBuilder.delete(selection);
@@ -142,6 +152,10 @@ export class KillYanker implements vscode.Disposable {
             editBuilder.insert(selection.start, regionTexts[i]!.getAppendedText());
           });
         });
+        if (!success) {
+          logger.warn("Failed to paste kill ring entity");
+        }
+        return;
       }
     }
 
@@ -150,7 +164,8 @@ export class KillYanker implements vscode.Disposable {
 
   public async yank(): Promise<void> {
     if (this.killRing === null) {
-      return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+      const text = await vscode.env.clipboard.readText();
+      return this.pasteString(text);
     }
 
     const clipboardText = await vscode.env.clipboard.readText();
@@ -163,7 +178,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     this.textChangeCount = 0;
-    await this.paste(killRingEntityToPaste);
+    await this.pasteKillRingEntity(killRingEntityToPaste);
     this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
@@ -194,7 +209,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     this.textChangeCount = 0;
-    await this.paste(killRingEntity);
+    await this.pasteKillRingEntity(killRingEntity);
     this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
