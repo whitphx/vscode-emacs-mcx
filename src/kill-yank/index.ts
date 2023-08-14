@@ -118,7 +118,16 @@ export class KillYanker implements vscode.Disposable {
     this.isAppending = false;
   }
 
-  private async paste(killRingEntity: KillRingEntity) {
+  private async pasteString(text: string): Promise<void> {
+    if (this.minibuffer.isReading) {
+      this.minibuffer.paste(text);
+      return;
+    }
+
+    return vscode.commands.executeCommand("paste", { text });
+  }
+
+  private async pasteKillRingEntity(killRingEntity: KillRingEntity) {
     const flattenedText = killRingEntity.asString();
 
     if (this.minibuffer.isReading) {
@@ -152,13 +161,7 @@ export class KillYanker implements vscode.Disposable {
     if (this.killRing === null) {
       const text = await vscode.env.clipboard.readText();
 
-      if (this.minibuffer.isReading) {
-        this.minibuffer.paste(text);
-        return;
-      }
-
-      return vscode.commands.executeCommand("paste", { text });
-      // return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+      return this.pasteString(text);
     }
 
     const clipboardText = await vscode.env.clipboard.readText();
@@ -171,7 +174,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     this.textChangeCount = 0;
-    await this.paste(killRingEntityToPaste);
+    await this.pasteKillRingEntity(killRingEntityToPaste);
     this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
@@ -202,7 +205,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     this.textChangeCount = 0;
-    await this.paste(killRingEntity);
+    await this.pasteKillRingEntity(killRingEntity);
     this.prevYankChanges = this.textChangeCount;
 
     this.docChangedAfterYank = false;
