@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "ESNext",
+    "target": "es6",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "noEmit": true
+  },
+  "include": ["."]
+}
