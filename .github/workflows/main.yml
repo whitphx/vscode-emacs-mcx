@@ -8,6 +8,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
+        type: ["native"]
+        include:
+          - os: ubuntu-latest
+            type: "web"
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -34,14 +38,18 @@ jobs:
 
       - name: Test
         run: xvfb-run -a yarn test
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && matrix.type == 'native'
       - name: Test
         run: yarn test
-        if: runner.os != 'Linux'
+        if: runner.os != 'Linux' && matrix.type == 'native'
+
+      - name: Test Web
+        run: yarn test:web --headless
+        if: matrix.type == 'web'
 
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
       - name: Build the vsix package on Linux
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && matrix.type == 'native'
         run: |
           if [ $IS_RELEASE = true ]; then
             VERSION=$(node -p "require('./package.json').version")
@@ -52,14 +60,14 @@ jobs:
 
       - name: Upload the vsix built on Linux
         uses: actions/upload-artifact@v3
-        if: ${{ matrix.os == 'ubuntu-latest' && ! startsWith(github.ref, 'refs/tags/v') }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.type == 'native' && ! startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
           name: emacs-mcx
 
       - name: Upload the vsix built on Linux (when pushed with a version tag)
         uses: actions/upload-artifact@v3
-        if: ${{ matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v') }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.type == 'native' && startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
           name: emacs-mcx
