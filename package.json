@@ -5140,7 +5140,7 @@
     "rimraf": "^5.0.1",
     "sinon": "^15.0.1",
     "strip-json-comments": "^5.0.1",
-    "ts-loader": "^9.4.2",
+    "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "ttypescript": "^1.5.15",
