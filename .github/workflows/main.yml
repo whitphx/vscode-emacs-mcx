@@ -40,11 +40,8 @@ jobs:
         if: runner.os != 'Linux'
 
       - name: Test Web
-        run: xvfb-run -a yarn test:web
+        run: yarn test:web --headless
         if: runner.os == 'Linux'
-      - name: Test Web
-        run: yarn test:web
-        if: runner.os != 'Linux'
 
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
       - name: Build the vsix package on Linux
