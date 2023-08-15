@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 import * as fs from "fs";
 import stripJsonComments from "strip-json-comments";
 import {
@@ -14,7 +16,7 @@ const packageDotJsonPath = "./package.json";
 console.info(`Reading ${srcFilePath} ...`);
 const srcContent = fs.readFileSync(srcFilePath, "utf8");
 const srcJSON = JSON.parse(stripJsonComments(srcContent));
-const keybindingSrcs: Array<any> = srcJSON["keybindings"];
+const keybindingSrcs: Array<any> = srcJSON["keybindings"]; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 let dstKeybindings: KeyBinding[] = [];
 
