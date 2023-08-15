@@ -57,6 +57,8 @@ jobs:
             VERSION=${{ github.sha }}
           fi
           yarn run vsce package -o emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix
+        env:
+          IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
       - name: Upload the vsix built on Linux
         uses: actions/upload-artifact@v3
