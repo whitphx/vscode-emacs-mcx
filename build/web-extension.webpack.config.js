@@ -1,3 +1,5 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -49,7 +51,7 @@ const config = /** @type WebpackConfig */ {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      process: "process/browser", // provide a shim for the global `process` variable
+      process: "process/browser.js", // provide a shim for the global `process` variable
     }),
   ],
   externals: {
