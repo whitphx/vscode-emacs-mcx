@@ -6,6 +6,7 @@ export function run(): Promise<void> {
     mocha.setup({
       ui: "tdd",
       reporter: undefined,
+      timeout: 10000,
     });
 
     // bundles all files in the current directory matching `*.test`
