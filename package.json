@@ -5118,7 +5118,6 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@types/glob": "^8.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
     "@types/sinon": "^10.0.16",
@@ -5131,7 +5130,7 @@
     "assert": "^2.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.0.0",
-    "glob": "^8.1.0",
+    "glob": "^10.3.3",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.0",
     "mocha": "^10.2.0",
