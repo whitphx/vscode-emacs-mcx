@@ -746,6 +746,19 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "s", // ctrl+x r s
+      "command": "emacs-mcx.StartRegisterSaveCommand",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
+      "key": "i", // ctrl+x r i
+      "command": "emacs-mcx.StartRegisterInsertCommand",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
+      "$special": "registerCommandTypes"
+    },
+    {
       "key": "y", // ctrl+x r y
       "command": "emacs-mcx.yankRectangle",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"

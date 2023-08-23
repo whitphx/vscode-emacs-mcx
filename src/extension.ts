@@ -343,6 +343,36 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("paredit.backwardKillSexp");
   });
 
+  registerEmulatorCommand("emacs-mcx.StartRegisterSaveCommand", (emulator) => {
+    return emulator.runCommand("StartRegisterSaveCommand");
+  });
+
+  registerEmulatorCommand("emacs-mcx.StartRegisterInsertCommand", (emulator) => {
+    return emulator.runCommand("StartRegisterInsertCommand");
+  });
+
+  registerEmulatorCommand("emacs-mcx.RegisterSaveCommand", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
+    const arg = args[0];
+    if (typeof arg !== "string") {
+      return;
+    }
+    return emulator.saveRegister(arg);
+  });
+
+  registerEmulatorCommand("emacs-mcx.RegisterInsertCommand", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
+    const arg = args[0];
+    if (typeof arg !== "string") {
+      return;
+    }
+    return emulator.insertRegister(arg);
+  });
+  
   vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
     if (1 <= args.length) {
       executeCommands(args[0]);
