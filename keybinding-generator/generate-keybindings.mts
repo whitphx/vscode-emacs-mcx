@@ -296,3 +296,34 @@ export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
 
   return keybindings;
 }
+
+export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
+  const keybindings: KeyBinding[] = [];
+
+  // Ascii all printable characters excluding delete.
+  // Ref: https://www.ascii-code.com/
+  const asciiPrintableChars: string[] = [];
+  // ' ' ~ '~'
+  for (let charCode = 0x20; charCode <= 0x7e; charCode++) {
+    asciiPrintableChars.push(String.fromCharCode(charCode));
+  }
+
+  for (const char of asciiPrintableChars) {
+    keybindings.push({
+      key: char,
+      when: "emacs-mcx.acceptingRectCommand && editorTextFocus && emacs-mcx.inRegisterSaveMode",
+      command: "emacs-mcx.RegisterSaveCommand",
+      args: [char],
+    });
+  }
+
+  for (const char of asciiPrintableChars) {
+    keybindings.push({
+      key: char,
+      when: "emacs-mcx.acceptingRectCommand && editorTextFocus && emacs-mcx.inRegisterInsertMode",
+      command: "emacs-mcx.RegisterInsertCommand",
+      args: [char],
+    });
+  }
+  return keybindings;
+}
