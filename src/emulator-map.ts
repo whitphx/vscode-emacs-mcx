@@ -4,7 +4,7 @@ import { KillRing } from "./kill-yank/kill-ring";
 import { Minibuffer } from "./minibuffer";
 
 export class EmacsEmulatorMap {
-  private emacsEmulatorMap: Map<string, EmacsEmulator>;
+  private emacsEmulatorMap: Map<TextEditor, EmacsEmulator>;
   private killRing: KillRing;
   private minibuffer: Minibuffer;
 
@@ -15,34 +15,32 @@ export class EmacsEmulatorMap {
   }
 
   public getOrCreate(editor: TextEditor): [EmacsEmulator, boolean] {
-    const editorId = editor.document.uri.toString();
-
     let isNew = false;
-    let emacsEmulator = this.get(editorId);
+    let emacsEmulator = this.get(editor);
 
     if (!emacsEmulator) {
       isNew = true;
       emacsEmulator = new EmacsEmulator(editor, this.killRing, this.minibuffer);
-      this.emacsEmulatorMap.set(editorId, emacsEmulator);
+      this.emacsEmulatorMap.set(editor, emacsEmulator);
     } else {
       emacsEmulator.setTextEditor(editor);
     }
     return [emacsEmulator, isNew];
   }
 
-  public get(uriString: string): EmacsEmulator | undefined {
-    return this.emacsEmulatorMap.get(uriString);
+  public get(editor: TextEditor): EmacsEmulator | undefined {
+    return this.emacsEmulatorMap.get(editor);
   }
 
-  public keys(): Iterable<string> {
+  public keys(): Iterable<TextEditor> {
     return this.emacsEmulatorMap.keys();
   }
 
-  public delete(editorId: string): void {
-    const emulator = this.emacsEmulatorMap.get(editorId);
+  public delete(editor: TextEditor): void {
+    const emulator = this.emacsEmulatorMap.get(editor);
     if (emulator) {
       emulator.dispose();
     }
-    this.emacsEmulatorMap.delete(editorId);
+    this.emacsEmulatorMap.delete(editor);
   }
 }
