@@ -39,7 +39,6 @@ export function activate(context: vscode.ExtensionContext): void {
     return curEmulator;
   }
 
-  // TODO: Refactor this to share the code snippet with `getAndUpdateEmulator`.
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       if (editor == null) {
