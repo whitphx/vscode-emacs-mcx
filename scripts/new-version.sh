@@ -7,10 +7,12 @@ if [ -z "${VERSION}" ]; then
 fi
 
 PRE_RELEASE_GIT_TAG_SUFFIX=""
+PRE_RELEASE_GIT_COMMENT_SUFFIX=""
 PRE_RELEASE_OPTION=${2:-}
 if [ "${PRE_RELEASE_OPTION}" = "pre" ]; then
   echo "Set the Git tag of this version as pre-release."
   PRE_RELEASE_GIT_TAG_SUFFIX="-pre"
+  PRE_RELEASE_GIT_COMMENT_SUFFIX=" (pre-release)"
 fi
 
 if [[ $(git diff --stat) != '' ]]; then
@@ -24,7 +26,7 @@ CURRENT_VERSION=`node --print 'require("./package.json").version'`
 
 echo "Add and commit package.json"
 git add package.json
-git commit -m "Version ${CURRENT_VERSION}"
+git commit -m "Version ${CURRENT_VERSION}${PRE_RELEASE_GIT_COMMENT_SUFFIX}"
 
 GIT_TAG="v${CURRENT_VERSION}${PRE_RELEASE_GIT_TAG_SUFFIX}"
 echo "Set git tag as ${GIT_TAG}"
