@@ -21,7 +21,6 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
-import { revealPrimaryActive } from "./commands/helpers/reveal";
 
 export interface IEmacsController {
   runCommand(commandName: string): void | Thenable<unknown>;
@@ -216,26 +215,24 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   public switchTextEditor(textEditor: TextEditor): void {
     this.setTextEditor(textEditor);
 
-    // TODO: Consider whether the following code block can be made simpler and share some code blocks with other parts.
-    if (this.isInMarkMode) {
-      this.setNativeSelections(
-        this.nativeSelections.map((selection, i) => {
-          const anchor = this.markModeAnchors[i] ?? selection.anchor;
-          return new vscode.Selection(anchor, selection.active);
-        }),
-      );
-      if (this.rectMode) {
-        this.applyNativeSelectionsAsRect();
-      } else {
-        // Do similar to exitRectangleMarkMode
-        textEditor.selections = this.nativeSelections;
-      }
-      revealPrimaryActive(textEditor);
+    this.setNativeSelections(
+      this.isInMarkMode
+        ? this.nativeSelections.map((selection, i) => {
+            const anchor = this.markModeAnchors[i] ?? selection.anchor;
+            return new vscode.Selection(anchor, selection.active);
+          })
+        : this.nativeSelections.map((selection) => {
+            return new vscode.Selection(selection.active, selection.active);
+          }),
+    );
+    if (this.rectMode) {
+      this.applyNativeSelectionsAsRect();
     } else {
-      textEditor.selections = this.nativeSelections.map((selection) => {
-        return new vscode.Selection(selection.active, selection.active);
-      });
+      this.textEditor.selections = this.nativeSelections;
     }
+
+    const active = this.nativeSelections[0]?.active ?? textEditor.selection.active;
+    textEditor.revealRange(new vscode.Range(active, active));
 
     if (this.rectMode) {
       // Pass
