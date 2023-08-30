@@ -2848,6 +2848,16 @@
         "when": "findInputFocussed"
       },
       {
+        "key": "ctrl+s",
+        "command": "notebook.find",
+        "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "notebook.find",
+        "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
+      },
+      {
         "key": "ctrl+alt+s",
         "command": "emacs-mcx.isearchForwardRegexp",
         "when": "!findInputFocussed && !config.emacs-mcx.useMetaPrefixMacCmd"
