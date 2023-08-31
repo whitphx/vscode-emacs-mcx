@@ -1,6 +1,7 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection, TextEditor } from "vscode";
+export { delay } from "../../utils";
 
 export async function setupWorkspace(
   initialText = "",
@@ -103,8 +104,4 @@ export function assertSelectionsEqual(textEditor: TextEditor, ...selections: Arr
     const expectSelection = selections[idx];
     assert.deepStrictEqual(actualSelection, expectSelection);
   });
-}
-
-export function delay(time?: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, time));
 }
