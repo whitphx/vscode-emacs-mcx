@@ -54,6 +54,10 @@ Refs:
 - [The official doc about `editor.find.seedSearchStringFromSelection` setting](basics#_seed-search-string-from-selection)
 - [The GitHub issue where we discuss about it](https://github.com/whitphx/vscode-emacs-mcx/issues/107)
 
+### The extension has been broken!
+
+Try the `Developer: Reinstall Extension...` command from the command palette to reinstall the extension. I fixed [a problem](https://github.com/whitphx/vscode-emacs-mcx/issues/1654) by this way somehow.
+
 ### I find a bug. I want a feature X to be implemented. I have a question.
 
 Post a bug report or a feature request to [GitHub Issues](https://github.com/whitphx/vscode-emacs-mcx/issues).
