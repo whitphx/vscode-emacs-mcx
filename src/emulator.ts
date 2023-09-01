@@ -38,24 +38,6 @@ export interface IEmacsController {
   registerDisposable: (disposable: vscode.Disposable) => void;
 }
 
-/*
-export class TextRegister {
-  private text_registers: Map<string, string>;
-  constructor() {
-    this.text_registers = new Map();
-  }
-  public get_register_value(somekey: string): string | undefined {
-    return this.text_registers.get(somekey);
-  }
-  public set_register_value(key: string, value: string): void {
-    this.text_registers.set(key, value);
-  }
-  public does_register_exist(key: string): boolean {
-    return this.text_registers.has(key);
-  }
-}
-*/
-
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private textEditor: TextEditor;
   private textRegister: Map<string, string>;
