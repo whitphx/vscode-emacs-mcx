@@ -38,6 +38,7 @@ export interface IEmacsController {
   registerDisposable: (disposable: vscode.Disposable) => void;
 }
 
+/*
 export class TextRegister {
   private text_registers: Map<string, string>;
   constructor() {
@@ -53,10 +54,11 @@ export class TextRegister {
     return this.text_registers.has(key);
   }
 }
+*/
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private textEditor: TextEditor;
-  private textRegister: TextRegister;
+  private textRegister: Map<string, string>;
 
   private commandRegistry: EmacsCommandRegistry;
 
@@ -112,7 +114,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.textEditor = textEditor;
     this._nativeSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
 
-    this.textRegister = new TextRegister();
+    this.textRegister = new Map<string, string>();
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
@@ -585,31 +587,31 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       combinedtext = combinedtext + this.textEditor.document.getText(selections[i]);
       i++;
     }
-    const msg = "Running RegisterSaveCommand to " + arg + " with this selection: " + combinedtext;
-    vscode.window.showInformationMessage(msg);
 
     const register_string = arg;
     if (register_string == null) {
       return;
     }
 
-    this.textRegister.set_register_value(register_string, combinedtext);
+    const msg = "Copying selection to register " + arg;
+    MessageManager.showMessage(msg);
+    this.textRegister.set(register_string, combinedtext);
+    // After copying the selection, get out of mark mode and de-select the selections
+    this.exitMarkMode();
+    this.makeSelectionsEmpty();
   }
 
   public async insertRegister(arg: string): Promise<void> {
-    if (!this.textRegister.does_register_exist(arg)) {
+    if (!this.textRegister.has(arg)) {
       return;
     }
 
-    const textToInsert = this.textRegister.get_register_value(arg);
+    const textToInsert = this.textRegister.get(arg);
     if (textToInsert == undefined) {
       return;
     }
     // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
     const selections = this.textEditor.selections;
-
-    const msg = "Running RegisterInsertCommand from register " + arg;
-    vscode.window.showInformationMessage(msg);
 
     this.textEditor.edit((editBuilder) => {
       selections.forEach((selection) => {
@@ -620,5 +622,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         editBuilder.insert(selection.start, textToInsert);
       });
     });
+
+    const msg = "Inserting content from register " + arg;
+    MessageManager.showMessage(msg);
   }
 }
