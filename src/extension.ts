@@ -41,6 +41,16 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor((editor) => {
+      // XXX: This is a workaround for the web test.
+      // `vscode-test-web` activates the extension before running the tests,
+      // however, with that activation, this event handler is registered and it conflicts with the tests
+      // because the selections will be unwillingly overridden by `EmacsEmulator.switchTextEditor()` called from this handler
+      // when the test code sets the selections for its own purpose.
+      // Ref: https://github.com/microsoft/vscode-test-web/issues/96
+      if (globalThis.IS_WEB_TEST) {
+        return;
+      }
+
       if (editor == null) {
         return;
       }
