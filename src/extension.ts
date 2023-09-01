@@ -22,8 +22,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
+  const textRegister = new Map<string, string>();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegister);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -372,7 +373,7 @@ export function activate(context: vscode.ExtensionContext): void {
     }
     return emulator.insertRegister(arg);
   });
-  
+
   vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
     if (1 <= args.length) {
       executeCommands(args[0]);

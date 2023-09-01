@@ -92,11 +92,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     textEditor: TextEditor,
     killRing: KillRing | null = null,
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
+    textRegister: Map<string, string> = new Map(),
   ) {
     this.textEditor = textEditor;
     this._nativeSelections = this.rectMode ? [] : textEditor.selections; // TODO: `[]` is workaround.
 
-    this.textRegister = new Map<string, string>();
+    this.textRegister = textRegister;
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
