@@ -40,6 +40,21 @@ export function activate(context: vscode.ExtensionContext): void {
   }
 
   context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+      if (editor == null) {
+        return;
+      }
+
+      const [curEmulator, isNew] = emulatorMap.getOrCreate(editor);
+      if (isNew) {
+        context.subscriptions.push(curEmulator);
+      }
+
+      curEmulator.switchTextEditor(editor);
+    }),
+  );
+
+  context.subscriptions.push(
     vscode.workspace.onDidCloseTextDocument(() => {
       const documents = vscode.workspace.textDocuments;
 
