@@ -4,6 +4,20 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.49.0 (pre-release)] - 2023-08-28
+
+### Fix
+
+- Share the mark-mode state and the mark anchor positions among all the editors on the same document, #1648.
+
+## [0.48.6 (pre-release)] - 2023-08-28
+
+Experimental pre-release.
+
+## [0.48.5] - 2023-08-28
+
+Skipped due to an error.
+
 ## [0.48.4] - 2023-08-16
 
 ### Fix
