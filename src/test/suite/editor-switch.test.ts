@@ -34,7 +34,7 @@ KLMNOPQRST`;
     setEmptyCursors(secondTextEditor, [2, 2]);
 
     // On the first editor, set the mark and move the cursor.
-    emulator.setTextEditor(firstTextEditor);
+    await emulator.switchTextEditor(firstTextEditor);
     setEmptyCursors(firstTextEditor, [0, 0]);
     emulator.setMarkCommand();
     await emulator.runCommand("forwardChar");
@@ -43,14 +43,14 @@ KLMNOPQRST`;
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(0, 0, 1, 1));
 
     // Focus on the second editor.
-    emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
+    await emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
 
     // The mark mode and the anchor position should be shared.
     assert.strictEqual(emulator.isInMarkMode, true);
     assertSelectionsEqual(secondTextEditor, new vscode.Selection(0, 0, 2, 2));
 
     // Focus back to the first editor, and assert that the mark mode and the cursor positions have not been changed.
-    emulator.switchTextEditor(firstTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
+    await emulator.switchTextEditor(firstTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
     assert.strictEqual(emulator.isInMarkMode, true);
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(0, 0, 1, 1));
 
@@ -60,7 +60,7 @@ KLMNOPQRST`;
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(1, 1, 1, 1));
 
     // Focus on the second editor and assert that the mark mode has been disabled.
-    emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
+    await emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
     assert.strictEqual(emulator.isInMarkMode, false);
     assertSelectionsEqual(secondTextEditor, new vscode.Selection(2, 2, 2, 2));
   });
@@ -87,7 +87,7 @@ KLMNOPQRST`;
     ); // Selected region is a rectangle.
 
     // Focus on the second editor.
-    emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
+    await emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
 
     // The mark mode and the anchor position should be shared.
     assert.strictEqual(emulator.inRectMarkMode, true);
@@ -100,7 +100,7 @@ KLMNOPQRST`;
     ); // Selected region is a rectangle.
 
     // Focus back to the first editor, and assert that the mark mode and the cursor positions have not been changed.
-    emulator.switchTextEditor(firstTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
+    await emulator.switchTextEditor(firstTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
     assert.strictEqual(emulator.inRectMarkMode, true);
     assertSelectionsEqual(
       firstTextEditor,
@@ -115,7 +115,7 @@ KLMNOPQRST`;
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(2, 2, 2, 2));
 
     // Focus on the second editor and assert that the mark mode has been disabled.
-    emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
+    await emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
     assert.strictEqual(emulator.inRectMarkMode, false);
     assertSelectionsEqual(secondTextEditor, new vscode.Selection(3, 3, 3, 3));
   });

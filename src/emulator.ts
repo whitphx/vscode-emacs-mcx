@@ -21,6 +21,8 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
+import { PromiseDelegate } from "./promise-delegate";
+import { delay } from "./utils";
 
 export interface IEmacsController {
   runCommand(commandName: string): void | Thenable<unknown>;
@@ -68,6 +70,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
    */
   private _nativeSelectionsMap: WeakMap<TextEditor, readonly vscode.Selection[]> = new WeakMap();
+  private _nativeSelectionsSetPromiseMap: WeakMap<TextEditor, PromiseDelegate<void>> = new WeakMap();
   public get nativeSelections(): readonly vscode.Selection[] {
     const maybeNativeSelections = this._nativeSelectionsMap.get(this.textEditor);
     if (maybeNativeSelections) {
@@ -80,6 +83,17 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
   private setNativeSelections(nativeSelections: readonly vscode.Selection[]): void {
     this._nativeSelectionsMap.set(this.textEditor, nativeSelections);
+
+    const setPromise = this._nativeSelectionsSetPromiseMap.get(this.textEditor);
+    if (setPromise) {
+      setPromise.resolvePromise();
+      this._nativeSelectionsSetPromiseMap.delete(this.textEditor);
+    }
+  }
+  private waitNativeSelectionsSet(timeout: number): Promise<void> {
+    const setPromise = new PromiseDelegate<void>();
+    this._nativeSelectionsSetPromiseMap.set(this.textEditor, setPromise);
+    return Promise.any([setPromise.promise, delay(timeout)]);
   }
   private applyNativeSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
@@ -212,8 +226,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * to restore and synchronize the mark mode and the anchor positions
    * when the active text editor is switched.
    */
-  public switchTextEditor(textEditor: TextEditor): void {
+  public async switchTextEditor(textEditor: TextEditor): Promise<void> {
     this.setTextEditor(textEditor);
+
+    // For example when the active text editor is switched by the code jump feature,
+    // the selections are overridden by the code jump result AFTER `onDidChangeActiveTextEditor` is invoked
+    // with some delay. So we need to wait for the selection change.
+    // XXX: The delay time is determined in an ad-hoc manner.
+    await this.waitNativeSelectionsSet(100);
 
     this.setNativeSelections(
       this.isInMarkMode
