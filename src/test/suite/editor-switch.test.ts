@@ -112,7 +112,7 @@ KLMNOPQRST`;
     // Disable the mark mode on the first editor.
     emulator.cancel();
     assert.strictEqual(emulator.inRectMarkMode, false);
-    assertSelectionsEqual(firstTextEditor, new vscode.Selection(2, 2, 2, 2));
+    assertSelectionsEqual(firstTextEditor, new vscode.Selection(0, 0, 2, 2));
 
     // Focus on the second editor and assert that the mark mode has been disabled.
     await emulator.switchTextEditor(secondTextEditor); // This is called in onDidChangeActiveTextEditor event handler in extension.ts in the real case.
