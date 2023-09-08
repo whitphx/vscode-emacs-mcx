@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 ARGS=$@
 ROOT="$(dirname "$(dirname "$(realpath "$0")")")"
 
@@ -18,6 +18,7 @@ tearDown() {
 }
 
 setup
+
 yarn vscode-test-web \
   --browserType=chromium \
   --extensionDevelopmentPath=. \
@@ -25,4 +26,8 @@ yarn vscode-test-web \
   --permission clipboard-read \
   --permission clipboard-write \
   $ARGS
+retval=$?
+
 tearDown
+
+exit $retval
