@@ -5110,7 +5110,7 @@
     "check:eslint": "eslint src --ext ts",
     "pretest": "yarn run test-compile",
     "test": "node ./out/test/runTest.js",
-    "test:web": "mv package.json package.json.bk && jq '.activationEvents = []' package.json.bk > package.json && vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js --permission clipboard-read --permission clipboard-write && mv package.json.bk package.json",
+    "test:web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js --permission clipboard-read --permission clipboard-write",
     "pretest:web": "yarn run compile-web",
     "compile-web": "webpack --config ./build/web-extension.webpack.config.js",
     "watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
