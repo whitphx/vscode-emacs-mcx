@@ -5110,7 +5110,7 @@
     "check:eslint": "eslint src --ext ts",
     "pretest": "yarn run test-compile",
     "test": "node ./out/test/runTest.js",
-    "test:web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js --permission clipboard-read --permission clipboard-write",
+    "test:web": "./scripts/run-web-test.sh",
     "pretest:web": "yarn run compile-web",
     "compile-web": "webpack --config ./build/web-extension.webpack.config.js",
     "watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
