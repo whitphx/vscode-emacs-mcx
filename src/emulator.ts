@@ -627,8 +627,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       return;
     }
 
-    const msg = "Copying selection to register " + arg;
-    MessageManager.showMessage(msg);
     this.textRegister.set(register_string, combinedtext);
     // After copying the selection, get out of mark mode and de-select the selections
     this.exitMarkMode();
@@ -647,7 +645,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
     const selections = this.textEditor.selections;
 
-    this.textEditor.edit((editBuilder) => {
+    await this.textEditor.edit((editBuilder) => {
       selections.forEach((selection) => {
         if (!selection.isEmpty) {
           editBuilder.delete(selection);
@@ -656,8 +654,5 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         editBuilder.insert(selection.start, textToInsert);
       });
     });
-
-    const msg = "Inserting content from register " + arg;
-    MessageManager.showMessage(msg);
   }
 }

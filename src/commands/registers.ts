@@ -7,7 +7,7 @@ export class StartRegisterSaveCommand extends EmacsCommand implements IEmacsComm
 
   private acceptingRegisterSaveCommand = false;
 
-  public startRegisterSaveCommand(): void {
+  private startRegisterSaveCommand(): void {
     this.acceptingRegisterSaveCommand = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterSaveMode", true);
   }
