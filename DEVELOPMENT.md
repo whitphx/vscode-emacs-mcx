@@ -34,7 +34,7 @@ See also https://code.visualstudio.com/docs/editor/debugging
 
 ### CI
 
-CI runs coding style checks and unit tests (See also [`.github/workflows/test.yml`](.github/workflows/test.yml)).
+CI runs coding style checks and unit tests (See also the `build` job defined in [`.github/workflows/main.yml`](.github/workflows/main.yml)).
 
 Make sure that **the CI has passed all coding style checks and unit tests** before requesting PR reviews.
 
