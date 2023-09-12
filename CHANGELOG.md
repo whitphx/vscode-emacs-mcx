@@ -4,6 +4,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Add
+
+- Text registers, #1643, by @justinhopkins.
+
 ## [0.49.1 (pre-release)] - 2023-09-08
 
 ### Fix

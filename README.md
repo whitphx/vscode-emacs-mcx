@@ -241,6 +241,15 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 
 See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Setting-Mark.html) and [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark-Ring.html) about the mark and the mark ring.
 
+## Text registers
+
+| Command       | Desc                                              |
+| ------------- | ------------------------------------------------- |
+| `C-x r s `_r_ | Copy region into register _r_ (copy-to-register). |
+| `C-x r i `_r_ | Insert text from register _r_ (insert-register).  |
+
+See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Registers.html) about the text registers.
+
 ## Rectangles
 
 | Command     | Desc                                                                                                      |
