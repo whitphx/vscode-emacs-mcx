@@ -7,11 +7,13 @@ export class EmacsEmulatorMap {
   private emacsEmulatorMap: Map<string, EmacsEmulator>;
   private killRing: KillRing;
   private minibuffer: Minibuffer;
+  private textRegister: Map<string, string>;
 
-  constructor(killRing: KillRing, minibuffer: Minibuffer) {
+  constructor(killRing: KillRing, minibuffer: Minibuffer, textRegister: Map<string, string>) {
     this.emacsEmulatorMap = new Map();
     this.killRing = killRing;
     this.minibuffer = minibuffer;
+    this.textRegister = textRegister;
   }
 
   public getOrCreate(editor: TextEditor): [EmacsEmulator, boolean] {
@@ -22,7 +24,7 @@ export class EmacsEmulatorMap {
 
     if (!emacsEmulator) {
       isNew = true;
-      emacsEmulator = new EmacsEmulator(editor, this.killRing, this.minibuffer);
+      emacsEmulator = new EmacsEmulator(editor, this.killRing, this.minibuffer, this.textRegister);
       this.emacsEmulatorMap.set(editorId, emacsEmulator);
     } else {
       emacsEmulator.setTextEditor(editor);

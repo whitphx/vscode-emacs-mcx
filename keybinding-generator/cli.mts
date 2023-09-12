@@ -8,6 +8,7 @@ import {
   generateKeybindings,
   generateKeybindingsForPrefixArgument,
   generateKeybindingsForTypeCharInRectMarkMode,
+  generateKeybindingsForRegisterCommands,
 } from "./generate-keybindings.mjs";
 
 const srcFilePath = "./keybindings.json";
@@ -30,6 +31,11 @@ keybindingSrcs.forEach((keybindingSrc) => {
   if (keybindingSrc.$special === "rectMarkModeTypes") {
     console.log("Adding keybindings for types in rectangle-mark-mode");
     dstKeybindings.push(...generateKeybindingsForTypeCharInRectMarkMode());
+    return;
+  }
+  if (keybindingSrc.$special == "registerCommandTypes") {
+    console.log("Adding keybindings for register commands");
+    dstKeybindings.push(...generateKeybindingsForRegisterCommands());
     return;
   }
 

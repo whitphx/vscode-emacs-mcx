@@ -22,8 +22,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
+  const textRegister = new Map<string, string>();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegister);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -356,6 +357,36 @@ export function activate(context: vscode.ExtensionContext): void {
 
   registerEmulatorCommand("emacs-mcx.paredit.backwardKillSexp", (emulator) => {
     emulator.runCommand("paredit.backwardKillSexp");
+  });
+
+  registerEmulatorCommand("emacs-mcx.StartRegisterSaveCommand", (emulator) => {
+    return emulator.runCommand("StartRegisterSaveCommand");
+  });
+
+  registerEmulatorCommand("emacs-mcx.StartRegisterInsertCommand", (emulator) => {
+    return emulator.runCommand("StartRegisterInsertCommand");
+  });
+
+  registerEmulatorCommand("emacs-mcx.RegisterSaveCommand", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
+    const arg = args[0];
+    if (typeof arg !== "string") {
+      return;
+    }
+    return emulator.saveRegister(arg);
+  });
+
+  registerEmulatorCommand("emacs-mcx.RegisterInsertCommand", (emulator, args) => {
+    if (!Array.isArray(args)) {
+      return;
+    }
+    const arg = args[0];
+    if (typeof arg !== "string") {
+      return;
+    }
+    return emulator.insertRegister(arg);
   });
 
   vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
