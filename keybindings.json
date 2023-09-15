@@ -316,6 +316,13 @@
       "command": "editor.action.previousMatchFindAction",
       "when": "findInputFocussed"
     },
+    // On notebooks, only `notebook.find` is available so we can't use Emacs-like i-search.
+    // As a fallback, we use `notebook.find` for `ctrl+s` and `ctrl+r`.
+    {
+      "keys": ["ctrl+s", "ctrl+r"],
+      "command": "notebook.find",
+      "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
+    },
     // i-search forward regexp
     {
       "key": "ctrl+meta+s",
