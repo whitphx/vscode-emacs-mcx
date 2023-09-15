@@ -4,9 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.50.0] - 2023-09-15
+
 ### Add
 
 - Text registers, #1643, by @justinhopkins.
+- Assign `C-s` and `C-r` to `notebook.find`, #1659.
 
 ## [0.49.1 (pre-release)] - 2023-09-08
 
