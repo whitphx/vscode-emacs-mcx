@@ -4,9 +4,22 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
-## [0.49.0 (pre-release)] - 2023-08-28
+## [0.50.0] - 2023-09-15
+
+### Add
+
+- Text registers, #1643, by @justinhopkins.
+- Assign `C-s` and `C-r` to `notebook.find`, #1659.
+
+## [0.49.1 (pre-release)] - 2023-09-08
 
 ### Fix
+
+- The editor switcher waits for selection updates triggered by other functions such as the code jump before synchronizing its own cursor positions so that it doesn't conflict with such other features, #1661.
+
+## [0.49.0 (pre-release)] - 2023-08-28
+
+### Change
 
 - Share the mark-mode state and the mark anchor positions among all the editors on the same document, #1648.
 

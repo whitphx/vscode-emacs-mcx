@@ -10,6 +10,8 @@ import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
+import { StartRegisterSaveCommand, StartRegisterInsertCommand } from "./commands/registers";
+import { getNonEmptySelections } from "./commands/helpers/selection";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
@@ -21,6 +23,8 @@ import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
+import { PromiseDelegate } from "./promise-delegate";
+import { delay } from "./utils";
 
 export interface IEmacsController {
   runCommand(commandName: string): void | Thenable<unknown>;
@@ -38,6 +42,7 @@ export interface IEmacsController {
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private textEditor: TextEditor;
+  private textRegister: Map<string, string>;
 
   private commandRegistry: EmacsCommandRegistry;
 
@@ -68,6 +73,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
    */
   private _nativeSelectionsMap: WeakMap<TextEditor, readonly vscode.Selection[]> = new WeakMap();
+  private _nativeSelectionsSetPromiseMap: WeakMap<TextEditor, PromiseDelegate<void>> = new WeakMap();
   public get nativeSelections(): readonly vscode.Selection[] {
     const maybeNativeSelections = this._nativeSelectionsMap.get(this.textEditor);
     if (maybeNativeSelections) {
@@ -80,6 +86,17 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
   private setNativeSelections(nativeSelections: readonly vscode.Selection[]): void {
     this._nativeSelectionsMap.set(this.textEditor, nativeSelections);
+
+    const setPromise = this._nativeSelectionsSetPromiseMap.get(this.textEditor);
+    if (setPromise) {
+      setPromise.resolvePromise();
+      this._nativeSelectionsSetPromiseMap.delete(this.textEditor);
+    }
+  }
+  private waitNativeSelectionsSet(timeout: number): Promise<void> {
+    const setPromise = new PromiseDelegate<void>();
+    this._nativeSelectionsSetPromiseMap.set(this.textEditor, setPromise);
+    return Promise.any([setPromise.promise, delay(timeout)]);
   }
   private applyNativeSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
@@ -107,10 +124,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     textEditor: TextEditor,
     killRing: KillRing | null = null,
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
+    textRegister: Map<string, string> = new Map(),
   ) {
     this.textEditor = textEditor;
     this.setNativeSelections(this.rectMode ? [] : textEditor.selections); // TODO: `[]` is workaround.
 
+    this.textRegister = textRegister;
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
@@ -172,6 +191,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.killYanker = killYanker; // TODO: To be removed
     this.registerDisposable(killYanker);
 
+    this.commandRegistry.register(new StartRegisterSaveCommand(this));
+    this.commandRegistry.register(new StartRegisterInsertCommand(this));
+
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
     };
@@ -212,8 +234,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * to restore and synchronize the mark mode and the anchor positions
    * when the active text editor is switched.
    */
-  public switchTextEditor(textEditor: TextEditor): void {
+  public async switchTextEditor(textEditor: TextEditor): Promise<void> {
     this.setTextEditor(textEditor);
+
+    // For example when the active text editor is switched by the code jump feature,
+    // the selections are overridden by the code jump result AFTER `onDidChangeActiveTextEditor` is invoked
+    // with some delay. So we need to wait for the selection change.
+    // XXX: The delay time is determined in an ad-hoc manner.
+    await this.waitNativeSelectionsSet(100);
 
     this.setNativeSelections(
       this.isInMarkMode
@@ -590,6 +618,61 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         // TODO: Cache the array of IEmacsCommandInterrupted instances
         command.onDidInterruptTextEditor();
       }
+    });
+  }
+
+  public saveRegister(arg: string): void {
+    const selectionsAfterRectDisabled =
+      this.inRectMarkMode &&
+      this.nativeSelections.map((selection) => {
+        const newLine = selection.active.line;
+        const newChar = Math.min(selection.active.character, selection.anchor.character);
+        return new vscode.Selection(newLine, newChar, newLine, newChar);
+      });
+    const selections = getNonEmptySelections(this.textEditor);
+    if (selectionsAfterRectDisabled) {
+      this.textEditor.selections = selectionsAfterRectDisabled;
+    }
+    // selections is now a list of non empty selections, iterate through them and
+    // build a single variable combinedtext
+    let i = 0;
+    let combinedtext = "";
+    while (i < selections.length) {
+      combinedtext = combinedtext + this.textEditor.document.getText(selections[i]);
+      i++;
+    }
+
+    const register_string = arg;
+    if (register_string == null) {
+      return;
+    }
+
+    this.textRegister.set(register_string, combinedtext);
+    // After copying the selection, get out of mark mode and de-select the selections
+    this.exitMarkMode();
+    this.makeSelectionsEmpty();
+  }
+
+  public async insertRegister(arg: string): Promise<void> {
+    if (!this.textRegister.has(arg)) {
+      return;
+    }
+
+    const textToInsert = this.textRegister.get(arg);
+    if (textToInsert == undefined) {
+      return;
+    }
+    // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
+    const selections = this.textEditor.selections;
+
+    await this.textEditor.edit((editBuilder) => {
+      selections.forEach((selection) => {
+        if (!selection.isEmpty) {
+          editBuilder.delete(selection);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        editBuilder.insert(selection.start, textToInsert);
+      });
     });
   }
 }
