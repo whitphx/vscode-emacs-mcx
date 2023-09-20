@@ -750,7 +750,7 @@
     {
       "key": "k", // ctrl+x r k
       "command": "emacs-mcx.killRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "key": "s", // ctrl+x r s
@@ -768,12 +768,12 @@
     {
       "key": "y", // ctrl+x r y
       "command": "emacs-mcx.yankRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "key": "d", // ctrl+x r d
       "command": "emacs-mcx.deleteRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "key": "meta+w", // ctrl+x r M-w
@@ -783,22 +783,22 @@
     {
       "key": "o", // ctrl+x r o
       "command": "emacs-mcx.openRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "key": "c", // ctrl+x r c
       "command": "emacs-mcx.clearRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "key": "t", // ctrl+x r t
       "command": "emacs-mcx.stringRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "key": "p", // ctrl+x r p
       "command": "emacs-mcx.replaceKillRingToRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
     },
     {
       "$special": "rectMarkModeTypes"
