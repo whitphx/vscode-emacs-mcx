@@ -3966,7 +3966,7 @@
       {
         "key": "k",
         "command": "emacs-mcx.killRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": "s",
@@ -5501,12 +5501,12 @@
       {
         "key": "y",
         "command": "emacs-mcx.yankRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": "d",
         "command": "emacs-mcx.deleteRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": "alt+w",
@@ -5532,22 +5532,22 @@
       {
         "key": "o",
         "command": "emacs-mcx.openRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": "c",
         "command": "emacs-mcx.clearRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": "t",
         "command": "emacs-mcx.stringRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": "p",
         "command": "emacs-mcx.replaceKillRingToRectangle",
-        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus && !(emacs-mcx.inRegisterSaveMode || emacs-mcx.inRegisterInsertMode)"
       },
       {
         "key": " ",
