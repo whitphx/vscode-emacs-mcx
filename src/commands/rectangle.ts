@@ -21,7 +21,7 @@ export class StartAcceptingRectCommand extends EmacsCommand implements IEmacsCom
 
   private acceptingRectCommand = false;
 
-  public startAcceptingRectCommand(): void {
+  private startAcceptingRectCommand(): void {
     this.acceptingRectCommand = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", true);
   }
