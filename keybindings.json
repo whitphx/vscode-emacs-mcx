@@ -793,7 +793,7 @@
     {
       "key": "t", // ctrl+x r t
       "command": "emacs-mcx.stringRectangle",
-      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus)"
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "p", // ctrl+x r p
