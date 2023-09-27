@@ -6659,7 +6659,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.1",
-    "@types/mocha": "^10.0.1",
+    "@types/mocha": "^10.0.2",
     "@types/node": "^18.11.18",
     "@types/sinon": "^10.0.17",
     "@types/vscode": "^1.63.0",
