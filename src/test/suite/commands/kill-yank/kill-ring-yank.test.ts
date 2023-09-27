@@ -544,17 +544,17 @@ suite("yank pop with auto-indent", () => {
 
     // Yank pastes "bar" with auto-indentation
     await emulator.runCommand("yank");
-    await delay(10);
+    await delay(100);
     assertTextEqual(activeTextEditor, "{\n    bar\n}");
 
     // YankPop pastes "foo" with auto-indentation
     await emulator.runCommand("yankPop");
-    await delay(10);
+    await delay(100);
     assertTextEqual(activeTextEditor, "{\n    foo\n}");
 
     // yankPop again
     await emulator.runCommand("yankPop");
-    await delay(10);
+    await delay(100);
     assertTextEqual(activeTextEditor, "{\n    bar\n}");
   });
 });
