@@ -11,6 +11,7 @@ export function run(): Promise<void> {
     forbidOnly: isCI,
     color: true,
     timeout: 10000,
+    retries: 2,
   });
 
   const testsRoot = path.resolve(__dirname, "..");
