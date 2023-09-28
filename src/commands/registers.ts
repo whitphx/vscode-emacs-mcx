@@ -9,6 +9,7 @@ export class StartRegisterSaveCommand extends EmacsCommand implements IEmacsComm
 
   private startRegisterSaveCommand(): void {
     this.acceptingRegisterSaveCommand = true;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterSaveMode", true);
   }
 
@@ -36,6 +37,7 @@ export class StartRegisterInsertCommand extends EmacsCommand implements IEmacsCo
 
   public startRegisterInsertCommand(): void {
     this.acceptingRegisterInsertCommand = true;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterInsertMode", true);
   }
 

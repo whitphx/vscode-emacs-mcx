@@ -311,7 +311,7 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   for (const char of asciiPrintableChars) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.acceptingRectCommand && editorTextFocus && emacs-mcx.inRegisterSaveMode",
+      when: "emacs-mcx.inRegisterSaveMode && editorTextFocus",
       command: "emacs-mcx.RegisterSaveCommand",
       args: [char],
     });
@@ -320,7 +320,7 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   for (const char of asciiPrintableChars) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.acceptingRectCommand && editorTextFocus && emacs-mcx.inRegisterInsertMode",
+      when: "emacs-mcx.inRegisterInsertMode && editorTextFocus",
       command: "emacs-mcx.RegisterInsertCommand",
       args: [char],
     });
