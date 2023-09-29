@@ -199,6 +199,13 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@playwright/browser-chromium@^1.38.1":
+  version "1.38.1"
+  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.38.1.tgz#daf0ed3f7a8f9ad6ca731c73be3682b7cce8d5ff"
+  integrity sha512-HRhcBGtk1XaGAQjOben/04PNHxWAY3DBHT97egraR5lx5SQSLOREIiYu/j7WlvQBz4QJP+XL2JsvoxFBJfXmAw==
+  dependencies:
+    playwright-core "1.38.1"
+
 "@sinonjs/commons@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-2.0.0.tgz#fd4ca5b063554307e8327b4564bd56d3b73924a3"
@@ -425,22 +432,23 @@
     jszip "^3.10.1"
     semver "^7.5.2"
 
-"@vscode/test-web@^0.0.45":
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.45.tgz#e0b23a67ec0081f69173565db93847ab3aec0a8e"
-  integrity sha512-yPJgxEbbxDlKGGpLzNQ8PDPOOUKUVo7Epg/3o+y7mKtjbg3nktIReJ/pPtOHrZxsNC8FkzTNBoTh5DMBHX/LGg==
+"@vscode/test-web@^0.0.46":
+  version "0.0.46"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.46.tgz#ad42bcaa5fbbf7929dcc629db6285fd7580753ad"
+  integrity sha512-s5rKDtCvIWN6kJpjXzBoWpLvftjH3m2r2MQNGUGsdY1+mOJ06lbbHeJn+g30+p0ec4Vh7PpBZGECflrRW+oH4Q==
   dependencies:
     "@koa/cors" "^4.0.0"
     "@koa/router" "^12.0.0"
+    "@playwright/browser-chromium" "^1.38.1"
     gunzip-maybe "^1.4.2"
     http-proxy-agent "^7.0.0"
-    https-proxy-agent "^7.0.1"
+    https-proxy-agent "^7.0.2"
     koa "^2.14.2"
     koa-morgan "^1.0.1"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
     minimist "^1.2.8"
-    playwright "^1.37.1"
+    playwright "^1.38.1"
     tar-fs "^3.0.4"
     vscode-uri "^3.0.7"
 
@@ -1769,7 +1777,7 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
 
-fsevents@~2.3.2:
+fsevents@2.3.2, fsevents@~2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
@@ -2060,10 +2068,10 @@ https-proxy-agent@^5.0.0:
     agent-base "6"
     debug "4"
 
-https-proxy-agent@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-7.0.1.tgz#0277e28f13a07d45c663633841e20a40aaafe0ab"
-  integrity sha512-Eun8zV0kcYS1g19r78osiQLEFIRspRUDd9tIfBCTBPBeMieF/EsJNL8VI3xOIdYRDEkjQnqOYPsZ2DsWsVsFwQ==
+https-proxy-agent@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-7.0.2.tgz#e2645b846b90e96c6e6f347fb5b2e41f1590b09b"
+  integrity sha512-NmLNjm6ucYwtcUmL7JQC1ZQ57LmHP4lT15FQ8D61nak1rO6DH+fz5qNK2Ap5UN4ZapYICE3/0KodcLYSPsPbaA==
   dependencies:
     agent-base "^7.0.2"
     debug "4"
@@ -3210,17 +3218,19 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.37.1:
-  version "1.37.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.37.1.tgz#cb517d52e2e8cb4fa71957639f1cd105d1683126"
-  integrity sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==
+playwright-core@1.38.1:
+  version "1.38.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.38.1.tgz#75a3c470aa9576b7d7c4e274de3d79977448ba08"
+  integrity sha512-tQqNFUKa3OfMf4b2jQ7aGLB8o9bS3bOY0yMEtldtC2+spf8QXG9zvXLTXUeRsoNuxEYMgLYR+NXfAa1rjKRcrg==
 
-playwright@^1.37.1:
-  version "1.37.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.37.1.tgz#6e488d82d7d98b9127c5db9c701f9c956ab47e76"
-  integrity sha512-bgUXRrQKhT48zHdxDYQTpf//0xDfDd5hLeEhjuSw8rXEGoT9YeElpfvs/izonTNY21IQZ7d3s22jLxYaAnubbQ==
+playwright@^1.38.1:
+  version "1.38.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.38.1.tgz#82ecd9bc4f4f64dbeee8a11c31793748e2528130"
+  integrity sha512-oRMSJmZrOu1FP5iu3UrCx8JEFRIMxLDM0c/3o4bpzU5Tz97BypefWf7TuTNPWeCe279TPal5RtPPZ+9lW/Qkow==
   dependencies:
-    playwright-core "1.37.1"
+    playwright-core "1.38.1"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 prebuild-install@^6.0.0:
   version "6.1.4"
