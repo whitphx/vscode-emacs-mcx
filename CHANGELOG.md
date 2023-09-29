@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.50.1] - 2023-09-15
+
+### Fix
+
+- Bugfix for text registers k, y, d, o, c, t, and p not working, #1679.
+
 ## [0.50.0] - 2023-09-15
 
 ### Add
