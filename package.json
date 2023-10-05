@@ -6662,7 +6662,7 @@
     "@types/mocha": "^10.0.2",
     "@types/node": "^18.11.18",
     "@types/sinon": "^10.0.18",
-    "@types/vscode": "^1.63.0",
+    "@types/vscode": "^1.83.0",
     "@types/webpack-env": "^1.18.2",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
