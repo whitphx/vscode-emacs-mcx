@@ -432,10 +432,10 @@
     jszip "^3.10.1"
     semver "^7.5.2"
 
-"@vscode/test-web@^0.0.46":
-  version "0.0.46"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.46.tgz#ad42bcaa5fbbf7929dcc629db6285fd7580753ad"
-  integrity sha512-s5rKDtCvIWN6kJpjXzBoWpLvftjH3m2r2MQNGUGsdY1+mOJ06lbbHeJn+g30+p0ec4Vh7PpBZGECflrRW+oH4Q==
+"@vscode/test-web@^0.0.47":
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.47.tgz#329abf815529c915e2acf6df8f87ffdaf682e33b"
+  integrity sha512-p1ym6+h30ecTLCrOcAlD7k3tq/AMVWzZjolbU3jcP0QJV0JSj9hp/Pnmfkrw8s2Xo5ywdbABSFSlNPUpZoicOA==
   dependencies:
     "@koa/cors" "^4.0.0"
     "@koa/router" "^12.0.0"
