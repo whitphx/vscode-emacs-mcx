@@ -49,9 +49,13 @@ export function activate(context: vscode.ExtensionContext): void {
       const [curEmulator, isNew] = emulatorMap.getOrCreate(editor);
       if (isNew) {
         context.subscriptions.push(curEmulator);
+      } else {
+        // NOTE: `switchTextEditor()`'s behavior is flaky
+        // as it depends on a delay with an ad-hoc duration,
+        // so it's important to put this call at this else block
+        // and avoid calling it when it's not necessary.
+        curEmulator.switchTextEditor(editor);
       }
-
-      curEmulator.switchTextEditor(editor);
     }),
   );
 
