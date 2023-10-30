@@ -259,9 +259,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this.textEditor.selections = this.nativeSelections;
     }
 
-    const active = this.nativeSelections[0]?.active ?? textEditor.selection.active;
-    textEditor.revealRange(new vscode.Range(active, active));
-
     if (this.rectMode) {
       // Pass
     } else {
