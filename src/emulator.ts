@@ -240,7 +240,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     // For example when the active text editor is switched by the code jump feature,
     // the selections are overridden by the code jump result AFTER `onDidChangeActiveTextEditor` is invoked
     // with some delay. So we need to wait for the selection change.
-    // XXX: The delay time is determined in an ad-hoc manner.
+    // XXX: This delay time is ad-hoc.
     await this.waitNativeSelectionsSet(100);
 
     this.setNativeSelections(
