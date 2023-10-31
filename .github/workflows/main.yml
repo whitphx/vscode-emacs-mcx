@@ -100,6 +100,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: emacs-mcx*.vsix
+          generate_release_notes: true
 
   publish:
     if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
