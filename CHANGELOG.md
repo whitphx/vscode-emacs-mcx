@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.50.2] - 2023-10-31
+
+### Fix
+
+- Stop revealing the cursor when switching text editors, #1721.
+- Stop cursor position modification at switching text editors if the text editor is newly opened, #1722.
+
 ## [0.50.1] - 2023-09-15
 
 ### Fix
