@@ -355,10 +355,10 @@
   resolved "https://registry.yarnpkg.com/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-8.1.1.tgz#b49c2c70150141a15e0fa7e79cf1f92a72934ce3"
   integrity sha512-0kSuKjAS0TrGLJ0M/+8MaFkGsQhZpB6pxOmvS3K8FYI72K//YmdfoW9X2qPsAKh1mkwxGD5zib9s1FIFed6E8g==
 
-"@types/vscode@^1.63.0":
-  version "1.66.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.66.0.tgz#e90e1308ad103f2bd31b72c17b8031b4cec0713d"
-  integrity sha512-ZfJck4M7nrGasfs4A4YbUoxis3Vu24cETw3DERsNYtDZmYSYtk6ljKexKFKhImO/ZmY6ZMsmegu2FPkXoUFImA==
+"@types/vscode@^1.83.2":
+  version "1.83.2"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.83.2.tgz#fd86eaf20915d885cb8e512ff6c453844697d675"
+  integrity sha512-qIN48iXkJi2eVyd9HB+TSYBssz7/EgSYw4IeoMNL9sJCao6qOVSXJR4z0HohV+Mvoiib1/rpK5hqoJ2Ua0N/+w==
 
 "@types/webpack-env@^1.18.3":
   version "1.18.3"
