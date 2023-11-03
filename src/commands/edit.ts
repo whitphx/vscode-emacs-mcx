@@ -77,21 +77,19 @@ export class NewLine extends EmacsCommand {
     await vscode.commands.executeCommand<void>("undo");
     await vscode.commands.executeCommand<void>("undo");
 
-    await textEditor
-      .edit((editBuilder) => {
-        textEditor.selections.forEach((selection, index) => {
-          const firstInsertedText = firstInsertedTexts[index];
-          const secondInsertedText = secondInsertedTexts[index];
-          if (firstInsertedText == null) {
-            throw new Error("firstInsertedText is null");
-          }
-          if (secondInsertedText == null) {
-            throw new Error("secondInsertedText is null");
-          }
-          editBuilder.insert(selection.active, firstInsertedText.repeat(repeat - 1) + secondInsertedText);
-        });
-      })
-      .then();
+    await textEditor.edit((editBuilder) => {
+      textEditor.selections.forEach((selection, index) => {
+        const firstInsertedText = firstInsertedTexts[index];
+        const secondInsertedText = secondInsertedTexts[index];
+        if (firstInsertedText == null) {
+          throw new Error("firstInsertedText is null");
+        }
+        if (secondInsertedText == null) {
+          throw new Error("secondInsertedText is null");
+        }
+        editBuilder.insert(selection.active, firstInsertedText.repeat(repeat - 1) + secondInsertedText);
+      });
+    });
 
     revealPrimaryActive(textEditor);
   }
