@@ -4,11 +4,15 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
-## [0.50.3] - 2023-11-03
+## [0.50.4] - 2023-11-03
 
 ### Fix
 
 - Set the activation event as "onStartupFinished", #1720.
+
+## [0.50.3] - 2023-11-03
+
+Skipped due to an error.
 
 ## [0.50.2] - 2023-10-31
 
