@@ -13,7 +13,7 @@ suite("newLine", () => {
   ];
 
   eols.forEach(([eol, eolStr]) => {
-    suite(`with ${eolStr}`, () => {
+    suite(`with ${JSON.stringify(eolStr)}`, () => {
       suite("basic behaviors", () => {
         setup(async () => {
           const initialText = `0123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`;
@@ -180,7 +180,7 @@ suite("newLine", () => {
         });
       });
 
-      test("working with prefix argument", async () => {
+      test("working with a prefix argument and undo/redo", async () => {
         const initialText = "";
         activeTextEditor = await setupWorkspace(initialText, { eol });
         emulator = new EmacsEmulator(activeTextEditor);
@@ -193,6 +193,14 @@ suite("newLine", () => {
         assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);
         assert.strictEqual(activeTextEditor.selection.active.line, 4);
         assert.strictEqual(activeTextEditor.selection.active.character, 0);
+
+        await vscode.commands.executeCommand<void>("undo");
+
+        assertTextEqual(activeTextEditor, "");
+
+        await vscode.commands.executeCommand<void>("redo");
+
+        assertTextEqual(activeTextEditor, `${eolStr}${eolStr}${eolStr}${eolStr}`);
       });
     });
   });
