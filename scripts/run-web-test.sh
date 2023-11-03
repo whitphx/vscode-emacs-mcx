@@ -9,7 +9,7 @@ setup() {
   echo "Rename package.json to package.json.bk"
   mv ${ROOT}/package.json ${ROOT}/package.json.bk
   echo "Remove the \"*\" activation event from package.json"
-  jq '.activationEvents |= map(select(. != "*"))' ${ROOT}/package.json.bk > ${ROOT}/package.json
+  jq '.activationEvents |= map(select(. != "onStartupFinished"))' ${ROOT}/package.json.bk > ${ROOT}/package.json
 }
 
 tearDown() {
