@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
-import { Range, Selection, TextEditor } from "vscode";
+import { Selection, TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { delay } from "../utils";
 
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";
@@ -48,30 +49,41 @@ export class NewLine extends EmacsCommand {
     // here because it doesn't work well with undo/redo pushing multiple edits into the undo stack.
     // Instead, we use `textEditor.edit` to push a single edit into the undo stack.
     // To do so, we first call the `default:type` command twice to insert two new lines
-    // record the inserted texts.
+    // and record the inserted texts.
     // Then undo these two edits and call `textEditor.edit` to insert the repeated texts at once.
-    const initialPositions = textEditor.selections.map((selection) => selection.active);
 
-    await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
-    const firstEditPositions = textEditor.selections.map((selection) => selection.active);
-    const firstInsertedTexts = firstEditPositions.map((position, index) => {
-      const initialPosition = initialPositions[index];
-      if (initialPosition == null) {
-        throw new Error("initialPosition is null");
-      }
-      const range = new Range(initialPosition, position);
-      return textEditor.document.getText(range);
+    const initCursorsAtEndOfLine = textEditor.selections.map((selection) => {
+      return selection.active.isEqual(textEditor.document.lineAt(selection.active.line).range.end);
     });
 
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
-    const secondEditPositions = textEditor.selections.map((selection) => selection.active);
-    const secondInsertedTexts = secondEditPositions.map((position, index) => {
-      const firstEditPosition = firstEditPositions[index];
-      if (firstEditPosition == null) {
-        throw new Error("firstEditPosition is null");
+    await delay(6); // Wait for code completion to finish. The value is ad-hoc.
+    await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
+
+    const eol = textEditor.document.eol === vscode.EndOfLine.CRLF ? "\r\n" : "\n";
+
+    const firstInsertedTexts = textEditor.selections.map((selection) => {
+      return eol + textEditor.document.lineAt(selection.active.line - 1).text;
+    });
+    const secondInsertedTexts = textEditor.selections.map((selection) => {
+      return eol + textEditor.document.lineAt(selection.active.line).text;
+    });
+
+    // Trailing new lines can be inserted for example
+    // when the cursor is inside a multi-line comment in JS like below.
+    // /**| */
+    // ↓
+    // /**
+    //  * |
+    //  */
+    // This `trailingNewLinesInserted` flag represents whether such trailing new lines are inserted.
+    const trailingNewLinesInserted = textEditor.selections.map((selection, index) => {
+      const initCursorAtEndOfLine = initCursorsAtEndOfLine[index];
+      if (initCursorAtEndOfLine == undefined || initCursorAtEndOfLine === true) {
+        return false;
       }
-      const range = new Range(firstEditPosition, position);
-      return textEditor.document.getText(range);
+      const cursorAtEndOfLine = selection.active.isEqual(textEditor.document.lineAt(selection.active.line).range.end);
+      return cursorAtEndOfLine;
     });
 
     await vscode.commands.executeCommand<void>("undo");
@@ -79,16 +91,28 @@ export class NewLine extends EmacsCommand {
 
     await textEditor.edit((editBuilder) => {
       textEditor.selections.forEach((selection, index) => {
-        const firstInsertedText = firstInsertedTexts[index];
-        const secondInsertedText = secondInsertedTexts[index];
-        if (firstInsertedText == null) {
-          throw new Error("firstInsertedText is null");
+        const firstInsertedLineText = firstInsertedTexts[index];
+        const secondInsertedLineText = secondInsertedTexts[index];
+        const trailingNewLineInserted = trailingNewLinesInserted[index];
+        if (firstInsertedLineText == null) {
+          throw new Error("firstInsertedLineText is null");
         }
-        if (secondInsertedText == null) {
-          throw new Error("secondInsertedText is null");
+        if (secondInsertedLineText == null) {
+          throw new Error("secondInsertedLineText is null");
         }
-        editBuilder.insert(selection.active, firstInsertedText.repeat(repeat - 1) + secondInsertedText);
+        editBuilder.insert(
+          selection.active,
+          firstInsertedLineText.repeat(repeat - 1) + secondInsertedLineText + (trailingNewLineInserted ? eol : ""),
+        );
       });
+    });
+    textEditor.selections = textEditor.selections.map((selection, index) => {
+      const trailingNewLineInserted = trailingNewLinesInserted[index];
+      if (trailingNewLineInserted) {
+        const newActive = textEditor.document.lineAt(selection.active.line - 1).range.end;
+        return new Selection(newActive, newActive);
+      }
+      return selection;
     });
 
     revealPrimaryActive(textEditor);
