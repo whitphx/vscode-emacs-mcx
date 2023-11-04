@@ -57,7 +57,7 @@ export class NewLine extends EmacsCommand {
     });
 
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
-    await delay(6); // Wait for code completion to finish. The value is ad-hoc.
+    await delay(33); // Wait for code completion to finish. The value is ad-hoc.
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
 
     // The first inserted line can be affected by the second.
