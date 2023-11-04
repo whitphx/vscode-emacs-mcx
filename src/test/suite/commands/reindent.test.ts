@@ -34,7 +34,7 @@ suite("Reindent", () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("reindent");
       assertTextEqual(activeTextEditor, initialText);
-      assertCursorsEqual(activeTextEditor, [1, 2]);
+      assertCursorsEqual(activeTextEditor, [0, 0]);
     });
   });
 

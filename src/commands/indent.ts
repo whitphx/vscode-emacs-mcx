@@ -6,7 +6,7 @@ export class Reindent extends EmacsCommand {
   public readonly id = "reindent";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
-    return vscode.commands.executeCommand("editor.action.reindentlines").then(() => {
+    return vscode.commands.executeCommand("editor.action.reindentselectedlines").then(() => {
       textEditor.selections = textEditor.selections.map((selection) => {
         const indentHeadChar = textEditor.document.lineAt(selection.active.line).firstNonWhitespaceCharacterIndex;
         if (selection.active.character > indentHeadChar) {
