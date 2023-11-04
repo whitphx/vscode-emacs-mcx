@@ -331,6 +331,10 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("recenterTopBottom");
   });
 
+  registerEmulatorCommand("emacs-mcx.reindent", (emulator) => {
+    emulator.runCommand("reindent");
+  });
+
   registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {
     emulator.runCommand("paredit.forwardSexp");
   });
