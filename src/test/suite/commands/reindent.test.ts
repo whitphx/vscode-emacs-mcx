@@ -10,23 +10,32 @@ suite("Reindent", () => {
 
 }`;
 
-  setup(async () => {
-    activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
-    activeTextEditor.options.tabSize = 2;
-    emulator = new EmacsEmulator(activeTextEditor);
-  });
+  suite("new indent", () => {
+    setup(async () => {
+      activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
+      activeTextEditor.options.tabSize = 2;
+      emulator = new EmacsEmulator(activeTextEditor);
+    });
 
-  teardown(cleanUpWorkspace);
+    teardown(cleanUpWorkspace);
 
-  test("indent", async () => {
-    setEmptyCursors(activeTextEditor, [1, 0]);
-    await emulator.runCommand("reindent");
-    assertTextEqual(
-      activeTextEditor,
-      `function() {
+    test("reindent works when the cursor is at the line where it should", async () => {
+      setEmptyCursors(activeTextEditor, [1, 0]);
+      await emulator.runCommand("reindent");
+      assertTextEqual(
+        activeTextEditor,
+        `function() {
   
 }`,
-    );
-    assertCursorsEqual(activeTextEditor, [1, 2]);
+      );
+      assertCursorsEqual(activeTextEditor, [1, 2]);
+    });
+
+    test("reindent doesn't work when the cursor is at the line where it shouldn't", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("reindent");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 2]);
+    });
   });
 });
