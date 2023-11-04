@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Selection, TextEditor } from "vscode";
+import { Range, Selection, TextEditor } from "vscode";
 import { createParallel, EmacsCommand } from ".";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
@@ -60,13 +60,17 @@ export class NewLine extends EmacsCommand {
     await delay(6); // Wait for code completion to finish. The value is ad-hoc.
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
 
-    const eol = textEditor.document.eol === vscode.EndOfLine.CRLF ? "\r\n" : "\n";
-
+    // The first inserted line can be affected by the second.
+    // We need to capture its final content after the second insertion to achieve the desired result.
     const firstInsertedTexts = textEditor.selections.map((selection) => {
-      return eol + textEditor.document.lineAt(selection.active.line - 1).text;
+      const from = textEditor.document.lineAt(selection.active.line - 2).range.end;
+      const to = textEditor.document.lineAt(selection.active.line - 1).range.end;
+      return textEditor.document.getText(new Range(from, to));
     });
     const secondInsertedTexts = textEditor.selections.map((selection) => {
-      return eol + textEditor.document.lineAt(selection.active.line).text;
+      const from = textEditor.document.lineAt(selection.active.line - 1).range.end;
+      const to = textEditor.document.lineAt(selection.active.line - 0).range.end;
+      return textEditor.document.getText(new Range(from, to));
     });
 
     // Trailing new lines can be inserted for example
@@ -76,14 +80,19 @@ export class NewLine extends EmacsCommand {
     // /**
     //  * |
     //  */
-    // This `trailingNewLinesInserted` flag represents whether such trailing new lines are inserted.
-    const trailingNewLinesInserted = textEditor.selections.map((selection, index) => {
+    // This `trailingLineTexts` contains such trailing new lines.
+    const trailingLineTexts = textEditor.selections.map((selection, index) => {
       const initCursorAtEndOfLine = initCursorsAtEndOfLine[index];
-      if (initCursorAtEndOfLine == undefined || initCursorAtEndOfLine === true) {
-        return false;
+      if (initCursorAtEndOfLine == null || initCursorAtEndOfLine === true) {
+        return "";
       }
       const cursorAtEndOfLine = selection.active.isEqual(textEditor.document.lineAt(selection.active.line).range.end);
-      return cursorAtEndOfLine;
+      if (!cursorAtEndOfLine) {
+        return "";
+      }
+
+      const nextLineStart = textEditor.document.lineAt(selection.active.line + 1).range.start;
+      return textEditor.document.getText(new Range(selection.active, nextLineStart));
     });
 
     await vscode.commands.executeCommand<void>("undo");
@@ -93,21 +102,24 @@ export class NewLine extends EmacsCommand {
       textEditor.selections.forEach((selection, index) => {
         const firstInsertedLineText = firstInsertedTexts[index];
         const secondInsertedLineText = secondInsertedTexts[index];
-        const trailingNewLineInserted = trailingNewLinesInserted[index];
+        const trailingLineText = trailingLineTexts[index];
         if (firstInsertedLineText == null) {
           throw new Error("firstInsertedLineText is null");
         }
         if (secondInsertedLineText == null) {
           throw new Error("secondInsertedLineText is null");
         }
+        if (trailingLineText == null) {
+          throw new Error("trailingLineText is null");
+        }
         editBuilder.insert(
           selection.active,
-          firstInsertedLineText.repeat(repeat - 1) + secondInsertedLineText + (trailingNewLineInserted ? eol : ""),
+          firstInsertedLineText.repeat(repeat - 1) + secondInsertedLineText + trailingLineText,
         );
       });
     });
     textEditor.selections = textEditor.selections.map((selection, index) => {
-      const trailingNewLineInserted = trailingNewLinesInserted[index];
+      const trailingNewLineInserted = trailingLineTexts[index];
       if (trailingNewLineInserted) {
         const newActive = textEditor.document.lineAt(selection.active.line - 1).range.end;
         return new Selection(newActive, newActive);
