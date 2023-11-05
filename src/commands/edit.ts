@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Range, Selection, TextEditor } from "vscode";
-import { createParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand } from ".";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
 
@@ -9,7 +9,7 @@ export class DeleteBackwardChar extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () => vscode.commands.executeCommand("deleteLeft"));
+    return makeParallel(repeat, () => vscode.commands.executeCommand("deleteLeft"));
   }
 }
 
@@ -18,7 +18,7 @@ export class DeleteForwardChar extends EmacsCommand {
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
+    return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>("deleteRight"),
     ) as Thenable<unknown> as Thenable<void>;
   }

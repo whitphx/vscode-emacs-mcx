@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { createParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand } from ".";
 import { Configuration } from "../configuration/configuration";
 import {
   travelForward as travelForwardParagraph,
@@ -234,7 +234,7 @@ export class ForwardWord extends EmacsCommand {
     }
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
+    return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight"),
     );
   }
@@ -254,7 +254,7 @@ export class BackwardWord extends EmacsCommand {
     }
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return createParallel(repeat, () =>
+    return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft"),
     );
   }
