@@ -32,11 +32,7 @@ export const moveCommandIds = [
 export class ForwardChar extends EmacsCommand {
   public readonly id = "forwardChar";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => curActive.translate(0, charDelta));
@@ -62,11 +58,7 @@ export class ForwardChar extends EmacsCommand {
 export class BackwardChar extends EmacsCommand {
   public readonly id = "backwardChar";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives(
@@ -94,11 +86,7 @@ export class BackwardChar extends EmacsCommand {
 export class NextLine extends EmacsCommand {
   public readonly id = "nextLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
@@ -121,11 +109,7 @@ export class NextLine extends EmacsCommand {
 export class PreviousLine extends EmacsCommand {
   public readonly id = "previousLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
@@ -147,11 +131,7 @@ export class PreviousLine extends EmacsCommand {
 export class MoveBeginningOfLine extends EmacsCommand {
   public readonly id = "moveBeginningOfLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
     }
@@ -185,11 +165,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
 export class MoveEndOfLine extends EmacsCommand {
   public readonly id = "moveEndOfLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.end);
       return;
@@ -223,7 +199,7 @@ export class MoveEndOfLine extends EmacsCommand {
 export class ForwardWord extends EmacsCommand {
   public readonly id = "forwardWord";
 
-  public execute(
+  public run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
@@ -243,7 +219,7 @@ export class ForwardWord extends EmacsCommand {
 export class BackwardWord extends EmacsCommand {
   public readonly id = "backwardWord";
 
-  public execute(
+  public run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
@@ -263,11 +239,7 @@ export class BackwardWord extends EmacsCommand {
 export class BackToIndentation extends EmacsCommand {
   public readonly id = "backToIndentation";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const doc = textEditor.document;
 
     const moveActiveFunc = (active: vscode.Position): vscode.Position => {
@@ -294,11 +266,7 @@ export class BackToIndentation extends EmacsCommand {
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       const beginning = textEditor.document.positionAt(0);
       this.emacsController.moveRectActives(() => beginning);
@@ -316,11 +284,7 @@ export class BeginningOfBuffer extends EmacsCommand {
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       const end = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
       this.emacsController.moveRectActives(() => end);
@@ -375,11 +339,7 @@ function movePrimaryCursorIntoVisibleRange(
 export class ScrollUpCommand extends EmacsCommand {
   public readonly id = "scrollUpCommand";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
       return vscode.commands
         .executeCommand<void>("editorScroll", {
@@ -406,11 +366,7 @@ export class ScrollUpCommand extends EmacsCommand {
 export class ScrollDownCommand extends EmacsCommand {
   public readonly id = "scrollDownCommand";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
       return vscode.commands
         .executeCommand<void>("editorScroll", {
@@ -437,7 +393,7 @@ export class ScrollDownCommand extends EmacsCommand {
 export class ForwardParagraph extends EmacsCommand {
   public readonly id = "forwardParagraph";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     const doc = textEditor.document;
 
@@ -465,7 +421,7 @@ export class ForwardParagraph extends EmacsCommand {
 export class BackwardParagraph extends EmacsCommand {
   public readonly id = "backwardParagraph";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     const doc = textEditor.document;
 
