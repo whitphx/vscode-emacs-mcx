@@ -113,4 +113,48 @@ suite("TabToTabStop", () => {
       assertCursorsEqual(activeTextEditor, [1, 4]);
     });
   });
+
+  suite("multi line", () => {
+    const initialText = `function() {
+console.log("hello");
+console.log("hello");
+console.log("hello");
+}`;
+
+    setup(async () => {
+      activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
+      activeTextEditor.options.tabSize = 2;
+      emulator = new EmacsEmulator(activeTextEditor);
+    });
+
+    teardown(cleanUpWorkspace);
+
+    test("reindent works on the selected lines", async () => {
+      activeTextEditor.selections = [new vscode.Selection(1, 0, 2, 1)];
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `function() {
+  console.log("hello");
+  console.log("hello");
+console.log("hello");
+}`,
+      );
+      assertCursorsEqual(activeTextEditor, [2, 3]);
+    });
+
+    test("reindent works with multi cursors", async () => {
+      setEmptyCursors(activeTextEditor, [1, 0], [2, 0]);
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `function() {
+  console.log("hello");
+  console.log("hello");
+console.log("hello");
+}`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 2], [2, 2]);
+    });
+  });
 });
