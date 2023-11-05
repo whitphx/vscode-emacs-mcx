@@ -8,7 +8,7 @@ suite("TabToTabStop", () => {
 
   suite("new indent", () => {
     const initialText = `function() {
-
+console.log("hello");
 }`;
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
@@ -24,7 +24,7 @@ suite("TabToTabStop", () => {
       assertTextEqual(
         activeTextEditor,
         `function() {
-  
+  console.log("hello");
 }`,
       );
       assertCursorsEqual(activeTextEditor, [1, 2]);
