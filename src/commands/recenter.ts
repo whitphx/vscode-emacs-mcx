@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor, TextEditorRevealType } from "vscode";
-import { EmacsCommand, IEmacsCommandInterrupted } from ".";
+import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 
 enum RecenterPosition {
   Middle,
@@ -8,7 +8,7 @@ enum RecenterPosition {
   Bottom,
 }
 
-export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInterrupted {
+export class RecenterTopBottom extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "recenterTopBottom";
 
   private recenterPosition: RecenterPosition = RecenterPosition.Middle;

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
-import { instanceOfIEmacsCommandInterrupted } from "./commands";
+import { isTextEditorInterruptionHandler } from "./commands";
 import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
@@ -189,7 +189,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.CopyRegion(this, killYanker));
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
-    this.killYanker = killYanker; // TODO: To be removed
+    this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 
     this.commandRegistry.register(new StartRegisterSaveCommand(this));
@@ -612,7 +612,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   private onDidInterruptTextEditor() {
     this.commandRegistry.forEach((command) => {
-      if (instanceOfIEmacsCommandInterrupted(command)) {
+      if (isTextEditorInterruptionHandler(command)) {
         // TODO: Cache the array of IEmacsCommandInterrupted instances
         command.onDidInterruptTextEditor();
       }
