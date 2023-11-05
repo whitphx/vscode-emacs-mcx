@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { EmacsCommand, IEmacsCommandInterrupted } from ".";
+import { EmacsCommand, TextEditorInterruptionHandler } from ".";
 
 // Will bind this this to C-x r s
-export class StartRegisterSaveCommand extends EmacsCommand implements IEmacsCommandInterrupted {
+export class StartRegisterSaveCommand extends EmacsCommand implements TextEditorInterruptionHandler {
   public readonly id = "StartRegisterSaveCommand";
 
   private acceptingRegisterSaveCommand = false;
@@ -30,7 +30,7 @@ export class StartRegisterSaveCommand extends EmacsCommand implements IEmacsComm
 }
 
 // Will bind this this to C-x r i
-export class StartRegisterInsertCommand extends EmacsCommand implements IEmacsCommandInterrupted {
+export class StartRegisterInsertCommand extends EmacsCommand implements TextEditorInterruptionHandler {
   public readonly id = "StartRegisterInsertCommand";
 
   private acceptingRegisterInsertCommand = false;

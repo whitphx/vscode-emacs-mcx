@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { EmacsCommand, IEmacsCommandInterrupted } from ".";
+import { EmacsCommand, TextEditorInterruptionHandler } from ".";
 import { IEmacsController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections } from "../rectangle";
@@ -15,7 +15,7 @@ import { Minibuffer } from "src/minibuffer";
  * with `{ "when": "emacs-mcx.acceptingRectCommand" }` condition.
  * Then, `kill-rectangle` can be executed through `C-x r k`.
  */
-export class StartAcceptingRectCommand extends EmacsCommand implements IEmacsCommandInterrupted {
+export class StartAcceptingRectCommand extends EmacsCommand implements TextEditorInterruptionHandler {
   public readonly id = "startAcceptingRectCommand";
 
   private acceptingRectCommand = false;
