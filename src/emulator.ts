@@ -37,8 +37,6 @@ export interface IEmacsController {
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
-
-  registerDisposable: (disposable: vscode.Disposable) => void;
 }
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
