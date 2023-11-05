@@ -7,11 +7,7 @@ export function makeParallel<T>(concurrency: number, promiseFactory: () => Thena
 export abstract class EmacsCommand {
   public abstract readonly id: string;
 
-  protected emacsController: IEmacsController;
-
-  public constructor(markModeController: IEmacsController) {
-    this.emacsController = markModeController;
-  }
+  public constructor(protected emacsController: IEmacsController) {}
 
   public abstract run(prefixArgument: number | undefined): void | Thenable<unknown>;
 }
