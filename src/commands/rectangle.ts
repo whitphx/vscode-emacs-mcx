@@ -30,7 +30,7 @@ export class StartAcceptingRectCommand extends EmacsCommand implements IEmacsCom
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
   }
 
-  public execute(): void {
+  public run(): void {
     this.startAcceptingRectCommand();
   }
 
@@ -75,7 +75,7 @@ abstract class EditRectangle extends RectangleKillYankCommand {
   protected copy = false;
   protected delete = false;
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const selections = getNonEmptySelections(this.emacsController.textEditor);
 
     if (selections.length !== 1) {
@@ -144,7 +144,7 @@ const getEolChar = (eol: vscode.EndOfLine): string | undefined => {
 export class YankRectangle extends RectangleKillYankCommand {
   public readonly id = "yankRectangle";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const killedRect = this.rectangleState.latestKilledRectangle;
 
     if (killedRect.length === 0) {
@@ -198,7 +198,7 @@ export class YankRectangle extends RectangleKillYankCommand {
 export class OpenRectangle extends EmacsCommand {
   public readonly id = "openRectangle";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const selections = getNonEmptySelections(this.emacsController.textEditor);
     if (selections.length === 0) {
       return;
@@ -224,7 +224,7 @@ export class OpenRectangle extends EmacsCommand {
 export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const selections = getNonEmptySelections(this.emacsController.textEditor);
     if (selections.length === 0) {
       return;
@@ -255,7 +255,7 @@ export class StringRectangle extends EmacsCommand {
     this.minibuffer = minibuffer;
   }
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
 
     if (replaceString == null) {
@@ -290,7 +290,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     this.killring = killring;
   }
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     if (this.killring === null) {
       return;
     }

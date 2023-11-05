@@ -40,7 +40,7 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
 abstract class PareditNavigatorCommand extends EmacsCommand {
   public abstract readonly pareditNavigatorFn: PareditNavigatorFn;
 
-  public async execute(prefixArgument: number | undefined) {
+  public async run(prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -84,7 +84,7 @@ export class MarkSexp extends EmacsCommand {
   public readonly id = "paredit.markSexp";
   private continuing = false;
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const arg = prefixArgument === undefined ? 1 : prefixArgument;
 
     const repeat = Math.abs(arg);
@@ -123,7 +123,7 @@ export class MarkSexp extends EmacsCommand {
 export class KillSexp extends KillYankCommand {
   public readonly id = "paredit.killSexp";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -146,7 +146,7 @@ export class KillSexp extends KillYankCommand {
 export class BackwardKillSexp extends KillYankCommand {
   public readonly id = "paredit.backwardKillSexp";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -169,7 +169,7 @@ export class BackwardKillSexp extends KillYankCommand {
 export class PareditKill extends KillYankCommand {
   public readonly id = "paredit.pareditKill";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;

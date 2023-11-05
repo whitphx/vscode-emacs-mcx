@@ -5,7 +5,7 @@ import { makeParallel, EmacsCommand } from ".";
 export class TabToTabStop extends EmacsCommand {
   public readonly id = "tabToTabStop";
 
-  public execute(prefixArgument: number | undefined): Thenable<unknown> {
+  public run(prefixArgument: number | undefined): Thenable<unknown> {
     // A single call of `editor.action.reindentselectedlines`
     // only affects a first selection which has a not indented line.
     // So we need to call it as many times as the number of selections.

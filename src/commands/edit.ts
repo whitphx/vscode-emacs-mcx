@@ -7,7 +7,7 @@ import { delay } from "../utils";
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";
 
-  public execute(prefixArgument: number | undefined): Thenable<unknown> {
+  public run(prefixArgument: number | undefined): Thenable<unknown> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () => vscode.commands.executeCommand("deleteLeft"));
   }
@@ -16,7 +16,7 @@ export class DeleteBackwardChar extends EmacsCommand {
 export class DeleteForwardChar extends EmacsCommand {
   public readonly id = "deleteForwardChar";
 
-  public execute(prefixArgument: number | undefined): Thenable<void> {
+  public run(prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>("deleteRight"),
@@ -27,7 +27,7 @@ export class DeleteForwardChar extends EmacsCommand {
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
-  public async execute(prefixArgument: number | undefined): Promise<void> {
+  public async run(prefixArgument: number | undefined): Promise<void> {
     this.emacsController.exitMarkMode();
 
     this.emacsController.textEditor.selections = this.emacsController.textEditor.selections.map(

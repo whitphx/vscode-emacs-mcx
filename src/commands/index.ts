@@ -13,11 +13,7 @@ export abstract class EmacsCommand {
     this.emacsController = markModeController;
   }
 
-  public run(prefixArgument: number | undefined): Thenable<unknown> | void {
-    return this.execute(prefixArgument);
-  }
-
-  public abstract execute(prefixArgument: number | undefined): void | Thenable<unknown>;
+  public abstract run(prefixArgument: number | undefined): void | Thenable<unknown>;
 }
 
 export interface IEmacsCommandInterrupted {

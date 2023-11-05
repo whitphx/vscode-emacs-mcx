@@ -13,7 +13,7 @@ export class RecenterTopBottom extends EmacsCommand implements IEmacsCommandInte
 
   private recenterPosition: RecenterPosition = RecenterPosition.Middle;
 
-  public execute(prefixArgument: number | undefined): void {
+  public run(prefixArgument: number | undefined): void {
     const activeRange = new vscode.Range(
       this.emacsController.textEditor.selection.active,
       this.emacsController.textEditor.selection.active,
