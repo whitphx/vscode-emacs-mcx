@@ -10,12 +10,17 @@ export abstract class EmacsCommand {
   public constructor(protected emacsController: IEmacsController) {}
 
   public abstract run(prefixArgument: number | undefined): void | Thenable<unknown>;
+
+  public onDidInterruptTextEditor?(): void;
 }
 
 export interface IEmacsCommandInterrupted {
   onDidInterruptTextEditor(): void;
 }
 
-export function instanceOfIEmacsCommandInterrupted(obj: any): obj is IEmacsCommandInterrupted {
+// This type guard trick is from https://stackoverflow.com/a/64163454/13103190
+export function instanceOfIEmacsCommandInterrupted<T extends { onDidInterruptTextEditor?: unknown }>(
+  obj: T,
+): obj is T & IEmacsCommandInterrupted {
   return typeof obj.onDidInterruptTextEditor === "function";
 }
