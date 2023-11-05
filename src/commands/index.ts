@@ -35,6 +35,7 @@ export interface ITextEditorInterruptionHandler {
   onDidInterruptTextEditor(): void;
 }
 
+// This type guard trick is from https://stackoverflow.com/a/64163454/13103190
 export function isTextEditorInterruptionHandler<T extends { onDidInterruptTextEditor?: unknown }>(
   obj: T,
 ): obj is T & ITextEditorInterruptionHandler {
