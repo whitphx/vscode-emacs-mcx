@@ -1,7 +1,7 @@
 import { TextEditor } from "vscode";
 import { IEmacsController } from "../emulator";
 
-export function createParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
+export function makeParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
   return Promise.all(Array.from({ length: concurrency }, promiseFactory));
 }
 

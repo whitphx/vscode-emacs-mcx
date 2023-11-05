@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
-import { createParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand } from ".";
 
 export class TabToTabStop extends EmacsCommand {
   public readonly id = "tabToTabStop";
@@ -9,7 +9,7 @@ export class TabToTabStop extends EmacsCommand {
     // A single call of `editor.action.reindentselectedlines`
     // only affects a first selection which has a not indented line.
     // So we need to call it as many times as the number of selections.
-    return createParallel(textEditor.selections.length, () =>
+    return makeParallel(textEditor.selections.length, () =>
       vscode.commands.executeCommand("editor.action.reindentselectedlines"),
     ).then(() => {
       textEditor.selections = textEditor.selections.map((selection) => {
