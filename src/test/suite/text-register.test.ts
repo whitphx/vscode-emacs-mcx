@@ -20,7 +20,15 @@ suite("Text registers", () => {
     activeTextEditor.selections = [new vscode.Selection(0, 0, 1, 2)];
     emulator.saveRegister("a");
 
+    // Empty string
+    activeTextEditor.selections = [new vscode.Selection(0, 0, 0, 0)];
+    emulator.saveRegister("b");
+
     await clearTextEditor(activeTextEditor);
+
+    await emulator.insertRegister("c");
+    assertTextEqual(activeTextEditor, "");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
 
     await emulator.insertRegister("b");
     assertTextEqual(activeTextEditor, "");
