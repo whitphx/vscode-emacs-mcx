@@ -15,6 +15,7 @@ scripts/
 **/.eslintrc.json
 **/*.map
 **/*.ts
+**/test
 **/*webpack.config.js
 keybindings.json
 DEVELOPMENT.md
