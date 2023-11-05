@@ -31,12 +31,12 @@ export abstract class EmacsCommand {
   public onDidInterruptTextEditor?(): void;
 }
 
-export interface IEmacsCommandInterrupted {
+export interface ITextEditorInterruptionHandler {
   onDidInterruptTextEditor(): void;
 }
 
-export function instanceOfIEmacsCommandInterrupted<T extends { onDidInterruptTextEditor?: unknown }>(
+export function isTextEditorInterruptionHandler<T extends { onDidInterruptTextEditor?: unknown }>(
   obj: T,
-): obj is T & IEmacsCommandInterrupted {
+): obj is T & ITextEditorInterruptionHandler {
   return typeof obj.onDidInterruptTextEditor === "function";
 }
