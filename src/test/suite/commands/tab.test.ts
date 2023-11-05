@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
 
-suite("Reindent", () => {
+suite("TabToTabStop", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
@@ -20,7 +20,7 @@ suite("Reindent", () => {
 
     test("reindent works when the cursor is at the line where it should", async () => {
       setEmptyCursors(activeTextEditor, [1, 0]);
-      await emulator.runCommand("reindent");
+      await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
         `function() {
@@ -32,7 +32,7 @@ suite("Reindent", () => {
 
     test("reindent doesn't work when the cursor is at the line where it shouldn't", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
-      await emulator.runCommand("reindent");
+      await emulator.runCommand("tabToTabStop");
       assertTextEqual(activeTextEditor, initialText);
       assertCursorsEqual(activeTextEditor, [0, 0]);
     });
@@ -53,7 +53,7 @@ suite("Reindent", () => {
 
     test("reindent works and the cursor is moved to the indent head when the cursor was at the beginning fo the line", async () => {
       setEmptyCursors(activeTextEditor, [1, 0]);
-      await emulator.runCommand("reindent");
+      await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
         `function() {
@@ -65,7 +65,7 @@ suite("Reindent", () => {
 
     test("reindent works and the cursor is not moved when the cursor was after the indent head", async () => {
       setEmptyCursors(activeTextEditor, [1, 8]);
-      await emulator.runCommand("reindent");
+      await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
         `function() {
@@ -91,7 +91,7 @@ suite("Reindent", () => {
 
     test("reindent does nothing and the cursor is moved to the indent head when the cursor was at the beginning fo the line", async () => {
       setEmptyCursors(activeTextEditor, [1, 0]);
-      await emulator.runCommand("reindent");
+      await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
         `function() {
@@ -103,7 +103,7 @@ suite("Reindent", () => {
 
     test("reindent does nothing and the cursor is not moved when the cursor was after the indent head", async () => {
       setEmptyCursors(activeTextEditor, [1, 4]);
-      await emulator.runCommand("reindent");
+      await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
         `function() {

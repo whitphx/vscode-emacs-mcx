@@ -6633,12 +6633,12 @@
       },
       {
         "key": "ctrl+i",
-        "command": "emacs-mcx.reindent",
+        "command": "emacs-mcx.tabToTabStop",
         "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorHasMultipleSelections && !editorHasSelection && !editorTabCompletion && !editorParameterHintsVisible && !editorInEmbeddedEditor && !editorInDiffEditor"
       },
       {
         "key": "tab",
-        "command": "emacs-mcx.reindent",
+        "command": "emacs-mcx.tabToTabStop",
         "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorHasMultipleSelections && !editorHasSelection && !editorTabCompletion && !editorParameterHintsVisible && !editorInEmbeddedEditor && !editorInDiffEditor"
       },
       {

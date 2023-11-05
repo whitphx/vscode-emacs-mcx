@@ -331,8 +331,8 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("recenterTopBottom");
   });
 
-  registerEmulatorCommand("emacs-mcx.reindent", (emulator) => {
-    emulator.runCommand("reindent");
+  registerEmulatorCommand("emacs-mcx.tabToTabStop", (emulator) => {
+    emulator.runCommand("tabToTabStop");
   });
 
   registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {

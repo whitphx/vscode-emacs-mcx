@@ -2,8 +2,8 @@ import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 
-export class Reindent extends EmacsCommand {
-  public readonly id = "reindent";
+export class TabToTabStop extends EmacsCommand {
+  public readonly id = "tabToTabStop";
 
   public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     return vscode.commands.executeCommand("editor.action.reindentselectedlines").then(() => {
