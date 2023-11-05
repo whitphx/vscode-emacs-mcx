@@ -4,6 +4,16 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.51.0] - 2023-11-05
+
+### Add
+
+- Emacs-like tab, #1735.
+
+### Fix
+
+- `C-m` (new-line) with a prefix argument pushes a single edit history, #1733.
+
 ## [0.50.4] - 2023-11-03
 
 ### Fix
