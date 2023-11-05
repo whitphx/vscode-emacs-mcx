@@ -196,7 +196,7 @@ suite("newLine", () => {
 
         await vscode.commands.executeCommand<void>("undo");
 
-        assertTextEqual(activeTextEditor, "");
+        assertTextEqual(activeTextEditor, initialText);
 
         await vscode.commands.executeCommand<void>("redo");
 
@@ -218,6 +218,14 @@ suite("newLine", () => {
           assertTextEqual(activeTextEditor, `(${eolStr}${eolStr}${eolStr}${eolStr}    ${eolStr})`);
           assert.strictEqual(activeTextEditor.selection.active.line, 4);
           assert.strictEqual(activeTextEditor.selection.active.character, 4);
+
+          await vscode.commands.executeCommand<void>("undo");
+
+          assertTextEqual(activeTextEditor, initialText);
+
+          await vscode.commands.executeCommand<void>("redo");
+
+          assertTextEqual(activeTextEditor, `(${eolStr}${eolStr}${eolStr}${eolStr}    ${eolStr})`);
         });
 
         const languagesAutoDoc = [
@@ -261,6 +269,14 @@ suite("newLine", () => {
             assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} * ${eolStr} * ${eolStr} * ${eolStr} */`);
             assert.strictEqual(activeTextEditor.selection.active.line, 4);
             assert.strictEqual(activeTextEditor.selection.active.character, 3);
+
+            await vscode.commands.executeCommand<void>("undo");
+
+            assertTextEqual(activeTextEditor, initialText);
+
+            await vscode.commands.executeCommand<void>("redo");
+
+            assertTextEqual(activeTextEditor, `/**${eolStr} * ${eolStr} * ${eolStr} * ${eolStr} * ${eolStr} */`);
           });
         });
       });
