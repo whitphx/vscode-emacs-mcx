@@ -77,6 +77,10 @@ If set as false, the VSCode's native cursor movements are preserved.
 For example, if set as true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
 If set as false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
 
+### `emacs-mcx.emacsLikeTab`
+
+If set as true, `tab` key works as the Emacs' `tab-to-tab-stop` command.
+
 ### `emacs-mcx.useMetaPrefixEscape`
 
 If set as true, Escape key works as the Meta prefix like original Emacs.

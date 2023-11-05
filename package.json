@@ -57,6 +57,11 @@
           "default": false,
           "description": "Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones"
         },
+        "emacs-mcx.emacsLikeTab": {
+          "type": "boolean",
+          "default": false,
+          "description": "Simulate the original emacs's tab behavior."
+        },
         "emacs-mcx.useMetaPrefixEscape": {
           "type": "boolean",
           "default": false,
@@ -6625,6 +6630,16 @@
       {
         "key": "ctrl+i",
         "command": "tab"
+      },
+      {
+        "key": "ctrl+i",
+        "command": "emacs-mcx.tabToTabStop",
+        "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorTabCompletion && !editorParameterHintsVisible"
+      },
+      {
+        "key": "tab",
+        "command": "emacs-mcx.tabToTabStop",
+        "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorTabCompletion && !editorParameterHintsVisible"
       },
       {
         "key": "ctrl+x left",
