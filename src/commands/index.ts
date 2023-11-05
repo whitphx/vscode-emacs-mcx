@@ -27,12 +27,16 @@ export abstract class EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
   ): void | Thenable<unknown>;
+
+  public onDidInterruptTextEditor?(): void;
 }
 
 export interface IEmacsCommandInterrupted {
   onDidInterruptTextEditor(): void;
 }
 
-export function instanceOfIEmacsCommandInterrupted(obj: any): obj is IEmacsCommandInterrupted {
+export function instanceOfIEmacsCommandInterrupted<T extends { onDidInterruptTextEditor?: unknown }>(
+  obj: T,
+): obj is T & IEmacsCommandInterrupted {
   return typeof obj.onDidInterruptTextEditor === "function";
 }
