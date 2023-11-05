@@ -6634,12 +6634,12 @@
       {
         "key": "ctrl+i",
         "command": "emacs-mcx.tabToTabStop",
-        "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorHasMultipleSelections && !editorHasSelection && !editorTabCompletion && !editorParameterHintsVisible && !editorInEmbeddedEditor && !editorInDiffEditor"
+        "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorTabCompletion && !editorParameterHintsVisible"
       },
       {
         "key": "tab",
         "command": "emacs-mcx.tabToTabStop",
-        "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorHasMultipleSelections && !editorHasSelection && !editorTabCompletion && !editorParameterHintsVisible && !editorInEmbeddedEditor && !editorInDiffEditor"
+        "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorTabCompletion && !editorParameterHintsVisible"
       },
       {
         "key": "ctrl+x left",
