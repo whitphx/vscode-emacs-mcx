@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { TextEditor } from "vscode";
 import { EmacsCommand, IEmacsCommandInterrupted } from ".";
 import { IEmacsController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
@@ -76,12 +75,8 @@ abstract class EditRectangle extends RectangleKillYankCommand {
   protected copy = false;
   protected delete = false;
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    const selections = getNonEmptySelections(textEditor);
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    const selections = getNonEmptySelections(this.emacsController.textEditor);
 
     if (selections.length !== 1) {
       // multiple cursor not supported
@@ -91,23 +86,28 @@ abstract class EditRectangle extends RectangleKillYankCommand {
 
     const notReversedSelection = new vscode.Selection(selection.start, selection.end);
 
-    const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
+    const rectSelections = convertSelectionToRectSelections(
+      this.emacsController.textEditor.document,
+      notReversedSelection,
+    );
 
     // Copy
     if (this.copy) {
-      const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
+      const rectText = rectSelections.map((lineSelection) =>
+        this.emacsController.textEditor.document.getText(lineSelection),
+      );
 
       this.rectangleState.latestKilledRectangle = rectText;
     }
 
     // Delete
     if (this.delete) {
-      await deleteRanges(textEditor, rectSelections);
+      await deleteRanges(this.emacsController.textEditor, rectSelections);
 
-      revealPrimaryActive(textEditor);
+      revealPrimaryActive(this.emacsController.textEditor);
 
       this.emacsController.exitMarkMode();
-      makeSelectionsEmpty(textEditor);
+      makeSelectionsEmpty(this.emacsController.textEditor);
     }
   }
 }
@@ -144,11 +144,7 @@ const getEolChar = (eol: vscode.EndOfLine): string | undefined => {
 export class YankRectangle extends RectangleKillYankCommand {
   public readonly id = "yankRectangle";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     const killedRect = this.rectangleState.latestKilledRectangle;
 
     if (killedRect.length === 0) {
@@ -158,13 +154,13 @@ export class YankRectangle extends RectangleKillYankCommand {
     const rectHeight = killedRect.length - 1;
     const rectWidth = killedRect[rectHeight]!.length; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
-    const active = textEditor.selection.active; // Multi-cursor is not supported
-    await textEditor.edit((edit) => {
-      const maxLine = textEditor.document.lineCount - 1;
+    const active = this.emacsController.textEditor.selection.active; // Multi-cursor is not supported
+    await this.emacsController.textEditor.edit((edit) => {
+      const maxLine = this.emacsController.textEditor.document.lineCount - 1;
 
       const insertColumn = active.character;
 
-      const eolChar = getEolChar(textEditor.document.eol);
+      const eolChar = getEolChar(this.emacsController.textEditor.document.eol);
 
       let rectLine = 0;
       while (rectLine <= rectHeight) {
@@ -175,7 +171,7 @@ export class YankRectangle extends RectangleKillYankCommand {
 
         const additionalColumns = Math.max(
           0,
-          insertColumn - textEditor.document.lineAt(insertLine).range.end.character,
+          insertColumn - this.emacsController.textEditor.document.lineAt(insertLine).range.end.character,
         );
 
         const insertText = " ".repeat(additionalColumns) + killedRect[rectLine];
@@ -189,35 +185,31 @@ export class YankRectangle extends RectangleKillYankCommand {
           .slice(rectLine)
           .map((lineText) => eolChar + " ".repeat(insertColumn) + lineText)
           .join("");
-        const lastPoint = textEditor.document.lineAt(maxLine).range.end;
+        const lastPoint = this.emacsController.textEditor.document.lineAt(maxLine).range.end;
         edit.insert(lastPoint, additionalText);
       }
     });
 
     const newActive = active.translate(rectHeight, rectWidth);
-    textEditor.selection = new vscode.Selection(newActive, newActive);
+    this.emacsController.textEditor.selection = new vscode.Selection(newActive, newActive);
   }
 }
 
 export class OpenRectangle extends EmacsCommand {
   public readonly id = "openRectangle";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    const selections = getNonEmptySelections(textEditor);
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    const selections = getNonEmptySelections(this.emacsController.textEditor);
     if (selections.length === 0) {
       return;
     }
 
-    const starts = textEditor.selections.map((selection) => selection.start);
+    const starts = this.emacsController.textEditor.selections.map((selection) => selection.start);
 
     const rectSelections = selections
-      .map(convertSelectionToRectSelections.bind(null, textEditor.document))
+      .map(convertSelectionToRectSelections.bind(null, this.emacsController.textEditor.document))
       .reduce((a, b) => a.concat(b), []);
-    await textEditor.edit((edit) => {
+    await this.emacsController.textEditor.edit((edit) => {
       rectSelections.forEach((rectSelection) => {
         const length = rectSelection.end.character - rectSelection.start.character;
         edit.insert(rectSelection.start, " ".repeat(length));
@@ -225,27 +217,23 @@ export class OpenRectangle extends EmacsCommand {
     });
 
     this.emacsController.exitMarkMode();
-    textEditor.selections = starts.map((s) => new vscode.Selection(s, s));
+    this.emacsController.textEditor.selections = starts.map((s) => new vscode.Selection(s, s));
   }
 }
 
 export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    const selections = getNonEmptySelections(textEditor);
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    const selections = getNonEmptySelections(this.emacsController.textEditor);
     if (selections.length === 0) {
       return;
     }
 
     const rectSelections = selections
-      .map(convertSelectionToRectSelections.bind(null, textEditor.document))
+      .map(convertSelectionToRectSelections.bind(null, this.emacsController.textEditor.document))
       .reduce((a, b) => a.concat(b), []);
-    await textEditor.edit((edit) => {
+    await this.emacsController.textEditor.edit((edit) => {
       rectSelections.forEach((rectSelection) => {
         const length = rectSelection.end.character - rectSelection.start.character;
         edit.replace(rectSelection, " ".repeat(length));
@@ -253,7 +241,7 @@ export class ClearRectangle extends EmacsCommand {
     });
 
     this.emacsController.exitMarkMode();
-    makeSelectionsEmpty(textEditor);
+    makeSelectionsEmpty(this.emacsController.textEditor);
   }
 }
 
@@ -267,33 +255,29 @@ export class StringRectangle extends EmacsCommand {
     this.minibuffer = minibuffer;
   }
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     const replaceString = await this.minibuffer.readFromMinibuffer({ prompt: "String rectangle" });
 
     if (replaceString == null) {
       return;
     }
 
-    const selections = getNonEmptySelections(textEditor);
+    const selections = getNonEmptySelections(this.emacsController.textEditor);
     if (selections.length === 0) {
       return;
     }
 
     const rectSelections = selections
-      .map(convertSelectionToRectSelections.bind(null, textEditor.document))
+      .map(convertSelectionToRectSelections.bind(null, this.emacsController.textEditor.document))
       .reduce((a, b) => a.concat(b), []);
-    await textEditor.edit((edit) => {
+    await this.emacsController.textEditor.edit((edit) => {
       rectSelections.forEach((rectSelection) => {
         edit.replace(rectSelection, replaceString);
       });
     });
 
     this.emacsController.exitMarkMode();
-    makeSelectionsEmpty(textEditor);
+    makeSelectionsEmpty(this.emacsController.textEditor);
   }
 }
 
@@ -306,11 +290,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     this.killring = killring;
   }
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     if (this.killring === null) {
       return;
     }
@@ -324,7 +304,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
       return;
     }
 
-    const selections = getNonEmptySelections(textEditor);
+    const selections = getNonEmptySelections(this.emacsController.textEditor);
 
     if (selections.length !== 1) {
       // multiple cursor not supported
@@ -339,7 +319,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
       finalCursorChar = insertChar + text.length;
     }
 
-    const currentRect = convertSelectionToRectSelections(textEditor.document, selection);
+    const currentRect = convertSelectionToRectSelections(this.emacsController.textEditor.document, selection);
     // rect is reversed in previous convert,
     // so we reverse it again as we need to traverse from smaller line number
     if (selection.active.line < selection.anchor.line) {
@@ -347,8 +327,8 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     }
 
     const lineStart = Math.max(selection.start.line, 0);
-    const lineEnd = Math.min(selection.end.line, textEditor.document.lineCount - 1);
-    await textEditor.edit((edit) => {
+    const lineEnd = Math.min(selection.end.line, this.emacsController.textEditor.document.lineCount - 1);
+    await this.emacsController.textEditor.edit((edit) => {
       for (let i = lineStart; i <= lineEnd; i++) {
         // Both `currentRect` and (`lineStart`, `lineEnd`) are calculated
         // based on the same information from the `selection` and the `textEditor`'s range,
@@ -367,6 +347,6 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     this.emacsController.exitMarkMode();
 
     const finalCursor = new vscode.Position(finalCursorLine, finalCursorChar);
-    textEditor.selections = [new vscode.Selection(finalCursor, finalCursor)];
+    this.emacsController.textEditor.selections = [new vscode.Selection(finalCursor, finalCursor)];
   }
 }

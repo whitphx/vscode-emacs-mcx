@@ -32,11 +32,7 @@ export const moveCommandIds = [
 export class ForwardChar extends EmacsCommand {
   public readonly id = "forwardChar";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => curActive.translate(0, charDelta));
@@ -44,17 +40,19 @@ export class ForwardChar extends EmacsCommand {
     }
 
     if (charDelta === 1) {
-      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
+      return vscode.commands.executeCommand<void>(
+        this.emacsController.isInMarkMode ? "cursorRightSelect" : "cursorRight",
+      );
     } else if (charDelta > 0) {
-      const doc = textEditor.document;
-      const newSelections = textEditor.selections.map((selection) => {
+      const doc = this.emacsController.textEditor.document;
+      const newSelections = this.emacsController.textEditor.selections.map((selection) => {
         const offset = doc.offsetAt(selection.active);
         const newActivePos = doc.positionAt(offset + charDelta);
-        const newAnchorPos = isInMarkMode ? selection.anchor : newActivePos;
+        const newAnchorPos = this.emacsController.isInMarkMode ? selection.anchor : newActivePos;
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
-      textEditor.selections = newSelections;
-      revealPrimaryActive(textEditor);
+      this.emacsController.textEditor.selections = newSelections;
+      revealPrimaryActive(this.emacsController.textEditor);
     }
   }
 }
@@ -62,11 +60,7 @@ export class ForwardChar extends EmacsCommand {
 export class BackwardChar extends EmacsCommand {
   public readonly id = "backwardChar";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives(
@@ -76,17 +70,19 @@ export class BackwardChar extends EmacsCommand {
     }
 
     if (charDelta === 1) {
-      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
+      return vscode.commands.executeCommand<void>(
+        this.emacsController.isInMarkMode ? "cursorLeftSelect" : "cursorLeft",
+      );
     } else if (charDelta > 0) {
-      const doc = textEditor.document;
-      const newSelections = textEditor.selections.map((selection) => {
+      const doc = this.emacsController.textEditor.document;
+      const newSelections = this.emacsController.textEditor.selections.map((selection) => {
         const offset = doc.offsetAt(selection.active);
         const newActivePos = doc.positionAt(offset - charDelta);
-        const newAnchorPos = isInMarkMode ? selection.anchor : newActivePos;
+        const newAnchorPos = this.emacsController.isInMarkMode ? selection.anchor : newActivePos;
         return new vscode.Selection(newAnchorPos, newActivePos);
       });
-      textEditor.selections = newSelections;
-      revealPrimaryActive(textEditor);
+      this.emacsController.textEditor.selections = newSelections;
+      revealPrimaryActive(this.emacsController.textEditor);
     }
   }
 }
@@ -94,15 +90,11 @@ export class BackwardChar extends EmacsCommand {
 export class NextLine extends EmacsCommand {
   public readonly id = "nextLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
-      const maxLine = textEditor.document.lineCount - 1;
+      const maxLine = this.emacsController.textEditor.document.lineCount - 1;
       this.emacsController.moveRectActives(
         (curActive) => new vscode.Position(Math.min(curActive.line + lineDelta, maxLine), curActive.character),
       );
@@ -113,7 +105,7 @@ export class NextLine extends EmacsCommand {
       to: "down",
       by: "wrappedLine",
       value: lineDelta,
-      select: isInMarkMode,
+      select: this.emacsController.isInMarkMode,
     });
   }
 }
@@ -121,11 +113,7 @@ export class NextLine extends EmacsCommand {
 export class PreviousLine extends EmacsCommand {
   public readonly id = "previousLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
 
     if (this.emacsController.inRectMarkMode) {
@@ -139,7 +127,7 @@ export class PreviousLine extends EmacsCommand {
       to: "up",
       by: "wrappedLine",
       value: lineDelta,
-      select: isInMarkMode,
+      select: this.emacsController.isInMarkMode,
     });
   }
 }
@@ -147,22 +135,20 @@ export class PreviousLine extends EmacsCommand {
 export class MoveBeginningOfLine extends EmacsCommand {
   public readonly id = "moveBeginningOfLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
+      this.emacsController.moveRectActives(
+        (curActive) => this.emacsController.textEditor.document.lineAt(curActive.line).range.start,
+      );
     }
 
     let moveHomeCommand: string;
     if (Configuration.instance.strictEmacsMove) {
       // Emacs behavior: Move to the beginning of the line.
-      moveHomeCommand = isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart";
+      moveHomeCommand = this.emacsController.isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart";
     } else {
       // VSCode behavior: Move to the first non-empty character (indentation).
-      moveHomeCommand = isInMarkMode ? "cursorHomeSelect" : "cursorHome";
+      moveHomeCommand = this.emacsController.isInMarkMode ? "cursorHomeSelect" : "cursorHome";
     }
 
     const moveHomeCommandFunc = () => vscode.commands.executeCommand<void>(moveHomeCommand);
@@ -175,7 +161,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
           to: "down",
           by: "line",
           value: prefixArgument - 1,
-          isInMarkMode,
+          isInMarkMode: this.emacsController.isInMarkMode,
         })
         .then(moveHomeCommandFunc);
     }
@@ -185,23 +171,21 @@ export class MoveBeginningOfLine extends EmacsCommand {
 export class MoveEndOfLine extends EmacsCommand {
   public readonly id = "moveEndOfLine";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.end);
+      this.emacsController.moveRectActives(
+        (curActive) => this.emacsController.textEditor.document.lineAt(curActive.line).range.end,
+      );
       return;
     }
 
     let moveEndCommand: string;
     if (Configuration.instance.strictEmacsMove) {
       // Emacs behavior: Move to the end of the line.
-      moveEndCommand = isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd";
+      moveEndCommand = this.emacsController.isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd";
     } else {
       // VSCode behavior: Move to the end of the wrapped line.
-      moveEndCommand = isInMarkMode ? "cursorEndSelect" : "cursorEnd";
+      moveEndCommand = this.emacsController.isInMarkMode ? "cursorEndSelect" : "cursorEnd";
     }
     const moveEndCommandFunc = () => vscode.commands.executeCommand<void>(moveEndCommand);
 
@@ -213,7 +197,7 @@ export class MoveEndOfLine extends EmacsCommand {
           to: "down",
           by: "line",
           value: prefixArgument - 1,
-          isInMarkMode,
+          isInMarkMode: this.emacsController.isInMarkMode,
         })
         .then(moveEndCommandFunc);
     }
@@ -223,11 +207,7 @@ export class MoveEndOfLine extends EmacsCommand {
 export class ForwardWord extends EmacsCommand {
   public readonly id = "forwardWord";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<unknown> {
+  public execute(prefixArgument: number | undefined): void | Thenable<unknown> {
     if (this.emacsController.inRectMarkMode) {
       // TODO: Not supported
       return;
@@ -235,7 +215,9 @@ export class ForwardWord extends EmacsCommand {
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight"),
+      vscode.commands.executeCommand<void>(
+        this.emacsController.isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight",
+      ),
     );
   }
 }
@@ -243,11 +225,7 @@ export class ForwardWord extends EmacsCommand {
 export class BackwardWord extends EmacsCommand {
   public readonly id = "backwardWord";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<unknown> {
+  public execute(prefixArgument: number | undefined): void | Thenable<unknown> {
     if (this.emacsController.inRectMarkMode) {
       // TODO: Not supported
       return;
@@ -255,7 +233,9 @@ export class BackwardWord extends EmacsCommand {
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft"),
+      vscode.commands.executeCommand<void>(
+        this.emacsController.isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft",
+      ),
     );
   }
 }
@@ -263,12 +243,8 @@ export class BackwardWord extends EmacsCommand {
 export class BackToIndentation extends EmacsCommand {
   public readonly id = "backToIndentation";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
-    const doc = textEditor.document;
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
+    const doc = this.emacsController.textEditor.document;
 
     const moveActiveFunc = (active: vscode.Position): vscode.Position => {
       const activeLine = doc.lineAt(active.line);
@@ -282,56 +258,52 @@ export class BackToIndentation extends EmacsCommand {
       return;
     }
 
-    const newSelections = textEditor.selections.map((selection) => {
+    const newSelections = this.emacsController.textEditor.selections.map((selection) => {
       const newActive = moveActiveFunc(selection.active);
-      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
+      return new vscode.Selection(this.emacsController.isInMarkMode ? selection.anchor : newActive, newActive);
     });
-    textEditor.selections = newSelections;
-    revealPrimaryActive(textEditor);
+    this.emacsController.textEditor.selections = newSelections;
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }
 
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
-      const beginning = textEditor.document.positionAt(0);
+      const beginning = this.emacsController.textEditor.document.positionAt(0);
       this.emacsController.moveRectActives(() => beginning);
       return;
     }
 
-    if (!isInMarkMode) {
-      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+    if (!this.emacsController.isInMarkMode) {
+      this.emacsController.pushMark(this.emacsController.textEditor.selections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark set");
     }
-    return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorTopSelect" : "cursorTop");
+    return vscode.commands.executeCommand<void>(this.emacsController.isInMarkMode ? "cursorTopSelect" : "cursorTop");
   }
 }
 
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
-      const end = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
+      const end = this.emacsController.textEditor.document.lineAt(
+        this.emacsController.textEditor.document.lineCount - 1,
+      ).range.end;
       this.emacsController.moveRectActives(() => end);
       return;
     }
 
-    if (!isInMarkMode) {
-      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.anchor));
+    if (!this.emacsController.isInMarkMode) {
+      this.emacsController.pushMark(this.emacsController.textEditor.selections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark set");
     }
-    return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorBottomSelect" : "cursorBottom");
+    return vscode.commands.executeCommand<void>(
+      this.emacsController.isInMarkMode ? "cursorBottomSelect" : "cursorBottom",
+    );
   }
 }
 
@@ -375,11 +347,7 @@ function movePrimaryCursorIntoVisibleRange(
 export class ScrollUpCommand extends EmacsCommand {
   public readonly id = "scrollUpCommand";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
       return vscode.commands
         .executeCommand<void>("editorScroll", {
@@ -387,7 +355,13 @@ export class ScrollUpCommand extends EmacsCommand {
           by: "wrappedLine",
           value: prefixArgument,
         })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+        .then(() =>
+          movePrimaryCursorIntoVisibleRange(
+            this.emacsController.textEditor,
+            this.emacsController.isInMarkMode,
+            this.emacsController,
+          ),
+        );
     }
 
     if (Configuration.instance.strictEmacsMove) {
@@ -396,9 +370,17 @@ export class ScrollUpCommand extends EmacsCommand {
           to: "down",
           by: "page",
         })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+        .then(() =>
+          movePrimaryCursorIntoVisibleRange(
+            this.emacsController.textEditor,
+            this.emacsController.isInMarkMode,
+            this.emacsController,
+          ),
+        );
     } else {
-      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
+      return vscode.commands.executeCommand<void>(
+        this.emacsController.isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown",
+      );
     }
   }
 }
@@ -406,11 +388,7 @@ export class ScrollUpCommand extends EmacsCommand {
 export class ScrollDownCommand extends EmacsCommand {
   public readonly id = "scrollDownCommand";
 
-  public execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<void> {
+  public execute(prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
       return vscode.commands
         .executeCommand<void>("editorScroll", {
@@ -418,7 +396,13 @@ export class ScrollDownCommand extends EmacsCommand {
           by: "wrappedLine",
           value: prefixArgument,
         })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+        .then(() =>
+          movePrimaryCursorIntoVisibleRange(
+            this.emacsController.textEditor,
+            this.emacsController.isInMarkMode,
+            this.emacsController,
+          ),
+        );
     }
 
     if (Configuration.instance.strictEmacsMove) {
@@ -427,9 +411,17 @@ export class ScrollDownCommand extends EmacsCommand {
           to: "up",
           by: "page",
         })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+        .then(() =>
+          movePrimaryCursorIntoVisibleRange(
+            this.emacsController.textEditor,
+            this.emacsController.isInMarkMode,
+            this.emacsController,
+          ),
+        );
     } else {
-      return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
+      return vscode.commands.executeCommand<void>(
+        this.emacsController.isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp",
+      );
     }
   }
 }
@@ -437,9 +429,9 @@ export class ScrollDownCommand extends EmacsCommand {
 export class ForwardParagraph extends EmacsCommand {
   public readonly id = "forwardParagraph";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+  public execute(prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
 
     const repeatedTravelForwardParagraph = (pos: vscode.Position): vscode.Position => {
       for (let i = 0; i < repeat; ++i) {
@@ -453,21 +445,21 @@ export class ForwardParagraph extends EmacsCommand {
       return;
     }
 
-    const newSelections = textEditor.selections.map((selection) => {
+    const newSelections = this.emacsController.textEditor.selections.map((selection) => {
       const newActive = repeatedTravelForwardParagraph(selection.active);
-      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
+      return new vscode.Selection(this.emacsController.isInMarkMode ? selection.anchor : newActive, newActive);
     });
-    textEditor.selections = newSelections;
-    revealPrimaryActive(textEditor);
+    this.emacsController.textEditor.selections = newSelections;
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }
 
 export class BackwardParagraph extends EmacsCommand {
   public readonly id = "backwardParagraph";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+  public execute(prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
 
     const repeatedTravelBackwardParagraph = (pos: vscode.Position): vscode.Position => {
       for (let i = 0; i < repeat; ++i) {
@@ -481,11 +473,11 @@ export class BackwardParagraph extends EmacsCommand {
       return;
     }
 
-    const newSelections = textEditor.selections.map((selection) => {
+    const newSelections = this.emacsController.textEditor.selections.map((selection) => {
       const newActive = repeatedTravelBackwardParagraph(selection.active);
-      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
+      return new vscode.Selection(this.emacsController.isInMarkMode ? selection.anchor : newActive, newActive);
     });
-    textEditor.selections = newSelections;
-    revealPrimaryActive(textEditor);
+    this.emacsController.textEditor.selections = newSelections;
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }

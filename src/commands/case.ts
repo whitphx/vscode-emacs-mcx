@@ -9,12 +9,8 @@ function hasNonEmptySelection(textEditor: TextEditor): boolean {
 export class TransformToUppercase extends EmacsCommand {
   public readonly id = "transformToUppercase";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    if (!hasNonEmptySelection(textEditor)) {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    if (!hasNonEmptySelection(this.emacsController.textEditor)) {
       await this.emacsController.runCommand("forwardWord");
     }
     await vscode.commands.executeCommand<void>("editor.action.transformToUppercase");
@@ -24,12 +20,8 @@ export class TransformToUppercase extends EmacsCommand {
 export class TransformToLowercase extends EmacsCommand {
   public readonly id = "transformToLowercase";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    if (!hasNonEmptySelection(textEditor)) {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    if (!hasNonEmptySelection(this.emacsController.textEditor)) {
       await this.emacsController.runCommand("forwardWord");
     }
     await vscode.commands.executeCommand<void>("editor.action.transformToLowercase");
@@ -39,12 +31,8 @@ export class TransformToLowercase extends EmacsCommand {
 export class TransformToTitlecase extends EmacsCommand {
   public readonly id = "transformToTitlecase";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    if (!hasNonEmptySelection(textEditor)) {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    if (!hasNonEmptySelection(this.emacsController.textEditor)) {
       await this.emacsController.runCommand("forwardWord");
     }
     await vscode.commands.executeCommand<void>("editor.action.transformToTitlecase");

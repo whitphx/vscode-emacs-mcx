@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
@@ -63,8 +62,8 @@ abstract class IsearchCommand extends EmacsCommand {
 export class IsearchForward extends IsearchCommand {
   public readonly id = "isearchForward";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.searchState.startSelections = textEditor.selections;
+  public execute(prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = this.emacsController.textEditor.selections;
 
     return this.openFindWidget({ isRegex: false }).then(() =>
       vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"),
@@ -75,8 +74,8 @@ export class IsearchForward extends IsearchCommand {
 export class IsearchBackward extends IsearchCommand {
   public readonly id = "isearchBackward";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.searchState.startSelections = textEditor.selections;
+  public execute(prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = this.emacsController.textEditor.selections;
     return this.openFindWidget({ isRegex: false }).then(() =>
       vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"),
     );
@@ -86,8 +85,8 @@ export class IsearchBackward extends IsearchCommand {
 export class IsearchForwardRegexp extends IsearchCommand {
   public readonly id = "isearchForwardRegexp";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.searchState.startSelections = textEditor.selections;
+  public execute(prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = this.emacsController.textEditor.selections;
     return this.openFindWidget({ isRegex: true }).then(() =>
       vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"),
     );
@@ -97,8 +96,8 @@ export class IsearchForwardRegexp extends IsearchCommand {
 export class IsearchBackwardRegexp extends IsearchCommand {
   public readonly id = "isearchBackwardRegexp";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.searchState.startSelections = textEditor.selections;
+  public execute(prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = this.emacsController.textEditor.selections;
     return this.openFindWidget({ isRegex: true }).then(() =>
       vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"),
     );
@@ -108,8 +107,8 @@ export class IsearchBackwardRegexp extends IsearchCommand {
 export class QueryReplace extends IsearchCommand {
   public readonly id = "queryReplace";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.searchState.startSelections = textEditor.selections;
+  public execute(prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = this.emacsController.textEditor.selections;
     // I could not find a way to open the find widget with `editor.actions.findWithArgs`
     // revealing the replace input and restoring the both query and replace strings.
     // So `editor.action.startFindReplaceAction` is used here.
@@ -120,8 +119,8 @@ export class QueryReplace extends IsearchCommand {
 export class QueryReplaceRegexp extends IsearchCommand {
   public readonly id = "queryReplaceRegexp";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
-    this.searchState.startSelections = textEditor.selections;
+  public execute(prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = this.emacsController.textEditor.selections;
     // Like `queryReplace` command, I could not find a way to open the find widget with the desired state.
     // In this command, setting `isRegex` is the priority and I gave up restoring the replace string by setting ´replaceString=undefined`.
     return this.openFindWidget({ isRegex: true, replaceString: "" });
@@ -134,12 +133,12 @@ export class QueryReplaceRegexp extends IsearchCommand {
 export class IsearchAbort extends IsearchCommand {
   public readonly id = "isearchAbort";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(prefixArgument: number | undefined): Thenable<void> {
     if (this.searchState.startSelections) {
-      textEditor.selections = this.searchState.startSelections;
+      this.emacsController.textEditor.selections = this.searchState.startSelections;
     }
     MessageManager.showMessage("Quit");
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
     return vscode.commands.executeCommand("closeFindWidget");
   }
 }
@@ -150,7 +149,7 @@ export class IsearchAbort extends IsearchCommand {
 export class IsearchExit extends IsearchCommand {
   public readonly id = "isearchExit";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(prefixArgument: number | undefined): Thenable<void> {
     if (this.searchState.startSelections) {
       this.emacsController.pushMark(this.searchState.startSelections.map((selection) => selection.anchor));
       MessageManager.showMessage("Mark saved where search started");

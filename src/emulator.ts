@@ -28,8 +28,11 @@ import { PromiseDelegate } from "./promise-delegate";
 import { delay } from "./utils";
 
 export interface IEmacsController {
+  readonly textEditor: TextEditor;
+
   runCommand(commandName: string): void | Thenable<unknown>;
 
+  readonly isInMarkMode: boolean;
   enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
   pushMark(positions: vscode.Position[], replace?: boolean): void;
@@ -42,7 +45,10 @@ export interface IEmacsController {
 }
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
-  private textEditor: TextEditor;
+  private _textEditor: TextEditor;
+  public get textEditor(): TextEditor {
+    return this._textEditor;
+  }
   private textRegister: Map<string, string>;
 
   private commandRegistry: EmacsCommandRegistry;
@@ -76,35 +82,35 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private _nativeSelectionsMap: WeakMap<TextEditor, readonly vscode.Selection[]> = new WeakMap();
   private _nativeSelectionsSetPromiseMap: WeakMap<TextEditor, PromiseDelegate<void>> = new WeakMap();
   public get nativeSelections(): readonly vscode.Selection[] {
-    const maybeNativeSelections = this._nativeSelectionsMap.get(this.textEditor);
+    const maybeNativeSelections = this._nativeSelectionsMap.get(this._textEditor);
     if (maybeNativeSelections) {
       return maybeNativeSelections;
     }
 
-    const nativeSelections = this.textEditor.selections;
+    const nativeSelections = this._textEditor.selections;
     this.setNativeSelections(nativeSelections);
     return nativeSelections;
   }
   private setNativeSelections(nativeSelections: readonly vscode.Selection[]): void {
-    this._nativeSelectionsMap.set(this.textEditor, nativeSelections);
+    this._nativeSelectionsMap.set(this._textEditor, nativeSelections);
 
-    const setPromise = this._nativeSelectionsSetPromiseMap.get(this.textEditor);
+    const setPromise = this._nativeSelectionsSetPromiseMap.get(this._textEditor);
     if (setPromise) {
       setPromise.resolvePromise();
-      this._nativeSelectionsSetPromiseMap.delete(this.textEditor);
+      this._nativeSelectionsSetPromiseMap.delete(this._textEditor);
     }
   }
   private waitNativeSelectionsSet(timeout: number): Promise<void> {
     const setPromise = new PromiseDelegate<void>();
-    this._nativeSelectionsSetPromiseMap.set(this.textEditor, setPromise);
+    this._nativeSelectionsSetPromiseMap.set(this._textEditor, setPromise);
     return Promise.any([setPromise.promise, delay(timeout)]);
   }
   private applyNativeSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
       const rectSelections = this.nativeSelections.flatMap(
-        convertSelectionToRectSelections.bind(null, this.textEditor.document),
+        convertSelectionToRectSelections.bind(null, this._textEditor.document),
       );
-      this.textEditor.selections = rectSelections;
+      this._textEditor.selections = rectSelections;
     }
   }
   public moveRectActives(navigateFn: (currentActive: vscode.Position, index: number) => vscode.Position): void {
@@ -127,7 +133,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
     textRegister: Map<string, string> = new Map(),
   ) {
-    this.textEditor = textEditor;
+    this._textEditor = textEditor;
     this.setNativeSelections(this.rectMode ? [] : textEditor.selections); // TODO: `[]` is workaround.
 
     this.textRegister = textRegister;
@@ -228,7 +234,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public setTextEditor(textEditor: TextEditor): void {
-    this.textEditor = textEditor;
+    this._textEditor = textEditor;
     this.killYanker.setTextEditor(textEditor);
   }
 
@@ -259,7 +265,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     if (this.rectMode) {
       this.applyNativeSelectionsAsRect();
     } else {
-      this.textEditor.selections = this.nativeSelections;
+      this._textEditor.selections = this.nativeSelections;
     }
 
     if (this.rectMode) {
@@ -270,7 +276,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public getTextEditor(): TextEditor {
-    return this.textEditor;
+    return this._textEditor;
   }
 
   public registerDisposable(disposable: vscode.Disposable): void {
@@ -285,10 +291,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
     // XXX: Is this a correct way to check the identity of document?
-    if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
+    if (e.document.uri.toString() === this._textEditor.document.uri.toString()) {
       if (
         e.contentChanges.some((contentChange) =>
-          this.textEditor.selections.some(
+          this._textEditor.selections.some(
             (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
           ),
         )
@@ -301,11 +307,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
-    if (e.textEditor === this.textEditor) {
+    if (e.textEditor === this._textEditor) {
       this.onDidInterruptTextEditor();
 
       if (!this.rectMode) {
-        this.setNativeSelections(this.textEditor.selections);
+        this.setNativeSelections(this._textEditor.selections);
       }
     }
   }
@@ -337,8 +343,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       return vscode.commands.executeCommand("type", { text: char });
     }
 
-    return this.textEditor.edit((editBuilder) => {
-      this.textEditor.selections.forEach((selection) => {
+    return this._textEditor.edit((editBuilder) => {
+      this._textEditor.selections.forEach((selection) => {
         editBuilder.insert(selection.active, char.repeat(repeat));
       });
     });
@@ -424,7 +430,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
 
-    const ret = command.run(this.textEditor, this.isInMarkMode, prefixArgument);
+    const ret = command.run(prefixArgument);
     this.afterCommand();
     return ret;
   }
@@ -473,8 +479,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", true);
     this.applyNativeSelectionsAsRect();
 
-    this.normalCursorStyle = this.textEditor.options.cursorStyle;
-    this.textEditor.options.cursorStyle = vscode.TextEditorCursorStyle.LineThin;
+    this.normalCursorStyle = this._textEditor.options.cursorStyle;
+    this._textEditor.options.cursorStyle = vscode.TextEditorCursorStyle.LineThin;
   }
 
   private exitRectangleMarkMode(): void {
@@ -484,13 +490,13 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     this.rectMode = false;
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRectMarkMode", false);
-    this.textEditor.selections = this.nativeSelections;
+    this._textEditor.selections = this.nativeSelections;
 
     if (!this.isInMarkMode) {
       this.makeSelectionsEmpty();
     }
 
-    this.textEditor.options.cursorStyle = this.normalCursorStyle;
+    this._textEditor.options.cursorStyle = this.normalCursorStyle;
   }
 
   /**
@@ -521,7 +527,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public enterMarkMode(pushMark = true): void {
     this._isInMarkMode = true;
-    this._markModeAnchors = this.textEditor.selections.map((selection) => selection.anchor);
+    this._markModeAnchors = this._textEditor.selections.map((selection) => selection.anchor);
     this.rectMode = false;
 
     // At this moment, the only way to set the context for `when` conditions is `setContext` command.
@@ -530,8 +536,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", true);
 
     if (pushMark) {
-      this.pushMark(this.textEditor.selections.map((selection) => selection.active));
-      this.textEditor.selections = this.textEditor.selections.map(
+      this.pushMark(this._textEditor.selections.map((selection) => selection.active));
+      this._textEditor.selections = this._textEditor.selections.map(
         (selection) => new Selection(selection.active, selection.active),
       );
     }
@@ -545,28 +551,28 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   public popMark(): void {
     const prevMark = this.markRing.pop();
     if (prevMark) {
-      this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
-      this.textEditor.revealRange(this.textEditor.selection);
+      this._textEditor.selections = prevMark.map((position) => new Selection(position, position));
+      this._textEditor.revealRange(this._textEditor.selection);
     }
   }
 
   public exchangePointAndMark(): void {
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
     this.enterMarkMode(false);
-    this.prevExchangedMarks = this.textEditor.selections.map((selection) => selection.active);
+    this.prevExchangedMarks = this._textEditor.selections.map((selection) => selection.active);
 
     if (prevMarks) {
-      const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);
-      const affectedSelections = this.textEditor.selections.slice(0, affectedLen).map((selection, i) => {
+      const affectedLen = Math.min(this._textEditor.selections.length, prevMarks.length);
+      const affectedSelections = this._textEditor.selections.slice(0, affectedLen).map((selection, i) => {
         // `i < affectedLen <= prevMarks.length`,
         // so the `noUncheckedIndexedAccess` rule can be skipped here.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const prevMark = prevMarks[i]!;
         return new vscode.Selection(selection.active, prevMark);
       });
-      const newSelections = affectedSelections.concat(this.textEditor.selections.slice(affectedLen));
-      this.textEditor.selections = newSelections;
-      this.textEditor.revealRange(this.textEditor.selection);
+      const newSelections = affectedSelections.concat(this._textEditor.selections.slice(affectedLen));
+      this._textEditor.selections = newSelections;
+      this._textEditor.revealRange(this._textEditor.selection);
     }
   }
 
@@ -592,8 +598,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   private makeSelectionsEmpty() {
-    const srcSelections = this.rectMode ? this.nativeSelections : this.textEditor.selections;
-    this.textEditor.selections = srcSelections.map((selection) => new Selection(selection.active, selection.active));
+    const srcSelections = this.rectMode ? this.nativeSelections : this._textEditor.selections;
+    this._textEditor.selections = srcSelections.map((selection) => new Selection(selection.active, selection.active));
   }
 
   private stopMultiCursor() {
@@ -601,11 +607,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   private hasMultipleSelections(): boolean {
-    return this.textEditor.selections.length > 1;
+    return this._textEditor.selections.length > 1;
   }
 
   private hasNonEmptySelection(): boolean {
-    return this.textEditor.selections.some((selection) => !selection.isEmpty);
+    return this._textEditor.selections.some((selection) => !selection.isEmpty);
   }
 
   private afterCommand() {
@@ -629,16 +635,16 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         const newChar = Math.min(selection.active.character, selection.anchor.character);
         return new vscode.Selection(newLine, newChar, newLine, newChar);
       });
-    const selections = getNonEmptySelections(this.textEditor);
+    const selections = getNonEmptySelections(this._textEditor);
     if (selectionsAfterRectDisabled) {
-      this.textEditor.selections = selectionsAfterRectDisabled;
+      this._textEditor.selections = selectionsAfterRectDisabled;
     }
     // selections is now a list of non empty selections, iterate through them and
     // build a single variable combinedtext
     let i = 0;
     let combinedtext = "";
     while (i < selections.length) {
-      combinedtext = combinedtext + this.textEditor.document.getText(selections[i]);
+      combinedtext = combinedtext + this._textEditor.document.getText(selections[i]);
       i++;
     }
 
@@ -663,9 +669,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       return;
     }
     // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
-    const selections = this.textEditor.selections;
+    const selections = this._textEditor.selections;
 
-    await this.textEditor.edit((editBuilder) => {
+    await this._textEditor.edit((editBuilder) => {
       selections.forEach((selection) => {
         if (!selection.isEmpty) {
           editBuilder.delete(selection);

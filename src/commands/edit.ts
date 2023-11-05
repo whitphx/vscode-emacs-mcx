@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Range, Selection, TextEditor } from "vscode";
+import { Range, Selection } from "vscode";
 import { makeParallel, EmacsCommand } from ".";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
@@ -7,7 +7,7 @@ import { delay } from "../utils";
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
+  public execute(prefixArgument: number | undefined): Thenable<unknown> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () => vscode.commands.executeCommand("deleteLeft"));
   }
@@ -16,7 +16,7 @@ export class DeleteBackwardChar extends EmacsCommand {
 export class DeleteForwardChar extends EmacsCommand {
   public readonly id = "deleteForwardChar";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public execute(prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>("deleteRight"),
@@ -27,14 +27,12 @@ export class DeleteForwardChar extends EmacsCommand {
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     this.emacsController.exitMarkMode();
 
-    textEditor.selections = textEditor.selections.map((selection) => new Selection(selection.active, selection.active));
+    this.emacsController.textEditor.selections = this.emacsController.textEditor.selections.map(
+      (selection) => new Selection(selection.active, selection.active),
+    );
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
 
@@ -52,8 +50,8 @@ export class NewLine extends EmacsCommand {
     // and record the inserted texts.
     // Then undo these two edits and call `textEditor.edit` to insert the repeated texts at once.
 
-    const initCursorsAtEndOfLine = textEditor.selections.map((selection) => {
-      return selection.active.isEqual(textEditor.document.lineAt(selection.active.line).range.end);
+    const initCursorsAtEndOfLine = this.emacsController.textEditor.selections.map((selection) => {
+      return selection.active.isEqual(this.emacsController.textEditor.document.lineAt(selection.active.line).range.end);
     });
 
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
@@ -62,15 +60,15 @@ export class NewLine extends EmacsCommand {
 
     // The first inserted lines can be affected by the second ones.
     // We need to capture its final content after the second insertion to achieve the desired result.
-    const firstInsertedTexts = textEditor.selections.map((selection) => {
-      const from = textEditor.document.lineAt(selection.active.line - 2).range.end;
-      const to = textEditor.document.lineAt(selection.active.line - 1).range.end;
-      return textEditor.document.getText(new Range(from, to));
+    const firstInsertedTexts = this.emacsController.textEditor.selections.map((selection) => {
+      const from = this.emacsController.textEditor.document.lineAt(selection.active.line - 2).range.end;
+      const to = this.emacsController.textEditor.document.lineAt(selection.active.line - 1).range.end;
+      return this.emacsController.textEditor.document.getText(new Range(from, to));
     });
-    const secondInsertedTexts = textEditor.selections.map((selection) => {
-      const from = textEditor.document.lineAt(selection.active.line - 1).range.end;
-      const to = textEditor.document.lineAt(selection.active.line - 0).range.end;
-      return textEditor.document.getText(new Range(from, to));
+    const secondInsertedTexts = this.emacsController.textEditor.selections.map((selection) => {
+      const from = this.emacsController.textEditor.document.lineAt(selection.active.line - 1).range.end;
+      const to = this.emacsController.textEditor.document.lineAt(selection.active.line - 0).range.end;
+      return this.emacsController.textEditor.document.getText(new Range(from, to));
     });
 
     // Trailing new lines can be inserted for example
@@ -82,28 +80,30 @@ export class NewLine extends EmacsCommand {
     //  */
     // The `trailingNewLinesInserted` flag list represents whether such trailing new lines are inserted or not.
     // `trailingLineTexts` contains the texts of such trailing new lines.
-    const trailingNewLinesInserted = textEditor.selections.map((selection, index) => {
+    const trailingNewLinesInserted = this.emacsController.textEditor.selections.map((selection, index) => {
       const initCursorAtEndOfLine = initCursorsAtEndOfLine[index];
       if (initCursorAtEndOfLine == null || initCursorAtEndOfLine === true) {
         return false;
       }
-      const cursorAtEndOfLine = selection.active.isEqual(textEditor.document.lineAt(selection.active.line).range.end);
+      const cursorAtEndOfLine = selection.active.isEqual(
+        this.emacsController.textEditor.document.lineAt(selection.active.line).range.end,
+      );
       return cursorAtEndOfLine;
     });
-    const trailingLineTexts = textEditor.selections.map((selection, index) => {
+    const trailingLineTexts = this.emacsController.textEditor.selections.map((selection, index) => {
       const trailingNewLineInserted = trailingNewLinesInserted[index];
       if (trailingNewLineInserted == null || trailingNewLineInserted === false) {
         return "";
       }
-      const nextLineStart = textEditor.document.lineAt(selection.active.line + 1).range.start;
-      return textEditor.document.getText(new Range(selection.active, nextLineStart));
+      const nextLineStart = this.emacsController.textEditor.document.lineAt(selection.active.line + 1).range.start;
+      return this.emacsController.textEditor.document.getText(new Range(selection.active, nextLineStart));
     });
 
     await vscode.commands.executeCommand<void>("undo");
     await vscode.commands.executeCommand<void>("undo");
 
-    await textEditor.edit((editBuilder) => {
-      textEditor.selections.forEach((selection, index) => {
+    await this.emacsController.textEditor.edit((editBuilder) => {
+      this.emacsController.textEditor.selections.forEach((selection, index) => {
         const firstInsertedLineText = firstInsertedTexts[index];
         const secondInsertedLineText = secondInsertedTexts[index];
         const trailingLineText = trailingLineTexts[index];
@@ -122,15 +122,15 @@ export class NewLine extends EmacsCommand {
         );
       });
     });
-    textEditor.selections = textEditor.selections.map((selection, index) => {
+    this.emacsController.textEditor.selections = this.emacsController.textEditor.selections.map((selection, index) => {
       const trailingNewLineInserted = trailingNewLinesInserted[index];
       if (trailingNewLineInserted) {
-        const newActive = textEditor.document.lineAt(selection.active.line - 1).range.end;
+        const newActive = this.emacsController.textEditor.document.lineAt(selection.active.line - 1).range.end;
         return new Selection(newActive, newActive);
       }
       return selection;
     });
 
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }

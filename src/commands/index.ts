@@ -1,4 +1,3 @@
-import { TextEditor } from "vscode";
 import { IEmacsController } from "../emulator";
 
 export function makeParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
@@ -14,19 +13,11 @@ export abstract class EmacsCommand {
     this.emacsController = markModeController;
   }
 
-  public run(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Thenable<unknown> | void {
-    return this.execute(textEditor, isInMarkMode, prefixArgument);
+  public run(prefixArgument: number | undefined): Thenable<unknown> | void {
+    return this.execute(prefixArgument);
   }
 
-  public abstract execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): void | Thenable<unknown>;
+  public abstract execute(prefixArgument: number | undefined): void | Thenable<unknown>;
 }
 
 export interface IEmacsCommandInterrupted {

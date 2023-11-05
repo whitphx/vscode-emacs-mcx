@@ -1,23 +1,18 @@
 import { Position, Range } from "vscode";
-import { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 
 export class DeleteBlankLines extends EmacsCommand {
   public readonly id = "deleteBlankLines";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
-    const document = textEditor.document;
+  public async execute(prefixArgument: number | undefined): Promise<void> {
+    const document = this.emacsController.textEditor.document;
 
-    for (let iSel = 0; iSel < textEditor.selections.length; ++iSel) {
+    for (let iSel = 0; iSel < this.emacsController.textEditor.selections.length; ++iSel) {
       // `selection[iSel]` is mutated during the loop,
       // therefore, each selection must be obtained
       // by indexing on each iteration.
       // That's why for-of loop is not appropriate here.
-      const selection = textEditor.selections[iSel]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+      const selection = this.emacsController.textEditor.selections[iSel]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
       const curLineNum = selection.active.line;
       const curLine = document.lineAt(curLineNum);
@@ -46,7 +41,7 @@ export class DeleteBlankLines extends EmacsCommand {
         previousLineOffset++;
       }
 
-      await textEditor.edit((editBuilder) => {
+      await this.emacsController.textEditor.edit((editBuilder) => {
         if (followingLineOffset > 0) {
           // Following empty lines exist
           const finalFollowingEmptyLineNum = curLineNum + followingLineOffset;

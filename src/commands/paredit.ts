@@ -1,5 +1,5 @@
 import * as paredit from "paredit.js";
-import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
+import { TextDocument, Selection, Range, Position } from "vscode";
 import { EmacsCommand } from ".";
 import { KillYankCommand } from "./kill";
 import { AppendDirection } from "../kill-yank";
@@ -40,23 +40,23 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
 abstract class PareditNavigatorCommand extends EmacsCommand {
   public abstract readonly pareditNavigatorFn: PareditNavigatorFn;
 
-  public async execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public async execute(prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
 
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
 
     const travelSexp = makeSexpTravelFunc(doc, this.pareditNavigatorFn);
-    const newSelections = textEditor.selections.map((selection) => {
+    const newSelections = this.emacsController.textEditor.selections.map((selection) => {
       const newActivePosition = travelSexp(selection.active, repeat);
-      return new Selection(isInMarkMode ? selection.anchor : newActivePosition, newActivePosition);
+      return new Selection(this.emacsController.isInMarkMode ? selection.anchor : newActivePosition, newActivePosition);
     });
 
-    textEditor.selections = newSelections;
+    this.emacsController.textEditor.selections = newSelections;
 
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }
 
@@ -84,25 +84,21 @@ export class MarkSexp extends EmacsCommand {
   public readonly id = "paredit.markSexp";
   private continuing = false;
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     const arg = prefixArgument === undefined ? 1 : prefixArgument;
 
     const repeat = Math.abs(arg);
     const navigatorFn = arg > 0 ? paredit.navigator.forwardSexp : paredit.navigator.backwardSexp;
 
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
 
     const travelSexp = makeSexpTravelFunc(doc, navigatorFn);
-    const newSelections = textEditor.selections.map((selection) => {
+    const newSelections = this.emacsController.textEditor.selections.map((selection) => {
       const newActivePosition = travelSexp(selection.active, repeat);
       return new Selection(selection.anchor, newActivePosition);
     });
 
-    textEditor.selections = newSelections;
+    this.emacsController.textEditor.selections = newSelections;
     if (newSelections.some((newSelection) => !newSelection.isEmpty)) {
       this.emacsController.enterMarkMode(false);
     }
@@ -114,7 +110,7 @@ export class MarkSexp extends EmacsCommand {
       this.continuing,
     );
 
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
 
     this.continuing = true;
   }
@@ -127,83 +123,71 @@ export class MarkSexp extends EmacsCommand {
 export class KillSexp extends KillYankCommand {
   public readonly id = "paredit.killSexp";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
 
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
 
     const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.forwardSexp);
-    const killRanges = textEditor.selections.map((selection) => {
+    const killRanges = this.emacsController.textEditor.selections.map((selection) => {
       const newActivePosition = travelSexp(selection.active, repeat);
       return new Range(selection.anchor, newActivePosition);
     });
 
     await this.killYanker.kill(killRanges);
 
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }
 
 export class BackwardKillSexp extends KillYankCommand {
   public readonly id = "paredit.backwardKillSexp";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
 
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
 
     const travelSexp = makeSexpTravelFunc(doc, paredit.navigator.backwardSexp);
-    const killRanges = textEditor.selections.map((selection) => {
+    const killRanges = this.emacsController.textEditor.selections.map((selection) => {
       const newActivePosition = travelSexp(selection.active, repeat);
       return new Range(selection.anchor, newActivePosition);
     });
 
     await this.killYanker.kill(killRanges, AppendDirection.Backward);
 
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 }
 
 export class PareditKill extends KillYankCommand {
   public readonly id = "paredit.pareditKill";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async execute(prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
 
-    const doc = textEditor.document;
+    const doc = this.emacsController.textEditor.document;
     const src = doc.getText(); // TODO: doc.getText is called a second time, in makeSexpTravelFunc
 
-    const killRanges = textEditor.selections.map((selection) => {
+    const killRanges = this.emacsController.textEditor.selections.map((selection) => {
       const navigatorFn: PareditNavigatorFn = (ast: paredit.AST, idx: number) => {
         while (src[idx] == " " || src[idx] == "\t") {
           idx += 1;
         }
         const lineNumber = selection.active.line;
-        const line = textEditor.document.lineAt(lineNumber);
+        const line = this.emacsController.textEditor.document.lineAt(lineNumber);
         const lineEnd = doc.offsetAt(line.range.end);
         if (idx >= lineEnd) {
-          const nextLine = textEditor.document.lineAt(lineNumber + 1);
+          const nextLine = this.emacsController.textEditor.document.lineAt(lineNumber + 1);
           return doc.offsetAt(nextLine.range.start);
         } else {
           let curr = idx;
@@ -222,7 +206,7 @@ export class PareditKill extends KillYankCommand {
 
     await this.killYanker.kill(killRanges.filter((range) => !range.isEmpty));
 
-    revealPrimaryActive(textEditor);
+    revealPrimaryActive(this.emacsController.textEditor);
   }
 
   private indexAfterKillSexp(ast: paredit.AST, currentIdx: number): number {
