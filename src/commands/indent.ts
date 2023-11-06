@@ -5,9 +5,8 @@ import { EmacsCommand } from ".";
 export class DeleteIndentation extends EmacsCommand {
   public readonly id = "deleteIndentation";
 
-  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
-    return vscode.commands
-      .executeCommand("emacs-mcx.previousLine")
-      .then(() => vscode.commands.executeCommand("editor.action.joinLines"));
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    await this.emacsController.runCommand("previousLine");
+    await vscode.commands.executeCommand("editor.action.joinLines");
   }
 }
