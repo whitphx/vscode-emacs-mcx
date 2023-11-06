@@ -3658,40 +3658,24 @@
       },
       {
         "key": "alt+shift+6",
-        "command": "emacs-mcx.executeCommands",
-        "when": "editorTextFocus && !editorReadOnly && !config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "command": "emacs-mcx.deleteIndentation",
+        "when": "editorTextFocus && !editorReadOnly && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+shift+6",
         "mac": "cmd+shift+6",
-        "command": "emacs-mcx.executeCommands",
-        "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "command": "emacs-mcx.deleteIndentation",
+        "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape shift+6",
-        "command": "emacs-mcx.executeCommands",
-        "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixEscape",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "command": "emacs-mcx.deleteIndentation",
+        "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ shift+6",
-        "command": "emacs-mcx.executeCommands",
-        "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "command": "emacs-mcx.deleteIndentation",
+        "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "escape",
