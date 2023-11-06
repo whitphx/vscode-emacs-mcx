@@ -7,7 +7,7 @@ import { delay } from "../utils";
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () => vscode.commands.executeCommand("deleteLeft"));
   }
@@ -16,7 +16,7 @@ export class DeleteBackwardChar extends EmacsCommand {
 export class DeleteForwardChar extends EmacsCommand {
   public readonly id = "deleteForwardChar";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>("deleteRight"),
@@ -27,11 +27,7 @@ export class DeleteForwardChar extends EmacsCommand {
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.exitMarkMode();
 
     textEditor.selections = textEditor.selections.map((selection) => new Selection(selection.active, selection.active));

@@ -47,11 +47,7 @@ function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1
 export class KillWord extends KillYankCommand {
   public readonly id = "killWord";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -85,11 +81,7 @@ function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat
 export class BackwardKillWord extends KillYankCommand {
   public readonly id = "backwardKillWord";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -106,7 +98,7 @@ export class BackwardKillWord extends KillYankCommand {
 export class KillLine extends KillYankCommand {
   public readonly id = "killLine";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const killWholeLine = Configuration.instance.killWholeLine;
 
     const ranges = textEditor.selections.map((selection) => {
@@ -139,7 +131,7 @@ export class KillLine extends KillYankCommand {
 export class KillWholeLine extends KillYankCommand {
   public readonly id = "killWholeLine";
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const ranges = textEditor.selections.map(
       (selection) =>
         // From the beginning of the line to the beginning of the next line
@@ -153,11 +145,7 @@ export class KillWholeLine extends KillYankCommand {
 export class KillRegion extends KillYankCommand {
   public readonly id = "killRegion";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const selectionsAfterRectDisabled =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {
@@ -182,11 +170,7 @@ export class KillRegion extends KillYankCommand {
 export class CopyRegion extends KillYankCommand {
   public readonly id = "copyRegion";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const ranges = getNonEmptySelections(textEditor);
     await this.killYanker.copy(ranges);
     this.emacsController.exitMarkMode();
@@ -199,11 +183,7 @@ export class CopyRegion extends KillYankCommand {
 export class Yank extends KillYankCommand {
   public readonly id = "yank";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
     await this.killYanker.yank();
     this.emacsController.exitMarkMode();
@@ -214,11 +194,7 @@ export class Yank extends KillYankCommand {
 export class YankPop extends KillYankCommand {
   public readonly id = "yankPop";
 
-  public async execute(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Promise<void> {
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     await this.killYanker.yankPop();
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);

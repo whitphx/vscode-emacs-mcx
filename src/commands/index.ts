@@ -14,15 +14,7 @@ export abstract class EmacsCommand {
     this.emacsController = markModeController;
   }
 
-  public run(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-  ): Thenable<unknown> | void {
-    return this.execute(textEditor, isInMarkMode, prefixArgument);
-  }
-
-  public abstract execute(
+  public abstract run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined,

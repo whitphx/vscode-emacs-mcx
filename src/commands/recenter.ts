@@ -13,7 +13,7 @@ export class RecenterTopBottom extends EmacsCommand implements ITextEditorInterr
 
   private recenterPosition: RecenterPosition = RecenterPosition.Middle;
 
-  public execute(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const activeRange = new vscode.Range(textEditor.selection.active, textEditor.selection.active);
 
     switch (this.recenterPosition) {
