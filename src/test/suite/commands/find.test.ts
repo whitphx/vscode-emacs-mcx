@@ -27,6 +27,8 @@ suite("isearch", () => {
 
     await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
     await delay(100);
+    await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
+    await delay(100);
 
     assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
 
@@ -39,6 +41,8 @@ suite("isearch", () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
     await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
+    await delay(100);
+    await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
     await delay(100);
 
     assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
@@ -61,6 +65,8 @@ suite("isearch", () => {
 
     await emulator.setMarkCommand();
     await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
+    await delay(100);
+    await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
     await delay(100);
 
     await emulator.runCommand("isearchExit");
