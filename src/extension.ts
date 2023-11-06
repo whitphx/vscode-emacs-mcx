@@ -4,7 +4,6 @@ import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
-import { executeCommands } from "./execute-commands";
 import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
 import { MessageManager } from "./message";
@@ -395,12 +394,6 @@ export function activate(context: vscode.ExtensionContext): void {
       return;
     }
     return emulator.insertRegister(arg);
-  });
-
-  vscode.commands.registerCommand("emacs-mcx.executeCommands", async (...args: any[]) => {
-    if (1 <= args.length) {
-      executeCommands(args[0]);
-    }
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {

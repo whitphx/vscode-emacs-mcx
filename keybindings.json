@@ -601,9 +601,11 @@
     },
     {
       "key": "meta+shift+6",
-      "command": "emacs-mcx.executeCommands",
+      "command": "runCommands",
       "when": "editorTextFocus && !editorReadOnly",
-      "args": ["emacs-mcx.previousLine", "editor.action.joinLines"]
+      "args": {
+        "commands": ["emacs-mcx.previousLine", "editor.action.joinLines"]
+      }
     },
     // Cancel
     {

@@ -9,7 +9,7 @@
     "url": "https://github.com/whitphx/vscode-emacs-mcx"
   },
   "engines": {
-    "vscode": "^1.63.0"
+    "vscode": "^1.77.0"
   },
   "categories": [
     "Other",
@@ -3658,40 +3658,48 @@
       },
       {
         "key": "alt+shift+6",
-        "command": "emacs-mcx.executeCommands",
+        "command": "runCommands",
         "when": "editorTextFocus && !editorReadOnly && !config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "args": {
+          "commands": [
+            "emacs-mcx.previousLine",
+            "editor.action.joinLines"
+          ]
+        }
       },
       {
         "key": "alt+shift+6",
         "mac": "cmd+shift+6",
-        "command": "emacs-mcx.executeCommands",
+        "command": "runCommands",
         "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "args": {
+          "commands": [
+            "emacs-mcx.previousLine",
+            "editor.action.joinLines"
+          ]
+        }
       },
       {
         "key": "escape shift+6",
-        "command": "emacs-mcx.executeCommands",
+        "command": "runCommands",
         "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixEscape",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "args": {
+          "commands": [
+            "emacs-mcx.previousLine",
+            "editor.action.joinLines"
+          ]
+        }
       },
       {
         "key": "ctrl+[ shift+6",
-        "command": "emacs-mcx.executeCommands",
+        "command": "runCommands",
         "when": "editorTextFocus && !editorReadOnly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": [
-          "emacs-mcx.previousLine",
-          "editor.action.joinLines"
-        ]
+        "args": {
+          "commands": [
+            "emacs-mcx.previousLine",
+            "editor.action.joinLines"
+          ]
+        }
       },
       {
         "key": "escape",
