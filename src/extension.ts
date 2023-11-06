@@ -335,6 +335,10 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("tabToTabStop");
   });
 
+  registerEmulatorCommand("emacs-mcx.deleteIndentation", (emulator) => {
+    emulator.runCommand("deleteIndentation");
+  });
+
   registerEmulatorCommand("emacs-mcx.paredit.forwardSexp", (emulator) => {
     emulator.runCommand("paredit.forwardSexp");
   });

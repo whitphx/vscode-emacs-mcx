@@ -4,7 +4,8 @@ import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./
 import * as CaseCommands from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
-import * as IndentCommands from "./commands/tab";
+import * as TabCommands from "./commands/tab";
+import * as IndentCommands from "./commands/indent";
 import * as FindCommands from "./commands/find";
 import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
@@ -165,7 +166,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new DeleteBlankLines(this));
     this.commandRegistry.register(new RecenterTopBottom(this));
 
-    this.commandRegistry.register(new IndentCommands.TabToTabStop(this));
+    this.commandRegistry.register(new TabCommands.TabToTabStop(this));
+
+    this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
 
     const searchState: FindCommands.SearchState = {
       startSelections: undefined,

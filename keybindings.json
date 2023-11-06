@@ -601,9 +601,8 @@
     },
     {
       "key": "meta+shift+6",
-      "command": "emacs-mcx.executeCommands",
-      "when": "editorTextFocus && !editorReadOnly",
-      "args": ["emacs-mcx.previousLine", "editor.action.joinLines"]
+      "command": "emacs-mcx.deleteIndentation",
+      "when": "editorTextFocus && !editorReadOnly"
     },
     // Cancel
     {
