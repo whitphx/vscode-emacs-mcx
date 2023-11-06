@@ -415,7 +415,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   }
 
-  public runCommand(commandName: string): Thenable<unknown> | void {
+  public runCommand(commandName: string, args?: unknown[]): Thenable<unknown> | void {
     const command = this.commandRegistry.get(commandName);
 
     if (command === undefined) {
@@ -424,7 +424,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
 
-    const ret = command.run(this.textEditor, this.isInMarkMode, prefixArgument);
+    const ret = command.run(this.textEditor, this.isInMarkMode, prefixArgument, args);
     this.afterCommand();
     return ret;
   }

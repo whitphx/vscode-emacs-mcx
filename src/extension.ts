@@ -86,7 +86,7 @@ export function activate(context: vscode.ExtensionContext): void {
     onNoEmulator?: (...args: unknown[]) => unknown,
   ) {
     const disposable = vscode.commands.registerCommand(commandName, (...args) => {
-      logger.debug(`[command]\t Command "${commandName}" executed with args (${args})`);
+      logger.debug(`[command]\t Command "${commandName}" executed with args (${JSON.stringify(args)})`);
 
       const emulator = getAndUpdateEmulator();
       if (!emulator) {
@@ -182,16 +182,8 @@ export function activate(context: vscode.ExtensionContext): void {
     emulator.runCommand("isearchAbort");
   });
 
-  registerEmulatorCommand("emacs-mcx.isearchExit", async (emulator, args) => {
-    await emulator.runCommand("isearchExit");
-
-    if (args == null || typeof args !== "object" || Array.isArray(args)) {
-      return;
-    }
-    const secondCommand = args.then;
-    if (typeof secondCommand === "string") {
-      await vscode.commands.executeCommand(secondCommand);
-    }
+  registerEmulatorCommand("emacs-mcx.isearchExit", (emulator, ...args) => {
+    return emulator.runCommand("isearchExit", args);
   });
 
   registerEmulatorCommand("emacs-mcx.deleteBackwardChar", (emulator) => {
