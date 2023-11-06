@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.51.2] - 2023-11-06
+
+### Fix
+
+- `isearch-exit` behavior keeping the mark-mode selections, #1745.
+- Refactoring, #1744, #1746.
+
 ## [0.51.1] - 2023-11-05
 
 ### Fix
