@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
+import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace, assertSelectionsEqual } from "../utils";
 
 suite("isearch", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -17,9 +17,9 @@ suite("isearch", () => {
   test("isearchAbort returns to where the search started", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
-    await emulator.runCommand("isearchForward");
+    await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
 
-    setEmptyCursors(activeTextEditor, [2, 0]);
+    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
 
     await emulator.runCommand("isearchAbort");
 
@@ -29,13 +29,15 @@ suite("isearch", () => {
   test("isearchExit sets a new mark at where the search started", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
-    await emulator.runCommand("isearchForward");
+    await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
 
-    setEmptyCursors(activeTextEditor, [2, 0]);
+    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
 
     await emulator.runCommand("isearchExit");
 
-    assertCursorsEqual(activeTextEditor, [2, 0]);
+    // This is different from the original Emacs behavior which doesn't select the matched text after exiting isearch.
+    // But I think this is more useful respecting the VSCode's behavior.
+    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
 
     emulator.popMark();
 
