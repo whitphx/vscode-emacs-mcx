@@ -4,6 +4,16 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.52.0] - 2023-11-06
+
+### Removed
+
+- `emacs-mcx.executeCommands` is removed. Use the [built-in `runCommands`](https://code.visualstudio.com/docs/getstarted/keybindings#_running-multiple-commands) instead which has been available since VSCode 1.77, #1749.
+
+### Fix
+
+- Implement `delete-indentation` as a command, #1748.
+
 ## [0.51.2] - 2023-11-06
 
 ### Fix
