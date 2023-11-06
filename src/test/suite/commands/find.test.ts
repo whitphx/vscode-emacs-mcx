@@ -1,7 +1,14 @@
 import * as vscode from "vscode";
 import * as assert from "assert";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace, assertSelectionsEqual } from "../utils";
+import {
+  assertCursorsEqual,
+  setEmptyCursors,
+  setupWorkspace,
+  cleanUpWorkspace,
+  assertSelectionsEqual,
+  delay,
+} from "../utils";
 
 suite("isearch", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -19,6 +26,7 @@ suite("isearch", () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
     await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
+    await delay(100);
 
     assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
 
@@ -31,6 +39,7 @@ suite("isearch", () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
     await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
+    await delay(100);
 
     assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
 
@@ -52,6 +61,7 @@ suite("isearch", () => {
 
     await emulator.setMarkCommand();
     await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
+    await delay(100);
 
     await emulator.runCommand("isearchExit");
 
