@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.52.1] - 2023-11-07
+
+### Fix
+
+- Refactoring, #1750, #1751.
+- Command handlers return promises, #1753.
+
 ## [0.52.0] - 2023-11-06
 
 ### Removed
