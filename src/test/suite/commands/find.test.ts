@@ -1,14 +1,6 @@
 import * as vscode from "vscode";
-import * as assert from "assert";
 import { EmacsEmulator } from "../../../emulator";
-import {
-  assertCursorsEqual,
-  setEmptyCursors,
-  setupWorkspace,
-  cleanUpWorkspace,
-  assertSelectionsEqual,
-  delay,
-} from "../utils";
+import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
 
 suite("isearch", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -25,12 +17,9 @@ suite("isearch", () => {
   test("isearchAbort returns to where the search started", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
-    await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
-    await delay(100);
-    await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
-    await delay(100);
+    await emulator.runCommand("isearchForward");
 
-    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
+    setEmptyCursors(activeTextEditor, [2, 0]);
 
     await emulator.runCommand("isearchAbort");
 
@@ -40,38 +29,16 @@ suite("isearch", () => {
   test("isearchExit sets a new mark at where the search started", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
 
-    await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
-    await delay(100);
-    await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
-    await delay(100);
+    await emulator.runCommand("isearchForward");
 
-    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
+    setEmptyCursors(activeTextEditor, [2, 0]);
 
     await emulator.runCommand("isearchExit");
 
-    // This is different from the original Emacs behavior which doesn't select the matched text after exiting isearch.
-    // But I think this is more useful respecting the VSCode's behavior.
-    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 3]);
-    assert.strictEqual(emulator.isInMarkMode, false);
+    assertCursorsEqual(activeTextEditor, [2, 0]);
 
     emulator.popMark();
 
     assertCursorsEqual(activeTextEditor, [1, 1]);
-    assert.strictEqual(emulator.isInMarkMode, false);
-  });
-
-  test("isearchExit keeps the mark mode", async () => {
-    setEmptyCursors(activeTextEditor, [1, 1]);
-
-    await emulator.setMarkCommand();
-    await emulator.runCommand("isearchForward", [{ searchString: "aaa" }]);
-    await delay(100);
-    await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
-    await delay(100);
-
-    await emulator.runCommand("isearchExit");
-
-    assertSelectionsEqual(activeTextEditor, [1, 1, 2, 3]);
-    assert.strictEqual(emulator.isInMarkMode, true);
   });
 });

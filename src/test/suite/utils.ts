@@ -98,16 +98,10 @@ export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[
   });
 }
 
-export function assertSelectionsEqual(
-  textEditor: TextEditor,
-  ...selections: Array<Selection | [number, number, number, number]>
-): void {
+export function assertSelectionsEqual(textEditor: TextEditor, ...selections: Array<Selection>): void {
   assert.strictEqual(textEditor.selections.length, selections.length);
   textEditor.selections.forEach((actualSelection, idx) => {
-    const maybeExpectSelection = selections[idx];
-    const expectSelection = Array.isArray(maybeExpectSelection)
-      ? new Selection(...maybeExpectSelection)
-      : maybeExpectSelection;
+    const expectSelection = selections[idx];
     assert.deepStrictEqual(actualSelection, expectSelection);
   });
 }

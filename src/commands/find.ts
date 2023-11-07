@@ -29,11 +29,11 @@ abstract class IsearchCommand extends EmacsCommand {
     this.searchState = searchState;
   }
 
-  protected openFindWidget(opts: { searchString?: string; replaceString?: string; isRegex: boolean }): Thenable<void> {
-    const { searchString, replaceString, isRegex } = opts;
+  protected openFindWidget(opts: { isRegex: boolean; replaceString?: string }): Thenable<void> {
+    const { isRegex, replaceString } = opts;
 
     const findArgs: FindArgs = {
-      searchString,
+      searchString: undefined,
       replaceString,
       isRegex,
       matchWholeWord: false,
@@ -63,21 +63,10 @@ abstract class IsearchCommand extends EmacsCommand {
 export class IsearchForward extends IsearchCommand {
   public readonly id = "isearchForward";
 
-  public run(
-    textEditor: TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-    args?: unknown[],
-  ): Thenable<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
 
-    // XXX: At this moment, the `searchString` arg is introduced only to this command for the testing purpose (see `find.test.ts`)
-    // and it is not used in the actual command execution and not introduced in other isearch commands.
-    // But it's ok to introduce it in other isearch commands and use it in the commands assigned to actual keybindings when necessary.
-    const arg0 = args?.[0];
-    const searchString = (arg0 as { searchString?: string } | undefined)?.searchString;
-
-    return this.openFindWidget({ searchString, isRegex: false }).then(() =>
+    return this.openFindWidget({ isRegex: false }).then(() =>
       vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction"),
     );
   }
