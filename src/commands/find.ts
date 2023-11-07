@@ -150,7 +150,12 @@ export class IsearchAbort extends IsearchCommand {
 export class IsearchExit extends IsearchCommand {
   public readonly id = "isearchExit";
 
-  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+  public run(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+    args?: unknown[],
+  ): Thenable<void> {
     return vscode.commands.executeCommand("closeFindWidget").then(() => {
       const startSelections = this.searchState.startSelections;
       if (startSelections) {
@@ -167,6 +172,13 @@ export class IsearchExit extends IsearchCommand {
           this.emacsController.pushMark(startSelections.map((selection) => selection.anchor));
           MessageManager.showMessage("Mark saved where search started");
         }
+      }
+
+      const arg0 = args?.[0];
+      const maybeNextCommand = (arg0 as { then?: string } | undefined)?.then;
+      const nextCommand = typeof maybeNextCommand === "string" ? maybeNextCommand : undefined;
+      if (nextCommand) {
+        return vscode.commands.executeCommand(nextCommand);
       }
     });
   }
