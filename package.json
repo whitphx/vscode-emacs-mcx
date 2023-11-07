@@ -79,7 +79,7 @@
         },
         "emacs-mcx.cursorMoveOnFindWidget": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "If true, the find widget does not close when using cursor moving commands while this is different from the original Emacs' behavior."
         },
         "emacs-mcx.enableOverridingTypeCommand": {
