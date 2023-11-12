@@ -35,6 +35,11 @@ export interface IConfiguration {
   enableOverridingTypeCommand: boolean;
 
   /**
+   * When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual).
+   */
+  lineMoveVisual: boolean;
+
+  /**
    * Extension debugging settings
    */
   debug: IDebugConfiguration;

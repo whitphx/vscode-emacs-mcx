@@ -99,7 +99,7 @@ export class NextLine extends EmacsCommand {
 
     return vscode.commands.executeCommand<void>("cursorMove", {
       to: "down",
-      by: "wrappedLine",
+      by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
       value: lineDelta,
       select: isInMarkMode,
     });
@@ -121,7 +121,7 @@ export class PreviousLine extends EmacsCommand {
 
     return vscode.commands.executeCommand<void>("cursorMove", {
       to: "up",
-      by: "wrappedLine",
+      by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
       value: lineDelta,
       select: isInMarkMode,
     });
@@ -344,7 +344,7 @@ export class ScrollUpCommand extends EmacsCommand {
       return vscode.commands
         .executeCommand<void>("editorScroll", {
           to: "down",
-          by: "wrappedLine",
+          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument,
         })
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
@@ -371,7 +371,7 @@ export class ScrollDownCommand extends EmacsCommand {
       return vscode.commands
         .executeCommand<void>("editorScroll", {
           to: "up",
-          by: "wrappedLine",
+          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument,
         })
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));

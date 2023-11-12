@@ -92,6 +92,11 @@
           "default": true,
           "description": "Whether M-<digit> (the `emacs-mcx.digitArgument` command) is enabled."
         },
+        "emacs-mcx.lineMoveVisual": {
+          "type": "boolean",
+          "default": true,
+          "description": "When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual)."
+        },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
           "description": "If true, all logs are suppressed.",
