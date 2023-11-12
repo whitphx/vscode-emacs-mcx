@@ -43,17 +43,6 @@ It's an intended design that simulates the original Emacs' behavior.
 You can disable it with `emacs-mcx.cursorMoveOnFindWidget` option described below.
 See https://github.com/whitphx/vscode-emacs-mcx/issues/137 for the details about this topic.
 
-### i-search (`C-s`) is initialized with the currently selected string and the previous search is removed.
-
-This is VSCode's design that an extension cannot control.
-To disable it, you should set `editor.find.seedSearchStringFromSelection` VSCode setting as `"never"`.
-It makes the find widget work similarly to Emacs.
-
-Refs:
-
-- [The official doc about `editor.find.seedSearchStringFromSelection` setting](basics#_seed-search-string-from-selection)
-- [The GitHub issue where we discuss about it](https://github.com/whitphx/vscode-emacs-mcx/issues/107)
-
 ### The extension has been broken!
 
 Try the `Developer: Reinstall Extension...` command from the command palette to reinstall the extension. I fixed [a problem](https://github.com/whitphx/vscode-emacs-mcx/issues/1654) by this way somehow.
