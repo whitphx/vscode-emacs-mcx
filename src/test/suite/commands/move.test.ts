@@ -111,6 +111,107 @@ suite("moveBeginning/EndOfLine", () => {
   });
 });
 
+suite("nextLine/previousLine", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = "x".repeat(1000) + "\n" + "a".repeat(1000) + "\n" + "x".repeat(1000);
+    activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
+    emulator = new EmacsEmulator(activeTextEditor);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  suite("lineMoveVisual=true", () => {
+    let wrappedLineWidth: number;
+
+    setup(async () => {
+      Configuration.instance.lineMoveVisual = true;
+
+      // Get wrapped line width
+      setEmptyCursors(activeTextEditor, [1, 0]);
+      await vscode.commands.executeCommand<void>("cursorMove", {
+        to: "wrappedLineEnd",
+        value: 1,
+      });
+      wrappedLineWidth = activeTextEditor.selection.active.character;
+    });
+    teardown(() => {
+      Configuration.reload();
+    });
+
+    suite("nextLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("nextLine");
+        assertCursorsEqual(activeTextEditor, [1, wrappedLineWidth]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        assertSelectionsEqual(activeTextEditor, [1, 0, 1, wrappedLineWidth]);
+      });
+    });
+
+    suite("previousLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, wrappedLineWidth]);
+        await emulator.runCommand("previousLine");
+        assertCursorsEqual(activeTextEditor, [1, 0]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, wrappedLineWidth]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("previousLine");
+        assertSelectionsEqual(activeTextEditor, [1, wrappedLineWidth, 1, 0]);
+      });
+    });
+  });
+
+  suite("lineMoveVisual=false", () => {
+    setup(() => {
+      Configuration.instance.lineMoveVisual = false;
+    });
+    teardown(() => {
+      Configuration.reload();
+    });
+
+    suite("nextLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("nextLine");
+        assertCursorsEqual(activeTextEditor, [2, 0]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        assertSelectionsEqual(activeTextEditor, [1, 0, 2, 0]);
+      });
+    });
+
+    suite("previousLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("previousLine");
+        assertCursorsEqual(activeTextEditor, [0, 0]);
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        emulator.setMarkCommand();
+        await emulator.runCommand("previousLine");
+        assertSelectionsEqual(activeTextEditor, [1, 0, 0, 0]);
+      });
+    });
+  });
+});
+
 suite("scroll-up/down-command", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
