@@ -94,7 +94,7 @@
         },
         "emacs-mcx.lineMoveVisual": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual)."
         },
         "emacs-mcx.debug.silent": {

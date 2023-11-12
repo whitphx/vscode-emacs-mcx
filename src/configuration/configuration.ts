@@ -38,7 +38,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
   public enableOverridingTypeCommand = false;
 
-  public lineMoveVisual = false;
+  public lineMoveVisual = true;
 
   public debug: IDebugConfiguration = {
     silent: false,
