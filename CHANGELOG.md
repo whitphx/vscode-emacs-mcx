@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.53.0] - 2023-11-12
+
+### Add
+
+- `emacs-mcx.lineMoveVisual`, #1761, by @DrScKAWAMOTO.
+
 ## [0.52.1] - 2023-11-07
 
 ### Fix
