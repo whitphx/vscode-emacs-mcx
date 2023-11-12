@@ -76,6 +76,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
       }
     }
 
+    this.overrideNativeConfigs();
+
     Logger.configChanged(this);
   }
 
@@ -88,5 +90,11 @@ export class Configuration implements IConfiguration, vscode.Disposable {
       }
     }
     return result;
+  }
+
+  private overrideNativeConfigs() {
+    vscode.workspace
+      .getConfiguration("editor.find")
+      .update("seedSearchStringFromSelection", "never", vscode.ConfigurationTarget.Global);
   }
 }
