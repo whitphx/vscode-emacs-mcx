@@ -1,7 +1,7 @@
 {
   "name": "emacs-mcx",
   "displayName": "Awesome Emacs Keymap",
-  "description": "Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.",
+  "description": "DrScKAWAMOTO version (Emacs Friendly Keymap with multi cursor support, improved mark-mode experience, clipboard and kill-ring integration, and lots of improvements and bug fixes.)",
   "version": "0.52.1",
   "publisher": "tuttieee",
   "repository": {
@@ -91,6 +91,11 @@
           "type": "boolean",
           "default": true,
           "description": "Whether M-<digit> (the `emacs-mcx.digitArgument` command) is enabled."
+        },
+        "emacs-mcx.lineMoveVisual": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual)."
         },
         "emacs-mcx.debug.silent": {
           "type": "boolean",

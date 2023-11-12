@@ -131,6 +131,10 @@ Note that this config makes use of VSCode API's `type` command under the hood an
 Indicates whether `M-<digit>` (the `emacs-mcx.digitArgument` command) is enabled.
 Set `false` when `M-<digit>` conflicts with some other necessary commands. See https://github.com/whitphx/vscode-emacs-mcx/issues/1208 for the background.
 
+### `emacs-mcx.lineMoveVisual`
+
+When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual).
+
 ### `emacs-mcx.debug.*`
 
 Configurations for debugging.

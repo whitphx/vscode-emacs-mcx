@@ -38,6 +38,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
   public enableOverridingTypeCommand = false;
 
+  public lineMoveVisual = false;
+
   public debug: IDebugConfiguration = {
     silent: false,
     loggingLevelForAlert: "error",
