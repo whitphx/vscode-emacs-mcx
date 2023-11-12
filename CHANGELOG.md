@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.54.0] - 2023-11-13
+
+### Fix
+
+- Override the default value of `editor.find.seedSearchStringFromSelection` to `"never"` to make the behavior of `C-s` and `C-r` consistent with the original Emacs, #1766.
+
 ## [0.53.0] - 2023-11-12
 
 ### Add
