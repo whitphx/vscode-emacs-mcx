@@ -437,10 +437,10 @@
     "@typescript-eslint/types" "4.33.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vscode/test-electron@^2.3.6":
-  version "2.3.6"
-  resolved "https://registry.yarnpkg.com/@vscode/test-electron/-/test-electron-2.3.6.tgz#61a6ec1b4bdc9a2a694a9d7d86b9cb8b82c5a116"
-  integrity sha512-M31xGH0RgqNU6CZ4/9g39oUMJ99nLzfjA+4UbtIQ6TcXQ6+2qkjOOxedmPBDDCg26/3Al5ubjY80hIoaMwKYSw==
+"@vscode/test-electron@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@vscode/test-electron/-/test-electron-2.3.7.tgz#51446177fcda907dfeab8291e3dc226a1b69b4d6"
+  integrity sha512-KVQCCNfkzi3fIPLK8nIP/5Ao6ExiH+b/DkE5ywpCPXItKNgrPh92qKRIxa2oPFBUkl7807mAoQ9jakNOoQ1oDA==
   dependencies:
     http-proxy-agent "^4.0.1"
     https-proxy-agent "^5.0.0"
