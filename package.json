@@ -105,7 +105,11 @@
               "pattern": "^\\S$"
             }
           },
-          "default": {"[": "]", "(": ")", "{": "}"}
+          "default": {
+            "[": "]",
+            "(": ")",
+            "{": "}"
+          }
         },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
