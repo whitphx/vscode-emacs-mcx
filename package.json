@@ -97,6 +97,16 @@
           "default": true,
           "description": "When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual)."
         },
+        "emacs-mcx.paredit.parentheses": {
+          "type": "object",
+          "patternProperties": {
+            "^\\S$": {
+              "type": "string",
+              "pattern": "^\\S$"
+            }
+          },
+          "default": {"[": "]", "(": ")", "{": "}"}
+        },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
           "description": "If true, all logs are suppressed.",
