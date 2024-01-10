@@ -1,4 +1,6 @@
 import assert from "assert";
+import * as vscode from "vscode";
+import * as sinon from "sinon";
 import { Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { KillRing } from "../../../kill-yank/kill-ring";
@@ -11,6 +13,7 @@ import {
   clearTextEditor,
   assertSelectionsEqual,
 } from "../utils";
+import { Configuration } from "../../../configuration/configuration";
 
 suite("paredit commands", () => {
   let activeTextEditor: TextEditor;
@@ -61,6 +64,51 @@ suite("paredit commands", () => {
 
       assertSelectionsEqual(activeTextEditor, new Selection(0, 5, 0, 0));
     });
+  });
+});
+
+suite("Parentheses config", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+  let getConfigurationStub: sinon.SinonStub;
+
+  setup(async () => {
+    const initialText = "<<>>";
+
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor);
+
+    getConfigurationStub = sinon.stub(vscode.workspace, "getConfiguration");
+  });
+  teardown(async () => {
+    getConfigurationStub.restore();
+    Configuration.reload();
+    await cleanUpWorkspace();
+  });
+
+  function mockPareditConfig(parentheses: Record<string, string>) {
+    getConfigurationStub.returns({
+      paredit: {
+        parentheses,
+      },
+    });
+    Configuration.reload();
+  }
+
+  test("forwardSexp", async () => {
+    mockPareditConfig({ "(": ")" });
+    setEmptyCursors(activeTextEditor, [0, 1]);
+    await emulator.runCommand("paredit.forwardSexp");
+    assertCursorsEqual(activeTextEditor, [0, 4]);
+    await emulator.runCommand("paredit.forwardSexp");
+    assertCursorsEqual(activeTextEditor, [0, 4]);
+
+    mockPareditConfig({ "<": ">" });
+    setEmptyCursors(activeTextEditor, [0, 1]);
+    await emulator.runCommand("paredit.forwardSexp");
+    assertCursorsEqual(activeTextEditor, [0, 3]);
+    await emulator.runCommand("paredit.forwardSexp");
+    assertCursorsEqual(activeTextEditor, [0, 3]);
   });
 });
 
