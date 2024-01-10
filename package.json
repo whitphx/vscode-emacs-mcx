@@ -6670,7 +6670,7 @@
     "@types/webpack-env": "^1.18.4",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
-    "@vscode/test-electron": "^2.3.6",
+    "@vscode/test-electron": "^2.3.8",
     "@vscode/test-web": "^0.0.48",
     "assert": "^2.1.0",
     "eslint": "^7.32.0",
