@@ -245,6 +245,7 @@ suite("scroll-up/down-command", () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       assert(vscode.commands.executeCommand.calledWithExactly("cursorPageDown"), "cursorPageDown is not called");
+      sinon.restore();
     });
 
     test("it scrolls one page if the cursor remains in the visible range without cursor move with strictEmacsMove = true", async () => {
@@ -309,6 +310,7 @@ suite("scroll-up/down-command", () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       assert(vscode.commands.executeCommand.calledWithExactly("cursorPageUp"), "cursorPageUp is not called");
+      sinon.restore();
     });
 
     test("it scrolls one page without cursor move if the cursor remains in the visible range with strictEmacsMove = true", async () => {
