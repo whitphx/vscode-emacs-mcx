@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.55.0] - 2024-01-11
+
+### Add
+
+- `emacs-mcx.paredit.parentheses` setting to configure parentheses characters, #1802.
+
 ## [0.54.1] - 2023-11-13
 
 ### Fix
