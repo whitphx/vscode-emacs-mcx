@@ -135,6 +135,18 @@ Set `false` when `M-<digit>` conflicts with some other necessary commands. See h
 
 When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual).
 
+### `emacs-mcx.paredit.parentheses`
+
+Key-value pairs of parentheses like the following example to be used in the ParEdit commands.
+
+```json
+{
+  "[": "]",
+  "(": ")",
+  "{": "}"
+}
+```
+
 ### `emacs-mcx.debug.*`
 
 Configurations for debugging.

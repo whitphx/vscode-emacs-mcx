@@ -1,0 +1,3 @@
+[submodule "vendor/paredit.js"]
+	path = vendor/paredit.js
+	url = https://github.com/whitphx/paredit.js.git

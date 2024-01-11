@@ -97,6 +97,20 @@
           "default": true,
           "description": "When true, line-move moves point by visual lines (same as an Emacs variable line-move-visual)."
         },
+        "emacs-mcx.paredit.parentheses": {
+          "type": "object",
+          "patternProperties": {
+            "^\\S$": {
+              "type": "string",
+              "pattern": "^\\S$"
+            }
+          },
+          "default": {
+            "[": "]",
+            "(": ")",
+            "{": "}"
+          }
+        },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
           "description": "If true, all logs are suppressed.",
@@ -6695,7 +6709,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "paredit.js": "^0.4.0",
+    "paredit.js": "./vendor/paredit.js",
     "winston": "^3.11.0",
     "winston-console-for-electron": "^0.0.7"
   }

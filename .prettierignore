@@ -4,3 +4,4 @@ dist
 out
 src/vs/
 keybindings.json
+vendor/
