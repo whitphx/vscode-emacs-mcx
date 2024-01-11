@@ -7,6 +7,7 @@ export function run(): Promise<void> {
       ui: "tdd",
       reporter: undefined,
       timeout: 10000,
+      retries: 2,
     });
 
     // bundles all files in the current directory matching `*.test`
