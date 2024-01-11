@@ -6684,7 +6684,7 @@
     "rimraf": "^5.0.5",
     "sinon": "^17.0.1",
     "strip-json-comments": "^5.0.1",
-    "ts-loader": "^9.5.0",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
     "ts-patch": "^3.0.2",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
