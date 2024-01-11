@@ -29,3 +29,6 @@ lerna-debug.log*
 .husky
 lint-staged.config.js
 .git-blame-ignore-revs
+.eslintcache
+.gitmodules
+.nvmrc
