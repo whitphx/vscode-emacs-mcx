@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import assert from "assert";
+import sinon from "sinon";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
@@ -232,16 +233,19 @@ suite("scroll-up/down-command", () => {
     visibleRange = _visibleRange;
     pageLines = visibleRange.end.line - visibleRange.start.line;
   });
-  teardown(cleanUpWorkspace);
+  teardown(async () => {
+    sinon.restore();
+    await cleanUpWorkspace();
+  });
 
   suite("scroll-up-command", () => {
-    test("it scrolls one page and moves the cursor to the bottom of the visible range", async () => {
-      const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
-      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
-
+    test("it delegates to the cursorPageDown command", async () => {
+      sinon.spy(vscode.commands, "executeCommand");
       await emulator.runCommand("scrollUpCommand");
-
-      assertCursorsEqual(activeTextEditor, [(activeTextEditor.visibleRanges[0]?.end.line as number) - 1, 0]);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      assert(vscode.commands.executeCommand.calledWithExactly("cursorPageDown"), "cursorPageDown is not called");
+      sinon.restore();
     });
 
     test("it scrolls one page if the cursor remains in the visible range without cursor move with strictEmacsMove = true", async () => {
@@ -300,13 +304,13 @@ suite("scroll-up/down-command", () => {
   });
 
   suite("scroll-down-command", () => {
-    test("it scrolls one page and moves the cursor to the top of the visible range", async () => {
-      const middleVisibleLine = Math.floor((visibleRange.start.line + visibleRange.end.line) / 2);
-      setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
-
+    test("it delegates to the cursorPageUp command", async () => {
+      sinon.spy(vscode.commands, "executeCommand");
       await emulator.runCommand("scrollDownCommand");
-
-      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      assert(vscode.commands.executeCommand.calledWithExactly("cursorPageUp"), "cursorPageUp is not called");
+      sinon.restore();
     });
 
     test("it scrolls one page without cursor move if the cursor remains in the visible range with strictEmacsMove = true", async () => {
