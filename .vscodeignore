@@ -8,6 +8,7 @@ out/
 src/
 keybinding-generator/
 scripts/
+vendor/
 .gitignore
 .eslintignore
 .prettierignore
@@ -26,5 +27,5 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .husky
-.lintstagedrc.json
+lint-staged.config.mjs
 .git-blame-ignore-revs
