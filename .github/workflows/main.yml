@@ -72,14 +72,14 @@ jobs:
           IS_PRE_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') && endsWith(github.ref, '-pre') }}
 
       - name: Upload the vsix built on Linux
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.type == 'native' && ! startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
           name: emacs-mcx
 
       - name: Upload the vsix built on Linux (when pushed with a version tag)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.type == 'native' && startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
