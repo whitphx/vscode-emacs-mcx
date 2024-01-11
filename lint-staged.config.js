@@ -8,14 +8,14 @@ module.exports = {
   "*.{js,ts,mjs,mts}": (files) => {
     const match = micromatch.not(files, path.join(__dirname, "./vendor/*"));
     if (match.length === 0) {
-      return "";
+      return [];
     }
     return `eslint --cache --fix ${match.join(" ")}`;
   },
   "*.{js,ts,mjs,mts,md,json,yml}": (files) => {
     const match = micromatch.not(files, path.join(__dirname, "./vendor/*"));
     if (match.length === 0) {
-      return "";
+      return [];
     }
     return `prettier --write ${match.join(" ")}`;
   },
