@@ -27,5 +27,5 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .husky
-lint-staged.config.mjs
+lint-staged.config.js
 .git-blame-ignore-revs
