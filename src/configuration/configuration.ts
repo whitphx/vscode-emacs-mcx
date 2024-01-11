@@ -83,6 +83,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
     Logger.configChanged(this);
 
+    // Update configs in the third-party libraries.
     paredit.reader.setParentheses(this.paredit.parentheses);
   }
 
