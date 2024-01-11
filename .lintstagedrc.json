@@ -1,4 +1,0 @@
-{
-  "!(vendor)/**/*.{js,ts}": "eslint --cache --fix",
-  "!(vendor)/**/*.{js,ts,md,json,yml}": "prettier --write"
-}
