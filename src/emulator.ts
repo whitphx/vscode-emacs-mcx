@@ -162,6 +162,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this));
+    this.commandRegistry.register(new EditCommands.DeleteHorizontalSpace(this));
     this.commandRegistry.register(new EditCommands.NewLine(this));
     this.commandRegistry.register(new DeleteBlankLines(this));
     this.commandRegistry.register(new RecenterTopBottom(this));

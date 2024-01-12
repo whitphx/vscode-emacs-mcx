@@ -190,6 +190,10 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("deleteForwardChar");
   });
 
+  registerEmulatorCommand("emacs-mcx.deleteHorizontalSpace", (emulator) => {
+    return emulator.runCommand("deleteHorizontalSpace");
+  });
+
   registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
     return emulator.universalArgument();
   });
