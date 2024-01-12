@@ -414,6 +414,11 @@
       "when": "editorTextFocus && !editorReadonly"
     },
     {
+      "key": "meta+\\",
+      "command": "emacs-mcx.deleteHorizontalSpace",
+      "when": "editorTextFocus && !editorReadonly"
+    },
+    {
       "key": "meta+d",
       "command": "emacs-mcx.killWord",
       "when": "editorTextFocus && !editorReadonly"

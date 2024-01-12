@@ -1,8 +1,10 @@
 import * as vscode from "vscode";
 import { Range, Selection, TextEditor } from "vscode";
 import { makeParallel, EmacsCommand } from ".";
+import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
+import { logger } from "../logger";
 
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";
@@ -21,6 +23,51 @@ export class DeleteForwardChar extends EmacsCommand {
     return makeParallel(repeat, () =>
       vscode.commands.executeCommand<void>("deleteRight"),
     ) as Thenable<unknown> as Thenable<void>;
+  }
+}
+
+export class DeleteHorizontalSpace extends EmacsCommand {
+  public readonly id = "deleteHorizontalSpace";
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    const onlyBefore = prefixArgument === undefined ? false : prefixArgument > 0;
+    return textEditor
+      .edit((editBuilder) => {
+        textEditor.selections.forEach((selection) => {
+          const line = selection.active.line;
+
+          let from = selection.active.character;
+          while (from > 0) {
+            const char = textEditor.document.getText(new Range(line, from - 1, line, from));
+            if (char !== " " && char !== "\t") {
+              break;
+            }
+            from -= 1;
+          }
+
+          let to = selection.active.character;
+          if (!onlyBefore) {
+            const lineEnd = textEditor.document.lineAt(line).range.end.character;
+            while (to < lineEnd) {
+              const char = textEditor.document.getText(new Range(line, to, line, to + 1));
+              if (char !== " " && char !== "\t") {
+                break;
+              }
+              to += 1;
+            }
+          }
+
+          editBuilder.delete(new Range(line, from, line, to));
+        });
+      })
+      .then((success) => {
+        if (!success) {
+          logger.warn("deleteHorizontalSpace failed");
+        }
+      })
+      .then(() => {
+        makeSelectionsEmpty(textEditor);
+      });
   }
 }
 

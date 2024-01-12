@@ -3280,6 +3280,27 @@
         "when": "editorTextFocus && !editorReadonly"
       },
       {
+        "key": "alt+\\",
+        "command": "emacs-mcx.deleteHorizontalSpace",
+        "when": "editorTextFocus && !editorReadonly && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+\\",
+        "mac": "cmd+\\",
+        "command": "emacs-mcx.deleteHorizontalSpace",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape \\",
+        "command": "emacs-mcx.deleteHorizontalSpace",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ \\",
+        "command": "emacs-mcx.deleteHorizontalSpace",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+d",
         "command": "emacs-mcx.killWord",
         "when": "editorTextFocus && !editorReadonly && !config.emacs-mcx.useMetaPrefixMacCmd"
