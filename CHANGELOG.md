@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.56.0] - 2024-01-13
+
+### Add
+
+- `delete-horizontal-space`, #1812.
+
 ## [0.55.0] - 2024-01-11
 
 ### Add
