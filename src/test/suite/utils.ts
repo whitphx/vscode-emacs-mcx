@@ -69,7 +69,7 @@ export async function cleanUpWorkspace(): Promise<void> {
 
     vscode.commands.executeCommand("workbench.action.closeAllEditors").then(
       () => null,
-      (err: any) => {
+      (err) => {
         clearInterval(interval);
         e(err);
       },

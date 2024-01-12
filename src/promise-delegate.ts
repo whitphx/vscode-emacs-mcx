@@ -3,7 +3,7 @@ export class PromiseDelegate<T> {
   // @ts-expect-error -- This will be initialized in the promise initializer function which will be called immediately in the constructor.
   private resolve: (value: T | PromiseLike<T>) => void;
   // @ts-expect-error -- This will be initialized in the promise initializer function which will be called immediately in the constructor.
-  private reject: (reason?: any) => void;
+  private reject: (reason?: unknown) => void;
 
   constructor() {
     this._promise = new Promise<T>((resolve, reject) => {
@@ -20,7 +20,7 @@ export class PromiseDelegate<T> {
     this.resolve(value);
   }
 
-  public rejectPromise(reason?: any): void {
+  public rejectPromise(reason?: unknown): void {
     this.reject(reason);
   }
 }

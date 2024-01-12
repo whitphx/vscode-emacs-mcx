@@ -25,7 +25,7 @@ import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
-import { delay } from "./utils";
+import { delay, type Unreliable } from "./utils";
 
 export interface IEmacsController {
   runCommand(commandName: string): void | Thenable<unknown>;
@@ -578,7 +578,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public executeCommandWithPrefixArgument<T>(
     command: string,
-    args: any = null,
+    args: Unreliable<unknown> = undefined,
     prefixArgumentKey = "prefixArgument",
   ): Thenable<T | undefined> {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
