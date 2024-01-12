@@ -8,11 +8,7 @@ import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
 import { MessageManager } from "./message";
 import { InputBoxMinibuffer } from "./minibuffer";
-
-// HACK: Currently there is no official type-safe way to handle
-//       the unsafe inputs such as the arguments of the extensions.
-// See: https://github.com/microsoft/TypeScript/issues/37700#issuecomment-940865298
-type Unreliable<T> = { [P in keyof T]?: Unreliable<T[P]> } | Array<Unreliable<T>> | undefined;
+import type { Unreliable } from "./utils";
 
 export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);
@@ -82,7 +78,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   function registerEmulatorCommand(
     commandName: string,
-    callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => unknown,
+    callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
     onNoEmulator?: (...args: unknown[]) => unknown,
   ) {
     const disposable = vscode.commands.registerCommand(commandName, (...args) => {
