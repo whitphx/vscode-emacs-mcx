@@ -149,6 +149,8 @@ export class InsertRegister extends EmacsCommand {
     // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
     const selections = textEditor.selections;
 
+    this.emacsController.pushMark(selections.map((s) => s.active));
+
     await textEditor.edit((editBuilder) => {
       selections.forEach((selection) => {
         if (!selection.isEmpty) {
