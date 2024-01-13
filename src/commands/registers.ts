@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { IEmacsController } from "../emulator";
+import { MessageManager } from "../message";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 
@@ -13,6 +14,8 @@ export class StartRegisterCopyCommand extends EmacsCommand implements ITextEdito
     this.acceptingRegisterCopyCommand = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", true);
+
+    MessageManager.showMessage("Copy to register: ");
   }
 
   private stopRegisterCopyCommand(): void {
@@ -41,6 +44,8 @@ export class StartRegisterInsertCommand extends EmacsCommand implements ITextEdi
     this.acceptingRegisterInsertCommand = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
     vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterInsertMode", true);
+
+    MessageManager.showMessage("Insert from register: ");
   }
 
   private stopRegisterInsertCommand(): void {
