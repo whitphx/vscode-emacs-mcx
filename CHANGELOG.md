@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.57.0] - 2024-01-13
+
+### Fix
+
+- Rename text register commands and refactor their implementations, #1815
+
 ## [0.56.0] - 2024-01-13
 
 ### Add
