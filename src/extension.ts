@@ -362,34 +362,20 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("paredit.backwardKillSexp");
   });
 
-  registerEmulatorCommand("emacs-mcx.StartRegisterSaveCommand", (emulator) => {
-    return emulator.runCommand("StartRegisterSaveCommand");
+  registerEmulatorCommand("emacs-mcx.startRegisterCopyCommand", (emulator) => {
+    return emulator.runCommand("startRegisterCopyCommand");
   });
 
-  registerEmulatorCommand("emacs-mcx.StartRegisterInsertCommand", (emulator) => {
-    return emulator.runCommand("StartRegisterInsertCommand");
+  registerEmulatorCommand("emacs-mcx.startRegisterInsertCommand", (emulator) => {
+    return emulator.runCommand("startRegisterInsertCommand");
   });
 
-  registerEmulatorCommand("emacs-mcx.RegisterSaveCommand", (emulator, arg0) => {
-    if (!Array.isArray(arg0)) {
-      return;
-    }
-    const arg = arg0[0];
-    if (typeof arg !== "string") {
-      return;
-    }
-    return emulator.saveRegister(arg);
+  registerEmulatorCommand("emacs-mcx.copyToRegister", (emulator, ...args) => {
+    return emulator.runCommand("copyToRegister", args);
   });
 
-  registerEmulatorCommand("emacs-mcx.RegisterInsertCommand", (emulator, arg0) => {
-    if (!Array.isArray(arg0)) {
-      return;
-    }
-    const arg = arg0[0];
-    if (typeof arg !== "string") {
-      return;
-    }
-    return emulator.insertRegister(arg);
+  registerEmulatorCommand("emacs-mcx.insertRegister", (emulator, ...args) => {
+    return emulator.runCommand("insertRegister", args);
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {
