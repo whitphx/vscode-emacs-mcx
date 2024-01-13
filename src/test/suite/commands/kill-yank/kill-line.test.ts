@@ -94,6 +94,28 @@ bcdefghij
 BCDEFGHIJ`,
       );
     });
+
+    (["mark-mode", "rectangle-mode"] as const).forEach((mode) => {
+      test(`${mode} doesn't affect the behavior`, async () => {
+        setEmptyCursors(activeTextEditor, [0, 0]);
+        if (mode === "mark-mode") {
+          emulator.setMarkCommand();
+        } else if (mode === "rectangle-mode") {
+          emulator.rectangleMarkMode();
+        }
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        // Now the cursor is at [1, 1]
+
+        await emulator.runCommand("killLine");
+        assertTextEqual(
+          activeTextEditor,
+          `0123456789
+a
+ABCDEFGHIJ`,
+        );
+      });
+    });
   });
 
   suite("with KillRing", () => {

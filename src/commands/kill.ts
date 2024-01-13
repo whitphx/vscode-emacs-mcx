@@ -53,6 +53,9 @@ export class KillWord extends KillYankCommand {
       return;
     }
 
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+
     const killRanges = textEditor.selections
       .map((selection) => findNextKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
@@ -87,6 +90,9 @@ export class BackwardKillWord extends KillYankCommand {
       return;
     }
 
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+
     const killRanges = textEditor.selections
       .map((selection) => findPreviousKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
@@ -100,6 +106,9 @@ export class KillLine extends KillYankCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const killWholeLine = Configuration.instance.killWholeLine;
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
 
     const ranges = textEditor.selections.map((selection) => {
       const cursor = selection.active;
@@ -123,7 +132,6 @@ export class KillLine extends KillYankCommand {
         return new Range(cursor, lineEnd);
       }
     });
-    this.emacsController.exitMarkMode();
     return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
   }
 }
@@ -132,12 +140,14 @@ export class KillWholeLine extends KillYankCommand {
   public readonly id = "killWholeLine";
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+
     const ranges = textEditor.selections.map(
       (selection) =>
         // From the beginning of the line to the beginning of the next line
         new Range(new Position(selection.active.line, 0), new Position(selection.active.line + 1, 0)),
     );
-    this.emacsController.exitMarkMode();
     return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
   }
 }
