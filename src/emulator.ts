@@ -192,7 +192,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 
-    this.commandRegistry.register(new TextRegisterCommands.StartRegisterSaveCommand(this));
+    this.commandRegistry.register(new TextRegisterCommands.StartRegisterCopyCommand(this));
     this.commandRegistry.register(new TextRegisterCommands.StartRegisterInsertCommand(this));
     this.commandRegistry.register(new TextRegisterCommands.CopyToRegister(this, textRegister));
     this.commandRegistry.register(new TextRegisterCommands.InsertRegister(this, textRegister));

@@ -4,36 +4,36 @@ import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 
 // Will bind this this to C-x r s
-export class StartRegisterSaveCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "StartRegisterSaveCommand";
+export class StartRegisterCopyCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "startRegisterCopyCommand";
 
-  private acceptingRegisterSaveCommand = false;
+  private acceptingRegisterCopyCommand = false;
 
-  private startRegisterSaveCommand(): void {
-    this.acceptingRegisterSaveCommand = true;
+  private startRegisterCopyCommand(): void {
+    this.acceptingRegisterCopyCommand = true;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterSaveMode", true);
+    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", true);
   }
 
-  private stopRegisterSaveCommand(): void {
-    this.acceptingRegisterSaveCommand = false;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterSaveMode", false);
+  private stopRegisterCopyCommand(): void {
+    this.acceptingRegisterCopyCommand = false;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", false);
   }
 
   public run(): void {
-    this.startRegisterSaveCommand();
+    this.startRegisterCopyCommand();
   }
 
   public onDidInterruptTextEditor(): void {
-    if (this.acceptingRegisterSaveCommand) {
-      this.stopRegisterSaveCommand();
+    if (this.acceptingRegisterCopyCommand) {
+      this.stopRegisterCopyCommand();
     }
   }
 }
 
 // Will bind this this to C-x r i
 export class StartRegisterInsertCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "StartRegisterInsertCommand";
+  public readonly id = "startRegisterInsertCommand";
 
   private acceptingRegisterInsertCommand = false;
 

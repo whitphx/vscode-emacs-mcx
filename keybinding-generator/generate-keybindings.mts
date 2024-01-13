@@ -311,7 +311,7 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   for (const char of asciiPrintableChars) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.inRegisterSaveMode && editorTextFocus",
+      when: "emacs-mcx.inRegisterCopyMode && editorTextFocus",
       command: "emacs-mcx.copyToRegister",
       args: char,
     });

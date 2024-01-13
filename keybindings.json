@@ -758,12 +758,12 @@
     },
     {
       "key": "s", // ctrl+x r s
-      "command": "emacs-mcx.StartRegisterSaveCommand",
+      "command": "emacs-mcx.startRegisterCopyCommand",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "i", // ctrl+x r i
-      "command": "emacs-mcx.StartRegisterInsertCommand",
+      "command": "emacs-mcx.startRegisterInsertCommand",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
