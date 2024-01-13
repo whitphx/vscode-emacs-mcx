@@ -3,11 +3,12 @@ import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace } from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace, setEmptyCursors } from "../../utils";
 
 [true, false].forEach((withKillRing) => {
   suite(`Emulator.killWholeLine, ${withKillRing ? "with" : "without"} killRing`, () => {
     let activeTextEditor: vscode.TextEditor;
+    let emulator: EmacsEmulator;
 
     suite("with non-empty initial text", () => {
       setup(async () => {
@@ -15,6 +16,10 @@ import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace } fr
 abcdefghij
 ABCDEFGHIJ`;
         activeTextEditor = await setupWorkspace(initialText);
+
+        emulator = withKillRing
+          ? new EmacsEmulator(activeTextEditor, new KillRing())
+          : new EmacsEmulator(activeTextEditor);
       });
 
       teardown(cleanUpWorkspace);
@@ -24,10 +29,6 @@ ABCDEFGHIJ`;
         const cursorCharNums = [0, 5, 10]; // beginning, middle, end
         cursorCharNums.forEach((cursorCharNum) => {
           test(`it works with single cursor at (${cursorLineNum}, ${cursorCharNum})`, async () => {
-            const emulator = withKillRing
-              ? new EmacsEmulator(activeTextEditor, new KillRing())
-              : new EmacsEmulator(activeTextEditor);
-
             activeTextEditor.selections = [
               new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum)),
             ];
@@ -54,8 +55,6 @@ ABCDEFGHIJ`,
         const cursorCharNums = [0, 5, 10]; // beginning, middle, end
         cursorCharNums.forEach((cursorCharNum) => {
           test(`it works with single cursor at (${cursorLineNum}, ${cursorCharNum})`, async () => {
-            const emulator = new EmacsEmulator(activeTextEditor);
-
             activeTextEditor.selections = [
               new Selection(new Position(cursorLineNum, cursorCharNum), new Position(cursorLineNum, cursorCharNum)),
             ];
@@ -75,6 +74,27 @@ abcdefghij
             await emulator.runCommand("yank");
             assert.strictEqual(activeTextEditor.document.getText(), "ABCDEFGHIJ");
           });
+        });
+      });
+
+      (["mark-mode", "rectangle-mode"] as const).forEach((mode) => {
+        test(`${mode} doesn't affect the behavior`, async () => {
+          setEmptyCursors(activeTextEditor, [0, 0]);
+          if (mode === "mark-mode") {
+            emulator.setMarkCommand();
+          } else if (mode === "rectangle-mode") {
+            emulator.rectangleMarkMode();
+          }
+          await emulator.runCommand("nextLine");
+          await emulator.runCommand("forwardChar");
+          // Now the cursor is at [1, 1]
+
+          await emulator.runCommand("killWholeLine");
+          assertTextEqual(
+            activeTextEditor,
+            `0123456789
+ABCDEFGHIJ`,
+          );
         });
       });
     });
