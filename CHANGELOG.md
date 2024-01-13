@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.57.1] - 2024-01-13
+
+### Fix
+
+- Kill commands cancel the mark-mode and the rectangle-mark-mode, #1816
+
 ## [0.57.0] - 2024-01-13
 
 ### Fix
