@@ -11,8 +11,7 @@ import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
-import { StartRegisterSaveCommand, StartRegisterInsertCommand } from "./commands/registers";
-import { getNonEmptySelections } from "./commands/helpers/selection";
+import * as TextRegisterCommands from "./commands/registers";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
@@ -41,7 +40,6 @@ export interface IEmacsController {
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private textEditor: TextEditor;
-  private textRegister: Map<string, string>;
 
   private commandRegistry: EmacsCommandRegistry;
 
@@ -128,7 +126,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.textEditor = textEditor;
     this.setNativeSelections(this.rectMode ? [] : textEditor.selections); // TODO: `[]` is workaround.
 
-    this.textRegister = textRegister;
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
@@ -195,8 +192,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 
-    this.commandRegistry.register(new StartRegisterSaveCommand(this));
-    this.commandRegistry.register(new StartRegisterInsertCommand(this));
+    this.commandRegistry.register(new TextRegisterCommands.StartRegisterSaveCommand(this));
+    this.commandRegistry.register(new TextRegisterCommands.StartRegisterInsertCommand(this));
+    this.commandRegistry.register(new TextRegisterCommands.CopyToRegister(this, textRegister));
+    this.commandRegistry.register(new TextRegisterCommands.InsertRegister(this, textRegister));
 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
@@ -219,6 +218,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new PareditCommands.KillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.PareditKill(this, killYanker));
+
+    this.commandRegistry.register;
 
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this));
@@ -615,60 +616,5 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   private onDidInterruptTextEditor() {
     this.commandRegistry.onInterrupt();
-  }
-
-  public saveRegister(arg: string): void {
-    const selectionsAfterRectDisabled =
-      this.inRectMarkMode &&
-      this.nativeSelections.map((selection) => {
-        const newLine = selection.active.line;
-        const newChar = Math.min(selection.active.character, selection.anchor.character);
-        return new vscode.Selection(newLine, newChar, newLine, newChar);
-      });
-    const selections = getNonEmptySelections(this.textEditor);
-    if (selectionsAfterRectDisabled) {
-      this.textEditor.selections = selectionsAfterRectDisabled;
-    }
-    // selections is now a list of non empty selections, iterate through them and
-    // build a single variable combinedtext
-    let i = 0;
-    let combinedtext = "";
-    while (i < selections.length) {
-      combinedtext = combinedtext + this.textEditor.document.getText(selections[i]);
-      i++;
-    }
-
-    const register_string = arg;
-    if (register_string == null) {
-      return;
-    }
-
-    this.textRegister.set(register_string, combinedtext);
-    // After copying the selection, get out of mark mode and de-select the selections
-    this.exitMarkMode();
-    this.makeSelectionsEmpty();
-  }
-
-  public async insertRegister(arg: string): Promise<void> {
-    if (!this.textRegister.has(arg)) {
-      return;
-    }
-
-    const textToInsert = this.textRegister.get(arg);
-    if (textToInsert == undefined) {
-      return;
-    }
-    // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
-    const selections = this.textEditor.selections;
-
-    await this.textEditor.edit((editBuilder) => {
-      selections.forEach((selection) => {
-        if (!selection.isEmpty) {
-          editBuilder.delete(selection);
-        }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        editBuilder.insert(selection.start, textToInsert);
-      });
-    });
   }
 }

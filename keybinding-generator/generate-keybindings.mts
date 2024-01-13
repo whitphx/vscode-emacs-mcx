@@ -312,8 +312,8 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
     keybindings.push({
       key: char,
       when: "emacs-mcx.inRegisterSaveMode && editorTextFocus",
-      command: "emacs-mcx.RegisterSaveCommand",
-      args: [char],
+      command: "emacs-mcx.copyToRegister",
+      args: char,
     });
   }
 
@@ -321,8 +321,8 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
     keybindings.push({
       key: char,
       when: "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-      command: "emacs-mcx.RegisterInsertCommand",
-      args: [char],
+      command: "emacs-mcx.insertRegister",
+      args: char,
     });
   }
   return keybindings;
