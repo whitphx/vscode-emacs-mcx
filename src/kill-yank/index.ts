@@ -7,6 +7,7 @@ import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { logger } from "../logger";
+import { convertSelectionToRectSelections, getRectText } from "../rectangle";
 
 export { AppendDirection };
 
@@ -74,14 +75,18 @@ export class KillYanker implements vscode.Disposable {
     }
   }
 
-  public async kill(ranges: Range[], appendDirection: AppendDirection = AppendDirection.Forward): Promise<void> {
+  public async kill(
+    ranges: Range[],
+    rectMarkMode: boolean,
+    appendDirection: AppendDirection = AppendDirection.Forward,
+  ): Promise<void> {
     if (!equalPositions(this.getCursorPositions(), this.prevKillPositions)) {
       this.isAppending = false;
     }
 
-    await this.copy(ranges, this.isAppending, appendDirection);
+    await this.copy(ranges, rectMarkMode, this.isAppending, appendDirection);
 
-    await this.delete(ranges);
+    await this.delete(ranges, rectMarkMode);
 
     this.isAppending = true;
     this.prevKillPositions = this.getCursorPositions();
@@ -89,21 +94,30 @@ export class KillYanker implements vscode.Disposable {
 
   public async copy(
     ranges: Range[],
+    rectMarkMode: boolean,
     shouldAppend = false,
     appendDirection: AppendDirection = AppendDirection.Forward,
   ): Promise<void> {
     const newKillEntity = new EditorTextKillRingEntity(
       ranges.map((range) => ({
         range,
-        text: this.textEditor.document.getText(range),
+        text: rectMarkMode ? getRectText(this.textEditor.document, range) : this.textEditor.document.getText(range),
+        rectMode: rectMarkMode,
       })),
     );
 
     if (this.killRing !== null) {
       const currentKill = this.killRing.getTop();
       if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
-        currentKill.append(newKillEntity, appendDirection);
-        await vscode.env.clipboard.writeText(currentKill.asString());
+        try {
+          currentKill.append(newKillEntity, appendDirection);
+          await vscode.env.clipboard.writeText(currentKill.asString());
+          return;
+        } catch {
+          this.killRing.push(newKillEntity);
+          await vscode.env.clipboard.writeText(newKillEntity.asString());
+          return;
+        }
       } else {
         this.killRing.push(newKillEntity);
         await vscode.env.clipboard.writeText(newKillEntity.asString());
@@ -137,17 +151,31 @@ export class KillYanker implements vscode.Disposable {
     if (killRingEntity.type === "editor") {
       const selections = this.textEditor.selections;
       const regionTexts = killRingEntity.getRegionTextsList();
+      const fillIndent = killRingEntity.hasRectModeText();
       const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
-      if (shouldPasteSeparately && regionTexts.length === selections.length) {
+      const canPasteSeparately = regionTexts.length === selections.length;
+      const pasteSeparately = shouldPasteSeparately && canPasteSeparately;
+      const customPaste = pasteSeparately || fillIndent;
+      if (customPaste) {
+        // The normal `paste` command is not suitable in this case, so we use `edit` command instead.
+        if (!pasteSeparately) {
+          // `pasteSeparately` is false, so there is only one paste target selection.
+          this.textEditor.selections = [this.textEditor.selection];
+        }
         const success = await this.textEditor.edit((editBuilder) => {
           selections.forEach((selection, i) => {
+            const indent = selection.start.character;
             if (!selection.isEmpty) {
               editBuilder.delete(selection);
             }
             // `regionTexts.length === selections.length` has already been checked,
             // so noUncheckedIndexedAccess rule can be skipped here.
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            editBuilder.insert(selection.start, regionTexts[i]!.getAppendedText());
+            let text = regionTexts[i]!.getAppendedText();
+            if (fillIndent) {
+              text = text.replace(/^/gm, " ".repeat(indent)).slice(indent);
+            }
+            editBuilder.insert(selection.start, text);
           });
         });
         if (!success) {
@@ -214,18 +242,26 @@ export class KillYanker implements vscode.Disposable {
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
-  private async delete(ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
+  private async delete(ranges: vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
+    const deleteRanges = rectMode
+      ? ranges.flatMap((range) =>
+          convertSelectionToRectSelections(this.textEditor.document, new vscode.Selection(range.start, range.end)),
+        )
+      : ranges;
+
     let success = false;
     let trial = 0;
     while (!success && trial < maxTrials) {
       success = await this.textEditor.edit((editBuilder) => {
-        ranges.forEach((range) => {
+        deleteRanges.forEach((range) => {
           editBuilder.delete(range);
         });
       });
       trial++;
     }
 
+    // TODO: Set the selections to the deleted ranges in the case of rectMode, which is now done in the kill command.
+    // It is needed to append the following kills.
     return success;
   }
 

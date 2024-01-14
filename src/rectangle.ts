@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { getEolChar } from "./commands/helpers/eol";
 
 export function convertSelectionToRectSelections(
   document: vscode.TextDocument,
@@ -24,4 +25,9 @@ export function convertSelectionToRectSelections(
   }
 
   return rectSelections;
+}
+
+export function getRectText(document: vscode.TextDocument, range: vscode.Range): string {
+  const rectRanges = convertSelectionToRectSelections(document, new vscode.Selection(range.start, range.end));
+  return rectRanges.map((rectRange) => document.getText(rectRange)).join(getEolChar(document.eol));
 }

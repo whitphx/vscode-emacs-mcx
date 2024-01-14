@@ -9,6 +9,7 @@ export enum AppendDirection {
 interface IRegionText {
   text: string;
   range: Range;
+  rectMode: boolean;
 }
 
 class AppendedRegionTexts {
@@ -40,6 +41,10 @@ class AppendedRegionTexts {
 
   public getLastRange(): Range {
     return this.regionTexts[this.regionTexts.length - 1]!.range; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  }
+
+  public hasRectModeText(): boolean {
+    return this.regionTexts.some((regionText) => regionText.rectMode);
   }
 }
 
@@ -78,7 +83,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     sortedAppendedTexts.forEach((item, i) => {
       const prevItem = sortedAppendedTexts[i - 1];
       if (prevItem && prevItem.range.start.line !== item.range.start.line) {
-        allText += "\n" + item.text;
+        allText += "\n" + item.text; // TODO: Use the appropriate EOL char.
       } else {
         allText += item.text;
       }
@@ -103,5 +108,9 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       (appendedRegionTexts, i) => appendedRegionTexts.append(additional[i]!, appendDirection),
     );
+  }
+
+  public hasRectModeText(): boolean {
+    return this.regionTextsList.some((regionTexts) => regionTexts.hasRectModeText());
   }
 }

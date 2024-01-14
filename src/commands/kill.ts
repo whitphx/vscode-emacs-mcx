@@ -59,7 +59,7 @@ export class KillWord extends KillYankCommand {
     const killRanges = textEditor.selections
       .map((selection) => findNextKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
-    await this.killYanker.kill(killRanges);
+    await this.killYanker.kill(killRanges, false);
     revealPrimaryActive(textEditor);
   }
 }
@@ -96,7 +96,7 @@ export class BackwardKillWord extends KillYankCommand {
     const killRanges = textEditor.selections
       .map((selection) => findPreviousKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
-    await this.killYanker.kill(killRanges, AppendDirection.Backward);
+    await this.killYanker.kill(killRanges, false, AppendDirection.Backward);
     revealPrimaryActive(textEditor);
   }
 }
@@ -132,7 +132,7 @@ export class KillLine extends KillYankCommand {
         return new Range(cursor, lineEnd);
       }
     });
-    return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
+    return this.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
   }
 }
 
@@ -148,7 +148,7 @@ export class KillWholeLine extends KillYankCommand {
         // From the beginning of the line to the beginning of the next line
         new Range(new Position(selection.active.line, 0), new Position(selection.active.line + 1, 0)),
     );
-    return this.killYanker.kill(ranges).then(() => revealPrimaryActive(textEditor));
+    return this.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
   }
 }
 
@@ -156,23 +156,25 @@ export class KillRegion extends KillYankCommand {
   public readonly id = "killRegion";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    const selectionsAfterRectDisabled =
-      this.emacsController.inRectMarkMode &&
-      this.emacsController.nativeSelections.map((selection) => {
+    if (this.emacsController.inRectMarkMode) {
+      const selectionsAfterRectDisabled = this.emacsController.nativeSelections.map((selection) => {
         const newLine = selection.active.line;
         const newChar = Math.min(selection.active.character, selection.anchor.character);
         return new vscode.Selection(newLine, newChar, newLine, newChar);
       });
 
-    const ranges = getNonEmptySelections(textEditor);
-    await this.killYanker.kill(ranges);
-    if (selectionsAfterRectDisabled) {
+      const ranges = this.emacsController.nativeSelections.map((s) => new Range(s.start, s.end));
+      await this.killYanker.kill(ranges, true);
+
       textEditor.selections = selectionsAfterRectDisabled;
+    } else {
+      const ranges = getNonEmptySelections(textEditor);
+      await this.killYanker.kill(ranges, false);
     }
+
     revealPrimaryActive(textEditor);
 
     this.emacsController.exitMarkMode();
-    this.killYanker.cancelKillAppend();
   }
 }
 
@@ -182,7 +184,7 @@ export class CopyRegion extends KillYankCommand {
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const ranges = getNonEmptySelections(textEditor);
-    await this.killYanker.copy(ranges);
+    await this.killYanker.copy(ranges, this.emacsController.inRectMarkMode);
     this.emacsController.exitMarkMode();
     this.killYanker.cancelKillAppend();
     makeSelectionsEmpty(textEditor);
