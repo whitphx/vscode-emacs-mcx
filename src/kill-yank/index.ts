@@ -173,9 +173,9 @@ export class KillYanker implements vscode.Disposable {
             let textToAddAfterBuffer = "";
             regionTexts.forEach((regionText) => {
               const indent = pasteCursor.character;
-              const regionHeight = regionText.range.end.line - regionText.range.start.line;
-              const regionWidth = regionText.range.end.character - regionText.range.start.character;
               if (regionText.rectMode) {
+                const regionHeight = regionText.range.end.line - regionText.range.start.line;
+                const regionWidth = regionText.range.end.character - regionText.range.start.character;
                 regionText.text.split(/\r?\n/).forEach((lineToPaste, j) => {
                   const pastedLineLength = lineToPaste.length;
                   const targetLine = pasteCursor.line + j;
@@ -192,14 +192,22 @@ export class KillYanker implements vscode.Disposable {
                     textToAddAfterBuffer += getEolChar(this.textEditor.document.eol) + whiteSpacesFilledLine;
                   }
                 });
+                pasteCursor = new Position(pasteCursor.line + regionHeight, pasteCursor.character + regionWidth);
               } else {
                 if (pasteCursor.line < this.textEditor.document.lineCount) {
                   editBuilder.insert(pasteCursor, regionText.text);
                 } else {
                   textToAddAfterBuffer += regionText.text;
                 }
+                const regionHeight = regionText.range.end.line - regionText.range.start.line;
+                if (regionHeight === 0) {
+                  const regionLastLineLength = regionText.range.end.character - regionText.range.start.character;
+                  pasteCursor = new Position(pasteCursor.line, pasteCursor.character + regionLastLineLength);
+                } else {
+                  const regionLastLineLength = regionText.range.end.character;
+                  pasteCursor = new Position(pasteCursor.line + regionHeight, regionLastLineLength);
+                }
               }
-              pasteCursor = new Position(pasteCursor.line + regionHeight, pasteCursor.character + regionWidth);
             });
             const endOfDoc = this.textEditor.document.lineAt(this.textEditor.document.lineCount - 1).range.end;
             editBuilder.insert(endOfDoc, textToAddAfterBuffer);
