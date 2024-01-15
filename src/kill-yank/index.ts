@@ -68,9 +68,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
-    const targetEditorId = e.textEditor.document.uri.toString();
-    const thisEditorId = this.textEditor.document.uri.toString();
-    if (targetEditorId === thisEditorId) {
+    if (e.textEditor === this.textEditor) {
       this.docChangedAfterYank = true;
       this.isAppending = false;
     }
