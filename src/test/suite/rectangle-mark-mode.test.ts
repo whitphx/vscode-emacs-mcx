@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import assert from "assert";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay, assertTextEqual } from "./utils";
+import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay, assertTextEqual, clearTextEditor } from "./utils";
+import { KillRing } from "../../kill-yank/kill-ring";
 
 suite("RectangleMarkMode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -84,7 +85,8 @@ KLMNOPQRST`;
 
   test("killing and yanking in rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
-    const emulator = new EmacsEmulator(activeTextEditor);
+    const killRing = new KillRing(3);
+    const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
     emulator.rectangleMarkMode();
 
@@ -111,6 +113,144 @@ KLMNOPQRST`,
     );
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]);
+
+    // Yanking the killed text in the rect-mark-mode.
+    // The text is yanked as a rectangle and automatically indented.
+    setEmptyCursors(activeTextEditor, [4, 2]);
+    await emulator.runCommand("yank");
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+klopqrst
+KLcdMNOPQRST
+  CD
+  mn`,
+    );
+  });
+
+  test("killing in rectangle-mark-mode followed by another kill command that appends the killed text", async () => {
+    setEmptyCursors(activeTextEditor, [1, 2]);
+    const killRing = new KillRing(3);
+    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+    emulator.rectangleMarkMode();
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(1, 2, 1, 4),
+      new vscode.Selection(2, 2, 2, 4),
+      new vscode.Selection(3, 2, 3, 4),
+    ]);
+
+    await emulator.runCommand("killRegion");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+klopqrst
+KLMNOPQRST`,
+    );
+
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]);
+
+    await emulator.runCommand("killLine");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+kl
+KLMNOPQRST`,
+    );
+
+    // Yanking the killed text in the rect-mark-mode.
+    // The text is yanked as a rectangle and automatically indented.
+    setEmptyCursors(activeTextEditor, [4, 2]);
+    await emulator.runCommand("yank");
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+kl
+KLcdMNOPQRST
+  CD
+  mnopqrst`,
+    );
+  });
+
+  test("Killing a region including empty lines", async () => {
+    await clearTextEditor(
+      activeTextEditor,
+      `0123456789
+
+abcdefghij
+
+ABCDEFGHIJ
+
+klmnopqrst
+
+KLMNOPQRST`,
+    );
+
+    setEmptyCursors(activeTextEditor, [0, 2]);
+
+    const killRing = new KillRing(3);
+    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+
+    emulator.rectangleMarkMode();
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(0, 2, 0, 4),
+      new vscode.Selection(1, 0, 1, 0),
+      new vscode.Selection(2, 2, 2, 4),
+      new vscode.Selection(3, 0, 3, 0),
+      new vscode.Selection(4, 2, 4, 4),
+      new vscode.Selection(5, 0, 5, 0),
+    ]);
+
+    await emulator.runCommand("killRegion");
+
+    assertTextEqual(
+      activeTextEditor,
+      `01456789
+
+abefghij
+
+ABEFGHIJ
+
+klmnopqrst
+
+KLMNOPQRST`,
+    );
+
+    await clearTextEditor(activeTextEditor, "");
+    await emulator.runCommand("yank");
+    assertTextEqual(
+      activeTextEditor,
+      `23
+  
+cd
+  
+CD
+  `,
+    );
   });
 
   test("typing a character in rectangle-mark-mode", async () => {
