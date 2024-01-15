@@ -166,16 +166,8 @@ export class KillRegion extends KillYankCommand {
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
-      const selectionsAfterRectDisabled = this.emacsController.nativeSelections.map((selection) => {
-        const newLine = selection.active.line;
-        const newChar = Math.min(selection.active.character, selection.anchor.character);
-        return new vscode.Selection(newLine, newChar, newLine, newChar);
-      });
-
       const ranges = this.emacsController.nativeSelections.map((s) => new Range(s.start, s.end));
       await this.killYanker.kill(ranges, true);
-
-      textEditor.selections = selectionsAfterRectDisabled;
     } else {
       const ranges = getNonEmptySelections(textEditor);
       await this.killYanker.kill(ranges, false);

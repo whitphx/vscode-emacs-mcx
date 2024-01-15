@@ -23,6 +23,10 @@ class AppendedRegionTexts {
     this.regionTexts = [regionText];
   }
 
+  public forEach(callback: (regionText: IRegionText) => void) {
+    this.regionTexts.forEach(callback);
+  }
+
   public append(another: AppendedRegionTexts, appendDirection: AppendDirection = AppendDirection.Forward) {
     if (appendDirection === AppendDirection.Forward) {
       this.regionTexts = this.regionTexts.concat(another.regionTexts);

@@ -3,18 +3,24 @@ import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { MessageManager } from "../message";
 import { equalPositions } from "../utils";
+import type { IEmacsController } from "../emulator";
 import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { logger } from "../logger";
 import { convertSelectionToRectSelections, getRectText } from "../rectangle";
+import { getEolChar } from "../commands/helpers/eol";
 
 export { AppendDirection };
 
 export class KillYanker implements vscode.Disposable {
-  private textEditor: TextEditor;
+  private emacsController: IEmacsController;
   private killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
   private minibuffer: Minibuffer;
+
+  private get textEditor(): TextEditor {
+    return this.emacsController.textEditor;
+  }
 
   private isAppending = false;
   private prevKillPositions: Position[];
@@ -26,8 +32,8 @@ export class KillYanker implements vscode.Disposable {
 
   private disposables: vscode.Disposable[];
 
-  constructor(textEditor: TextEditor, killRing: KillRing | null, minibuffer: Minibuffer) {
-    this.textEditor = textEditor;
+  constructor(emacsController: IEmacsController, killRing: KillRing | null, minibuffer: Minibuffer) {
+    this.emacsController = emacsController;
     this.killRing = killRing;
     this.minibuffer = minibuffer;
 
@@ -42,14 +48,6 @@ export class KillYanker implements vscode.Disposable {
 
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
-  }
-
-  public setTextEditor(textEditor: TextEditor): void {
-    this.textEditor = textEditor;
-  }
-
-  public getTextEditor(): TextEditor {
-    return this.textEditor;
   }
 
   public dispose(): void {
@@ -147,12 +145,12 @@ export class KillYanker implements vscode.Disposable {
 
     if (killRingEntity.type === "editor") {
       const selections = this.textEditor.selections;
-      const regionTexts = killRingEntity.getRegionTextsList();
-      const fillIndent = killRingEntity.hasRectModeText();
-      const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
-      const canPasteSeparately = regionTexts.length === selections.length;
+      const regionTextsList = killRingEntity.getRegionTextsList();
+      const shouldPasteSeparately =
+        regionTextsList.length > 1 && flattenedText.split("\n").length !== regionTextsList.length;
+      const canPasteSeparately = regionTextsList.length === selections.length;
       const pasteSeparately = shouldPasteSeparately && canPasteSeparately;
-      const customPaste = pasteSeparately || fillIndent;
+      const customPaste = pasteSeparately || killRingEntity.hasRectModeText();
       if (customPaste) {
         // The normal `paste` command is not suitable in this case, so we use `edit` command instead.
         if (!pasteSeparately) {
@@ -161,18 +159,49 @@ export class KillYanker implements vscode.Disposable {
         }
         const success = await this.textEditor.edit((editBuilder) => {
           selections.forEach((selection, i) => {
-            const indent = selection.start.character;
             if (!selection.isEmpty) {
               editBuilder.delete(selection);
             }
+
             // `regionTexts.length === selections.length` has already been checked,
             // so noUncheckedIndexedAccess rule can be skipped here.
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            let text = regionTexts[i]!.getAppendedText();
-            if (fillIndent) {
-              text = text.replace(/^/gm, " ".repeat(indent)).slice(indent);
-            }
-            editBuilder.insert(selection.start, text);
+            const regionTexts = regionTextsList[i]!;
+
+            let pasteCursor = selection.start;
+            let textToAddAfterBuffer = "";
+            regionTexts.forEach((regionText) => {
+              const indent = pasteCursor.character;
+              const regionHeight = regionText.range.end.line - regionText.range.start.line;
+              const regionWidth = regionText.range.end.character - regionText.range.start.character;
+              if (regionText.rectMode) {
+                regionText.text.split(/\r?\n/).forEach((lineToPaste, j) => {
+                  const pastedLineLength = lineToPaste.length;
+                  const targetLine = pasteCursor.line + j;
+                  if (targetLine < this.textEditor.document.lineCount) {
+                    const existingIndent = this.textEditor.document.lineAt(targetLine).range.end.character;
+                    const whiteSpacesBefore = indent > existingIndent ? " ".repeat(indent - existingIndent) : "";
+                    const whiteSpacesAfter = " ".repeat(regionWidth - pastedLineLength);
+                    const whiteSpacesFilledLine = whiteSpacesBefore + lineToPaste + whiteSpacesAfter;
+                    editBuilder.insert(new Position(targetLine, pasteCursor.character), whiteSpacesFilledLine);
+                  } else {
+                    const whiteSpacesBefore = " ".repeat(indent);
+                    const whiteSpacesAfter = " ".repeat(regionWidth - pastedLineLength);
+                    const whiteSpacesFilledLine = whiteSpacesBefore + lineToPaste + whiteSpacesAfter;
+                    textToAddAfterBuffer += getEolChar(this.textEditor.document.eol) + whiteSpacesFilledLine;
+                  }
+                });
+              } else {
+                if (pasteCursor.line < this.textEditor.document.lineCount) {
+                  editBuilder.insert(pasteCursor, regionText.text);
+                } else {
+                  textToAddAfterBuffer += regionText.text;
+                }
+              }
+              pasteCursor = new Position(pasteCursor.line + regionHeight, pasteCursor.character + regionWidth);
+            });
+            const endOfDoc = this.textEditor.document.lineAt(this.textEditor.document.lineCount - 1).range.end;
+            editBuilder.insert(endOfDoc, textToAddAfterBuffer);
           });
         });
         if (!success) {
@@ -240,6 +269,14 @@ export class KillYanker implements vscode.Disposable {
   }
 
   private async delete(ranges: vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
+    const selectionsAfterRectDeleted =
+      this.emacsController.inRectMarkMode &&
+      this.emacsController.nativeSelections.map((selection) => {
+        const newLine = selection.active.line;
+        const newChar = Math.min(selection.active.character, selection.anchor.character);
+        return new vscode.Selection(newLine, newChar, newLine, newChar);
+      });
+
     const deleteRanges = rectMode
       ? ranges.flatMap((range) =>
           convertSelectionToRectSelections(this.textEditor.document, new vscode.Selection(range.start, range.end)),
@@ -257,8 +294,10 @@ export class KillYanker implements vscode.Disposable {
       trial++;
     }
 
-    // TODO: Set the selections to the deleted ranges in the case of rectMode, which is now done in the kill command.
-    // It is needed to append the following kills.
+    if (selectionsAfterRectDeleted) {
+      this.emacsController.exitMarkMode();
+      this.textEditor.selections = selectionsAfterRectDeleted;
+    }
     return success;
   }
 
@@ -272,6 +311,10 @@ export class KillYanker implements vscode.Disposable {
   }
 
   private getCursorPositions(): Position[] {
-    return this.textEditor.selections.map((selection) => selection.active);
+    if (this.emacsController.inRectMarkMode) {
+      return this.emacsController.nativeSelections.map((selection) => selection.active);
+    } else {
+      return this.textEditor.selections.map((selection) => selection.active);
+    }
   }
 }
