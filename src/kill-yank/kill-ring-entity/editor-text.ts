@@ -1,5 +1,6 @@
-import { Range } from "vscode";
+import { Range, EndOfLine } from "vscode";
 import { IKillRingEntity } from "./kill-ring-entity";
+import { getEolChar } from "../../commands/helpers/eol";
 
 export enum AppendDirection {
   Forward,
@@ -55,9 +56,14 @@ class AppendedRegionTexts {
 export class EditorTextKillRingEntity implements IKillRingEntity {
   public readonly type = "editor";
   private regionTextsList: AppendedRegionTexts[];
+  private eolChar: string;
 
-  constructor(regionTexts: IRegionText[]) {
+  constructor(
+    regionTexts: IRegionText[],
+    private eol: EndOfLine,
+  ) {
     this.regionTextsList = regionTexts.map((regionText) => new AppendedRegionTexts(regionText));
+    this.eolChar = getEolChar(eol);
   }
 
   public isSameClipboardText(clipboardText: string): boolean {
@@ -87,7 +93,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     sortedAppendedTexts.forEach((item, i) => {
       const prevItem = sortedAppendedTexts[i - 1];
       if (prevItem && prevItem.range.start.line !== item.range.start.line) {
-        allText += "\n" + item.text; // TODO: Use the appropriate EOL char.
+        allText += this.eolChar + item.text;
       } else {
         allText += item.text;
       }

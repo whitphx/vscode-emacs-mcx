@@ -105,6 +105,7 @@ export class KillYanker implements vscode.Disposable {
         text: rectMarkMode ? getRectText(this.textEditor.document, range) : this.textEditor.document.getText(range),
         rectMode: rectMarkMode,
       })),
+      this.textEditor.document.eol,
     );
 
     if (this.killRing !== null) {
