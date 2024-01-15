@@ -80,6 +80,9 @@ export class KillYanker implements vscode.Disposable {
     rectMarkMode: boolean,
     appendDirection: AppendDirection = AppendDirection.Forward,
   ): Promise<void> {
+    if (ranges.length === 0 || ranges.some((range) => range.isEmpty)) {
+      this.isAppending = false;
+    }
     if (!equalPositions(this.getCursorPositions(), this.prevKillPositions)) {
       this.isAppending = false;
     }
@@ -109,15 +112,9 @@ export class KillYanker implements vscode.Disposable {
     if (this.killRing !== null) {
       const currentKill = this.killRing.getTop();
       if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
-        try {
-          currentKill.append(newKillEntity, appendDirection);
-          await vscode.env.clipboard.writeText(currentKill.asString());
-          return;
-        } catch {
-          this.killRing.push(newKillEntity);
-          await vscode.env.clipboard.writeText(newKillEntity.asString());
-          return;
-        }
+        currentKill.append(newKillEntity, appendDirection);
+        await vscode.env.clipboard.writeText(currentKill.asString());
+        return;
       } else {
         this.killRing.push(newKillEntity);
         await vscode.env.clipboard.writeText(newKillEntity.asString());

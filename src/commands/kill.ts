@@ -8,6 +8,7 @@ import { WordCharacterClassifier, getMapForWordSeparators } from "vs/editor/comm
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
+import { MessageManager } from "../message";
 
 function getWordSeparators(): WordCharacterClassifier {
   // Ref: https://github.com/VSCodeVim/Vim/blob/91ca71f8607458c0558f9aff61e230c6917d4b51/src/configuration/configuration.ts#L155
@@ -132,7 +133,15 @@ export class KillLine extends KillYankCommand {
         return new Range(cursor, lineEnd);
       }
     });
-    return this.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
+
+    const endOfDoc = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
+    const nonEndRanges = ranges.filter((range) => !(range.isEmpty && range.end.isEqual(endOfDoc)));
+    if (nonEndRanges.length === 0) {
+      MessageManager.showMessage("End of buffer");
+      return Promise.resolve();
+    }
+
+    return this.killYanker.kill(nonEndRanges, false).then(() => revealPrimaryActive(textEditor));
   }
 }
 
