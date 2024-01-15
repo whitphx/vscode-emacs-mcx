@@ -291,14 +291,15 @@ export class KillYanker implements vscode.Disposable {
         deleteRanges.forEach((range) => {
           editBuilder.delete(range);
         });
+
+        if (selectionsAfterRectDeleted) {
+          this.emacsController.exitMarkMode();
+          this.textEditor.selections = selectionsAfterRectDeleted;
+        }
       });
       trial++;
     }
 
-    if (selectionsAfterRectDeleted) {
-      this.emacsController.exitMarkMode();
-      this.textEditor.selections = selectionsAfterRectDeleted;
-    }
     return success;
   }
 

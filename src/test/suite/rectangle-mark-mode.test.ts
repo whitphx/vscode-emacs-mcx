@@ -161,6 +161,8 @@ KLMNOPQRST`,
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]);
 
+    await delay(); // Wait for all related event listeners to have been called
+
     await emulator.runCommand("killLine");
 
     assertTextEqual(
