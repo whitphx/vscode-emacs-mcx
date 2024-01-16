@@ -153,8 +153,8 @@ export class KillYanker implements vscode.Disposable {
       const customPaste = pasteSeparately || killRingEntity.hasRectModeText();
       if (customPaste) {
         // The normal `paste` command is not suitable in this case, so we use `edit` command instead.
-        if (!pasteSeparately) {
-          // `pasteSeparately` is false, so there is only one paste target selection.
+        if (!canPasteSeparately) {
+          // `canPasteSeparately` is false, so give up to paste separately and use the first selection.
           this.textEditor.selections = [this.textEditor.selection];
         }
         const success = await this.textEditor.edit((editBuilder) => {
@@ -163,7 +163,8 @@ export class KillYanker implements vscode.Disposable {
               editBuilder.delete(selection);
             }
 
-            // `regionTexts.length === selections.length` has already been checked,
+            // `canPasteSeparately = regionTexts.length === selections.length` has already been checked
+            // or this.selections.length === 1 is confirmed, so regionTextsList[i] is not null.
             // so noUncheckedIndexedAccess rule can be skipped here.
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const regionTexts = regionTextsList[i]!;
