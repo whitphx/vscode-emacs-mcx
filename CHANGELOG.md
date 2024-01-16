@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.57.2] - 2024-01-16
+
+### Fix
+
+- Internal fix on the event handler interrupting the appending kills, #1818
+
 ## [0.57.1] - 2024-01-13
 
 ### Fix
