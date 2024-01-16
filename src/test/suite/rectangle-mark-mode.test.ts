@@ -114,7 +114,7 @@ KLMNOPQRST`,
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(3, 2, 3, 2)]);
 
-    // Yanking the killed text in the rect-mark-mode.
+    // Yank the killed text in the rect-mark-mode.
     // The text is yanked as a rectangle and automatically indented.
     setEmptyCursors(activeTextEditor, [4, 2]);
     await emulator.runCommand("yank");
@@ -174,7 +174,7 @@ kl
 KLMNOPQRST`,
     );
 
-    // Yanking the killed text in the rect-mark-mode.
+    // Yank the killed text in the rect-mark-mode.
     // The text is yanked as a rectangle and automatically indented.
     setEmptyCursors(activeTextEditor, [4, 2]);
     await emulator.runCommand("yank");
@@ -234,7 +234,7 @@ abcdefgh
 ABCDEFGHKLMNOPQRST`,
     );
 
-    // Yanking the killed text in the rect-mark-mode.
+    // Yank the killed text in the rect-mark-mode.
     // The text is yanked as a rectangle and automatically indented.
     setEmptyCursors(activeTextEditor, [2, 1]);
     await emulator.runCommand("yank");
