@@ -74,7 +74,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public async kill(
-    ranges: Range[],
+    ranges: readonly Range[],
     rectMarkMode: boolean,
     appendDirection: AppendDirection = AppendDirection.Forward,
   ): Promise<void> {
@@ -94,7 +94,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public async copy(
-    ranges: Range[],
+    ranges: readonly Range[],
     rectMarkMode: boolean,
     shouldAppend = false,
     appendDirection: AppendDirection = AppendDirection.Forward,
@@ -277,7 +277,7 @@ export class KillYanker implements vscode.Disposable {
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
-  private async delete(ranges: vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
+  private async delete(ranges: readonly vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
     const selectionsAfterRectDeleted =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {

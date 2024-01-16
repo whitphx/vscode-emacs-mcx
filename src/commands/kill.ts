@@ -166,7 +166,7 @@ export class KillRegion extends KillYankCommand {
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
-      const ranges = this.emacsController.nativeSelections.map((s) => new Range(s.start, s.end));
+      const ranges = this.emacsController.nativeSelections;
       await this.killYanker.kill(ranges, true);
     } else {
       const ranges = getNonEmptySelections(textEditor);
@@ -185,7 +185,7 @@ export class CopyRegion extends KillYankCommand {
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
-      const ranges = this.emacsController.nativeSelections.map((s) => new Range(s.start, s.end));
+      const ranges = this.emacsController.nativeSelections;
       await this.killYanker.copy(ranges, true);
     } else {
       const ranges = getNonEmptySelections(textEditor);
