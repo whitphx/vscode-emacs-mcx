@@ -58,10 +58,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
   private regionTextsList: AppendedRegionTexts[];
   private eolChar: string;
 
-  constructor(
-    regionTexts: IRegionText[],
-    private eol: EndOfLine,
-  ) {
+  constructor(regionTexts: IRegionText[], eol: EndOfLine) {
     this.regionTextsList = regionTexts.map((regionText) => new AppendedRegionTexts(regionText));
     this.eolChar = getEolChar(eol);
   }
