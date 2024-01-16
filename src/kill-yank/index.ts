@@ -113,7 +113,6 @@ export class KillYanker implements vscode.Disposable {
       if (shouldAppend && currentKill instanceof EditorTextKillRingEntity) {
         currentKill.append(newKillEntity, appendDirection);
         await vscode.env.clipboard.writeText(currentKill.asString());
-        return;
       } else {
         this.killRing.push(newKillEntity);
         await vscode.env.clipboard.writeText(newKillEntity.asString());
