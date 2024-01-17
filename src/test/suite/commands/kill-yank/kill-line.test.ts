@@ -18,11 +18,13 @@ suite("killLine", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
-  setup(async () => {
-    const initialText = `0123456789
+  const initialText = `0123456789
 abcdefghij
 ABCDEFGHIJ`;
+
+  setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
+    vscode.env.clipboard.writeText("");
   });
 
   teardown(cleanUpWorkspace);
@@ -158,6 +160,10 @@ abcdefghij
 
         await vscode.commands.executeCommand(interruptingCommand); // Interrupt
 
+        const endOfDoc = activeTextEditor.document.lineAt(activeTextEditor.document.lineCount - 1).range.end;
+        const secondKillAtEndOfDoc = activeTextEditor.selections.every((selection) =>
+          selection.active.isEqual(endOfDoc),
+        );
         await emulator.runCommand("killLine"); // 3nd line
         await emulator.runCommand("killLine"); // EOL of 3nd (no effect)
 
@@ -166,9 +172,12 @@ abcdefghij
         setEmptyCursors(activeTextEditor, [0, 0]);
         await emulator.runCommand("yank");
 
-        assert.ok(
-          !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
-        );
+        if (!secondKillAtEndOfDoc) {
+          // If the second killLine was at the end of the doc, it didn't work.
+          assert.ok(
+            !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
+          );
+        }
         await emulator.runCommand("yankPop");
         assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
       });
@@ -207,6 +216,10 @@ abcdefghij
 
         await op(); // Interrupt
 
+        const endOfDoc = activeTextEditor.document.lineAt(activeTextEditor.document.lineCount - 1).range.end;
+        const secondKillAtEndOfDoc = activeTextEditor.selections.every((selection) =>
+          selection.active.isEqual(endOfDoc),
+        );
         await emulator.runCommand("killLine"); // 3nd line
         await emulator.runCommand("killLine"); // EOL of 3nd (no effect)
 
@@ -215,12 +228,30 @@ abcdefghij
         setEmptyCursors(activeTextEditor, [0, 0]);
         await emulator.runCommand("yank");
 
-        assert.ok(
-          !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
-        );
+        if (!secondKillAtEndOfDoc) {
+          // If the second killLine was at the end of the doc, it didn't work.
+          assert.ok(
+            !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
+          );
+        }
         await emulator.runCommand("yankPop");
         assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
       });
+    });
+
+    test("nothing happens if the cursor is at the end of the document", async () => {
+      setEmptyCursors(activeTextEditor, [2, 10]);
+
+      await emulator.runCommand("killLine");
+
+      assertTextEqual(activeTextEditor, initialText);
+
+      await clearTextEditor(activeTextEditor);
+
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yank");
+
+      assertTextEqual(activeTextEditor, "");
     });
   });
 

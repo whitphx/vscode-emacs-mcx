@@ -111,8 +111,17 @@ export class KillLine extends KillYankCommand {
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
 
-    const ranges = textEditor.selections.map((selection) => {
-      const cursor = selection.active;
+    const endOfDoc = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
+
+    const actives = textEditor.selections.map((selection) => selection.active);
+    const nonEndActives = actives.filter((active) => !active.isEqual(endOfDoc));
+
+    if (nonEndActives.length === 0) {
+      MessageManager.showMessage("End of buffer");
+      return Promise.resolve();
+    }
+
+    const ranges = nonEndActives.map((cursor) => {
       const lineAtCursor = textEditor.document.lineAt(cursor.line);
 
       if (prefixArgument !== undefined) {
@@ -134,14 +143,7 @@ export class KillLine extends KillYankCommand {
       }
     });
 
-    const endOfDoc = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
-    const nonEndRanges = ranges.filter((range) => !(range.isEmpty && range.end.isEqual(endOfDoc)));
-    if (nonEndRanges.length === 0) {
-      MessageManager.showMessage("End of buffer");
-      return Promise.resolve();
-    }
-
-    return this.killYanker.kill(nonEndRanges, false).then(() => revealPrimaryActive(textEditor));
+    return this.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
   }
 }
 
