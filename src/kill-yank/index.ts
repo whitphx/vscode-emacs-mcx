@@ -192,7 +192,10 @@ export class KillYanker implements vscode.Disposable {
                     textToAddAfterBuffer += getEolChar(this.textEditor.document.eol) + whiteSpacesFilledLine;
                   }
                 });
-                pasteCursor = new Position(pasteCursor.line + regionHeight, pasteCursor.character + regionWidth);
+                pasteCursor = new Position(
+                  pasteCursor.line + regionHeight, // This rect paste is different from the normal paste/edit.insert from the vertical direction perspective, so we need to update the vertical position of the cursor.
+                  pasteCursor.character, // In contrast, the horizontal movement is automatically handled by the `editBuilder.insert` above internally, so we don't need to update the horizontal position of the cursor.
+                );
               } else {
                 if (pasteCursor.line < this.textEditor.document.lineCount) {
                   editBuilder.insert(pasteCursor, regionText.text);
