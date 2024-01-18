@@ -164,8 +164,8 @@ export class KillYanker implements vscode.Disposable {
             }
 
             // `canPasteSeparately = regionTexts.length === selections.length` has already been checked
-            // or this.selections.length === 1 is confirmed, so regionTextsList[i] is not null.
-            // so noUncheckedIndexedAccess rule can be skipped here.
+            // or `this.selections.length === 1` is confirmed, so regionTextsList[i] is not null
+            // and the `noUncheckedIndexedAccess` rule can be skipped here.
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const regionTexts = regionTextsList[i]!;
 
@@ -181,8 +181,8 @@ export class KillYanker implements vscode.Disposable {
                   const targetLine = pasteCursor.line + j;
                   if (targetLine < this.textEditor.document.lineCount) {
                     const existingIndent = this.textEditor.document.lineAt(targetLine).range.end.character;
-                    const whiteSpacesBefore = indent > existingIndent ? " ".repeat(indent - existingIndent) : "";
-                    const whiteSpacesAfter = " ".repeat(regionWidth - pastedLineLength);
+                    const whiteSpacesBefore = " ".repeat(Math.max(indent - existingIndent, 0));
+                    const whiteSpacesAfter = " ".repeat(Math.max(regionWidth - pastedLineLength, 0));
                     const whiteSpacesFilledLine = whiteSpacesBefore + lineToPaste + whiteSpacesAfter;
                     editBuilder.insert(new Position(targetLine, pasteCursor.character), whiteSpacesFilledLine);
                   } else {
@@ -196,16 +196,10 @@ export class KillYanker implements vscode.Disposable {
               } else {
                 if (pasteCursor.line < this.textEditor.document.lineCount) {
                   editBuilder.insert(pasteCursor, regionText.text);
+                  // In this case, `pasteCursor` shouldn't be updated because `editBuilder.insert` handles it internally.
                 } else {
                   textToAddAfterBuffer += regionText.text;
-                }
-                const regionHeight = regionText.range.end.line - regionText.range.start.line;
-                if (regionHeight === 0) {
-                  const regionLastLineLength = regionText.range.end.character - regionText.range.start.character;
-                  pasteCursor = new Position(pasteCursor.line, pasteCursor.character + regionLastLineLength);
-                } else {
-                  const regionLastLineLength = regionText.range.end.character;
-                  pasteCursor = new Position(pasteCursor.line + regionHeight, regionLastLineLength);
+                  // In this case, `pasteCursor` doesn't need to be updated because `editBuilder.insert` will no longer be called after this.
                 }
               }
             });
