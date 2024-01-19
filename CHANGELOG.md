@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.58.0] - 2024-01-19
+
+### Fix
+
+- Fix the behavior of `killLine` and `killRegion` in the rect-mode, #1817.
+
 ## [0.57.2] - 2024-01-16
 
 ### Fix
