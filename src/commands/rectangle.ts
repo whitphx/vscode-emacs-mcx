@@ -5,6 +5,7 @@ import { IEmacsController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections } from "../rectangle";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { getEolChar } from "./helpers/eol";
 import { KillRing } from "../kill-yank/kill-ring";
 import { Minibuffer } from "src/minibuffer";
 
@@ -125,17 +126,6 @@ export class KillRectangle extends EditRectangle {
   protected delete = true;
   protected copy = true;
 }
-
-const getEolChar = (eol: vscode.EndOfLine): string | undefined => {
-  switch (eol) {
-    case vscode.EndOfLine.CRLF:
-      return "\r\n";
-    case vscode.EndOfLine.LF:
-      return "\n";
-    default:
-      return "\n";
-  }
-};
 
 export class YankRectangle extends RectangleKillYankCommand {
   public readonly id = "yankRectangle";

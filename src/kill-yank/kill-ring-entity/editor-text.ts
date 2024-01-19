@@ -1,5 +1,6 @@
-import { Range } from "vscode";
+import { Range, EndOfLine } from "vscode";
 import { IKillRingEntity } from "./kill-ring-entity";
+import { getEolChar } from "../../commands/helpers/eol";
 
 export enum AppendDirection {
   Forward,
@@ -9,6 +10,7 @@ export enum AppendDirection {
 interface IRegionText {
   text: string;
   range: Range;
+  rectMode: boolean;
 }
 
 class AppendedRegionTexts {
@@ -20,6 +22,10 @@ class AppendedRegionTexts {
 
   constructor(regionText: IRegionText) {
     this.regionTexts = [regionText];
+  }
+
+  public forEach(callback: (regionText: IRegionText) => void) {
+    this.regionTexts.forEach(callback);
   }
 
   public append(another: AppendedRegionTexts, appendDirection: AppendDirection = AppendDirection.Forward) {
@@ -41,14 +47,20 @@ class AppendedRegionTexts {
   public getLastRange(): Range {
     return this.regionTexts[this.regionTexts.length - 1]!.range; // eslint-disable-line @typescript-eslint/no-non-null-assertion
   }
+
+  public hasRectModeText(): boolean {
+    return this.regionTexts.some((regionText) => regionText.rectMode);
+  }
 }
 
 export class EditorTextKillRingEntity implements IKillRingEntity {
   public readonly type = "editor";
   private regionTextsList: AppendedRegionTexts[];
+  private eolChar: string;
 
-  constructor(regionTexts: IRegionText[]) {
+  constructor(regionTexts: IRegionText[], eol: EndOfLine) {
     this.regionTextsList = regionTexts.map((regionText) => new AppendedRegionTexts(regionText));
+    this.eolChar = getEolChar(eol);
   }
 
   public isSameClipboardText(clipboardText: string): boolean {
@@ -78,7 +90,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     sortedAppendedTexts.forEach((item, i) => {
       const prevItem = sortedAppendedTexts[i - 1];
       if (prevItem && prevItem.range.start.line !== item.range.start.line) {
-        allText += "\n" + item.text;
+        allText += this.eolChar + item.text;
       } else {
         allText += item.text;
       }
@@ -103,5 +115,9 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       (appendedRegionTexts, i) => appendedRegionTexts.append(additional[i]!, appendDirection),
     );
+  }
+
+  public hasRectModeText(): boolean {
+    return this.regionTextsList.some((regionTexts) => regionTexts.hasRectModeText());
   }
 }

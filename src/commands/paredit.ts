@@ -137,7 +137,7 @@ export class KillSexp extends KillYankCommand {
       return new Range(selection.anchor, newActivePosition);
     });
 
-    await this.killYanker.kill(killRanges);
+    await this.killYanker.kill(killRanges, false);
 
     revealPrimaryActive(textEditor);
   }
@@ -160,7 +160,7 @@ export class BackwardKillSexp extends KillYankCommand {
       return new Range(selection.anchor, newActivePosition);
     });
 
-    await this.killYanker.kill(killRanges, AppendDirection.Backward);
+    await this.killYanker.kill(killRanges, false, AppendDirection.Backward);
 
     revealPrimaryActive(textEditor);
   }
@@ -204,7 +204,10 @@ export class PareditKill extends KillYankCommand {
       return new Range(selection.anchor, newActivePosition);
     });
 
-    await this.killYanker.kill(killRanges.filter((range) => !range.isEmpty));
+    await this.killYanker.kill(
+      killRanges.filter((range) => !range.isEmpty),
+      false,
+    );
 
     revealPrimaryActive(textEditor);
   }

@@ -3,17 +3,24 @@ import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { MessageManager } from "../message";
 import { equalPositions } from "../utils";
+import type { IEmacsController } from "../emulator";
 import { KillRing, KillRingEntity } from "./kill-ring";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { logger } from "../logger";
+import { convertSelectionToRectSelections, getRectText } from "../rectangle";
+import { getEolChar } from "../commands/helpers/eol";
 
 export { AppendDirection };
 
 export class KillYanker implements vscode.Disposable {
-  private textEditor: TextEditor;
+  private emacsController: IEmacsController;
   private killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
   private minibuffer: Minibuffer;
+
+  private get textEditor(): TextEditor {
+    return this.emacsController.textEditor;
+  }
 
   private isAppending = false;
   private prevKillPositions: Position[];
@@ -25,8 +32,8 @@ export class KillYanker implements vscode.Disposable {
 
   private disposables: vscode.Disposable[];
 
-  constructor(textEditor: TextEditor, killRing: KillRing | null, minibuffer: Minibuffer) {
-    this.textEditor = textEditor;
+  constructor(emacsController: IEmacsController, killRing: KillRing | null, minibuffer: Minibuffer) {
+    this.emacsController = emacsController;
     this.killRing = killRing;
     this.minibuffer = minibuffer;
 
@@ -41,14 +48,6 @@ export class KillYanker implements vscode.Disposable {
 
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
-  }
-
-  public setTextEditor(textEditor: TextEditor): void {
-    this.textEditor = textEditor;
-  }
-
-  public getTextEditor(): TextEditor {
-    return this.textEditor;
   }
 
   public dispose(): void {
@@ -74,29 +73,39 @@ export class KillYanker implements vscode.Disposable {
     }
   }
 
-  public async kill(ranges: Range[], appendDirection: AppendDirection = AppendDirection.Forward): Promise<void> {
+  public async kill(
+    ranges: readonly Range[],
+    rectMarkMode: boolean,
+    appendDirection: AppendDirection = AppendDirection.Forward,
+  ): Promise<void> {
+    if (ranges.length === 0 || ranges.some((range) => range.isEmpty)) {
+      this.isAppending = false;
+    }
     if (!equalPositions(this.getCursorPositions(), this.prevKillPositions)) {
       this.isAppending = false;
     }
 
-    await this.copy(ranges, this.isAppending, appendDirection);
+    await this.copy(ranges, rectMarkMode, this.isAppending, appendDirection);
 
-    await this.delete(ranges);
+    await this.delete(ranges, rectMarkMode);
 
     this.isAppending = true;
     this.prevKillPositions = this.getCursorPositions();
   }
 
   public async copy(
-    ranges: Range[],
+    ranges: readonly Range[],
+    rectMarkMode: boolean,
     shouldAppend = false,
     appendDirection: AppendDirection = AppendDirection.Forward,
   ): Promise<void> {
     const newKillEntity = new EditorTextKillRingEntity(
       ranges.map((range) => ({
         range,
-        text: this.textEditor.document.getText(range),
+        text: rectMarkMode ? getRectText(this.textEditor.document, range) : this.textEditor.document.getText(range),
+        rectMode: rectMarkMode,
       })),
+      this.textEditor.document.eol,
     );
 
     if (this.killRing !== null) {
@@ -136,18 +145,69 @@ export class KillYanker implements vscode.Disposable {
 
     if (killRingEntity.type === "editor") {
       const selections = this.textEditor.selections;
-      const regionTexts = killRingEntity.getRegionTextsList();
-      const shouldPasteSeparately = regionTexts.length > 1 && flattenedText.split("\n").length !== regionTexts.length;
-      if (shouldPasteSeparately && regionTexts.length === selections.length) {
+      const regionTextsList = killRingEntity.getRegionTextsList();
+      const shouldPasteSeparately =
+        regionTextsList.length > 1 && flattenedText.split("\n").length !== regionTextsList.length;
+      const canPasteSeparately = regionTextsList.length === selections.length;
+      const pasteSeparately = shouldPasteSeparately && canPasteSeparately;
+      const customPaste = pasteSeparately || killRingEntity.hasRectModeText();
+      if (customPaste) {
+        // The normal `paste` command is not suitable in this case, so we use `edit` command instead.
+        if (!canPasteSeparately) {
+          // `canPasteSeparately` is false, so give up to paste separately and use the first selection.
+          this.textEditor.selections = [this.textEditor.selection];
+        }
         const success = await this.textEditor.edit((editBuilder) => {
           selections.forEach((selection, i) => {
             if (!selection.isEmpty) {
               editBuilder.delete(selection);
             }
-            // `regionTexts.length === selections.length` has already been checked,
-            // so noUncheckedIndexedAccess rule can be skipped here.
+
+            // `canPasteSeparately = regionTexts.length === selections.length` has already been checked
+            // or `this.selections.length === 1` is confirmed, so regionTextsList[i] is not null
+            // and the `noUncheckedIndexedAccess` rule can be skipped here.
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            editBuilder.insert(selection.start, regionTexts[i]!.getAppendedText());
+            const regionTexts = regionTextsList[i]!;
+
+            let pasteCursor = selection.start;
+            let textToAddAfterBuffer = "";
+            regionTexts.forEach((regionText) => {
+              const indent = pasteCursor.character;
+              if (regionText.rectMode) {
+                const regionHeight = regionText.range.end.line - regionText.range.start.line;
+                const regionWidth = regionText.range.end.character - regionText.range.start.character;
+                regionText.text.split(/\r?\n/).forEach((lineToPaste, j) => {
+                  const pastedLineLength = lineToPaste.length;
+                  const targetLine = pasteCursor.line + j;
+                  if (targetLine < this.textEditor.document.lineCount) {
+                    const existingIndent = this.textEditor.document.lineAt(targetLine).range.end.character;
+                    const whiteSpacesBefore = " ".repeat(Math.max(indent - existingIndent, 0));
+                    const whiteSpacesAfter = " ".repeat(Math.max(regionWidth - pastedLineLength, 0));
+                    const whiteSpacesFilledLine = whiteSpacesBefore + lineToPaste + whiteSpacesAfter;
+                    editBuilder.insert(new Position(targetLine, pasteCursor.character), whiteSpacesFilledLine);
+                  } else {
+                    const whiteSpacesBefore = " ".repeat(indent);
+                    const whiteSpacesAfter = " ".repeat(regionWidth - pastedLineLength);
+                    const whiteSpacesFilledLine = whiteSpacesBefore + lineToPaste + whiteSpacesAfter;
+                    textToAddAfterBuffer += getEolChar(this.textEditor.document.eol) + whiteSpacesFilledLine;
+                  }
+                });
+                pasteCursor = new Position(
+                  pasteCursor.line + regionHeight, // This rect paste is different from the normal paste/edit.insert from the vertical direction perspective, so we need to update the vertical position of the cursor.
+                  pasteCursor.character, // In contrast, the horizontal movement is automatically handled by the `editBuilder.insert` above internally, so we don't need to update the horizontal position of the cursor.
+                );
+              } else {
+                if (pasteCursor.line < this.textEditor.document.lineCount) {
+                  editBuilder.insert(pasteCursor, regionText.text);
+                  // In this case, `pasteCursor` shouldn't be updated because `editBuilder.insert` handles it internally.
+                } else {
+                  textToAddAfterBuffer += regionText.text;
+                  // In this case, `pasteCursor` doesn't need to be updated because `editBuilder.insert` will no longer be called after this.
+                }
+              }
+            });
+            const endOfDoc = this.textEditor.document.lineAt(this.textEditor.document.lineCount - 1).range.end;
+            editBuilder.insert(endOfDoc, textToAddAfterBuffer);
           });
         });
         if (!success) {
@@ -214,14 +274,33 @@ export class KillYanker implements vscode.Disposable {
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
-  private async delete(ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
+  private async delete(ranges: readonly vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
+    const selectionsAfterRectDeleted =
+      this.emacsController.inRectMarkMode &&
+      this.emacsController.nativeSelections.map((selection) => {
+        const newLine = selection.active.line;
+        const newChar = Math.min(selection.active.character, selection.anchor.character);
+        return new vscode.Selection(newLine, newChar, newLine, newChar);
+      });
+
+    const deleteRanges = rectMode
+      ? ranges.flatMap((range) =>
+          convertSelectionToRectSelections(this.textEditor.document, new vscode.Selection(range.start, range.end)),
+        )
+      : ranges;
+
     let success = false;
     let trial = 0;
     while (!success && trial < maxTrials) {
       success = await this.textEditor.edit((editBuilder) => {
-        ranges.forEach((range) => {
+        deleteRanges.forEach((range) => {
           editBuilder.delete(range);
         });
+
+        if (selectionsAfterRectDeleted) {
+          this.emacsController.exitMarkMode();
+          this.textEditor.selections = selectionsAfterRectDeleted;
+        }
       });
       trial++;
     }
@@ -239,6 +318,10 @@ export class KillYanker implements vscode.Disposable {
   }
 
   private getCursorPositions(): Position[] {
-    return this.textEditor.selections.map((selection) => selection.active);
+    if (this.emacsController.inRectMarkMode) {
+      return this.emacsController.nativeSelections.map((selection) => selection.active);
+    } else {
+      return this.textEditor.selections.map((selection) => selection.active);
+    }
   }
 }

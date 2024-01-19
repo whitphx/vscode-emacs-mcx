@@ -27,6 +27,8 @@ import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
 
 export interface IEmacsController {
+  readonly textEditor: TextEditor;
+
   runCommand(commandName: string): void | Thenable<unknown>;
 
   enterMarkMode(pushMark?: boolean): void;
@@ -39,7 +41,10 @@ export interface IEmacsController {
 }
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
-  private textEditor: TextEditor;
+  private _textEditor: TextEditor;
+  public get textEditor(): TextEditor {
+    return this._textEditor;
+  }
 
   private commandRegistry: EmacsCommandRegistry;
 
@@ -123,7 +128,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
     textRegister: Map<string, string> = new Map(),
   ) {
-    this.textEditor = textEditor;
+    this._textEditor = textEditor;
     this.setNativeSelections(this.rectMode ? [] : textEditor.selections); // TODO: `[]` is workaround.
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
@@ -180,7 +185,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new FindCommands.IsearchAbort(this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchExit(this, searchState));
 
-    const killYanker = new KillYanker(textEditor, killRing, minibuffer);
+    const killYanker = new KillYanker(this, killRing, minibuffer);
     this.commandRegistry.register(new KillCommands.KillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.BackwardKillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.KillLine(this, killYanker));
@@ -230,8 +235,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public setTextEditor(textEditor: TextEditor): void {
-    this.textEditor = textEditor;
-    this.killYanker.setTextEditor(textEditor);
+    this._textEditor = textEditor;
   }
 
   /**
