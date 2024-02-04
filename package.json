@@ -6346,7 +6346,7 @@
     "typescript": "^5.3.3",
     "typescript-transform-paths": "^3.4.6",
     "vsce": "^2.15.0",
-    "webpack": "^5.90.0",
+    "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
