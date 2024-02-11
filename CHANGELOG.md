@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.59.0] - 2024-02-12
+
+### Changed
+
+- Change the publisher name from `tuttieee` to `whitphx`, #1853.
+
 ## [0.58.0] - 2024-01-19
 
 ### Fix
