@@ -87,6 +87,11 @@
           "default": false,
           "description": "If true, overriding `type` command is enabled to use prefix arguments on character inputs by IME."
         },
+        "emacs-mcx.wordPartMoveEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, word moving will use 'Camel hump' word part moving instead of whole word"
+        },
         "emacs-mcx.enableDigitArgument": {
           "type": "boolean",
           "default": true,

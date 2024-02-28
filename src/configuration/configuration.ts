@@ -39,7 +39,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
   public enableOverridingTypeCommand = false;
 
-  public lineMoveVisual = true;
+  public wordPartMoveEnabled = false;
 
   public paredit: IPareditConfiguration = {
     parentheses: { "[": "]", "(": ")", "{": "}" },

@@ -210,8 +210,13 @@ export class ForwardWord extends EmacsCommand {
     }
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+
+    const moveRightSelectCommand = Configuration.instance.wordPartMoveEnabled ? "cursorWordPartRightSelect" : "cursorWordRightSelect";
+    const moveRightCommand = Configuration.instance.wordPartMoveEnabled ? "cursorWordPartRight" : "cursorWordRight";
+
+
     return makeParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight"),
+    vscode.commands.executeCommand<void>(isInMarkMode ? moveRightSelectCommand : moveRightCommand),
     );
   }
 }
@@ -230,8 +235,12 @@ export class BackwardWord extends EmacsCommand {
     }
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
+
+    const moveLeftSelectCommand = Configuration.instance.wordPartMoveEnabled ? "cursorWordPartLeftSelect" : "cursorWordLeftSelect";
+    const moveLeftCommand = Configuration.instance.wordPartMoveEnabled ? "cursorWordPartLeft" : "cursorWordLeft";
+
     return makeParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft"),
+      vscode.commands.executeCommand<void>(isInMarkMode ? moveLeftSelectCommand : moveLeftCommand),
     );
   }
 }
