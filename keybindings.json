@@ -269,7 +269,7 @@
       }
     },
     {
-      "key": "escape g",
+      "key": ["escape g g", "escape g escape g"],
       "command": "workbench.action.gotoLine",
       "when": "config.emacs-mcx.useMetaPrefixEscape"
     },
