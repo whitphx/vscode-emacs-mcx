@@ -99,7 +99,7 @@ jobs:
           name: emacs-mcx
 
       - name: Create a new release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: emacs-mcx*.vsix
           generate_release_notes: true
