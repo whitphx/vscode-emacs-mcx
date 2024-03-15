@@ -6319,7 +6319,7 @@
   "devDependencies": {
     "@types/glob": "^8.0.1",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.11.28",
     "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.63.0",
     "@types/webpack-env": "^1.18.4",
