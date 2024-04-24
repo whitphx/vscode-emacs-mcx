@@ -525,6 +525,8 @@ suite("yank pop with auto-indent", () => {
     activeTextEditor = await setupWorkspace("", { language: "typescript" });
     activeTextEditor.options.tabSize = 4;
 
+    await delay(1000);
+
     const killRing = new KillRing(60);
     const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
