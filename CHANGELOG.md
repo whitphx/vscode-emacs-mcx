@@ -4,14 +4,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
-## [0.59.1] - 2024-02-12
+## [0.59.1]
 
-### Changed
+Skipped.
 
-- Change the `publisher` field in `package.json` from `tuttieee` to `whitphx`, #1853.
-- Change the `name` field in `package.json` from `emacs-mcx` to `awesome-emacs`, #1854.
-
-## [0.59.0] - 2024-02-12
+## [0.59.0]
 
 Skipped.
 
