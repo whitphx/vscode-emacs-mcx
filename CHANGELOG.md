@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.59.2]
+
+### Fix
+
+- Cursor position maintenance, #1889.
+
 ## [0.59.1]
 
 Skipped.
