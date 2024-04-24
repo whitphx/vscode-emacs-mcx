@@ -57,7 +57,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   /**
-   * The anchor positions (=set mark positions) in mark mode are shared among TextEditors.
+   * EmacsEmulator is bound to a document,
+   * and the anchor positions (=set mark positions) in mark mode
+   * are shared among the TextEditor-s attached to the document.
    */
   private _markModeAnchors: vscode.Position[] = [];
   private get markModeAnchors(): vscode.Position[] {
@@ -86,13 +88,15 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.setNativeSelections(nativeSelections);
     return nativeSelections;
   }
-  private setNativeSelections(nativeSelections: readonly vscode.Selection[]): void {
-    this._nativeSelectionsMap.set(this.textEditor, nativeSelections);
+  private setNativeSelections(nativeSelections: readonly vscode.Selection[], textEditor?: vscode.TextEditor): void {
+    textEditor = textEditor ?? this.textEditor;
 
-    const setPromise = this._nativeSelectionsSetPromiseMap.get(this.textEditor);
+    this._nativeSelectionsMap.set(textEditor, nativeSelections);
+
+    const setPromise = this._nativeSelectionsSetPromiseMap.get(textEditor);
     if (setPromise) {
       setPromise.resolvePromise();
-      this._nativeSelectionsSetPromiseMap.delete(this.textEditor);
+      this._nativeSelectionsSetPromiseMap.delete(textEditor);
     }
   }
   private waitNativeSelectionsSet(timeout: number): Promise<void> {
@@ -307,12 +311,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
+    if (!this.rectMode) {
+      this.setNativeSelections(e.textEditor.selections, e.textEditor);
+    }
+
     if (e.textEditor === this.textEditor) {
       this.onDidInterruptTextEditor();
-
-      if (!this.rectMode) {
-        this.setNativeSelections(this.textEditor.selections);
-      }
     }
   }
 
