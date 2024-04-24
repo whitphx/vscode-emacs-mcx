@@ -40,6 +40,43 @@ export interface IEmacsController {
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
 }
 
+class NativeSelectionsStore {
+  /**
+   * `_nativeSelectionsMap[textEditor]` is usually synced to `textEditor.selections`.
+   * Specially in rect-mark-mode, it is used to manage the underlying selections which the move commands directly manipulate
+   * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `_nativeSelectionsMap[textEditor]`.
+   */
+  private _nativeSelectionsMap: WeakMap<TextEditor, readonly vscode.Selection[]> = new WeakMap();
+  private _nativeSelectionsSetPromiseMap: WeakMap<TextEditor, PromiseDelegate<void>> = new WeakMap();
+
+  public get(textEditor: TextEditor): readonly vscode.Selection[] {
+    const maybeNativeSelections = this._nativeSelectionsMap.get(textEditor);
+    if (maybeNativeSelections) {
+      return maybeNativeSelections;
+    }
+
+    const nativeSelections = textEditor.selections;
+    this.set(textEditor, nativeSelections);
+    return nativeSelections;
+  }
+
+  public set(textEditor: TextEditor, nativeSelections: readonly vscode.Selection[]): void {
+    this._nativeSelectionsMap.set(textEditor, nativeSelections);
+
+    const setPromise = this._nativeSelectionsSetPromiseMap.get(textEditor);
+    if (setPromise) {
+      setPromise.resolvePromise();
+      this._nativeSelectionsSetPromiseMap.delete(textEditor);
+    }
+  }
+
+  public waitSet(textEditor: TextEditor, timeout: number): Promise<void> {
+    const setPromise = new PromiseDelegate<void>();
+    this._nativeSelectionsSetPromiseMap.set(textEditor, setPromise);
+    return Promise.any([setPromise.promise, delay(timeout)]);
+  }
+}
+
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private _textEditor: TextEditor;
   public get textEditor(): TextEditor {
@@ -71,38 +108,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this._isInMarkMode && this.rectMode;
   }
 
-  /**
-   * _nativeSelectionsMap[textEditor] is usually synced to `textEditor.selections`.
-   * Specially in rect-mark-mode, it is used to manage the underlying selections which the move commands directly manipulate
-   * and the `textEditor.selections` is in turn managed to visually represent rects reflecting the underlying `this._nativeSelections`.
-   */
-  private _nativeSelectionsMap: WeakMap<TextEditor, readonly vscode.Selection[]> = new WeakMap();
-  private _nativeSelectionsSetPromiseMap: WeakMap<TextEditor, PromiseDelegate<void>> = new WeakMap();
+  private nativeSelectionsStore: NativeSelectionsStore = new NativeSelectionsStore();
   public get nativeSelections(): readonly vscode.Selection[] {
-    const maybeNativeSelections = this._nativeSelectionsMap.get(this.textEditor);
-    if (maybeNativeSelections) {
-      return maybeNativeSelections;
-    }
-
-    const nativeSelections = this.textEditor.selections;
-    this.setNativeSelections(nativeSelections);
-    return nativeSelections;
-  }
-  private setNativeSelections(nativeSelections: readonly vscode.Selection[], textEditor?: vscode.TextEditor): void {
-    textEditor = textEditor ?? this.textEditor;
-
-    this._nativeSelectionsMap.set(textEditor, nativeSelections);
-
-    const setPromise = this._nativeSelectionsSetPromiseMap.get(textEditor);
-    if (setPromise) {
-      setPromise.resolvePromise();
-      this._nativeSelectionsSetPromiseMap.delete(textEditor);
-    }
-  }
-  private waitNativeSelectionsSet(timeout: number): Promise<void> {
-    const setPromise = new PromiseDelegate<void>();
-    this._nativeSelectionsSetPromiseMap.set(this.textEditor, setPromise);
-    return Promise.any([setPromise.promise, delay(timeout)]);
+    return this.nativeSelectionsStore.get(this.textEditor);
   }
   private applyNativeSelectionsAsRect(): void {
     if (this.inRectMarkMode) {
@@ -117,7 +125,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       const newActive = navigateFn(s.active, i);
       return new vscode.Selection(s.anchor, newActive);
     });
-    this.setNativeSelections(newNativeSelections);
+    this.nativeSelectionsStore.set(this.textEditor, newNativeSelections);
     this.applyNativeSelectionsAsRect();
   }
 
@@ -133,7 +141,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     textRegister: Map<string, string> = new Map(),
   ) {
     this._textEditor = textEditor;
-    this.setNativeSelections(this.rectMode ? [] : textEditor.selections); // TODO: `[]` is workaround.
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
@@ -254,9 +261,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     // the selections are overridden by the code jump result AFTER `onDidChangeActiveTextEditor` is invoked
     // with some delay. So we need to wait for the selection change.
     // XXX: This delay time is ad-hoc.
-    await this.waitNativeSelectionsSet(100);
+    await this.nativeSelectionsStore.waitSet(textEditor, 100);
 
-    this.setNativeSelections(
+    this.nativeSelectionsStore.set(
+      textEditor,
       this.isInMarkMode
         ? this.nativeSelections.map((selection, i) => {
             const anchor = this.markModeAnchors[i] ?? selection.anchor;
@@ -312,7 +320,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
     if (!this.rectMode) {
-      this.setNativeSelections(e.textEditor.selections, e.textEditor);
+      this.nativeSelectionsStore.set(e.textEditor, e.textEditor.selections);
     }
 
     if (e.textEditor === this.textEditor) {
