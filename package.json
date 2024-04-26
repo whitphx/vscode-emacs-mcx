@@ -6326,7 +6326,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vscode/test-electron": "^2.3.9",
-    "@vscode/test-web": "^0.0.53",
+    "@vscode/test-web": "^0.0.54",
     "assert": "^2.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
