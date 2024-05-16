@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.60.0]
+
+### Changed
+
+- `tabToTabStop` behavior in offside-rule languages such as Python is changed to be more like the original Emacs, #1911.
+
 ## [0.59.2]
 
 ### Fix
