@@ -9,14 +9,14 @@ export class TabToTabStop extends EmacsCommand {
 
   private latestTextEditor: TextEditor | undefined;
   private latestSelections: readonly vscode.Selection[] = [];
-  private latestIndentUnitsArr: readonly (number | undefined)[] = [];
+  private latestIndentLevels: readonly (number | undefined)[] = [];
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     if (offsideRuleLanguageIds.includes(textEditor.document.languageId)) {
       const tabSize = textEditor.options.tabSize as number;
       const insertSpaces = textEditor.options.insertSpaces as boolean;
 
-      const indentChars = insertSpaces ? tabSize : 1;
+      const singleIndentSize = insertSpaces ? tabSize : 1;
 
       const indentOps = textEditor.selections.map((selection, i) => {
         let prevNonEmptyLine: vscode.TextLine | undefined;
@@ -29,14 +29,16 @@ export class TabToTabStop extends EmacsCommand {
           break;
         }
         const prevLineIndentChars = prevNonEmptyLine?.firstNonWhitespaceCharacterIndex;
-        const thisLineMaxIndentUnits = prevLineIndentChars != null ? Math.floor(prevLineIndentChars / tabSize) + 1 : 0;
 
-        const prevIndentUnits = this.latestIndentUnitsArr[i]; // IndentUnits applied in the previous call
-        const newIndentUnits =
-          prevIndentUnits != null && 0 < prevIndentUnits && prevIndentUnits <= thisLineMaxIndentUnits
-            ? prevIndentUnits - 1
-            : thisLineMaxIndentUnits;
-        const newIndentChars = newIndentUnits * indentChars;
+        const maxIndentLevel = prevLineIndentChars != null ? Math.floor(prevLineIndentChars / tabSize) + 1 : 0;
+
+        const prevIndentLevel = this.latestIndentLevels[i]; // IndentUnits applied in the previous call
+        const newIndentLevel =
+          prevIndentLevel != null && 0 < prevIndentLevel && prevIndentLevel <= maxIndentLevel
+            ? prevIndentLevel - 1
+            : maxIndentLevel;
+
+        const newIndentChars = newIndentLevel * singleIndentSize;
 
         const thisLine = textEditor.document.lineAt(selection.active.line);
         const charsOffsetAfterIndent = Math.max(
@@ -46,7 +48,7 @@ export class TabToTabStop extends EmacsCommand {
 
         return {
           line: selection.active.line,
-          newIndentUnits,
+          newIndentLevel,
           newIndentChars,
           newCursorChars: newIndentChars + charsOffsetAfterIndent,
         };
@@ -72,7 +74,7 @@ export class TabToTabStop extends EmacsCommand {
         return new vscode.Selection(active, active);
       });
 
-      this.latestIndentUnitsArr = indentOps.map((indentOp) => indentOp.newIndentUnits);
+      this.latestIndentLevels = indentOps.map((indentOp) => indentOp.newIndentLevel);
       this.latestTextEditor = textEditor;
       this.latestSelections = textEditor.selections;
 
@@ -105,7 +107,7 @@ export class TabToTabStop extends EmacsCommand {
         return activeSelection && latestSelection.isEqual(activeSelection);
       });
     if (!interruptedBySelfCursorMove) {
-      this.latestIndentUnitsArr = [];
+      this.latestIndentLevels = [];
     }
   }
 }
