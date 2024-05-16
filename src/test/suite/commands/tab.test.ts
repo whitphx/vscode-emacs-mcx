@@ -180,8 +180,32 @@ print("hello")`;
 
     teardown(cleanUpWorkspace);
 
-    test("reindent works when the cursor is at the line where it should", async () => {
+    test("reindent works when the cursor is at the line where it should, then it repeats possible indentations", async () => {
       setEmptyCursors(activeTextEditor, [1, 0]);
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 4]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 4]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 0]);
+
       await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
@@ -211,8 +235,32 @@ print("hello")`;
 
     teardown(cleanUpWorkspace);
 
-    test("reindent works and the cursor is moved to the indent head when the cursor was at the beginning fo the line", async () => {
+    test("reindent works and the cursor is moved to the indent head when the cursor was at the beginning fo the line, then it repeats possible indentations", async () => {
       setEmptyCursors(activeTextEditor, [1, 0]);
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 4]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 4]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 0]);
+
       await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
@@ -222,15 +270,39 @@ print("hello")`;
       assertCursorsEqual(activeTextEditor, [1, 4]);
     });
 
-    test("reindent works and the cursor is not moved when the cursor was after the indent head", async () => {
-      setEmptyCursors(activeTextEditor, [1, 8]);
+    test("reindent works and the cursor is not moved when the cursor was after the indent head, then it repeats possible indentations", async () => {
+      setEmptyCursors(activeTextEditor, [1, 12]);
       await emulator.runCommand("tabToTabStop");
       assertTextEqual(
         activeTextEditor,
         `def f():
     print("hello")`,
       );
+      assertCursorsEqual(activeTextEditor, [1, 8]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 8]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+print("hello")`,
+      );
       assertCursorsEqual(activeTextEditor, [1, 4]);
+
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 8]);
     });
   });
 });

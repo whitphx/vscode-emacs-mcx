@@ -7,6 +7,10 @@ const offsideRuleLanguageIds = ["python"];
 export class TabToTabStop extends EmacsCommand {
   public readonly id = "tabToTabStop";
 
+  private latestTextEditor: TextEditor | undefined;
+  private latestSelections: readonly vscode.Selection[] = [];
+  private latestIndentUnitsArr: readonly (number | undefined)[] = [];
+
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     if (offsideRuleLanguageIds.includes(textEditor.document.languageId)) {
       const tabSize = textEditor.options.tabSize as number;
@@ -14,7 +18,7 @@ export class TabToTabStop extends EmacsCommand {
 
       const indentChars = insertSpaces ? tabSize : 1;
 
-      const indentOps = textEditor.selections.map((selection) => {
+      const indentOps = textEditor.selections.map((selection, i) => {
         let prevNonEmptyLine: vscode.TextLine | undefined;
         for (let i = selection.active.line - 1; i >= 0; i--) {
           const line = textEditor.document.lineAt(i);
@@ -24,18 +28,25 @@ export class TabToTabStop extends EmacsCommand {
           prevNonEmptyLine = line;
           break;
         }
-        const prevIndentChars = prevNonEmptyLine?.firstNonWhitespaceCharacterIndex;
-        const newIndentUnits = prevIndentChars != null ? Math.floor(prevIndentChars / tabSize) + 1 : 0;
+        const prevLineIndentChars = prevNonEmptyLine?.firstNonWhitespaceCharacterIndex;
+        const thisLineMaxIndentUnits = prevLineIndentChars != null ? Math.floor(prevLineIndentChars / tabSize) + 1 : 0;
+
+        const prevIndentUnits = this.latestIndentUnitsArr[i]; // IndentUnits applied in the previous call
+        const newIndentUnits =
+          prevIndentUnits != null && 0 < prevIndentUnits && prevIndentUnits <= thisLineMaxIndentUnits
+            ? prevIndentUnits - 1
+            : thisLineMaxIndentUnits;
         const newIndentChars = newIndentUnits * indentChars;
 
-        const curLine = textEditor.document.lineAt(selection.active.line);
+        const thisLine = textEditor.document.lineAt(selection.active.line);
         const charsOffsetAfterIndent = Math.max(
-          selection.active.character - curLine.firstNonWhitespaceCharacterIndex,
+          selection.active.character - thisLine.firstNonWhitespaceCharacterIndex,
           0,
         );
 
         return {
           line: selection.active.line,
+          newIndentUnits,
           newIndentChars,
           newCursorChars: newIndentChars + charsOffsetAfterIndent,
         };
@@ -61,6 +72,10 @@ export class TabToTabStop extends EmacsCommand {
         return new vscode.Selection(active, active);
       });
 
+      this.latestIndentUnitsArr = indentOps.map((indentOp) => indentOp.newIndentUnits);
+      this.latestTextEditor = textEditor;
+      this.latestSelections = textEditor.selections;
+
       this.emacsController.exitMarkMode();
     }
 
@@ -80,5 +95,17 @@ export class TabToTabStop extends EmacsCommand {
       });
       this.emacsController.exitMarkMode();
     });
+  }
+
+  public onDidInterruptTextEditor(): void {
+    const interruptedBySelfCursorMove =
+      this.latestTextEditor === vscode.window.activeTextEditor &&
+      this.latestSelections.every((latestSelection, i) => {
+        const activeSelection = vscode.window.activeTextEditor?.selections[i];
+        return activeSelection && latestSelection.isEqual(activeSelection);
+      });
+    if (!interruptedBySelfCursorMove) {
+      this.latestIndentUnitsArr = [];
+    }
   }
 }
