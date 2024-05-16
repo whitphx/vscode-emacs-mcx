@@ -14,7 +14,7 @@ export class TabToTabStop extends EmacsCommand {
 
       const indentChars = insertSpaces ? tabSize : 1;
 
-      const editsAndMoves = textEditor.selections.map((selection) => {
+      const indentOps = textEditor.selections.map((selection) => {
         let prevNonEmptyLine: vscode.TextLine | undefined;
         for (let i = selection.active.line - 1; i >= 0; i--) {
           const line = textEditor.document.lineAt(i);
@@ -29,30 +29,38 @@ export class TabToTabStop extends EmacsCommand {
         const newIndentChars = newIndentUnits * indentChars;
 
         const curLine = textEditor.document.lineAt(selection.active.line);
-        const charsToInsert = Math.max(newIndentChars - curLine.firstNonWhitespaceCharacterIndex, 0);
-        const charsToMoveCurAfterIndent = Math.max(
+        const charsOffsetAfterIndent = Math.max(
           selection.active.character - curLine.firstNonWhitespaceCharacterIndex,
           0,
         );
 
         return {
           line: selection.active.line,
-          charsToInsert,
-          cursorChars: newIndentChars + charsToMoveCurAfterIndent,
+          newIndentChars,
+          newCursorChars: newIndentChars + charsOffsetAfterIndent,
         };
       });
 
+      // Update the indents
       const indentChar = insertSpaces ? " " : "\t";
       textEditor.edit((editBuilder) => {
-        editsAndMoves.forEach((editAndMove) => {
-          const lineHead = new vscode.Position(editAndMove.line, 0);
-          editBuilder.insert(lineHead, indentChar.repeat(editAndMove.charsToInsert));
+        indentOps.forEach((indentOp) => {
+          const line = textEditor.document.lineAt(indentOp.line);
+          const lineHead = line.range.start;
+          const charsToInsertOrDelete = indentOp.newIndentChars - line.firstNonWhitespaceCharacterIndex;
+          if (charsToInsertOrDelete >= 0) {
+            editBuilder.insert(lineHead, indentChar.repeat(charsToInsertOrDelete));
+          } else {
+            editBuilder.delete(new vscode.Range(lineHead, new vscode.Position(indentOp.line, -charsToInsertOrDelete)));
+          }
         });
       });
-      textEditor.selections = editsAndMoves.map((editAndMove) => {
-        const active = new vscode.Position(editAndMove.line, editAndMove.cursorChars);
+      // Update the cursor positions
+      textEditor.selections = indentOps.map((indentOp) => {
+        const active = new vscode.Position(indentOp.line, indentOp.newCursorChars);
         return new vscode.Selection(active, active);
       });
+
       this.emacsController.exitMarkMode();
     }
 

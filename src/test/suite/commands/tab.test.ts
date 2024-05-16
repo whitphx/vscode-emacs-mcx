@@ -198,4 +198,39 @@ print("hello")`;
       assertCursorsEqual(activeTextEditor, [0, 0]);
     });
   });
+
+  suite("reindent existing lines", () => {
+    const initialText = `def f():
+        print("hello")`;
+
+    setup(async () => {
+      activeTextEditor = await setupWorkspace(initialText, { language });
+      activeTextEditor.options.tabSize = tabSize;
+      emulator = new EmacsEmulator(activeTextEditor);
+    });
+
+    teardown(cleanUpWorkspace);
+
+    test("reindent works and the cursor is moved to the indent head when the cursor was at the beginning fo the line", async () => {
+      setEmptyCursors(activeTextEditor, [1, 0]);
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 4]);
+    });
+
+    test("reindent works and the cursor is not moved when the cursor was after the indent head", async () => {
+      setEmptyCursors(activeTextEditor, [1, 8]);
+      await emulator.runCommand("tabToTabStop");
+      assertTextEqual(
+        activeTextEditor,
+        `def f():
+    print("hello")`,
+      );
+      assertCursorsEqual(activeTextEditor, [1, 4]);
+    });
+  });
 });
