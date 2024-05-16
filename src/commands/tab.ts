@@ -24,8 +24,8 @@ export class TabToTabStop extends EmacsCommand {
           prevNonEmptyLine = line;
           break;
         }
-        const prevIndentHeadChar = prevNonEmptyLine?.firstNonWhitespaceCharacterIndex ?? 0;
-        const newIndentUnits = Math.floor(prevIndentHeadChar / tabSize) + 1;
+        const prevIndentChars = prevNonEmptyLine?.firstNonWhitespaceCharacterIndex;
+        const newIndentUnits = prevIndentChars != null ? Math.floor(prevIndentChars / tabSize) + 1 : 0;
         const newIndentChars = newIndentUnits * indentChars;
 
         const curLine = textEditor.document.lineAt(selection.active.line);
