@@ -6337,7 +6337,7 @@
     "prettier": "^3.2.5",
     "process": "^0.11.10",
     "rimraf": "^5.0.7",
-    "sinon": "^17.0.1",
+    "sinon": "^18.0.0",
     "strip-json-comments": "^5.0.1",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
