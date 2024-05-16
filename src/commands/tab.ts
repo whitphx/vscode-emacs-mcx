@@ -11,7 +11,11 @@ export class TabToTabStop extends EmacsCommand {
   private latestSelections: readonly vscode.Selection[] = [];
   private latestIndentLevels: readonly (number | undefined)[] = [];
 
-  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
+  public async run(
+    textEditor: TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+  ): Promise<unknown> {
     if (offsideRuleLanguageIds.includes(textEditor.document.languageId)) {
       const tabSize = textEditor.options.tabSize as number;
       const insertSpaces = textEditor.options.insertSpaces as boolean;
@@ -56,7 +60,7 @@ export class TabToTabStop extends EmacsCommand {
 
       // Update the indents
       const indentChar = insertSpaces ? " " : "\t";
-      textEditor.edit((editBuilder) => {
+      await textEditor.edit((editBuilder) => {
         indentOps.forEach((indentOp) => {
           const line = textEditor.document.lineAt(indentOp.line);
           const lineHead = line.range.start;
@@ -79,6 +83,7 @@ export class TabToTabStop extends EmacsCommand {
       this.latestSelections = textEditor.selections;
 
       this.emacsController.exitMarkMode();
+      return;
     }
 
     // A single call of `editor.action.reindentselectedlines`
