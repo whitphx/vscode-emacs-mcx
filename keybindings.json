@@ -389,6 +389,12 @@
       ],
       "command": ""
     },
+    // VSCode's quick search is like Emacs' Occur mode. Quick search is available since VSCode 1.89 (https://code.visualstudio.com/updates/v1_89#_quick-search).
+    {
+      "key": "meta+s o",
+      "command": "workbench.action.quickTextSearch",
+      "when": "editorFocus"
+    },
     // addSelectionToNext/PreviousFindMatch
     {
       "key": "ctrl+meta+n",

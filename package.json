@@ -9,7 +9,7 @@
     "url": "https://github.com/whitphx/vscode-emacs-mcx"
   },
   "engines": {
-    "vscode": "^1.63.0"
+    "vscode": "^1.89.0"
   },
   "categories": [
     "Other",
@@ -3058,6 +3058,17 @@
         "key": "alt+backspace",
         "command": "",
         "when": "isWindows && replaceInputFocussed && !isComposing"
+      },
+      {
+        "key": "alt+s o",
+        "command": "workbench.action.quickTextSearch",
+        "when": "editorFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+s o",
+        "mac": "cmd+s o",
+        "command": "workbench.action.quickTextSearch",
+        "when": "editorFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+alt+n",
