@@ -335,6 +335,5 @@ function getAssignableKeys(includeNumerics: boolean): string[] {
 
   return keys;
 }
-
 const ASSIGNABLE_KEYS = getAssignableKeys(true);
 const ASSIGNABLE_KEYS_WO_NUMS = getAssignableKeys(false);
