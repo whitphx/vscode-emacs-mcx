@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.60.1]
+
+### Fix
+
+- Delete invalid keybindings, #1911.
+
 ## [0.60.0]
 
 ### Changed
