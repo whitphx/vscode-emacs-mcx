@@ -1242,91 +1242,11 @@
         "when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "!",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "!"
-        ]
-      },
-      {
-        "key": "\"",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "\""
-        ]
-      },
-      {
-        "key": "#",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "#"
-        ]
-      },
-      {
-        "key": "$",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "$"
-        ]
-      },
-      {
-        "key": "%",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "%"
-        ]
-      },
-      {
-        "key": "&",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "&"
-        ]
-      },
-      {
         "key": "'",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
         "args": [
           "'"
-        ]
-      },
-      {
-        "key": "(",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "("
-        ]
-      },
-      {
-        "key": ")",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          ")"
-        ]
-      },
-      {
-        "key": "*",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "*"
-        ]
-      },
-      {
-        "key": "+",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "+"
         ]
       },
       {
@@ -1362,14 +1282,6 @@
         ]
       },
       {
-        "key": ":",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          ":"
-        ]
-      },
-      {
         "key": ";",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
@@ -1378,43 +1290,11 @@
         ]
       },
       {
-        "key": "<",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "<"
-        ]
-      },
-      {
         "key": "=",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
         "args": [
           "="
-        ]
-      },
-      {
-        "key": ">",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          ">"
-        ]
-      },
-      {
-        "key": "?",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "?"
-        ]
-      },
-      {
-        "key": "@",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "@"
         ]
       },
       {
@@ -1650,22 +1530,6 @@
         ]
       },
       {
-        "key": "^",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "^"
-        ]
-      },
-      {
-        "key": "_",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "_"
-        ]
-      },
-      {
         "key": "`",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
@@ -1879,38 +1743,6 @@
         "command": "emacs-mcx.typeChar",
         "args": [
           "z"
-        ]
-      },
-      {
-        "key": "{",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "{"
-        ]
-      },
-      {
-        "key": "|",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "|"
-        ]
-      },
-      {
-        "key": "}",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "}"
-        ]
-      },
-      {
-        "key": "~",
-        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "~"
         ]
       },
       {
@@ -4947,99 +4779,11 @@
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {
-        "key": " ",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          " "
-        ]
-      },
-      {
-        "key": "!",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "!"
-        ]
-      },
-      {
-        "key": "\"",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "\""
-        ]
-      },
-      {
-        "key": "#",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "#"
-        ]
-      },
-      {
-        "key": "$",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "$"
-        ]
-      },
-      {
-        "key": "%",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "%"
-        ]
-      },
-      {
-        "key": "&",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "&"
-        ]
-      },
-      {
         "key": "'",
         "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
         "args": [
           "'"
-        ]
-      },
-      {
-        "key": "(",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "("
-        ]
-      },
-      {
-        "key": ")",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          ")"
-        ]
-      },
-      {
-        "key": "*",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "*"
-        ]
-      },
-      {
-        "key": "+",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "+"
         ]
       },
       {
@@ -5155,14 +4899,6 @@
         ]
       },
       {
-        "key": ":",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          ":"
-        ]
-      },
-      {
         "key": ";",
         "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
@@ -5171,43 +4907,11 @@
         ]
       },
       {
-        "key": "<",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "<"
-        ]
-      },
-      {
         "key": "=",
         "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
         "args": [
           "="
-        ]
-      },
-      {
-        "key": ">",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          ">"
-        ]
-      },
-      {
-        "key": "?",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "?"
-        ]
-      },
-      {
-        "key": "@",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "@"
         ]
       },
       {
@@ -5443,22 +5147,6 @@
         ]
       },
       {
-        "key": "^",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "^"
-        ]
-      },
-      {
-        "key": "_",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "_"
-        ]
-      },
-      {
         "key": "`",
         "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",
@@ -5672,38 +5360,6 @@
         "command": "emacs-mcx.typeChar",
         "args": [
           "z"
-        ]
-      },
-      {
-        "key": "{",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "{"
-        ]
-      },
-      {
-        "key": "|",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "|"
-        ]
-      },
-      {
-        "key": "}",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "}"
-        ]
-      },
-      {
-        "key": "~",
-        "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
-        "command": "emacs-mcx.typeChar",
-        "args": [
-          "~"
         ]
       },
       {

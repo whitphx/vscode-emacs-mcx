@@ -231,20 +231,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     }),
   );
 
-  // Ascii all printable characters excluding space, delete, and numeric characters.
-  // Ref: https://www.ascii-code.com/
-  const asciiPrintableChars: string[] = [];
-  // '!' ~ '/'
-  for (let charCode = 0x21; charCode <= 0x2f; charCode++) {
-    asciiPrintableChars.push(String.fromCharCode(charCode));
-  }
-  // 0x30 - 0x39 are numeric, '0' ~ '9', and so skipped.
-  // ':' ~ '~'
-  for (let charCode = 0x3a; charCode <= 0x7e; charCode++) {
-    asciiPrintableChars.push(String.fromCharCode(charCode));
-  }
-
-  for (const char of asciiPrintableChars) {
+  for (const char of ASSIGNABLE_KEYS_WO_NUMS) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
@@ -277,15 +264,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
 export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  // Ascii all printable characters excluding delete.
-  // Ref: https://www.ascii-code.com/
-  const asciiPrintableChars: string[] = [];
-  // ' ' ~ '~'
-  for (let charCode = 0x20; charCode <= 0x7e; charCode++) {
-    asciiPrintableChars.push(String.fromCharCode(charCode));
-  }
-
-  for (const char of asciiPrintableChars) {
+  for (const char of ASSIGNABLE_KEYS) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
@@ -297,29 +276,10 @@ export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
   return keybindings;
 }
 
-const KEYBINDING_VALID_KEYS: string[] = [];
-// Found these valid keys by registering all printable characters (0x20 <= charCode <= 0x7e) to the keybindings and picking up the validly registered keys from the keybindings setting tab.
-// Ref: Ascii printable characters: https://www.ascii-code.com/
-KEYBINDING_VALID_KEYS.push("'", ",", "-", ".", "/");
-for (let charCode = 0x30; charCode <= 0x39; charCode++) {
-  // '0' ~ '9'
-  KEYBINDING_VALID_KEYS.push(String.fromCharCode(charCode));
-}
-KEYBINDING_VALID_KEYS.push(";", "=");
-for (let charCode = 0x41; charCode <= 0x5a; charCode++) {
-  // 'A' ~ 'Z'
-  KEYBINDING_VALID_KEYS.push(String.fromCharCode(charCode));
-}
-KEYBINDING_VALID_KEYS.push("[", "\\", "]", "`");
-for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
-  // 'a' ~ 'z'
-  KEYBINDING_VALID_KEYS.push(String.fromCharCode(charCode));
-}
-
 export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  for (const char of KEYBINDING_VALID_KEYS) {
+  for (const char of ASSIGNABLE_KEYS) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.inRegisterCopyMode && editorTextFocus",
@@ -334,7 +294,7 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
     args: " ",
   });
 
-  for (const char of KEYBINDING_VALID_KEYS) {
+  for (const char of ASSIGNABLE_KEYS) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.inRegisterInsertMode && editorTextFocus",
@@ -350,3 +310,31 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   });
   return keybindings;
 }
+
+function getAssignableKeys(includeNumerics: boolean): string[] {
+  const keys: string[] = [];
+  // Found these valid keys by registering all printable characters (0x20 <= charCode <= 0x7e) to the keybindings and picking up the validly registered keys from the keybindings setting tab.
+  // Ref: Ascii printable characters: https://www.ascii-code.com/
+  keys.push("'", ",", "-", ".", "/");
+  if (includeNumerics) {
+    for (let charCode = 0x30; charCode <= 0x39; charCode++) {
+      // '0' ~ '9'
+      keys.push(String.fromCharCode(charCode));
+    }
+  }
+  keys.push(";", "=");
+  for (let charCode = 0x41; charCode <= 0x5a; charCode++) {
+    // 'A' ~ 'Z'
+    keys.push(String.fromCharCode(charCode));
+  }
+  keys.push("[", "\\", "]", "`");
+  for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
+    // 'a' ~ 'z'
+    keys.push(String.fromCharCode(charCode));
+  }
+
+  return keys;
+}
+
+const ASSIGNABLE_KEYS = getAssignableKeys(true);
+const ASSIGNABLE_KEYS_WO_NUMS = getAssignableKeys(false);
