@@ -212,16 +212,17 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 
 ### Search Commands
 
-| Command                              | Desc                                                               |
-| ------------------------------------ | ------------------------------------------------------------------ |
-| `C-s`                                | Incremental search forward (isearch-forward).                      |
-| `C-r`                                | Incremental search backward (isearch-backward).                    |
-| `C-M-s`                              | Begin incremental regexp search (isearch-forward-regexp).          |
-| `C-M-r`                              | Begin reverse incremental regexp search (isearch-backward-regexp). |
-| `M-S-5` (`M-%` with US keyboard)     | Replace (query-replace)                                            |
-| `C-M-S-5` (`C-M-%` with US keyboard) | Replace with regexp (query-replace-regexp)                         |
-| `C-M-n`                              | Add selection to next find match                                   |
-| `C-M-p`                              | Add selection to previous find match                               |
+| Command                              | Desc                                                                                                                  |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `C-s`                                | Incremental search forward (isearch-forward).                                                                         |
+| `C-r`                                | Incremental search backward (isearch-backward).                                                                       |
+| `C-M-s`                              | Begin incremental regexp search (isearch-forward-regexp).                                                             |
+| `C-M-r`                              | Begin reverse incremental regexp search (isearch-backward-regexp).                                                    |
+| `M-S-5` (`M-%` with US keyboard)     | Replace (query-replace)                                                                                               |
+| `C-M-S-5` (`C-M-%` with US keyboard) | Replace with regexp (query-replace-regexp)                                                                            |
+| `C-M-n`                              | Add selection to next find match                                                                                      |
+| `C-M-p`                              | Add selection to previous find match                                                                                  |
+| `M-s o`                              | Open [Quick Search](https://code.visualstudio.com/updates/v1_89#_quick-search), which is like Emacs' `occur` command. |
 
 ### Edit commands
 
