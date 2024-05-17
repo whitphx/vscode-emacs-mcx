@@ -4,13 +4,23 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
-## [0.60.1]
+## [0.61.0] - 2024-05-17
+
+### Add
+
+- Assign `M-s o` to the Quick Search command, which is like Emacs' occur, #1912.
+
+### Fix
+
+- The package description, #1913.
+
+## [0.60.1] - 2024-05-17
 
 ### Fix
 
 - Delete invalid keybindings, #1911.
 
-## [0.60.0]
+## [0.60.0] - 2024-05-17
 
 ### Changed
 
