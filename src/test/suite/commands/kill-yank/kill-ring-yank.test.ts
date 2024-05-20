@@ -524,6 +524,7 @@ suite("yank pop with auto-indent", () => {
   test("Yank in a language that has auto-indent support", async function () {
     activeTextEditor = await setupWorkspace("", { language: "javascript" });
     activeTextEditor.options.tabSize = 4;
+    await delay(1000);
 
     const killRing = new KillRing(60);
     const emulator = new EmacsEmulator(activeTextEditor, killRing);
