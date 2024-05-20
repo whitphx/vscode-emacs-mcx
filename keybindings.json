@@ -392,8 +392,7 @@
     // VSCode's quick search is like Emacs' Occur mode. Quick search is available since VSCode 1.89 (https://code.visualstudio.com/updates/v1_89#_quick-search).
     {
       "key": "meta+s o",
-      "command": "workbench.action.quickTextSearch",
-      "when": "editorFocus"
+      "command": "workbench.action.quickTextSearch"
     },
     // addSelectionToNext/PreviousFindMatch
     {
@@ -984,9 +983,11 @@
       "command": "workbench.action.togglePanel",
       "when": "!terminalFocus"
     },
+    // Assign `ctrl+i` to `tab` with the same condition as the VSCode default keybinding on `tab`.
     {
       "key": "ctrl+i",
-      "command": "tab"
+      "command": "tab",
+      "when": "editorTextFocus && !editorReadonly && !editorTabMovesFocus"
     },
     {
       "keys": ["ctrl+i", "tab"],

@@ -3062,13 +3062,13 @@
       {
         "key": "alt+s o",
         "command": "workbench.action.quickTextSearch",
-        "when": "editorFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+s o",
         "mac": "cmd+s o",
         "command": "workbench.action.quickTextSearch",
-        "when": "editorFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+alt+n",
@@ -5688,7 +5688,8 @@
       },
       {
         "key": "ctrl+i",
-        "command": "tab"
+        "command": "tab",
+        "when": "editorTextFocus && !editorReadonly && !editorTabMovesFocus"
       },
       {
         "key": "ctrl+i",
