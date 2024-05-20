@@ -166,7 +166,7 @@ export class KillYanker implements vscode.Disposable {
             // `canPasteSeparately = regionTexts.length === selections.length` has already been checked
             // or `this.selections.length === 1` is confirmed, so regionTextsList[i] is not null
             // and the `noUncheckedIndexedAccess` rule can be skipped here.
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
             const regionTexts = regionTextsList[i]!;
 
             let pasteCursor = selection.start;

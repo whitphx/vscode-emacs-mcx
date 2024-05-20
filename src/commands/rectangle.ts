@@ -84,7 +84,7 @@ abstract class EditRectangle extends RectangleKillYankCommand {
       // multiple cursor not supported
       return;
     }
-    const selection = selections[0]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    const selection = selections[0]!;
 
     const notReversedSelection = new vscode.Selection(selection.start, selection.end);
 
@@ -138,7 +138,7 @@ export class YankRectangle extends RectangleKillYankCommand {
     }
 
     const rectHeight = killedRect.length - 1;
-    const rectWidth = killedRect[rectHeight]!.length; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    const rectWidth = killedRect[rectHeight]!.length;
 
     const active = textEditor.selection.active; // Multi-cursor is not supported
     await textEditor.edit((edit) => {
@@ -296,7 +296,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
       // multiple cursor not supported
       return;
     }
-    const selection = selections[0]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    const selection = selections[0]!;
 
     const insertChar = Math.min(selection.start.character, selection.end.character);
     const finalCursorLine = selection.active.line;
@@ -319,7 +319,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
         // Both `currentRect` and (`lineStart`, `lineEnd`) are calculated
         // based on the same information from the `selection` and the `textEditor`'s range,
         // so the `noUncheckedIndexedAccess` rule can be skipped here.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         const rgn = currentRect[i - lineStart]!;
         if (rgn.end.character < insertChar) {
           const fill = insertChar - rgn.end.character;

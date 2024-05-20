@@ -156,7 +156,7 @@ export class InsertRegister extends EmacsCommand {
         if (!selection.isEmpty) {
           editBuilder.delete(selection);
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         editBuilder.insert(selection.start, textToInsert);
       });
     });

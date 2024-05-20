@@ -45,7 +45,7 @@ class AppendedRegionTexts {
   }
 
   public getLastRange(): Range {
-    return this.regionTexts[this.regionTexts.length - 1]!.range; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    return this.regionTexts[this.regionTexts.length - 1]!.range;
   }
 
   public hasRectModeText(): boolean {
@@ -112,7 +112,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
     this.regionTextsList.map(
       // `additional.length === this.regionTextsList.length` has already been checked,
       // so noUncheckedIndexedAccess rule can be skipped here.
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       (appendedRegionTexts, i) => appendedRegionTexts.append(additional[i]!, appendDirection),
     );
   }

@@ -104,12 +104,11 @@ class NodeLogger implements ILogger {
   public configChanged(configuration: IConfiguration) {
     // `this.logger.transports` has 2 items as set at the constructor,
     // so the `noUncheckedIndexedAccess` rule can be skipped here.
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
+
     this.logger.transports[0]!.level = configuration.debug.loggingLevelForConsole;
     this.logger.transports[0]!.silent = configuration.debug.silent;
     this.logger.transports[1]!.level = configuration.debug.loggingLevelForAlert;
     (this.logger.transports[1] as VsCodeMessage).configuration = configuration;
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
   }
 }
 
