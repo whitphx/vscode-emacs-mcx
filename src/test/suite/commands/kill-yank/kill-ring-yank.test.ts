@@ -522,7 +522,7 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
-    activeTextEditor = await setupWorkspace("", { language: "typescript" });
+    activeTextEditor = await setupWorkspace("", { language: "javascript" });
     activeTextEditor.options.tabSize = 4;
 
     const killRing = new KillRing(60);
