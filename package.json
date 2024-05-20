@@ -5716,7 +5716,7 @@
     "webpack:prod": "webpack --mode production --devtool hidden-source-map",
     "webpack": "yarn webpack:dev",
     "test-compile": "tspc -p ./",
-    "gen-keys": "ts-node --esm ./keybinding-generator/cli.mts",
+    "gen-keys": "yarn node --into ./keybinding-generator --loader ts-node/esm cli.mts",
     "test-gen-keys": "TS_NODE_PROJECT='keybinding-generator/tsconfig.json' NODE_OPTIONS='--loader ts-node/esm' yarn mocha --require ts-node/register './keybinding-generator/*.test.*'",
     "fix:prettier": "prettier --write .",
     "fix:eslint": "eslint src --fix",

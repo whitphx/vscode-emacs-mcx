@@ -1,6 +1,7 @@
 /* eslint-env node */
 
-import * as fs from "fs";
+import fs from "node:fs";
+import url from "node:url";
 import stripJsonComments from "strip-json-comments";
 import {
   KeyBinding,
@@ -11,8 +12,8 @@ import {
   generateKeybindingsForRegisterCommands,
 } from "./generate-keybindings.mjs";
 
-const srcFilePath = "./keybindings.json";
-const packageDotJsonPath = "./package.json";
+const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
+const packageDotJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
 
 console.info(`Reading ${srcFilePath} ...`);
 const srcContent = fs.readFileSync(srcFilePath, "utf8");
