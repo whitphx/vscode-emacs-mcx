@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.61.1] - 2024-05-20
+
+### Fix
+
+- Modify `M-s o` and `C-i` keybindings, #1916.
+- Internal package updates.
+
 ## [0.61.0] - 2024-05-17
 
 ### Add
