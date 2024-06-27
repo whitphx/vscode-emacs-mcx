@@ -334,12 +334,12 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@playwright/browser-chromium@^1.43.1":
-  version "1.43.1"
-  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.43.1.tgz#4e85834b8e705e32b4ecf7ebac20878b4c504509"
-  integrity sha512-CBuHhRIF/VGyUnPvK7/4IUbm0AAOZZI5huHlr+qNr5cFQpQ6TXBqOwSMef/xUz9HcjxWOxDPION7br1kOlyV/A==
+"@playwright/browser-chromium@^1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.45.0.tgz#a3fc02e1d8e9ec3518b8c0fc6453ea74785bf3d1"
+  integrity sha512-yZxAsaxvn60VEPaPghYuL7xC78f994QdkJ3PtPZKozKctsIkT60GiDjjemwJKvWVgo/Z4v/hjim4okLKMIRkEw==
   dependencies:
-    playwright-core "1.43.1"
+    playwright-core "1.45.0"
 
 "@sinonjs/commons@^2.0.0":
   version "2.0.0"
@@ -571,14 +571,14 @@
     ora "^7.0.1"
     semver "^7.6.2"
 
-"@vscode/test-web@^0.0.54":
-  version "0.0.54"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.54.tgz#2bbcfcee1b620969eec43b5dd04e6db40190bbcb"
-  integrity sha512-LDdFFEzmnKQ96QmuRxK9kRhddQmwqyI/VOb6YhyPqOsbKBIM7uzTqpckoueOu9EEnvPSNQNoxqb426AakI8e5w==
+"@vscode/test-web@^0.0.55":
+  version "0.0.55"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.55.tgz#41562488487dc65b4f21728a76a5b766d7631fef"
+  integrity sha512-3e+RPXk7x4eoL4q/1PkLiVJ95MyXCKbbbWCtCDOJuFkcB3BN3Fjnk04J4l8J86R/uQUFGi71Ns66wWwanT1n+Q==
   dependencies:
     "@koa/cors" "^5.0.0"
     "@koa/router" "^12.0.1"
-    "@playwright/browser-chromium" "^1.43.1"
+    "@playwright/browser-chromium" "^1.45.0"
     gunzip-maybe "^1.4.2"
     http-proxy-agent "^7.0.2"
     https-proxy-agent "^7.0.4"
@@ -587,8 +587,8 @@
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
     minimist "^1.2.8"
-    playwright "^1.43.1"
-    tar-fs "^3.0.5"
+    playwright "^1.45.0"
+    tar-fs "^3.0.6"
     vscode-uri "^3.0.8"
 
 "@vscode/vsce-sign-alpine-arm64@2.0.2":
@@ -3609,17 +3609,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.43.1:
-  version "1.43.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.43.1.tgz#0eafef9994c69c02a1a3825a4343e56c99c03b02"
-  integrity sha512-EI36Mto2Vrx6VF7rm708qSnesVQKbxEWvPrfA1IPY6HgczBplDx7ENtx+K2n4kJ41sLLkuGfmb0ZLSSXlDhqPg==
+playwright-core@1.45.0:
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.45.0.tgz#5741a670b7c9060ce06852c0051d84736fb94edc"
+  integrity sha512-lZmHlFQ0VYSpAs43dRq1/nJ9G/6SiTI7VPqidld9TDefL9tX87bTKExWZZUF5PeRyqtXqd8fQi2qmfIedkwsNQ==
 
-playwright@^1.43.1:
-  version "1.43.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.43.1.tgz#8ad08984ac66c9ef3d0db035be54dd7ec9f1c7d9"
-  integrity sha512-V7SoH0ai2kNt1Md9E3Gwas5B9m8KR2GVvwZnAI6Pg0m3sh7UvgiYhRrhsziCmqMJNouPckiOhk8T+9bSAK0VIA==
+playwright@^1.45.0:
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.45.0.tgz#400c709c64438690f13705cb9c88ef93089c5c27"
+  integrity sha512-4z3ac3plDfYzGB6r0Q3LF8POPR20Z8D0aXcxbJvmfMgSSq1hkcgvFRXJk9rUq5H/MJ0Ktal869hhOdI/zUTeLA==
   dependencies:
-    playwright-core "1.43.1"
+    playwright-core "1.45.0"
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -4263,10 +4263,10 @@ tar-fs@^2.0.0:
     pump "^3.0.0"
     tar-stream "^2.1.4"
 
-tar-fs@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.5.tgz#f954d77767e4e6edf973384e1eb95f8f81d64ed9"
-  integrity sha512-JOgGAmZyMgbqpLwct7ZV8VzkEB6pxXFBVErLtb+XCOqzc6w1xiWKI9GVd6bwk68EX7eJ4DWmfXVmq8K2ziZTGg==
+tar-fs@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.6.tgz#eaccd3a67d5672f09ca8e8f9c3d2b89fa173f217"
+  integrity sha512-iokBDQQkUyeXhgPYaZxmczGPhnhXZ0CmrqI+MOb/WFGS9DW5wnfrLgtjUJBvz50vQ3qfRwJ62QVoCFu8mPVu5w==
   dependencies:
     pump "^3.0.0"
     tar-stream "^3.1.5"
