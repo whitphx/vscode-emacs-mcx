@@ -5762,7 +5762,7 @@
     "typescript": "^5.5.2",
     "typescript-eslint": "^7.14.1",
     "typescript-transform-paths": "^3.4.7",
-    "webpack": "^5.92.0",
+    "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
