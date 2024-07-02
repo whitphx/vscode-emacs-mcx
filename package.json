@@ -5760,7 +5760,7 @@
     "ts-patch": "^3.2.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^7.14.1",
+    "typescript-eslint": "^7.15.0",
     "typescript-transform-paths": "^3.4.7",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4"
