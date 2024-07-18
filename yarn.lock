@@ -652,10 +652,10 @@
     "@vscode/vsce-sign-win32-arm64" "2.0.2"
     "@vscode/vsce-sign-win32-x64" "2.0.2"
 
-"@vscode/vsce@^2.30.0":
-  version "2.30.0"
-  resolved "https://registry.yarnpkg.com/@vscode/vsce/-/vsce-2.30.0.tgz#7a0c16b20ef529fa291fe9d3c7fe51a2a613f773"
-  integrity sha512-MBYpXdCY1SCdc2u/y11kmJuSODKFyZRpeRTQq5p4rSg05QSjSy5pz6h/BGLNdSahgXfKRBATEkjAcJFdJuDz8Q==
+"@vscode/vsce@^2.31.0":
+  version "2.31.0"
+  resolved "https://registry.yarnpkg.com/@vscode/vsce/-/vsce-2.31.0.tgz#1d357a48c5fcc3b1597fb36cca97c90bb2b84cda"
+  integrity sha512-iZvx9Vn3E81BCwZUAFctQyVxJE09LJ/nLHLGVZmKB5Pjtn62EgjWfJupehmWGmRYMS6ViK+7q7ysNrjxNFhh1g==
   dependencies:
     "@azure/identity" "^4.1.0"
     "@vscode/vsce-sign" "^2.0.0"
