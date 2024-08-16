@@ -4524,12 +4524,12 @@ typescript-eslint@^7.16.1:
     "@typescript-eslint/parser" "7.16.1"
     "@typescript-eslint/utils" "7.16.1"
 
-typescript-transform-paths@^3.4.7:
-  version "3.4.7"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.4.7.tgz#1deaf976fb1b7a70fb26b541356017057c0c17a5"
-  integrity sha512-1Us1kdkdfKd2unbkBAOV2HHRmbRBYpSuk9nJ7cLD2hP4QmfToiM/VpxNlhJc1eezVwVqSKSBjNSzZsK/fWR/9A==
+typescript-transform-paths@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.4.11.tgz#42543784001ada8d382d6b4dd7520b70818df013"
+  integrity sha512-yUEHc991mbXjrjcOSBat1yiwzlSOqRyzjzj/5txQ7jy21Up0/p9H7XQ1c2lYLxf+Aum9vMpW/tG86ajkNupsZA==
   dependencies:
-    minimatch "^3.0.4"
+    minimatch "^3.1.2"
 
 typescript@^5.5.3:
   version "5.5.3"
