@@ -3182,7 +3182,7 @@ minimatch@5.0.1:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimatch@^10.0.0:
+minimatch@^10.0.0, minimatch@^10.0.1:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-10.0.1.tgz#ce0521856b453c86e25f2c4c0d03e6ff7ddc440b"
   integrity sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==
@@ -4524,12 +4524,12 @@ typescript-eslint@^7.16.1:
     "@typescript-eslint/parser" "7.16.1"
     "@typescript-eslint/utils" "7.16.1"
 
-typescript-transform-paths@^3.4.7:
-  version "3.4.7"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.4.7.tgz#1deaf976fb1b7a70fb26b541356017057c0c17a5"
-  integrity sha512-1Us1kdkdfKd2unbkBAOV2HHRmbRBYpSuk9nJ7cLD2hP4QmfToiM/VpxNlhJc1eezVwVqSKSBjNSzZsK/fWR/9A==
+typescript-transform-paths@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-3.5.0.tgz#6ae89ee2be7c7aa5a448b4c75c4e2c4d00ba67ce"
+  integrity sha512-Qsm5elv11DWu1q+yaugV37ygHhSLhPExkkQu3+blIYfEZAMtY6jSdXANoaR7p+uDoAAHrWXSzwFYK9AmTApLvw==
   dependencies:
-    minimatch "^3.0.4"
+    minimatch "^10.0.1"
 
 typescript@^5.5.3:
   version "5.5.3"
