@@ -919,6 +919,11 @@
       "when": "!terminalFocus"
     },
     {
+      "key": "ctrl+x shift+=",
+      "command": "workbench.action.evenEditorWidths",
+      "when": "!terminalFocus"
+    },
+    {
       "key": "ctrl+meta+f",
       "command": "emacs-mcx.paredit.forwardSexp",
       "when": "editorTextFocus"
