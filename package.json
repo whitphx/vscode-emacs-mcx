@@ -5542,6 +5542,11 @@
         "when": "!terminalFocus"
       },
       {
+        "key": "ctrl+x shift+=",
+        "command": "workbench.action.evenEditorWidths",
+        "when": "!terminalFocus"
+      },
+      {
         "key": "ctrl+alt+f",
         "command": "emacs-mcx.paredit.forwardSexp",
         "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
