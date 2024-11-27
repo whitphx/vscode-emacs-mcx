@@ -543,6 +543,7 @@ suite("yank pop with auto-indent", () => {
     const initialText = "{\n\n}";
     await clearTextEditor(activeTextEditor, initialText);
     setEmptyCursors(activeTextEditor, [1, 0]);
+    await delay(100);
 
     // Yank pastes "bar" with auto-indentation
     await emulator.runCommand("yank");
