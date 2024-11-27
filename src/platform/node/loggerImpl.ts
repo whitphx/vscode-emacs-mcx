@@ -2,7 +2,7 @@
  * This file is derived from https://github.com/VSCodeVim/Vim/tree/104cf4779a221e951a90ef5daa1e5aa7a161b0f7
  */
 
-import TransportStream = require("winston-transport");
+import TransportStream from "winston-transport";
 import * as vscode from "vscode";
 import * as winston from "winston";
 import { ConsoleForElectron } from "winston-console-for-electron";
