@@ -4,6 +4,16 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.62.0] - 2024-11-27
+
+### Add
+
+- `balance-windows`, #2080, by @ramnes.
+
+### Fix
+
+- Internal package updates.
+
 ## [0.61.2] - 2024-06-13
 
 ### Fix
