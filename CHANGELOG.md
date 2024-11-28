@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.62.1] - 2024-11-28
+
+### Fix
+
+- Exclude unnecessary files from the VSIX package, #2106.
+- Internal package updates.
+
 ## [0.62.0] - 2024-11-27
 
 ### Add
