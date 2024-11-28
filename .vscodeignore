@@ -32,3 +32,4 @@ lint-staged.config.js
 .eslintcache
 .gitmodules
 .nvmrc
+eslint.config.mjs
