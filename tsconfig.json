@@ -11,8 +11,8 @@
       "vs/*": ["src/vs/*"],
       "platform/*": ["src/platform/node/*"]
     },
-    "plugins": [{ "transform": "typescript-transform-paths" }],
-    "strict": true /* enable all strict type-checking options */,
+    "strict": true,
+    "strictBuiltinIteratorReturn": false, // To work around an error from `lru-cache`: https://github.com/isaacs/node-lru-cache/issues/348#issuecomment-2296786407
     "esModuleInterop": true,
     /* Additional Checks */
     "noImplicitAny": true,
