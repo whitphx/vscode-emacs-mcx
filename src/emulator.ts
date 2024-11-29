@@ -174,6 +174,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.window.onDidChangeTextEditorVisibleRanges(
       () => {
         if (Configuration.instance.strictEmacsMove) {
+          // Keep the primary cursor in the visible range when scrolling
           MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
         }
       },
