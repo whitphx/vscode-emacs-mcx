@@ -285,7 +285,6 @@ suite("scroll-up/down-command", () => {
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollUpCommand");
-      await delay(10);
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
@@ -303,6 +302,7 @@ suite("scroll-up/down-command", () => {
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollUpCommand");
+      await delay(10);
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
