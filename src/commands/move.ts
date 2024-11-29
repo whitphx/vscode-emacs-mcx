@@ -341,20 +341,18 @@ export class ScrollUpCommand extends EmacsCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "down",
-          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
-          value: prefixArgument,
-        });
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "down",
+        by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
+        value: prefixArgument,
+      });
     }
 
     if (Configuration.instance.strictEmacsMove) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "down",
-          by: "page",
-        });
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "down",
+        by: "page",
+      });
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
     }
@@ -366,20 +364,18 @@ export class ScrollDownCommand extends EmacsCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "up",
-          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
-          value: prefixArgument,
-        });
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "up",
+        by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
+        value: prefixArgument,
+      });
     }
 
     if (Configuration.instance.strictEmacsMove) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "up",
-          by: "page",
-        });
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "up",
+        by: "page",
+      });
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
     }
