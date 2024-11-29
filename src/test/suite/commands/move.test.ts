@@ -3,7 +3,14 @@ import assert from "assert";
 import sinon from "sinon";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
+import {
+  assertCursorsEqual,
+  assertSelectionsEqual,
+  setEmptyCursors,
+  setupWorkspace,
+  cleanUpWorkspace,
+  delay,
+} from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("moveBeginning/EndOfLine", () => {
@@ -278,6 +285,7 @@ suite("scroll-up/down-command", () => {
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollUpCommand");
+      await delay(10);
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
