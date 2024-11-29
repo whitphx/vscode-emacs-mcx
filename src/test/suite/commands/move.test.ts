@@ -234,6 +234,7 @@ suite("scroll-up/down-command", () => {
     emulator = new EmacsEmulator(activeTextEditor);
 
     await vscode.commands.executeCommand("editorScroll", { to: "down", by: "page" });
+    await delay(10);
 
     const _visibleRange = activeTextEditor.visibleRanges[0];
     if (_visibleRange == null) {
