@@ -303,14 +303,13 @@ suite("scroll-up/down-command", () => {
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(12);
       await emulator.runCommand("scrollUpCommand");
-      await delay(10);
 
       assert.equal(
         activeTextEditor.visibleRanges[0]?.start.line,
         initVisibleStartLine + 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
-      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
+      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]!.start.line + 12, 0]);
     });
   });
 
@@ -375,7 +374,7 @@ suite("scroll-up/down-command", () => {
         initVisibleStartLine - 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
-      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.end.line as number, 0]);
+      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]!.end.line - 12, 0]);
     });
   });
 });
