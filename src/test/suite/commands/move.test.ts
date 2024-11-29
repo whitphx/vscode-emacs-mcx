@@ -301,6 +301,31 @@ suite("scroll-up/down-command", () => {
       );
       assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
     });
+
+    test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range, keeping the selection", async () => {
+      setEmptyCursors(activeTextEditor, [visibleRange.start.line, 0]); // This line will be outside the visible range after scrolling.
+
+      const initVisibleStartLine = visibleRange.start.line;
+      const initCursorPosition = activeTextEditor.selection.active;
+
+      emulator.setMarkCommand();
+
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(12);
+      await emulator.runCommand("scrollUpCommand");
+
+      assert.equal(
+        activeTextEditor.visibleRanges[0]?.start.line,
+        initVisibleStartLine + 12,
+        "Expected the visibleRange has been scrolled 2 lines",
+      );
+      assertSelectionsEqual(activeTextEditor, [
+        initCursorPosition.line,
+        initCursorPosition.character,
+        activeTextEditor.visibleRanges[0]?.start.line as number,
+        0,
+      ]);
+    });
   });
 
   suite("scroll-down-command", () => {
@@ -365,6 +390,31 @@ suite("scroll-up/down-command", () => {
         "Expected the visibleRange has been scrolled 2 lines",
       );
       assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.end.line as number, 0]);
+    });
+
+    test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range, keeping the selection", async () => {
+      setEmptyCursors(activeTextEditor, [visibleRange.end.line, 0]); // This line will be outside the visible range after scrolling.
+
+      const initVisibleStartLine = visibleRange.start.line;
+      const initCursorPosition = activeTextEditor.selection.active;
+
+      emulator.setMarkCommand();
+
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(12);
+      await emulator.runCommand("scrollDownCommand");
+
+      assert.equal(
+        activeTextEditor.visibleRanges[0]?.start.line,
+        initVisibleStartLine - 12,
+        "Expected the visibleRange has been scrolled 2 lines",
+      );
+      assertSelectionsEqual(activeTextEditor, [
+        initCursorPosition.line,
+        initCursorPosition.character,
+        activeTextEditor.visibleRanges[0]?.end.line as number,
+        0,
+      ]);
     });
   });
 });

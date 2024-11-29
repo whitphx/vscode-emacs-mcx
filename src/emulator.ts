@@ -171,6 +171,16 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.EndOfBuffer(this));
     this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this));
     this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this));
+    vscode.window.onDidChangeTextEditorVisibleRanges(
+      () => {
+        if (Configuration.instance.strictEmacsMove) {
+          // Keep the primary cursor in the visible range when scrolling
+          MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
+        }
+      },
+      this,
+      this.disposables,
+    );
     this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));

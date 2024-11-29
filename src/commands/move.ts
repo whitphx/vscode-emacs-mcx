@@ -299,7 +299,7 @@ export class EndOfBuffer extends EmacsCommand {
   }
 }
 
-function movePrimaryCursorIntoVisibleRange(
+export function movePrimaryCursorIntoVisibleRange(
   textEditor: TextEditor,
   isInMarkMode: boolean,
   emacsController: IEmacsController,
@@ -351,12 +351,10 @@ export class ScrollUpCommand extends EmacsCommand {
     }
 
     if (Configuration.instance.strictEmacsMove) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "down",
-          by: "page",
-        })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "down",
+        by: "page",
+      });
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
     }
@@ -378,12 +376,10 @@ export class ScrollDownCommand extends EmacsCommand {
     }
 
     if (Configuration.instance.strictEmacsMove) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "up",
-          by: "page",
-        })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "up",
+        by: "page",
+      });
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
     }
