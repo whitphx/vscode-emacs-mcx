@@ -341,13 +341,12 @@ export class ScrollUpCommand extends EmacsCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "down",
-          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
-          value: prefixArgument,
-        })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "down",
+        by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
+        value: prefixArgument,
+        revealCursor: true,
+      });
     }
 
     if (Configuration.instance.strictEmacsMove) {
@@ -366,13 +365,12 @@ export class ScrollDownCommand extends EmacsCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
-      return vscode.commands
-        .executeCommand<void>("editorScroll", {
-          to: "up",
-          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
-          value: prefixArgument,
-        })
-        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
+      return vscode.commands.executeCommand<void>("editorScroll", {
+        to: "up",
+        by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
+        value: prefixArgument,
+        revealCursor: true,
+      });
     }
 
     if (Configuration.instance.strictEmacsMove) {
