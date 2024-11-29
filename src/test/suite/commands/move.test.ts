@@ -3,14 +3,7 @@ import assert from "assert";
 import sinon from "sinon";
 import { Range, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import {
-  assertCursorsEqual,
-  assertSelectionsEqual,
-  setEmptyCursors,
-  setupWorkspace,
-  cleanUpWorkspace,
-  delay,
-} from "../utils";
+import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("moveBeginning/EndOfLine", () => {
@@ -227,14 +220,11 @@ suite("scroll-up/down-command", () => {
   let pageLines: number;
 
   setup(async () => {
-    Configuration.instance.strictEmacsMove = false;
-
     const initialText = "a\n".repeat(400);
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
 
     await vscode.commands.executeCommand("editorScroll", { to: "down", by: "page" });
-    await delay(10);
 
     const _visibleRange = activeTextEditor.visibleRanges[0];
     if (_visibleRange == null) {
@@ -309,7 +299,7 @@ suite("scroll-up/down-command", () => {
         initVisibleStartLine + 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
-      assertCursorsEqual(activeTextEditor, [visibleRange.start.line, 0]);
+      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.start.line as number, 0]);
     });
   });
 
@@ -374,7 +364,7 @@ suite("scroll-up/down-command", () => {
         initVisibleStartLine - 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
-      assertCursorsEqual(activeTextEditor, [visibleRange.end.line, 0]);
+      assertCursorsEqual(activeTextEditor, [activeTextEditor.visibleRanges[0]?.end.line as number, 0]);
     });
   });
 });
