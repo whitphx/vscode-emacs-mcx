@@ -314,7 +314,22 @@ export function movePrimaryCursorIntoVisibleRange(
   let newPrimaryActive: vscode.Position;
   if (primaryActive.isBefore(visibleRange.start)) {
     newPrimaryActive = visibleRange.start.with(undefined, 0);
-  } else if (primaryActive.isAfter(visibleRange.end)) {
+  } else if (
+    // This method is called in the `onDidChangeTextEditorVisibleRanges` callback,
+    // and it is called when the user edits the document maybe because the edit moves the cursor.
+    // When executing the `deleteLeft` command for example, the document is shortened by 1 character
+    // and the cursor is moved to 1 character left, which is correct. However, in this case,
+    // the `onDidChangeTextEditorVisibleRanges` is called before `textEditor.selection` is updated,
+    // so we can't compare `visibleRange` with `editor.selection.active` directly in this method,
+    // which causes the issue like https://github.com/whitphx/vscode-emacs-mcx/issues/2113.
+    // * To solve the issue https://github.com/whitphx/vscode-emacs-mcx/issues/2113, we compare the lines instead of the positions.
+    // * Also, we compare the primaryActive.line with visibleRange.end.line + 1
+    //   because, for example, when the cursor is at [lastLine, 0] and the `deleteLeft` command is executed,
+    //   `visibleRange.end.line` becomes `lastLine - 1` but the cursor position is still [lastLine, 0] when this method is called form the callback due to the problem stated above,
+    //   in which case the cursor is considered out of the visible range, which is incorrect.
+    primaryActive.line >
+    visibleRange.end.line + 1
+  ) {
     newPrimaryActive = visibleRange.end.with(undefined, 0);
   } else {
     return;
