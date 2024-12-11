@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.62.4] - 2024-12-11
+
+### Fix
+
+- Cursor position adjustment in the `strictEmacsMove` mode, #2123.
+
 ## [0.62.3] - 2024-11-29
 
 ### Fix
