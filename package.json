@@ -24,6 +24,9 @@
     "selection",
     "mark mode"
   ],
+  "sponsor": {
+    "url": "https://github.com/sponsors/whitphx"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
