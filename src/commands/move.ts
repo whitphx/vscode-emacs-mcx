@@ -304,16 +304,20 @@ export function movePrimaryCursorIntoVisibleRange(
   isInMarkMode: boolean,
   emacsController: IEmacsController,
 ) {
-  const visibleRange = textEditor.visibleRanges[0];
-  if (visibleRange == null) {
+  const visibleRanges = textEditor.visibleRanges;
+  // `visibleRanges` can have multiple ranges when there is a folded region.
+  // TODO: Now we don't have a good way to test such a case.
+  const firstVisibleRange = visibleRanges[0];
+  const lastVisibleRange = visibleRanges[visibleRanges.length - 1];
+  if (firstVisibleRange == null || lastVisibleRange == null) {
     return;
   }
 
   const primaryAnchor = textEditor.selection.anchor;
   const primaryActive = textEditor.selection.active;
   let newPrimaryActive: vscode.Position;
-  if (primaryActive.isBefore(visibleRange.start)) {
-    newPrimaryActive = visibleRange.start.with(undefined, 0);
+  if (primaryActive.isBefore(firstVisibleRange.start)) {
+    newPrimaryActive = firstVisibleRange.start.with(undefined, 0);
   } else if (
     // This method is called in the `onDidChangeTextEditorVisibleRanges` callback,
     // and it is called when the user edits the document maybe because the edit moves the cursor.
@@ -328,9 +332,9 @@ export function movePrimaryCursorIntoVisibleRange(
     //   `visibleRange.end.line` becomes `lastLine - 1` but the cursor position is still [lastLine, 0] when this method is called form the callback due to the problem stated above,
     //   in which case the cursor is considered out of the visible range, which is incorrect.
     primaryActive.line >
-    visibleRange.end.line + 1
+    lastVisibleRange.end.line + 1
   ) {
-    newPrimaryActive = visibleRange.end.with(undefined, 0);
+    newPrimaryActive = lastVisibleRange.end.with(undefined, 0);
   } else {
     return;
   }
