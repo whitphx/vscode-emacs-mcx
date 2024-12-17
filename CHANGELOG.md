@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.62.5] - 2024-12-17
+
+### Fix
+
+- Cursor position adjustment in the `strictEmacsMove` mode when there are folded regions, #2131.
+
 ## [0.62.4] - 2024-12-11
 
 ### Fix
