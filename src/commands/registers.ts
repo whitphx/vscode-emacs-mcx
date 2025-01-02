@@ -80,8 +80,8 @@ export class CopyToRegister extends EmacsCommand {
     prefixArgument: number | undefined,
     args?: unknown[],
   ): void | Thenable<void> {
-    const arg = args?.[0];
-    if (typeof arg !== "string") {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
       return;
     }
 
@@ -99,18 +99,13 @@ export class CopyToRegister extends EmacsCommand {
     // selections is now a list of non empty selections, iterate through them and
     // build a single variable combinedtext
     let i = 0;
-    let combinedtext = "";
+    let combinedText = "";
     while (i < selections.length) {
-      combinedtext = combinedtext + textEditor.document.getText(selections[i]);
+      combinedText = combinedText + textEditor.document.getText(selections[i]);
       i++;
     }
 
-    const register_string = arg;
-    if (register_string == null) {
-      return;
-    }
-
-    this.textRegister.set(register_string, combinedtext);
+    this.textRegister.set(registerKey, combinedText);
     // After copying the selection, get out of mark mode and de-select the selections
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
