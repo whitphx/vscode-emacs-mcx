@@ -4,6 +4,8 @@ import { MessageManager } from "../message";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 
+export type TextRegisters = Map<string, string>;
+
 // Will bind this this to C-x r s
 export class StartRegisterCopyCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "startRegisterCopyCommand";
@@ -69,7 +71,7 @@ export class CopyToRegister extends EmacsCommand {
 
   constructor(
     emacsController: IEmacsController,
-    private readonly textRegister: Map<string, string>,
+    private readonly textRegisters: TextRegisters,
   ) {
     super(emacsController);
   }
@@ -105,7 +107,7 @@ export class CopyToRegister extends EmacsCommand {
       i++;
     }
 
-    this.textRegister.set(registerKey, combinedText);
+    this.textRegisters.set(registerKey, combinedText);
     // After copying the selection, get out of mark mode and de-select the selections
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
@@ -117,7 +119,7 @@ export class InsertRegister extends EmacsCommand {
 
   constructor(
     emacsController: IEmacsController,
-    private readonly textRegister: Map<string, string>,
+    private readonly textRegisters: TextRegisters,
   ) {
     super(emacsController);
   }
@@ -133,11 +135,11 @@ export class InsertRegister extends EmacsCommand {
       return;
     }
 
-    if (!this.textRegister.has(arg)) {
+    if (!this.textRegisters.has(arg)) {
       return;
     }
 
-    const textToInsert = this.textRegister.get(arg);
+    const textToInsert = this.textRegisters.get(arg);
     if (textToInsert == undefined) {
       return;
     }

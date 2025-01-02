@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
+import type { TextRegisters } from "./commands/registers";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
@@ -17,9 +18,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
-  const textRegister = new Map<string, string>();
+  const textRegisters: TextRegisters = new Map();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegister);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegisters);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
