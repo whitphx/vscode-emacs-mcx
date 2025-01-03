@@ -16,7 +16,7 @@ export class RegisterCommandState {
   public startAcceptingRegisterKey(commandType: RegisterCommandType, message: string): void {
     this._acceptingRegisterCommand = commandType;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterKey", true);
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", true);
 
     MessageManager.showMessage(message);
   }
@@ -24,7 +24,7 @@ export class RegisterCommandState {
   public stopAcceptingRegisterKey(): void {
     if (this._acceptingRegisterCommand) {
       this._acceptingRegisterCommand = null;
-      vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterKey", false);
+      vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", false);
     }
   }
 }
