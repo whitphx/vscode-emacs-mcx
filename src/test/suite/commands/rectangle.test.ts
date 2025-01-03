@@ -149,6 +149,7 @@ KLMNOPQRST`,
     await emulator.runCommand("copyRectangleAsKill");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [2, 7]);
+    assert.equal(emulator.isInMarkMode, false);
 
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("yankRectangle");
