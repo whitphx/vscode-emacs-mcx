@@ -371,12 +371,8 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("startRegisterInsertCommand");
   });
 
-  registerEmulatorCommand("emacs-mcx.copyToRegister", (emulator, ...args) => {
-    return emulator.runCommand("copyToRegister", args);
-  });
-
-  registerEmulatorCommand("emacs-mcx.insertRegister", (emulator, ...args) => {
-    return emulator.runCommand("insertRegister", args);
+  registerEmulatorCommand("emacs-mcx.registerCommand", (emulator, ...args) => {
+    return emulator.runCommand("registerCommand", args);
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {

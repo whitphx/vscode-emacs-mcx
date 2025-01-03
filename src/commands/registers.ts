@@ -6,72 +6,77 @@ import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection"
 
 export type TextRegisters = Map<string, string>;
 
-// Will bind this this to C-x r s
+type RegisterCommandType = "copy" | "insert";
+export class RegisterCommandState {
+  private _acceptingRegisterCommand: RegisterCommandType | null = null;
+  public get acceptingRegisterCommand(): RegisterCommandType | null {
+    return this._acceptingRegisterCommand;
+  }
+
+  public startAcceptingRegisterKey(commandType: RegisterCommandType, message: string): void {
+    this._acceptingRegisterCommand = commandType;
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterKey", true);
+
+    MessageManager.showMessage(message);
+  }
+
+  public stopAcceptingRegisterKey(): void {
+    if (this._acceptingRegisterCommand) {
+      this._acceptingRegisterCommand = null;
+      vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterKey", false);
+    }
+  }
+}
+
+// Will be bound to C-x r s
 export class StartRegisterCopyCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "startRegisterCopyCommand";
 
-  private acceptingRegisterCopyCommand = false;
-
-  private startRegisterCopyCommand(): void {
-    this.acceptingRegisterCopyCommand = true;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", true);
-
-    MessageManager.showMessage("Copy to register: ");
-  }
-
-  private stopRegisterCopyCommand(): void {
-    this.acceptingRegisterCopyCommand = false;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", false);
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandSequenceState: RegisterCommandState,
+  ) {
+    super(emacsController);
   }
 
   public run(): void {
-    this.startRegisterCopyCommand();
+    this.registerCommandSequenceState.startAcceptingRegisterKey("copy", "Copy to register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    if (this.acceptingRegisterCopyCommand) {
-      this.stopRegisterCopyCommand();
-    }
+    this.registerCommandSequenceState.stopAcceptingRegisterKey();
   }
 }
 
-// Will bind this this to C-x r i
+// Will be bound to C-x r i
 export class StartRegisterInsertCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "startRegisterInsertCommand";
 
-  private acceptingRegisterInsertCommand = false;
-
-  public startRegisterInsertCommand(): void {
-    this.acceptingRegisterInsertCommand = true;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterInsertMode", true);
-
-    MessageManager.showMessage("Insert from register: ");
-  }
-
-  private stopRegisterInsertCommand(): void {
-    this.acceptingRegisterInsertCommand = false;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterInsertMode", false);
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandSequenceState: RegisterCommandState,
+  ) {
+    super(emacsController);
   }
 
   public run(): void {
-    this.startRegisterInsertCommand();
+    this.registerCommandSequenceState.startAcceptingRegisterKey("insert", "Insert from register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    if (this.acceptingRegisterInsertCommand) {
-      this.stopRegisterInsertCommand();
-    }
+    this.registerCommandSequenceState.stopAcceptingRegisterKey();
   }
 }
 
-export class CopyToRegister extends EmacsCommand {
-  public readonly id = "copyToRegister";
+// Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
+export class RegisterCommand extends EmacsCommand {
+  public readonly id = "registerCommand";
 
   constructor(
     emacsController: IEmacsController,
     private readonly textRegisters: TextRegisters,
+    private readonly registerCommandSequenceState: RegisterCommandState,
   ) {
     super(emacsController);
   }
@@ -87,6 +92,22 @@ export class CopyToRegister extends EmacsCommand {
       return;
     }
 
+    if (!this.registerCommandSequenceState.acceptingRegisterCommand) {
+      return;
+    }
+
+    const commandType = this.registerCommandSequenceState.acceptingRegisterCommand;
+    this.registerCommandSequenceState.stopAcceptingRegisterKey();
+
+    if (commandType === "copy") {
+      return this.runCopy(textEditor, registerKey);
+    } else if (commandType === "insert") {
+      return this.runInsert(textEditor, registerKey);
+    }
+  }
+
+  // copy-to-register, C-x r s <r>
+  public runCopy(textEditor: vscode.TextEditor, registerKey: string): void | Thenable<void> {
     const selectionsAfterRectDisabled =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {
@@ -112,32 +133,11 @@ export class CopyToRegister extends EmacsCommand {
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
   }
-}
 
-export class InsertRegister extends EmacsCommand {
-  public readonly id = "insertRegister";
-
-  constructor(
-    emacsController: IEmacsController,
-    private readonly textRegisters: TextRegisters,
-  ) {
-    super(emacsController);
-  }
-
-  public async run(
-    textEditor: vscode.TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-    args?: unknown[],
-  ): Promise<void> {
-    const registerKey = args?.[0];
-    if (typeof registerKey !== "string") {
-      return;
-    }
-
+  // insert-register, C-x r i <r>
+  public async runInsert(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
     if (!this.textRegisters.has(registerKey)) {
       MessageManager.showMessage("Register does not contain text");
-      // TODO: Exit the inRegisterInsertMode.
       return;
     }
 

@@ -3855,890 +3855,446 @@
       },
       {
         "key": "'",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "'"
-      },
-      {
-        "key": "'",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "'"
       },
       {
         "key": ",",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": ","
-      },
-      {
-        "key": ",",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": ","
       },
       {
         "key": "-",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "-"
-      },
-      {
-        "key": "-",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "-"
       },
       {
         "key": ".",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "."
-      },
-      {
-        "key": ".",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "."
       },
       {
         "key": "/",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "/"
-      },
-      {
-        "key": "/",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "/"
       },
       {
         "key": "0",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "0"
-      },
-      {
-        "key": "0",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "0"
       },
       {
         "key": "1",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "1"
-      },
-      {
-        "key": "1",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "1"
       },
       {
         "key": "2",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "2"
-      },
-      {
-        "key": "2",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "2"
       },
       {
         "key": "3",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "3"
-      },
-      {
-        "key": "3",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "3"
       },
       {
         "key": "4",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "4"
-      },
-      {
-        "key": "4",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "4"
       },
       {
         "key": "5",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "5"
-      },
-      {
-        "key": "5",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "5"
       },
       {
         "key": "6",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "6"
-      },
-      {
-        "key": "6",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "6"
       },
       {
         "key": "7",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "7"
-      },
-      {
-        "key": "7",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "7"
       },
       {
         "key": "8",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "8"
-      },
-      {
-        "key": "8",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "8"
       },
       {
         "key": "9",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "9"
-      },
-      {
-        "key": "9",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "9"
       },
       {
         "key": ";",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": ";"
-      },
-      {
-        "key": ";",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": ";"
       },
       {
         "key": "=",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "="
-      },
-      {
-        "key": "=",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "="
       },
       {
         "key": "A",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "A"
-      },
-      {
-        "key": "A",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "A"
       },
       {
         "key": "B",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "B"
-      },
-      {
-        "key": "B",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "B"
       },
       {
         "key": "C",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "C"
-      },
-      {
-        "key": "C",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "C"
       },
       {
         "key": "D",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "D"
-      },
-      {
-        "key": "D",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "D"
       },
       {
         "key": "E",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "E"
-      },
-      {
-        "key": "E",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "E"
       },
       {
         "key": "F",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "F"
-      },
-      {
-        "key": "F",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "F"
       },
       {
         "key": "G",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "G"
-      },
-      {
-        "key": "G",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "G"
       },
       {
         "key": "H",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "H"
-      },
-      {
-        "key": "H",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "H"
       },
       {
         "key": "I",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "I"
-      },
-      {
-        "key": "I",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "I"
       },
       {
         "key": "J",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "J"
-      },
-      {
-        "key": "J",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "J"
       },
       {
         "key": "K",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "K"
-      },
-      {
-        "key": "K",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "K"
       },
       {
         "key": "L",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "L"
-      },
-      {
-        "key": "L",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "L"
       },
       {
         "key": "M",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "M"
-      },
-      {
-        "key": "M",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "M"
       },
       {
         "key": "N",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "N"
-      },
-      {
-        "key": "N",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "N"
       },
       {
         "key": "O",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "O"
-      },
-      {
-        "key": "O",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "O"
       },
       {
         "key": "P",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "P"
-      },
-      {
-        "key": "P",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "P"
       },
       {
         "key": "Q",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "Q"
-      },
-      {
-        "key": "Q",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "Q"
       },
       {
         "key": "R",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "R"
-      },
-      {
-        "key": "R",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "R"
       },
       {
         "key": "S",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "S"
-      },
-      {
-        "key": "S",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "S"
       },
       {
         "key": "T",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "T"
-      },
-      {
-        "key": "T",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "T"
       },
       {
         "key": "U",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "U"
-      },
-      {
-        "key": "U",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "U"
       },
       {
         "key": "V",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "V"
-      },
-      {
-        "key": "V",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "V"
       },
       {
         "key": "W",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "W"
-      },
-      {
-        "key": "W",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "W"
       },
       {
         "key": "X",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "X"
-      },
-      {
-        "key": "X",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "X"
       },
       {
         "key": "Y",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "Y"
-      },
-      {
-        "key": "Y",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "Y"
       },
       {
         "key": "Z",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "Z"
-      },
-      {
-        "key": "Z",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "Z"
       },
       {
         "key": "[",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "["
-      },
-      {
-        "key": "[",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "["
       },
       {
         "key": "\\",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "\\"
-      },
-      {
-        "key": "\\",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "\\"
       },
       {
         "key": "]",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "]"
-      },
-      {
-        "key": "]",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "]"
       },
       {
         "key": "`",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "`"
-      },
-      {
-        "key": "`",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "`"
       },
       {
         "key": "a",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "a"
-      },
-      {
-        "key": "a",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "a"
       },
       {
         "key": "b",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "b"
-      },
-      {
-        "key": "b",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "b"
       },
       {
         "key": "c",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "c"
-      },
-      {
-        "key": "c",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "c"
       },
       {
         "key": "d",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "d"
-      },
-      {
-        "key": "d",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "d"
       },
       {
         "key": "e",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "e"
-      },
-      {
-        "key": "e",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "e"
       },
       {
         "key": "f",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "f"
-      },
-      {
-        "key": "f",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "f"
       },
       {
         "key": "g",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "g"
-      },
-      {
-        "key": "g",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "g"
       },
       {
         "key": "h",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "h"
-      },
-      {
-        "key": "h",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "h"
       },
       {
         "key": "i",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "i"
-      },
-      {
-        "key": "i",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "i"
       },
       {
         "key": "j",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "j"
-      },
-      {
-        "key": "j",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "j"
       },
       {
         "key": "k",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "k"
-      },
-      {
-        "key": "k",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "k"
       },
       {
         "key": "l",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "l"
-      },
-      {
-        "key": "l",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "l"
       },
       {
         "key": "m",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "m"
-      },
-      {
-        "key": "m",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "m"
       },
       {
         "key": "n",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "n"
-      },
-      {
-        "key": "n",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "n"
       },
       {
         "key": "o",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "o"
-      },
-      {
-        "key": "o",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "o"
       },
       {
         "key": "p",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "p"
-      },
-      {
-        "key": "p",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "p"
       },
       {
         "key": "q",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "q"
-      },
-      {
-        "key": "q",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "q"
       },
       {
         "key": "r",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "r"
-      },
-      {
-        "key": "r",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "r"
       },
       {
         "key": "s",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "s"
-      },
-      {
-        "key": "s",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "s"
       },
       {
         "key": "t",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "t"
-      },
-      {
-        "key": "t",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "t"
       },
       {
         "key": "u",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "u"
-      },
-      {
-        "key": "u",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "u"
       },
       {
         "key": "v",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "v"
-      },
-      {
-        "key": "v",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "v"
       },
       {
         "key": "w",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "w"
-      },
-      {
-        "key": "w",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "w"
       },
       {
         "key": "x",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "x"
-      },
-      {
-        "key": "x",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "x"
       },
       {
         "key": "y",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "y"
-      },
-      {
-        "key": "y",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "y"
       },
       {
         "key": "z",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": "z"
-      },
-      {
-        "key": "z",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": "z"
       },
       {
         "key": "space",
-        "when": "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-        "command": "emacs-mcx.copyToRegister",
-        "args": " "
-      },
-      {
-        "key": "space",
-        "when": "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-        "command": "emacs-mcx.insertRegister",
+        "when": "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+        "command": "emacs-mcx.registerCommand",
         "args": " "
       },
       {

@@ -279,22 +279,20 @@ export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
 export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  const keyAndChars = ASSIGNABLE_KEYS.map((key) => ({ key, char: key })).concat([{ key: "space", char: " " }]);
-
-  for (const { key, char } of keyAndChars) {
+  for (const char of ASSIGNABLE_KEYS) {
     keybindings.push({
-      key,
-      when: "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-      command: "emacs-mcx.copyToRegister",
-      args: char,
-    });
-    keybindings.push({
-      key,
-      when: "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-      command: "emacs-mcx.insertRegister",
+      key: char,
+      when: "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+      command: "emacs-mcx.registerCommand",
       args: char,
     });
   }
+  keybindings.push({
+    key: "space",
+    when: "emacs-mcx.acceptingRegisterKey && editorTextFocus",
+    command: "emacs-mcx.registerCommand",
+    args: " ",
+  });
   return keybindings;
 }
 
