@@ -20,7 +20,6 @@ export class KillRing {
   public push(entity: KillRingEntity | null | undefined): void {
     // Handle invalid inputs gracefully
     if (!entity || !(entity instanceof ClipboardTextKillRingEntity || entity instanceof EditorTextKillRingEntity)) {
-      this.pointer = null;
       return;
     }
 
@@ -32,7 +31,7 @@ export class KillRing {
   }
 
   public getTop(): KillRingEntity | undefined {
-    if (this.pointer === null || this.killRing.length === 0) {
+    if (this.pointer === null || this.killRing.length === 0 || !this.killRing[this.pointer]) {
       return undefined;
     }
 
