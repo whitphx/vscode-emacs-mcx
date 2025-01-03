@@ -4,72 +4,80 @@ import { MessageManager } from "../message";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 
-// Will bind this this to C-x r s
-export class StartRegisterCopyCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "startRegisterCopyCommand";
+export type TextRegisters = Map<string, string>;
 
-  private acceptingRegisterCopyCommand = false;
+type RegisterCommandType = "copy" | "insert";
+export class RegisterCommandState {
+  private _acceptingRegisterCommand: RegisterCommandType | null = null;
+  public get acceptingRegisterCommand(): RegisterCommandType | null {
+    return this._acceptingRegisterCommand;
+  }
 
-  private startRegisterCopyCommand(): void {
-    this.acceptingRegisterCopyCommand = true;
+  public startAcceptingRegisterKey(commandType: RegisterCommandType, message: string): void {
+    this._acceptingRegisterCommand = commandType;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", true);
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", true);
 
-    MessageManager.showMessage("Copy to register: ");
+    MessageManager.showMessage(message);
   }
 
-  private stopRegisterCopyCommand(): void {
-    this.acceptingRegisterCopyCommand = false;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterCopyMode", false);
-  }
-
-  public run(): void {
-    this.startRegisterCopyCommand();
-  }
-
-  public onDidInterruptTextEditor(): void {
-    if (this.acceptingRegisterCopyCommand) {
-      this.stopRegisterCopyCommand();
+  public stopAcceptingRegisterKey(): void {
+    if (this._acceptingRegisterCommand) {
+      this._acceptingRegisterCommand = null;
+      vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", false);
+      MessageManager.removeMessage();
     }
   }
 }
 
-// Will bind this this to C-x r i
-export class StartRegisterInsertCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "startRegisterInsertCommand";
-
-  private acceptingRegisterInsertCommand = false;
-
-  public startRegisterInsertCommand(): void {
-    this.acceptingRegisterInsertCommand = true;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterInsertMode", true);
-
-    MessageManager.showMessage("Insert from register: ");
-  }
-
-  private stopRegisterInsertCommand(): void {
-    this.acceptingRegisterInsertCommand = false;
-    vscode.commands.executeCommand("setContext", "emacs-mcx.inRegisterInsertMode", false);
-  }
-
-  public run(): void {
-    this.startRegisterInsertCommand();
-  }
-
-  public onDidInterruptTextEditor(): void {
-    if (this.acceptingRegisterInsertCommand) {
-      this.stopRegisterInsertCommand();
-    }
-  }
-}
-
-export class CopyToRegister extends EmacsCommand {
-  public readonly id = "copyToRegister";
+// Will be bound to C-x r s
+export class PreCopyToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preCopyToRegister";
 
   constructor(
     emacsController: IEmacsController,
-    private readonly textRegister: Map<string, string>,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("copy", "Copy to register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
+// Will be bound to C-x r i
+export class PreInsertRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preInsertRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("insert", "Insert from register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
+// Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
+export class SomeRegisterCommand extends EmacsCommand {
+  public readonly id = "someRegisterCommand";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly textRegisters: TextRegisters,
+    private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
   }
@@ -80,11 +88,27 @@ export class CopyToRegister extends EmacsCommand {
     prefixArgument: number | undefined,
     args?: unknown[],
   ): void | Thenable<void> {
-    const arg = args?.[0];
-    if (typeof arg !== "string") {
+    const commandType = this.registerCommandState.acceptingRegisterCommand;
+    if (!commandType) {
       return;
     }
 
+    this.registerCommandState.stopAcceptingRegisterKey();
+
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
+
+    if (commandType === "copy") {
+      return this.runCopy(textEditor, registerKey);
+    } else if (commandType === "insert") {
+      return this.runInsert(textEditor, registerKey);
+    }
+  }
+
+  // copy-to-register, C-x r s <r>
+  public runCopy(textEditor: vscode.TextEditor, registerKey: string): void | Thenable<void> {
     const selectionsAfterRectDisabled =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {
@@ -96,60 +120,31 @@ export class CopyToRegister extends EmacsCommand {
     if (selectionsAfterRectDisabled) {
       textEditor.selections = selectionsAfterRectDisabled;
     }
-    // selections is now a list of non empty selections, iterate through them and
-    // build a single variable combinedtext
-    let i = 0;
-    let combinedtext = "";
-    while (i < selections.length) {
-      combinedtext = combinedtext + textEditor.document.getText(selections[i]);
-      i++;
-    }
 
-    const register_string = arg;
-    if (register_string == null) {
-      return;
-    }
+    const texts = selections.map((selection) => textEditor.document.getText(selection));
+    const text = texts.join(""); // TODO: Deal with the multi-cursor case like the kill-yank commands.
 
-    this.textRegister.set(register_string, combinedtext);
-    // After copying the selection, get out of mark mode and de-select the selections
+    this.textRegisters.set(registerKey, text);
+
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
   }
-}
 
-export class InsertRegister extends EmacsCommand {
-  public readonly id = "insertRegister";
-
-  constructor(
-    emacsController: IEmacsController,
-    private readonly textRegister: Map<string, string>,
-  ) {
-    super(emacsController);
-  }
-
-  public async run(
-    textEditor: vscode.TextEditor,
-    isInMarkMode: boolean,
-    prefixArgument: number | undefined,
-    args?: unknown[],
-  ): Promise<void> {
-    const arg = args?.[0];
-    if (typeof arg !== "string") {
-      return;
-    }
-
-    if (!this.textRegister.has(arg)) {
-      return;
-    }
-
-    const textToInsert = this.textRegister.get(arg);
-    if (textToInsert == undefined) {
-      return;
-    }
-    // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
+  // insert-register, C-x r i <r>
+  public async runInsert(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
     const selections = textEditor.selections;
 
     this.emacsController.pushMark(selections.map((s) => s.active));
+
+    if (!this.textRegisters.has(registerKey)) {
+      MessageManager.showMessage("Register does not contain text");
+      return;
+    }
+
+    const textToInsert = this.textRegisters.get(registerKey);
+    if (textToInsert == undefined) {
+      return;
+    }
 
     await textEditor.edit((editBuilder) => {
       selections.forEach((selection) => {
@@ -160,5 +155,7 @@ export class InsertRegister extends EmacsCommand {
         editBuilder.insert(selection.start, textToInsert);
       });
     });
+
+    MessageManager.showMessage("Mark set");
   }
 }

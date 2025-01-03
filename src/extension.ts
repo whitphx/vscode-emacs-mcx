@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
+import type { TextRegisters } from "./commands/registers";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
@@ -17,9 +18,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
-  const textRegister = new Map<string, string>();
+  const textRegisters: TextRegisters = new Map();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegister);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegisters);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -362,20 +363,16 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("paredit.backwardKillSexp");
   });
 
-  registerEmulatorCommand("emacs-mcx.startRegisterCopyCommand", (emulator) => {
-    return emulator.runCommand("startRegisterCopyCommand");
+  registerEmulatorCommand("emacs-mcx.preCopyToRegister", (emulator) => {
+    return emulator.runCommand("preCopyToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.startRegisterInsertCommand", (emulator) => {
-    return emulator.runCommand("startRegisterInsertCommand");
+  registerEmulatorCommand("emacs-mcx.preInsertRegister", (emulator) => {
+    return emulator.runCommand("preInsertRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.copyToRegister", (emulator, ...args) => {
-    return emulator.runCommand("copyToRegister", args);
-  });
-
-  registerEmulatorCommand("emacs-mcx.insertRegister", (emulator, ...args) => {
-    return emulator.runCommand("insertRegister", args);
+  registerEmulatorCommand("emacs-mcx.someRegisterCommand", (emulator, ...args) => {
+    return emulator.runCommand("someRegisterCommand", args);
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {

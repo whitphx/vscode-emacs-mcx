@@ -102,10 +102,10 @@ abstract class EditRectangle extends RectangleKillYankCommand {
       await deleteRanges(textEditor, rectSelections);
 
       revealPrimaryActive(textEditor);
-
-      this.emacsController.exitMarkMode();
-      makeSelectionsEmpty(textEditor);
     }
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
   }
 }
 

@@ -20,9 +20,11 @@ export class MessageManager implements vscode.Disposable {
   }
 
   public static showMessage(text: string): void {
-    if (this.instance) {
-      this.instance.showMessage(text);
-    }
+    this.instance.showMessage(text);
+  }
+
+  public static removeMessage(): void {
+    this.instance.removeMessage();
   }
 
   private static inst: MessageManager;
@@ -71,6 +73,12 @@ export class MessageManager implements vscode.Disposable {
       this.messageDisposable.dispose();
     }
     this.messageDisposable = vscode.window.setStatusBarMessage(text, this.timeout);
+  }
+
+  public removeMessage(): void {
+    if (this.messageDisposable !== null) {
+      this.messageDisposable.dispose();
+    }
   }
 
   public dispose(): void {

@@ -148,7 +148,8 @@ KLMNOPQRST`,
     activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
     await emulator.runCommand("copyRectangleAsKill");
     assertTextEqual(activeTextEditor, initialText);
-    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(0, 3, 2, 7)]); // The selection is not changed
+    assertCursorsEqual(activeTextEditor, [2, 7]);
+    assert.equal(emulator.isInMarkMode, false);
 
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("yankRectangle");

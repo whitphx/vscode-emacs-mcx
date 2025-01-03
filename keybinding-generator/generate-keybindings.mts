@@ -282,30 +282,15 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   for (const char of ASSIGNABLE_KEYS) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-      command: "emacs-mcx.copyToRegister",
+      when: "emacs-mcx.acceptingRegisterCommand && editorTextFocus",
+      command: "emacs-mcx.someRegisterCommand",
       args: char,
     });
   }
   keybindings.push({
     key: "space",
-    when: "emacs-mcx.inRegisterCopyMode && editorTextFocus",
-    command: "emacs-mcx.copyToRegister",
-    args: " ",
-  });
-
-  for (const char of ASSIGNABLE_KEYS) {
-    keybindings.push({
-      key: char,
-      when: "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-      command: "emacs-mcx.insertRegister",
-      args: char,
-    });
-  }
-  keybindings.push({
-    key: "space",
-    when: "emacs-mcx.inRegisterInsertMode && editorTextFocus",
-    command: "emacs-mcx.insertRegister",
+    when: "emacs-mcx.acceptingRegisterCommand && editorTextFocus",
+    command: "emacs-mcx.someRegisterCommand",
     args: " ",
   });
   return keybindings;
