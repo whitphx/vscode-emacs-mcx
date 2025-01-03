@@ -4,6 +4,8 @@ import { MessageManager } from "../message";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle";
+import { deleteRanges } from "../utils";
+import { revealPrimaryActive } from "./helpers/reveal";
 
 interface RegisterDataBase {
   type: string;
@@ -139,7 +141,7 @@ export class SomeRegisterCommand extends EmacsCommand {
     const deleteRegion = prefixArgument != null;
 
     if (commandType === "copy") {
-      return this.runCopy(textEditor, registerKey);
+      return this.runCopy(textEditor, registerKey, deleteRegion);
     } else if (commandType === "insert") {
       return this.runInsert(textEditor, registerKey);
     } else if (commandType === "copy-rectangle") {
@@ -148,7 +150,7 @@ export class SomeRegisterCommand extends EmacsCommand {
   }
 
   // copy-to-register, C-x r s <r>
-  public runCopy(textEditor: vscode.TextEditor, registerKey: string): void | Thenable<void> {
+  public async runCopy(textEditor: vscode.TextEditor, registerKey: string, deleteRegion: boolean): Promise<void> {
     const selectionsAfterRectDisabled =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {
@@ -163,6 +165,11 @@ export class SomeRegisterCommand extends EmacsCommand {
 
     const texts = selections.map((selection) => textEditor.document.getText(selection));
     const text = texts.join(""); // TODO: Deal with the multi-cursor case like the kill-yank commands.
+
+    if (deleteRegion) {
+      await deleteRanges(textEditor, selections);
+      revealPrimaryActive(textEditor);
+    }
 
     this.textRegisters.set(registerKey, { type: "text", text });
 

@@ -3,6 +3,7 @@ import { getEolChar } from "./commands/helpers/eol";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./commands/helpers/selection";
 import { revealPrimaryActive } from "./commands/helpers/reveal";
 import { IEmacsController } from "./emulator";
+import { deleteRanges } from "./utils";
 
 export function convertSelectionToRectSelections(
   document: vscode.TextDocument,
@@ -33,21 +34,6 @@ export function convertSelectionToRectSelections(
 export function getRectText(document: vscode.TextDocument, range: vscode.Range): string {
   const rectRanges = convertSelectionToRectSelections(document, new vscode.Selection(range.start, range.end));
   return rectRanges.map((rectRange) => document.getText(rectRange)).join(getEolChar(document.eol));
-}
-
-async function deleteRanges(textEditor: vscode.TextEditor, ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
-  let success = false;
-  let trial = 0;
-  while (!success && trial < maxTrials) {
-    success = await textEditor.edit((editBuilder) => {
-      ranges.forEach((range) => {
-        editBuilder.delete(range);
-      });
-    });
-    trial++;
-  }
-
-  return success;
 }
 
 export type RectangleTexts = string[];
@@ -84,7 +70,6 @@ export async function copyOrDeleteRect(
   // Delete
   if (options.delete) {
     await deleteRanges(textEditor, rectSelections);
-
     revealPrimaryActive(textEditor);
   }
 
