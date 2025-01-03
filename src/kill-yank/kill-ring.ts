@@ -18,11 +18,6 @@ export class KillRing {
   }
 
   public push(entity: KillRingEntity): void {
-    // Validate entity before adding to kill ring
-    if (!entity || typeof entity.asString !== "function") {
-      return;
-    }
-
     this.killRing = [entity].concat(this.killRing);
     if (this.killRing.length > this.maxNum) {
       this.killRing = this.killRing.slice(0, this.maxNum);

@@ -83,10 +83,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this._textEditor;
   }
 
-  private commandRegistry!: EmacsCommandRegistry;
+  private commandRegistry: EmacsCommandRegistry;
 
-  private markRing!: MarkRing;
-  private prevExchangedMarks!: vscode.Position[] | null;
+  private markRing: MarkRing;
+  private prevExchangedMarks: vscode.Position[] | null;
 
   private _isInMarkMode = false;
   public get isInMarkMode(): boolean {
@@ -129,10 +129,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.applyNativeSelectionsAsRect();
   }
 
-  private killYanker!: KillYanker;
-  private prefixArgumentHandler!: PrefixArgumentHandler;
+  private killYanker: KillYanker;
+  private prefixArgumentHandler: PrefixArgumentHandler;
 
-  private disposables!: vscode.Disposable[];
+  private disposables: vscode.Disposable[];
 
   /**
    * Initializes a new instance of EmacsEmulator.
@@ -153,28 +153,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this._textEditor = textEditor;
 
     // Initialize core components
-    this.initializeCoreComponents(minibuffer, killRing);
-
-    // Set up event listeners
-    this.setupEventListeners();
-
-    // Initialize command registry and register all commands
-    this.initializeCommandRegistry();
-    this.registerMoveCommands();
-    this.registerEditCommands();
-    this.registerFindCommands();
-    this.registerKillCommands(this.killYanker);
-    this.registerTextRegisterCommands(textRegisters);
-    this.registerRectangleCommands(minibuffer, killRing);
-    this.registerPareditCommands(this.killYanker);
-    this.registerSelectionCommands();
-    this.registerCaseCommands();
-  }
-
-  /**
-   * Initializes core components required for Emacs emulation
-   */
-  private initializeCoreComponents(minibuffer: Minibuffer, killRing: KillRing | null): void {
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
@@ -190,12 +168,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     const killYanker = new KillYanker(this, killRing, minibuffer);
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
-  }
 
-  /**
-   * Sets up event listeners for text and selection changes
-   */
-  private setupEventListeners(): void {
+    // Set up event listeners
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
 
@@ -209,25 +183,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this,
       this.disposables,
     );
-  }
 
-  /**
-   * Initializes the command registry
-   */
-  private initializeCommandRegistry(): void {
-    this.commandRegistry = new EmacsCommandRegistry();
-    this.afterCommand = this.afterCommand.bind(this);
-  }
-
-  /**
-   * Registers movement-related commands
-   */
-  /**
-   * Registers all movement-related commands with the command registry.
-   * This includes basic cursor movement (char, line, word),
-   * buffer navigation (beginning/end), and scrolling commands.
-   */
-  private registerMoveCommands(): void {
+    // Register movement commands
     this.commandRegistry.register(new MoveCommands.ForwardChar(this)); // C-f
     this.commandRegistry.register(new MoveCommands.BackwardChar(this)); // C-b
     this.commandRegistry.register(new MoveCommands.NextLine(this)); // C-n
@@ -243,12 +200,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this)); // M-v
     this.commandRegistry.register(new MoveCommands.ForwardParagraph(this)); // M-}
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this)); // M-{
-  }
 
-  /**
-   * Registers basic editing commands
-   */
-  private registerEditCommands(): void {
+    // Register editing commands
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteHorizontalSpace(this));
@@ -257,12 +210,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new RecenterTopBottom(this));
     this.commandRegistry.register(new TabCommands.TabToTabStop(this));
     this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
-  }
 
-  /**
-   * Registers search and replace commands
-   */
-  private registerFindCommands(): void {
+    // Register search and replace commands
     const searchState: FindCommands.SearchState = {
       startSelections: undefined,
     };
@@ -274,12 +223,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new FindCommands.QueryReplaceRegexp(this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchAbort(this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchExit(this, searchState));
-  }
 
-  /**
-   * Registers kill and yank (cut/copy/paste) commands
-   */
-  private registerKillCommands(killYanker: KillYanker): void {
+    // Register kill and yank commands
     this.commandRegistry.register(new KillCommands.KillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.BackwardKillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.KillLine(this, killYanker));
@@ -288,24 +233,16 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.CopyRegion(this, killYanker));
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
-  }
 
-  /**
-   * Registers text register commands for named text storage
-   */
-  private registerTextRegisterCommands(textRegisters: TextRegisterCommands.TextRegisters): void {
+    // Register text register commands
     const registerCommandState = new TextRegisterCommands.RegisterCommandState();
     this.commandRegistry.register(new TextRegisterCommands.PreCopyToRegister(this, registerCommandState));
     this.commandRegistry.register(new TextRegisterCommands.PreInsertRegister(this, registerCommandState));
     this.commandRegistry.register(
       new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, registerCommandState),
     );
-  }
 
-  /**
-   * Registers rectangle manipulation commands
-   */
-  private registerRectangleCommands(minibuffer: Minibuffer, killRing: KillRing | null): void {
+    // Register rectangle commands
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
     };
@@ -318,12 +255,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new RectangleCommands.ClearRectangle(this));
     this.commandRegistry.register(new RectangleCommands.StringRectangle(this, minibuffer));
     this.commandRegistry.register(new RectangleCommands.ReplaceKillRingToRectangle(this, killRing));
-  }
 
-  /**
-   * Registers paredit (structural editing) commands
-   */
-  private registerPareditCommands(killYanker: KillYanker): void {
+    // Register paredit commands
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this));
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this));
     this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this));
@@ -332,20 +265,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new PareditCommands.KillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.PareditKill(this, killYanker));
-  }
 
-  /**
-   * Registers selection manipulation commands
-   */
-  private registerSelectionCommands(): void {
+    // Register selection commands
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this));
-  }
 
-  /**
-   * Registers case transformation commands
-   */
-  private registerCaseCommands(): void {
+    // Register case transformation commands
     this.commandRegistry.register(new CaseCommands.TransformToUppercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToLowercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this));
