@@ -71,8 +71,8 @@ export class PreInsertRegister extends EmacsCommand implements ITextEditorInterr
 }
 
 // Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
-export class RegisterCommand extends EmacsCommand {
-  public readonly id = "registerCommand";
+export class SomeRegisterCommand extends EmacsCommand {
+  public readonly id = "someRegisterCommand";
 
   constructor(
     emacsController: IEmacsController,
