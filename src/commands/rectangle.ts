@@ -3,8 +3,7 @@ import { TextEditor } from "vscode";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { IEmacsController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
-import { convertSelectionToRectSelections, insertRect, type RectangleTexts } from "../rectangle";
-import { revealPrimaryActive } from "./helpers/reveal";
+import { convertSelectionToRectSelections, copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle";
 import { KillRing } from "../kill-yank/kill-ring";
 import { Minibuffer } from "src/minibuffer";
 
@@ -18,6 +17,7 @@ import { Minibuffer } from "src/minibuffer";
  */
 export class StartAcceptingRectCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "startAcceptingRectCommand";
+  override isIntermediateCommand = true;
 
   private acceptingRectCommand = false;
 
@@ -56,54 +56,18 @@ export abstract class RectangleKillYankCommand extends EmacsCommand {
   }
 }
 
-async function deleteRanges(textEditor: vscode.TextEditor, ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
-  let success = false;
-  let trial = 0;
-  while (!success && trial < maxTrials) {
-    success = await textEditor.edit((editBuilder) => {
-      ranges.forEach((range) => {
-        editBuilder.delete(range);
-      });
-    });
-    trial++;
-  }
-
-  return success;
-}
-
 abstract class EditRectangle extends RectangleKillYankCommand {
   protected copy = false;
   protected delete = false;
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    const selections = getNonEmptySelections(textEditor);
-
-    if (selections.length !== 1) {
-      // Multiple cursors not supported
-      return;
+    const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
+      copy: this.copy,
+      delete: this.delete,
+    });
+    if (copiedRectTexts !== null) {
+      this.rectangleState.latestKilledRectangle = copiedRectTexts;
     }
-    const selection = selections[0]!;
-
-    const notReversedSelection = new vscode.Selection(selection.start, selection.end);
-
-    const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
-
-    // Copy
-    if (this.copy) {
-      const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
-
-      this.rectangleState.latestKilledRectangle = rectText;
-    }
-
-    // Delete
-    if (this.delete) {
-      await deleteRanges(textEditor, rectSelections);
-
-      revealPrimaryActive(textEditor);
-    }
-
-    this.emacsController.exitMarkMode();
-    makeSelectionsEmpty(textEditor);
   }
 }
 

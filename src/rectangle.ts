@@ -1,5 +1,8 @@
 import * as vscode from "vscode";
 import { getEolChar } from "./commands/helpers/eol";
+import { getNonEmptySelections, makeSelectionsEmpty } from "./commands/helpers/selection";
+import { revealPrimaryActive } from "./commands/helpers/reveal";
+import { IEmacsController } from "./emulator";
 
 export function convertSelectionToRectSelections(
   document: vscode.TextDocument,
@@ -32,7 +35,65 @@ export function getRectText(document: vscode.TextDocument, range: vscode.Range):
   return rectRanges.map((rectRange) => document.getText(rectRange)).join(getEolChar(document.eol));
 }
 
+async function deleteRanges(textEditor: vscode.TextEditor, ranges: vscode.Range[], maxTrials = 3): Promise<boolean> {
+  let success = false;
+  let trial = 0;
+  while (!success && trial < maxTrials) {
+    success = await textEditor.edit((editBuilder) => {
+      ranges.forEach((range) => {
+        editBuilder.delete(range);
+      });
+    });
+    trial++;
+  }
+
+  return success;
+}
+
 export type RectangleTexts = string[];
+
+interface CopyOrDeleteRectOptions {
+  copy: boolean;
+  delete: boolean;
+}
+export async function copyOrDeleteRect(
+  emacsController: IEmacsController,
+  textEditor: vscode.TextEditor,
+  options: CopyOrDeleteRectOptions,
+): Promise<RectangleTexts | null> {
+  const selections = getNonEmptySelections(textEditor);
+
+  if (selections.length !== 1) {
+    // Multiple cursors not supported
+    return null;
+  }
+  const selection = selections[0]!;
+
+  const notReversedSelection = new vscode.Selection(selection.start, selection.end);
+
+  const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
+
+  // Copy
+  let copiedRectText: RectangleTexts | null = null;
+  if (options.copy) {
+    const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
+
+    copiedRectText = rectText;
+  }
+
+  // Delete
+  if (options.delete) {
+    await deleteRanges(textEditor, rectSelections);
+
+    revealPrimaryActive(textEditor);
+  }
+
+  emacsController.exitMarkMode();
+  makeSelectionsEmpty(textEditor);
+
+  return copiedRectText;
+}
+
 export async function insertRect(textEditor: vscode.TextEditor, rectTexts: RectangleTexts): Promise<void> {
   if (rectTexts.length === 0) {
     return;

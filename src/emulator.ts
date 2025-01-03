@@ -451,6 +451,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       throw Error(`command ${commandName} is not found`);
     }
 
+    if (command.isIntermediateCommand) {
+      return command.run(this.textEditor, this.isInMarkMode, this.getPrefixArgument(), args);
+    }
+
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
 
     const ret = command.run(this.textEditor, this.isInMarkMode, prefixArgument, args);

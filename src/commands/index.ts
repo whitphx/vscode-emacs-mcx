@@ -8,6 +8,12 @@ export function makeParallel<T>(concurrency: number, promiseFactory: () => Thena
 export abstract class EmacsCommand {
   public abstract readonly id: string;
 
+  /**
+   * Some commands are a part of a longer command sequence, such as `C-x r` that is followed by `i` or `s` to consist a complete command sequence `C-x r i` or `C-x r s`.
+   * Such commands are flagged as intermediate commands so that they should not call `afterCommand` and cancel the prefix argument in `EmacsEmulator.runCommand`.
+   */
+  public readonly isIntermediateCommand: boolean = false;
+
   protected emacsController: IEmacsController;
 
   public constructor(markModeController: IEmacsController) {
