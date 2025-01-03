@@ -56,14 +56,24 @@ export abstract class RectangleKillYankCommand extends EmacsCommand {
   }
 }
 
-abstract class EditRectangle extends RectangleKillYankCommand {
-  protected copy = false;
-  protected delete = false;
+export class DeleteRectangle extends RectangleKillYankCommand {
+  public readonly id = "deleteRectangle";
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    await copyOrDeleteRect(this.emacsController, textEditor, {
+      copy: false,
+      delete: true,
+    });
+  }
+}
+
+export class CopyRectangleAsKill extends RectangleKillYankCommand {
+  public readonly id = "copyRectangleAsKill";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
-      copy: this.copy,
-      delete: this.delete,
+      copy: true,
+      delete: false,
     });
     if (copiedRectTexts !== null) {
       this.rectangleState.latestKilledRectangle = copiedRectTexts;
@@ -71,22 +81,18 @@ abstract class EditRectangle extends RectangleKillYankCommand {
   }
 }
 
-export class DeleteRectangle extends EditRectangle {
-  public readonly id = "deleteRectangle";
-  protected delete = true;
-  protected copy = false;
-}
-
-export class CopyRectangleAsKill extends EditRectangle {
-  public readonly id = "copyRectangleAsKill";
-  protected delete = false;
-  protected copy = true;
-}
-
-export class KillRectangle extends EditRectangle {
+export class KillRectangle extends RectangleKillYankCommand {
   public readonly id = "killRectangle";
-  protected delete = true;
-  protected copy = true;
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
+      copy: true,
+      delete: true,
+    });
+    if (copiedRectTexts !== null) {
+      this.rectangleState.latestKilledRectangle = copiedRectTexts;
+    }
+  }
 }
 
 export class YankRectangle extends RectangleKillYankCommand {
