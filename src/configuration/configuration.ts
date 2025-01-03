@@ -78,6 +78,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
         let val = emacsConfigs[option] as any; // eslint-disable-line @typescript-eslint/no-explicit-any
         if (val !== null && val !== undefined) {
           // Validate configuration values
+          // Validate configuration values before assignment
           switch (option) {
             case "killRingMax":
             case "markRingMax":
