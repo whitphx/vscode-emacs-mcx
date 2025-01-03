@@ -3,10 +3,23 @@ import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
+import { convertSelectionToRectSelections, insertRect, type RectangleTexts } from "../rectangle";
 
-export type TextRegisters = Map<string, string>;
+interface RegisterDataBase {
+  type: string;
+}
+interface TextRegisterData extends RegisterDataBase {
+  type: "text";
+  text: string;
+}
+interface RectangleRegisterData extends RegisterDataBase {
+  type: "rectangle";
+  rectTexts: RectangleTexts;
+}
+export type RegisterData = TextRegisterData | RectangleRegisterData;
+export type TextRegisters = Map<string, RegisterData>;
 
-type RegisterCommandType = "copy" | "insert";
+type RegisterCommandType = "copy" | "insert" | "copy-rectangle";
 export class RegisterCommandState {
   private _acceptingRegisterCommand: RegisterCommandType | null = null;
   public get acceptingRegisterCommand(): RegisterCommandType | null {
@@ -70,6 +83,26 @@ export class PreInsertRegister extends EmacsCommand implements ITextEditorInterr
   }
 }
 
+// Will be bound to C-x r r
+export class PreCopyRectangleToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preCopyRectangleToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("copy-rectangle", "Copy rectangle to register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
 // Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
 export class SomeRegisterCommand extends EmacsCommand {
   public readonly id = "someRegisterCommand";
@@ -104,6 +137,8 @@ export class SomeRegisterCommand extends EmacsCommand {
       return this.runCopy(textEditor, registerKey);
     } else if (commandType === "insert") {
       return this.runInsert(textEditor, registerKey);
+    } else if (commandType === "copy-rectangle") {
+      return this.runCopyRectangle(textEditor, registerKey);
     }
   }
 
@@ -124,7 +159,7 @@ export class SomeRegisterCommand extends EmacsCommand {
     const texts = selections.map((selection) => textEditor.document.getText(selection));
     const text = texts.join(""); // TODO: Deal with the multi-cursor case like the kill-yank commands.
 
-    this.textRegisters.set(registerKey, text);
+    this.textRegisters.set(registerKey, { type: "text", text });
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
@@ -141,21 +176,47 @@ export class SomeRegisterCommand extends EmacsCommand {
       return;
     }
 
-    const textToInsert = this.textRegisters.get(registerKey);
-    if (textToInsert == undefined) {
+    const dataToInsert = this.textRegisters.get(registerKey);
+    if (dataToInsert == undefined) {
       return;
     }
 
-    await textEditor.edit((editBuilder) => {
-      selections.forEach((selection) => {
-        if (!selection.isEmpty) {
-          editBuilder.delete(selection);
-        }
+    if (dataToInsert.type === "text") {
+      await textEditor.edit((editBuilder) => {
+        selections.forEach((selection) => {
+          if (!selection.isEmpty) {
+            editBuilder.delete(selection);
+          }
 
-        editBuilder.insert(selection.start, textToInsert);
+          editBuilder.insert(selection.start, dataToInsert.text);
+        });
       });
-    });
+    } else if (dataToInsert.type === "rectangle") {
+      await insertRect(textEditor, dataToInsert.rectTexts);
+    }
 
     MessageManager.showMessage("Mark set");
+  }
+
+  // copy-rectangle-to-register, C-x r r <r>
+  public runCopyRectangle(textEditor: vscode.TextEditor, registerKey: string): void | Thenable<void> {
+    const selections = getNonEmptySelections(textEditor);
+
+    if (selections.length !== 1) {
+      // Multiple cursors not supported
+      return;
+    }
+    const selection = selections[0]!;
+
+    const notReversedSelection = new vscode.Selection(selection.start, selection.end);
+
+    const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
+
+    const rectText = rectSelections.map((lineSelection) => textEditor.document.getText(lineSelection));
+
+    this.textRegisters.set(registerKey, { type: "rectangle", rectTexts: rectText });
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
   }
 }

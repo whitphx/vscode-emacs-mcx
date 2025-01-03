@@ -3854,6 +3854,11 @@
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {
+        "key": "r",
+        "command": "emacs-mcx.preCopyRectangleToRegister",
+        "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+      },
+      {
         "key": "'",
         "when": "emacs-mcx.acceptingRegisterCommand && editorTextFocus",
         "command": "emacs-mcx.someRegisterCommand",

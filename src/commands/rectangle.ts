@@ -3,9 +3,8 @@ import { TextEditor } from "vscode";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { IEmacsController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
-import { convertSelectionToRectSelections } from "../rectangle";
+import { convertSelectionToRectSelections, insertRect, type RectangleTexts } from "../rectangle";
 import { revealPrimaryActive } from "./helpers/reveal";
-import { getEolChar } from "./helpers/eol";
 import { KillRing } from "../kill-yank/kill-ring";
 import { Minibuffer } from "src/minibuffer";
 
@@ -43,9 +42,8 @@ export class StartAcceptingRectCommand extends EmacsCommand implements ITextEdit
   }
 }
 
-type KilledRectangle = string[];
 export interface RectangleState {
-  latestKilledRectangle: KilledRectangle; // multi-cursor is not supported
+  latestKilledRectangle: RectangleTexts; // multi-cursor is not supported
 }
 
 export abstract class RectangleKillYankCommand extends EmacsCommand {
@@ -81,7 +79,7 @@ abstract class EditRectangle extends RectangleKillYankCommand {
     const selections = getNonEmptySelections(textEditor);
 
     if (selections.length !== 1) {
-      // multiple cursor not supported
+      // Multiple cursors not supported
       return;
     }
     const selection = selections[0]!;
@@ -133,51 +131,7 @@ export class YankRectangle extends RectangleKillYankCommand {
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const killedRect = this.rectangleState.latestKilledRectangle;
 
-    if (killedRect.length === 0) {
-      return;
-    }
-
-    const rectHeight = killedRect.length - 1;
-    const rectWidth = killedRect[rectHeight]!.length;
-
-    const active = textEditor.selection.active; // Multi-cursor is not supported
-    await textEditor.edit((edit) => {
-      const maxLine = textEditor.document.lineCount - 1;
-
-      const insertColumn = active.character;
-
-      const eolChar = getEolChar(textEditor.document.eol);
-
-      let rectLine = 0;
-      while (rectLine <= rectHeight) {
-        const insertLine = active.line + rectLine;
-        if (insertLine > maxLine) {
-          break;
-        }
-
-        const additionalColumns = Math.max(
-          0,
-          insertColumn - textEditor.document.lineAt(insertLine).range.end.character,
-        );
-
-        const insertText = " ".repeat(additionalColumns) + killedRect[rectLine];
-        edit.insert(new vscode.Position(insertLine, insertColumn), insertText);
-
-        ++rectLine;
-      }
-
-      if (rectLine <= rectHeight) {
-        const additionalText = killedRect
-          .slice(rectLine)
-          .map((lineText) => eolChar + " ".repeat(insertColumn) + lineText)
-          .join("");
-        const lastPoint = textEditor.document.lineAt(maxLine).range.end;
-        edit.insert(lastPoint, additionalText);
-      }
-    });
-
-    const newActive = active.translate(rectHeight, rectWidth);
-    textEditor.selection = new vscode.Selection(newActive, newActive);
+    return insertRect(textEditor, killedRect);
   }
 }
 
@@ -293,7 +247,7 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
     const selections = getNonEmptySelections(textEditor);
 
     if (selections.length !== 1) {
-      // multiple cursor not supported
+      // Multiple cursors not supported
       return;
     }
     const selection = selections[0]!;

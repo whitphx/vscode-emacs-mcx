@@ -371,6 +371,10 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("preInsertRegister");
   });
 
+  registerEmulatorCommand("emacs-mcx.preCopyRectangleToRegister", (emulator) => {
+    return emulator.runCommand("preCopyRectangleToRegister");
+  });
+
   registerEmulatorCommand("emacs-mcx.someRegisterCommand", (emulator, ...args) => {
     return emulator.runCommand("someRegisterCommand", args);
   });
