@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.63.0] - 2025-01-03
+
+### Add
+
+- `copy-rectangle-to-register`, [#2142](https://github.com/whitphx/vscode-emacs-mcx/pull/2142).
+
 ## [0.62.6] - 2025-01-03
 
 ### Fix
