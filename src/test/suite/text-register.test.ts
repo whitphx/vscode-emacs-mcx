@@ -18,23 +18,28 @@ suite("Text registers", () => {
 
   test("copy and paste", async () => {
     activeTextEditor.selections = [new vscode.Selection(0, 0, 1, 2)];
-    await emulator.runCommand("copyToRegister", ["a"]);
+    await emulator.runCommand("preCopyToRegister");
+    await emulator.runCommand("registerCommand", ["a"]);
 
     // Empty string
     activeTextEditor.selections = [new vscode.Selection(0, 0, 0, 0)];
-    await emulator.runCommand("copyToRegister", ["b"]);
+    await emulator.runCommand("preCopyToRegister");
+    await emulator.runCommand("registerCommand", ["b"]);
 
     await clearTextEditor(activeTextEditor);
 
-    await emulator.runCommand("insertRegister", ["c"]);
+    await emulator.runCommand("preInsertRegister");
+    await emulator.runCommand("registerCommand", ["c"]);
     assertTextEqual(activeTextEditor, "");
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
-    await emulator.runCommand("insertRegister", ["b"]);
+    await emulator.runCommand("preInsertRegister");
+    await emulator.runCommand("registerCommand", ["b"]);
     assertTextEqual(activeTextEditor, "");
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
-    await emulator.runCommand("insertRegister", ["a"]);
+    await emulator.runCommand("preInsertRegister");
+    await emulator.runCommand("registerCommand", ["a"]);
     assertTextEqual(activeTextEditor, "0123456789\nab");
     assertCursorsEqual(activeTextEditor, [1, 2]);
   });
