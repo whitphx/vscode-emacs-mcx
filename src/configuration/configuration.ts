@@ -130,8 +130,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown configuration error";
       Configuration.logger.error(`Configuration error: ${message}`);
-      // Error is already shown to user through the logger's VSCode integration
-      // Keep the previous valid configuration
+      // Rethrow the error after logging it
+      throw error;
     }
   }
 
