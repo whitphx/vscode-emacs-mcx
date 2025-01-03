@@ -130,18 +130,18 @@ export class InsertRegister extends EmacsCommand {
     prefixArgument: number | undefined,
     args?: unknown[],
   ): Promise<void> {
-    const arg = args?.[0];
-    if (typeof arg !== "string") {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
       return;
     }
 
-    if (!this.textRegisters.has(arg)) {
+    if (!this.textRegisters.has(registerKey)) {
       MessageManager.showMessage("Register does not contain text");
       // TODO: Exit the inRegisterInsertMode.
       return;
     }
 
-    const textToInsert = this.textRegisters.get(arg);
+    const textToInsert = this.textRegisters.get(registerKey);
     if (textToInsert == undefined) {
       return;
     }
