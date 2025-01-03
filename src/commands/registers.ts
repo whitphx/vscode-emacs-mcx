@@ -25,6 +25,7 @@ export class RegisterCommandState {
     if (this._acceptingRegisterCommand) {
       this._acceptingRegisterCommand = null;
       vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", false);
+      MessageManager.removeMessage();
     }
   }
 }
@@ -87,17 +88,17 @@ export class RegisterCommand extends EmacsCommand {
     prefixArgument: number | undefined,
     args?: unknown[],
   ): void | Thenable<void> {
-    const registerKey = args?.[0];
-    if (typeof registerKey !== "string") {
-      return;
-    }
-
     const commandType = this.registerCommandState.acceptingRegisterCommand;
     if (!commandType) {
       return;
     }
 
     this.registerCommandState.stopAcceptingRegisterKey();
+
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
 
     if (commandType === "copy") {
       return this.runCopy(textEditor, registerKey);
