@@ -4,6 +4,14 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.62.6] - 2025-01-03
+
+### Fix
+
+- Refactoring the text register commands, [#2140](https://github.com/whitphx/vscode-emacs-mcx/pull/2140).
+- Fix the internal context name to manage the `C-x r -` command sequence state, [#2140](https://github.com/whitphx/vscode-emacs-mcx/pull/2140).
+- Fix `copyToRegister` to deactivate mark-mode and selections, [#2140](https://github.com/whitphx/vscode-emacs-mcx/pull/2140).
+
 ## [0.62.5] - 2024-12-17
 
 ### Fix
