@@ -17,7 +17,13 @@ export class KillRing {
     this.killRing = [];
   }
 
-  public push(entity: KillRingEntity): void {
+  public push(entity: KillRingEntity | null | undefined): void {
+    // Handle invalid inputs gracefully
+    if (!entity || !(entity instanceof ClipboardTextKillRingEntity || entity instanceof EditorTextKillRingEntity)) {
+      this.pointer = null;
+      return;
+    }
+
     this.killRing = [entity].concat(this.killRing);
     if (this.killRing.length > this.maxNum) {
       this.killRing = this.killRing.slice(0, this.maxNum);
