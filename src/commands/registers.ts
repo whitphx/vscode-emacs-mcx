@@ -137,6 +137,10 @@ export class RegisterCommand extends EmacsCommand {
 
   // insert-register, C-x r i <r>
   public async runInsert(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+    const selections = textEditor.selections;
+
+    this.emacsController.pushMark(selections.map((s) => s.active));
+
     if (!this.textRegisters.has(registerKey)) {
       MessageManager.showMessage("Register does not contain text");
       return;
@@ -146,10 +150,6 @@ export class RegisterCommand extends EmacsCommand {
     if (textToInsert == undefined) {
       return;
     }
-    // Looking for how to insert-replace with selections highlighted.... must copy-paste from Yank command
-    const selections = textEditor.selections;
-
-    this.emacsController.pushMark(selections.map((s) => s.active));
 
     await textEditor.edit((editBuilder) => {
       selections.forEach((selection) => {
@@ -160,5 +160,7 @@ export class RegisterCommand extends EmacsCommand {
         editBuilder.insert(selection.start, textToInsert);
       });
     });
+
+    MessageManager.showMessage("Mark set");
   }
 }
