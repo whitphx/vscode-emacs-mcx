@@ -35,17 +35,17 @@ export class PreCopyToRegister extends EmacsCommand implements ITextEditorInterr
 
   constructor(
     emacsController: IEmacsController,
-    private readonly registerCommandSequenceState: RegisterCommandState,
+    private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
   }
 
   public run(): void {
-    this.registerCommandSequenceState.startAcceptingRegisterKey("copy", "Copy to register: ");
+    this.registerCommandState.startAcceptingRegisterKey("copy", "Copy to register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandSequenceState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterKey();
   }
 }
 
@@ -55,17 +55,17 @@ export class PreInsertRegister extends EmacsCommand implements ITextEditorInterr
 
   constructor(
     emacsController: IEmacsController,
-    private readonly registerCommandSequenceState: RegisterCommandState,
+    private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
   }
 
   public run(): void {
-    this.registerCommandSequenceState.startAcceptingRegisterKey("insert", "Insert from register: ");
+    this.registerCommandState.startAcceptingRegisterKey("insert", "Insert from register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandSequenceState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterKey();
   }
 }
 
@@ -76,7 +76,7 @@ export class RegisterCommand extends EmacsCommand {
   constructor(
     emacsController: IEmacsController,
     private readonly textRegisters: TextRegisters,
-    private readonly registerCommandSequenceState: RegisterCommandState,
+    private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
   }
@@ -92,12 +92,12 @@ export class RegisterCommand extends EmacsCommand {
       return;
     }
 
-    if (!this.registerCommandSequenceState.acceptingRegisterCommand) {
+    const commandType = this.registerCommandState.acceptingRegisterCommand;
+    if (!commandType) {
       return;
     }
 
-    const commandType = this.registerCommandSequenceState.acceptingRegisterCommand;
-    this.registerCommandSequenceState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterKey();
 
     if (commandType === "copy") {
       return this.runCopy(textEditor, registerKey);
