@@ -136,6 +136,8 @@ export class InsertRegister extends EmacsCommand {
     }
 
     if (!this.textRegisters.has(arg)) {
+      MessageManager.showMessage("Register does not contain text");
+      // TODO: Exit the inRegisterInsertMode.
       return;
     }
 
