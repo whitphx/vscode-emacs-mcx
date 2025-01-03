@@ -120,17 +120,12 @@ export class SomeRegisterCommand extends EmacsCommand {
     if (selectionsAfterRectDisabled) {
       textEditor.selections = selectionsAfterRectDisabled;
     }
-    // selections is now a list of non empty selections, iterate through them and
-    // build a single variable combinedtext
-    let i = 0;
-    let combinedText = "";
-    while (i < selections.length) {
-      combinedText = combinedText + textEditor.document.getText(selections[i]);
-      i++;
-    }
 
-    this.textRegisters.set(registerKey, combinedText);
-    // After copying the selection, get out of mark mode and de-select the selections
+    const texts = selections.map((selection) => textEditor.document.getText(selection));
+    const text = texts.join(""); // TODO: Deal with the multi-cursor case like the kill-yank commands.
+
+    this.textRegisters.set(registerKey, text);
+
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
   }
