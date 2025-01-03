@@ -30,8 +30,8 @@ export class RegisterCommandState {
 }
 
 // Will be bound to C-x r s
-export class StartRegisterCopyCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "startRegisterCopyCommand";
+export class PreCopyToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preCopyToRegister";
 
   constructor(
     emacsController: IEmacsController,
@@ -50,8 +50,8 @@ export class StartRegisterCopyCommand extends EmacsCommand implements ITextEdito
 }
 
 // Will be bound to C-x r i
-export class StartRegisterInsertCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "startRegisterInsertCommand";
+export class PreInsertRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preInsertRegister";
 
   constructor(
     emacsController: IEmacsController,

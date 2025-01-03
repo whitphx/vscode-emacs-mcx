@@ -763,12 +763,12 @@
     },
     {
       "key": "s", // ctrl+x r s
-      "command": "emacs-mcx.startRegisterCopyCommand",
+      "command": "emacs-mcx.preCopyToRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "i", // ctrl+x r i
-      "command": "emacs-mcx.startRegisterInsertCommand",
+      "command": "emacs-mcx.preInsertRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {

@@ -3845,12 +3845,12 @@
       },
       {
         "key": "s",
-        "command": "emacs-mcx.startRegisterCopyCommand",
+        "command": "emacs-mcx.preCopyToRegister",
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {
         "key": "i",
-        "command": "emacs-mcx.startRegisterInsertCommand",
+        "command": "emacs-mcx.preInsertRegister",
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {

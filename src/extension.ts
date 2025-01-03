@@ -363,12 +363,12 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("paredit.backwardKillSexp");
   });
 
-  registerEmulatorCommand("emacs-mcx.startRegisterCopyCommand", (emulator) => {
-    return emulator.runCommand("startRegisterCopyCommand");
+  registerEmulatorCommand("emacs-mcx.preCopyToRegister", (emulator) => {
+    return emulator.runCommand("preCopyToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.startRegisterInsertCommand", (emulator) => {
-    return emulator.runCommand("startRegisterInsertCommand");
+  registerEmulatorCommand("emacs-mcx.preInsertRegister", (emulator) => {
+    return emulator.runCommand("preInsertRegister");
   });
 
   registerEmulatorCommand("emacs-mcx.registerCommand", (emulator, ...args) => {
