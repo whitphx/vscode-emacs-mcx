@@ -31,7 +31,21 @@ export class Configuration implements IConfiguration, vscode.Disposable {
    * Config fields
    */
 
-  public killRingMax = 60;
+  private _killRingMax = 60;
+  public get killRingMax(): number {
+    const config = vscode.workspace.getConfiguration("emacs-mcx");
+    const val = config && typeof config.get === "function" ? config.get("killRingMax") : undefined;
+
+    if (val !== undefined) {
+      if (typeof val !== "number" || !Number.isInteger(val) || val <= 0) {
+        const error = new Error(`killRingMax must be a positive integer (got ${val})`);
+        Configuration.logger.warn(`Error accessing killRingMax configuration: ${error.message}`);
+        throw error;
+      }
+      return val;
+    }
+    return this._killRingMax;
+  }
 
   public markRingMax = 16;
 
@@ -47,11 +61,54 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     parentheses: { "[": "]", "(": ")", "{": "}" },
   };
 
-  public debug: IDebugConfiguration = {
+  private _debug: IDebugConfiguration = {
     silent: false,
     loggingLevelForAlert: "error",
     loggingLevelForConsole: "error",
   };
+  public get debug(): IDebugConfiguration {
+    const config = vscode.workspace.getConfiguration("emacs-mcx");
+    const val = config && typeof config.get === "function" ? config.get("debug") : undefined;
+
+    if (val !== undefined) {
+      if (typeof val !== "object" || val === null) {
+        const error = new Error("debug configuration must be an object");
+        Configuration.logger.warn(`Error accessing debug configuration: ${error.message}`);
+        throw error;
+      }
+
+      const debugConfig = val as {
+        silent?: unknown;
+        loggingLevelForAlert?: unknown;
+        loggingLevelForConsole?: unknown;
+      };
+
+      if (typeof debugConfig.silent !== "boolean") {
+        const error = new Error("debug.silent must be a boolean");
+        Configuration.logger.warn(`Error accessing debug configuration: ${error.message}`);
+        throw error;
+      }
+
+      const validLogLevels = ["error", "warn", "info", "debug"];
+      if (!validLogLevels.includes(debugConfig.loggingLevelForAlert as string)) {
+        const error = new Error("debug.loggingLevelForAlert must be one of: error, warn, info, debug");
+        Configuration.logger.warn(`Error accessing debug configuration: ${error.message}`);
+        throw error;
+      }
+      if (!validLogLevels.includes(debugConfig.loggingLevelForConsole as string)) {
+        const error = new Error("debug.loggingLevelForConsole must be one of: error, warn, info, debug");
+        Configuration.logger.warn(`Error accessing debug configuration: ${error.message}`);
+        throw error;
+      }
+
+      return {
+        silent: debugConfig.silent,
+        loggingLevelForAlert: debugConfig.loggingLevelForAlert as "error" | "warn" | "info" | "debug",
+        loggingLevelForConsole: debugConfig.loggingLevelForConsole as "error" | "warn" | "info" | "debug",
+      };
+    }
+    return this._debug;
+  }
 
   public static reload(): void {
     this.instance.reload();
