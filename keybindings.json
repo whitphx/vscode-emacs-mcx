@@ -772,6 +772,11 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "r", // ctrl+x r r
+      "command": "emacs-mcx.preCopyRectangleToRegister",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "$special": "registerCommandTypes"
     },
     {
