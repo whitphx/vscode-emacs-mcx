@@ -20,15 +20,11 @@ export class MessageManager implements vscode.Disposable {
   }
 
   public static showMessage(text: string): void {
-    if (this.instance) {
-      this.instance.showMessage(text);
-    }
+    this.instance.showMessage(text);
   }
 
   public static removeMessage(): void {
-    if (this.instance) {
-      this.instance.removeMessage();
-    }
+    this.instance.removeMessage();
   }
 
   private static inst: MessageManager;
