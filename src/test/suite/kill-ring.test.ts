@@ -67,4 +67,29 @@ suite("KillRing", () => {
     assert.strictEqual(killRing.popNext(), undefined);
     assert.strictEqual(killRing.popNext(), undefined);
   });
+
+  test("handles invalid push data gracefully", () => {
+    const killRing = new KillRing(3);
+
+    // Test pushing null
+    assert.doesNotThrow(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      killRing.push(null as any); // Testing error handling
+    });
+    assert.strictEqual(killRing.getTop(), undefined);
+
+    // Test pushing undefined
+    assert.doesNotThrow(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      killRing.push(undefined as any); // Testing error handling
+    });
+    assert.strictEqual(killRing.getTop(), undefined);
+
+    // Test pushing invalid entity
+    assert.doesNotThrow(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      killRing.push({ invalid: "entity" } as any); // Testing error handling
+    });
+    assert.strictEqual(killRing.getTop(), undefined);
+  });
 });
