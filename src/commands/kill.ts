@@ -29,6 +29,14 @@ export abstract class KillYankCommand extends EmacsCommand {
   }
 }
 
+/**
+ * Finds the range from current position to the end of specified number of words.
+ * Used by KillWord command to determine the text range to kill.
+ * @param doc - The text document to search in
+ * @param position - Starting position for the search
+ * @param repeat - Number of words to include in range (defaults to 1)
+ * @returns Range object or undefined if range would be empty
+ */
 function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
   if (repeat <= 0) {
     throw new Error(`Invalid repeat ${repeat}`);
@@ -65,6 +73,14 @@ export class KillWord extends KillYankCommand {
   }
 }
 
+/**
+ * Finds the range from current position to the start of specified number of words.
+ * Used by BackwardKillWord command to determine the text range to kill.
+ * @param doc - The text document to search in
+ * @param position - Starting position for the search
+ * @param repeat - Number of words to include in range (defaults to 1)
+ * @returns Range object or undefined if range would be empty
+ */
 function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
   if (repeat <= 0) {
     throw new Error(`Invalid repeat ${repeat}`);
@@ -102,9 +118,20 @@ export class BackwardKillWord extends KillYankCommand {
   }
 }
 
+/**
+ * Implements the Emacs C-k command to kill from cursor to end of line.
+ * Has special behavior when at end of line or with prefix argument.
+ */
 export class KillLine extends KillYankCommand {
   public readonly id = "killLine";
 
+  /**
+   * Kills text from cursor to end of line, or entire next line if at end.
+   * With prefix argument, kills that many lines forward.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Number of lines to kill forward
+   */
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const killWholeLine = Configuration.instance.killWholeLine;
 
@@ -163,9 +190,20 @@ export class KillWholeLine extends KillYankCommand {
   }
 }
 
+/**
+ * Implements the Emacs C-w command to kill (cut) the selected region.
+ * Supports both normal and rectangle selections.
+ */
 export class KillRegion extends KillYankCommand {
   public readonly id = "killRegion";
 
+  /**
+   * Kills the currently selected region and adds it to the kill ring.
+   * Handles both normal selections and rectangle selections differently.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Not used in this command
+   */
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
       const ranges = this.emacsController.nativeSelections;
@@ -200,9 +238,20 @@ export class CopyRegion extends KillYankCommand {
   }
 }
 
+/**
+ * Implements the Emacs C-y command to yank (paste) text from kill ring.
+ * Supports both normal and rectangle yanking modes.
+ */
 export class Yank extends KillYankCommand {
   public readonly id = "yank";
 
+  /**
+   * Yanks the most recently killed text at cursor position.
+   * Sets mark at the beginning of yanked text.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Not used in this command
+   */
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
     await this.killYanker.yank();
@@ -211,9 +260,20 @@ export class Yank extends KillYankCommand {
   }
 }
 
+/**
+ * Implements the Emacs M-y command to cycle through kill ring entries.
+ * Must be used immediately after a yank command.
+ */
 export class YankPop extends KillYankCommand {
   public readonly id = "yankPop";
 
+  /**
+   * Replaces previously yanked text with next entry in kill ring.
+   * Only works immediately after a yank or another yank-pop.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Not used in this command
+   */
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     await this.killYanker.yankPop();
     this.emacsController.exitMarkMode();
