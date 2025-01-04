@@ -339,16 +339,17 @@ export class SomeRegisterCommand extends EmacsCommand {
       return;
     }
 
-    // Create a selection from the target position to the current position
     // In Emacs, when jumping to a register:
-    // - The target position becomes the active point (where the cursor is)
     // - The current position becomes the mark (anchor point)
-    const newSelection = new vscode.Selection(targetPosition, targetPosition);
-    textEditor.selections = [newSelection];
-
-    // Set mark mode and ensure proper mark state
-    this.emacsController.enterMarkMode();
+    // - The target position becomes the active point (where the cursor is)
+    // First, set the mark at the current position
     this.emacsController.pushMark([currentPos]);
+    this.emacsController.enterMarkMode();
+
+    // Create a selection from the current position to the target position
+    // The active position (cursor) should be at the target
+    const newSelection = new vscode.Selection(currentPos, targetPosition);
+    textEditor.selections = [newSelection];
 
     // Reveal cursor and notify user
     revealPrimaryActive(textEditor);

@@ -599,8 +599,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public pushMark(positions: vscode.Position[], replace = false): void {
-    this.setPrevExchangedMarks(null);
     this.markRing.push(positions, replace);
+    this.setPrevExchangedMarks(positions);
   }
 
   public popMark(): void {
@@ -612,26 +612,41 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public exchangePointAndMark(): void {
+    // Use prevExchangedMarks if available, otherwise use mark ring
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
 
     if (prevMarks) {
       // Save current positions before updating selections
       const currentPositions = this.textEditor.selections.map((selection) => selection.active);
+
+      // Create new selections by swapping active and anchor points
       const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);
       const affectedSelections = this.textEditor.selections.slice(0, affectedLen).map((selection, i) => {
         // `i < affectedLen <= prevMarks.length`,
         // so the `noUncheckedIndexedAccess` rule can be skipped here.
-
         const prevMark = prevMarks[i]!;
-        return new vscode.Selection(prevMark, prevMark);
+        // In VSCode's Selection model:
+        // - anchor is where the selection starts (mark)
+        // - active is where the cursor is (point)
+        // When exchanging point and mark in Emacs:
+        // - The current cursor position becomes the mark (selection start/anchor)
+        // - The previous mark becomes the new cursor position (active)
+        // This matches Emacs behavior where C-x C-x swaps cursor and mark
+        // In VSCode's Selection:
+        // - anchor is where the selection starts (mark)
+        // - active is where the cursor is (point)
+        return new vscode.Selection(selection.active, prevMark);
       });
       const newSelections = affectedSelections.concat(this.textEditor.selections.slice(affectedLen));
 
-      // Set prevExchangedMarks before updating selections
-      this.setPrevExchangedMarks(currentPositions);
-
       // Update selections
       this.textEditor.selections = newSelections;
+
+      // Set prevExchangedMarks to current positions for next exchange
+      this.setPrevExchangedMarks(currentPositions);
+
+      // Enter mark mode to show the selection
+      this.enterMarkMode(false);
       this.textEditor.revealRange(this.textEditor.selection);
     }
   }
