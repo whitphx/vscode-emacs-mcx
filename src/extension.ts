@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
-import type { TextRegisters } from "./commands/registers";
+import type { Registers } from "./commands/registers";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
@@ -18,9 +18,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
-  const textRegisters: TextRegisters = new Map();
+  const registers: Registers = new Map();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, textRegisters);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, registers);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -375,8 +375,20 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("preCopyRectangleToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.someRegisterCommand", (emulator, ...args) => {
-    return emulator.runCommand("someRegisterCommand", args);
+  registerEmulatorCommand("emacs-mcx.pointToRegister", (emulator, ...args) => {
+    return emulator.runCommand("pointToRegister", args);
+  });
+
+  registerEmulatorCommand("emacs-mcx.jumpToRegister", (emulator, ...args) => {
+    return emulator.runCommand("jumpToRegister", args);
+  });
+
+  registerEmulatorCommand("emacs-mcx.copyToRegister", (emulator, ...args) => {
+    return emulator.runCommand("copyToRegister", args);
+  });
+
+  registerEmulatorCommand("emacs-mcx.copyRectangleToRegister", (emulator, ...args) => {
+    return emulator.runCommand("copyRectangleToRegister", args);
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {

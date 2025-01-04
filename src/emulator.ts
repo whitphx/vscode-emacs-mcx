@@ -25,6 +25,7 @@ import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
+import { EmacsCommand } from "./commands";
 
 export interface IEmacsController {
   readonly textEditor: TextEditor;
@@ -38,6 +39,7 @@ export interface IEmacsController {
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
+  exchangePointAndMark(): void;
 }
 
 class NativeSelectionsStore {
@@ -138,7 +140,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     textEditor: TextEditor,
     killRing: KillRing | null = null,
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
-    textRegisters: TextRegisterCommands.TextRegisters = new Map(),
+    registers: TextRegisterCommands.Registers = new Map(),
   ) {
     this._textEditor = textEditor;
 
@@ -190,6 +192,18 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new DeleteBlankLines(this));
     this.commandRegistry.register(new RecenterTopBottom(this));
 
+    // Register mark commands
+    class ExchangePointAndMark extends EmacsCommand {
+      public readonly id = "exchangePointAndMark";
+      constructor(emulator: EmacsEmulator) {
+        super(emulator);
+      }
+      public run(): void {
+        this.emacsController.exchangePointAndMark();
+      }
+    }
+    this.commandRegistry.register(new ExchangePointAndMark(this));
+
     this.commandRegistry.register(new TabCommands.TabToTabStop(this));
 
     this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
@@ -222,9 +236,13 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new TextRegisterCommands.PreCopyToRegister(this, registerCommandState));
     this.commandRegistry.register(new TextRegisterCommands.PreInsertRegister(this, registerCommandState));
     this.commandRegistry.register(new TextRegisterCommands.PreCopyRectangleToRegister(this, registerCommandState));
+    this.commandRegistry.register(new TextRegisterCommands.CopyToRegister(this, registers, registerCommandState));
     this.commandRegistry.register(
-      new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, registerCommandState),
+      new TextRegisterCommands.CopyRectangleToRegister(this, registers, registerCommandState),
     );
+    this.commandRegistry.register(new TextRegisterCommands.InsertRegister(this, registers, registerCommandState));
+    this.commandRegistry.register(new TextRegisterCommands.PointToRegister(this, registers, registerCommandState));
+    this.commandRegistry.register(new TextRegisterCommands.JumpToRegister(this, registers, registerCommandState));
 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
