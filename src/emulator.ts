@@ -139,6 +139,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     killRing: KillRing | null = null,
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
     textRegisters: TextRegisterCommands.TextRegisters = new Map(),
+    positionRegisters: TextRegisterCommands.PositionRegisters = new Map(),
   ) {
     this._textEditor = textEditor;
 
@@ -222,7 +223,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new TextRegisterCommands.PreCopyToRegister(this, registerCommandState));
     this.commandRegistry.register(new TextRegisterCommands.PreInsertRegister(this, registerCommandState));
     this.commandRegistry.register(
-      new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, registerCommandState),
+      new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, positionRegisters, registerCommandState),
     );
 
     const rectangleState: RectangleCommands.RectangleState = {

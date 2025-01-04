@@ -4349,6 +4349,16 @@
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {
+        "key": "space",
+        "command": "emacs-mcx.prePointToRegister",
+        "when": "emacs-mcx.acceptingRegisterCommand && editorTextFocus"
+      },
+      {
+        "key": "j",
+        "command": "emacs-mcx.preJumpToRegister",
+        "when": "emacs-mcx.acceptingRegisterCommand && editorTextFocus"
+      },
+      {
         "key": "'",
         "when": "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
         "command": "emacs-mcx.typeChar",

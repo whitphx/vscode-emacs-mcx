@@ -5,8 +5,9 @@ import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 
 export type TextRegisters = Map<string, string>;
+export type PositionRegisters = Map<string, readonly vscode.Position[]>;
 
-type RegisterCommandType = "copy" | "insert";
+type RegisterCommandType = "copy" | "insert" | "point" | "jump";
 export class RegisterCommandState {
   private _acceptingRegisterCommand: RegisterCommandType | null = null;
   public get acceptingRegisterCommand(): RegisterCommandType | null {
@@ -71,12 +72,53 @@ export class PreInsertRegister extends EmacsCommand implements ITextEditorInterr
 }
 
 // Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
+// Will be bound to C-x r SPC
+export class PrePointToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "prePointToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("point", "Point to register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
+// Will be bound to C-x r j
+export class PreJumpToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preJumpToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("jump", "Jump to register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
 export class SomeRegisterCommand extends EmacsCommand {
   public readonly id = "someRegisterCommand";
 
   constructor(
     emacsController: IEmacsController,
     private readonly textRegisters: TextRegisters,
+    private readonly positionRegisters: PositionRegisters,
     private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
@@ -104,6 +146,10 @@ export class SomeRegisterCommand extends EmacsCommand {
       return this.runCopy(textEditor, registerKey);
     } else if (commandType === "insert") {
       return this.runInsert(textEditor, registerKey);
+    } else if (commandType === "point") {
+      return this.runPoint(textEditor, registerKey);
+    } else if (commandType === "jump") {
+      return this.runJump(textEditor, registerKey);
     }
   }
 
@@ -157,5 +203,31 @@ export class SomeRegisterCommand extends EmacsCommand {
     });
 
     MessageManager.showMessage("Mark set");
+  }
+
+  // point-to-register, C-x r SPC <r>
+  public runPoint(textEditor: vscode.TextEditor, registerKey: string): void {
+    const positions = textEditor.selections.map((selection) => selection.active);
+    this.positionRegisters.set(registerKey, positions);
+
+    this.emacsController.exitMarkMode();
+    MessageManager.showMessage(`Point saved to register ${registerKey}`);
+  }
+
+  // jump-to-register, C-x r j <r>
+  public runJump(textEditor: vscode.TextEditor, registerKey: string): void {
+    if (!this.positionRegisters.has(registerKey)) {
+      MessageManager.showMessage("Register does not contain a position");
+      return;
+    }
+
+    const positions = this.positionRegisters.get(registerKey);
+    if (positions == undefined) {
+      return;
+    }
+
+    textEditor.selections = positions.map((pos) => new vscode.Selection(pos, pos));
+    this.emacsController.exitMarkMode();
+    MessageManager.showMessage(`Jumped to position in register ${registerKey}`);
   }
 }
