@@ -20,7 +20,7 @@ interface RectangleRegisterData extends RegisterDataBase {
 }
 interface PositionRegisterData extends RegisterDataBase {
   type: "positions";
-  positions: ReadonlyArray<vscode.Position>;
+  positions: vscode.Position[];
 }
 export type RegisterData = TextRegisterData | RectangleRegisterData | PositionRegisterData;
 export type Registers = Map<string, RegisterData>;
@@ -247,10 +247,22 @@ export class SomeRegisterCommand extends EmacsCommand {
     const positions = textEditor.selections.map(
       (selection) => new vscode.Position(selection.active.line, selection.active.character),
     );
-    this.registers.set(registerKey, {
+    // Store positions with explicit type annotation
+    if (positions.length === 0) {
+      MessageManager.showMessage("No position to store");
+      return;
+    }
+    // Ensure all positions are valid VSCode Position objects
+    const validPositions = positions.filter((pos): pos is vscode.Position => pos instanceof vscode.Position);
+    if (validPositions.length === 0) {
+      MessageManager.showMessage("Invalid positions");
+      return;
+    }
+    const registerData: PositionRegisterData = {
       type: "positions",
-      positions: positions,
-    });
+      positions: validPositions,
+    };
+    this.registers.set(registerKey, registerData);
     // Keep selections empty at current positions
     makeSelectionsEmpty(textEditor);
     MessageManager.showMessage("Position saved in register");
@@ -269,9 +281,8 @@ export class SomeRegisterCommand extends EmacsCommand {
       return;
     }
 
-    // Save current positions to mark ring before jumping
-    const currentPositions = textEditor.selections.map((s) => new vscode.Position(s.active.line, s.active.character));
-
+    // Get and validate current positions
+    const currentPositions = textEditor.selections.map((s) => s.active);
     if (currentPositions.length === 0) {
       MessageManager.showMessage("No valid current positions");
       return;
@@ -282,20 +293,66 @@ export class SomeRegisterCommand extends EmacsCommand {
       return;
     }
 
-    // Set mark at current position before jumping
-    const firstCurrentPosition = currentPositions[0];
-    if (!(firstCurrentPosition instanceof vscode.Position)) {
-      MessageManager.showMessage("Invalid current position");
+    // Get positions from register and ensure they are valid
+    const storedPositions = data.positions;
+    if (!storedPositions || storedPositions.length === 0) {
+      MessageManager.showMessage("No positions stored in register");
       return;
     }
-    this.emacsController.enterMarkMode();
-    this.emacsController.pushMark(currentPositions);
 
-    // Create selections with current position as anchor and register position as active
-    const validPositions = data.positions.filter((pos): pos is vscode.Position => pos instanceof vscode.Position);
-    textEditor.selections = validPositions.map((pos) => new vscode.Selection(firstCurrentPosition, pos));
+    // First, save current positions as marks before moving
+    const currentMarks = currentPositions.map((pos) => new vscode.Position(pos.line, pos.character));
+
+    // Ensure we have at least one mark
+    if (currentMarks.length === 0) {
+      return;
+    }
+
+    // Create selections using the stored positions, ensuring type safety
+    const validStoredPositions = storedPositions.filter((pos): pos is vscode.Position => {
+      return pos instanceof vscode.Position && typeof pos.line === "number" && typeof pos.character === "number";
+    });
+    if (validStoredPositions.length === 0) {
+      MessageManager.showMessage("Invalid positions in register");
+      return;
+    }
+
+    // Use the first stored position for all selections to maintain consistent behavior
+    // We can use non-null assertion here because we've verified the array has elements
+    const targetPosition: vscode.Position = validStoredPositions[0]!;
+
+    // Save current positions as marks before moving
+    const marks = currentPositions.map((pos) => new vscode.Position(pos.line, pos.character));
+
+    // Set the marks for exchange point and mark functionality
+    // Important: These marks should be the positions we're jumping FROM
+    this.emacsController.pushMark(marks);
+    this.emacsController.setPrevExchangedMarks(marks);
+
+    // Create selections at target position with proper mark handling
+    // When jumping to a position in Emacs, we want to:
+    // 1. Set the mark at the current position (already done with pushMark above)
+    // 2. Move to the target position
+    // 3. Create a selection that spans from mark to target position
+    const currentPos = currentPositions[0];
+    if (!currentPos) {
+      return;
+    }
+
+    // Create a selection from the target position to the current position
+    // In Emacs, when jumping to a register:
+    // - The target position becomes the active point (where the cursor is)
+    // - The current position becomes the mark (anchor point)
+    const newSelection = new vscode.Selection(targetPosition, targetPosition);
+    textEditor.selections = [newSelection];
+
+    // Set mark mode and ensure proper mark state
+    this.emacsController.enterMarkMode();
+    this.emacsController.pushMark([currentPos]);
+
+    // Reveal cursor and notify user
     revealPrimaryActive(textEditor);
-    MessageManager.showMessage("Mark set");
+    MessageManager.showMessage("Jumped to saved position");
   }
 }
 
@@ -533,20 +590,29 @@ export class JumpToRegister extends EmacsCommand {
       return;
     }
 
-    // Set mark at current position before jumping
-    const firstCurrentPosition = currentPositions[0];
-    if (!(firstCurrentPosition instanceof vscode.Position)) {
-      MessageManager.showMessage("Invalid current position");
+    // Filter valid positions
+    const validCurrentPositions = currentPositions.filter(
+      (pos): pos is vscode.Position => pos instanceof vscode.Position,
+    );
+    const validPositions = data.positions.filter((pos): pos is vscode.Position => pos instanceof vscode.Position);
+
+    if (validCurrentPositions.length === 0 || validPositions.length === 0) {
+      MessageManager.showMessage("Invalid positions");
       return;
     }
-    this.emacsController.pushMark(currentPositions);
-    this.emacsController.enterMarkMode();
 
-    // Create selections with current position as anchor and register position as active
-    const validPositions = data.positions.filter((pos): pos is vscode.Position => pos instanceof vscode.Position);
-    textEditor.selections = validPositions.map((pos) => new vscode.Selection(firstCurrentPosition, pos));
+    // First, save current positions as marks
+    this.emacsController.pushMark(validCurrentPositions);
+    this.emacsController.setPrevExchangedMarks(validCurrentPositions);
+
+    // Then move to the target positions
+    // When jumping to a register position:
+    // - Both anchor and active points should be at the target position
+    // - This creates a cursor without selection
+    const newSelections = validPositions.map((pos) => new vscode.Selection(pos, pos));
+    textEditor.selections = newSelections;
+
     revealPrimaryActive(textEditor);
-
-    MessageManager.showMessage("Mark set");
+    MessageManager.showMessage("Jumped to saved position");
   }
 }

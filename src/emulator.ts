@@ -35,9 +35,11 @@ export interface IEmacsController {
   enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
   pushMark(positions: vscode.Position[], replace?: boolean): void;
+  setPrevExchangedMarks(positions: vscode.Position[] | null): void;
 
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
+  readonly prevExchangedMarks: vscode.Position[] | null;
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
   exchangePointAndMark(): void;
 }
@@ -88,7 +90,15 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private commandRegistry: EmacsCommandRegistry;
 
   private markRing: MarkRing;
-  private prevExchangedMarks: vscode.Position[] | null;
+  private _prevExchangedMarks: vscode.Position[] | null;
+
+  public get prevExchangedMarks(): vscode.Position[] | null {
+    return this._prevExchangedMarks;
+  }
+
+  public setPrevExchangedMarks(positions: vscode.Position[] | null): void {
+    this._prevExchangedMarks = positions;
+  }
 
   private _isInMarkMode = false;
   public get isInMarkMode(): boolean {
@@ -145,7 +155,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this._textEditor = textEditor;
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
-    this.prevExchangedMarks = null;
+    this._prevExchangedMarks = null;
 
     this.prefixArgumentHandler = new PrefixArgumentHandler(
       this.onPrefixArgumentChange,
@@ -589,7 +599,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public pushMark(positions: vscode.Position[], replace = false): void {
-    this.prevExchangedMarks = null;
+    this.setPrevExchangedMarks(null);
     this.markRing.push(positions, replace);
   }
 
@@ -603,19 +613,24 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   public exchangePointAndMark(): void {
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
-    this.enterMarkMode(false);
-    this.prevExchangedMarks = this.textEditor.selections.map((selection) => selection.active);
 
     if (prevMarks) {
+      // Save current positions before updating selections
+      const currentPositions = this.textEditor.selections.map((selection) => selection.active);
       const affectedLen = Math.min(this.textEditor.selections.length, prevMarks.length);
       const affectedSelections = this.textEditor.selections.slice(0, affectedLen).map((selection, i) => {
         // `i < affectedLen <= prevMarks.length`,
         // so the `noUncheckedIndexedAccess` rule can be skipped here.
 
         const prevMark = prevMarks[i]!;
-        return new vscode.Selection(selection.active, prevMark);
+        return new vscode.Selection(prevMark, prevMark);
       });
       const newSelections = affectedSelections.concat(this.textEditor.selections.slice(affectedLen));
+
+      // Set prevExchangedMarks before updating selections
+      this.setPrevExchangedMarks(currentPositions);
+
+      // Update selections
       this.textEditor.selections = newSelections;
       this.textEditor.revealRange(this.textEditor.selection);
     }
