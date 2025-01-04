@@ -18,10 +18,15 @@ interface RectangleRegisterData extends RegisterDataBase {
   type: "rectangle";
   rectTexts: RectangleTexts;
 }
-export type RegisterData = TextRegisterData | RectangleRegisterData;
-export type TextRegisters = Map<string, RegisterData>;
+interface PositionRegisterData extends RegisterDataBase {
+  type: "positions";
+  positions: ReadonlyArray<vscode.Position>;
+}
+export type RegisterData = TextRegisterData | RectangleRegisterData | PositionRegisterData;
+export type Registers = Map<string, RegisterData>;
+export type TextRegisters = Registers; // Maintain backward compatibility
 
-type RegisterCommandType = "copy" | "insert" | "copy-rectangle";
+type RegisterCommandType = "copy" | "insert" | "copy-rectangle" | "point" | "jump";
 export class RegisterCommandState {
   private _acceptingRegisterCommand: RegisterCommandType | null = null;
   public get acceptingRegisterCommand(): RegisterCommandType | null {
@@ -114,7 +119,7 @@ export class SomeRegisterCommand extends EmacsCommand {
 
   constructor(
     emacsController: IEmacsController,
-    private readonly textRegisters: TextRegisters,
+    private readonly registers: Registers,
     private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
@@ -134,7 +139,8 @@ export class SomeRegisterCommand extends EmacsCommand {
     this.registerCommandState.stopAcceptingRegisterKey();
 
     const registerKey = args?.[0];
-    if (typeof registerKey !== "string") {
+    if (typeof registerKey !== "string" || registerKey.length !== 1) {
+      MessageManager.showMessage("Invalid register key");
       return;
     }
 
@@ -146,32 +152,36 @@ export class SomeRegisterCommand extends EmacsCommand {
       return this.runInsert(textEditor, registerKey);
     } else if (commandType === "copy-rectangle") {
       return this.runCopyRectangle(textEditor, registerKey, deleteRegion);
+    } else if (commandType === "point") {
+      return this.runPoint(textEditor, registerKey);
+    } else if (commandType === "jump") {
+      return this.runJump(textEditor, registerKey);
     }
   }
 
   // copy-to-register, C-x r s <r>
   public async runCopy(textEditor: vscode.TextEditor, registerKey: string, deleteRegion: boolean): Promise<void> {
-    const selectionsAfterRectDisabled =
-      this.emacsController.inRectMarkMode &&
-      this.emacsController.nativeSelections.map((selection) => {
-        const newLine = selection.active.line;
-        const newChar = Math.min(selection.active.character, selection.anchor.character);
-        return new vscode.Selection(newLine, newChar, newLine, newChar);
-      });
-    const selections = getNonEmptySelections(textEditor);
-    if (selectionsAfterRectDisabled) {
-      textEditor.selections = selectionsAfterRectDisabled;
+    const nonEmptySelections = getNonEmptySelections(textEditor);
+
+    // If there are no non-empty selections, store an empty string
+    if (nonEmptySelections.length === 0) {
+      this.registers.set(registerKey, { type: "text", text: "" });
+      this.emacsController.exitMarkMode();
+      makeSelectionsEmpty(textEditor);
+      return;
     }
 
-    const texts = selections.map((selection) => textEditor.document.getText(selection));
+    const texts = nonEmptySelections.map((selection) => textEditor.document.getText(selection));
     const text = texts.join(""); // TODO: Deal with the multi-cursor case like the kill-yank commands.
 
     if (deleteRegion) {
-      await deleteRanges(textEditor, selections);
+      await deleteRanges(textEditor, nonEmptySelections);
       revealPrimaryActive(textEditor);
     }
 
-    this.textRegisters.set(registerKey, { type: "text", text });
+    // Store text in register with correct type
+    const registerData: TextRegisterData = { type: "text", text };
+    this.registers.set(registerKey, registerData);
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
@@ -181,26 +191,28 @@ export class SomeRegisterCommand extends EmacsCommand {
   public async runInsert(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
     const selections = textEditor.selections;
 
+    // Save current positions before inserting
     this.emacsController.pushMark(selections.map((s) => s.active));
 
-    if (!this.textRegisters.has(registerKey)) {
+    if (!this.registers.has(registerKey)) {
       MessageManager.showMessage("Register does not contain text");
       return;
     }
 
-    const dataToInsert = this.textRegisters.get(registerKey);
-    if (dataToInsert == undefined) {
+    const dataToInsert = this.registers.get(registerKey);
+    if (!dataToInsert) {
       return;
     }
 
+    // Handle text and rectangle data types with proper type checking
     if (dataToInsert.type === "text") {
+      const text = dataToInsert.text ?? ""; // Use empty string if text is undefined
       await textEditor.edit((editBuilder) => {
         selections.forEach((selection) => {
           if (!selection.isEmpty) {
             editBuilder.delete(selection);
           }
-
-          editBuilder.insert(selection.start, dataToInsert.text);
+          editBuilder.insert(selection.start, text);
         });
       });
     } else if (dataToInsert.type === "rectangle") {
@@ -222,10 +234,319 @@ export class SomeRegisterCommand extends EmacsCommand {
     });
 
     if (copiedRectTexts) {
-      this.textRegisters.set(registerKey, { type: "rectangle", rectTexts: copiedRectTexts });
+      this.registers.set(registerKey, { type: "rectangle", rectTexts: copiedRectTexts });
     }
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
+  }
+
+  // point-to-register, C-x r SPC <r>
+  public async runPoint(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+    // Save all cursor positions as new Position objects to ensure immutability
+    const positions = textEditor.selections.map(
+      (selection) => new vscode.Position(selection.active.line, selection.active.character),
+    );
+    this.registers.set(registerKey, {
+      type: "positions",
+      positions: positions,
+    });
+    // Keep selections empty at current positions
+    makeSelectionsEmpty(textEditor);
+    MessageManager.showMessage("Position saved in register");
+  }
+
+  // jump-to-register, C-x r j <r>
+  public async runJump(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+    if (!this.registers.has(registerKey)) {
+      MessageManager.showMessage("Register does not contain a position");
+      return;
+    }
+
+    const data = this.registers.get(registerKey);
+    if (data?.type !== "positions") {
+      MessageManager.showMessage("Register does not contain a position");
+      return;
+    }
+
+    // Save current positions to mark ring before jumping
+    const currentPositions = textEditor.selections.map((s) => new vscode.Position(s.active.line, s.active.character));
+
+    if (currentPositions.length === 0) {
+      MessageManager.showMessage("No valid current positions");
+      return;
+    }
+
+    if (!data.positions || data.positions.length === 0) {
+      MessageManager.showMessage("No position stored in this register");
+      return;
+    }
+
+    // Set mark at current position before jumping
+    const firstCurrentPosition = currentPositions[0];
+    if (!(firstCurrentPosition instanceof vscode.Position)) {
+      MessageManager.showMessage("Invalid current position");
+      return;
+    }
+    this.emacsController.enterMarkMode();
+    this.emacsController.pushMark(currentPositions);
+
+    // Create selections with current position as anchor and register position as active
+    const validPositions = data.positions.filter((pos): pos is vscode.Position => pos instanceof vscode.Position);
+    textEditor.selections = validPositions.map((pos) => new vscode.Selection(firstCurrentPosition, pos));
+    revealPrimaryActive(textEditor);
+    MessageManager.showMessage("Mark set");
+  }
+}
+
+// copy-to-register, C-x r s <r>
+export class CopyToRegister extends EmacsCommand {
+  public readonly id = "copyToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registers: Registers,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public async run(
+    textEditor: vscode.TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+    args?: unknown[],
+  ): Promise<void> {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
+
+    const deleteRegion = prefixArgument != null;
+
+    const selectionsAfterRectDisabled =
+      this.emacsController.inRectMarkMode &&
+      this.emacsController.nativeSelections.map((selection) => {
+        const newLine = selection.active.line;
+        const newChar = Math.min(selection.active.character, selection.anchor.character);
+        return new vscode.Selection(newLine, newChar, newLine, newChar);
+      });
+    const selections = getNonEmptySelections(textEditor);
+    if (selectionsAfterRectDisabled) {
+      textEditor.selections = selectionsAfterRectDisabled;
+    }
+
+    const texts = selections.map((selection) => textEditor.document.getText(selection));
+    const text = texts.join(""); // TODO: Deal with the multi-cursor case like the kill-yank commands.
+
+    if (deleteRegion) {
+      await deleteRanges(textEditor, selections);
+      revealPrimaryActive(textEditor);
+    }
+
+    this.registers.set(registerKey, { type: "text", text });
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+  }
+}
+
+// copy-rectangle-to-register, C-x r r <r>
+export class CopyRectangleToRegister extends EmacsCommand {
+  public readonly id = "copyRectangleToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registers: Registers,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public async run(
+    textEditor: vscode.TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+    args?: unknown[],
+  ): Promise<void> {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
+
+    const deleteRegion = prefixArgument != null;
+
+    const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
+      copy: true,
+      delete: deleteRegion,
+    });
+
+    if (copiedRectTexts) {
+      this.registers.set(registerKey, { type: "rectangle", rectTexts: copiedRectTexts });
+    }
+
+    this.emacsController.exitMarkMode();
+    makeSelectionsEmpty(textEditor);
+  }
+}
+
+// point-to-register, C-x r SPC <r>
+export class PointToRegister extends EmacsCommand {
+  public readonly id = "pointToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registers: Registers,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public async run(
+    textEditor: vscode.TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+    args?: unknown[],
+  ): Promise<void> {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
+
+    // Save all cursor positions as new Position objects to ensure immutability
+    const positions = textEditor.selections.map(
+      (selection) => new vscode.Position(selection.active.line, selection.active.character),
+    );
+
+    if (positions.length === 0) {
+      MessageManager.showMessage("No valid positions to save");
+      return;
+    }
+
+    this.registers.set(registerKey, {
+      type: "positions",
+      positions: positions,
+    });
+    // Keep selections empty at current positions
+    makeSelectionsEmpty(textEditor);
+    MessageManager.showMessage("Position saved in register");
+  }
+}
+
+// jump-to-register, C-x r j <r>
+export class InsertRegister extends EmacsCommand {
+  public readonly id = "insertRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registers: Registers,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public async run(
+    textEditor: vscode.TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+    args?: unknown[],
+  ): Promise<void> {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
+
+    if (!this.registers.has(registerKey)) {
+      MessageManager.showMessage("Register does not contain text");
+      return;
+    }
+
+    const data = this.registers.get(registerKey);
+    if (!data) {
+      return;
+    }
+
+    // Save current positions before inserting
+    this.emacsController.pushMark(textEditor.selections.map((s) => s.active));
+
+    // Handle text and rectangle data types with proper type checking
+    if (data.type === "text") {
+      const text = data.text ?? ""; // Use empty string if text is undefined
+      await textEditor.edit((editBuilder) => {
+        textEditor.selections.forEach((selection) => {
+          if (!selection.isEmpty) {
+            editBuilder.delete(selection);
+          }
+          editBuilder.insert(selection.start, text);
+        });
+      });
+    } else if (data.type === "rectangle") {
+      // Handle rectangle data
+      await insertRect(textEditor, data.rectTexts);
+    }
+
+    makeSelectionsEmpty(textEditor);
+    revealPrimaryActive(textEditor);
+  }
+}
+
+export class JumpToRegister extends EmacsCommand {
+  public readonly id = "jumpToRegister";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registers: Registers,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public async run(
+    textEditor: vscode.TextEditor,
+    isInMarkMode: boolean,
+    prefixArgument: number | undefined,
+    args?: unknown[],
+  ): Promise<void> {
+    const registerKey = args?.[0];
+    if (typeof registerKey !== "string") {
+      return;
+    }
+
+    if (!this.registers.has(registerKey)) {
+      MessageManager.showMessage("Register does not contain a position");
+      return;
+    }
+
+    const data = this.registers.get(registerKey);
+    if (data?.type !== "positions") {
+      MessageManager.showMessage("Register does not contain a position");
+      return;
+    }
+
+    // Save current positions before jumping
+    const currentPositions = textEditor.selections.map(
+      (sel) => new vscode.Position(sel.active.line, sel.active.character),
+    );
+
+    if (currentPositions.length === 0 || !data.positions || data.positions.length === 0) {
+      MessageManager.showMessage("No position to jump to");
+      return;
+    }
+
+    // Set mark at current position before jumping
+    const firstCurrentPosition = currentPositions[0];
+    if (!(firstCurrentPosition instanceof vscode.Position)) {
+      MessageManager.showMessage("Invalid current position");
+      return;
+    }
+    this.emacsController.pushMark(currentPositions);
+    this.emacsController.enterMarkMode();
+
+    // Create selections with current position as anchor and register position as active
+    const validPositions = data.positions.filter((pos): pos is vscode.Position => pos instanceof vscode.Position);
+    textEditor.selections = validPositions.map((pos) => new vscode.Selection(firstCurrentPosition, pos));
+    revealPrimaryActive(textEditor);
+
+    MessageManager.showMessage("Mark set");
   }
 }
