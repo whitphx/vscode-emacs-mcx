@@ -9,6 +9,7 @@ import {
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { IEmacsController } from "src/emulator";
+import { handleRectangleMode, createNewSelections } from "./helpers/rectangleMode";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -34,24 +35,34 @@ export class ForwardChar extends EmacsCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
-    if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives((curActive) => curActive.translate(0, charDelta));
-      return;
-    }
 
     if (charDelta === 1) {
+      if (this.emacsController.inRectMarkMode) {
+        this.emacsController.moveRectActives((curActive) => curActive.translate(0, charDelta));
+        return;
+      }
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
-    } else if (charDelta > 0) {
-      const doc = textEditor.document;
-      const newSelections = textEditor.selections.map((selection) => {
-        const offset = doc.offsetAt(selection.active);
-        const newActivePos = doc.positionAt(offset + charDelta);
-        const newAnchorPos = isInMarkMode ? selection.anchor : newActivePos;
-        return new vscode.Selection(newAnchorPos, newActivePos);
-      });
-      textEditor.selections = newSelections;
-      revealPrimaryActive(textEditor);
     }
+
+    const moveForward = (pos: vscode.Position): vscode.Position => {
+      const doc = textEditor.document;
+      const offset = doc.offsetAt(pos);
+      return doc.positionAt(offset + charDelta);
+    };
+
+    handleRectangleMode(
+      this.emacsController,
+      textEditor,
+      isInMarkMode,
+      () => this.emacsController.moveRectActives(moveForward),
+      () => {
+        const newSelections = createNewSelections(textEditor, isInMarkMode, (selection) =>
+          moveForward(selection.active),
+        );
+        textEditor.selections = newSelections;
+        revealPrimaryActive(textEditor);
+      },
+    );
   }
 }
 
@@ -60,26 +71,36 @@ export class BackwardChar extends EmacsCommand {
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
-    if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives(
-        (curActive) => new vscode.Position(curActive.line, Math.max(curActive.character - charDelta, 0)),
-      );
-      return;
-    }
 
     if (charDelta === 1) {
+      if (this.emacsController.inRectMarkMode) {
+        this.emacsController.moveRectActives(
+          (curActive) => new vscode.Position(curActive.line, Math.max(curActive.character - charDelta, 0)),
+        );
+        return;
+      }
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
-    } else if (charDelta > 0) {
-      const doc = textEditor.document;
-      const newSelections = textEditor.selections.map((selection) => {
-        const offset = doc.offsetAt(selection.active);
-        const newActivePos = doc.positionAt(offset - charDelta);
-        const newAnchorPos = isInMarkMode ? selection.anchor : newActivePos;
-        return new vscode.Selection(newAnchorPos, newActivePos);
-      });
-      textEditor.selections = newSelections;
-      revealPrimaryActive(textEditor);
     }
+
+    const moveBackward = (pos: vscode.Position): vscode.Position => {
+      const doc = textEditor.document;
+      const offset = doc.offsetAt(pos);
+      return doc.positionAt(offset - charDelta);
+    };
+
+    handleRectangleMode(
+      this.emacsController,
+      textEditor,
+      isInMarkMode,
+      () => this.emacsController.moveRectActives(moveBackward),
+      () => {
+        const newSelections = createNewSelections(textEditor, isInMarkMode, (selection) =>
+          moveBackward(selection.active),
+        );
+        textEditor.selections = newSelections;
+        revealPrimaryActive(textEditor);
+      },
+    );
   }
 }
 
@@ -196,9 +217,20 @@ export class MoveEndOfLine extends EmacsCommand {
   }
 }
 
+/**
+ * Implements the Emacs M-f command to move forward by words.
+ * Uses VSCode's word movement commands for consistent behavior.
+ */
 export class ForwardWord extends EmacsCommand {
   public readonly id = "forwardWord";
 
+  /**
+   * Moves cursor forward by specified number of words.
+   * Currently does not support rectangle mode.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Number of words to move (defaults to 1)
+   */
   public run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
@@ -216,9 +248,20 @@ export class ForwardWord extends EmacsCommand {
   }
 }
 
+/**
+ * Implements the Emacs M-b command to move backward by words.
+ * Uses VSCode's word movement commands for consistent behavior.
+ */
 export class BackwardWord extends EmacsCommand {
   public readonly id = "backwardWord";
 
+  /**
+   * Moves cursor backward by specified number of words.
+   * Currently does not support rectangle mode.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Number of words to move (defaults to 1)
+   */
   public run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
@@ -263,9 +306,20 @@ export class BackToIndentation extends EmacsCommand {
   }
 }
 
+/**
+ * Implements the Emacs M-< command to move to start of buffer.
+ * Sets mark at previous position when not in mark mode.
+ */
 export class BeginningOfBuffer extends EmacsCommand {
   public readonly id = "beginningOfBuffer";
 
+  /**
+   * Moves cursor to beginning of buffer, setting mark at previous position.
+   * Supports both normal and rectangle selection modes.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Not used in this command
+   */
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       const beginning = textEditor.document.positionAt(0);
@@ -281,9 +335,20 @@ export class BeginningOfBuffer extends EmacsCommand {
   }
 }
 
+/**
+ * Implements the Emacs M-> command to move to end of buffer.
+ * Sets mark at previous position when not in mark mode.
+ */
 export class EndOfBuffer extends EmacsCommand {
   public readonly id = "endOfBuffer";
 
+  /**
+   * Moves cursor to end of buffer, setting mark at previous position.
+   * Supports both normal and rectangle selection modes.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Not used in this command
+   */
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       const end = textEditor.document.lineAt(textEditor.document.lineCount - 1).range.end;
@@ -355,9 +420,20 @@ export function movePrimaryCursorIntoVisibleRange(
   textEditor.selections = newSelections;
 }
 
+/**
+ * Implements the Emacs C-v command for scrolling text upward (showing text below).
+ * Supports both page-wise and line-wise scrolling based on configuration.
+ */
 export class ScrollUpCommand extends EmacsCommand {
   public readonly id = "scrollUpCommand";
 
+  /**
+   * Scrolls the view upward by page or specified number of lines.
+   * Ensures cursor stays in visible range after scrolling.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Number of lines to scroll (if line-wise)
+   */
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
       return vscode.commands
@@ -405,9 +481,20 @@ export class ScrollDownCommand extends EmacsCommand {
   }
 }
 
+/**
+ * Implements the Emacs M-} command to move forward by paragraphs.
+ * A paragraph is defined by blank lines between text.
+ */
 export class ForwardParagraph extends EmacsCommand {
   public readonly id = "forwardParagraph";
 
+  /**
+   * Moves cursor forward by specified number of paragraphs.
+   * Supports both normal and rectangle selection modes.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Number of paragraphs to move (defaults to 1)
+   */
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     const doc = textEditor.document;
@@ -419,23 +506,36 @@ export class ForwardParagraph extends EmacsCommand {
       return pos;
     };
 
-    if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives(repeatedTravelForwardParagraph);
-      return;
-    }
-
-    const newSelections = textEditor.selections.map((selection) => {
-      const newActive = repeatedTravelForwardParagraph(selection.active);
-      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
-    });
-    textEditor.selections = newSelections;
-    revealPrimaryActive(textEditor);
+    handleRectangleMode(
+      this.emacsController,
+      textEditor,
+      isInMarkMode,
+      () => this.emacsController.moveRectActives(repeatedTravelForwardParagraph),
+      () => {
+        const newSelections = createNewSelections(textEditor, isInMarkMode, (selection) =>
+          repeatedTravelForwardParagraph(selection.active),
+        );
+        textEditor.selections = newSelections;
+        revealPrimaryActive(textEditor);
+      },
+    );
   }
 }
 
+/**
+ * Implements the Emacs M-{ command to move backward by paragraphs.
+ * A paragraph is defined by blank lines between text.
+ */
 export class BackwardParagraph extends EmacsCommand {
   public readonly id = "backwardParagraph";
 
+  /**
+   * Moves cursor backward by specified number of paragraphs.
+   * Supports both normal and rectangle selection modes.
+   * @param textEditor - The active text editor
+   * @param isInMarkMode - Whether mark mode is active
+   * @param prefixArgument - Number of paragraphs to move (defaults to 1)
+   */
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     const doc = textEditor.document;
@@ -447,16 +547,18 @@ export class BackwardParagraph extends EmacsCommand {
       return pos;
     };
 
-    if (this.emacsController.inRectMarkMode) {
-      this.emacsController.moveRectActives(repeatedTravelBackwardParagraph);
-      return;
-    }
-
-    const newSelections = textEditor.selections.map((selection) => {
-      const newActive = repeatedTravelBackwardParagraph(selection.active);
-      return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
-    });
-    textEditor.selections = newSelections;
-    revealPrimaryActive(textEditor);
+    handleRectangleMode(
+      this.emacsController,
+      textEditor,
+      isInMarkMode,
+      () => this.emacsController.moveRectActives(repeatedTravelBackwardParagraph),
+      () => {
+        const newSelections = createNewSelections(textEditor, isInMarkMode, (selection) =>
+          repeatedTravelBackwardParagraph(selection.active),
+        );
+        textEditor.selections = newSelections;
+        revealPrimaryActive(textEditor);
+      },
+    );
   }
 }

@@ -134,6 +134,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   private disposables: vscode.Disposable[];
 
+  /**
+   * Core controller for emulating Emacs-like behavior in VSCode.
+   *
+   * @param textEditor - VSCode text editor instance
+   * @param killRing - Optional kill ring for clipboard history
+   * @param minibuffer - Interface for user input
+   * @param textRegisters - Storage for named text snippets
+   */
   constructor(
     textEditor: TextEditor,
     killRing: KillRing | null = null,
@@ -151,12 +159,22 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     );
 
     this.disposables = [];
+    this.commandRegistry = new EmacsCommandRegistry();
+    this.afterCommand = this.afterCommand.bind(this);
 
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
 
-    this.commandRegistry = new EmacsCommandRegistry();
-    this.afterCommand = this.afterCommand.bind(this);
+    vscode.window.onDidChangeTextEditorVisibleRanges(
+      () => {
+        if (Configuration.instance.strictEmacsMove) {
+          // Keep the primary cursor in the visible range when scrolling
+          MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
+        }
+      },
+      this,
+      this.disposables,
+    );
 
     this.commandRegistry.register(new MoveCommands.ForwardChar(this));
     this.commandRegistry.register(new MoveCommands.BackwardChar(this));
@@ -171,16 +189,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.EndOfBuffer(this));
     this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this));
     this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this));
-    vscode.window.onDidChangeTextEditorVisibleRanges(
-      () => {
-        if (Configuration.instance.strictEmacsMove) {
-          // Keep the primary cursor in the visible range when scrolling
-          MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
-        }
-      },
-      this,
-      this.disposables,
-    );
     this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
@@ -189,11 +197,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new EditCommands.NewLine(this));
     this.commandRegistry.register(new DeleteBlankLines(this));
     this.commandRegistry.register(new RecenterTopBottom(this));
-
     this.commandRegistry.register(new TabCommands.TabToTabStop(this));
-
     this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
 
+    // Register search and replace commands
     const searchState: FindCommands.SearchState = {
       startSelections: undefined,
     };
@@ -207,6 +214,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new FindCommands.IsearchExit(this, searchState));
 
     const killYanker = new KillYanker(this, killRing, minibuffer);
+    this.killYanker = killYanker;
+    this.registerDisposable(killYanker);
+
     this.commandRegistry.register(new KillCommands.KillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.BackwardKillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.KillLine(this, killYanker));
@@ -215,8 +225,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.CopyRegion(this, killYanker));
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
-    this.killYanker = killYanker;
-    this.registerDisposable(killYanker);
 
     const registerCommandState = new TextRegisterCommands.RegisterCommandState();
     this.commandRegistry.register(new TextRegisterCommands.PreCopyToRegister(this, registerCommandState));
@@ -225,7 +233,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(
       new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, registerCommandState),
     );
-
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
     };
@@ -247,10 +254,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new PareditCommands.KillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.PareditKill(this, killYanker));
-
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this));
 
+    // Register case transformation commands
     this.commandRegistry.register(new CaseCommands.TransformToUppercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToLowercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this));
@@ -552,6 +559,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     MessageManager.showMessage("Quit");
   }
 
+  /**
+   * In Emacs, mark mode is used to define regions of text for operations.
+   * When active, the region between point (cursor) and mark is highlighted.
+   *
+   * @param pushMark - If true, saves current cursor position(s) to mark ring
+   */
   public enterMarkMode(pushMark = true): void {
     this._isInMarkMode = true;
     this._markModeAnchors = this.textEditor.selections.map((selection) => selection.anchor);
@@ -570,6 +583,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
+  /**
+   * @param positions - Array of positions to save as marks
+   * @param replace - If true, replaces the last mark instead of pushing new ones
+   */
   public pushMark(positions: vscode.Position[], replace = false): void {
     this.prevExchangedMarks = null;
     this.markRing.push(positions, replace);
@@ -583,6 +600,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
+  /**
+   * Implements the Emacs C-x C-x command functionality.
+   * If called repeatedly, alternates between the last two marked positions.
+   * In multi-cursor mode, affects only cursors that have corresponding marks.
+   */
   public exchangePointAndMark(): void {
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
     this.enterMarkMode(false);
