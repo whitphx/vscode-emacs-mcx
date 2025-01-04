@@ -135,13 +135,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private disposables: vscode.Disposable[];
 
   /**
-   * Initializes a new instance of EmacsEmulator.
-   * This class serves as the core controller for emulating Emacs-like behavior in VSCode,
-   * managing text operations, mark mode, and command registration.
+   * Core controller for emulating Emacs-like behavior in VSCode.
    *
-   * @param textEditor - The VSCode text editor instance to attach to
-   * @param killRing - Optional kill ring for managing clipboard history
-   * @param minibuffer - Interface for user input, defaults to InputBoxMinibuffer
+   * @param textEditor - VSCode text editor instance
+   * @param killRing - Optional kill ring for clipboard history
+   * @param minibuffer - Interface for user input
    * @param textRegisters - Storage for named text snippets
    */
   constructor(
@@ -152,7 +150,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   ) {
     this._textEditor = textEditor;
 
-    // Initialize core components
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
     this.prevExchangedMarks = null;
 
@@ -165,11 +162,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry = new EmacsCommandRegistry();
     this.afterCommand = this.afterCommand.bind(this);
 
-    const killYanker = new KillYanker(this, killRing, minibuffer);
-    this.killYanker = killYanker;
-    this.registerDisposable(killYanker);
-
-    // Set up event listeners
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
 
@@ -184,24 +176,21 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this.disposables,
     );
 
-    // Register movement commands
-    this.commandRegistry.register(new MoveCommands.ForwardChar(this)); // C-f
-    this.commandRegistry.register(new MoveCommands.BackwardChar(this)); // C-b
-    this.commandRegistry.register(new MoveCommands.NextLine(this)); // C-n
-    this.commandRegistry.register(new MoveCommands.PreviousLine(this)); // C-p
-    this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this)); // C-a
-    this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this)); // C-e
-    this.commandRegistry.register(new MoveCommands.ForwardWord(this)); // M-f
-    this.commandRegistry.register(new MoveCommands.BackwardWord(this)); // M-b
-    this.commandRegistry.register(new MoveCommands.BackToIndentation(this)); // M-m
-    this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this)); // M-<
-    this.commandRegistry.register(new MoveCommands.EndOfBuffer(this)); // M->
-    this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this)); // C-v
-    this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this)); // M-v
-    this.commandRegistry.register(new MoveCommands.ForwardParagraph(this)); // M-}
-    this.commandRegistry.register(new MoveCommands.BackwardParagraph(this)); // M-{
-
-    // Register editing commands
+    this.commandRegistry.register(new MoveCommands.ForwardChar(this));
+    this.commandRegistry.register(new MoveCommands.BackwardChar(this));
+    this.commandRegistry.register(new MoveCommands.NextLine(this));
+    this.commandRegistry.register(new MoveCommands.PreviousLine(this));
+    this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this));
+    this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this));
+    this.commandRegistry.register(new MoveCommands.ForwardWord(this));
+    this.commandRegistry.register(new MoveCommands.BackwardWord(this));
+    this.commandRegistry.register(new MoveCommands.BackToIndentation(this));
+    this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this));
+    this.commandRegistry.register(new MoveCommands.EndOfBuffer(this));
+    this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this));
+    this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this));
+    this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
+    this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteHorizontalSpace(this));
@@ -224,7 +213,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new FindCommands.IsearchAbort(this, searchState));
     this.commandRegistry.register(new FindCommands.IsearchExit(this, searchState));
 
-    // Register kill and yank commands
+    const killYanker = new KillYanker(this, killRing, minibuffer);
+    this.killYanker = killYanker;
+    this.registerDisposable(killYanker);
+
     this.commandRegistry.register(new KillCommands.KillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.BackwardKillWord(this, killYanker));
     this.commandRegistry.register(new KillCommands.KillLine(this, killYanker));
@@ -234,15 +226,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
 
-    // Register text register commands
     const registerCommandState = new TextRegisterCommands.RegisterCommandState();
     this.commandRegistry.register(new TextRegisterCommands.PreCopyToRegister(this, registerCommandState));
     this.commandRegistry.register(new TextRegisterCommands.PreInsertRegister(this, registerCommandState));
     this.commandRegistry.register(
       new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, registerCommandState),
     );
-
-    // Register rectangle commands
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
     };
@@ -256,7 +245,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new RectangleCommands.StringRectangle(this, minibuffer));
     this.commandRegistry.register(new RectangleCommands.ReplaceKillRingToRectangle(this, killRing));
 
-    // Register paredit commands
     this.commandRegistry.register(new PareditCommands.ForwardSexp(this));
     this.commandRegistry.register(new PareditCommands.BackwardSexp(this));
     this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this));
@@ -265,8 +253,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new PareditCommands.KillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this, killYanker));
     this.commandRegistry.register(new PareditCommands.PareditKill(this, killYanker));
-
-    // Register selection commands
     this.commandRegistry.register(new AddSelectionToNextFindMatch(this));
     this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this));
 
@@ -332,13 +318,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
-  /**
-   * Handles text document change events.
-   * Exits mark mode when text changes occur within selected regions
-   * and notifies the editor of interruption.
-   *
-   * @param e - The document change event
-   */
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
@@ -356,13 +335,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
-  /**
-   * Handles selection change events in the editor.
-   * Updates the native selections store and handles interruptions,
-   * with special handling for rectangle mode selections.
-   *
-   * @param e - The selection change event from VS Code
-   */
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
     if (!this.rectMode) {
       this.nativeSelectionsStore.set(e.textEditor, e.textEditor.selections);
@@ -583,7 +555,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   /**
-   * Enters mark mode, which enables text selection.
    * In Emacs, mark mode is used to define regions of text for operations.
    * When active, the region between point (cursor) and mark is highlighted.
    *
@@ -608,9 +579,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   /**
-   * Saves one or more cursor positions to the mark ring.
-   * The mark ring maintains a history of marked positions for navigation.
-   *
    * @param positions - Array of positions to save as marks
    * @param replace - If true, replaces the last mark instead of pushing new ones
    */
@@ -628,12 +596,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   /**
-   * Swaps the current cursor position (point) with the mark position.
    * Implements the Emacs C-x C-x command functionality.
-   *
    * If called repeatedly, alternates between the last two marked positions.
    * In multi-cursor mode, affects only cursors that have corresponding marks.
-   * Enters mark mode without pushing new marks to preserve the mark ring state.
    */
   public exchangePointAndMark(): void {
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
@@ -655,11 +620,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
-  /**
-   * Exits mark mode, ending the current text selection operation.
-   * This preserves the current selection but stops further region expansion.
-   * Also ensures rectangle mode is exited and updates VS Code context.
-   */
   public exitMarkMode(): void {
     this._isInMarkMode = false;
     this.exitRectangleMarkMode();
