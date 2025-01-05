@@ -234,13 +234,9 @@ export class SomeRegisterCommand extends EmacsCommand {
 
     this.emacsController.pushMark(selections.map((s) => s.active));
 
-    if (!this.registers.has(registerKey)) {
-      MessageManager.showMessage("Register does not contain text");
-      return;
-    }
-
     const dataToInsert = this.registers.get(registerKey);
     if (dataToInsert == undefined) {
+      MessageManager.showMessage("Register does not contain text");
       return;
     }
 
