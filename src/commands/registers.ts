@@ -18,10 +18,15 @@ interface RectangleRegisterData extends RegisterDataBase {
   type: "rectangle";
   rectTexts: RectangleTexts;
 }
-export type RegisterData = TextRegisterData | RectangleRegisterData;
+interface PointRegisterData extends RegisterDataBase {
+  type: "point";
+  buffer: vscode.Uri;
+  points: vscode.Position[];
+}
+export type RegisterData = TextRegisterData | RectangleRegisterData | PointRegisterData;
 export type TextRegisters = Map<string, RegisterData>;
 
-type RegisterCommandType = "copy" | "insert" | "copy-rectangle";
+type RegisterCommandType = "copy" | "insert" | "copy-rectangle" | "point" | "jump";
 export class RegisterCommandState {
   private _acceptingRegisterCommand: RegisterCommandType | null = null;
   public get acceptingRegisterCommand(): RegisterCommandType | null {
@@ -108,6 +113,48 @@ export class PreCopyRectangleToRegister extends EmacsCommand implements ITextEdi
   }
 }
 
+// Will be bound to C-x r SPC
+export class PrePointToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "prePointToRegister";
+  override isIntermediateCommand = true;
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("point", "Point to register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
+// Will be bound to C-x r j
+export class PreJumpToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "preJumpToRegister";
+  override isIntermediateCommand = true;
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly registerCommandState: RegisterCommandState,
+  ) {
+    super(emacsController);
+  }
+
+  public run(): void {
+    this.registerCommandState.startAcceptingRegisterKey("jump", "Jump to register: ");
+  }
+
+  public onDidInterruptTextEditor(): void {
+    this.registerCommandState.stopAcceptingRegisterKey();
+  }
+}
+
 // Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
 export class SomeRegisterCommand extends EmacsCommand {
   public readonly id = "someRegisterCommand";
@@ -146,6 +193,10 @@ export class SomeRegisterCommand extends EmacsCommand {
       return this.runInsert(textEditor, registerKey);
     } else if (commandType === "copy-rectangle") {
       return this.runCopyRectangle(textEditor, registerKey, deleteRegion);
+    } else if (commandType === "point") {
+      return this.runPoint(textEditor, registerKey);
+    } else if (commandType === "jump") {
+      return this.runJump(textEditor, registerKey);
     }
   }
 
@@ -227,5 +278,37 @@ export class SomeRegisterCommand extends EmacsCommand {
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
+  }
+
+  // point-to-register, C-x r SPC <r>
+  public async runPoint(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+    const points = textEditor.selections.map((selection) => selection.active);
+    this.textRegisters.set(registerKey, {
+      type: "point",
+      buffer: textEditor.document.uri,
+      points,
+    });
+  }
+
+  // jump-to-register, C-x r j <r>
+  public async runJump(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+    const data = this.textRegisters.get(registerKey);
+    if (data == undefined || data.type !== "point") {
+      MessageManager.showMessage("Register doesn't contain a buffer position or configuration");
+      return;
+    }
+
+    const document = vscode.workspace.textDocuments.find((doc) => doc.uri.toString() === data.buffer.toString());
+    if (!document) {
+      MessageManager.showMessage("That register's buffer no longer exists");
+      return;
+    }
+
+    const selections = data.points.map((point) => new vscode.Selection(point, point)); // XXX: This behavior is a bit different from the original Emacs when the buffer is in mark mode.
+
+    await vscode.window.showTextDocument(document, { selection: selections[0] });
+    if (vscode.window.activeTextEditor) {
+      vscode.window.activeTextEditor.selections = selections;
+    }
   }
 }
