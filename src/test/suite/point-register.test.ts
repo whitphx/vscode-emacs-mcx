@@ -11,7 +11,7 @@ import {
 } from "./utils";
 import assert from "assert";
 
-suite.only("Point registers", () => {
+suite("Point registers", () => {
   const initialText = "0123456789\nabcdefghij\nABCDEFGHIJ";
 
   let activeTextEditor: vscode.TextEditor;
