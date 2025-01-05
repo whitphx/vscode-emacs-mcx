@@ -24,7 +24,7 @@ interface PointRegisterData extends RegisterDataBase {
   points: vscode.Position[];
 }
 export type RegisterData = TextRegisterData | RectangleRegisterData | PointRegisterData;
-export type TextRegisters = Map<string, RegisterData>;
+export type Registers = Map<string, RegisterData>;
 
 type RegisterCommandType = "copy" | "insert" | "copy-rectangle" | "point" | "jump";
 export class RegisterCommandState {
@@ -161,7 +161,7 @@ export class SomeRegisterCommand extends EmacsCommand {
 
   constructor(
     emacsController: IEmacsController,
-    private readonly textRegisters: TextRegisters,
+    private readonly registers: Registers,
     private readonly registerCommandState: RegisterCommandState,
   ) {
     super(emacsController);
@@ -222,7 +222,7 @@ export class SomeRegisterCommand extends EmacsCommand {
       revealPrimaryActive(textEditor);
     }
 
-    this.textRegisters.set(registerKey, { type: "text", text });
+    this.registers.set(registerKey, { type: "text", text });
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
@@ -234,12 +234,12 @@ export class SomeRegisterCommand extends EmacsCommand {
 
     this.emacsController.pushMark(selections.map((s) => s.active));
 
-    if (!this.textRegisters.has(registerKey)) {
+    if (!this.registers.has(registerKey)) {
       MessageManager.showMessage("Register does not contain text");
       return;
     }
 
-    const dataToInsert = this.textRegisters.get(registerKey);
+    const dataToInsert = this.registers.get(registerKey);
     if (dataToInsert == undefined) {
       return;
     }
@@ -273,7 +273,7 @@ export class SomeRegisterCommand extends EmacsCommand {
     });
 
     if (copiedRectTexts) {
-      this.textRegisters.set(registerKey, { type: "rectangle", rectTexts: copiedRectTexts });
+      this.registers.set(registerKey, { type: "rectangle", rectTexts: copiedRectTexts });
     }
 
     this.emacsController.exitMarkMode();
@@ -283,7 +283,7 @@ export class SomeRegisterCommand extends EmacsCommand {
   // point-to-register, C-x r SPC <r>
   public async runPoint(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
     const points = textEditor.selections.map((selection) => selection.active);
-    this.textRegisters.set(registerKey, {
+    this.registers.set(registerKey, {
       type: "point",
       buffer: textEditor.document.uri,
       points,
@@ -292,7 +292,7 @@ export class SomeRegisterCommand extends EmacsCommand {
 
   // jump-to-register, C-x r j <r>
   public async runJump(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
-    const data = this.textRegisters.get(registerKey);
+    const data = this.registers.get(registerKey);
     if (data == undefined || data.type !== "point") {
       MessageManager.showMessage("Register doesn't contain a buffer position or configuration");
       return;
