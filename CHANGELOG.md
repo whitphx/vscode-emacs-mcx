@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.64.0] - 2025-01-06
+
+### Add
+
+- `point-to-register` and `jump-to-register`, [#2150](https://github.com/whitphx/vscode-emacs-mcx/pull/2150).
+
 ## [0.63.0] - 2025-01-03
 
 ### Add
