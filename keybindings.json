@@ -777,6 +777,16 @@
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
+      "key": "space", // ctrl+x r SPC
+      "command": "emacs-mcx.prePointToRegister",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
+      "key": "j", // ctrl+x r j
+      "command": "emacs-mcx.preJumpToRegister",
+      "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+    },
+    {
       "$special": "registerCommandTypes"
     },
     {

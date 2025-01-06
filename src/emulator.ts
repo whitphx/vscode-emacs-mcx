@@ -11,7 +11,7 @@ import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
 import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
-import * as TextRegisterCommands from "./commands/registers";
+import * as RegisterCommands from "./commands/registers";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
@@ -138,7 +138,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     textEditor: TextEditor,
     killRing: KillRing | null = null,
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
-    textRegisters: TextRegisterCommands.TextRegisters = new Map(),
+    registers: RegisterCommands.Registers = new Map(),
   ) {
     this._textEditor = textEditor;
 
@@ -218,13 +218,13 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 
-    const registerCommandState = new TextRegisterCommands.RegisterCommandState();
-    this.commandRegistry.register(new TextRegisterCommands.PreCopyToRegister(this, registerCommandState));
-    this.commandRegistry.register(new TextRegisterCommands.PreInsertRegister(this, registerCommandState));
-    this.commandRegistry.register(new TextRegisterCommands.PreCopyRectangleToRegister(this, registerCommandState));
-    this.commandRegistry.register(
-      new TextRegisterCommands.SomeRegisterCommand(this, textRegisters, registerCommandState),
-    );
+    const registerCommandState = new RegisterCommands.RegisterCommandState();
+    this.commandRegistry.register(new RegisterCommands.PreCopyToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.PreInsertRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.PreCopyRectangleToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.PrePointToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.PreJumpToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.SomeRegisterCommand(this, registers, registerCommandState));
 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],

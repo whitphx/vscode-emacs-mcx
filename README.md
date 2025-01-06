@@ -272,6 +272,13 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Settin
 
 See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Registers.html) about the text registers.
 
+## Position registers
+
+| Command         | Desc                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| `C-x r SPC `_r_ | Record the position of point and the current buffer in register _r_ (`point-to-register`). |
+| `C-x r j `_r_   | Jump to the position and buffer saved in register _r_ (`jump-to-register`).                |
+
 ## Rectangles
 
 | Command     | Desc                                                                                                      |
@@ -288,10 +295,10 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-R
 
 ### Rectangle Registers
 
-| Command       | Desc                                                                                                                 |
-| ------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Command | Desc |
+| ------------- | --------------------------------------------------------------------------------------------------------r------------ |
 | `C-x r r `_r_ | Copy the region-rectangle into register _r_ (`copy-rectangle-to-register`). With prefix argument, delete it as well. |
-| `C-x r i `_r_ | Insert the rectangle stored in register _r_ (if it contains a rectangle) (`insert-register`).                        |
+| `C-x r i `_r_ | Insert the rectangle stored in register _r_ (if it contains a rectangle) (`insert-register`). |
 
 ### Other Commands
 
