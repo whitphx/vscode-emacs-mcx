@@ -295,10 +295,10 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-R
 
 ### Rectangle Registers
 
-| Command | Desc |
-| ------------- | --------------------------------------------------------------------------------------------------------r------------ |
+| Command       | Desc                                                                                                                 |
+| ------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `C-x r r `_r_ | Copy the region-rectangle into register _r_ (`copy-rectangle-to-register`). With prefix argument, delete it as well. |
-| `C-x r i `_r_ | Insert the rectangle stored in register _r_ (if it contains a rectangle) (`insert-register`). |
+| `C-x r i `_r_ | Insert the rectangle stored in register _r_ (if it contains a rectangle) (`insert-register`).                        |
 
 ### Other Commands
 
