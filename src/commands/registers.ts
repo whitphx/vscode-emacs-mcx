@@ -18,12 +18,12 @@ interface RectangleRegisterEntry extends RegisterEntryBase {
   type: "rectangle";
   rectTexts: RectangleTexts;
 }
-interface PointRegisterEntry extends RegisterEntryBase {
-  type: "point";
+interface PositionRegisterEntry extends RegisterEntryBase {
+  type: "position";
   buffer: vscode.Uri;
-  points: vscode.Position[];
+  positions: vscode.Position[];
 }
-export type RegisterEntry = TextRegisterEntry | RectangleRegisterEntry | PointRegisterEntry;
+export type RegisterEntry = TextRegisterEntry | RectangleRegisterEntry | PositionRegisterEntry;
 export type Registers = Map<string, RegisterEntry>;
 
 type RegisterCommandType = "copy" | "insert" | "copy-rectangle" | "point" | "jump";
@@ -278,18 +278,18 @@ export class SomeRegisterCommand extends EmacsCommand {
 
   // point-to-register, C-x r SPC <r>
   public async runPoint(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
-    const points = textEditor.selections.map((selection) => selection.active);
+    const positions = textEditor.selections.map((selection) => selection.active);
     this.registers.set(registerKey, {
-      type: "point",
+      type: "position",
       buffer: textEditor.document.uri,
-      points,
+      positions,
     });
   }
 
   // jump-to-register, C-x r j <r>
   public async runJump(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
     const data = this.registers.get(registerKey);
-    if (data == undefined || data.type !== "point") {
+    if (data == undefined || data.type !== "position") {
       MessageManager.showMessage("Register doesn't contain a buffer position or configuration");
       return;
     }
@@ -300,7 +300,7 @@ export class SomeRegisterCommand extends EmacsCommand {
       return;
     }
 
-    const selections = data.points.map((point) => new vscode.Selection(point, point)); // XXX: This behavior is a bit different from the original Emacs when the buffer is in mark mode.
+    const selections = data.positions.map((position) => new vscode.Selection(position, position)); // XXX: This behavior is a bit different from the original Emacs when the buffer is in mark mode.
 
     await vscode.window.showTextDocument(document, { selection: selections[0] });
     if (vscode.window.activeTextEditor) {
