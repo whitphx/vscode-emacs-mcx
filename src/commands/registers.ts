@@ -7,24 +7,24 @@ import { copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle"
 import { deleteRanges } from "../utils";
 import { revealPrimaryActive } from "./helpers/reveal";
 
-interface RegisterDataBase {
+interface RegisterEntryBase {
   type: string;
 }
-interface TextRegisterData extends RegisterDataBase {
+interface TextRegisterEntry extends RegisterEntryBase {
   type: "text";
   text: string;
 }
-interface RectangleRegisterData extends RegisterDataBase {
+interface RectangleRegisterEntry extends RegisterEntryBase {
   type: "rectangle";
   rectTexts: RectangleTexts;
 }
-interface PointRegisterData extends RegisterDataBase {
+interface PointRegisterEntry extends RegisterEntryBase {
   type: "point";
   buffer: vscode.Uri;
   points: vscode.Position[];
 }
-export type RegisterData = TextRegisterData | RectangleRegisterData | PointRegisterData;
-export type Registers = Map<string, RegisterData>;
+export type RegisterEntry = TextRegisterEntry | RectangleRegisterEntry | PointRegisterEntry;
+export type Registers = Map<string, RegisterEntry>;
 
 type RegisterCommandType = "copy" | "insert" | "copy-rectangle" | "point" | "jump";
 export class RegisterCommandState {
@@ -181,7 +181,7 @@ export class SomeRegisterCommand extends EmacsCommand {
     this.registerCommandState.stopAcceptingRegisterKey();
 
     const registerKey = args?.[0];
-    if (typeof registerKey !== "string") {
+    if (typeof registerKey !== "string" || registerKey.length !== 1) {
       return;
     }
 
@@ -235,7 +235,7 @@ export class SomeRegisterCommand extends EmacsCommand {
     this.emacsController.pushMark(selections.map((s) => s.active));
 
     const dataToInsert = this.registers.get(registerKey);
-    if (dataToInsert == undefined) {
+    if (dataToInsert == null) {
       MessageManager.showMessage("Register does not contain text");
       return;
     }
