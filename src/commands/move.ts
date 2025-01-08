@@ -538,19 +538,20 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
       return;
     }
 
-    // Get the visible range boundaries (end.line is exclusive)
+    // Get the visible range boundaries
+    // Note: end.line is exclusive, so subtract 1 for actual last visible line
     const visibleTop = relevantRange.start.line;
-    const visibleBottom = relevantRange.end.line;
-    const visibleLineCount = visibleBottom - visibleTop;
+    const visibleBottom = relevantRange.end.line - 1;
+    const visibleLineCount = visibleBottom - visibleTop + 1;
 
-    // Calculate center position based on the test's expectations and folded ranges
-    // For a range of 482-517 (35 lines), we want center=499
-    // For folded ranges, we need to handle the exclusive end line differently
-    // Use floor to match Emacs behavior - for odd number of lines, center is slightly below middle
-    const visibleCenter = Math.floor(visibleTop + visibleLineCount / 2);
+    // Calculate center position based on the test's expectations
+    // For a range of 482-512, center should be 497
+    const visibleCenter = Math.min(visibleBottom, Math.max(visibleTop, Math.floor((visibleTop + visibleBottom) / 2)));
 
-    // Debug output
-    logger.debug(`[MoveToWindowLineTopBottom] Processing range with ${visibleLineCount} lines`);
+    // Debug output with detailed range information
+    logger.debug(
+      `[MoveToWindowLineTopBottom] Processing range ${visibleTop}-${visibleBottom} (${visibleLineCount} lines), center=${visibleCenter}`,
+    );
 
     let targetLine: number;
 
@@ -559,17 +560,21 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
         // 0 means first line
         targetLine = visibleTop;
         MoveToWindowLineTopBottom.cycleState = undefined; // Reset state for prefix arguments
-        logger.debug(`[MoveToWindowLineTopBottom] Moving to top line`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to top line ${targetLine}`);
       } else if (prefixArgument > 0) {
         // Positive numbers count from top (1-based)
-        targetLine = Math.min(visibleTop + (prefixArgument - 1), visibleBottom - 1);
-        logger.debug(`[MoveToWindowLineTopBottom] Moving with positive prefix`);
+        targetLine = Math.min(visibleTop + (prefixArgument - 1), visibleBottom);
+        logger.debug(
+          `[MoveToWindowLineTopBottom] Moving with positive prefix ${prefixArgument} to line ${targetLine} (top=${visibleTop})`,
+        );
       } else {
         // Negative numbers count from bottom (-1 means last line)
         // For -1, we want the last visible line
         // For -2, we want two lines before that
-        targetLine = Math.max(visibleBottom - Math.abs(prefixArgument) - 1, visibleTop);
-        logger.debug(`[MoveToWindowLineTopBottom] Moving with negative prefix`);
+        targetLine = Math.max(visibleBottom + prefixArgument + 1, visibleTop);
+        logger.debug(
+          `[MoveToWindowLineTopBottom] Moving with negative prefix ${prefixArgument} to line ${targetLine} (bottom=${visibleBottom})`,
+        );
       }
       // Reset state when using prefix argument
       MoveToWindowLineTopBottom.cycleState = undefined;
@@ -584,9 +589,9 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
         MoveToWindowLineTopBottom.cycleState = "top";
         logger.debug(`[MoveToWindowLineTopBottom] Moving to top`);
       } else if (currentState === "top") {
-        targetLine = visibleBottom - 1;
+        targetLine = visibleBottom;
         MoveToWindowLineTopBottom.cycleState = "bottom";
-        logger.debug(`[MoveToWindowLineTopBottom] Moving to bottom`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to bottom line ${targetLine}`);
       } else {
         targetLine = visibleCenter;
         MoveToWindowLineTopBottom.cycleState = "center";
@@ -595,7 +600,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
     }
 
     // Ensure target line stays within visible range
-    // Note: visibleBottom is exclusive, so we subtract 1 for the maximum
+    // visibleBottom is already adjusted to be inclusive
     targetLine = Math.max(visibleTop, Math.min(visibleBottom, targetLine));
     logger.debug(`[MoveToWindowLineTopBottom] Target line calculated`);
 
@@ -622,7 +627,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
           nearestLine = range.start.line;
         }
 
-        // Check distance to range end (exclusive)
+        // Check distance to range end (already adjusted to be inclusive)
         const distanceToEnd = Math.abs(targetLine - (range.end.line - 1));
         if (distanceToEnd < minDistance) {
           minDistance = distanceToEnd;

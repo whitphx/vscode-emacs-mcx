@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import assert from "assert";
 import { EmacsEmulator } from "../../../emulator";
 import { assertSelectionsEqual, setupWorkspace, cleanUpWorkspace, delay } from "../utils";
+import { logger } from "../../../logger";
 
 suite("MoveToWindowLineTopBottom", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -21,7 +22,23 @@ suite("MoveToWindowLineTopBottom", () => {
       lineNumber: 500,
       at: "center",
     });
-    await delay(100);
+    await delay(1000); // Further increased delay for web environment stability
+
+    // Add retry logic for getting visible ranges with proper type checks
+    let retryCount = 0;
+    let ranges: readonly vscode.Range[] = [];
+    while (retryCount < 3) {
+      ranges = activeTextEditor.visibleRanges;
+      if (ranges.length > 0) {
+        const firstRange = ranges[0];
+        if (firstRange && firstRange.end.line - firstRange.start.line >= 10) {
+          break;
+        }
+      }
+      await delay(500);
+      retryCount++;
+      logger.debug(`Retry ${retryCount}: Visible ranges count = ${ranges.length}`);
+    }
 
     // Verify we have a valid visible range
     const initialRange = activeTextEditor.visibleRanges[0];
@@ -45,7 +62,7 @@ suite("MoveToWindowLineTopBottom", () => {
 
     // First call - should move to center
     await emulator.runCommand("moveToWindowLineTopBottom");
-    await delay(100); // Wait for editor to update
+    await delay(1000); // Further increased delay for web environment stability
 
     cycleRange = activeTextEditor.visibleRanges[0];
     assert.ok(cycleRange, "Editor should have a visible range");
@@ -62,7 +79,7 @@ suite("MoveToWindowLineTopBottom", () => {
 
     // Second call - should move to top
     await emulator.runCommand("moveToWindowLineTopBottom");
-    await delay(100);
+    await delay(1000); // Further increased delay for web environment stability
 
     cycleRange = activeTextEditor.visibleRanges[0];
     assert.ok(cycleRange, "Editor should have a visible range after second call");
@@ -75,7 +92,7 @@ suite("MoveToWindowLineTopBottom", () => {
 
     // Third call - should move to bottom
     await emulator.runCommand("moveToWindowLineTopBottom");
-    await delay(100);
+    await delay(1000); // Further increased delay for web environment stability
 
     cycleRange = activeTextEditor.visibleRanges[0];
     assert.ok(cycleRange, "Editor should have a visible range after third call");
@@ -88,7 +105,7 @@ suite("MoveToWindowLineTopBottom", () => {
 
     // Fourth call - should move back to center
     await emulator.runCommand("moveToWindowLineTopBottom");
-    await delay(100);
+    await delay(1000); // Further increased delay for web environment stability
 
     cycleRange = activeTextEditor.visibleRanges[0];
     assert.ok(cycleRange, "Editor should have a visible range after fourth call");

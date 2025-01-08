@@ -725,11 +725,25 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   private onDidInterruptTextEditor() {
-    this._isInterrupted = true;
-    this.commandRegistry.onInterrupt();
-    // Reset interrupted state after handling
-    setTimeout(() => {
-      this._isInterrupted = false;
-    }, 0);
+    // Only set interrupted state if we're not in a safe command
+    const currentCommandId = this.commandRegistry.getCurrentCommandId();
+    const safeCommands = new Set([
+      "moveToWindowLineTopBottom",
+      "universalArgument",
+      "digitArgument",
+      "negativeArgument",
+      "subsequentArgumentDigit",
+    ]);
+
+    if (!currentCommandId || !safeCommands.has(currentCommandId)) {
+      this._isInterrupted = true;
+      this.commandRegistry.onInterrupt();
+      // Reset interrupted state after handling
+      setTimeout(() => {
+        this._isInterrupted = false;
+      }, 0);
+    } else {
+      logger.debug(`[EmacsEmulator] Ignoring interruption during safe command: ${currentCommandId}`);
+    }
   }
 }
