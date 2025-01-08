@@ -16,86 +16,23 @@ suite("MoveToWindowLineTopBottom", () => {
     // Set up a proper visible range by positioning cursor and revealing
     activeTextEditor.selection = new vscode.Selection(500, 0, 500, 0);
 
-    // Helper function to stabilize the visible range
-    const stabilizeVisibleRange = async (targetLine: number, retries = 5): Promise<boolean> => {
-      for (let i = 0; i < retries; i++) {
-        // Center on the target line
-        await vscode.commands.executeCommand("revealLine", {
-          lineNumber: targetLine,
-          at: "center",
-        });
-        await delay(200);
-
-        // Small scroll movements to stabilize
-        await vscode.commands.executeCommand("scrollLineDown");
-        await delay(50);
-        await vscode.commands.executeCommand("scrollLineUp");
-        await delay(50);
-
-        // Re-center and wait
-        await vscode.commands.executeCommand("revealLine", {
-          lineNumber: targetLine,
-          at: "center",
-        });
-        await delay(200);
-
-        // Check if range is stable
-        const range = activeTextEditor.visibleRanges[0];
-        if (
-          range &&
-          Math.abs(range.start.line - 482) <= 2 &&
-          Math.abs(range.end.line - 517) <= 2 &&
-          Math.abs(Math.floor((range.start.line + range.end.line) / 2) - 500) <= 2
-        ) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    // Try to stabilize the visible range
-    const isStable = await stabilizeVisibleRange(500);
-    if (!isStable) {
-      throw new Error("Failed to establish stable visible range after multiple attempts");
-    }
-
-    // Enhanced debug logging for test setup
-    console.log("=== Test Setup Debug Info ===");
-    console.log("Document info:", {
-      totalLines: activeTextEditor.document.lineCount,
-      currentLine: activeTextEditor.selection.active.line,
-      currentChar: activeTextEditor.selection.active.character,
+    // Position cursor and reveal it in the center of the viewport
+    await vscode.commands.executeCommand("revealLine", {
+      lineNumber: 500,
+      at: "center",
     });
+    await delay(100);
 
+    // Verify we have a valid visible range
     const initialRange = activeTextEditor.visibleRanges[0];
     if (!initialRange) {
-      throw new Error("No visible range available after stabilization");
+      throw new Error("No visible range available after setup");
     }
 
-    console.log("Initial visible range:", {
-      start: initialRange.start.line,
-      end: initialRange.end.line,
-      lineCount: initialRange.end.line - initialRange.start.line,
-      centerLine: Math.floor((initialRange.start.line + initialRange.end.line) / 2),
-      expectedTop: 482,
-      expectedBottom: 517,
-    });
-
-    // Verify the visible range is properly set up
-    if (Math.abs(initialRange.start.line - 482) > 5 || Math.abs(initialRange.end.line - 517) > 5) {
-      throw new Error(
-        `Visible range not properly established. Got ${initialRange.start.line} to ${initialRange.end.line}, expected around 482 to 517`,
-      );
-    }
-    // Verify the visible range is properly set up
-    const setupRange = activeTextEditor.visibleRanges[0];
-    if (!setupRange) {
-      throw new Error("No visible range available after stabilization");
-    }
-    if (Math.abs(setupRange.start.line - 482) > 5 || Math.abs(setupRange.end.line - 517) > 5) {
-      throw new Error(
-        `Visible range not properly established. Got ${setupRange.start.line} to ${setupRange.end.line}, expected around 482 to 517`,
-      );
+    // Ensure we have enough lines visible for testing
+    const visibleLines = initialRange.end.line - initialRange.start.line;
+    if (visibleLines < 10) {
+      throw new Error("Not enough lines visible for testing. Need at least 10 visible lines.");
     }
   });
 

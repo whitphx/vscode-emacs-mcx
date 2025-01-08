@@ -398,10 +398,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         // Only trigger interruption for non-safe commands
         this.onDidInterruptTextEditor();
       } else {
-        console.log("[EmacsEmulator] Ignoring document change from safe command:", {
-          commandId: currentCommandId,
-          changes: e.contentChanges.length,
-        });
+        logger.debug("[EmacsEmulator] Ignoring document change from safe command");
       }
 
       // Reset document changed flag after handling

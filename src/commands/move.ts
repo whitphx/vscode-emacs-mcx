@@ -8,7 +8,8 @@ import {
 } from "./helpers/paragraph";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
-import { IEmacsController } from "src/emulator";
+import { IEmacsController } from "../emulator";
+import { logger } from "../logger";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -472,10 +473,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
     // If no visible ranges, create a single-line range at cursor position
     if (!visibleRanges.length) {
       const fallbackRange = new vscode.Range(cursorLine, 0, cursorLine + 1, 0);
-      console.log("[MoveToWindowLineTopBottom] No visible ranges, using fallback:", {
-        start: fallbackRange.start.line,
-        end: fallbackRange.end.line,
-      });
+      logger.debug("[MoveToWindowLineTopBottom] No visible ranges, using fallback range");
       return fallbackRange;
     }
 
@@ -483,15 +481,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
     // We've already checked visibleRanges.length > 0
     const firstRange = visibleRanges[0]!;
 
-    // Debug output for visible ranges
-    console.log(
-      "[MoveToWindowLineTopBottom] All visible ranges:",
-      visibleRanges.map((range) => ({
-        start: range.start.line,
-        end: range.end.line,
-        size: range.end.line - range.start.line,
-      })),
-    );
+    logger.debug("[MoveToWindowLineTopBottom] Processing visible ranges");
 
     // First, try to find the range containing the cursor
     const containingRange = visibleRanges.find(
@@ -499,21 +489,13 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
     );
 
     if (containingRange) {
-      console.log("[MoveToWindowLineTopBottom] Found containing range:", {
-        start: containingRange.start.line,
-        end: containingRange.end.line,
-        size: containingRange.end.line - containingRange.start.line,
-      });
+      logger.debug("[MoveToWindowLineTopBottom] Found range containing cursor");
       return containingRange;
     }
 
     // If only one range, return it
     if (visibleRanges.length === 1) {
-      console.log("[MoveToWindowLineTopBottom] Only one range available:", {
-        start: firstRange.start.line,
-        end: firstRange.end.line,
-        size: firstRange.end.line - firstRange.start.line,
-      });
+      logger.debug("[MoveToWindowLineTopBottom] Using single available range");
       return firstRange;
     }
 
@@ -527,13 +509,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
       const distanceToEnd = Math.abs(cursorLine - (range.end.line - 1));
       const minRangeDistance = Math.min(distanceToStart, distanceToEnd);
 
-      console.log("[MoveToWindowLineTopBottom] Checking range distance:", {
-        start: range.start.line,
-        end: range.end.line,
-        distanceToStart,
-        distanceToEnd,
-        minRangeDistance,
-      });
+      logger.debug("[MoveToWindowLineTopBottom] Calculating range distances");
 
       if (minRangeDistance < minDistance) {
         minDistance = minRangeDistance;
@@ -541,18 +517,13 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
       }
     }
 
-    console.log("[MoveToWindowLineTopBottom] Selected nearest range:", {
-      start: nearestRange.start.line,
-      end: nearestRange.end.line,
-      size: nearestRange.end.line - nearestRange.start.line,
-      distance: minDistance,
-    });
+    logger.debug("[MoveToWindowLineTopBottom] Selected nearest visible range");
 
     return nearestRange;
   }
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
-    console.log(`[${this.id}] Starting command execution`);
+    logger.debug(`[${this.id}] Starting command execution`);
 
     // Reset cycle state if too much time has passed
     const now = Date.now();
@@ -579,13 +550,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
     const visibleCenter = Math.floor(visibleTop + visibleLineCount / 2);
 
     // Debug output
-    console.log(
-      `[MoveToWindowLineTopBottom] Range: top=${visibleTop}, bottom=${visibleBottom}, count=${visibleLineCount}`,
-    );
-    console.log(`[MoveToWindowLineTopBottom] Center calculation: raw=${visibleCenter}, final=${visibleCenter}`);
-
-    // Debug output for state and prefix argument
-    console.log(`[MoveToWindowLineTopBottom] State=${currentState}, Prefix=${prefixArgument}`);
+    logger.debug(`[MoveToWindowLineTopBottom] Processing range with ${visibleLineCount} lines`);
 
     let targetLine: number;
 
@@ -594,17 +559,17 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
         // 0 means first line
         targetLine = visibleTop;
         MoveToWindowLineTopBottom.cycleState = undefined; // Reset state for prefix arguments
-        console.log(`[MoveToWindowLineTopBottom] Prefix 0: Moving to top line ${targetLine}`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to top line`);
       } else if (prefixArgument > 0) {
         // Positive numbers count from top (1-based)
         targetLine = Math.min(visibleTop + (prefixArgument - 1), visibleBottom - 1);
-        console.log(`[MoveToWindowLineTopBottom] Positive prefix ${prefixArgument}: Moving to line ${targetLine}`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving with positive prefix`);
       } else {
         // Negative numbers count from bottom (-1 means last line)
-        // For -1, we want the last visible line (visibleBottom - 1)
-        // For -2, we want two lines before that (visibleBottom - 2)
-        targetLine = Math.max(visibleBottom - Math.abs(prefixArgument), visibleTop);
-        console.log(`[MoveToWindowLineTopBottom] Negative prefix ${prefixArgument}: Moving to line ${targetLine}`);
+        // For -1, we want the last visible line
+        // For -2, we want two lines before that
+        targetLine = Math.max(visibleBottom - Math.abs(prefixArgument) - 1, visibleTop);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving with negative prefix`);
       }
       // Reset state when using prefix argument
       MoveToWindowLineTopBottom.cycleState = undefined;
@@ -613,27 +578,26 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
       if (!currentState || currentState === "bottom") {
         targetLine = visibleCenter;
         MoveToWindowLineTopBottom.cycleState = "center";
-        console.log(`[MoveToWindowLineTopBottom] No state/bottom -> center: Moving to line ${targetLine}`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to center`);
       } else if (currentState === "center") {
         targetLine = visibleTop;
         MoveToWindowLineTopBottom.cycleState = "top";
-        console.log(`[MoveToWindowLineTopBottom] center -> top: Moving to line ${targetLine}`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to top`);
       } else if (currentState === "top") {
-        targetLine = visibleBottom - 1; // Adjust for exclusive range end
+        targetLine = visibleBottom - 1;
         MoveToWindowLineTopBottom.cycleState = "bottom";
-        console.log(`[MoveToWindowLineTopBottom] top -> bottom: Moving to line ${targetLine}`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to bottom`);
       } else {
         targetLine = visibleCenter;
         MoveToWindowLineTopBottom.cycleState = "center";
-        console.log(`[MoveToWindowLineTopBottom] fallback -> center: Moving to line ${targetLine}`);
+        logger.debug(`[MoveToWindowLineTopBottom] Moving to center (fallback)`);
       }
     }
 
     // Ensure target line stays within visible range
     // Note: visibleBottom is exclusive, so we subtract 1 for the maximum
-    const originalTarget = targetLine;
     targetLine = Math.max(visibleTop, Math.min(visibleBottom, targetLine));
-    console.log(`[MoveToWindowLineTopBottom] Target line: original=${originalTarget}, clamped=${targetLine}`);
+    logger.debug(`[MoveToWindowLineTopBottom] Target line calculated`);
 
     // If the target line would be in a folded section, adjust to nearest visible line
     const visibleRanges = textEditor.visibleRanges;
@@ -694,7 +658,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
       textEditor.revealRange(new vscode.Range(newPosition, newPosition), vscode.TextEditorRevealType.Default);
     }
 
-    console.log(`[${this.id}] Completed command execution`);
+    logger.debug(`[${this.id}] Completed command execution`);
   }
 
   public onDidInterruptTextEditor(currentCommandId?: string): void {
