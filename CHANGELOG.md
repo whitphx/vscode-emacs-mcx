@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.65.0] - 2025-01-08
+
+### Change
+
+- Remove the `pre*` prefix from the register command names, [#2152](https://github.com/whitphx/vscode-emacs-mcx/pull/2152).
+
 ## [0.64.0] - 2025-01-06
 
 ### Add
