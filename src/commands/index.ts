@@ -31,7 +31,7 @@ export abstract class EmacsCommand {
 }
 
 export interface ITextEditorInterruptionHandler {
-  onDidInterruptTextEditor(): void;
+  onDidInterruptTextEditor(currentCommandId?: string): void;
 }
 
 // This type guard trick is from https://stackoverflow.com/a/64163454/13103190

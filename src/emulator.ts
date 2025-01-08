@@ -13,7 +13,9 @@ import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
 import * as RegisterCommands from "./commands/registers";
 import { RecenterTopBottom } from "./commands/recenter";
+import { EmacsCommand } from "./commands";
 import { EmacsCommandRegistry } from "./commands/registry";
+import { MoveToWindowLineTopBottom } from "./commands/move";
 import { KillYanker } from "./kill-yank";
 import { KillRing } from "./kill-yank/kill-ring";
 import { logger } from "./logger";
@@ -38,6 +40,8 @@ export interface IEmacsController {
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
+  readonly isInterrupted: boolean;
+  readonly wasDocumentChanged: boolean;
 }
 
 class NativeSelectionsStore {
@@ -79,6 +83,17 @@ class NativeSelectionsStore {
 
 export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   private _textEditor: TextEditor;
+  private _isInterrupted = false;
+  private _wasDocumentChanged = false;
+
+  public get wasDocumentChanged(): boolean {
+    return this._wasDocumentChanged;
+  }
+
+  public get isInterrupted(): boolean {
+    return this._isInterrupted;
+  }
+
   public get textEditor(): TextEditor {
     return this._textEditor;
   }
@@ -189,6 +204,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new EditCommands.NewLine(this));
     this.commandRegistry.register(new DeleteBlankLines(this));
     this.commandRegistry.register(new RecenterTopBottom(this));
+    this.commandRegistry.register(new MoveToWindowLineTopBottom(this));
 
     this.commandRegistry.register(new TabCommands.TabToTabStop(this));
 
@@ -254,6 +270,46 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new CaseCommands.TransformToUppercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToLowercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this));
+
+    // Register prefix argument commands
+    class UniversalArgumentCommand extends EmacsCommand {
+      public readonly id = "universalArgument";
+      constructor(private readonly emulator: EmacsEmulator) {
+        super(emulator);
+      }
+      public run(_textEditor: TextEditor, _isInMarkMode: boolean): void | Thenable<void> {
+        return this.emulator.universalArgument();
+      }
+    }
+    this.commandRegistry.register(new UniversalArgumentCommand(this));
+
+    class DigitArgumentCommand extends EmacsCommand {
+      public readonly id = "digitArgument";
+      constructor(private readonly emulator: EmacsEmulator) {
+        super(emulator);
+      }
+      public run(
+        _textEditor: TextEditor,
+        _isInMarkMode: boolean,
+        _prefixArgument: number | undefined,
+        args?: unknown[],
+      ): void | Thenable<void> {
+        const digit = args?.[0] as number;
+        return this.emulator.digitArgument(digit);
+      }
+    }
+    this.commandRegistry.register(new DigitArgumentCommand(this));
+
+    class NegativeArgumentCommand extends EmacsCommand {
+      public readonly id = "negativeArgument";
+      constructor(private readonly emulator: EmacsEmulator) {
+        super(emulator);
+      }
+      public run(_textEditor: TextEditor, _isInMarkMode: boolean): void | Thenable<void> {
+        return this.emulator.negativeArgument();
+      }
+    }
+    this.commandRegistry.register(new NegativeArgumentCommand(this));
   }
 
   public setTextEditor(textEditor: TextEditor): void {
@@ -315,17 +371,43 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
-      if (
-        e.contentChanges.some((contentChange) =>
-          this.textEditor.selections.some(
-            (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
-          ),
-        )
-      ) {
-        this.exitMarkMode();
+      const currentCommandId = this.commandRegistry.getCurrentCommandId();
+
+      // Define safe commands that can modify document without interrupting state
+      const safeModifyingCommands = new Set([
+        "universalArgument",
+        "digitArgument",
+        "negativeArgument",
+        "subsequentArgumentDigit",
+      ]);
+
+      const isPartOfSafeCommand = currentCommandId && safeModifyingCommands.has(currentCommandId);
+
+      if (!isPartOfSafeCommand) {
+        this._wasDocumentChanged = true;
+        if (
+          e.contentChanges.some((contentChange) =>
+            this.textEditor.selections.some(
+              (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
+            ),
+          )
+        ) {
+          this.exitMarkMode();
+        }
+
+        // Only trigger interruption for non-safe commands
+        this.onDidInterruptTextEditor();
+      } else {
+        console.log("[EmacsEmulator] Ignoring document change from safe command:", {
+          commandId: currentCommandId,
+          changes: e.contentChanges.length,
+        });
       }
 
-      this.onDidInterruptTextEditor();
+      // Reset document changed flag after handling
+      setTimeout(() => {
+        this._wasDocumentChanged = false;
+      }, 0);
     }
   }
 
@@ -405,28 +487,28 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   /**
    * C-u
    */
-  public universalArgument(): Promise<unknown> {
+  public universalArgument(): Thenable<void> {
     return this.prefixArgumentHandler.universalArgument();
   }
 
   /**
    * M-<number>
    */
-  public digitArgument(digit: number): Promise<unknown> {
+  public digitArgument(digit: number): Thenable<void> {
     return this.prefixArgumentHandler.digitArgument(digit);
   }
 
   /**
    * M--
    */
-  public negativeArgument(): Promise<unknown> {
+  public negativeArgument(): Thenable<void> {
     return this.prefixArgumentHandler.negativeArgument();
   }
 
   /**
    * Digits following C-u or M-<number>
    */
-  public subsequentArgumentDigit(arg: number): Promise<unknown> {
+  public subsequentArgumentDigit(arg: number): Thenable<void> {
     return this.prefixArgumentHandler.subsequentArgumentDigit(arg);
   }
 
@@ -646,6 +728,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   private onDidInterruptTextEditor() {
+    this._isInterrupted = true;
     this.commandRegistry.onInterrupt();
+    // Reset interrupted state after handling
+    setTimeout(() => {
+      this._isInterrupted = false;
+    }, 0);
   }
 }

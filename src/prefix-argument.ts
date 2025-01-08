@@ -27,7 +27,7 @@ export class PrefixArgumentHandler {
     this.onAcceptingStateChange = onAcceptingStateChange;
   }
 
-  private updateState(newState: Partial<PrefixArgumentHandlerState>): Promise<unknown> {
+  private updateState(newState: Partial<PrefixArgumentHandlerState>): Thenable<void> {
     const oldState = this.state;
     this.state = {
       ...this.state,
@@ -49,14 +49,14 @@ export class PrefixArgumentHandler {
       promises.push(promise);
     }
 
-    return Promise.all(promises);
+    return Promise.all(promises).then(() => {});
   }
 
   private showPrefixArgumentMessage() {
     MessageManager.showMessage(`C-u ${this.state.prefixArgumentStr}-`);
   }
 
-  public subsequentArgumentDigit(arg: number): Promise<unknown> {
+  public subsequentArgumentDigit(arg: number): Thenable<void> {
     if (!this.state.isInPrefixArgumentMode) {
       logger.debug(`[PrefixArgumentHandler.subsequentArgumentDigit]\t Not in prefix argument mode. exit.`);
       return Promise.resolve();
@@ -83,7 +83,7 @@ export class PrefixArgumentHandler {
   /**
    * Emacs' ctrl-u
    */
-  public universalArgument(): Promise<unknown> {
+  public universalArgument(): Thenable<void> {
     if (this.state.isInPrefixArgumentMode && this.state.prefixArgumentStr.length > 0) {
       logger.debug(`[PrefixArgumentHandler.universalArgument]\t Stop accepting prefix argument.`);
       return this.updateState({
@@ -100,7 +100,7 @@ export class PrefixArgumentHandler {
     }
   }
 
-  public digitArgument(arg: number): Promise<unknown> {
+  public digitArgument(arg: number): Thenable<void> {
     if (isNaN(arg) || arg < 0) {
       logger.debug(`[PrefixArgumentHandler.digitArgument]\t Input digit is NaN or negative. Ignore it.`);
       return Promise.resolve();
@@ -117,7 +117,7 @@ export class PrefixArgumentHandler {
     return promise;
   }
 
-  public negativeArgument(): Promise<unknown> {
+  public negativeArgument(): Thenable<void> {
     if (this.state.prefixArgumentStr !== "") {
       logger.warn(`[PrefixArgumentHandler.negativeArgument]\t Invalid invocation of negative-argument.`);
       return Promise.resolve();
@@ -137,7 +137,7 @@ export class PrefixArgumentHandler {
     return this.state.isAcceptingPrefixArgument && this.state.prefixArgumentStr === "";
   }
 
-  public cancel(): Promise<unknown> {
+  public cancel(): Thenable<void> {
     logger.debug(`[PrefixArgumentHandler.cancel]`);
     return this.updateState({
       isInPrefixArgumentMode: false,

@@ -3,6 +3,8 @@ import { EmacsCommand, ITextEditorInterruptionHandler, isTextEditorInterruptionH
 export class EmacsCommandRegistry {
   private commands: Map<string, EmacsCommand>;
   private interruptionHandlers: ITextEditorInterruptionHandler[];
+  private lastExecutedCommandId?: string;
+  private currentCommandId?: string;
 
   constructor() {
     this.commands = new Map();
@@ -17,12 +19,28 @@ export class EmacsCommandRegistry {
   }
 
   public get(commandName: string): EmacsCommand | undefined {
-    return this.commands.get(commandName);
+    const command = this.commands.get(commandName);
+    if (command) {
+      this.lastExecutedCommandId = commandName;
+      this.currentCommandId = commandName;
+      // Reset currentCommandId after command execution
+      setTimeout(() => {
+        this.currentCommandId = undefined;
+      }, 0);
+    }
+    return command;
+  }
+
+  public getCurrentCommandId(): string | undefined {
+    // Return the current command ID if it exists, otherwise return the last executed command
+    // This helps track command context during document changes that happen after command execution
+    return this.currentCommandId || this.lastExecutedCommandId;
   }
 
   public onInterrupt(): void {
+    const currentCommandId = this.lastExecutedCommandId;
     for (const handler of this.interruptionHandlers) {
-      handler.onDidInterruptTextEditor();
+      handler.onDidInterruptTextEditor(currentCommandId);
     }
   }
 }

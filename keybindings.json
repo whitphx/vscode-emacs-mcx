@@ -294,6 +294,12 @@
       "command": "emacs-mcx.recenterTopBottom",
       "when": "editorTextFocus"
     },
+    // move-to-window-line
+    {
+      "key": "meta+r",
+      "command": "emacs-mcx.moveToWindowLineTopBottom",
+      "when": "editorTextFocus"
+    },
     // i-search forward
     {
       "key": "ctrl+s",
