@@ -22,19 +22,12 @@ export class EmacsCommandRegistry {
     const command = this.commands.get(commandName);
     if (command) {
       this.lastExecutedCommandId = commandName;
-      this.currentCommandId = commandName;
-      // Reset currentCommandId after command execution
-      setTimeout(() => {
-        this.currentCommandId = undefined;
-      }, 0);
     }
     return command;
   }
 
   public getCurrentCommandId(): string | undefined {
-    // Return the current command ID if it exists, otherwise return the last executed command
-    // This helps track command context during document changes that happen after command execution
-    return this.currentCommandId || this.lastExecutedCommandId;
+    return this.lastExecutedCommandId;
   }
 
   public onInterrupt(): void {

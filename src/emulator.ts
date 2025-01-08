@@ -371,40 +371,26 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
-      const currentCommandId = this.commandRegistry.getCurrentCommandId();
-
-      // Define safe commands that can modify document without interrupting state
-      const safeModifyingCommands = new Set([
-        "universalArgument",
-        "digitArgument",
-        "negativeArgument",
-        "subsequentArgumentDigit",
-      ]);
-
-      const isPartOfSafeCommand = currentCommandId && safeModifyingCommands.has(currentCommandId);
-
-      if (!isPartOfSafeCommand) {
-        this._wasDocumentChanged = true;
-        if (
-          e.contentChanges.some((contentChange) =>
-            this.textEditor.selections.some(
-              (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
-            ),
-          )
-        ) {
-          this.exitMarkMode();
-        }
-
-        // Only trigger interruption for non-safe commands
-        this.onDidInterruptTextEditor();
-      } else {
-        logger.debug("[EmacsEmulator] Ignoring document change from safe command");
+      if (
+        e.contentChanges.some((contentChange) =>
+          this.textEditor.selections.some(
+            (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
+          ),
+        )
+      ) {
+        this.exitMarkMode();
       }
 
-      // Reset document changed flag after handling
-      setTimeout(() => {
-        this._wasDocumentChanged = false;
-      }, 0);
+      // Only trigger interruption for non-prefix-argument commands
+      const currentCommandId = this.commandRegistry.getCurrentCommandId();
+      const isPrefixCommand =
+        currentCommandId?.startsWith("universalArgument") ||
+        currentCommandId?.startsWith("digitArgument") ||
+        currentCommandId?.startsWith("negativeArgument");
+
+      if (!isPrefixCommand) {
+        this.onDidInterruptTextEditor();
+      }
     }
   }
 
@@ -725,25 +711,15 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   private onDidInterruptTextEditor() {
-    // Only set interrupted state if we're not in a safe command
     const currentCommandId = this.commandRegistry.getCurrentCommandId();
-    const safeCommands = new Set([
-      "moveToWindowLineTopBottom",
-      "universalArgument",
-      "digitArgument",
-      "negativeArgument",
-      "subsequentArgumentDigit",
-    ]);
+    const isSafeCommand =
+      currentCommandId === "moveToWindowLineTopBottom" ||
+      currentCommandId?.startsWith("universalArgument") ||
+      currentCommandId?.startsWith("digitArgument") ||
+      currentCommandId?.startsWith("negativeArgument");
 
-    if (!currentCommandId || !safeCommands.has(currentCommandId)) {
-      this._isInterrupted = true;
+    if (!isSafeCommand) {
       this.commandRegistry.onInterrupt();
-      // Reset interrupted state after handling
-      setTimeout(() => {
-        this._isInterrupted = false;
-      }, 0);
-    } else {
-      logger.debug(`[EmacsEmulator] Ignoring interruption during safe command: ${currentCommandId}`);
     }
   }
 }
