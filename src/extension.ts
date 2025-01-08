@@ -363,28 +363,28 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("paredit.backwardKillSexp");
   });
 
-  registerEmulatorCommand("emacs-mcx.preCopyToRegister", (emulator) => {
-    return emulator.runCommand("preCopyToRegister");
+  registerEmulatorCommand("emacs-mcx.copyToRegister", (emulator) => {
+    return emulator.runCommand("copyToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.preInsertRegister", (emulator) => {
-    return emulator.runCommand("preInsertRegister");
+  registerEmulatorCommand("emacs-mcx.insertRegister", (emulator) => {
+    return emulator.runCommand("insertRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.preCopyRectangleToRegister", (emulator) => {
-    return emulator.runCommand("preCopyRectangleToRegister");
+  registerEmulatorCommand("emacs-mcx.copyRectangleToRegister", (emulator) => {
+    return emulator.runCommand("copyRectangleToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.prePointToRegister", (emulator) => {
-    return emulator.runCommand("prePointToRegister");
+  registerEmulatorCommand("emacs-mcx.pointToRegister", (emulator) => {
+    return emulator.runCommand("pointToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.preJumpToRegister", (emulator) => {
-    return emulator.runCommand("preJumpToRegister");
+  registerEmulatorCommand("emacs-mcx.jumpToRegister", (emulator) => {
+    return emulator.runCommand("jumpToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.someRegisterCommand", (emulator, ...args) => {
-    return emulator.runCommand("someRegisterCommand", args);
+  registerEmulatorCommand("emacs-mcx.registerNameCommand", (emulator, ...args) => {
+    return emulator.runCommand("registerNameCommand", args);
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {

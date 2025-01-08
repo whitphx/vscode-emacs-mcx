@@ -28,31 +28,31 @@ export type Registers = Map<string, RegisterEntry>;
 
 type RegisterCommandType = "copy" | "insert" | "copy-rectangle" | "point" | "jump";
 export class RegisterCommandState {
-  private _acceptingRegisterCommand: RegisterCommandType | null = null;
-  public get acceptingRegisterCommand(): RegisterCommandType | null {
-    return this._acceptingRegisterCommand;
+  private _acceptingRegisterName: RegisterCommandType | null = null;
+  public get acceptingRegisterName(): RegisterCommandType | null {
+    return this._acceptingRegisterName;
   }
 
-  public startAcceptingRegisterKey(commandType: RegisterCommandType, message: string): void {
-    this._acceptingRegisterCommand = commandType;
+  public startAcceptingRegisterName(commandType: RegisterCommandType, message: string): void {
+    this._acceptingRegisterName = commandType;
     vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRectCommand", false);
-    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", true);
+    vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterName", true);
 
     MessageManager.showMessage(message);
   }
 
-  public stopAcceptingRegisterKey(): void {
-    if (this._acceptingRegisterCommand) {
-      this._acceptingRegisterCommand = null;
-      vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterCommand", false);
+  public stopAcceptingRegisterName(): void {
+    if (this._acceptingRegisterName) {
+      this._acceptingRegisterName = null;
+      vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingRegisterName", false);
       MessageManager.removeMessage();
     }
   }
 }
 
 // Will be bound to C-x r s
-export class PreCopyToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "preCopyToRegister";
+export class CopyToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "copyToRegister";
   override isIntermediateCommand = true;
 
   constructor(
@@ -63,17 +63,17 @@ export class PreCopyToRegister extends EmacsCommand implements ITextEditorInterr
   }
 
   public run(): void {
-    this.registerCommandState.startAcceptingRegisterKey("copy", "Copy to register: ");
+    this.registerCommandState.startAcceptingRegisterName("copy", "Copy to register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterName();
   }
 }
 
 // Will be bound to C-x r i
-export class PreInsertRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "preInsertRegister";
+export class InsertRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "insertRegister";
   override isIntermediateCommand = true;
 
   constructor(
@@ -84,17 +84,17 @@ export class PreInsertRegister extends EmacsCommand implements ITextEditorInterr
   }
 
   public run(): void {
-    this.registerCommandState.startAcceptingRegisterKey("insert", "Insert from register: ");
+    this.registerCommandState.startAcceptingRegisterName("insert", "Insert from register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterName();
   }
 }
 
 // Will be bound to C-x r r
-export class PreCopyRectangleToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "preCopyRectangleToRegister";
+export class CopyRectangleToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "copyRectangleToRegister";
   override isIntermediateCommand = true;
 
   constructor(
@@ -105,17 +105,17 @@ export class PreCopyRectangleToRegister extends EmacsCommand implements ITextEdi
   }
 
   public run(): void {
-    this.registerCommandState.startAcceptingRegisterKey("copy-rectangle", "Copy rectangle to register: ");
+    this.registerCommandState.startAcceptingRegisterName("copy-rectangle", "Copy rectangle to register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterName();
   }
 }
 
 // Will be bound to C-x r SPC
-export class PrePointToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "prePointToRegister";
+export class PointToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "pointToRegister";
   override isIntermediateCommand = true;
 
   constructor(
@@ -126,17 +126,17 @@ export class PrePointToRegister extends EmacsCommand implements ITextEditorInter
   }
 
   public run(): void {
-    this.registerCommandState.startAcceptingRegisterKey("point", "Point to register: ");
+    this.registerCommandState.startAcceptingRegisterName("point", "Point to register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterName();
   }
 }
 
 // Will be bound to C-x r j
-export class PreJumpToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "preJumpToRegister";
+export class JumpToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "jumpToRegister";
   override isIntermediateCommand = true;
 
   constructor(
@@ -147,17 +147,17 @@ export class PreJumpToRegister extends EmacsCommand implements ITextEditorInterr
   }
 
   public run(): void {
-    this.registerCommandState.startAcceptingRegisterKey("jump", "Jump to register: ");
+    this.registerCommandState.startAcceptingRegisterName("jump", "Jump to register: ");
   }
 
   public onDidInterruptTextEditor(): void {
-    this.registerCommandState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterName();
   }
 }
 
-// Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterKey context.
-export class SomeRegisterCommand extends EmacsCommand {
-  public readonly id = "someRegisterCommand";
+// Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterName context.
+export class RegisterNameCommand extends EmacsCommand {
+  public readonly id = "registerNameCommand";
 
   constructor(
     emacsController: IEmacsController,
@@ -173,35 +173,35 @@ export class SomeRegisterCommand extends EmacsCommand {
     prefixArgument: number | undefined,
     args?: unknown[],
   ): void | Thenable<void> {
-    const commandType = this.registerCommandState.acceptingRegisterCommand;
+    const commandType = this.registerCommandState.acceptingRegisterName;
     if (!commandType) {
       return;
     }
 
-    this.registerCommandState.stopAcceptingRegisterKey();
+    this.registerCommandState.stopAcceptingRegisterName();
 
-    const registerKey = args?.[0];
-    if (typeof registerKey !== "string" || registerKey.length !== 1) {
+    const registerName = args?.[0];
+    if (typeof registerName !== "string" || registerName.length !== 1) {
       return;
     }
 
     const deleteRegion = prefixArgument != null;
 
     if (commandType === "copy") {
-      return this.runCopy(textEditor, registerKey, deleteRegion);
+      return this.runCopy(textEditor, registerName, deleteRegion);
     } else if (commandType === "insert") {
-      return this.runInsert(textEditor, registerKey);
+      return this.runInsert(textEditor, registerName);
     } else if (commandType === "copy-rectangle") {
-      return this.runCopyRectangle(textEditor, registerKey, deleteRegion);
+      return this.runCopyRectangle(textEditor, registerName, deleteRegion);
     } else if (commandType === "point") {
-      return this.runPoint(textEditor, registerKey);
+      return this.runPoint(textEditor, registerName);
     } else if (commandType === "jump") {
-      return this.runJump(textEditor, registerKey);
+      return this.runJump(textEditor, registerName);
     }
   }
 
   // copy-to-register, C-x r s <r>
-  public async runCopy(textEditor: vscode.TextEditor, registerKey: string, deleteRegion: boolean): Promise<void> {
+  public async runCopy(textEditor: vscode.TextEditor, registerName: string, deleteRegion: boolean): Promise<void> {
     const selectionsAfterRectDisabled =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {
@@ -222,19 +222,19 @@ export class SomeRegisterCommand extends EmacsCommand {
       revealPrimaryActive(textEditor);
     }
 
-    this.registers.set(registerKey, { type: "text", text });
+    this.registers.set(registerName, { type: "text", text });
 
     this.emacsController.exitMarkMode();
     makeSelectionsEmpty(textEditor);
   }
 
   // insert-register, C-x r i <r>
-  public async runInsert(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+  public async runInsert(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
     const selections = textEditor.selections;
 
     this.emacsController.pushMark(selections.map((s) => s.active));
 
-    const dataToInsert = this.registers.get(registerKey);
+    const dataToInsert = this.registers.get(registerName);
     if (dataToInsert == null) {
       MessageManager.showMessage("Register does not contain text");
       return;
@@ -260,7 +260,7 @@ export class SomeRegisterCommand extends EmacsCommand {
   // copy-rectangle-to-register, C-x r r <r>
   public async runCopyRectangle(
     textEditor: vscode.TextEditor,
-    registerKey: string,
+    registerName: string,
     deleteRegion: boolean,
   ): Promise<void> {
     const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
@@ -269,7 +269,7 @@ export class SomeRegisterCommand extends EmacsCommand {
     });
 
     if (copiedRectTexts) {
-      this.registers.set(registerKey, { type: "rectangle", rectTexts: copiedRectTexts });
+      this.registers.set(registerName, { type: "rectangle", rectTexts: copiedRectTexts });
     }
 
     this.emacsController.exitMarkMode();
@@ -277,9 +277,9 @@ export class SomeRegisterCommand extends EmacsCommand {
   }
 
   // point-to-register, C-x r SPC <r>
-  public async runPoint(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
+  public async runPoint(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
     const positions = textEditor.selections.map((selection) => selection.active);
-    this.registers.set(registerKey, {
+    this.registers.set(registerName, {
       type: "position",
       buffer: textEditor.document.uri,
       positions,
@@ -287,8 +287,8 @@ export class SomeRegisterCommand extends EmacsCommand {
   }
 
   // jump-to-register, C-x r j <r>
-  public async runJump(textEditor: vscode.TextEditor, registerKey: string): Promise<void> {
-    const data = this.registers.get(registerKey);
+  public async runJump(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
+    const data = this.registers.get(registerName);
     if (data == undefined || data.type !== "position") {
       MessageManager.showMessage("Register doesn't contain a buffer position or configuration");
       return;

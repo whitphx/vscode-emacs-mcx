@@ -763,27 +763,27 @@
     },
     {
       "key": "s", // ctrl+x r s
-      "command": "emacs-mcx.preCopyToRegister",
+      "command": "emacs-mcx.copyToRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "i", // ctrl+x r i
-      "command": "emacs-mcx.preInsertRegister",
+      "command": "emacs-mcx.insertRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "r", // ctrl+x r r
-      "command": "emacs-mcx.preCopyRectangleToRegister",
+      "command": "emacs-mcx.copyRectangleToRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "space", // ctrl+x r SPC
-      "command": "emacs-mcx.prePointToRegister",
+      "command": "emacs-mcx.pointToRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {
       "key": "j", // ctrl+x r j
-      "command": "emacs-mcx.preJumpToRegister",
+      "command": "emacs-mcx.jumpToRegister",
       "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
     },
     {

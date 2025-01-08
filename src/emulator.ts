@@ -219,12 +219,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.registerDisposable(killYanker);
 
     const registerCommandState = new RegisterCommands.RegisterCommandState();
-    this.commandRegistry.register(new RegisterCommands.PreCopyToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.PreInsertRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.PreCopyRectangleToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.PrePointToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.PreJumpToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.SomeRegisterCommand(this, registers, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.CopyToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.InsertRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.CopyRectangleToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.PointToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.JumpToRegister(this, registerCommandState));
+    this.commandRegistry.register(new RegisterCommands.RegisterNameCommand(this, registers, registerCommandState));
 
     const rectangleState: RectangleCommands.RectangleState = {
       latestKilledRectangle: [],
