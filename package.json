@@ -5324,7 +5324,7 @@
     "@vscode/vsce": "^3.2.1",
     "assert": "^2.1.0",
     "eslint": "^9.17.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.0.1",
     "glob": "^11.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
