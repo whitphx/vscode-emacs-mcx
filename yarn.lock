@@ -493,10 +493,10 @@
   resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.89.0.tgz#df0beb3f4ab9133ee8c5fcac8fc578e4623d8749"
   integrity sha512-TMfGKLSVxfGfoO8JfIE/neZqv7QLwS4nwPwL/NwMvxtAY2230H2I4Z5xx6836pmJvMAzqooRQ4pmLm7RUicP3A==
 
-"@types/webpack-env@^1.18.5":
-  version "1.18.5"
-  resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.18.5.tgz#eccda0b04fe024bed505881e2e532f9c119169bf"
-  integrity sha512-wz7kjjRRj8/Lty4B+Kr0LN6Ypc/3SymeCCGSbaXp2leH0ZVg/PriNiOwNj4bD4uphI7A8NXS4b6Gl373sfO5mA==
+"@types/webpack-env@^1.18.6":
+  version "1.18.6"
+  resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.18.6.tgz#27823a5de13e4304b47af0cbb7ce2aeebd40971c"
+  integrity sha512-b32JtXK2UJHdXWUiNdIXxeAUXJu+FZG6HRMDNZu+o6QTzQ3dsDNR6Q7XQj5GD5skljXgb5zxc/+G/ZxkFKdlyg==
 
 "@typescript-eslint/eslint-plugin@8.21.0":
   version "8.21.0"
