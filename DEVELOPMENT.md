@@ -9,15 +9,15 @@ This repository has introduced linter (ESLint), code formatter (Prettier), and u
 To format the source files with ESLint and Prettier, run the following commands.
 
 ```shell
-$ yarn check:eslint
-$ yarn check:prettier
+$ npm run check:eslint
+$ npm run check:prettier
 ```
 
 The commands below do only coding style checks, without formatting. These commands are automatically executed during the CI.
 
 ```
-$ yarn fix:eslint
-$ yarn fix:prettier
+$ npm run fix:eslint
+$ npm run fix:prettier
 ```
 
 ### Unit tests
@@ -43,7 +43,7 @@ Make sure that **the CI has passed all coding style checks and unit tests** befo
 Keybindings of a VSCode extension must be defined in its `contributes.keybindings` section in `package.json` as described in [the doc](https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings),
 but you MUST NOT edit it directly in case of this extension.
 
-Instead, to change the keybindings, you have to edit `keybindings.json` and run `yarn gen-keys` to generate the resultant keybinding definitions and update `package.json` with them.
+Instead, to change the keybindings, you have to edit `keybindings.json` and run `npm run gen-keys` to generate the resultant keybinding definitions and update `package.json` with them.
 
 After that, you have to commit the auto-updated `package.json` in addition to `keybindings.json`.
 Please also edit the keybindings list in `README.md`.
@@ -92,4 +92,4 @@ See `src/extension.ts`.
 
 Finally, bind the exposed command to key strokes.
 It's typically done by editing `package.json` though, it's incorrect in this extension.
-Edit `keybindings.json` and run `yarn gen-keys` instead as described above.
+Edit `keybindings.json` and run `npm run gen-keys` instead as described above.
