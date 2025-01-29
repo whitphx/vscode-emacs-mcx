@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.65.1] - 2025-01-29
+
+### Fix
+
+- Internal refactoring and package updates.
+
 ## [0.65.0] - 2025-01-08
 
 ### Change
