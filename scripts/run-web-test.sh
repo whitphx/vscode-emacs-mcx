@@ -19,7 +19,7 @@ tearDown() {
 
 setup
 
-npm run vscode-test-web \
+npm exec -- vscode-test-web \
   --browserType=chromium \
   --extensionDevelopmentPath=. \
   --extensionTestsPath=dist/web/test/suite/index.js \
