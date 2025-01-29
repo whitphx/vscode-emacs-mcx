@@ -21,7 +21,7 @@ if [[ $(git diff --stat) != '' ]]; then
 fi
 
 echo "Set version"
-yarn version --new-version ${VERSION} --no-git-tag-version
+npm version --new-version ${VERSION} --no-git-tag-version
 CURRENT_VERSION=`node --print 'require("./package.json").version'`
 
 echo "Add and commit package.json"
