@@ -47,11 +47,11 @@ jobs:
         run: xvfb-run -a npm test
         if: runner.os == 'Linux' && matrix.type == 'native'
       - name: Test
-        run: npm test
+        run: npm run test
         if: runner.os != 'Linux' && matrix.type == 'native'
 
       - name: Test Web
-        run: npm test:web --headless
+        run: npm run test:web -- --headless
         if: matrix.type == 'web'
 
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
