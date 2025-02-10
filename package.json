@@ -5323,7 +5323,7 @@
     "@vscode/test-web": "^0.0.65",
     "@vscode/vsce": "^3.2.2",
     "assert": "^2.1.0",
-    "eslint": "^9.19.0",
+    "eslint": "^9.20.0",
     "eslint-config-prettier": "^10.0.1",
     "glob": "^11.0.1",
     "husky": "^9.1.7",
