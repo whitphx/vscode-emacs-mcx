@@ -5312,7 +5312,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@eslint/js": "^9.18.0",
+    "@eslint/js": "^9.22.0",
     "@types/glob": "^8.0.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.12.0",
