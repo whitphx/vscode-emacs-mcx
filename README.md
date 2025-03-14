@@ -35,7 +35,7 @@ This extension aims
 This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks for all these great works.
 Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
 
-## FAQ
+## FAQ/Tips
 
 ### The cursor cannot be moved on the find widget as the widget closes with movement keys.
 
@@ -53,6 +53,11 @@ Refs:
 
 - [The official doc about `editor.find.seedSearchStringFromSelection` setting](basics#_seed-search-string-from-selection)
 - [The GitHub issue where we discuss about it](https://github.com/whitphx/vscode-emacs-mcx/issues/107)
+
+### I want to use keyboard macro
+
+Check out [Keyboard Macro Beta](https://marketplace.visualstudio.com/items?itemName=tshino.kb-macro) by [tshino](https://github.com/tshino) (`tshino.kb-macro`).
+Also [`imjonathan/keybindings.json`](https://gist.github.com/imjonathan/20112f04608e5e7fa371dd117f4d8801) is custom keybindings for the combination of Keyboard Macro Beta and this extension.
 
 ### The extension has been broken!
 
