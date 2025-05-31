@@ -56,8 +56,7 @@ Refs:
 
 ### I want to use keyboard macro
 
-Check out [Keyboard Macro Beta](https://marketplace.visualstudio.com/items?itemName=tshino.kb-macro) by [tshino](https://github.com/tshino) (`tshino.kb-macro`).
-Also [`imjonathan/keybindings.json`](https://gist.github.com/imjonathan/20112f04608e5e7fa371dd117f4d8801) is custom keybindings for the combination of Keyboard Macro Beta and this extension.
+Check out [Keyboard Macro Beta](https://marketplace.visualstudio.com/items?itemName=tshino.kb-macro) by [tshino](https://github.com/tshino) (`tshino.kb-macro`) and [its keybindings](https://github.com/tshino/vscode-kb-macro/blob/main/keymap-wrapper/tuttieee.emacs-mcx.json).
 
 ### The extension has been broken!
 
