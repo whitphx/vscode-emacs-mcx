@@ -1,6 +1,7 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
+import { compareVersions } from "compare-versions";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
@@ -522,6 +523,12 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
+    if (compareVersions(vscode.version, "1.102") < 0) {
+      // Temporary fix for https://github.com/whitphx/vscode-emacs-mcx/issues/2278
+      // TODO: remove this when VSCode 1.102 is released
+      this.skip();
+    }
+
     activeTextEditor = await setupWorkspace("", { language: "javascript" });
     activeTextEditor.options.tabSize = 4;
     activeTextEditor.options.insertSpaces = true;
