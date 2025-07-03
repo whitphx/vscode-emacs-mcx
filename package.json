@@ -5339,7 +5339,7 @@
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
-    "tsx": "^4.19.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0",
     "webpack": "^5.97.1",
