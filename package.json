@@ -5323,6 +5323,7 @@
     "@vscode/test-web": "^0.0.65",
     "@vscode/vsce": "^3.2.2",
     "assert": "^2.1.0",
+    "compare-versions": "^6.1.1",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "glob": "^11.0.1",
@@ -5345,7 +5346,6 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "compare-versions": "^6.1.1",
     "paredit.js": "./vendor/paredit.js",
     "winston": "^3.17.0",
     "winston-console-for-electron": "^0.0.7",
