@@ -524,6 +524,8 @@ suite("yank pop with auto-indent", () => {
 
   test("Yank in a language that has auto-indent support", async function () {
     if (compareVersions(vscode.version, "1.102") < 0) {
+      // Temporary fix for https://github.com/whitphx/vscode-emacs-mcx/issues/2278
+      // TODO: remove this when VSCode 1.102 is released
       this.skip();
     }
 
