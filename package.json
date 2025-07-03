@@ -5345,6 +5345,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
+    "compare-versions": "^6.1.1",
     "paredit.js": "./vendor/paredit.js",
     "winston": "^3.17.0",
     "winston-console-for-electron": "^0.0.7",
