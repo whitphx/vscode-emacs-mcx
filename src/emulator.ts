@@ -317,9 +317,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
       if (
         e.contentChanges.some((contentChange) =>
-          this.textEditor.selections.some(
-            (selection) => typeof contentChange.range.intersection(selection) !== "undefined",
-          ),
+          this.textEditor.selections.some((selection) => contentChange.range.intersection(selection) != null),
         )
       ) {
         this.exitMarkMode();
