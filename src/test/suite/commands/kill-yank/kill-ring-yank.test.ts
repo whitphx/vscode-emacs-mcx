@@ -523,7 +523,7 @@ suite("yank pop with auto-indent", () => {
   teardown(cleanUpWorkspace);
 
   test("Yank in a language that has auto-indent support", async function () {
-    if (compareVersions(vscode.version, "1.101") <= 0) {
+    if (compareVersions(vscode.version, "1.102") < 0) {
       this.skip();
     }
 
