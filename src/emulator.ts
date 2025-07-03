@@ -61,6 +61,9 @@ class NativeSelectionsStore {
   }
 
   public set(textEditor: TextEditor, nativeSelections: readonly vscode.Selection[]): void {
+    logger.debug(
+      `[NativeSelectionsStore.set]\t Set native selections for ${textEditor.document.uri.toString()}: ${JSON.stringify(nativeSelections)}`,
+    );
     this._nativeSelectionsMap.set(textEditor, nativeSelections);
 
     const setPromise = this._nativeSelectionsSetPromiseMap.get(textEditor);
@@ -140,6 +143,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
     registers: RegisterCommands.Registers = new Map(),
   ) {
+    logger.debug(`[EmacsEmulator.constructor]\t Create EmacsEmulator for ${textEditor.document.uri.toString()}`);
+
     this._textEditor = textEditor;
 
     this.markRing = new MarkRing(Configuration.instance.markRingMax);
@@ -266,6 +271,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * when the active text editor is switched.
    */
   public async switchTextEditor(textEditor: TextEditor): Promise<void> {
+    logger.debug(`[EmacsEmulator.switchTextEditor]\t Switching text editor to ${textEditor.document.uri.toString()}`);
+
     this.setTextEditor(textEditor);
 
     // For example when the active text editor is switched by the code jump feature,
@@ -273,6 +280,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     // with some delay. So we need to wait for the selection change.
     // XXX: This delay time is ad-hoc.
     await this.nativeSelectionsStore.waitSet(textEditor, 100);
+    logger.debug(
+      `[EmacsEmulator.switchTextEditor]\t Native selections after waitSet: ${JSON.stringify(
+        this.nativeSelectionsStore.get(textEditor),
+      )}`,
+    );
 
     this.nativeSelectionsStore.set(
       textEditor,
@@ -287,8 +299,18 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     );
     if (this.rectMode) {
       this.applyNativeSelectionsAsRect();
+      logger.debug(
+        `[EmacsEmulator.switchTextEditor]\t Text editor selections after switch (rect mode): ${JSON.stringify(
+          this.textEditor.selections,
+        )}`,
+      );
     } else {
       this.textEditor.selections = this.nativeSelections;
+      logger.debug(
+        `[EmacsEmulator.switchTextEditor]\t Text editor selections after switch: ${JSON.stringify(
+          this.textEditor.selections,
+        )}`,
+      );
     }
 
     if (this.rectMode) {
@@ -313,6 +335,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
+    logger.debug(`[EmacsEmulator.onDidChangeTextDocument]\t Document: ${e.document.uri.toString()}`);
+
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
       if (
@@ -330,6 +354,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
+    logger.debug(
+      `[EmacsEmulator.onDidChangeTextEditorSelection]\t Text editor: ${e.textEditor.document.uri.toString()}, Selections: ${JSON.stringify(e.textEditor.selections)}`,
+    );
+
     if (!this.rectMode) {
       this.nativeSelectionsStore.set(e.textEditor, e.textEditor.selections);
     }
@@ -406,6 +434,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * C-u
    */
   public universalArgument(): Promise<unknown> {
+    logger.debug(`[EmacsEmulator.universalArgument]\t`);
     return this.prefixArgumentHandler.universalArgument();
   }
 
@@ -413,6 +442,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * M-<number>
    */
   public digitArgument(digit: number): Promise<unknown> {
+    logger.debug(`[EmacsEmulator.digitArgument]\t Digit: ${digit}`);
     return this.prefixArgumentHandler.digitArgument(digit);
   }
 
@@ -420,6 +450,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * M--
    */
   public negativeArgument(): Promise<unknown> {
+    logger.debug(`[EmacsEmulator.negativeArgument]\t`);
     return this.prefixArgumentHandler.negativeArgument();
   }
 
@@ -427,6 +458,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * Digits following C-u or M-<number>
    */
   public subsequentArgumentDigit(arg: number): Promise<unknown> {
+    logger.debug(`[EmacsEmulator.subsequentArgumentDigit]\t Digit: ${arg}`);
     return this.prefixArgumentHandler.subsequentArgumentDigit(arg);
   }
 
@@ -466,6 +498,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * C-<SPC>
    */
   public setMarkCommand(): void {
+    logger.debug(`[EmacsEmulator.setMarkCommand]\t`);
+
     if (this.prefixArgumentHandler.precedingSingleCtrlU()) {
       // C-u C-<SPC>
       this.prefixArgumentHandler.cancel();
@@ -486,6 +520,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * C-x <SPC>
    */
   public rectangleMarkMode(): void {
+    logger.debug(`[EmacsEmulator.rectangleMarkMode]\t`);
+
     if (this.inRectMarkMode) {
       this.exitRectangleMarkMode();
     } else {
@@ -495,6 +531,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   private normalCursorStyle?: vscode.TextEditorCursorStyle = undefined;
   private enterRectangleMarkMode(): void {
+    logger.debug(`[EmacsEmulator.enterRectangleMarkMode]\t`);
+
     if (this.isInMarkMode) {
       MessageManager.showMessage("Rectangle-Mark mode enabled in current buffer");
     } else {
@@ -511,6 +549,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   private exitRectangleMarkMode(): void {
+    logger.debug(`[EmacsEmulator.exitRectangleMarkMode]\t`);
+
     if (!this.rectMode) {
       return;
     }
@@ -530,6 +570,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * Invoked by C-g
    */
   public cancel(): void {
+    logger.debug(`[EmacsEmulator.cancel]\t`);
+
     if (this.rectMode) {
       this.exitRectangleMarkMode();
     }
@@ -553,6 +595,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public enterMarkMode(pushMark = true): void {
+    logger.debug(`[EmacsEmulator.enterMarkMode]\t`);
+
     this._isInMarkMode = true;
     this._markModeAnchors = this.textEditor.selections.map((selection) => selection.anchor);
     this.rectMode = false;
@@ -571,11 +615,15 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public pushMark(positions: vscode.Position[], replace = false): void {
+    logger.debug(`[EmacsEmulator.pushMark]\t Positions: ${JSON.stringify(positions)}`);
+
     this.prevExchangedMarks = null;
     this.markRing.push(positions, replace);
   }
 
   public popMark(): void {
+    logger.debug(`[EmacsEmulator.popMark]\t`);
+
     const prevMark = this.markRing.pop();
     if (prevMark) {
       this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
@@ -584,6 +632,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public exchangePointAndMark(): void {
+    logger.debug(`[EmacsEmulator.exchangePointAndMark]\t`);
+
     const prevMarks = this.prevExchangedMarks || this.markRing.getTop();
     this.enterMarkMode(false);
     this.prevExchangedMarks = this.textEditor.selections.map((selection) => selection.active);
@@ -604,6 +654,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public exitMarkMode(): void {
+    logger.debug(`[EmacsEmulator.exitMarkMode]\t`);
+
     this._isInMarkMode = false;
     this.exitRectangleMarkMode();
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
@@ -614,6 +666,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     args: Unreliable<unknown> = undefined,
     prefixArgumentKey = "prefixArgument",
   ): Thenable<T | undefined> {
+    logger.debug(
+      `[EmacsEmulator.executeCommandWithPrefixArgument]\t Command: ${command}, Args: ${JSON.stringify(args)}`,
+    );
+
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     this.prefixArgumentHandler.cancel();
 

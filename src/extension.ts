@@ -38,6 +38,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor((editor) => {
+      logger.debug(`[event]\t onDidChangeActiveTextEditor: ${editor?.document.uri.toString() ?? "null"}`);
+
       if (editor == null) {
         return;
       }
@@ -57,6 +59,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.workspace.onDidCloseTextDocument(() => {
+      logger.debug(`[event]\t onDidCloseTextDocument`);
+
       const documents = vscode.workspace.textDocuments;
 
       // Delete emulators once all tabs of this document have been closed
@@ -71,6 +75,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
+      logger.debug(`[event]\t onDidChangeConfiguration: ${JSON.stringify(e)}`);
+
       if (e.affectsConfiguration("emacs-mcx")) {
         Configuration.reload();
       }
