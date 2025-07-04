@@ -5334,7 +5334,7 @@
     "process": "^0.11.10",
     "rimraf": "^6.0.1",
     "sinon": "^21.0.0",
-    "strip-json-comments": "^5.0.1",
+    "strip-json-comments": "^5.0.2",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
