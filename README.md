@@ -363,6 +363,14 @@ See https://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html for
 
 This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to provide sexp functionalities. Thank you for this great library.
 
+### Looking up identifiers
+
+| Command | Desc                                                                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `M-.`   | Find definitions of an identifier (xref-find-definitions). It's just bound to VSCode's "Go to Definition" (`editor.action.revealDefinition`).    |
+| `M-,`   | Go back to where you previously invoked M-. and friends (xref-go-back). It's just bound to VSCode's "Go Back" (`workbench.action.navigateBack`). |
+| `C-M-,` | Go forward to where you previously invoked M-, (xref-go-forward). It's just bound to VSCode's "Go Forward" (`workbench.action.navigateForward`). |
+
 ## Other commands
 
 ### `emacs-mcx.executeCommandWithPrefixArgument`
