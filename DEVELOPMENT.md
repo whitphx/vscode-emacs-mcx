@@ -93,3 +93,10 @@ See `src/extension.ts`.
 Finally, bind the exposed command to key strokes.
 It's typically done by editing `package.json` though, it's incorrect in this extension.
 Edit `keybindings.json` and run `npm run gen-keys` instead as described above.
+
+# Release the extension
+
+```
+$ ./scripts/new-version.sh <version>
+$ git push origin main --tags
+```
