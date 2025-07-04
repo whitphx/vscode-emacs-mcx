@@ -97,6 +97,7 @@ Edit `keybindings.json` and run `npm run gen-keys` instead as described above.
 # Release the extension
 
 ```
+$ vi CHANGELOG.md
 $ ./scripts/new-version.sh <version>
 $ git push origin main --tags
 ```
