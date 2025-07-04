@@ -5287,6 +5287,69 @@
       {
         "key": "ctrl+x right",
         "command": "workbench.action.nextEditor"
+      },
+      {
+        "key": "alt+.",
+        "command": "editor.action.revealDefinition",
+        "when": "editorHasDefinitionProvider && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+.",
+        "mac": "cmd+.",
+        "command": "editor.action.revealDefinition",
+        "when": "editorHasDefinitionProvider && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape .",
+        "command": "editor.action.revealDefinition",
+        "when": "editorHasDefinitionProvider && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ .",
+        "command": "editor.action.revealDefinition",
+        "when": "editorHasDefinitionProvider && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+,",
+        "command": "workbench.action.navigateBack",
+        "when": "canNavigateBack && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+,",
+        "mac": "cmd+,",
+        "command": "workbench.action.navigateBack",
+        "when": "canNavigateBack && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ,",
+        "command": "workbench.action.navigateBack",
+        "when": "canNavigateBack && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ,",
+        "command": "workbench.action.navigateBack",
+        "when": "canNavigateBack && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+alt+,",
+        "command": "workbench.action.navigateForward",
+        "when": "canNavigateForward && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "ctrl+alt+,",
+        "mac": "ctrl+cmd+,",
+        "command": "workbench.action.navigateForward",
+        "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+,",
+        "command": "workbench.action.navigateForward",
+        "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+,",
+        "command": "workbench.action.navigateForward",
+        "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       }
     ]
   },

@@ -1022,6 +1022,27 @@
     {
       "key": "ctrl+x right",
       "command": "workbench.action.nextEditor"
+    },
+    // Looking up identifiers
+    {
+      // Copied from the VSCode default keybinding for "Go to Definition" and assigned to "M-."
+      "key": "meta+.",
+      "command": "editor.action.revealDefinition",
+      "when": "editorHasDefinitionProvider && editorTextFocus"
+    },
+    {
+      // Copied from the VSCode default keybinding for "Go Back",
+      // which is a good alternative to Emacs' `xref-go-back`
+      "key": "meta+,",
+      "command": "workbench.action.navigateBack",
+      "when": "canNavigateBack"
+    },
+    {
+      // Copied from the VSCode default keybinding for "Go Forward",
+      // which is a good alternative to Emacs' `xref-go-forward`
+      "key": "ctrl+meta+,",
+      "command": "workbench.action.navigateForward",
+      "when": "canNavigateForward"
     }
   ]
 }
