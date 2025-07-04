@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
-    if (typeof activeTextEditor === "undefined") {
+    if (activeTextEditor == null) {
       return undefined;
     }
 
