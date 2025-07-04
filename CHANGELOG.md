@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.66.0] - 2025-07-04
+
+### Add
+
+- Code jump commands (xref-find-definitions, xref-go-back, xref-go-forward), [#2289](https://github.com/whitphx/vscode-emacs-mcx/pull/2289).
+
 ## [0.65.2] - 2025-07-04
 
 ### Fix
