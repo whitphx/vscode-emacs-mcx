@@ -12,5 +12,6 @@
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "cSpell.words": ["gitmodules", "isearch", "Keymap", "Minibuffer", "nvmrc", "openvsx", "paredit", "Sexp"]
 }
