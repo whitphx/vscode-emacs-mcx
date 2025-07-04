@@ -25,7 +25,7 @@ npm version --new-version ${VERSION} --no-git-tag-version
 CURRENT_VERSION=`node --print 'require("./package.json").version'`
 
 echo "Add and commit package.json"
-git add package.json
+git add package.json package-lock.json
 git commit -m "Version ${CURRENT_VERSION}${PRE_RELEASE_GIT_COMMENT_SUFFIX}"
 
 GIT_TAG="v${CURRENT_VERSION}${PRE_RELEASE_GIT_TAG_SUFFIX}"
