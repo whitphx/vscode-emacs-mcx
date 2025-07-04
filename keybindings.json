@@ -1043,6 +1043,24 @@
       "key": "ctrl+meta+,",
       "command": "workbench.action.navigateForward",
       "when": "canNavigateForward"
+    },
+    // To make C-c and C-x work in the terminal
+    // These solutions are provided by https://github.com/whitphx/vscode-emacs-mcx/issues/1533#issuecomment-2009398006
+    {
+        "key": "ctrl+c",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "\u0003" // 'C' & 0x1F == 0x03
+        },
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+x",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "\u0018" // 'X' & 0x1F  == 0x18
+        },
+        "when": "terminalFocus"
     }
   ]
 }
