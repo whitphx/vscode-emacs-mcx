@@ -5350,6 +5350,22 @@
         "key": "ctrl+[ ctrl+,",
         "command": "workbench.action.navigateForward",
         "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+c",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+          "text": "\u0003"
+        }
+      },
+      {
+        "key": "ctrl+x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+          "text": "\u0018"
+        }
       }
     ]
   },
