@@ -20,6 +20,12 @@ if [[ $(git diff --stat) != '' ]]; then
   exit -1
 fi
 
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [ "${CURRENT_BRANCH}" != "main" ]; then
+  echo "Not on main branch (currently on ${CURRENT_BRANCH}). Aborting."
+  exit -1
+fi
+
 echo "Set version"
 npm version --new-version ${VERSION} --no-git-tag-version
 CURRENT_VERSION=`node --print 'require("./package.json").version'`
