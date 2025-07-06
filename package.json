@@ -2594,24 +2594,24 @@
       },
       {
         "key": "alt+g alt+g",
-        "command": "workbench.action.gotoLine",
+        "command": "emacs-mcx.gotoLine",
         "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+g",
         "mac": "cmd+g cmd+g",
-        "command": "workbench.action.gotoLine",
+        "command": "emacs-mcx.gotoLine",
         "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g g",
-        "command": "workbench.action.gotoLine",
+        "command": "emacs-mcx.gotoLine",
         "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g g",
         "mac": "cmd+g g",
-        "command": "workbench.action.gotoLine",
+        "command": "emacs-mcx.gotoLine",
         "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
@@ -2619,7 +2619,7 @@
         "command": "emacs-mcx.isearchExit",
         "when": "editorFocus && findWidgetVisible && !isComposing && !config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
-          "then": "workbench.action.gotoLine"
+          "then": "emacs-mcx.gotoLine"
         }
       },
       {
@@ -2628,7 +2628,7 @@
         "command": "emacs-mcx.isearchExit",
         "when": "editorFocus && findWidgetVisible && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
-          "then": "workbench.action.gotoLine"
+          "then": "emacs-mcx.gotoLine"
         }
       },
       {
@@ -2636,7 +2636,7 @@
         "command": "emacs-mcx.isearchExit",
         "when": "editorFocus && findWidgetVisible && !isComposing && !config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
-          "then": "workbench.action.gotoLine"
+          "then": "emacs-mcx.gotoLine"
         }
       },
       {
@@ -2645,12 +2645,12 @@
         "command": "emacs-mcx.isearchExit",
         "when": "editorFocus && findWidgetVisible && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
-          "then": "workbench.action.gotoLine"
+          "then": "emacs-mcx.gotoLine"
         }
       },
       {
         "key": "escape g",
-        "command": "workbench.action.gotoLine",
+        "command": "emacs-mcx.gotoLine",
         "when": "config.emacs-mcx.useMetaPrefixEscape"
       },
       {

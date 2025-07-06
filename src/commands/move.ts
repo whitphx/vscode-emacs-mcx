@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TextEditor } from "vscode";
+import type { TextEditor } from "vscode";
 import { makeParallel, EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
 import { Configuration } from "../configuration/configuration";
 import {

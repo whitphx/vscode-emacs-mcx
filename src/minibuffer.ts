@@ -3,6 +3,7 @@ import { logger } from "./logger";
 
 interface ReadFromMinibufferOption {
   prompt: string;
+  validationMessage?: string;
 }
 
 export interface Minibuffer {
@@ -41,7 +42,8 @@ export class InputBoxMinibuffer implements Minibuffer {
 
     const inputBox = vscode.window.createInputBox();
     this.inputBox = inputBox;
-    inputBox.title = option.prompt;
+    inputBox.prompt = option.prompt;
+    inputBox.validationMessage = option.validationMessage;
     inputBox.show();
 
     const dispose = () => {

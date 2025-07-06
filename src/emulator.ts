@@ -9,6 +9,7 @@ import * as IndentCommands from "./commands/indent";
 import * as FindCommands from "./commands/find";
 import * as KillCommands from "./commands/kill";
 import * as MoveCommands from "./commands/move";
+import * as NavigationCommands from "./commands/navigation";
 import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
 import * as RegisterCommands from "./commands/registers";
@@ -195,6 +196,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new TabCommands.TabToTabStop(this));
 
     this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
+
+    this.commandRegistry.register(new NavigationCommands.GotoLine(this, minibuffer));
 
     const searchState: FindCommands.SearchState = {
       startSelections: undefined,
