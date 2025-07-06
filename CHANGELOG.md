@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.67.0] - 2025-07-07
+
+### Add
+
+- `C-p` and `C-n` for list navigation, [#2294](https://github.com/whitphx/vscode-emacs-mcx/pull/2294).
+- `move-to-window-line-top-bottom`, [#2295](https://github.com/whitphx/vscode-emacs-mcx/pull/2295).
+
 ## [0.66.1] - 2025-07-06
 
 ### Fix
