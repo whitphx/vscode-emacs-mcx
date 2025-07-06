@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { makeParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
 import { Configuration } from "../configuration/configuration";
 import {
   travelForward as travelForwardParagraph,
@@ -27,6 +27,7 @@ export const moveCommandIds = [
   "forwardParagraph",
   "backwardParagraph",
   "backToIndentation",
+  "moveToWindowLineTopBottom",
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -458,5 +459,140 @@ export class BackwardParagraph extends EmacsCommand {
     });
     textEditor.selections = newSelections;
     revealPrimaryActive(textEditor);
+  }
+}
+
+enum MoveToWindowLinePosition {
+  Middle,
+  Top,
+  Bottom,
+}
+
+export function calcMiddleOffset(visibleRanges: readonly vscode.Range[]): number | undefined {
+  let visibleLineCount = 0;
+  visibleRanges.forEach((range) => {
+    visibleLineCount += range.end.line - range.start.line + 1;
+  });
+  if (visibleLineCount === 0) {
+    return undefined;
+  }
+  return Math.floor(visibleLineCount / 2);
+}
+
+export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOffset: number): number | undefined {
+  let offset = targetOffset;
+  for (const range of visibleRanges) {
+    const linesInRange = range.end.line - range.start.line + 1;
+    if (offset < linesInRange) {
+      return range.start.line + offset;
+    }
+    offset -= linesInRange;
+  }
+  return undefined;
+}
+
+export function calcMiddleLine(visibleRanges: readonly vscode.Range[]): number | undefined {
+  const targetOffset = calcMiddleOffset(visibleRanges);
+  if (targetOffset == null) {
+    return;
+  }
+  return calcTargetLine(visibleRanges, targetOffset);
+}
+
+export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "moveToWindowLineTopBottom";
+
+  private movePosition: MoveToWindowLinePosition = MoveToWindowLinePosition.Middle;
+  private lastSetSelection: vscode.Selection | undefined = undefined;
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+    const targetLine =
+      prefixArgument == null
+        ? this.calculateTargetLineByPosition(textEditor)
+        : this.calculateTargetLineByPrefixArgument(textEditor, prefixArgument);
+
+    if (targetLine == null) {
+      return;
+    }
+
+    const clampedTargetLine = Math.max(0, Math.min(textEditor.document.lineCount - 1, targetLine));
+
+    this.updateSelections(textEditor, isInMarkMode, clampedTargetLine);
+  }
+
+  private calculateTargetLineByPosition(textEditor: TextEditor): number | undefined {
+    switch (this.movePosition) {
+      case MoveToWindowLinePosition.Middle: {
+        const result = calcMiddleLine(textEditor.visibleRanges);
+        if (result == null) {
+          return undefined;
+        }
+        this.movePosition = MoveToWindowLinePosition.Top;
+        return result;
+      }
+      case MoveToWindowLinePosition.Top: {
+        const firstVisibleRange = textEditor.visibleRanges[0];
+        if (firstVisibleRange == null) {
+          return undefined;
+        }
+        this.movePosition = MoveToWindowLinePosition.Bottom;
+        return firstVisibleRange.start.line;
+      }
+      case MoveToWindowLinePosition.Bottom: {
+        const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
+        if (lastVisibleRange == null) {
+          return undefined;
+        }
+        this.movePosition = MoveToWindowLinePosition.Middle;
+        return lastVisibleRange.end.line;
+      }
+    }
+  }
+
+  private calculateTargetLineByPrefixArgument(textEditor: TextEditor, prefixArgument: number): number | undefined {
+    if (prefixArgument >= 0) {
+      const firstVisibleRange = textEditor.visibleRanges[0];
+      if (firstVisibleRange == null) {
+        return undefined;
+      }
+      return firstVisibleRange.start.line + prefixArgument;
+    } else {
+      const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
+      if (lastVisibleRange == null) {
+        return undefined;
+      }
+      return lastVisibleRange.end.line + prefixArgument + 1;
+    }
+  }
+
+  private updateSelections(textEditor: TextEditor, isInMarkMode: boolean, targetLine: number): void {
+    const targetPosition = new vscode.Position(targetLine, 0);
+    textEditor.selections = textEditor.selections.map((selection, i) => {
+      if (i === 0) {
+        return new vscode.Selection(isInMarkMode ? selection.anchor : targetPosition, targetPosition);
+      } else {
+        return selection;
+      }
+    });
+    this.lastSetSelection = textEditor.selections[0];
+
+    // NOTE: We don't call `revealPrimaryActive()` in this command because
+    //       revealPrimaryActive() moves the view to make some margin before or after the active line,
+    //       which is not the behavior we want in this command.
+  }
+
+  public onDidInterruptTextEditor(event: InterruptEvent): void {
+    if (event.reason === "selection-changed") {
+      // This command itself changes the selection, so ignore the interruption in such a case.
+      if (
+        this.lastSetSelection &&
+        event.originalEvent.kind === vscode.TextEditorSelectionChangeKind.Command &&
+        event.originalEvent.selections[0]?.isEqual(this.lastSetSelection)
+      ) {
+        return;
+      }
+    }
+
+    this.movePosition = MoveToWindowLinePosition.Middle;
   }
 }

@@ -2572,6 +2572,27 @@
         }
       },
       {
+        "key": "alt+r",
+        "command": "emacs-mcx.moveToWindowLineTopBottom",
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+r",
+        "mac": "cmd+r",
+        "command": "emacs-mcx.moveToWindowLineTopBottom",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape r",
+        "command": "emacs-mcx.moveToWindowLineTopBottom",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ r",
+        "command": "emacs-mcx.moveToWindowLineTopBottom",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+g alt+g",
         "command": "workbench.action.gotoLine",
         "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"

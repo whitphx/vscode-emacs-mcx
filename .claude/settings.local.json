@@ -1,6 +1,12 @@
 {
   "permissions": {
-    "allow": ["Bash(grep:*)"],
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(npm run gen-keys:*)",
+      "Bash(npm run test-compile:*)",
+      "Bash(npm test)"
+    ],
     "deny": []
   }
 }

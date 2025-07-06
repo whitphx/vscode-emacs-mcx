@@ -25,6 +25,7 @@ import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
+import { InterruptEvent } from "./commands";
 
 export interface IEmacsController {
   readonly textEditor: TextEditor;
@@ -183,6 +184,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     );
     this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
+    this.commandRegistry.register(new MoveCommands.MoveToWindowLineTopBottom(this));
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteHorizontalSpace(this));
@@ -323,7 +325,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         this.exitMarkMode();
       }
 
-      this.onDidInterruptTextEditor();
+      this.onDidInterruptTextEditor({ reason: "document-changed", originalEvent: e });
     }
   }
 
@@ -333,7 +335,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
 
     if (e.textEditor === this.textEditor) {
-      this.onDidInterruptTextEditor();
+      this.onDidInterruptTextEditor({ reason: "selection-changed", originalEvent: e });
     }
   }
 
@@ -542,7 +544,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this.exitMarkMode();
     }
 
-    this.onDidInterruptTextEditor();
+    this.onDidInterruptTextEditor({ reason: "user-cancel" });
 
     this.killYanker.cancelKillAppend();
     this.prefixArgumentHandler.cancel();
@@ -643,7 +645,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this.prefixArgumentHandler.cancel();
   }
 
-  private onDidInterruptTextEditor() {
-    this.commandRegistry.onInterrupt();
+  public onDidInterruptTextEditor(event: InterruptEvent) {
+    this.commandRegistry.onInterrupt(event);
   }
 }
