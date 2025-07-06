@@ -58,7 +58,7 @@ function replaceAll(src: string, search: string, replacement: string) {
   return src.split(search).join(replacement); // split + join = replaceAll
 }
 
-export function generateKeybindings(src: KeyBindingSource, terminalSequenceSet?: Set<string>): KeyBinding[] {
+export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   let keys: string[];
   if (src.key) {
     keys = [src.key];
@@ -91,28 +91,18 @@ export function generateKeybindings(src: KeyBindingSource, terminalSequenceSet?:
         throw new Error(`Unparsable key string: "${key}"`);
       }
 
-      // For some keybindings with modifiers to work in the terminal.
-      // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode,
-      // when the user presses `ctrl+x`, it's not sent to the terminal because
-      // VSCode interrupts the key sequence to handle the following `ctrl+c` key stroke.
-      // It makes impossible to use Emacs (and some other apps) in the terminal
-      // because they can't receive the `ctrl+x` key stroke.
-      // So, we add the "!terminalFocus" condition to the keybinding so that VSCode doesn't handle the key stroke
+      // For keybindings with modifiers to work in Emacs in the terminal.
+      // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode without "!terminalFocus" condition,
+      // when the user presses `ctrl+x`, VSCode interrupts the key sequence expecting the following `ctrl+c` key stroke
+      // and `ctrl+x` is not sent to the terminal.
+      // It makes impossible to use the keybindings starting with `ctrl+x`
+      // in Emacs (and some other apps) in the terminal
+      // because they can't receive the `ctrl+x` key stroke sent from the terminal emulator of VSCode
+      // So, we add the "!terminalFocus" condition to such keybindings so that VSCode doesn't interrupt the key strokes in the terminal.
       const isUnconditional = when == null;
-      if (isUnconditional) {
-        // If the keybinding is unconditional, we disable it in the terminal.
-        // This is to avoid conflicts with Emacs keybindings in the terminal.
+      const hasModifiers = key.split("+").some((k) => ["ctrl", "shift", "alt", "meta"].includes(k));
+      if (isUnconditional && hasModifiers) {
         when = addWhenCond(when, "!terminalFocus");
-      }
-      // This is more aggressive enhancement for Emacs in the terminal.
-      // For example, Emacs in the terminal can handle `meta+x` when the user presses `ESC x` as ESC is sent to the terminal as expected.
-      // However, this extension registers other keys such as `alt` as the meta key
-      // and we want them to work in Emacs in the terminal as well.
-      // So, we define the keybinding to send `ESC x` to the terminal when the user presses `alt+x`.
-      const shouldDefineTerminalSequence = isUnconditional;
-      if (shouldDefineTerminalSequence) {
-        const firstKeyStroke = key.split(" ")[0];
-        terminalSequenceSet?.add(firstKeyStroke); // Add the first key stroke to the set.
       }
 
       // Convert "meta" specifications
