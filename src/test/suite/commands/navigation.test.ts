@@ -3,7 +3,14 @@ import assert from "assert";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { Minibuffer } from "../../../minibuffer";
-import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
+import {
+  assertCursorsEqual,
+  assertSelectionsEqual,
+  setEmptyCursors,
+  setupWorkspace,
+  cleanUpWorkspace,
+  clearTextEditor,
+} from "../utils";
 
 class MockMinibuffer implements Minibuffer {
   returnValues: (string | undefined)[];
@@ -203,6 +210,19 @@ suite("GotoLine", () => {
       assert.equal(mockMinibuffer.callCount, 2);
     });
 
+    [" 10", "10 ", "  10  ", "   10   "].forEach((input) => {
+      test(`handles numeric input with whitespaces: "${input}"`, async () => {
+        setEmptyCursors(activeTextEditor, [5, 3]);
+
+        mockMinibuffer = new MockMinibuffer([input]);
+        emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+
+        await emulator.runCommand("gotoLine");
+
+        assertCursorsEqual(activeTextEditor, [9, 0]);
+      });
+    });
+
     test("handles cancellation", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
       const originalPosition = activeTextEditor.selection.active;
@@ -268,56 +288,55 @@ suite("GotoLine", () => {
     });
 
     test("uses primary cursor anchor for mark mode", async () => {
-      // Set up multiple cursors with different anchors
-      activeTextEditor.selections = [
-        new vscode.Selection(5, 3, 8, 5), // Primary selection with anchor at 5,3
-        new vscode.Selection(10, 2, 12, 4),
-        new vscode.Selection(15, 1, 17, 6),
-      ];
-
       mockMinibuffer = new MockMinibuffer(["20"]);
       emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
 
-      emulator.setMarkCommand(); // Enter mark mode - this collapses selections to active positions
+      // Set up multiple cursors with different anchors
+      activeTextEditor.selections = [
+        new vscode.Selection(5, 3, 5, 3),
+        new vscode.Selection(10, 2, 10, 2),
+        new vscode.Selection(15, 1, 15, 1),
+      ];
+
+      emulator.setMarkCommand();
+      // Move primary cursor to a different position
+      await emulator.runCommand("forwardChar");
+      await emulator.runCommand("forwardChar");
+      await emulator.runCommand("forwardChar");
+      await emulator.runCommand("nextLine");
+      await emulator.runCommand("nextLine");
+
       await emulator.runCommand("gotoLine");
 
-      // Should create selection from primary active position (8,5) when mark mode was entered to target
+      // Should keep the primary cursor anchor and create a selection
+      // from it to the target line
       assert.equal(activeTextEditor.selections.length, 1);
-      assertSelectionsEqual(activeTextEditor, [8, 5, 19, 0]);
+      assertSelectionsEqual(activeTextEditor, [5, 3, 19, 0]);
     });
   });
 
   suite("edge cases", () => {
     test("handles single line document", async () => {
-      // Create a single line document
-      const singleLineText = "single line";
-      const singleLineEditor = await setupWorkspace(singleLineText);
-      const singleLineMinibuffer = new MockMinibuffer(["1"]);
-      const singleLineEmulator = new EmacsEmulator(singleLineEditor, null, singleLineMinibuffer);
+      await clearTextEditor(activeTextEditor, "single line");
+      const minibuffer = new MockMinibuffer(["1"]);
+      const emulator = new EmacsEmulator(activeTextEditor, null, minibuffer);
 
-      setEmptyCursors(singleLineEditor, [0, 5]);
+      setEmptyCursors(activeTextEditor, [0, 5]);
 
-      await singleLineEmulator.runCommand("gotoLine");
+      await emulator.runCommand("gotoLine");
 
-      assertCursorsEqual(singleLineEditor, [0, 0]);
-
-      // Clean up
-      await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+      assertCursorsEqual(activeTextEditor, [0, 0]);
     });
 
     test("handles empty document", async () => {
-      // Create an empty document
-      const emptyEditor = await setupWorkspace("");
-      const emptyMinibuffer = new MockMinibuffer(["1"]);
-      const emptyEmulator = new EmacsEmulator(emptyEditor, null, emptyMinibuffer);
+      await clearTextEditor(activeTextEditor, "");
+      const minibuffer = new MockMinibuffer(["1"]);
+      const emulator = new EmacsEmulator(activeTextEditor, null, minibuffer);
 
-      await emptyEmulator.runCommand("gotoLine");
+      await emulator.runCommand("gotoLine");
 
       // Should stay at line 0 (only line in empty document)
-      assertCursorsEqual(emptyEditor, [0, 0]);
-
-      // Clean up
-      await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+      assertCursorsEqual(activeTextEditor, [0, 0]);
     });
 
     test("handles zero input", async () => {
