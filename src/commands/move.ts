@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { makeParallel, EmacsCommand, ITextEditorInterruptionHandler, InterruptReason } from ".";
+import { makeParallel, EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
 import { Configuration } from "../configuration/configuration";
 import {
   travelForward as travelForwardParagraph,
@@ -485,6 +485,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
   public readonly id = "moveToWindowLineTopBottom";
 
   private movePosition: MoveToWindowLinePosition = MoveToWindowLinePosition.Middle;
+  private lastSetSelection: vscode.Selection | undefined = undefined;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     let targetLine: number;
@@ -554,12 +555,19 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
         return selection;
       }
     });
+    this.lastSetSelection = textEditor.selections[0];
   }
 
-  public onDidInterruptTextEditor(reason: InterruptReason): void {
-    if (reason === "selection-changed") {
-      // This command itself changes the selection, so ignore this interruption.
-      return;
+  public onDidInterruptTextEditor(event: InterruptEvent): void {
+    if (event.reason === "selection-changed") {
+      // This command itself changes the selection, so ignore the interruption in such a case.
+      if (
+        this.lastSetSelection &&
+        event.originalEvent.kind === vscode.TextEditorSelectionChangeKind.Command &&
+        event.originalEvent.selections[0]?.isEqual(this.lastSetSelection)
+      ) {
+        return;
+      }
     }
 
     this.movePosition = MoveToWindowLinePosition.Middle;

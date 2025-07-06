@@ -1,5 +1,5 @@
 import { isTextEditorInterruptionHandler } from ".";
-import type { EmacsCommand, ITextEditorInterruptionHandler, InterruptReason } from ".";
+import type { EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
 
 export class EmacsCommandRegistry {
   private commands: Map<string, EmacsCommand>;
@@ -21,9 +21,9 @@ export class EmacsCommandRegistry {
     return this.commands.get(commandName);
   }
 
-  public onInterrupt(reason: InterruptReason): void {
+  public onInterrupt(event: InterruptEvent): void {
     for (const handler of this.interruptionHandlers) {
-      handler.onDidInterruptTextEditor(reason);
+      handler.onDidInterruptTextEditor(event);
     }
   }
 }

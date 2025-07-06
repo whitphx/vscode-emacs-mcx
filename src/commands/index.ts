@@ -1,4 +1,5 @@
 import { TextEditor } from "vscode";
+import type { TextEditorSelectionChangeEvent, TextDocumentChangeEvent } from "vscode";
 import type { IEmacsController } from "../emulator";
 
 export function makeParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
@@ -6,6 +7,22 @@ export function makeParallel<T>(concurrency: number, promiseFactory: () => Thena
 }
 
 export type InterruptReason = "user-cancel" | "selection-changed" | "document-changed";
+export interface InterruptEventBase {
+  reason: InterruptReason;
+  originalEvent?: unknown;
+}
+export interface UserCancelInterruptEvent extends InterruptEventBase {
+  reason: "user-cancel";
+}
+export interface SelectionChangedInterruptEvent extends InterruptEventBase {
+  reason: "selection-changed";
+  originalEvent: TextEditorSelectionChangeEvent;
+}
+export interface DocumentChangedInterruptEvent extends InterruptEventBase {
+  reason: "document-changed";
+  originalEvent: TextDocumentChangeEvent;
+}
+export type InterruptEvent = UserCancelInterruptEvent | SelectionChangedInterruptEvent | DocumentChangedInterruptEvent;
 
 export abstract class EmacsCommand {
   public abstract readonly id: string;
@@ -29,11 +46,11 @@ export abstract class EmacsCommand {
     args?: unknown[],
   ): void | Thenable<unknown>;
 
-  public onDidInterruptTextEditor?(reason: InterruptReason): void;
+  public onDidInterruptTextEditor?(event: InterruptEvent): void;
 }
 
 export interface ITextEditorInterruptionHandler {
-  onDidInterruptTextEditor(reason: InterruptReason): void;
+  onDidInterruptTextEditor(event: InterruptEvent): void;
 }
 
 // This type guard trick is from https://stackoverflow.com/a/64163454/13103190

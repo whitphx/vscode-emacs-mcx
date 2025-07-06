@@ -25,7 +25,7 @@ import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
-import { InterruptReason } from "./commands";
+import { InterruptEvent } from "./commands";
 
 export interface IEmacsController {
   readonly textEditor: TextEditor;
@@ -325,7 +325,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         this.exitMarkMode();
       }
 
-      this.onDidInterruptTextEditor("document-changed");
+      this.onDidInterruptTextEditor({ reason: "document-changed", originalEvent: e });
     }
   }
 
@@ -335,7 +335,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
 
     if (e.textEditor === this.textEditor) {
-      this.onDidInterruptTextEditor("selection-changed");
+      this.onDidInterruptTextEditor({ reason: "selection-changed", originalEvent: e });
     }
   }
 
@@ -544,7 +544,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       this.exitMarkMode();
     }
 
-    this.onDidInterruptTextEditor("user-cancel");
+    this.onDidInterruptTextEditor({ reason: "user-cancel" });
 
     this.killYanker.cancelKillAppend();
     this.prefixArgumentHandler.cancel();
@@ -645,7 +645,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this.prefixArgumentHandler.cancel();
   }
 
-  public onDidInterruptTextEditor(reason: InterruptReason) {
-    this.commandRegistry.onInterrupt(reason);
+  public onDidInterruptTextEditor(event: InterruptEvent) {
+    this.commandRegistry.onInterrupt(event);
   }
 }
