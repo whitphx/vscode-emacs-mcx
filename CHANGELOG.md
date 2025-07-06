@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.66.1] - 2025-07-06
+
+### Fix
+
+- Remove `C-x` conflicts in the terminal, [#2290](https://github.com/whitphx/vscode-emacs-mcx/pull/2290).
+
 ## [0.66.0] - 2025-07-04
 
 ### Add
