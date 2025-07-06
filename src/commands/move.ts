@@ -27,6 +27,7 @@ export const moveCommandIds = [
   "forwardParagraph",
   "backwardParagraph",
   "backToIndentation",
+  "moveToWindowLineTopBottom",
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -458,5 +459,100 @@ export class BackwardParagraph extends EmacsCommand {
     });
     textEditor.selections = newSelections;
     revealPrimaryActive(textEditor);
+  }
+}
+
+enum MoveToWindowLinePosition {
+  Middle,
+  Top,
+  Bottom,
+}
+
+function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOffset: number): number | undefined {
+  let targetLine;
+  let offset = targetOffset;
+  for (const range of visibleRanges) {
+    const linesInRange = range.end.line - range.start.line + 1;
+    if (offset < linesInRange) {
+      targetLine = range.start.line + offset;
+      return targetLine;
+    }
+    offset -= linesInRange;
+  }
+}
+
+export class MoveToWindowLineTopBottom extends EmacsCommand {
+  public readonly id = "moveToWindowLineTopBottom";
+
+  private movePosition: MoveToWindowLinePosition = MoveToWindowLinePosition.Middle;
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
+    let targetLine: number;
+    if (prefixArgument == null) {
+      switch (this.movePosition) {
+        case MoveToWindowLinePosition.Middle: {
+          let visibleLineCount = 0;
+          textEditor.visibleRanges.forEach((range) => {
+            visibleLineCount += range.end.line - range.start.line + 1;
+          });
+          if (visibleLineCount === 0) {
+            return;
+          }
+          const targetOffset = Math.floor(visibleLineCount / 2);
+          const result = calcTargetLine(textEditor.visibleRanges, targetOffset);
+          if (result == null) {
+            return;
+          }
+          targetLine = result;
+
+          this.movePosition = MoveToWindowLinePosition.Top;
+          break;
+        }
+        case MoveToWindowLinePosition.Top: {
+          const firstVisibleRange = textEditor.visibleRanges[0];
+          if (firstVisibleRange == null) {
+            return;
+          }
+          targetLine = firstVisibleRange.start.line;
+
+          this.movePosition = MoveToWindowLinePosition.Bottom;
+          break;
+        }
+        case MoveToWindowLinePosition.Bottom: {
+          const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
+          if (lastVisibleRange == null) {
+            return;
+          }
+          targetLine = lastVisibleRange.end.line;
+
+          this.movePosition = MoveToWindowLinePosition.Middle;
+          break;
+        }
+      }
+    } else {
+      if (prefixArgument >= 0) {
+        const firstVisibleRange = textEditor.visibleRanges[0];
+        if (firstVisibleRange == null) {
+          return;
+        }
+        targetLine = firstVisibleRange.start.line + prefixArgument;
+      } else {
+        const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
+        if (lastVisibleRange == null) {
+          return;
+        }
+        targetLine = lastVisibleRange.end.line + prefixArgument + 1;
+      }
+    }
+
+    const targetPosition = new vscode.Position(targetLine, 0);
+
+    textEditor.selections = textEditor.selections.map((selection, i) => {
+      if (i === 0) {
+        return new vscode.Selection(isInMarkMode ? selection.anchor : targetPosition, targetPosition);
+      } else {
+        return selection;
+      }
+    });
   }
 }

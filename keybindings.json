@@ -255,6 +255,12 @@
         "then": "emacs-mcx.beginningOfBuffer"
       }
     },
+    // move-to-window-line-top-bottom
+    {
+      "key": "meta+r",
+      "command": "emacs-mcx.moveToWindowLineTopBottom",
+      "when": "editorTextFocus"
+    },
     // go to line
     {
       "keys": ["meta+g meta+g", "meta+g g"],
