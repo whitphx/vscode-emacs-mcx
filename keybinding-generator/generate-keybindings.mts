@@ -58,7 +58,7 @@ function replaceAll(src: string, search: string, replacement: string) {
   return src.split(search).join(replacement); // split + join = replaceAll
 }
 
-export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
+export function generateKeybindings(src: KeyBindingSource, terminalSequenceSet?: Set<string>): KeyBinding[] {
   let keys: string[];
   if (src.key) {
     keys = [src.key];
@@ -89,6 +89,30 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     keys.forEach((key) => {
       if (!isValidKey(key)) {
         throw new Error(`Unparsable key string: "${key}"`);
+      }
+
+      // For some keybindings with modifiers to work in the terminal.
+      // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode,
+      // when the user presses `ctrl+x`, it's not sent to the terminal because
+      // VSCode interrupts the key sequence to handle the following `ctrl+c` key stroke.
+      // It makes impossible to use Emacs (and some other apps) in the terminal
+      // because they can't receive the `ctrl+x` key stroke.
+      // So, we add the "!terminalFocus" condition to the keybinding so that VSCode doesn't handle the key stroke
+      const isUnconditional = when == null;
+      if (isUnconditional) {
+        // If the keybinding is unconditional, we disable it in the terminal.
+        // This is to avoid conflicts with Emacs keybindings in the terminal.
+        when = addWhenCond(when, "!terminalFocus");
+      }
+      // This is more aggressive enhancement for Emacs in the terminal.
+      // For example, Emacs in the terminal can handle `meta+x` when the user presses `ESC x` as ESC is sent to the terminal as expected.
+      // However, this extension registers other keys such as `alt` as the meta key
+      // and we want them to work in Emacs in the terminal as well.
+      // So, we define the keybinding to send `ESC x` to the terminal when the user presses `alt+x`.
+      const shouldDefineTerminalSequence = isUnconditional;
+      if (shouldDefineTerminalSequence) {
+        const firstKeyStroke = key.split(" ")[0];
+        terminalSequenceSet?.add(firstKeyStroke); // Add the first key stroke to the set.
       }
 
       // Convert "meta" specifications
@@ -322,3 +346,33 @@ function getAssignableKeys(includeNumerics: boolean): string[] {
 }
 const ASSIGNABLE_KEYS = getAssignableKeys(true);
 const ASSIGNABLE_KEYS_WO_NUMERICS = getAssignableKeys(false);
+
+export function getTerminalSequenceKeybindings(key: string): string | undefined {
+  const keyCombo = new Set(key.split("+"));
+  const possibleModifiers = ["ctrl", "shift", "alt", "meta"];
+  const modifiers = possibleModifiers.filter((mod) => keyCombo.has(mod));
+  if (modifiers.length > 1) {
+    console.warn(`Multiple modifiers found in key "${key}": ${modifiers.join(", ")}`);
+    return;
+  }
+  const modifier = modifiers[0] || "";
+  const chars = ASSIGNABLE_KEYS.filter((c) => keyCombo.has(c));
+  console.log("Modifier:", modifier, "Chars:", chars);
+  if (modifier === "meta") {
+    return "\u001b" + chars.join(""); // ESC + chars
+  }
+  if (modifier === "ctrl") {
+    if (chars.length !== 1) {
+      console.warn(`Ctrl modifier is used with multiple characters in key "${key}": ${chars.join(", ")}`);
+      return;
+    }
+    const char = chars[0];
+    if (char.length !== 1) {
+      console.warn(`Ctrl modifier is used with non-single character in key "${key}": ${char}`);
+      return;
+    }
+    const charCode = char.charCodeAt(0) & 0x1f; // Ctrl modifier (0x1F) and char code
+    return String.fromCharCode(charCode);
+  }
+  return;
+}

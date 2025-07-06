@@ -392,16 +392,7 @@
     // VSCode's quick search is like Emacs' Occur mode. Quick search is available since VSCode 1.89 (https://code.visualstudio.com/updates/v1_89#_quick-search).
     {
       "key": "meta+s o",
-      "command": "workbench.action.quickTextSearch",
-      "when": "!terminalFocus" // To make Emacs in the terminal work as expected.
-    },
-    {
-      "key": "meta+s",
-      "command": "workbench.action.terminal.sendSequence",
-      "when": "terminalFocus", // To make Emacs in the terminal work as expected.
-      "args": {
-        "text": "\u001bs" // Send `ESC s` to the terminal.
-      }
+      "command": "workbench.action.quickTextSearch"
     },
     // addSelectionToNext/PreviousFindMatch
     {
@@ -860,16 +851,7 @@
     // Show commands
     {
       "key": "meta+x",
-      "command": "workbench.action.showCommands",
-      "when": "!terminalFocus" // To make Emacs in the terminal work as expected.
-    },
-    {
-      "key": "meta+x",
-      "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001bx" // Send `ESC` to the terminal.
-      },
-      "when": "terminalFocus" // To make Emacs in the terminal work as expected.
+      "command": "workbench.action.showCommands"
     },
     // Sidebar
     {

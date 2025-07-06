@@ -2574,24 +2574,24 @@
       {
         "key": "alt+g alt+g",
         "command": "workbench.action.gotoLine",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+g",
         "mac": "cmd+g cmd+g",
         "command": "workbench.action.gotoLine",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g g",
         "command": "workbench.action.gotoLine",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g g",
         "mac": "cmd+g g",
         "command": "workbench.action.gotoLine",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+g",
@@ -2635,24 +2635,24 @@
       {
         "key": "alt+g n",
         "command": "editor.action.marker.next",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g n",
         "mac": "cmd+g n",
         "command": "editor.action.marker.next",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+n",
         "command": "editor.action.marker.next",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+n",
         "mac": "cmd+g cmd+n",
         "command": "editor.action.marker.next",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+x `",
@@ -2662,24 +2662,24 @@
       {
         "key": "alt+g p",
         "command": "editor.action.marker.prev",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g p",
         "mac": "cmd+g p",
         "command": "editor.action.marker.prev",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+p",
         "command": "editor.action.marker.prev",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+p",
         "mac": "cmd+g cmd+p",
         "command": "editor.action.marker.prev",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+l",
@@ -3072,39 +3072,6 @@
         "mac": "cmd+s o",
         "command": "workbench.action.quickTextSearch",
         "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "alt+s",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bs"
-        }
-      },
-      {
-        "key": "alt+s",
-        "mac": "cmd+s",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bs"
-        }
-      },
-      {
-        "key": "escape s",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001bs"
-        }
-      },
-      {
-        "key": "ctrl+[ s",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001bs"
-        }
       },
       {
         "key": "ctrl+alt+n",
@@ -5054,58 +5021,25 @@
         "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "alt+x",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bx"
-        }
-      },
-      {
-        "key": "alt+x",
-        "mac": "cmd+x",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bx"
-        }
-      },
-      {
-        "key": "escape x",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001bx"
-        }
-      },
-      {
-        "key": "ctrl+[ x",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001bx"
-        }
-      },
-      {
         "key": "ctrl+alt+space",
         "command": "workbench.action.toggleSidebarVisibility",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+alt+space",
         "mac": "ctrl+cmd+space",
         "command": "workbench.action.toggleSidebarVisibility",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape ctrl+space",
         "command": "workbench.action.toggleSidebarVisibility",
-        "when": "config.emacs-mcx.useMetaPrefixEscape"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ ctrl+space",
         "command": "workbench.action.toggleSidebarVisibility",
-        "when": "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+x ctrl+c",
@@ -5419,6 +5353,105 @@
         "key": "ctrl+[ ctrl+,",
         "command": "workbench.action.navigateForward",
         "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+g",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bg"
+        }
+      },
+      {
+        "key": "alt+g",
+        "mac": "cmd+g",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bg"
+        }
+      },
+      {
+        "key": "escape g",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bg"
+        }
+      },
+      {
+        "key": "ctrl+[ g",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bg"
+        }
+      },
+      {
+        "key": "alt+s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "alt+s",
+        "mac": "cmd+s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "escape s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "ctrl+[ s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "alt+x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bx"
+        }
+      },
+      {
+        "key": "alt+x",
+        "mac": "cmd+x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bx"
+        }
+      },
+      {
+        "key": "escape x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bx"
+        }
+      },
+      {
+        "key": "ctrl+[ x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bx"
+        }
       }
     ]
   },
