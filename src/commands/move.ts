@@ -514,7 +514,9 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
       return;
     }
 
-    this.updateSelections(textEditor, isInMarkMode, targetLine);
+    const clampedTargetLine = Math.max(0, Math.min(textEditor.document.lineCount - 1, targetLine));
+
+    this.updateSelections(textEditor, isInMarkMode, clampedTargetLine);
   }
 
   private calculateTargetLineByPosition(textEditor: TextEditor): number | undefined {
