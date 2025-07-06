@@ -474,7 +474,7 @@ export function calcMiddleOffset(visibleRanges: readonly vscode.Range[]): number
     visibleLineCount += range.end.line - range.start.line + 1;
   });
   if (visibleLineCount === 0) {
-    return;
+    return undefined;
   }
   return Math.floor(visibleLineCount / 2);
 }
