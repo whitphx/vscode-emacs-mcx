@@ -20,7 +20,7 @@ const srcContent = fs.readFileSync(srcFilePath, "utf8");
 const srcJSON = JSON.parse(stripJsonComments(srcContent));
 const keybindingSrcs: Array<any> = srcJSON["keybindings"]; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-let dstKeybindings: KeyBinding[] = [];
+const dstKeybindings: KeyBinding[] = [];
 
 keybindingSrcs.forEach((keybindingSrc) => {
   // XXX: Escape hatch for prefix argument keybindings.
@@ -45,7 +45,7 @@ keybindingSrcs.forEach((keybindingSrc) => {
   }
 
   const keybindings = generateKeybindings(keybindingSrc);
-  dstKeybindings = dstKeybindings.concat(keybindings);
+  dstKeybindings.push(...keybindings);
 });
 
 console.info(`Reading ${packageDotJsonPath} ...`);

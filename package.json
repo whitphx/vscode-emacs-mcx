@@ -2574,24 +2574,24 @@
       {
         "key": "alt+g alt+g",
         "command": "workbench.action.gotoLine",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+g",
         "mac": "cmd+g cmd+g",
         "command": "workbench.action.gotoLine",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g g",
         "command": "workbench.action.gotoLine",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g g",
         "mac": "cmd+g g",
         "command": "workbench.action.gotoLine",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+g",
@@ -2635,24 +2635,24 @@
       {
         "key": "alt+g n",
         "command": "editor.action.marker.next",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g n",
         "mac": "cmd+g n",
         "command": "editor.action.marker.next",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+n",
         "command": "editor.action.marker.next",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+n",
         "mac": "cmd+g cmd+n",
         "command": "editor.action.marker.next",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+x `",
@@ -2662,24 +2662,24 @@
       {
         "key": "alt+g p",
         "command": "editor.action.marker.prev",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g p",
         "mac": "cmd+g p",
         "command": "editor.action.marker.prev",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+p",
         "command": "editor.action.marker.prev",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+g alt+p",
         "mac": "cmd+g cmd+p",
         "command": "editor.action.marker.prev",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "ctrl+l",
@@ -5043,7 +5043,8 @@
       },
       {
         "key": "ctrl+x ctrl+c",
-        "command": "workbench.action.closeWindow"
+        "command": "workbench.action.closeWindow",
+        "when": "!terminalFocus"
       },
       {
         "key": "ctrl+x z",
@@ -5282,11 +5283,13 @@
       },
       {
         "key": "ctrl+x left",
-        "command": "workbench.action.previousEditor"
+        "command": "workbench.action.previousEditor",
+        "when": "editorTextFocus"
       },
       {
         "key": "ctrl+x right",
-        "command": "workbench.action.nextEditor"
+        "command": "workbench.action.nextEditor",
+        "when": "editorTextFocus"
       },
       {
         "key": "alt+.",
