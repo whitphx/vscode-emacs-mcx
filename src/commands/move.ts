@@ -567,7 +567,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
     this.lastSetSelection = textEditor.selections[0];
 
     // NOTE: We don't call `revealPrimaryActive()` in this command because
-    //       revealPrimaryActive() moves the view to make a some margin before or after the active line,
+    //       revealPrimaryActive() moves the view to make some margin before or after the active line,
     //       which is not the behavior we want in this command.
   }
 
