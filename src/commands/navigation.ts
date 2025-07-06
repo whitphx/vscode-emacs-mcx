@@ -48,3 +48,30 @@ export class GotoLine extends EmacsCommand {
     }
   }
 }
+
+export class FindDefinitions extends EmacsCommand {
+  public readonly id = "findDefinitions";
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    const anchors = textEditor.selections.map((selection) => selection.anchor);
+
+    await vscode.commands.executeCommand("editor.action.revealDefinition");
+
+    if (isInMarkMode) {
+      // The selections should have been updated by the `revealDefinition` command,
+      // so we reconcile them with the anchors, i.e. marks.
+      // The code below deals with multiple selections,
+      // however, in real, the `revealDefinition` command removes non-primary selections.
+      textEditor.selections = textEditor.selections.map((selection, index) => {
+        const anchor = anchors[index];
+        if (anchor == null) {
+          return selection;
+        }
+        return new vscode.Selection(anchor, selection.active);
+      });
+    } else {
+      this.emacsController.pushMark(anchors);
+      // Original Emacs' `xref-find-definitions` command does not show the "Mark set" message,
+    }
+  }
+}
