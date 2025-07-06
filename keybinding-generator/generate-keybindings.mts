@@ -22,8 +22,8 @@ export function isValidKey(key: string): boolean {
     return false;
   }
 
-  // * '+' must be only as a concatenator of keys.
-  // * Key combinations must be concatenated by '+' without surrouding white spaces.
+  // * '+' must be only as concatenation of keys.
+  // * Key combinations must be concatenated by '+' without surrounding white spaces.
   if (key.match(/\s\+/) || key.match(/\+\s/)) {
     return false;
   }
@@ -31,12 +31,12 @@ export function isValidKey(key: string): boolean {
   return true;
 }
 
-export function replaceMetaWithEscape(keycombo: string): string {
-  if (keycombo.includes(" ")) {
-    throw new Error(`Key combo "${keycombo}" has white spaces.`);
+export function replaceMetaWithEscape(keyCombo: string): string {
+  if (keyCombo.includes(" ")) {
+    throw new Error(`Key combo "${keyCombo}" has white spaces.`);
   }
 
-  const strokes = keycombo.split("+");
+  const strokes = keyCombo.split("+");
   const strokesWithoutMeta = strokes.filter((stroke) => stroke !== "meta");
   const metaIncluded = strokes.includes("meta");
 
@@ -231,7 +231,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     }),
   );
 
-  for (const char of ASSIGNABLE_KEYS_WO_NUMS) {
+  for (const char of ASSIGNABLE_KEYS_WO_NUMERICS) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
@@ -321,4 +321,4 @@ function getAssignableKeys(includeNumerics: boolean): string[] {
   return keys;
 }
 const ASSIGNABLE_KEYS = getAssignableKeys(true);
-const ASSIGNABLE_KEYS_WO_NUMS = getAssignableKeys(false);
+const ASSIGNABLE_KEYS_WO_NUMERICS = getAssignableKeys(false);
