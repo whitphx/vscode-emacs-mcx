@@ -71,7 +71,7 @@ export class FindDefinitions extends EmacsCommand {
       });
     } else {
       this.emacsController.pushMark(anchors);
-      MessageManager.showMessage("Mark set");
+      // Original Emacs' `xref-find-definitions` command does not show the "Mark set" message,
     }
   }
 }
