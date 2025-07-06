@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { makeParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand, ITextEditorInterruptionHandler, InterruptReason } from ".";
 import { Configuration } from "../configuration/configuration";
 import {
   travelForward as travelForwardParagraph,
@@ -481,7 +481,7 @@ export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOff
   }
 }
 
-export class MoveToWindowLineTopBottom extends EmacsCommand {
+export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "moveToWindowLineTopBottom";
 
   private movePosition: MoveToWindowLinePosition = MoveToWindowLinePosition.Middle;
@@ -554,5 +554,14 @@ export class MoveToWindowLineTopBottom extends EmacsCommand {
         return selection;
       }
     });
+  }
+
+  public onDidInterruptTextEditor(reason: InterruptReason): void {
+    if (reason === "selection-changed") {
+      // This command itself changes the selection, so ignore this interruption.
+      return;
+    }
+
+    this.movePosition = MoveToWindowLinePosition.Middle;
   }
 }

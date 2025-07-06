@@ -5,6 +5,8 @@ export function makeParallel<T>(concurrency: number, promiseFactory: () => Thena
   return Promise.all(Array.from({ length: concurrency }, promiseFactory));
 }
 
+export type InterruptReason = "user-cancel" | "selection-changed" | "document-changed";
+
 export abstract class EmacsCommand {
   public abstract readonly id: string;
 
@@ -27,11 +29,11 @@ export abstract class EmacsCommand {
     args?: unknown[],
   ): void | Thenable<unknown>;
 
-  public onDidInterruptTextEditor?(): void;
+  public onDidInterruptTextEditor?(reason: InterruptReason): void;
 }
 
 export interface ITextEditorInterruptionHandler {
-  onDidInterruptTextEditor(): void;
+  onDidInterruptTextEditor(reason: InterruptReason): void;
 }
 
 // This type guard trick is from https://stackoverflow.com/a/64163454/13103190
