@@ -1064,19 +1064,6 @@
       "key": "ctrl+meta+,",
       "command": "workbench.action.navigateForward",
       "when": "canNavigateForward"
-    },
-    {
-      // To make C-x work in the terminal.
-      // This extension defines keybindings that consist of multiple keys starting with `ctrl+x`
-      // with which VSCode interrupts the C-x input to the terminal for waiting for the next key,
-      // so we need to define this keybinding explicitly to make `C-x` work in the terminal.
-      // This is inspired by https://github.com/whitphx/vscode-emacs-mcx/issues/1533#issuecomment-2009398006
-      "key": "ctrl+x",
-      "command": "workbench.action.terminal.sendSequence",
-      "args": {
-          "text": "\u0018" // 'X' & 0x1F  == 0x18
-      },
-      "when": "terminalFocus"
     }
   ]
 }
