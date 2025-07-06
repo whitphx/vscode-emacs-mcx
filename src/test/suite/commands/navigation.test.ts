@@ -237,7 +237,7 @@ suite("GotoLine", () => {
       assert.equal(activeTextEditor.selection.active.character, originalPosition.character);
     });
 
-    test("accepts floating point numbers (truncates to integer)", async () => {
+    test("accepts floating point numbers (truncates to integer, which is different from original behavior of Emacs)", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["10.7"]);
