@@ -280,7 +280,7 @@ suite("moveToWindowLineTopBottom", () => {
         },
       });
 
-      // Next call should go to middle (not middle), confirming reset
+      // Next call should go to middle (not bottom), confirming reset
       await emulator.runCommand("moveToWindowLineTopBottom");
 
       const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
