@@ -264,7 +264,7 @@
     // go to line
     {
       "keys": ["meta+g meta+g", "meta+g g"],
-      "command": "workbench.action.gotoLine",
+      "command": "emacs-mcx.gotoLine",
       "when": "!terminalFocus"
     },
     {
@@ -272,12 +272,12 @@
       "command": "emacs-mcx.isearchExit",
       "when": "editorFocus && findWidgetVisible && !isComposing",
       "args": {
-        "then": "workbench.action.gotoLine"
+        "then": "emacs-mcx.gotoLine"
       }
     },
     {
       "key": "escape g",
-      "command": "workbench.action.gotoLine",
+      "command": "emacs-mcx.gotoLine",
       "when": "config.emacs-mcx.useMetaPrefixEscape"
     },
     // marker next

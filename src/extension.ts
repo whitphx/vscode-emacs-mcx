@@ -151,6 +151,10 @@ export function activate(context: vscode.ExtensionContext): void {
     });
   });
 
+  registerEmulatorCommand("emacs-mcx.gotoLine", (emulator) => {
+    return emulator.runCommand("gotoLine");
+  });
+
   registerEmulatorCommand("emacs-mcx.isearchForward", (emulator) => {
     return emulator.runCommand("isearchForward");
   });
