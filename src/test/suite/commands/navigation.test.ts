@@ -40,6 +40,120 @@ class MockMinibuffer implements Minibuffer {
   }
 }
 
+suite("FindDefinitions", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `function foo() {
+  return bar();
+}
+
+function bar() {
+  return 42;
+}
+
+baz();
+`;
+    activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
+  });
+
+  teardown(async () => {
+    await cleanUpWorkspace();
+  });
+
+  suite("basic functionality", () => {
+    test("executes revealDefinition command", async () => {
+      setEmptyCursors(activeTextEditor, [1, 9]); // Position on "bar"
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.runCommand("findDefinitions");
+
+      assertCursorsEqual(activeTextEditor, [4, 9]); // Should move to "bar" definition
+    });
+
+    test("sets mark when not in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [1, 9]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.runCommand("findDefinitions");
+
+      // Should be at definition location
+      assertCursorsEqual(activeTextEditor, [4, 9]);
+
+      // Test that mark was set by popping it
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [1, 9]); // Should return to original position
+    });
+  });
+
+  suite("mark-mode integration", () => {
+    test("preserves selection and does not set new mark when in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [1, 9]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.runCommand("findDefinitions");
+
+      // Should have selection from original position to definition
+      assertSelectionsEqual(activeTextEditor, [1, 9, 4, 9]);
+
+      // If no new mark was added to the mark ring, popMark should return to the original position
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [1, 9]); // Should return to original position
+
+      // Try popMark again - if findDefinitions didn't add a mark, cursor should stay at [1, 9]
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [1, 9]); // Should remain at original position
+    });
+  });
+
+  suite("multi-cursor behavior", () => {
+    test("handles multiple selections (VSCode typically removes non-primary)", async () => {
+      activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.runCommand("findDefinitions");
+
+      // Should be at definition location with only primary selection
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [4, 9]);
+
+      // Test that marks were set for all original cursors
+      emulator.popMark();
+      // Should restore both original positions
+      assert.equal(activeTextEditor.selections.length, 2);
+      assertCursorsEqual(activeTextEditor, [1, 9], [2, 5]);
+    });
+
+    test("handles mark mode with multiple initial selections", async () => {
+      // Set up multiple cursors
+      activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.runCommand("findDefinitions");
+
+      // Should restore only the primary anchor
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertSelectionsEqual(activeTextEditor, [1, 9, 4, 9]);
+    });
+  });
+
+  suite("edge cases", () => {
+    test("handles command failure gracefully", async () => {
+      setEmptyCursors(activeTextEditor, [8, 0]); // Position on "baz()" that has no definition
+
+      emulator = new EmacsEmulator(activeTextEditor);
+
+      await emulator.runCommand("findDefinitions");
+
+      // Should not change the cursor position
+      assertCursorsEqual(activeTextEditor, [8, 0]);
+    });
+  });
+});
+
 suite("GotoLine", () => {
   let activeTextEditor: TextEditor;
   let mockMinibuffer: MockMinibuffer;

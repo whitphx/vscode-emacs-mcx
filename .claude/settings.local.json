@@ -5,7 +5,9 @@
       "Bash(rg:*)",
       "Bash(npm run gen-keys:*)",
       "Bash(npm run test-compile:*)",
-      "Bash(npm test)"
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }
