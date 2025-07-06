@@ -198,6 +198,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
 
     this.commandRegistry.register(new NavigationCommands.GotoLine(this, minibuffer));
+    this.commandRegistry.register(new NavigationCommands.FindDefinitions(this));
 
     const searchState: FindCommands.SearchState = {
       startSelections: undefined,

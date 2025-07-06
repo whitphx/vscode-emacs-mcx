@@ -5324,23 +5324,23 @@
       },
       {
         "key": "alt+.",
-        "command": "editor.action.revealDefinition",
+        "command": "emacs-mcx.findDefinitions",
         "when": "editorHasDefinitionProvider && editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+.",
         "mac": "cmd+.",
-        "command": "editor.action.revealDefinition",
+        "command": "emacs-mcx.findDefinitions",
         "when": "editorHasDefinitionProvider && editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape .",
-        "command": "editor.action.revealDefinition",
+        "command": "emacs-mcx.findDefinitions",
         "when": "editorHasDefinitionProvider && editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ .",
-        "command": "editor.action.revealDefinition",
+        "command": "emacs-mcx.findDefinitions",
         "when": "editorHasDefinitionProvider && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {

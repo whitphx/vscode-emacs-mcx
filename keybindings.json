@@ -1049,9 +1049,10 @@
     },
     // Looking up identifiers
     {
-      // Copied from the VSCode default keybinding for "Go to Definition" and assigned to "M-."
       "key": "meta+.",
-      "command": "editor.action.revealDefinition",
+      // `emacs-mcx.findDefinitions` is a wrapper of `editor.action.revealDefinition` ("Go to Definition").
+      "command": "emacs-mcx.findDefinitions",
+      // The `when` clause is copied from the VSCode default keybinding for "Go to Definition".
       "when": "editorHasDefinitionProvider && editorTextFocus"
     },
     {
