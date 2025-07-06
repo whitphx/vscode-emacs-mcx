@@ -993,6 +993,18 @@
       "when": "inQuickOpen"
     },
     {
+      // Copied from the VSCode default keybinding for `list.focusUp`. It is only assigned on macOS but this extension assigns it on all platforms.
+      "key": "ctrl+p",
+      "command": "list.focusUp",
+      "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+    },
+    {
+      // Copied from the VSCode default keybinding for `list.focusDown`. It is only assigned on macOS but this extension assigns it on all platforms.
+      "key": "ctrl+n",
+      "command": "list.focusDown",
+      "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+    },
+    {
       "key": "ctrl+m",
       "command": "workbench.action.acceptSelectedQuickOpenItem",
       "when": "inQuickOpen"

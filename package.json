@@ -5252,6 +5252,16 @@
         "when": "inQuickOpen"
       },
       {
+        "key": "ctrl+p",
+        "command": "list.focusUp",
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "list.focusDown",
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      },
+      {
         "key": "ctrl+m",
         "command": "workbench.action.acceptSelectedQuickOpenItem",
         "when": "inQuickOpen"
