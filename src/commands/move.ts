@@ -488,6 +488,7 @@ export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOff
     }
     offset -= linesInRange;
   }
+  return undefined;
 }
 
 export function calcMiddleLine(visibleRanges: readonly vscode.Range[]): number | undefined {
