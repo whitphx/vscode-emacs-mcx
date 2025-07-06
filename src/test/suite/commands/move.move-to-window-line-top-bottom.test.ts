@@ -233,7 +233,7 @@ suite("moveToWindowLineTopBottom", () => {
 
     test("handles single line document", async () => {
       // Create a single line document
-      clearTextEditor(activeTextEditor, "single line");
+      await clearTextEditor(activeTextEditor, "single line");
 
       setEmptyCursors(activeTextEditor, [0, 0]);
 
