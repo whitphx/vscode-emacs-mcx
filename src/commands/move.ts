@@ -468,7 +468,7 @@ enum MoveToWindowLinePosition {
   Bottom,
 }
 
-function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOffset: number): number | undefined {
+export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOffset: number): number | undefined {
   let targetLine;
   let offset = targetOffset;
   for (const range of visibleRanges) {

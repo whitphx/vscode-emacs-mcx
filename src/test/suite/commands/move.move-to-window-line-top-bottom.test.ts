@@ -2,9 +2,53 @@ import * as vscode from "vscode";
 import assert from "assert";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
+import { calcTargetLine } from "../../../commands/move";
 import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
 
-suite.only("moveToWindowLineTopBottom", () => {
+suite("calcTargetLine", () => {
+  test("calculates target line for single range", () => {
+    const ranges = [new vscode.Range(10, 0, 20, 0)];
+
+    assert.equal(calcTargetLine(ranges, 0), 10);
+    assert.equal(calcTargetLine(ranges, 5), 15);
+    assert.equal(calcTargetLine(ranges, 10), 20);
+    assert.equal(calcTargetLine(ranges, 15), undefined);
+  });
+
+  test("calculates target line for multiple ranges", () => {
+    const ranges = [
+      new vscode.Range(10, 0, 15, 0), // 6 lines (10-15)
+      new vscode.Range(20, 0, 25, 0), // 6 lines (20-25)
+    ];
+
+    // First range
+    assert.equal(calcTargetLine(ranges, 0), 10);
+    assert.equal(calcTargetLine(ranges, 3), 13);
+    assert.equal(calcTargetLine(ranges, 5), 15);
+
+    // Second range
+    assert.equal(calcTargetLine(ranges, 6), 20);
+    assert.equal(calcTargetLine(ranges, 9), 23);
+    assert.equal(calcTargetLine(ranges, 11), 25);
+
+    // Out of bounds
+    assert.equal(calcTargetLine(ranges, 12), undefined);
+  });
+
+  test("handles empty ranges array", () => {
+    assert.equal(calcTargetLine([], 0), undefined);
+    assert.equal(calcTargetLine([], 5), undefined);
+  });
+
+  test("handles single line ranges", () => {
+    const ranges = [new vscode.Range(10, 0, 10, 0)];
+
+    assert.equal(calcTargetLine(ranges, 0), 10);
+    assert.equal(calcTargetLine(ranges, 1), undefined);
+  });
+});
+
+suite("moveToWindowLineTopBottom", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
 
@@ -34,18 +78,11 @@ suite.only("moveToWindowLineTopBottom", () => {
       });
 
       const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      let targetLine = 0;
-      let offset = expectedMiddleLine;
-      for (const range of visibleRanges) {
-        const linesInRange = range.end.line - range.start.line + 1;
-        if (offset < linesInRange) {
-          targetLine = range.start.line + offset;
-          break;
-        }
-        offset -= linesInRange;
-      }
+      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
 
-      assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      if (targetLine !== undefined) {
+        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      }
     });
 
     test("second call moves to top of window", async () => {
@@ -89,18 +126,11 @@ suite.only("moveToWindowLineTopBottom", () => {
       });
 
       const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      let targetLine = 0;
-      let offset = expectedMiddleLine;
-      for (const range of visibleRanges) {
-        const linesInRange = range.end.line - range.start.line + 1;
-        if (offset < linesInRange) {
-          targetLine = range.start.line + offset;
-          break;
-        }
-        offset -= linesInRange;
-      }
+      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
 
-      assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      if (targetLine !== undefined) {
+        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      }
     });
   });
 
@@ -160,18 +190,11 @@ suite.only("moveToWindowLineTopBottom", () => {
       });
 
       const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      let targetLine = 0;
-      let offset = expectedMiddleLine;
-      for (const range of visibleRanges) {
-        const linesInRange = range.end.line - range.start.line + 1;
-        if (offset < linesInRange) {
-          targetLine = range.start.line + offset;
-          break;
-        }
-        offset -= linesInRange;
-      }
+      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
 
-      assertSelectionsEqual(activeTextEditor, [45, 0, targetLine, 0]);
+      if (targetLine !== undefined) {
+        assertSelectionsEqual(activeTextEditor, [45, 0, targetLine, 0]);
+      }
     });
 
     test("preserves selection with prefix argument", async () => {
