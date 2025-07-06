@@ -336,33 +336,3 @@ function getAssignableKeys(includeNumerics: boolean): string[] {
 }
 const ASSIGNABLE_KEYS = getAssignableKeys(true);
 const ASSIGNABLE_KEYS_WO_NUMERICS = getAssignableKeys(false);
-
-export function getTerminalSequenceKeybindings(key: string): string | undefined {
-  const keyCombo = new Set(key.split("+"));
-  const possibleModifiers = ["ctrl", "shift", "alt", "meta"];
-  const modifiers = possibleModifiers.filter((mod) => keyCombo.has(mod));
-  if (modifiers.length > 1) {
-    console.warn(`Multiple modifiers found in key "${key}": ${modifiers.join(", ")}`);
-    return;
-  }
-  const modifier = modifiers[0] || "";
-  const chars = ASSIGNABLE_KEYS.filter((c) => keyCombo.has(c));
-  console.log("Modifier:", modifier, "Chars:", chars);
-  if (modifier === "meta") {
-    return "\u001b" + chars.join(""); // ESC + chars
-  }
-  if (modifier === "ctrl") {
-    if (chars.length !== 1) {
-      console.warn(`Ctrl modifier is used with multiple characters in key "${key}": ${chars.join(", ")}`);
-      return;
-    }
-    const char = chars[0];
-    if (char.length !== 1) {
-      console.warn(`Ctrl modifier is used with non-single character in key "${key}": ${char}`);
-      return;
-    }
-    const charCode = char.charCodeAt(0) & 0x1f; // Ctrl modifier (0x1F) and char code
-    return String.fromCharCode(charCode);
-  }
-  return;
-}
