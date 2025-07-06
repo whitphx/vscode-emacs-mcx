@@ -480,13 +480,11 @@ export function calcMiddleOffset(visibleRanges: readonly vscode.Range[]): number
 }
 
 export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOffset: number): number | undefined {
-  let targetLine;
   let offset = targetOffset;
   for (const range of visibleRanges) {
     const linesInRange = range.end.line - range.start.line + 1;
     if (offset < linesInRange) {
-      targetLine = range.start.line + offset;
-      return targetLine;
+      return range.start.line + offset;
     }
     offset -= linesInRange;
   }
