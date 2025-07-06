@@ -258,4 +258,92 @@ suite("moveToWindowLineTopBottom", () => {
       await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
     });
   });
+
+  suite("interruption handler", () => {
+    test("resets position to Middle after user-cancel interruption", async () => {
+      // Move to top state by cycling
+      await emulator.runCommand("moveToWindowLineTopBottom"); // middle
+      await emulator.runCommand("moveToWindowLineTopBottom"); // top
+
+      // Now the command should be in Top state, simulate interruption
+      emulator.onDidInterruptTextEditor("user-cancel");
+
+      // Next call should go to middle (not bottom), confirming reset
+      await emulator.runCommand("moveToWindowLineTopBottom");
+
+      const visibleRanges = activeTextEditor.visibleRanges;
+      let totalVisibleLines = 0;
+      visibleRanges.forEach((range) => {
+        totalVisibleLines += range.end.line - range.start.line + 1;
+      });
+
+      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
+      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
+
+      if (targetLine !== undefined) {
+        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      }
+    });
+
+    test("resets position to Middle after document-changed interruption", async () => {
+      // Move to bottom state by cycling
+      await emulator.runCommand("moveToWindowLineTopBottom"); // middle
+      await emulator.runCommand("moveToWindowLineTopBottom"); // top
+      await emulator.runCommand("moveToWindowLineTopBottom"); // bottom
+
+      // Now the command should be in Bottom state, simulate interruption
+      emulator.onDidInterruptTextEditor("document-changed");
+
+      // Next call should go to middle (not middle), confirming reset
+      await emulator.runCommand("moveToWindowLineTopBottom");
+
+      const visibleRanges = activeTextEditor.visibleRanges;
+      let totalVisibleLines = 0;
+      visibleRanges.forEach((range) => {
+        totalVisibleLines += range.end.line - range.start.line + 1;
+      });
+
+      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
+      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
+
+      if (targetLine !== undefined) {
+        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      }
+    });
+
+    test("ignores selection-changed interruption", async () => {
+      // Move to top state by cycling
+      await emulator.runCommand("moveToWindowLineTopBottom"); // middle
+      await emulator.runCommand("moveToWindowLineTopBottom"); // top
+
+      // Now the command should be in Top state, simulate selection-changed interruption
+      emulator.onDidInterruptTextEditor("selection-changed");
+
+      // Next call should go to bottom (not middle), confirming no reset
+      await emulator.runCommand("moveToWindowLineTopBottom");
+
+      const lastVisibleRange = activeTextEditor.visibleRanges[activeTextEditor.visibleRanges.length - 1];
+      if (lastVisibleRange) {
+        assertCursorsEqual(activeTextEditor, [lastVisibleRange.end.line, 0]);
+      }
+    });
+
+    test("interruption during cycling sequence resets properly", async () => {
+      // Start a cycling sequence
+      await emulator.runCommand("moveToWindowLineTopBottom"); // middle
+      await emulator.runCommand("moveToWindowLineTopBottom"); // top
+
+      // Interrupt the sequence
+      emulator.onDidInterruptTextEditor("document-changed");
+
+      // The next two calls should be middle -> top (not bottom -> middle)
+      await emulator.runCommand("moveToWindowLineTopBottom"); // should be middle
+      await emulator.runCommand("moveToWindowLineTopBottom"); // should be top
+
+      const firstVisibleRange = activeTextEditor.visibleRanges[0];
+      if (firstVisibleRange) {
+        assertCursorsEqual(activeTextEditor, [firstVisibleRange.start.line, 0]);
+      }
+    });
+  });
 });

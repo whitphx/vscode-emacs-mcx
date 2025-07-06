@@ -645,7 +645,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this.prefixArgumentHandler.cancel();
   }
 
-  private onDidInterruptTextEditor(reason: InterruptReason) {
+  public onDidInterruptTextEditor(reason: InterruptReason) {
     this.commandRegistry.onInterrupt(reason);
   }
 }
