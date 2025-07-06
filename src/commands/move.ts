@@ -505,9 +505,10 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
   private lastSetSelection: vscode.Selection | undefined = undefined;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
-    const targetLine = prefixArgument == null
-      ? this.calculateTargetLineByPosition(textEditor)
-      : this.calculateTargetLineByPrefixArgument(textEditor, prefixArgument);
+    const targetLine =
+      prefixArgument == null
+        ? this.calculateTargetLineByPosition(textEditor)
+        : this.calculateTargetLineByPrefixArgument(textEditor, prefixArgument);
 
     if (targetLine == null) {
       return;
