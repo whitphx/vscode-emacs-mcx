@@ -4,9 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.68.0] - 2025-07-0
+
 ### Add
 
 - New `goto-line` command integrated with mark-mode, [#2297](https://github.com/whitphx/vscode-emacs-mcx/pull/2297).
+- New `find-definitions` command integrated with mark-mode, [#2298](https://github.com/whitphx/vscode-emacs-mcx/pull/2298).
 
 ## [0.67.0] - 2025-07-07
 
