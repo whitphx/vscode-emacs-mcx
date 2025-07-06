@@ -3,7 +3,7 @@ import type { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import type { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
-import { Minibuffer } from "src/minibuffer";
+import { Minibuffer } from "../minibuffer";
 import { revealPrimaryActive } from "./helpers/reveal";
 
 export class GotoLine extends EmacsCommand {
