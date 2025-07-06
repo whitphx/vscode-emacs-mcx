@@ -35,15 +35,11 @@ export class GotoLine extends EmacsCommand {
 
     const clampedTargetLine = Math.max(1, Math.min(targetLine, textEditor.document.lineCount));
 
-    textEditor.selections = textEditor.selections.map((selection, i) => {
-      if (i === 0) {
-        // Move the primary selection to the target line
-        const active = new vscode.Position(clampedTargetLine - 1, 0);
-        return new vscode.Selection(isInMarkMode ? selection.anchor : active, active);
-      } else {
-        return selection;
-      }
-    });
+    // This command intentionally abort the multi-cursor mode.
+    // Jumping to a line keeping the multi-cursor mode is confusing.
+    const active = new vscode.Position(clampedTargetLine - 1, 0);
+    textEditor.selection = new vscode.Selection(isInMarkMode ? textEditor.selection.anchor : active, active);
+
     revealPrimaryActive(textEditor);
 
     if (!isInMarkMode) {
