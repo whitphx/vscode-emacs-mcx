@@ -505,58 +505,64 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
   private lastSetSelection: vscode.Selection | undefined = undefined;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
-    let targetLine: number;
-    if (prefixArgument == null) {
-      switch (this.movePosition) {
-        case MoveToWindowLinePosition.Middle: {
-          const result = calcMiddleLine(textEditor.visibleRanges);
-          if (result == null) {
-            return;
-          }
-          targetLine = result;
+    const targetLine = prefixArgument == null
+      ? this.calculateTargetLineByPosition(textEditor)
+      : this.calculateTargetLineByPrefixArgument(textEditor, prefixArgument);
 
-          this.movePosition = MoveToWindowLinePosition.Top;
-          break;
-        }
-        case MoveToWindowLinePosition.Top: {
-          const firstVisibleRange = textEditor.visibleRanges[0];
-          if (firstVisibleRange == null) {
-            return;
-          }
-          targetLine = firstVisibleRange.start.line;
-
-          this.movePosition = MoveToWindowLinePosition.Bottom;
-          break;
-        }
-        case MoveToWindowLinePosition.Bottom: {
-          const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
-          if (lastVisibleRange == null) {
-            return;
-          }
-          targetLine = lastVisibleRange.end.line;
-
-          this.movePosition = MoveToWindowLinePosition.Middle;
-          break;
-        }
-      }
-    } else {
-      if (prefixArgument >= 0) {
-        const firstVisibleRange = textEditor.visibleRanges[0];
-        if (firstVisibleRange == null) {
-          return;
-        }
-        targetLine = firstVisibleRange.start.line + prefixArgument;
-      } else {
-        const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
-        if (lastVisibleRange == null) {
-          return;
-        }
-        targetLine = lastVisibleRange.end.line + prefixArgument + 1;
-      }
+    if (targetLine == null) {
+      return;
     }
 
-    const targetPosition = new vscode.Position(targetLine, 0);
+    this.updateSelections(textEditor, isInMarkMode, targetLine);
+  }
 
+  private calculateTargetLineByPosition(textEditor: TextEditor): number | undefined {
+    switch (this.movePosition) {
+      case MoveToWindowLinePosition.Middle: {
+        const result = calcMiddleLine(textEditor.visibleRanges);
+        if (result == null) {
+          return undefined;
+        }
+        this.movePosition = MoveToWindowLinePosition.Top;
+        return result;
+      }
+      case MoveToWindowLinePosition.Top: {
+        const firstVisibleRange = textEditor.visibleRanges[0];
+        if (firstVisibleRange == null) {
+          return undefined;
+        }
+        this.movePosition = MoveToWindowLinePosition.Bottom;
+        return firstVisibleRange.start.line;
+      }
+      case MoveToWindowLinePosition.Bottom: {
+        const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
+        if (lastVisibleRange == null) {
+          return undefined;
+        }
+        this.movePosition = MoveToWindowLinePosition.Middle;
+        return lastVisibleRange.end.line;
+      }
+    }
+  }
+
+  private calculateTargetLineByPrefixArgument(textEditor: TextEditor, prefixArgument: number): number | undefined {
+    if (prefixArgument >= 0) {
+      const firstVisibleRange = textEditor.visibleRanges[0];
+      if (firstVisibleRange == null) {
+        return undefined;
+      }
+      return firstVisibleRange.start.line + prefixArgument;
+    } else {
+      const lastVisibleRange = textEditor.visibleRanges[textEditor.visibleRanges.length - 1];
+      if (lastVisibleRange == null) {
+        return undefined;
+      }
+      return lastVisibleRange.end.line + prefixArgument + 1;
+    }
+  }
+
+  private updateSelections(textEditor: TextEditor, isInMarkMode: boolean, targetLine: number): void {
+    const targetPosition = new vscode.Position(targetLine, 0);
     textEditor.selections = textEditor.selections.map((selection, i) => {
       if (i === 0) {
         return new vscode.Selection(isInMarkMode ? selection.anchor : targetPosition, targetPosition);
