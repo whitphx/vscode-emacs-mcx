@@ -392,7 +392,16 @@
     // VSCode's quick search is like Emacs' Occur mode. Quick search is available since VSCode 1.89 (https://code.visualstudio.com/updates/v1_89#_quick-search).
     {
       "key": "meta+s o",
-      "command": "workbench.action.quickTextSearch"
+      "command": "workbench.action.quickTextSearch",
+      "when": "!terminalFocus" // To make Emacs in the terminal work as expected.
+    },
+    {
+      "key": "meta+s",
+      "command": "workbench.action.terminal.sendSequence",
+      "when": "terminalFocus", // To make Emacs in the terminal work as expected.
+      "args": {
+        "text": "\u001bs" // Send `ESC s` to the terminal.
+      }
     },
     // addSelectionToNext/PreviousFindMatch
     {
@@ -851,7 +860,16 @@
     // Show commands
     {
       "key": "meta+x",
-      "command": "workbench.action.showCommands"
+      "command": "workbench.action.showCommands",
+      "when": "!terminalFocus" // To make Emacs in the terminal work as expected.
+    },
+    {
+      "key": "meta+x",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001bx" // Send `ESC` to the terminal.
+      },
+      "when": "terminalFocus" // To make Emacs in the terminal work as expected.
     },
     // Sidebar
     {
@@ -861,7 +879,8 @@
     // Workspace
     {
       "key": "ctrl+x ctrl+c",
-      "command": "workbench.action.closeWindow"
+      "command": "workbench.action.closeWindow",
+      "when": "!terminalFocus"
     },
     {
       "key": "ctrl+x z",
@@ -1017,11 +1036,13 @@
     },
     {
       "key": "ctrl+x left",
-      "command": "workbench.action.previousEditor"
+      "command": "workbench.action.previousEditor",
+      "when": "editorTextFocus"
     },
     {
       "key": "ctrl+x right",
-      "command": "workbench.action.nextEditor"
+      "command": "workbench.action.nextEditor",
+      "when": "editorTextFocus"
     },
     // Looking up identifiers
     {
@@ -1044,23 +1065,18 @@
       "command": "workbench.action.navigateForward",
       "when": "canNavigateForward"
     },
-    // To make C-c and C-x work in the terminal
-    // These solutions are provided by https://github.com/whitphx/vscode-emacs-mcx/issues/1533#issuecomment-2009398006
     {
-        "key": "ctrl+c",
-        "command": "workbench.action.terminal.sendSequence",
-        "args": {
-            "text": "\u0003" // 'C' & 0x1F == 0x03
-        },
-        "when": "terminalFocus"
-    },
-    {
-        "key": "ctrl+x",
-        "command": "workbench.action.terminal.sendSequence",
-        "args": {
-            "text": "\u0018" // 'X' & 0x1F  == 0x18
-        },
-        "when": "terminalFocus"
+      // To make C-x work in the terminal.
+      // This extension defines keybindings that consist of multiple keys starting with `ctrl+x`
+      // with which VSCode interrupts the C-x input to the terminal for waiting for the next key,
+      // so we need to define this keybinding explicitly to make `C-x` work in the terminal.
+      // This is inspired by https://github.com/whitphx/vscode-emacs-mcx/issues/1533#issuecomment-2009398006
+      "key": "ctrl+x",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+          "text": "\u0018" // 'X' & 0x1F  == 0x18
+      },
+      "when": "terminalFocus"
     }
   ]
 }

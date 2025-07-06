@@ -3065,13 +3065,46 @@
       {
         "key": "alt+s o",
         "command": "workbench.action.quickTextSearch",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+s o",
         "mac": "cmd+s o",
         "command": "workbench.action.quickTextSearch",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "alt+s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "alt+s",
+        "mac": "cmd+s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "escape s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bs"
+        }
+      },
+      {
+        "key": "ctrl+[ s",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bs"
+        }
       },
       {
         "key": "ctrl+alt+n",
@@ -5002,23 +5035,56 @@
       {
         "key": "alt+x",
         "command": "workbench.action.showCommands",
-        "when": "!config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "alt+x",
         "mac": "cmd+x",
         "command": "workbench.action.showCommands",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape x",
         "command": "workbench.action.showCommands",
-        "when": "config.emacs-mcx.useMetaPrefixEscape"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ x",
         "command": "workbench.action.showCommands",
-        "when": "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bx"
+        }
+      },
+      {
+        "key": "alt+x",
+        "mac": "cmd+x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bx"
+        }
+      },
+      {
+        "key": "escape x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bx"
+        }
+      },
+      {
+        "key": "ctrl+[ x",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bx"
+        }
       },
       {
         "key": "ctrl+alt+space",
@@ -5043,7 +5109,8 @@
       },
       {
         "key": "ctrl+x ctrl+c",
-        "command": "workbench.action.closeWindow"
+        "command": "workbench.action.closeWindow",
+        "when": "!terminalFocus"
       },
       {
         "key": "ctrl+x z",
@@ -5282,11 +5349,13 @@
       },
       {
         "key": "ctrl+x left",
-        "command": "workbench.action.previousEditor"
+        "command": "workbench.action.previousEditor",
+        "when": "editorTextFocus"
       },
       {
         "key": "ctrl+x right",
-        "command": "workbench.action.nextEditor"
+        "command": "workbench.action.nextEditor",
+        "when": "editorTextFocus"
       },
       {
         "key": "alt+.",
@@ -5350,14 +5419,6 @@
         "key": "ctrl+[ ctrl+,",
         "command": "workbench.action.navigateForward",
         "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "ctrl+c",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-          "text": "\u0003"
-        }
       },
       {
         "key": "ctrl+x",
