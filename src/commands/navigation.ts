@@ -19,7 +19,7 @@ export class GotoLine extends EmacsCommand {
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const anchors = textEditor.selections.map((selection) => selection.anchor);
 
-    let targetLine: number | undefined;
+    let targetLine: number | undefined = prefixArgument;
     let validationMessage: string | undefined;
     while (targetLine == null || isNaN(targetLine)) {
       const targetLineStr = await this.minibuffer.readFromMinibuffer({ prompt: "Goto Line", validationMessage });

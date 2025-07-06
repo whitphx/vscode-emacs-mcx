@@ -228,6 +228,163 @@ suite("GotoLine", () => {
     });
   });
 
+  suite("prefix argument functionality", () => {
+    test("uses prefix argument 8 as target line", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument(); // C-u
+      emulator.digitArgument(8); // 8
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [7, 0]); // Line 8 -> index 7
+    });
+
+    test("uses prefix argument 1 to go to first line", async () => {
+      setEmptyCursors(activeTextEditor, [20, 5]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument(); // C-u
+      emulator.digitArgument(1); // 1
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [0, 0]); // Line 1 -> index 0
+    });
+
+    test("uses prefix argument 50 which gets clamped to last line", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+      const lastLineNumber = activeTextEditor.document.lineCount;
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument();
+      emulator.digitArgument(5);
+      emulator.digitArgument(0); // 50
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [lastLineNumber - 1, 0]); // Should clamp to last line
+    });
+
+    test("uses prefix argument 99 which gets clamped to last line", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+      const lastLineNumber = activeTextEditor.document.lineCount;
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument();
+      emulator.digitArgument(9);
+      emulator.digitArgument(9); // 99
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [lastLineNumber - 1, 0]); // Clamped to last line
+    });
+
+    test("clamps prefix argument when too low (zero)", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument();
+      emulator.digitArgument(0); // 0
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [0, 0]); // Clamped to line 1 -> index 0
+    });
+
+    test("handles negative prefix argument", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.negativeArgument(); // M--
+      emulator.digitArgument(5); // -5
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [0, 0]); // Clamped to line 1 -> index 0
+    });
+
+    test("C-u 4 uses 4 as target line", async () => {
+      setEmptyCursors(activeTextEditor, [10, 2]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument(); // C-u
+      emulator.digitArgument(4); // 4
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [3, 0]); // Line 4 -> index 3
+    });
+
+    test("C-u alone (universal argument without digits) uses 4 as target line (this is different from origin Emacs behavior though)", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument(); // C-u alone gives 4
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [3, 0]); // Should go to line 4 -> index 3
+    });
+
+    test("Multiple C-u (C-u C-u) gives prefix argument 16 (this is different from origin Emacs behavior though)", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument(); // C-u (4)
+      emulator.universalArgument(); // C-u (16)
+
+      await emulator.runCommand("gotoLine");
+
+      // Should go to line 16
+      assertCursorsEqual(activeTextEditor, [15, 0]); // Line 16 -> index 15
+    });
+  });
+
+  suite("prefix argument with mark-mode integration", () => {
+    test("prefix argument sets mark when not in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument();
+      emulator.digitArgument(2);
+      emulator.digitArgument(0); // 20
+
+      await emulator.runCommand("gotoLine");
+
+      // Should be at line 20, and mark should be set at original position
+      assertCursorsEqual(activeTextEditor, [19, 0]);
+
+      // Test that mark was set by popping it
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [5, 3]);
+    });
+
+    test("preserves selection and does not set new mark when in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      emulator.universalArgument();
+      emulator.digitArgument(1);
+      emulator.digitArgument(5); // 15
+
+      await emulator.runCommand("gotoLine");
+
+      // Should have selection from original position to target line
+      assertSelectionsEqual(activeTextEditor, [5, 3, 14, 0]);
+
+      // If no new mark was added to the mark ring, popMark should return to the original position
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [5, 3]); // Should return to original position
+
+      // Try popMark again - if gotoLine didn't add a mark, cursor should stay at [5, 3]
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [5, 3]); // Should remain at original position
+    });
+  });
+
   suite("mark-mode integration", () => {
     test("sets mark when not in mark mode", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
@@ -382,6 +539,26 @@ suite("GotoLine", () => {
       assertCursorsEqual(activeTextEditor, [19, 0]);
     });
 
+    test("terminates multi-cursor mode with prefix argument", async () => {
+      // Set up multiple cursors
+      activeTextEditor.selections = [
+        new vscode.Selection(5, 3, 5, 3),
+        new vscode.Selection(10, 2, 10, 2),
+        new vscode.Selection(15, 1, 15, 1),
+      ];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.universalArgument();
+      emulator.digitArgument(2);
+      emulator.digitArgument(5); // 25
+
+      await emulator.runCommand("gotoLine");
+
+      // Should have only one cursor at target line
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [24, 0]); // Line 25 -> index 24
+    });
+
     test("terminates multi-cursor mode in mark mode", async () => {
       // Set up multiple cursors
       activeTextEditor.selections = [
@@ -399,6 +576,27 @@ suite("GotoLine", () => {
       // Should have only one selection from original primary cursor to target
       assert.equal(activeTextEditor.selections.length, 1);
       assertSelectionsEqual(activeTextEditor, [5, 3, 19, 0]);
+    });
+
+    test("terminates multi-cursor mode in mark mode with prefix argument", async () => {
+      // Set up multiple cursors
+      activeTextEditor.selections = [
+        new vscode.Selection(5, 3, 5, 3),
+        new vscode.Selection(10, 2, 10, 2),
+        new vscode.Selection(15, 1, 15, 1),
+      ];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      emulator.universalArgument();
+      emulator.digitArgument(3);
+      emulator.digitArgument(0); // 30
+
+      await emulator.runCommand("gotoLine");
+
+      // Should have only one selection from original primary cursor to target
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertSelectionsEqual(activeTextEditor, [5, 3, 29, 0]); // Line 30 -> index 29
     });
 
     test("uses primary cursor anchor for mark mode", async () => {
