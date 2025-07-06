@@ -92,17 +92,25 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       }
 
       // For keybindings with modifiers to work in Emacs in the terminal.
-      // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode without "!terminalFocus" condition,
-      // when the user presses `ctrl+x`, VSCode interrupts the key sequence expecting the following `ctrl+c` key stroke
-      // and `ctrl+x` is not sent to the terminal.
-      // It makes impossible to use the keybindings starting with `ctrl+x`
+      // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode,
+      // when the user presses `ctrl+x`, VSCode interrupts the key sequence
+      // waiting for the second key stroke e.g. `ctrl+c`,
+      // and the first `ctrl+x` is never sent to the terminal.
+      // It makes impossible to use keybindings starting with `ctrl+x`
       // in Emacs (and some other apps) in the terminal
-      // because they can't receive the `ctrl+x` key stroke sent from the terminal emulator of VSCode
-      // So, we add the "!terminalFocus" condition to such keybindings so that VSCode doesn't interrupt the key strokes in the terminal.
+      // because they never receives `ctrl+x` from the terminal emulator.
+      // So we warn potentially problematic keybindings that may cause the problem.
       const isUnconditional = when == null;
-      const hasModifiers = key.split("+").some((k) => ["ctrl", "shift", "alt", "meta"].includes(k));
-      if (isUnconditional && hasModifiers) {
-        when = addWhenCond(when, "!terminalFocus");
+      const keyElements = key.split("+");
+      const hasModifiers = keyElements.some((k) => ["ctrl", "shift", "alt"].includes(k));
+      // "meta" can be ignored. Looks like VSCode handles ESC in the terminal properly so that the problem above doesn't happen.
+      // So the user can use ESC as a meta key in the terminal without issues.
+      const hasMeta = keyElements.includes("meta");
+      if (isUnconditional && hasModifiers && !hasMeta) {
+        throw new Error(
+          `Keybinding "${key}" has a modifier but is unconditional. It may cause issues in Emacs in the terminal. ` +
+            `Consider adding "!terminalFocus" condition to the keybinding.`,
+        );
       }
 
       // Convert "meta" specifications

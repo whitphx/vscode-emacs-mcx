@@ -258,7 +258,8 @@
     // go to line
     {
       "keys": ["meta+g meta+g", "meta+g g"],
-      "command": "workbench.action.gotoLine"
+      "command": "workbench.action.gotoLine",
+      "when": "!terminalFocus"
     },
     {
       "keys": ["meta+g meta+g", "meta+g g"],
@@ -276,7 +277,8 @@
     // marker next
     {
       "keys": ["meta+g n", "meta+g meta+n"],
-      "command": "editor.action.marker.next"
+      "command": "editor.action.marker.next",
+      "when": "editorTextFocus"
     },
     {
       "key": "ctrl+x `",
@@ -286,7 +288,8 @@
     // marker prev
     {
       "keys": ["meta+g p", "meta+g meta+p"],
-      "command": "editor.action.marker.prev"
+      "command": "editor.action.marker.prev",
+      "when": "editorTextFocus"
     },
     // recenter-top-bottom
     {
