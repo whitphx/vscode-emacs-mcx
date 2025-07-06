@@ -468,6 +468,17 @@ enum MoveToWindowLinePosition {
   Bottom,
 }
 
+export function calcMiddleOffset(visibleRanges: readonly vscode.Range[]): number | undefined {
+  let visibleLineCount = 0;
+  visibleRanges.forEach((range) => {
+    visibleLineCount += range.end.line - range.start.line + 1;
+  });
+  if (visibleLineCount === 0) {
+    return;
+  }
+  return Math.floor(visibleLineCount / 2);
+}
+
 export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOffset: number): number | undefined {
   let targetLine;
   let offset = targetOffset;
@@ -481,6 +492,14 @@ export function calcTargetLine(visibleRanges: readonly vscode.Range[], targetOff
   }
 }
 
+export function calcMiddleLine(visibleRanges: readonly vscode.Range[]): number | undefined {
+  const targetOffset = calcMiddleOffset(visibleRanges);
+  if (targetOffset == null) {
+    return;
+  }
+  return calcTargetLine(visibleRanges, targetOffset);
+}
+
 export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEditorInterruptionHandler {
   public readonly id = "moveToWindowLineTopBottom";
 
@@ -492,15 +511,7 @@ export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEdit
     if (prefixArgument == null) {
       switch (this.movePosition) {
         case MoveToWindowLinePosition.Middle: {
-          let visibleLineCount = 0;
-          textEditor.visibleRanges.forEach((range) => {
-            visibleLineCount += range.end.line - range.start.line + 1;
-          });
-          if (visibleLineCount === 0) {
-            return;
-          }
-          const targetOffset = Math.floor(visibleLineCount / 2);
-          const result = calcTargetLine(textEditor.visibleRanges, targetOffset);
+          const result = calcMiddleLine(textEditor.visibleRanges);
           if (result == null) {
             return;
           }

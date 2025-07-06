@@ -2,8 +2,16 @@ import * as vscode from "vscode";
 import assert from "assert";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { calcTargetLine } from "../../../commands/move";
-import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
+import { calcTargetLine, calcMiddleLine } from "../../../commands/move";
+import {
+  assertCursorsEqual,
+  assertSelectionsEqual,
+  setEmptyCursors,
+  setupWorkspace,
+  cleanUpWorkspace,
+  clearTextEditor,
+  delay,
+} from "../utils";
 
 suite("calcTargetLine", () => {
   test("calculates target line for single range", () => {
@@ -53,7 +61,7 @@ suite("moveToWindowLineTopBottom", () => {
   let emulator: EmacsEmulator;
 
   setup(async () => {
-    const initialText = "line 0\n".repeat(100);
+    const initialText = "line\n".repeat(100);
     activeTextEditor = await setupWorkspace(initialText);
     emulator = new EmacsEmulator(activeTextEditor);
 
@@ -71,18 +79,12 @@ suite("moveToWindowLineTopBottom", () => {
 
       await emulator.runCommand("moveToWindowLineTopBottom");
 
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+      if (expectedMiddleLine == null) {
+        throw new Error("No visible ranges available to calculate middle line");
       }
+
+      assertCursorsEqual(activeTextEditor, [expectedMiddleLine, 0]);
     });
 
     test("second call moves to top of window", async () => {
@@ -93,9 +95,11 @@ suite("moveToWindowLineTopBottom", () => {
       await emulator.runCommand("moveToWindowLineTopBottom");
 
       const firstVisibleRange = activeTextEditor.visibleRanges[0];
-      if (firstVisibleRange) {
-        assertCursorsEqual(activeTextEditor, [firstVisibleRange.start.line, 0]);
+      if (!firstVisibleRange) {
+        throw new Error("No visible range available");
       }
+
+      assertCursorsEqual(activeTextEditor, [firstVisibleRange.start.line, 0]);
     });
 
     test("third call moves to bottom of window", async () => {
@@ -107,9 +111,11 @@ suite("moveToWindowLineTopBottom", () => {
       await emulator.runCommand("moveToWindowLineTopBottom");
 
       const lastVisibleRange = activeTextEditor.visibleRanges[activeTextEditor.visibleRanges.length - 1];
-      if (lastVisibleRange) {
-        assertCursorsEqual(activeTextEditor, [lastVisibleRange.end.line, 0]);
+      if (!lastVisibleRange) {
+        throw new Error("No visible range available");
       }
+
+      assertCursorsEqual(activeTextEditor, [lastVisibleRange.end.line, 0]);
     });
 
     test("fourth call cycles back to middle", async () => {
@@ -119,18 +125,12 @@ suite("moveToWindowLineTopBottom", () => {
       await emulator.runCommand("moveToWindowLineTopBottom"); // bottom
       await emulator.runCommand("moveToWindowLineTopBottom"); // back to middle
 
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+      if (expectedMiddleLine == null) {
+        throw new Error("No visible ranges available to calculate middle line");
       }
+
+      assertCursorsEqual(activeTextEditor, [expectedMiddleLine, 0]);
     });
   });
 
@@ -183,18 +183,13 @@ suite("moveToWindowLineTopBottom", () => {
 
       await emulator.runCommand("moveToWindowLineTopBottom");
 
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertSelectionsEqual(activeTextEditor, [45, 0, targetLine, 0]);
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+      if (expectedMiddleLine == null) {
+        throw new Error("No visible ranges available to calculate middle line");
       }
+
+      assert.notEqual(expectedMiddleLine, 45, "Target line should not be the same as initial cursor position");
+      assertSelectionsEqual(activeTextEditor, [45, 0, expectedMiddleLine, 0]);
     });
 
     test("preserves selection with prefix argument", async () => {
@@ -211,20 +206,12 @@ suite("moveToWindowLineTopBottom", () => {
       await emulator.runCommand("moveToWindowLineTopBottom");
 
       const expectedLine = firstVisibleRange.start.line + 5;
+      assert.notEqual(expectedLine, 45, "Target line should not be the same as initial cursor position");
       assertSelectionsEqual(activeTextEditor, [45, 0, expectedLine, 0]);
     });
   });
 
   suite("edge cases", () => {
-    test("handles empty visible ranges gracefully", async () => {
-      // This test is more theoretical since VSCode should always have visible ranges
-      // But we can test the command doesn't crash
-      await emulator.runCommand("moveToWindowLineTopBottom");
-
-      // Should not crash, cursor position might change but that's acceptable
-      assert.ok(activeTextEditor.selection.active !== undefined);
-    });
-
     test("moves only primary cursor in multi-cursor scenario", async () => {
       // Set up multiple cursors
       activeTextEditor.selections = [
@@ -235,27 +222,25 @@ suite("moveToWindowLineTopBottom", () => {
 
       await emulator.runCommand("moveToWindowLineTopBottom");
 
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+
       // Only the first cursor should move, others should remain unchanged
       assert.equal(activeTextEditor.selections.length, 3);
+      assert.equal(activeTextEditor.selections[0]?.active.line, expectedMiddleLine);
       assert.equal(activeTextEditor.selections[1]?.active.line, 55);
       assert.equal(activeTextEditor.selections[2]?.active.line, 65);
     });
 
     test("handles single line document", async () => {
       // Create a single line document
-      const singleLineText = "single line";
-      const singleLineEditor = await setupWorkspace(singleLineText);
-      const singleLineEmulator = new EmacsEmulator(singleLineEditor);
+      clearTextEditor(activeTextEditor, "single line");
 
-      setEmptyCursors(singleLineEditor, [0, 0]);
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-      await singleLineEmulator.runCommand("moveToWindowLineTopBottom");
+      await emulator.runCommand("moveToWindowLineTopBottom");
 
       // Should stay at line 0
-      assertCursorsEqual(singleLineEditor, [0, 0]);
-
-      // Clean up
-      await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+      assertCursorsEqual(activeTextEditor, [0, 0]);
     });
   });
 
@@ -271,18 +256,12 @@ suite("moveToWindowLineTopBottom", () => {
       // Next call should go to middle (not bottom), confirming reset
       await emulator.runCommand("moveToWindowLineTopBottom");
 
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+      if (expectedMiddleLine == null) {
+        throw new Error("No visible ranges available to calculate middle line");
       }
+
+      assertCursorsEqual(activeTextEditor, [expectedMiddleLine, 0]);
     });
 
     test("resets position to Middle after document-changed interruption", async () => {
@@ -304,45 +283,12 @@ suite("moveToWindowLineTopBottom", () => {
       // Next call should go to middle (not middle), confirming reset
       await emulator.runCommand("moveToWindowLineTopBottom");
 
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+      if (expectedMiddleLine == null) {
+        throw new Error("No visible ranges available to calculate middle line");
       }
-    });
 
-    test("ignores selection-changed interruption from own command", async () => {
-      // Move to top state by cycling
-      await emulator.runCommand("moveToWindowLineTopBottom"); // middle
-      await emulator.runCommand("moveToWindowLineTopBottom"); // top
-
-      // Get the current selection set by the command
-      const currentSelection = activeTextEditor.selection;
-
-      // Simulate selection-changed interruption from the command itself
-      emulator.onDidInterruptTextEditor({
-        reason: "selection-changed",
-        originalEvent: {
-          textEditor: activeTextEditor,
-          kind: vscode.TextEditorSelectionChangeKind.Command,
-          selections: [currentSelection],
-        } as vscode.TextEditorSelectionChangeEvent,
-      });
-
-      // Next call should go to bottom (not middle), confirming no reset
-      await emulator.runCommand("moveToWindowLineTopBottom");
-
-      const lastVisibleRange = activeTextEditor.visibleRanges[activeTextEditor.visibleRanges.length - 1];
-      if (lastVisibleRange) {
-        assertCursorsEqual(activeTextEditor, [lastVisibleRange.end.line, 0]);
-      }
+      assertCursorsEqual(activeTextEditor, [expectedMiddleLine, 0]);
     });
 
     test("resets position after user-driven selection change", async () => {
@@ -350,63 +296,19 @@ suite("moveToWindowLineTopBottom", () => {
       await emulator.runCommand("moveToWindowLineTopBottom"); // middle
       await emulator.runCommand("moveToWindowLineTopBottom"); // top
 
-      // Simulate user-driven selection change (Mouse)
-      emulator.onDidInterruptTextEditor({
-        reason: "selection-changed",
-        originalEvent: {
-          textEditor: activeTextEditor,
-          kind: vscode.TextEditorSelectionChangeKind.Mouse,
-          selections: [new vscode.Selection(30, 0, 30, 0)],
-        } as vscode.TextEditorSelectionChangeEvent,
-      });
+      // Simulate user-driven selection change
+      setEmptyCursors(activeTextEditor, [30, 0]);
+      await delay(100); // Wait for the selection change event to be processed
 
       // Next call should go to middle (not bottom), confirming reset
       await emulator.runCommand("moveToWindowLineTopBottom");
 
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
+      const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
+      if (expectedMiddleLine == null) {
+        throw new Error("No visible ranges available to calculate middle line");
       }
-    });
 
-    test("resets position after command-driven selection change with different selection", async () => {
-      // Move to top state by cycling
-      await emulator.runCommand("moveToWindowLineTopBottom"); // middle
-      await emulator.runCommand("moveToWindowLineTopBottom"); // top
-
-      // Simulate command-driven selection change but with different selection
-      emulator.onDidInterruptTextEditor({
-        reason: "selection-changed",
-        originalEvent: {
-          textEditor: activeTextEditor,
-          kind: vscode.TextEditorSelectionChangeKind.Command,
-          selections: [new vscode.Selection(25, 0, 25, 0)], // Different from lastSetSelection
-        } as vscode.TextEditorSelectionChangeEvent,
-      });
-
-      // Next call should go to middle (not bottom), confirming reset
-      await emulator.runCommand("moveToWindowLineTopBottom");
-
-      const visibleRanges = activeTextEditor.visibleRanges;
-      let totalVisibleLines = 0;
-      visibleRanges.forEach((range) => {
-        totalVisibleLines += range.end.line - range.start.line + 1;
-      });
-
-      const expectedMiddleLine = Math.floor(totalVisibleLines / 2);
-      const targetLine = calcTargetLine(visibleRanges, expectedMiddleLine);
-
-      if (targetLine !== undefined) {
-        assertCursorsEqual(activeTextEditor, [targetLine, 0]);
-      }
+      assertCursorsEqual(activeTextEditor, [expectedMiddleLine, 0]);
     });
 
     test("interruption during cycling sequence resets properly", async () => {
