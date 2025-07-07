@@ -1011,16 +1011,21 @@
       "command": "selectNextCodeAction",
       "when": "codeActionMenuVisible"
     },
-    {
-      "key": "ctrl+p",
-      "command": "workbench.action.quickOpenNavigateNextInFilePicker",
-      "when": "inFilesPicker && inQuickOpen"
-    },
-    {
-      "key": "ctrl+n",
-      "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
-      "when": "inFilesPicker && inQuickOpen"
-    },
+    // Don't assign `workbench.action.quickOpenNavigate*InFilePicker`
+    // because these commands immediately open the selected file when the user releases the key,
+    // which is not useful behavior,
+    // and the navigation is just possible with the `workbench.action.quickOpenSelect*` commands,
+    // which are already assigned to `ctrl+p` and `ctrl+n` above.
+    // {
+    //   "key": "ctrl+p",
+    //   "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
+    //   "when": "inFilesPicker && inQuickOpen"
+    // },
+    // {
+    //   "key": "ctrl+n",
+    //   "command": "workbench.action.quickOpenNavigateNextInFilePicker",
+    //   "when": "inFilesPicker && inQuickOpen"
+    // },
     {
       "key": "ctrl+m",
       "command": "workbench.action.acceptSelectedQuickOpenItem",
