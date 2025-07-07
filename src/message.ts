@@ -59,14 +59,14 @@ export class MessageManager implements vscode.Disposable {
     vscode.workspace.onWillSaveTextDocument(this.onInterrupt, this, this.disposables);
   }
 
-  public onInterrupt(): void {
+  public onInterrupt = (): void => {
     if (this.messageDisposable === null) {
       return;
     }
 
     this.messageDisposable.dispose();
     this.messageDisposable = null;
-  }
+  };
 
   public showMessage(text: string): void {
     if (this.messageDisposable) {

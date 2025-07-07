@@ -296,8 +296,7 @@ ABCDEFGHKLMNOPQRST`,
 
     // Yank the killed text in the rect-mark-mode.
     // The text is yanked as a rectangle and automatically indented.
-    clearTextEditor(activeTextEditor, "\n".repeat(10));
-    await delay(100);
+    await clearTextEditor(activeTextEditor, "\n".repeat(10));
     setEmptyCursors(activeTextEditor, [2, 0]);
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 0, 2, 0)]);
     await emulator.runCommand("yank");

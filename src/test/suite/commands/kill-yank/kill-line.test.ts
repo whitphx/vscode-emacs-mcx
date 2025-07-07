@@ -204,7 +204,7 @@ abcdefghij
       ],
     ];
 
-    const otherOps: Array<[string, () => Thenable<void>]> = [["cancel", async () => await emulator.cancel()]];
+    const otherOps: Array<[string, () => void]> = [["cancel", () => emulator.cancel()]];
 
     const ops: Array<[string, () => Thenable<unknown> | void]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {

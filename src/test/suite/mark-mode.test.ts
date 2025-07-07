@@ -218,7 +218,7 @@ ABCDEFGHIJ`;
     assert.deepStrictEqual(activeTextEditor.selections, [new Selection(new Position(1, 1), new Position(0, 0))]);
   });
 
-  test("set and pop marks", async () => {
+  test("set and pop marks", () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
     // C-<SPC> C-<SPC> to push and deactivate mark.
     emulator.setMarkCommand();

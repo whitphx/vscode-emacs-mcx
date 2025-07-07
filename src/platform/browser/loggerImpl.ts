@@ -46,7 +46,7 @@ export class VsCodeMessage implements ILogger {
     return priority <= this.priorityThreshold;
   }
 
-  private async log(info: { level: string; message: string }) {
+  private log(info: { level: string; message: string }) {
     if (this.configuration && this.configuration.debug.silent) {
       return;
     }

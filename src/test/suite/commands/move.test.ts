@@ -240,11 +240,11 @@ suite("scroll-up/down-command", () => {
 
   suite("scroll-up-command", () => {
     test("it delegates to the cursorPageDown command", async () => {
-      sinon.spy(vscode.commands, "executeCommand");
+      const spiedExecuteCommand = sinon.spy(vscode.commands, "executeCommand");
+
       await emulator.runCommand("scrollUpCommand");
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      assert(vscode.commands.executeCommand.calledWithExactly("cursorPageDown"), "cursorPageDown is not called");
+      assert(spiedExecuteCommand.calledWithExactly("cursorPageDown"), "cursorPageDown is not called");
+
       sinon.restore();
     });
 
@@ -330,11 +330,11 @@ suite("scroll-up/down-command", () => {
 
   suite("scroll-down-command", () => {
     test("it delegates to the cursorPageUp command", async () => {
-      sinon.spy(vscode.commands, "executeCommand");
+      const spiedExecuteCommand = sinon.spy(vscode.commands, "executeCommand");
+
       await emulator.runCommand("scrollDownCommand");
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      assert(vscode.commands.executeCommand.calledWithExactly("cursorPageUp"), "cursorPageUp is not called");
+      assert(spiedExecuteCommand.calledWithExactly("cursorPageUp"), "cursorPageUp is not called");
+
       sinon.restore();
     });
 

@@ -8,9 +8,10 @@ import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../utils";
 suite("Negative argument (M--)", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
+  let spiedExecuteCommand: sinon.SinonSpy;
 
   setup(() => {
-    sinon.spy(vscode.commands, "executeCommand");
+    spiedExecuteCommand = sinon.spy(vscode.commands, "executeCommand");
   });
 
   teardown(() => {
@@ -19,26 +20,20 @@ suite("Negative argument (M--)", () => {
 
   const assertPrefixArgumentContext = (expected: number | undefined) => {
     assert(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      vscode.commands.executeCommand.calledWithExactly("setContext", "emacs-mcx.prefixArgument", expected),
+      spiedExecuteCommand.calledWithExactly("setContext", "emacs-mcx.prefixArgument", expected),
       `Assertion failed that emacs-mcx.prefixArgument context has been set to ${expected}`,
     );
   };
 
   const assertAcceptingArgumentContext = (expected: boolean) => {
     assert(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      vscode.commands.executeCommand.calledWithExactly("setContext", "emacs-mcx.acceptingArgument", expected),
+      spiedExecuteCommand.calledWithExactly("setContext", "emacs-mcx.acceptingArgument", expected),
       `Assertion failed that emacs-mcx.acceptingArgument context has been set to ${expected}`,
     );
   };
 
   const resetExecuteCommandSpy = () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    vscode.commands.executeCommand.resetHistory();
+    spiedExecuteCommand.resetHistory();
   };
 
   suite("Negative argument and single character input", () => {

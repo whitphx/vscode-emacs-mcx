@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext): void {
   }
 
   context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor((editor) => {
+    vscode.window.onDidChangeActiveTextEditor(async (editor) => {
       if (editor == null) {
         return;
       }
@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext): void {
         // as it depends on a delay with an ad-hoc duration,
         // so it's important to put this call at this else block
         // and avoid calling it when it's not necessary.
-        curEmulator.switchTextEditor(editor);
+        await curEmulator.switchTextEditor(editor);
       }
     }),
   );

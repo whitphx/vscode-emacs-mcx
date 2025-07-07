@@ -318,7 +318,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
-  public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
+  public onDidChangeTextDocument = (e: vscode.TextDocumentChangeEvent): void => {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
       if (
@@ -331,9 +331,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
       this.onDidInterruptTextEditor({ reason: "document-changed", originalEvent: e });
     }
-  }
+  };
 
-  public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
+  public onDidChangeTextEditorSelection = (e: vscode.TextEditorSelectionChangeEvent): void => {
     if (!this.rectMode) {
       this.nativeSelectionsStore.set(e.textEditor, e.textEditor.selections);
     }
@@ -341,12 +341,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     if (e.textEditor === this.textEditor) {
       this.onDidInterruptTextEditor({ reason: "selection-changed", originalEvent: e });
     }
-  }
+  };
 
   /**
    * An extended version of the native `type` command with prefix argument integration.
    */
-  public typeChar(char: string): void | Thenable<unknown> {
+  public async typeChar(char: string): Promise<unknown> {
     if (this.isInMarkMode) {
       this.exitMarkMode();
     }
@@ -356,7 +356,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
 
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
-    this.prefixArgumentHandler.cancel();
+    await this.prefixArgumentHandler.cancel();
 
     const repeat = prefixArgument == null ? 1 : prefixArgument;
     if (repeat < 0) {
@@ -378,14 +378,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   // Ref: https://github.com/Microsoft/vscode-extension-samples/blob/f9955406b4cad550fdfa891df23a84a2b344c3d8/vim-sample/src/extension.ts#L152
-  public type(text: string): Thenable<unknown> {
+  public async type(text: string): Promise<unknown> {
     // Single character input with prefix argument
     // NOTE: This single character handling should be replaced with `EmacsEmulator.typeChar` directly bound to relevant keystrokes,
     // however, it's difficult to cover all characters without `type` event registration,
     // then this method can be used to handle single character inputs other than ASCII characters,
     // for those who want it as an option.
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
-    this.prefixArgumentHandler.cancel();
+    await this.prefixArgumentHandler.cancel();
 
     logger.debug(`[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
     if (prefixArgument !== undefined && prefixArgument >= 0) {
@@ -434,19 +434,19 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this.prefixArgumentHandler.subsequentArgumentDigit(arg);
   }
 
-  public onPrefixArgumentChange(newPrefixArgument: number | undefined): Thenable<unknown> {
+  public onPrefixArgumentChange = (newPrefixArgument: number | undefined): Thenable<unknown> => {
     logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
 
     return Promise.all([
       vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument),
       vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgumentExists", newPrefixArgument != null),
     ]);
-  }
+  };
 
-  public onPrefixArgumentAcceptingStateChange(newState: boolean): Thenable<unknown> {
+  public onPrefixArgumentAcceptingStateChange = (newState: boolean): Thenable<unknown> => {
     logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
     return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
-  }
+  };
 
   public runCommand(commandName: string, args?: unknown[]): Thenable<unknown> | void {
     const command = this.commandRegistry.get(commandName);

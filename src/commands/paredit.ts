@@ -40,7 +40,7 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
 abstract class PareditNavigatorCommand extends EmacsCommand {
   public abstract readonly pareditNavigatorFn: PareditNavigatorFn;
 
-  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
@@ -84,7 +84,7 @@ export class MarkSexp extends EmacsCommand {
   public readonly id = "paredit.markSexp";
   private continuing = false;
 
-  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const arg = prefixArgument === undefined ? 1 : prefixArgument;
 
     const repeat = Math.abs(arg);
