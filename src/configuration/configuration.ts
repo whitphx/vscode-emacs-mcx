@@ -73,9 +73,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     for (const option of Object.keys(this)) {
       let val: unknown = emacsConfigs[option];
       if (val !== null && val !== undefined) {
-        if (val.constructor.name === Object.name) {
-          // @ts-expect-error Casting {} to { [key: string]: unknown }
-          val = Configuration.unproxify(val);
+        if (typeof val === "object" && val != null) {
+          val = Configuration.unproxify(val as Record<string, unknown>);
         }
         // @ts-expect-error Type unsafe
         this[option] = val;
