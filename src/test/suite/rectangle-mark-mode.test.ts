@@ -375,9 +375,9 @@ KLMNOPQRST`,
     assertTextEqual(
       activeTextEditor,
       `23
-
+  
 cd
-
+  
 CD
   `,
     );
