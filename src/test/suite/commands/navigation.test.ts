@@ -233,8 +233,8 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument(); // C-u
-      emulator.digitArgument(8); // 8
+      await emulator.universalArgument(); // C-u
+      await emulator.subsequentArgumentDigit(8); // 8
 
       await emulator.runCommand("gotoLine");
 
@@ -245,36 +245,24 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [20, 5]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument(); // C-u
-      emulator.digitArgument(1); // 1
+      await emulator.universalArgument(); // C-u
+      await emulator.subsequentArgumentDigit(1); // 1
 
       await emulator.runCommand("gotoLine");
 
       assertCursorsEqual(activeTextEditor, [0, 0]); // Line 1 -> index 0
     });
 
-    test("uses prefix argument 50 which gets clamped to last line", async () => {
+    test("uses prefix argument very high which gets clamped to last line", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
       const lastLineNumber = activeTextEditor.document.lineCount;
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument();
-      emulator.digitArgument(5);
-      emulator.digitArgument(0); // 50
-
-      await emulator.runCommand("gotoLine");
-
-      assertCursorsEqual(activeTextEditor, [lastLineNumber - 1, 0]); // Should clamp to last line
-    });
-
-    test("uses prefix argument 99 which gets clamped to last line", async () => {
-      setEmptyCursors(activeTextEditor, [5, 3]);
-      const lastLineNumber = activeTextEditor.document.lineCount;
-
-      emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument();
-      emulator.digitArgument(9);
-      emulator.digitArgument(9); // 99
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(9);
+      await emulator.subsequentArgumentDigit(9);
+      await emulator.subsequentArgumentDigit(9);
+      await emulator.subsequentArgumentDigit(9);
 
       await emulator.runCommand("gotoLine");
 
@@ -285,8 +273,8 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument();
-      emulator.digitArgument(0); // 0
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(0); // 0
 
       await emulator.runCommand("gotoLine");
 
@@ -297,8 +285,8 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.negativeArgument(); // M--
-      emulator.digitArgument(5); // -5
+      await emulator.negativeArgument(); // M--
+      await emulator.subsequentArgumentDigit(5); // -5
 
       await emulator.runCommand("gotoLine");
 
@@ -309,8 +297,8 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [10, 2]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument(); // C-u
-      emulator.digitArgument(4); // 4
+      await emulator.universalArgument(); // C-u
+      await emulator.subsequentArgumentDigit(4); // 4
 
       await emulator.runCommand("gotoLine");
 
@@ -321,7 +309,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument(); // C-u alone gives 4
+      await emulator.universalArgument(); // C-u alone gives 4
 
       await emulator.runCommand("gotoLine");
 
@@ -332,8 +320,8 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument(); // C-u (4)
-      emulator.universalArgument(); // C-u (16)
+      await emulator.universalArgument(); // C-u (4)
+      await emulator.universalArgument(); // C-u (16)
 
       await emulator.runCommand("gotoLine");
 
@@ -347,9 +335,9 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument();
-      emulator.digitArgument(2);
-      emulator.digitArgument(0); // 20
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(0); // 20
 
       await emulator.runCommand("gotoLine");
 
@@ -366,9 +354,9 @@ suite("GotoLine", () => {
 
       emulator = new EmacsEmulator(activeTextEditor);
       emulator.setMarkCommand(); // Enter mark mode
-      emulator.universalArgument();
-      emulator.digitArgument(1);
-      emulator.digitArgument(5); // 15
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(1);
+      await emulator.subsequentArgumentDigit(5); // 15
 
       await emulator.runCommand("gotoLine");
 
@@ -548,9 +536,9 @@ suite("GotoLine", () => {
       ];
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.universalArgument();
-      emulator.digitArgument(2);
-      emulator.digitArgument(5); // 25
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(5); // 25
 
       await emulator.runCommand("gotoLine");
 
@@ -588,9 +576,9 @@ suite("GotoLine", () => {
 
       emulator = new EmacsEmulator(activeTextEditor);
       emulator.setMarkCommand(); // Enter mark mode
-      emulator.universalArgument();
-      emulator.digitArgument(3);
-      emulator.digitArgument(0); // 30
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(3);
+      await emulator.subsequentArgumentDigit(0); // 30
 
       await emulator.runCommand("gotoLine");
 
