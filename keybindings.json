@@ -45,16 +45,6 @@
     },
     {
       "keys": ["up", "ctrl+p"],
-      "command": "selectPrevSuggestion",
-      "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-    },
-    {
-      "keys": ["up", "ctrl+p"],
-      "command": "showPrevParameterHint",
-      "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
-    },
-    {
-      "keys": ["up", "ctrl+p"],
       "command": "emacs-mcx.isearchExit",
       "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
       "args": {
@@ -66,16 +56,6 @@
       "keys": ["down", "ctrl+n"],
       "command": "emacs-mcx.nextLine",
       "whens": ["editorTextFocus", "terminalFocus"]
-    },
-    {
-      "keys": ["down", "ctrl+n"],
-      "command": "selectNextSuggestion",
-      "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-    },
-    {
-      "keys": ["down", "ctrl+n"],
-      "command": "showNextParameterHint",
-      "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
     },
     {
       "keys": ["down", "ctrl+n"],
@@ -978,15 +958,38 @@
       "command": "emacs-mcx.paredit.backwardKillSexp",
       "when": "editorTextFocus"
     },
+    // Assign various up/down navigation commands to `ctrl+p` and `ctrl+n`.
+    // They are assigned to `ctrl+p` and `ctrl+n` by default in VSCode only on macOS,
+    // while this extension reassigns them on all platforms.
     {
       "key": "ctrl+p",
-      "command": "selectPrevQuickFix",
-      "when": "editorFocus && quickFixWidgetVisible"
+      "command": "showPrevParameterHint",
+      "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
     },
     {
       "key": "ctrl+n",
-      "command": "selectNextQuickFix",
-      "when": "editorFocus && quickFixWidgetVisible"
+      "command": "showNextParameterHint",
+      "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "selectPrevSuggestion",
+      "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "selectNextSuggestion",
+      "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "list.focusUp",
+      "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "list.focusDown",
+      "when": "listFocus && !inputFocus && !treestickyScrollFocused"
     },
     {
       "key": "ctrl+p",
@@ -999,17 +1002,30 @@
       "when": "inQuickOpen"
     },
     {
-      // Copied from the VSCode default keybinding for `list.focusUp`. It is only assigned on macOS but this extension assigns it on all platforms.
       "key": "ctrl+p",
-      "command": "list.focusUp",
-      "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      "command": "selectPrevCodeAction",
+      "when": "codeActionMenuVisible"
     },
     {
-      // Copied from the VSCode default keybinding for `list.focusDown`. It is only assigned on macOS but this extension assigns it on all platforms.
       "key": "ctrl+n",
-      "command": "list.focusDown",
-      "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      "command": "selectNextCodeAction",
+      "when": "codeActionMenuVisible"
     },
+    // Don't assign `workbench.action.quickOpenNavigate*InFilePicker`
+    // because these commands immediately open the selected file when the user releases the key,
+    // which is not useful behavior,
+    // and the navigation is just possible with the `workbench.action.quickOpenSelect*` commands,
+    // which are already assigned to `ctrl+p` and `ctrl+n` above.
+    // {
+    //   "key": "ctrl+p",
+    //   "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
+    //   "when": "inFilesPicker && inQuickOpen"
+    // },
+    // {
+    //   "key": "ctrl+n",
+    //   "command": "workbench.action.quickOpenNavigateNextInFilePicker",
+    //   "when": "inFilesPicker && inQuickOpen"
+    // },
     {
       "key": "ctrl+m",
       "command": "workbench.action.acceptSelectedQuickOpenItem",
