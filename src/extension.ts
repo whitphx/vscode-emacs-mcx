@@ -82,7 +82,8 @@ export function activate(context: vscode.ExtensionContext): void {
     callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
     onNoEmulator?: (...args: unknown[]) => unknown,
   ) {
-    const disposable = vscode.commands.registerCommand(commandName, (...args) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const disposable = vscode.commands.registerCommand(commandName, (...args: Unreliable<any>[]) => {
       logger.debug(`[command]\t Command "${commandName}" executed with args (${JSON.stringify(args)})`);
 
       const emulator = getAndUpdateEmulator();
