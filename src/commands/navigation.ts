@@ -19,7 +19,9 @@ export class GotoLine extends EmacsCommand {
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const anchors = textEditor.selections.map((selection) => selection.anchor);
 
-    let targetLine: number | undefined;
+    // By default, ask the user to input a line number.
+    // If the prefix argument is given, use its value as the target line.
+    let targetLine: number | undefined = prefixArgument;
     let validationMessage: string | undefined;
     while (targetLine == null || isNaN(targetLine)) {
       const targetLineStr = await this.minibuffer.readFromMinibuffer({ prompt: "Goto Line", validationMessage });

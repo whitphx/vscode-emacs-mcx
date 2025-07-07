@@ -40,120 +40,6 @@ class MockMinibuffer implements Minibuffer {
   }
 }
 
-suite("FindDefinitions", () => {
-  let activeTextEditor: TextEditor;
-  let emulator: EmacsEmulator;
-
-  setup(async () => {
-    const initialText = `function foo() {
-  return bar();
-}
-
-function bar() {
-  return 42;
-}
-
-baz();
-`;
-    activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
-  });
-
-  teardown(async () => {
-    await cleanUpWorkspace();
-  });
-
-  suite("basic functionality", () => {
-    test("executes revealDefinition command", async () => {
-      setEmptyCursors(activeTextEditor, [1, 9]); // Position on "bar"
-
-      emulator = new EmacsEmulator(activeTextEditor);
-      await emulator.runCommand("findDefinitions");
-
-      assertCursorsEqual(activeTextEditor, [4, 9]); // Should move to "bar" definition
-    });
-
-    test("sets mark when not in mark mode", async () => {
-      setEmptyCursors(activeTextEditor, [1, 9]);
-
-      emulator = new EmacsEmulator(activeTextEditor);
-      await emulator.runCommand("findDefinitions");
-
-      // Should be at definition location
-      assertCursorsEqual(activeTextEditor, [4, 9]);
-
-      // Test that mark was set by popping it
-      emulator.popMark();
-      assertCursorsEqual(activeTextEditor, [1, 9]); // Should return to original position
-    });
-  });
-
-  suite("mark-mode integration", () => {
-    test("preserves selection and does not set new mark when in mark mode", async () => {
-      setEmptyCursors(activeTextEditor, [1, 9]);
-
-      emulator = new EmacsEmulator(activeTextEditor);
-      emulator.setMarkCommand(); // Enter mark mode
-      await emulator.runCommand("findDefinitions");
-
-      // Should have selection from original position to definition
-      assertSelectionsEqual(activeTextEditor, [1, 9, 4, 9]);
-
-      // If no new mark was added to the mark ring, popMark should return to the original position
-      emulator.popMark();
-      assertCursorsEqual(activeTextEditor, [1, 9]); // Should return to original position
-
-      // Try popMark again - if findDefinitions didn't add a mark, cursor should stay at [1, 9]
-      emulator.popMark();
-      assertCursorsEqual(activeTextEditor, [1, 9]); // Should remain at original position
-    });
-  });
-
-  suite("multi-cursor behavior", () => {
-    test("handles multiple selections (VSCode typically removes non-primary)", async () => {
-      activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
-
-      emulator = new EmacsEmulator(activeTextEditor);
-      await emulator.runCommand("findDefinitions");
-
-      // Should be at definition location with only primary selection
-      assert.equal(activeTextEditor.selections.length, 1);
-      assertCursorsEqual(activeTextEditor, [4, 9]);
-
-      // Test that marks were set for all original cursors
-      emulator.popMark();
-      // Should restore both original positions
-      assert.equal(activeTextEditor.selections.length, 2);
-      assertCursorsEqual(activeTextEditor, [1, 9], [2, 5]);
-    });
-
-    test("handles mark mode with multiple initial selections", async () => {
-      // Set up multiple cursors
-      activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
-
-      emulator = new EmacsEmulator(activeTextEditor);
-      emulator.setMarkCommand(); // Enter mark mode
-      await emulator.runCommand("findDefinitions");
-
-      // Should restore only the primary anchor
-      assert.equal(activeTextEditor.selections.length, 1);
-      assertSelectionsEqual(activeTextEditor, [1, 9, 4, 9]);
-    });
-  });
-
-  suite("edge cases", () => {
-    test("handles command failure gracefully", async () => {
-      setEmptyCursors(activeTextEditor, [8, 0]); // Position on "baz()" that has no definition
-
-      emulator = new EmacsEmulator(activeTextEditor);
-
-      await emulator.runCommand("findDefinitions");
-
-      // Should not change the cursor position
-      assertCursorsEqual(activeTextEditor, [8, 0]);
-    });
-  });
-});
-
 suite("GotoLine", () => {
   let activeTextEditor: TextEditor;
   let mockMinibuffer: MockMinibuffer;
@@ -225,6 +111,151 @@ suite("GotoLine", () => {
       await emulator.runCommand("gotoLine");
 
       assertCursorsEqual(activeTextEditor, [0, 0]); // Clamped to line 1 -> index 0
+    });
+  });
+
+  suite("prefix argument functionality", () => {
+    test("uses prefix argument 8 as target line", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument(); // C-u
+      await emulator.subsequentArgumentDigit(8); // 8
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [7, 0]); // Line 8 -> index 7
+    });
+
+    test("uses prefix argument 1 to go to first line", async () => {
+      setEmptyCursors(activeTextEditor, [20, 5]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument(); // C-u
+      await emulator.subsequentArgumentDigit(1); // 1
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [0, 0]); // Line 1 -> index 0
+    });
+
+    test("uses prefix argument very high which gets clamped to last line", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+      const lastLineNumber = activeTextEditor.document.lineCount;
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(9);
+      await emulator.subsequentArgumentDigit(9);
+      await emulator.subsequentArgumentDigit(9);
+      await emulator.subsequentArgumentDigit(9);
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [lastLineNumber - 1, 0]); // Clamped to last line
+    });
+
+    test("clamps prefix argument when too low (zero)", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(0); // 0
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [0, 0]); // Clamped to line 1 -> index 0
+    });
+
+    test("handles negative prefix argument", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.negativeArgument(); // M--
+      await emulator.subsequentArgumentDigit(5); // -5
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [0, 0]); // Clamped to line 1 -> index 0
+    });
+
+    test("C-u 4 uses 4 as target line", async () => {
+      setEmptyCursors(activeTextEditor, [10, 2]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument(); // C-u
+      await emulator.subsequentArgumentDigit(4); // 4
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [3, 0]); // Line 4 -> index 3
+    });
+
+    test("C-u alone (universal argument without digits) uses 4 as target line (this is different from origin Emacs behavior though)", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument(); // C-u alone gives 4
+
+      await emulator.runCommand("gotoLine");
+
+      assertCursorsEqual(activeTextEditor, [3, 0]); // Should go to line 4 -> index 3
+    });
+
+    test("Multiple C-u (C-u C-u) gives prefix argument 16 (this is different from origin Emacs behavior though)", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument(); // C-u (4)
+      await emulator.universalArgument(); // C-u (16)
+
+      await emulator.runCommand("gotoLine");
+
+      // Should go to line 16
+      assertCursorsEqual(activeTextEditor, [15, 0]); // Line 16 -> index 15
+    });
+  });
+
+  suite("prefix argument with mark-mode integration", () => {
+    test("prefix argument sets mark when not in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(0); // 20
+
+      await emulator.runCommand("gotoLine");
+
+      // Should be at line 20, and mark should be set at original position
+      assertCursorsEqual(activeTextEditor, [19, 0]);
+
+      // Test that mark was set by popping it
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [5, 3]);
+    });
+
+    test("preserves selection and does not set new mark when in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [5, 3]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(1);
+      await emulator.subsequentArgumentDigit(5); // 15
+
+      await emulator.runCommand("gotoLine");
+
+      // Should have selection from original position to target line
+      assertSelectionsEqual(activeTextEditor, [5, 3, 14, 0]);
+
+      // If no new mark was added to the mark ring, popMark should return to the original position
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [5, 3]); // Should return to original position
+
+      // Try popMark again - if gotoLine didn't add a mark, cursor should stay at [5, 3]
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [5, 3]); // Should remain at original position
     });
   });
 
@@ -382,6 +413,26 @@ suite("GotoLine", () => {
       assertCursorsEqual(activeTextEditor, [19, 0]);
     });
 
+    test("terminates multi-cursor mode with prefix argument", async () => {
+      // Set up multiple cursors
+      activeTextEditor.selections = [
+        new vscode.Selection(5, 3, 5, 3),
+        new vscode.Selection(10, 2, 10, 2),
+        new vscode.Selection(15, 1, 15, 1),
+      ];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(2);
+      await emulator.subsequentArgumentDigit(5); // 25
+
+      await emulator.runCommand("gotoLine");
+
+      // Should have only one cursor at target line
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [24, 0]); // Line 25 -> index 24
+    });
+
     test("terminates multi-cursor mode in mark mode", async () => {
       // Set up multiple cursors
       activeTextEditor.selections = [
@@ -399,6 +450,27 @@ suite("GotoLine", () => {
       // Should have only one selection from original primary cursor to target
       assert.equal(activeTextEditor.selections.length, 1);
       assertSelectionsEqual(activeTextEditor, [5, 3, 19, 0]);
+    });
+
+    test("terminates multi-cursor mode in mark mode with prefix argument", async () => {
+      // Set up multiple cursors
+      activeTextEditor.selections = [
+        new vscode.Selection(5, 3, 5, 3),
+        new vscode.Selection(10, 2, 10, 2),
+        new vscode.Selection(15, 1, 15, 1),
+      ];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.universalArgument();
+      await emulator.subsequentArgumentDigit(3);
+      await emulator.subsequentArgumentDigit(0); // 30
+
+      await emulator.runCommand("gotoLine");
+
+      // Should have only one selection from original primary cursor to target
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertSelectionsEqual(activeTextEditor, [5, 3, 29, 0]); // Line 30 -> index 29
     });
 
     test("uses primary cursor anchor for mark mode", async () => {
@@ -476,6 +548,120 @@ suite("GotoLine", () => {
 
       // Should clamp to last line
       assertCursorsEqual(activeTextEditor, [lastLineNumber - 1, 0]);
+    });
+  });
+});
+
+suite("FindDefinitions", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `function foo() {
+  return bar();
+}
+
+function bar() {
+  return 42;
+}
+
+baz();
+`;
+    activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
+  });
+
+  teardown(async () => {
+    await cleanUpWorkspace();
+  });
+
+  suite("basic functionality", () => {
+    test("executes revealDefinition command", async () => {
+      setEmptyCursors(activeTextEditor, [1, 9]); // Position on "bar"
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.runCommand("findDefinitions");
+
+      assertCursorsEqual(activeTextEditor, [4, 9]); // Should move to "bar" definition
+    });
+
+    test("sets mark when not in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [1, 9]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.runCommand("findDefinitions");
+
+      // Should be at definition location
+      assertCursorsEqual(activeTextEditor, [4, 9]);
+
+      // Test that mark was set by popping it
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [1, 9]); // Should return to original position
+    });
+  });
+
+  suite("mark-mode integration", () => {
+    test("preserves selection and does not set new mark when in mark mode", async () => {
+      setEmptyCursors(activeTextEditor, [1, 9]);
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.runCommand("findDefinitions");
+
+      // Should have selection from original position to definition
+      assertSelectionsEqual(activeTextEditor, [1, 9, 4, 9]);
+
+      // If no new mark was added to the mark ring, popMark should return to the original position
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [1, 9]); // Should return to original position
+
+      // Try popMark again - if findDefinitions didn't add a mark, cursor should stay at [1, 9]
+      emulator.popMark();
+      assertCursorsEqual(activeTextEditor, [1, 9]); // Should remain at original position
+    });
+  });
+
+  suite("multi-cursor behavior", () => {
+    test("handles multiple selections (VSCode typically removes non-primary)", async () => {
+      activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      await emulator.runCommand("findDefinitions");
+
+      // Should be at definition location with only primary selection
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertCursorsEqual(activeTextEditor, [4, 9]);
+
+      // Test that marks were set for all original cursors
+      emulator.popMark();
+      // Should restore both original positions
+      assert.equal(activeTextEditor.selections.length, 2);
+      assertCursorsEqual(activeTextEditor, [1, 9], [2, 5]);
+    });
+
+    test("handles mark mode with multiple initial selections", async () => {
+      // Set up multiple cursors
+      activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
+
+      emulator = new EmacsEmulator(activeTextEditor);
+      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.runCommand("findDefinitions");
+
+      // Should restore only the primary anchor
+      assert.equal(activeTextEditor.selections.length, 1);
+      assertSelectionsEqual(activeTextEditor, [1, 9, 4, 9]);
+    });
+  });
+
+  suite("edge cases", () => {
+    test("handles command failure gracefully", async () => {
+      setEmptyCursors(activeTextEditor, [8, 0]); // Position on "baz()" that has no definition
+
+      emulator = new EmacsEmulator(activeTextEditor);
+
+      await emulator.runCommand("findDefinitions");
+
+      // Should not change the cursor position
+      assertCursorsEqual(activeTextEditor, [8, 0]);
     });
   });
 });
