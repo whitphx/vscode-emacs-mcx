@@ -613,15 +613,17 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.commands.executeCommand("setContext", "emacs-mcx.inMarkMode", false);
   }
 
-  public executeCommandWithPrefixArgument<T>(
+  public executeCommandWithPrefixArgument<T = unknown>(
     command: string,
     args: Unreliable<unknown> = undefined,
     prefixArgumentKey = "prefixArgument",
-  ): Thenable<T | undefined> {
+  ): Thenable<T> {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
-    this.prefixArgumentHandler.cancel();
 
-    return vscode.commands.executeCommand<T>(command, { ...args, [prefixArgumentKey]: prefixArgument });
+    return Promise.all([
+      this.prefixArgumentHandler.cancel(),
+      vscode.commands.executeCommand<T>(command, { ...args, [prefixArgumentKey]: prefixArgument }),
+    ]).then(([, result]) => result);
   }
 
   public getPrefixArgument(): number | undefined {
