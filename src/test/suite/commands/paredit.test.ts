@@ -265,7 +265,7 @@ suite("paredit.backward-kill-sexp", () => {
   (
     a b
   )
-
+  
 )`,
     );
     assertCursorsEqual(activeTextEditor, [4, 2]);
@@ -275,7 +275,7 @@ suite("paredit.backward-kill-sexp", () => {
     assertTextEqual(
       activeTextEditor,
       `(
-
+  
 )`,
     );
     assertCursorsEqual(activeTextEditor, [1, 2]);
@@ -305,7 +305,7 @@ suite("paredit.backward-kill-sexp", () => {
     assertTextEqual(
       activeTextEditor,
       `(
-
+  
 )`,
     );
     assertCursorsEqual(activeTextEditor, [1, 2]);
