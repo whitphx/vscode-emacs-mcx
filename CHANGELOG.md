@@ -6,6 +6,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 - Refactoring the config system, [#2301](https://github.com/whitphx/vscode-emacs-mcx/pull/2301).
 
+## [0.72.0] - 2025-07-08
+
+### Add
+
+- Assign arrow-up/down alongside `C-p`/`C-n` for widget navigation, [#2305](https://github.com/whitphx/vscode-emacs-mcx/pull/2305)
+
 ## [0.71.0] - 2025-07-07
 
 ### Add
