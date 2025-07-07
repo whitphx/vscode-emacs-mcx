@@ -5218,8 +5218,18 @@
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "up",
+        "command": "showPrevParameterHint",
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+      },
+      {
         "key": "ctrl+p",
         "command": "showPrevParameterHint",
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+      },
+      {
+        "key": "down",
+        "command": "showNextParameterHint",
         "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
       },
       {
@@ -5228,8 +5238,18 @@
         "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
       },
       {
+        "key": "up",
+        "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+      },
+      {
         "key": "ctrl+p",
         "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+      },
+      {
+        "key": "down",
+        "command": "selectNextSuggestion",
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
       },
       {
@@ -5238,8 +5258,18 @@
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
       },
       {
+        "key": "up",
+        "command": "list.focusUp",
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      },
+      {
         "key": "ctrl+p",
         "command": "list.focusUp",
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      },
+      {
+        "key": "down",
+        "command": "list.focusDown",
         "when": "listFocus && !inputFocus && !treestickyScrollFocused"
       },
       {
@@ -5248,8 +5278,18 @@
         "when": "listFocus && !inputFocus && !treestickyScrollFocused"
       },
       {
+        "key": "up",
+        "command": "workbench.action.quickOpenSelectPrevious",
+        "when": "inQuickOpen"
+      },
+      {
         "key": "ctrl+p",
         "command": "workbench.action.quickOpenSelectPrevious",
+        "when": "inQuickOpen"
+      },
+      {
+        "key": "down",
+        "command": "workbench.action.quickOpenSelectNext",
         "when": "inQuickOpen"
       },
       {
@@ -5258,8 +5298,18 @@
         "when": "inQuickOpen"
       },
       {
+        "key": "up",
+        "command": "selectPrevCodeAction",
+        "when": "codeActionMenuVisible"
+      },
+      {
         "key": "ctrl+p",
         "command": "selectPrevCodeAction",
+        "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "down",
+        "command": "selectNextCodeAction",
         "when": "codeActionMenuVisible"
       },
       {
