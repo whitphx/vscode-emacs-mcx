@@ -70,7 +70,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   private reload() {
     const emacsConfigs = vscode.workspace.getConfiguration("emacs-mcx");
 
-    // Disable forin rule here as we make accessors enumerable.`
     for (const option of Object.keys(this)) {
       let val: unknown = emacsConfigs[option];
       if (val !== null && val !== undefined) {
