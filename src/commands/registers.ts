@@ -277,7 +277,7 @@ export class RegisterNameCommand extends EmacsCommand {
   }
 
   // point-to-register, C-x r SPC <r>
-  public async runPoint(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
+  public runPoint(textEditor: vscode.TextEditor, registerName: string): void {
     const positions = textEditor.selections.map((selection) => selection.active);
     this.registers.set(registerName, {
       type: "position",

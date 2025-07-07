@@ -179,7 +179,7 @@ suite("moveToWindowLineTopBottom", () => {
   suite("mark mode behavior", () => {
     test("preserves selection when moving to middle", async () => {
       setEmptyCursors(activeTextEditor, [45, 0]);
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
 
       await emulator.runCommand("moveToWindowLineTopBottom");
 
@@ -194,7 +194,7 @@ suite("moveToWindowLineTopBottom", () => {
 
     test("preserves selection with prefix argument", async () => {
       setEmptyCursors(activeTextEditor, [45, 0]);
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
 
       const firstVisibleRange = activeTextEditor.visibleRanges[0];
       if (!firstVisibleRange) {

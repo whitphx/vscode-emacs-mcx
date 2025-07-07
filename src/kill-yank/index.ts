@@ -56,7 +56,7 @@ export class KillYanker implements vscode.Disposable {
     }
   }
 
-  public onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
+  public onDidChangeTextDocument = (e: vscode.TextDocumentChangeEvent): void => {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
       this.docChangedAfterYank = true;
@@ -64,14 +64,14 @@ export class KillYanker implements vscode.Disposable {
     }
 
     this.textChangeCount++;
-  }
+  };
 
-  public onDidChangeTextEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
+  public onDidChangeTextEditorSelection = (e: vscode.TextEditorSelectionChangeEvent): void => {
     if (e.textEditor === this.textEditor) {
       this.docChangedAfterYank = true;
       this.isAppending = false;
     }
-  }
+  };
 
   public async kill(
     ranges: readonly Range[],

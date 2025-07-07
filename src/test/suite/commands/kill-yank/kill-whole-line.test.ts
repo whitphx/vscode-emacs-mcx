@@ -72,7 +72,7 @@ abcdefghij
       test(`${mode} doesn't affect the behavior`, async () => {
         setEmptyCursors(activeTextEditor, [0, 0]);
         if (mode === "mark-mode") {
-          emulator.setMarkCommand();
+          await emulator.setMarkCommand();
         } else if (mode === "rectangle-mode") {
           emulator.rectangleMarkMode();
         }

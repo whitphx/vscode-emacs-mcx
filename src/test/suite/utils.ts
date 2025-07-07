@@ -24,9 +24,9 @@ export async function setupWorkspace(
   assert.ok(activeTextEditor);
 
   // Set EOL to LF for the tests to work even on Windows
-  await (activeTextEditor as TextEditor).edit((editBuilder) => editBuilder.setEndOfLine(eol));
+  await activeTextEditor.edit((editBuilder) => editBuilder.setEndOfLine(eol));
 
-  return activeTextEditor as TextEditor;
+  return activeTextEditor;
 }
 
 export async function clearTextEditor(textEditor: TextEditor, initializeWith = ""): Promise<void> {
@@ -69,7 +69,7 @@ export async function cleanUpWorkspace(): Promise<void> {
 
     vscode.commands.executeCommand("workbench.action.closeAllEditors").then(
       () => null,
-      (err) => {
+      (err: Error) => {
         clearInterval(interval);
         e(err);
       },

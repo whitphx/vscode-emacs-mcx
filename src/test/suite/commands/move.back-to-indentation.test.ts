@@ -26,7 +26,7 @@ non-indented-line with space
       [1, 6], // After the indentation
     ] as [number, number][]
   ).forEach((startPosition) => {
-    test(`moving from ${startPosition} to the indented text ([1, 4])`, async () => {
+    test(`moving from ${JSON.stringify(startPosition)} to the indented text ([1, 4])`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
       await emulator.runCommand("backToIndentation");
@@ -43,7 +43,7 @@ non-indented-line with space
       [3, 6], // After the indentation
     ] as [number, number][]
   ).forEach((startPosition) => {
-    test(`moving from ${startPosition} to the indented text ([1, 4]) with a line containing another white space`, async () => {
+    test(`moving from ${JSON.stringify(startPosition)} to the indented text ([1, 4]) with a line containing another white space`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
       await emulator.runCommand("backToIndentation");
@@ -58,7 +58,7 @@ non-indented-line with space
       [0, 2],
     ] as [number, number][]
   ).forEach((startPosition) => {
-    test(`moving from ${startPosition} to the beginning of the line ([0, 0]) if there is no indentation`, async () => {
+    test(`moving from ${JSON.stringify(startPosition)} to the beginning of the line ([0, 0]) if there is no indentation`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
       await emulator.runCommand("backToIndentation");
@@ -73,7 +73,7 @@ non-indented-line with space
       [2, 2],
     ] as [number, number][]
   ).forEach((startPosition) => {
-    test(`moving from ${startPosition} to the beginning of the line ([2, 0]) if there is no indentation`, async () => {
+    test(`moving from ${JSON.stringify(startPosition)} to the beginning of the line ([2, 0]) if there is no indentation`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
       await emulator.runCommand("backToIndentation");
@@ -88,7 +88,7 @@ non-indented-line with space
       [4, 2],
     ] as [number, number][]
   ).forEach((startPosition) => {
-    test(`moving from ${startPosition} to the end of the line ([4, 4]) if there is indentation but no content`, async () => {
+    test(`moving from ${JSON.stringify(startPosition)} to the end of the line ([4, 4]) if there is indentation but no content`, async () => {
       setEmptyCursors(activeTextEditor, startPosition);
 
       await emulator.runCommand("backToIndentation");

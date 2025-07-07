@@ -32,11 +32,11 @@ export function run(): Promise<void> {
             }
           });
         } catch (err) {
-          e(err);
+          e(err instanceof Error ? err : new Error(String(err)));
         }
       })
       .catch((err) => {
-        e(err);
+        e(err instanceof Error ? err : new Error(String(err)));
       });
   });
 }

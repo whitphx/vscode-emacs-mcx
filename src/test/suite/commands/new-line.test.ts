@@ -82,7 +82,7 @@ eols.forEach(([eol, eolStr]) => {
         test("it cancels mark-mode and does NOT remove the selected text", async () => {
           // Set up mark-mode
           setEmptyCursors(activeTextEditor, [0, 0]);
-          emulator.setMarkCommand();
+          await emulator.setMarkCommand();
           await emulator.runCommand("forwardChar");
           assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
 
@@ -95,7 +95,7 @@ eols.forEach(([eol, eolStr]) => {
 
           // Then, next mark-mode works
           setEmptyCursors(activeTextEditor, [0, 0]);
-          emulator.setMarkCommand();
+          await emulator.setMarkCommand();
           await emulator.runCommand("forwardChar");
           assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
         });

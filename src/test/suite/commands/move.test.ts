@@ -35,7 +35,7 @@ suite("moveBeginning/EndOfLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0));
       });
@@ -50,7 +50,7 @@ suite("moveBeginning/EndOfLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, 1000));
       });
@@ -89,7 +89,7 @@ suite("moveBeginning/EndOfLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, lastWrappedLineStart));
       });
@@ -104,7 +104,7 @@ suite("moveBeginning/EndOfLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, wrappedLineWidth));
       });
@@ -151,7 +151,7 @@ suite("nextLine/previousLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("nextLine");
         assertSelectionsEqual(activeTextEditor, [1, 0, 1, wrappedLineWidth]);
       });
@@ -166,7 +166,7 @@ suite("nextLine/previousLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, wrappedLineWidth]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("previousLine");
         assertSelectionsEqual(activeTextEditor, [1, wrappedLineWidth, 1, 0]);
       });
@@ -190,7 +190,7 @@ suite("nextLine/previousLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("nextLine");
         assertSelectionsEqual(activeTextEditor, [1, 0, 2, 0]);
       });
@@ -205,7 +205,7 @@ suite("nextLine/previousLine", () => {
 
       test("with mark", async () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
         await emulator.runCommand("previousLine");
         assertSelectionsEqual(activeTextEditor, [1, 0, 0, 0]);
       });
@@ -240,11 +240,11 @@ suite("scroll-up/down-command", () => {
 
   suite("scroll-up-command", () => {
     test("it delegates to the cursorPageDown command", async () => {
-      sinon.spy(vscode.commands, "executeCommand");
+      const spiedExecuteCommand = sinon.spy(vscode.commands, "executeCommand");
+
       await emulator.runCommand("scrollUpCommand");
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      assert(vscode.commands.executeCommand.calledWithExactly("cursorPageDown"), "cursorPageDown is not called");
+      assert(spiedExecuteCommand.calledWithExactly("cursorPageDown"), "cursorPageDown is not called");
+
       sinon.restore();
     });
 
@@ -308,7 +308,7 @@ suite("scroll-up/down-command", () => {
       const initVisibleStartLine = visibleRange.start.line;
       const initCursorPosition = activeTextEditor.selection.active;
 
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
 
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(12);
@@ -330,11 +330,11 @@ suite("scroll-up/down-command", () => {
 
   suite("scroll-down-command", () => {
     test("it delegates to the cursorPageUp command", async () => {
-      sinon.spy(vscode.commands, "executeCommand");
+      const spiedExecuteCommand = sinon.spy(vscode.commands, "executeCommand");
+
       await emulator.runCommand("scrollDownCommand");
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      assert(vscode.commands.executeCommand.calledWithExactly("cursorPageUp"), "cursorPageUp is not called");
+      assert(spiedExecuteCommand.calledWithExactly("cursorPageUp"), "cursorPageUp is not called");
+
       sinon.restore();
     });
 
@@ -398,7 +398,7 @@ suite("scroll-up/down-command", () => {
       const initVisibleStartLine = visibleRange.start.line;
       const initCursorPosition = activeTextEditor.selection.active;
 
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
 
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(12);
