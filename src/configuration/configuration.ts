@@ -72,14 +72,16 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
     // Disable forin rule here as we make accessors enumerable.`
     for (const option in this) {
-      let val = emacsConfigs[option];
-      if (val !== null && val !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (val.constructor.name === Object.name) {
-          val = Configuration.unproxify(val);
+      if (Object.prototype.hasOwnProperty.call(this, option)) {
+        let val = emacsConfigs[option];
+        if (val !== null && val !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          if (val.constructor.name === Object.name) {
+            val = Configuration.unproxify(val);
+          }
+          // @ts-expect-error Type unsafe
+          this[option] = val;
         }
-        // @ts-expect-error Type unsafe
-        this[option] = val;
       }
     }
 
