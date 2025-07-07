@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.69.1] - 2025-07-08
+
+### Fix
+
+- Remove floating promises, [#2300](https://github.com/whitphx/vscode-emacs-mcx/pull/2300).
+
 ## [0.69.0] - 2025-07-08
 
 ### Add
