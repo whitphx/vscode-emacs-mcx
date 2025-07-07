@@ -4,7 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
-## [0.68.0] - 2025-07-0
+## [0.69.0] - 2025-07-08
+
+### Add
+
+- `goto-line` accepts a prefix argument to jump to the specified line number, [#2299](https://github.com/whitphx/vscode-emacs-mcx/pull/2299).
+
+## [0.68.0] - 2025-07-07
 
 ### Add
 
