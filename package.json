@@ -33,6 +33,11 @@
   "extensionKind": [
     "ui"
   ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
   "main": "./dist/extension.js",
   "browser": "./dist/web/extension.js",
   "contributes": {
