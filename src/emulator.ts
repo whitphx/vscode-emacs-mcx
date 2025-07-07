@@ -158,7 +158,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
 
     this.commandRegistry = new EmacsCommandRegistry();
-    this.afterCommand = this.afterCommand.bind(this);
 
     this.commandRegistry.register(new MoveCommands.ForwardChar(this));
     this.commandRegistry.register(new MoveCommands.BackwardChar(this));
@@ -455,15 +454,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       throw Error(`command ${commandName} is not found`);
     }
 
-    if (command.isIntermediateCommand) {
-      return command.run(this.textEditor, this.isInMarkMode, this.getPrefixArgument(), args);
-    }
-
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
 
-    const ret = command.run(this.textEditor, this.isInMarkMode, prefixArgument, args);
-    this.afterCommand();
-    return ret;
+    return Promise.all([
+      command.isIntermediateCommand ? null : this.prefixArgumentHandler.cancel(),
+      command.run(this.textEditor, this.isInMarkMode, prefixArgument, args),
+    ]).then(([, result]) => result);
   }
 
   /**
@@ -645,10 +641,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   private hasNonEmptySelection(): boolean {
     return this.textEditor.selections.some((selection) => !selection.isEmpty);
-  }
-
-  private afterCommand() {
-    return this.prefixArgumentHandler.cancel();
   }
 
   public onDidInterruptTextEditor(event: InterruptEvent) {
