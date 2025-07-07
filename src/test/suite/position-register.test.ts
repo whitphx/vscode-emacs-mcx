@@ -59,7 +59,7 @@ suite("Point registers", () => {
   test("point-to-register doesn't interrupt mark mode and saves only the active positions", async () => {
     // Save position
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("pointToRegister");

@@ -101,7 +101,7 @@ BCDEFGHIJ`,
       test(`${mode} doesn't affect the behavior`, async () => {
         setEmptyCursors(activeTextEditor, [0, 0]);
         if (mode === "mark-mode") {
-          emulator.setMarkCommand();
+          await emulator.setMarkCommand();
         } else if (mode === "rectangle-mode") {
           emulator.rectangleMarkMode();
         }
@@ -204,7 +204,7 @@ abcdefghij
       ],
     ];
 
-    const otherOps: Array<[string, () => void]> = [["cancel", () => emulator.cancel()]];
+    const otherOps: Array<[string, () => Promise<void>]> = [["cancel", () => emulator.cancel()]];
 
     const ops: Array<[string, () => Thenable<unknown> | void]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {

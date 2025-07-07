@@ -239,7 +239,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(1);
       await emulator.subsequentArgumentDigit(5); // 15
@@ -282,7 +282,7 @@ suite("GotoLine", () => {
       mockMinibuffer = new MockMinibuffer(["10"]);
       emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
 
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("gotoLine");
 
       // Should create selection from original position to target line
@@ -295,7 +295,7 @@ suite("GotoLine", () => {
       mockMinibuffer = new MockMinibuffer(["10"]);
       emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
 
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("gotoLine");
 
       // Should have selection from original position to target line (gotoLine in mark mode preserves selection)
@@ -444,7 +444,7 @@ suite("GotoLine", () => {
       mockMinibuffer = new MockMinibuffer(["20"]);
       emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
 
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("gotoLine");
 
       // Should have only one selection from original primary cursor to target
@@ -461,7 +461,7 @@ suite("GotoLine", () => {
       ];
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(3);
       await emulator.subsequentArgumentDigit(0); // 30
@@ -484,7 +484,7 @@ suite("GotoLine", () => {
         new vscode.Selection(15, 1, 15, 1),
       ];
 
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
       // Move primary cursor to a different position
       await emulator.runCommand("forwardChar");
       await emulator.runCommand("forwardChar");
@@ -604,7 +604,7 @@ baz();
       setEmptyCursors(activeTextEditor, [1, 9]);
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("findDefinitions");
 
       // Should have selection from original position to definition
@@ -643,7 +643,7 @@ baz();
       activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
 
       emulator = new EmacsEmulator(activeTextEditor);
-      emulator.setMarkCommand(); // Enter mark mode
+      await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("findDefinitions");
 
       // Should restore only the primary anchor

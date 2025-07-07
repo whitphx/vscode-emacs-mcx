@@ -360,7 +360,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
     test(`${mode} doesn't affect the behavior of killWord`, async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
       if (mode === "mark-mode") {
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
       } else if (mode === "rectangle-mode") {
         emulator.rectangleMarkMode();
       }
@@ -375,7 +375,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
     test(`${mode} doesn't affect the behavior of backwardKillWord`, async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
       if (mode === "mark-mode") {
-        emulator.setMarkCommand();
+        await emulator.setMarkCommand();
       } else if (mode === "rectangle-mode") {
         emulator.rectangleMarkMode();
       }

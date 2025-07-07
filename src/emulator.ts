@@ -465,11 +465,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   /**
    * C-<SPC>
    */
-  public setMarkCommand(): void {
+  public async setMarkCommand(): Promise<void> {
     if (this.prefixArgumentHandler.precedingSingleCtrlU()) {
       // C-u C-<SPC>
-      this.prefixArgumentHandler.cancel();
-      return this.popMark();
+      this.popMark();
+      await this.prefixArgumentHandler.cancel();
+      return;
     }
 
     if (this.isInMarkMode && !this.hasNonEmptySelection()) {
@@ -529,7 +530,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   /**
    * Invoked by C-g
    */
-  public cancel(): void {
+  public async cancel(): Promise<void> {
     if (this.rectMode) {
       this.exitRectangleMarkMode();
     }
@@ -547,9 +548,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.onDidInterruptTextEditor({ reason: "user-cancel" });
 
     this.killYanker.cancelKillAppend();
-    this.prefixArgumentHandler.cancel();
 
     MessageManager.showMessage("Quit");
+
+    await this.prefixArgumentHandler.cancel();
   }
 
   public enterMarkMode(pushMark = true): void {

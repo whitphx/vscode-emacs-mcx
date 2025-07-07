@@ -56,7 +56,7 @@ suite("isearch", () => {
 
   test("isearchExit keeps the selection of the mark mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 1]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
 
     await emulator.runCommand("isearchForward");
 

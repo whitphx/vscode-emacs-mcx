@@ -46,7 +46,7 @@ KLMNOPQRST`;
       new vscode.Selection(2, 2, 2, 4),
     ]);
 
-    emulator.cancel();
+    await emulator.cancel();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 4, 2, 4)]);
   });
@@ -78,7 +78,7 @@ KLMNOPQRST`;
       new vscode.Selection(2, 4, 2, 2),
       new vscode.Selection(1, 4, 1, 2),
     ]);
-    emulator.cancel();
+    await emulator.cancel();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 1, 2)]);
   });
@@ -375,9 +375,9 @@ KLMNOPQRST`,
     assertTextEqual(
       activeTextEditor,
       `23
-  
+
 cd
-  
+
 CD
   `,
     );

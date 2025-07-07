@@ -40,7 +40,7 @@ suite("paredit commands", () => {
     test("with mark-mode", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
       await emulator.runCommand("paredit.forwardSexp");
 
       assertSelectionsEqual(activeTextEditor, new Selection(0, 0, 0, 5));
@@ -59,7 +59,7 @@ suite("paredit commands", () => {
     test("with mark-mode", async () => {
       setEmptyCursors(activeTextEditor, [0, 5]);
 
-      emulator.setMarkCommand();
+      await emulator.setMarkCommand();
       await emulator.runCommand("paredit.backwardSexp");
 
       assertSelectionsEqual(activeTextEditor, new Selection(0, 5, 0, 0));
@@ -265,7 +265,7 @@ suite("paredit.backward-kill-sexp", () => {
   (
     a b
   )
-  
+
 )`,
     );
     assertCursorsEqual(activeTextEditor, [4, 2]);
@@ -275,7 +275,7 @@ suite("paredit.backward-kill-sexp", () => {
     assertTextEqual(
       activeTextEditor,
       `(
-  
+
 )`,
     );
     assertCursorsEqual(activeTextEditor, [1, 2]);
@@ -305,7 +305,7 @@ suite("paredit.backward-kill-sexp", () => {
     assertTextEqual(
       activeTextEditor,
       `(
-  
+
 )`,
     );
     assertCursorsEqual(activeTextEditor, [1, 2]);
@@ -573,7 +573,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
   test("forwardSexp: the selection is revealed at the active cursor", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
 
     await emulator.runCommand("paredit.forwardSexp");
 
@@ -586,7 +586,7 @@ suite("paredit commands with a long text that requires revealing", () => {
 
   test("backwardSexp: the selection is revealed at the active cursor", async () => {
     setEmptyCursors(activeTextEditor, [1000, 1]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
 
     await emulator.runCommand("paredit.backwardSexp");
 

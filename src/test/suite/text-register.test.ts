@@ -27,7 +27,7 @@ suite("Text registers", () => {
 
   test("copy and paste", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -40,7 +40,7 @@ suite("Text registers", () => {
 
     // Empty string
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("copyToRegister");
     await emulator.runCommand("registerNameCommand", ["b"]);
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
@@ -67,7 +67,7 @@ suite("Text registers", () => {
 
   test("copy with prefix argument that deletes region", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -81,7 +81,7 @@ suite("Text registers", () => {
 
     // Empty string
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyToRegister");
     await emulator.runCommand("registerNameCommand", ["b"]);
@@ -104,7 +104,7 @@ suite("Text registers", () => {
 
   test("copy and paste rectangle", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -148,7 +148,7 @@ suite("Text registers", () => {
 
   test("copy rectangle with prefix argument that deletes region", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");

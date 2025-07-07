@@ -36,7 +36,7 @@ KLMNOPQRST`;
     // On the first editor, set the mark and move the cursor.
     await emulator.switchTextEditor(firstTextEditor);
     setEmptyCursors(firstTextEditor, [0, 0]);
-    emulator.setMarkCommand();
+    await emulator.setMarkCommand();
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
     assert.strictEqual(emulator.isInMarkMode, true);
@@ -55,7 +55,7 @@ KLMNOPQRST`;
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(0, 0, 1, 1));
 
     // Disable the mark mode on the first editor.
-    emulator.cancel();
+    await emulator.cancel();
     assert.strictEqual(emulator.isInMarkMode, false);
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(1, 1, 1, 1));
 
@@ -110,7 +110,7 @@ KLMNOPQRST`;
     ); // Selected region is a rectangle.
 
     // Disable the mark mode on the first editor.
-    emulator.cancel();
+    await emulator.cancel();
     assert.strictEqual(emulator.inRectMarkMode, false);
     assertSelectionsEqual(firstTextEditor, new vscode.Selection(2, 2, 2, 2));
 
