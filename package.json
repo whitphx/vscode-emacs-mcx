@@ -1860,26 +1860,6 @@
       },
       {
         "key": "up",
-        "command": "selectPrevSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-      },
-      {
-        "key": "ctrl+p",
-        "command": "selectPrevSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-      },
-      {
-        "key": "up",
-        "command": "showPrevParameterHint",
-        "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
-      },
-      {
-        "key": "ctrl+p",
-        "command": "showPrevParameterHint",
-        "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
-      },
-      {
-        "key": "up",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
@@ -1913,26 +1893,6 @@
         "key": "ctrl+n",
         "command": "emacs-mcx.nextLine",
         "when": "terminalFocus"
-      },
-      {
-        "key": "down",
-        "command": "selectNextSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-      },
-      {
-        "key": "ctrl+n",
-        "command": "selectNextSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-      },
-      {
-        "key": "down",
-        "command": "showNextParameterHint",
-        "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
-      },
-      {
-        "key": "ctrl+n",
-        "command": "showNextParameterHint",
-        "when": "parameterHintsMultipleSignatures && parameterHintsVisible && textInputFocus"
       },
       {
         "key": "down",
@@ -5254,13 +5214,33 @@
       },
       {
         "key": "ctrl+p",
-        "command": "selectPrevQuickFix",
-        "when": "editorFocus && quickFixWidgetVisible"
+        "command": "showPrevParameterHint",
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
       },
       {
         "key": "ctrl+n",
-        "command": "selectNextQuickFix",
-        "when": "editorFocus && quickFixWidgetVisible"
+        "command": "showNextParameterHint",
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "list.focusUp",
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "list.focusDown",
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
       },
       {
         "key": "ctrl+p",
@@ -5274,13 +5254,23 @@
       },
       {
         "key": "ctrl+p",
-        "command": "list.focusUp",
-        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+        "command": "selectPrevCodeAction",
+        "when": "codeActionMenuVisible"
       },
       {
         "key": "ctrl+n",
-        "command": "list.focusDown",
-        "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+        "command": "selectNextCodeAction",
+        "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.quickOpenNavigateNextInFilePicker",
+        "when": "inFilesPicker && inQuickOpen"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
+        "when": "inFilesPicker && inQuickOpen"
       },
       {
         "key": "ctrl+m",
