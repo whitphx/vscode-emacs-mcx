@@ -6,19 +6,25 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 - Refactoring the config system, [#2301](https://github.com/whitphx/vscode-emacs-mcx/pull/2301).
 
-## [0.70.0] - 2025-07-08
+## [0.71.0] - 2025-07-07
+
+### Add
+
+- Support Workspace Trust, [#2303](https://github.com/whitphx/vscode-emacs-mcx/pull/2303).
+
+## [0.70.0] - 2025-07-07
 
 ### Change
 
 - Assign `C-p` and `C-n` for up/down navigation in various widgets and remove invalid command assignments, [#2302](https://github.com/whitphx/vscode-emacs-mcx/pull/2302)
 
-## [0.69.1] - 2025-07-08
+## [0.69.1] - 2025-07-07
 
 ### Fix
 
 - Remove floating promises, [#2300](https://github.com/whitphx/vscode-emacs-mcx/pull/2300).
 
-## [0.69.0] - 2025-07-08
+## [0.69.0] - 2025-07-07
 
 ### Add
 
