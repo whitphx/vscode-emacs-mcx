@@ -13,5 +13,16 @@
     "editor.tabSize": 2,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["gitmodules", "isearch", "Keymap", "Minibuffer", "nvmrc", "openvsx", "paredit", "Sexp"]
+  "cSpell.words": [
+    "gitmodules",
+    "Interruptible",
+    "isearch",
+    "Keymap",
+    "Minibuffer",
+    "nvmrc",
+    "openvsx",
+    "paredit",
+    "Sexp"
+  ],
+  "emacs-mcx.useMetaPrefixMacCmd": false
 }

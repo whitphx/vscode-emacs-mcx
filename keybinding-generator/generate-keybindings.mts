@@ -7,6 +7,7 @@ export interface KeyBindingSource {
   when?: string;
   whens?: string[];
   args?: unknown;
+  isearchInterruptible?: boolean | "interruptOnly";
 }
 
 export interface KeyBinding {
@@ -57,6 +58,25 @@ function addWhenCond(base: string | undefined, additional: string): string {
 function replaceAll(src: string, search: string, replacement: string) {
   return src.split(search).join(replacement); // split + join = replaceAll
 }
+
+const FIND_EDIT_KEYS = [
+  "up",
+  "down",
+  "left",
+  "right",
+  "home",
+  "end",
+  "ctrl+f",
+  "ctrl+right",
+  "ctrl+b",
+  "ctrl+left",
+  "ctrl+a",
+  "ctrl+e",
+  "ctrl+n",
+  "ctrl+p",
+];
+const NO_FIND_EXIT_KEYS_WIN_LINUX = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
+const NO_FIND_EXIT_KEYS_MAC = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
 
 export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   let keys: string[];
@@ -115,9 +135,12 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
 
       // Convert "meta" specifications
       if (key.includes("meta")) {
+        const altKey = replaceAll(key, "meta", "alt");
+        const macCmdKey = replaceAll(key, "meta", "cmd");
+
         // Generate a keybinding using ALT as meta.
         keybindings.push({
-          key: replaceAll(key, "meta", "alt"),
+          key: altKey,
           command: src.command,
           when: addWhenCond(when, "!config.emacs-mcx.useMetaPrefixMacCmd"),
           ...(src.args ? { args: src.args } : {}),
@@ -125,8 +148,8 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
 
         // Generate a keybinding using CMD as meta for macOS.
         keybindings.push({
-          key: replaceAll(key, "meta", "alt"),
-          mac: replaceAll(key, "meta", "cmd"),
+          key: altKey,
+          mac: macCmdKey,
           command: src.command,
           when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
           ...(src.args ? { args: src.args } : {}),
@@ -163,6 +186,57 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       }
     });
   });
+
+  // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
+  keybindings.forEach((binding) => {
+    if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
+      const isWinOrLinuxOrSomethingElse = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms.
+      binding.when = addWhenCond(binding.when, `!(${isWinOrLinuxOrSomethingElse} && findWidgetVisible)`);
+    }
+    const macKey = binding.mac ?? binding.key;
+    if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
+      const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
+      binding.when = addWhenCond(binding.when, `!(${isMacOrSomethingElse} && findWidgetVisible)`);
+    }
+  });
+
+  // Add `isearchExit` keybindings if necessary
+  if (src.isearchInterruptible === true || src.isearchInterruptible === "interruptOnly") {
+    const isearchExitKeybindings: KeyBinding[] = [];
+    keybindings.forEach((binding) => {
+      if (binding.key != null) {
+        const whenElements = [];
+        whenElements.push("editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing");
+        if (FIND_EDIT_KEYS.includes(binding.key)) {
+          // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
+          whenElements.unshift("!config.emacs-mcx.cursorMoveOnFindWidget");
+        }
+        if (NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
+          // Enable isearchExit for this key when the platform is NOT win/linux.
+          // In other platforms such as `isWeb`, disable isearchExit as a mild default.
+          whenElements.unshift("isMac");
+        }
+        const macKey = binding.mac ?? binding.key;
+        if (NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
+          // Enable isearchExit for this key when the platform is NOT macOS.
+          // In other platforms such as `isWeb`, disable isearchExit as a mild default.
+          whenElements.unshift("(isLinux || isWindows)");
+        }
+        isearchExitKeybindings.push({
+          key: binding.key,
+          command: "emacs-mcx.isearchExit",
+          when: whenElements.join(" && "),
+          args:
+            src.isearchInterruptible === "interruptOnly"
+              ? undefined
+              : {
+                  then: src.command,
+                },
+        });
+      }
+    });
+    keybindings.push(...isearchExitKeybindings);
+  }
 
   return keybindings;
 }

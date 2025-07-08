@@ -13,113 +13,57 @@
     {
       "keys": ["right", "ctrl+f"],
       "command": "emacs-mcx.forwardChar",
-      "whens": ["editorTextFocus", "terminalFocus"] // TODO: `!suggestWidgetVisible` should be added like up/down?
-    },
-    {
-      "keys": ["right", "ctrl+f"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.forwardChar"
-      }
+      "whens": ["editorTextFocus", "terminalFocus"],
+      "isearchInterruptible": true
     },
     // left
     {
       "keys": ["left", "ctrl+b"],
       "command": "emacs-mcx.backwardChar",
-      "whens": ["editorTextFocus", "terminalFocus"]
-    },
-    {
-      "keys": ["left", "ctrl+b"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.backwardChar"
-      }
+      "whens": ["editorTextFocus", "terminalFocus"],
+      "isearchInterruptible": true
     },
     // up
     {
       "keys": ["up", "ctrl+p"],
       "command": "emacs-mcx.previousLine",
-      "whens": ["editorTextFocus && !suggestWidgetVisible", "terminalFocus"]
-    },
-    {
-      "keys": ["up", "ctrl+p"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.previousLine"
-      }
+      "whens": ["editorTextFocus", "terminalFocus"],
+      "isearchInterruptible": true
     },
     // down
     {
       "keys": ["down", "ctrl+n"],
       "command": "emacs-mcx.nextLine",
-      "whens": ["editorTextFocus", "terminalFocus"]
-    },
-    {
-      "keys": ["down", "ctrl+n"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.nextLine"
-      }
+      "whens": ["editorTextFocus", "terminalFocus"],
+      "isearchInterruptible": true
     },
     // home
     {
       "keys": ["home", "ctrl+a"],
       "command": "emacs-mcx.moveBeginningOfLine",
-      "whens": ["editorTextFocus", "terminalFocus"]
-    },
-    {
-      "keys": ["home", "ctrl+a"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.moveBeginningOfLine"
-      }
+      "whens": ["editorTextFocus", "terminalFocus"],
+      "isearchInterruptible": true
     },
     // end
     {
       "keys": ["end", "ctrl+e"],
       "command": "emacs-mcx.moveEndOfLine",
-      "whens": ["editorTextFocus", "terminalFocus"]
-    },
-    {
-      "keys": ["end", "ctrl+e"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.moveEndOfLine"
-      }
+      "whens": ["editorTextFocus", "terminalFocus"],
+      "isearchInterruptible": true
     },
     // forward word (meta + f)
     {
       "key": "meta+f",
       "command": "emacs-mcx.forwardWord",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "meta+f",
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.forwardWord"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // backward word (meta + b)
     {
       "key": "meta+b",
       "command": "emacs-mcx.backwardWord",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "meta+b",
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.backwardWord"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // right-word (ctrl + <right>)
     // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
@@ -127,15 +71,8 @@
     {
       "keys": ["ctrl+right", "meta+right"],
       "command": "emacs-mcx.forwardWord",
-      "when": "editorTextFocus"
-    },
-    {
-      "keys": ["ctrl+right", "meta+right"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.forwardWord"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // left word (ctrl + <left>)
     // In left-to-right languages, left-word is same as backward-word, and VSCode is not supporting RTL now.
@@ -143,57 +80,29 @@
     {
       "keys": ["ctrl+left", "meta+left"],
       "command": "emacs-mcx.backwardWord",
-      "when": "editorTextFocus"
-    },
-    {
-      "keys": ["ctrl+left", "meta+left"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-      "args": {
-        "then": "emacs-mcx.backwardWord"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // back-to-indentation (meta + m)
     {
       "key": "meta+m",
       "command": "emacs-mcx.backToIndentation",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "meta+m",
-      "command": "emacs-mcx.isearchExit",
-      "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.backToIndentation"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // page down (ctrl + v)
     {
       "keys": ["pagedown", "ctrl+v"],
       "command": "emacs-mcx.scrollUpCommand",
-      "when": "editorTextFocus && !suggestWidgetVisible"
-    },
-    {
-      "keys": ["pagedown", "ctrl+v"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.scrollUpCommand"
-      }
+      "when": "editorTextFocus && !suggestWidgetVisible",
+      "isearchInterruptible": true
     },
     // page up (meta + v)
     {
       "keys": ["pageup", "meta+v"],
       "command": "emacs-mcx.scrollDownCommand",
-      "when": "editorTextFocus && !suggestWidgetVisible"
-    },
-    {
-      "keys": ["pageup", "meta+v"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.scrollDownCommand"
-      }
+      "when": "editorTextFocus && !suggestWidgetVisible",
+      "isearchInterruptible": true
     },
     // backward paragraph (meta + shift + [)
     {
@@ -211,29 +120,15 @@
     {
       "key": "meta+shift+.",
       "command": "emacs-mcx.endOfBuffer",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "meta+shift+.",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.endOfBuffer"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // beginning of buffer (meta + <)
     {
       "key": "meta+shift+,",
       "command": "emacs-mcx.beginningOfBuffer",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "meta+shift+,",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.beginningOfBuffer"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     // move-to-window-line-top-bottom
     {
@@ -245,15 +140,8 @@
     {
       "keys": ["meta+g meta+g", "meta+g g"],
       "command": "emacs-mcx.gotoLine",
-      "when": "!terminalFocus"
-    },
-    {
-      "keys": ["meta+g meta+g", "meta+g g"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.gotoLine"
-      }
+      "when": "!terminalFocus",
+      "isearchInterruptible": true
     },
     {
       "key": "escape g",
@@ -438,20 +326,9 @@
       "when": "editorTextFocus && !editorReadonly"
     },
     {
-      "key": "ctrl+w",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
-    },
-    {
       "key": "meta+w",
       "command": "emacs-mcx.copyRegion",
       "when": "editorTextFocus"
-    },
-    {
-      // TODO: This behavior is different from the original one.
-      "key": "meta+w",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
     },
     {
       "key": "ctrl+y",
@@ -463,115 +340,71 @@
       "command": "emacs-mcx.yank",
       "when": "emacs-mcx.minibufferReading"
     },
-    {
-      "key": "ctrl+y",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
-    },
+    // {
+    // TODO: Find a command to set the search string.
+    //   "key": "ctrl+y",
+    //   "command": "emacs-mcx.isearchExit",
+    //   "when": "editorFocus && findWidgetVisible && !isComposing"
+    // },
     {
       "key": "meta+y",
       "command": "emacs-mcx.yank-pop",
       "when": "editorTextFocus && !editorReadonly"
     },
-    {
-      "key": "meta+y",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
-    },
+    // {
+    // TODO: Find a command to set the search string.
+    //   "key": "meta+y",
+    //   "command": "emacs-mcx.isearchExit",
+    //   "when": "editorFocus && findWidgetVisible && !isComposing"
+    // },
     {
       "key": "ctrl+o",
       "command": "lineBreakInsert",
-      "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-      "key": "ctrl+o",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
+      "when": "editorTextFocus && !editorReadonly",
+      "isearchInterruptible": true
     },
     {
       "key": "ctrl+m",
       "command": "emacs-mcx.newLine",
-      "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-      "key": "ctrl+m",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
+      "when": "editorTextFocus && !editorReadonly",
+      "isearchInterruptible": "interruptOnly"  // C-m in isearch exits isearch but doesn't insert a new line.
     },
     {
       "key": "ctrl+j",
       "command": "emacs-mcx.newLine",
       "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-      "key": "ctrl+j",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing"
+      // In original Emacs, `C-j` in isearch adds "\n" **to the search string**
+      // TODO: Find a way to add "\n" to the search string in isearch in VSCode.
     },
     {
       "key": "ctrl+x ctrl+o",
       "command": "emacs-mcx.deleteBlankLines",
-      "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-      "key": "ctrl+x ctrl+o",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "emacs-mcx.deleteBlankLines"
-      }
+      "when": "editorTextFocus && !editorReadonly",
+      "isearchInterruptible": true
     },
     {
       "key": "ctrl+x h",
       "command": "editor.action.selectAll",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "ctrl+x h",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "editor.action.selectAll"
-      }
+      "when": "editorTextFocus",
+      "isearchInterruptible": true
     },
     {
       "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
       "command": "undo",
-      "when": "editorTextFocus && !editorReadonly"
+      "when": "editorTextFocus && !editorReadonly",
+      "isearchInterruptible": true
     },
     {
-      "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "undo"
-      }
-    },
-    {
-      "key": "ctrl+;",
+      "key": "ctrl+;",  // TODO: `C-x C-;` is true in the original Emacs.
       "command": "editor.action.commentLine",
-      "when": "editorTextFocus && !editorReadonly"
+      "when": "editorTextFocus && !editorReadonly",
+      "isearchInterruptible": true
     },
     {
-      "key": "ctrl+;",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "editor.action.commentLine"
-      }
-    },
-    {
-      "key": "meta+;",
+      "key": "meta+;",  // TODO: This is also different from the original Emacs.
       "command": "editor.action.blockComment",
-      "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-      "key": "meta+;",
-      "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !isComposing",
-      "args": {
-        "then": "editor.action.blockComment"
-      }
+      "when": "editorTextFocus && !editorReadonly",
+      "isearchInterruptible": true
     },
     {
       "key": "ctrl+x ctrl+l",
@@ -627,7 +460,7 @@
     {
       "key": "enter",
       "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing"
+      "when": "editorFocus && findInputFocussed && !isComposing"
     },
     { "key": "ctrl+g", "command": "noop", "when": "sideBarFocus" },
     // Assign "C-g" to the commands which are assigned to "escape" by default.
