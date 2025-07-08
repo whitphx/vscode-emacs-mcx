@@ -2316,7 +2316,7 @@
       {
         "key": "ctrl+v",
         "command": "emacs-mcx.scrollUpCommand",
-        "when": "editorTextFocus && !suggestWidgetVisible && !(!isMac && findWidgetVisible)"
+        "when": "editorTextFocus && !suggestWidgetVisible && !(!isMac && (findInputFocussed || replaceInputFocussed))"
       },
       {
         "key": "pagedown",
@@ -2329,7 +2329,7 @@
       {
         "key": "ctrl+v",
         "command": "emacs-mcx.isearchExit",
-        "when": "isMac && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && !(!isMac && (findInputFocussed || replaceInputFocussed))",
         "args": {
           "then": "emacs-mcx.scrollUpCommand"
         }
@@ -2347,7 +2347,7 @@
       {
         "mac": "cmd+v",
         "command": "emacs-mcx.scrollDownCommand",
-        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd && !(!(isLinux || isWindows) && findWidgetVisible)"
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd && !(!(isLinux || isWindows) && (findInputFocussed || replaceInputFocussed))"
       },
       {
         "key": "escape v",
@@ -3403,7 +3403,7 @@
       {
         "mac": "cmd+c",
         "command": "emacs-mcx.transformToTitlecase",
-        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd && !(!(isLinux || isWindows) && findWidgetVisible)"
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd && !(!(isLinux || isWindows) && (findInputFocussed || replaceInputFocussed))"
       },
       {
         "key": "escape c",
@@ -4876,7 +4876,7 @@
       {
         "mac": "cmd+x",
         "command": "workbench.action.showCommands",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd && !(!(isLinux || isWindows) && findWidgetVisible)"
+        "when": "config.emacs-mcx.useMetaPrefixMacCmd && !(!(isLinux || isWindows) && (findInputFocussed || replaceInputFocussed))"
       },
       {
         "key": "escape x",

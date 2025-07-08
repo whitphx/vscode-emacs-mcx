@@ -183,19 +183,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     });
   });
 
-  // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
-  keybindings.forEach((binding) => {
-    if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
-      const isWinOrLinuxOrSomethingElse = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms.
-      binding.when = addWhenCond(binding.when, `!(${isWinOrLinuxOrSomethingElse} && findWidgetVisible)`);
-    }
-    const macKey = binding.mac ?? binding.key;
-    if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
-      const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
-      binding.when = addWhenCond(binding.when, `!(${isMacOrSomethingElse} && findWidgetVisible)`);
-    }
-  });
-
   // Add `isearchExit` keybindings if necessary
   if (src.isearchInterruptible === true || src.isearchInterruptible === "interruptOnly") {
     const isearchExitKeybindings: KeyBinding[] = [];
@@ -206,17 +193,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         if (FIND_EDIT_KEYS.includes(binding.key)) {
           // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
           whenElements.unshift("!config.emacs-mcx.cursorMoveOnFindWidget");
-        }
-        if (NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
-          // Enable isearchExit for this key when the platform is NOT win/linux.
-          // In other platforms such as `isWeb`, disable isearchExit as a mild default.
-          whenElements.unshift("isMac");
-        }
-        const macKey = binding.mac ?? binding.key;
-        if (NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
-          // Enable isearchExit for this key when the platform is NOT macOS.
-          // In other platforms such as `isWeb`, disable isearchExit as a mild default.
-          whenElements.unshift("(isLinux || isWindows)");
         }
         isearchExitKeybindings.push({
           key: binding.key,
@@ -233,6 +209,25 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     });
     keybindings.push(...isearchExitKeybindings);
   }
+
+  // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
+  keybindings.forEach((binding) => {
+    if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
+      const isWinOrLinuxOrSomethingElse = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms.
+      binding.when = addWhenCond(
+        binding.when,
+        `!(${isWinOrLinuxOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
+      );
+    }
+    const macKey = binding.mac ?? binding.key;
+    if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
+      const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
+      binding.when = addWhenCond(
+        binding.when,
+        `!(${isMacOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
+      );
+    }
+  });
 
   return keybindings;
 }
