@@ -1753,22 +1753,22 @@
       {
         "key": "right",
         "command": "emacs-mcx.forwardChar",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+f",
         "command": "emacs-mcx.forwardChar",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "right",
         "command": "emacs-mcx.forwardChar",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+f",
         "command": "emacs-mcx.forwardChar",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "right",
@@ -1805,22 +1805,22 @@
       {
         "key": "left",
         "command": "emacs-mcx.backwardChar",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+b",
         "command": "emacs-mcx.backwardChar",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "left",
         "command": "emacs-mcx.backwardChar",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+b",
         "command": "emacs-mcx.backwardChar",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "left",
@@ -1857,22 +1857,22 @@
       {
         "key": "up",
         "command": "emacs-mcx.previousLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "emacs-mcx.previousLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "up",
         "command": "emacs-mcx.previousLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "emacs-mcx.previousLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "up",
@@ -1909,22 +1909,22 @@
       {
         "key": "down",
         "command": "emacs-mcx.nextLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "emacs-mcx.nextLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
         "command": "emacs-mcx.nextLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "emacs-mcx.nextLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
@@ -1961,22 +1961,22 @@
       {
         "key": "home",
         "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+a",
         "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "home",
         "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+a",
         "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "home",
@@ -2013,22 +2013,22 @@
       {
         "key": "end",
         "command": "emacs-mcx.moveEndOfLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+e",
         "command": "emacs-mcx.moveEndOfLine",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "end",
         "command": "emacs-mcx.moveEndOfLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+e",
         "command": "emacs-mcx.moveEndOfLine",
-        "when": "terminalFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "terminalFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "end",
@@ -2065,7 +2065,7 @@
       {
         "key": "alt+f",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "mac": "cmd+f",
@@ -2109,7 +2109,7 @@
       {
         "key": "alt+b",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "mac": "cmd+b",
@@ -2153,12 +2153,12 @@
       {
         "key": "ctrl+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "mac": "cmd+right",
@@ -2210,12 +2210,12 @@
       {
         "key": "ctrl+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "mac": "cmd+left",
@@ -2793,42 +2793,42 @@
       {
         "key": "ctrl+f",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+b",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+a",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+e",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+f",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+b",
         "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+m",
@@ -2903,42 +2903,42 @@
       {
         "key": "ctrl+f",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+b",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+a",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+e",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+f",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+b",
         "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "isWindows && replaceInputFocussed && !isComposing && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "alt+m",
@@ -5096,102 +5096,102 @@
       {
         "key": "up",
         "command": "showPrevParameterHint",
-        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "showPrevParameterHint",
-        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
         "command": "showNextParameterHint",
-        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "showNextParameterHint",
-        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "up",
         "command": "selectPrevSuggestion",
-        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "selectPrevSuggestion",
-        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
         "command": "selectNextSuggestion",
-        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "selectNextSuggestion",
-        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "up",
         "command": "list.focusUp",
-        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "list.focusUp",
-        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
         "command": "list.focusDown",
-        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "list.focusDown",
-        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "listFocus && !inputFocus && !treestickyScrollFocused && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "up",
         "command": "workbench.action.quickOpenSelectPrevious",
-        "when": "inQuickOpen && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "inQuickOpen && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "workbench.action.quickOpenSelectPrevious",
-        "when": "inQuickOpen && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "inQuickOpen && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
         "command": "workbench.action.quickOpenSelectNext",
-        "when": "inQuickOpen && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "inQuickOpen && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "workbench.action.quickOpenSelectNext",
-        "when": "inQuickOpen && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "inQuickOpen && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "up",
         "command": "selectPrevCodeAction",
-        "when": "codeActionMenuVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "codeActionMenuVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+p",
         "command": "selectPrevCodeAction",
-        "when": "codeActionMenuVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "codeActionMenuVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "down",
         "command": "selectNextCodeAction",
-        "when": "codeActionMenuVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "codeActionMenuVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+n",
         "command": "selectNextCodeAction",
-        "when": "codeActionMenuVisible && !(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)"
+        "when": "codeActionMenuVisible && !((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)"
       },
       {
         "key": "ctrl+m",

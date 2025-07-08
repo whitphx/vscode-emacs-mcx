@@ -460,7 +460,7 @@
     {
       "key": "enter",
       "command": "emacs-mcx.isearchExit",
-      "when": "editorFocus && findInputFocussed && !isComposing"
+      "when": "editorFocus && findInputFocussed && !isComposing" // `!isComposing` is necessary to avoid closing the find widget when hitting `Enter` to confirm the IME input.
     },
     { "key": "ctrl+g", "command": "noop", "when": "sideBarFocus" },
     // Assign "C-g" to the commands which are assigned to "escape" by default.
