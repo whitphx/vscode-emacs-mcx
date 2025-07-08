@@ -215,9 +215,9 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     keybindings.push(...isearchExitKeybindings);
   }
 
-  // この段階で、例えば ctrl+f には forwardChar と isearchExit の両方が登録されている状態になっている。
-  // * isearchExit は config.emacs-mcx.cursorMoveOnFindWidget 対応済み。
-  // * forwardChar を config.emacs-mcx.cursorMoveOnFindWidget に対応させつつ、非macでは findInputFocussed のときは無効化する。
+  // At this point, `ctrl+f` is assigned to both `emacs-mcx.forwardChar` and `emacs-mcx.isearchExit`.
+  // 1. `emacs-mcx.isearchExit` already takes care of `config.emacs-mcx.cursorMoveOnFindWidget`.
+  // 2. `emacs-mcx.forwardChar` should be modified to take care of `config.emacs-mcx.cursorMoveOnFindWidget` as well,
 
   // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
   keybindings.forEach((binding) => {
