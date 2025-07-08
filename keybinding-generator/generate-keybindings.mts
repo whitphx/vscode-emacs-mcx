@@ -191,19 +191,21 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   // Add `isearchExit` keybindings if necessary
   if (src.isearchInterruptible === true || src.isearchInterruptible === "interruptOnly") {
     const isearchExitKeybindings: KeyBinding[] = [];
-    keybindings.forEach((binding) => {
-      if (binding.key != null) {
+    keys.forEach((key) => {
+      if (key != null) {
+        key = replaceAll(key, "meta", "alt");
+
         const whenElements = [];
         whenElements.push(
           "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
           // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
         );
-        if (FIND_EDIT_KEYS.includes(binding.key)) {
+        if (FIND_EDIT_KEYS.includes(key)) {
           // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
           whenElements.unshift("!config.emacs-mcx.cursorMoveOnFindWidget");
         }
         isearchExitKeybindings.push({
-          key: binding.key,
+          key,
           command: "emacs-mcx.isearchExit",
           when: whenElements.join(" && "),
           args:
@@ -218,6 +220,10 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     keybindings.push(...isearchExitKeybindings);
   }
 
+  return keybindings;
+}
+
+export function postProcess(keybindings: KeyBinding[]): void {
   // At this point, `ctrl+f` is assigned to both `emacs-mcx.forwardChar` and `emacs-mcx.isearchExit`.
   // 1. `emacs-mcx.isearchExit` already takes care of `config.emacs-mcx.cursorMoveOnFindWidget`.
   // 2. `emacs-mcx.forwardChar` should be modified to take care of `config.emacs-mcx.cursorMoveOnFindWidget` as well,
@@ -257,8 +263,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       );
     }
   });
-
-  return keybindings;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
