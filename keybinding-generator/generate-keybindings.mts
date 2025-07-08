@@ -135,12 +135,9 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
 
       // Convert "meta" specifications
       if (key.includes("meta")) {
-        const altKey = replaceAll(key, "meta", "alt");
-        const macCmdKey = replaceAll(key, "meta", "cmd");
-
         // Generate a keybinding using ALT as meta.
         keybindings.push({
-          key: altKey,
+          key: replaceAll(key, "meta", "alt"),
           command: src.command,
           when: addWhenCond(when, "!config.emacs-mcx.useMetaPrefixMacCmd"),
           ...(src.args ? { args: src.args } : {}),
@@ -148,8 +145,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
 
         // Generate a keybinding using CMD as meta for macOS.
         keybindings.push({
-          key: altKey,
-          mac: macCmdKey,
+          mac: replaceAll(key, "meta", "cmd"),
           command: src.command,
           when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
           ...(src.args ? { args: src.args } : {}),
