@@ -90,6 +90,11 @@ function emacsLikeKeybindingsInFindWidgetOnAllPlatforms(keybindings: KeyBinding[
   const emacsLikeKeybindings = ["ctrl+f", "ctrl+b", "ctrl+p", "ctrl+n", "ctrl+a", "ctrl+e"];
 
   keybindings.forEach((binding) => {
+    if (binding.command == null || binding.command.trim() === "") {
+      // no-op
+      return;
+    }
+
     if (!emacsLikeKeybindings.some((k) => k === binding.key)) {
       return;
     }

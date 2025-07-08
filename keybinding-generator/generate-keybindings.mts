@@ -252,6 +252,10 @@ export function postProcess(keybindings: KeyBinding[]): void {
   });
 
   keybindings.forEach((binding) => {
+    if (binding.command?.trim() === "") {
+      // Empty command explicitly means no-op.
+      return;
+    }
     if (binding.command === "emacs-mcx.isearchExit") {
       // isearchExit keybindings were added above and already taking care of `config.emacs-mcx.cursorMoveOnFindWidget`.
       return;
