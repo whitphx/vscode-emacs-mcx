@@ -84,27 +84,97 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
   return errors;
 }
 
+function emacsLikeKeybindingsInFindWidgetOnAllPlatforms(keybindings: KeyBinding[]): string[] {
+  const errors: string[] = [];
+
+  const emacsLikeKeybindings = ["ctrl+f", "ctrl+b", "ctrl+p", "ctrl+n", "ctrl+a", "ctrl+e"];
+
+  keybindings.forEach((binding) => {
+    if (!emacsLikeKeybindings.some((k) => k === binding.key)) {
+      return;
+    }
+    if (binding.when == null) {
+      // Unconditionally active.
+      errors.push(
+        `Keybinding "${binding.key}" is activated unconditionally, which may leads to conflicting with edit/move keybindings in find widget.`,
+      );
+      return;
+    }
+
+    const context = {
+      editorTextFocus: true,
+      editorReadonly: false,
+      suggestWidgetVisible: false,
+      terminalFocus: false,
+      findWidgetVisible: true,
+      findInputFocussed: true,
+      replaceInputFocussed: false,
+      "config.emacs-mcx.cursorMoveOnFindWidget": true,
+      isComposing: false,
+    };
+    const when = binding.when;
+
+    // Emacs-like keybindings such as `ctrl+f` should be no-op in the find widget
+    // when `config.emacs-mcx.cursorMoveOnFindWidget` is true.
+    ["windows", "mac", "linux", "web"].forEach((platform) => {
+      const isMatched = evaluateWhenCondition(
+        when,
+        {
+          ...context,
+          isWindows: platform === "windows",
+          isMac: platform === "mac",
+          isLinux: platform === "linux",
+          isWeb: platform === "web",
+        },
+        true,
+      );
+      if (isMatched) {
+        errors.push(
+          `Keybinding "${binding.key}" with "${when}" on ${platform} is activated in find widget, which may leads to conflicting with edit/move keybindings in find widget.`,
+        );
+        return;
+      }
+    });
+
+    // `isearchExit` assigned to Emacs-like keybindings such as `ctrl+f` should work in the find widget
+    // when `config.emacs-mcx.cursorMoveOnFindWidget` is false.
+    if (binding.command === "emacs-mcx.isearchExit") {
+      // `isearchExit` keybindings were added above and already taking care of `config.emacs-mcx.cursorMoveOnFindWidget`.
+      ["windows", "mac", "linux", "web"].forEach((platform) => {
+        const isMatched = evaluateWhenCondition(
+          when,
+          {
+            ...context,
+            isWindows: platform === "windows",
+            isMac: platform === "mac",
+            isLinux: platform === "linux",
+            isWeb: platform === "web",
+            "config.emacs-mcx.cursorMoveOnFindWidget": false,
+          },
+          true,
+        );
+        if (!isMatched) {
+          errors.push(
+            `Keybinding "${binding.key}" with "${when}" on ${platform} should be activated in find widget but it may not.`,
+          );
+          return;
+        }
+      });
+    }
+  });
+
+  return errors;
+}
+
 export function validate(keybindings: KeyBinding[]) {
-  // const appearedConditions = new Set<string>(
-  //   keybindings
-  //     .map((keybinding) => keybinding.when ?? "")
-  //     .map((when) => when.trim().split(/[&|]+/))
-  //     .flat()
-  //     .map((cond) => cond.trim())
-  //     .map((cond) => {
-  //       // `a == b` -> `a`
-  //       const elems = cond.split(/[!=]=/);
-  //       return elems.length > 0 ? elems[0] : "";
-  //     })
-  //     .filter((cond) => cond !== "")
-  //     .map((cond) => cond.trim().split(/[\s!()]+/))
-  //     .flat()
-  //     .map((cond) => cond.trim())
-  //     .filter((cond) => cond !== ""),
-  // );
+  // NOTE: This validation process is not perfect.
+  // We define ad-hoc rules to detect potential issues in keybindings.
+  // We haven't paid so much care about reducing false positives,
+  // focusing on detecting possible issues.
 
   const errors: string[] = [];
   errors.push(...cmdEditsInFindWidgetOnMac(keybindings));
+  errors.push(...emacsLikeKeybindingsInFindWidgetOnAllPlatforms(keybindings));
 
   if (errors.length > 0) {
     throw new Error("Keybinding validation failed:\n" + errors.join("\n"));

@@ -78,6 +78,32 @@ const FIND_EDIT_KEYS = [
 const NO_FIND_EXIT_KEYS_WIN_LINUX = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
 const NO_FIND_EXIT_KEYS_MAC = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
 
+// const EMACS_MOVEMENT_KEYS = [
+//   "ctrl+f",
+//   "ctrl+b",
+//   "ctrl+p",
+//   "ctrl+n",
+//   "ctrl+a",
+//   "ctrl+e",
+//   "alt+f",
+//   "alt+b",
+//   "alt+m",
+//   "ctrl+d",
+//   "ctrl+h",
+//   "alt+d",
+//   "ctrl+k",
+//   "ctrl+w",
+//   "alt+w",
+//   "ctrl+y",
+//   "alt+y",
+//   "ctrl+m",
+//   "ctrl+j",
+//   "alt+l",
+//   "alt+u",
+//   "alt+backspace",
+// ];
+const EMACS_MOVEMENT_KEYS = FIND_EDIT_KEYS;
+
 export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   let keys: string[];
   if (src.key) {
@@ -210,6 +236,10 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     keybindings.push(...isearchExitKeybindings);
   }
 
+  // この段階で、例えば ctrl+f には forwardChar と isearchExit の両方が登録されている状態になっている。
+  // * isearchExit は config.emacs-mcx.cursorMoveOnFindWidget 対応済み。
+  // * forwardChar を config.emacs-mcx.cursorMoveOnFindWidget に対応させつつ、非macでは findInputFocussed のときは無効化する。
+
   // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
   keybindings.forEach((binding) => {
     if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
@@ -225,6 +255,23 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       binding.when = addWhenCond(
         binding.when,
         `!(${isMacOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
+      );
+    }
+  });
+
+  keybindings.forEach((binding) => {
+    if (binding.command === "emacs-mcx.isearchExit") {
+      // isearchExit keybindings were added above and already taking care of `config.emacs-mcx.cursorMoveOnFindWidget`.
+      return;
+    }
+    // Keys such as `ctrl+f` and `ctrl+b` should not work in the find widget
+    // because Emacs users expect them to move the cursor in the find widget
+    // but VSCode doesn't support registering custom keybindings in the find widget.
+    // So we disable them in the find widget.
+    if (binding.key && EMACS_MOVEMENT_KEYS.includes(binding.key)) {
+      binding.when = addWhenCond(
+        binding.when,
+        `!(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)`,
       );
     }
   });
