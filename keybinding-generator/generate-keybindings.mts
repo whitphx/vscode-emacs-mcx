@@ -59,6 +59,7 @@ function replaceAll(src: string, search: string, replacement: string) {
   return src.split(search).join(replacement); // split + join = replaceAll
 }
 
+// Keys that should be left unbound in the find widget when `config.emacs-mcx.cursorMoveOnFindWidget` is true.
 const FIND_EDIT_KEYS = [
   "up",
   "down",
@@ -74,35 +75,13 @@ const FIND_EDIT_KEYS = [
   "ctrl+e",
   "ctrl+n",
   "ctrl+p",
+  "alt+f",
+  "alt+right",
+  "alt+b",
+  "alt+left",
 ];
 const NO_FIND_EXIT_KEYS_WIN_LINUX = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
 const NO_FIND_EXIT_KEYS_MAC = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
-
-// const EMACS_MOVEMENT_KEYS = [
-//   "ctrl+f",
-//   "ctrl+b",
-//   "ctrl+p",
-//   "ctrl+n",
-//   "ctrl+a",
-//   "ctrl+e",
-//   "alt+f",
-//   "alt+b",
-//   "alt+m",
-//   "ctrl+d",
-//   "ctrl+h",
-//   "alt+d",
-//   "ctrl+k",
-//   "ctrl+w",
-//   "alt+w",
-//   "ctrl+y",
-//   "alt+y",
-//   "ctrl+m",
-//   "ctrl+j",
-//   "alt+l",
-//   "alt+u",
-//   "alt+backspace",
-// ];
-const EMACS_MOVEMENT_KEYS = FIND_EDIT_KEYS;
 
 export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   let keys: string[];
@@ -268,7 +247,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     // because Emacs users expect them to move the cursor in the find widget
     // but VSCode doesn't support registering custom keybindings in the find widget.
     // So we disable them in the find widget.
-    if (binding.key && EMACS_MOVEMENT_KEYS.includes(binding.key)) {
+    if (binding.key && FIND_EDIT_KEYS.includes(binding.key)) {
       binding.when = addWhenCond(
         binding.when,
         `!(((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed) && !isComposing)`,
