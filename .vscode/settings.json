@@ -23,6 +23,5 @@
     "openvsx",
     "paredit",
     "Sexp"
-  ],
-  "emacs-mcx.useMetaPrefixMacCmd": false
+  ]
 }
