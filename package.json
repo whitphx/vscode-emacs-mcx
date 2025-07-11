@@ -2273,7 +2273,7 @@
       {
         "key": "ctrl+v",
         "command": "emacs-mcx.isearchExit",
-        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && !(!isMac && (findInputFocussed || replaceInputFocussed))",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && isMac",
         "args": {
           "then": "emacs-mcx.scrollUpCommand"
         }
@@ -2322,7 +2322,7 @@
       {
         "mac": "cmd+v",
         "command": "emacs-mcx.isearchExit",
-        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
           "then": "emacs-mcx.scrollDownCommand"
         }

@@ -236,11 +236,20 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
                 then: src.command,
               },
       });
+      isearchExitKeybindingsForThisKey.forEach((binding) => {
+        if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
+          binding.when = addWhenCond(binding.when, `isMac`);
+        }
+        const macKey = binding.mac ?? binding.key;
+        if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
+          if (binding.key != null) {
+            binding.when = addWhenCond(binding.when, `(isLinux || isWindows)`);
+          }
+        }
+      });
       isearchExitKeybindings.push(...isearchExitKeybindingsForThisKey);
     });
   }
-
-  keybindings.push(...isearchExitKeybindings);
 
   // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
   keybindings.forEach((binding) => {
@@ -265,6 +274,8 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       }
     }
   });
+
+  keybindings.push(...isearchExitKeybindings);
 
   return keybindings;
 }
