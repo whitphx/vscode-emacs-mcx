@@ -70,13 +70,11 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   private reload() {
     const emacsConfigs = vscode.workspace.getConfiguration("emacs-mcx");
 
-    // Disable forin rule here as we make accessors enumerable.`
-    for (const option in this) {
-      let val = emacsConfigs[option];
-      if (val !== null && val !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (val.constructor.name === Object.name) {
-          val = Configuration.unproxify(val);
+    for (const option of Object.keys(this)) {
+      let val: unknown = emacsConfigs[option];
+      if (val != null) {
+        if (typeof val === "object" && val != null) {
+          val = Configuration.unproxify(val as Record<string, unknown>);
         }
         // @ts-expect-error Type unsafe
         this[option] = val;
