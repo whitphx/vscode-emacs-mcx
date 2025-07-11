@@ -1,5 +1,5 @@
-import vm from "node:vm";
 import { KeyBinding } from "./generate-keybindings.mjs";
+import { evaluateSimpleBooleanExpression } from "./simple-eval-bool.mjs";
 
 /**
  * Evaluates a `when` condition string with the provided context **in a very rough way**.
@@ -21,8 +21,7 @@ function evaluateWhenCondition(when: string, context: Record<string, boolean>, d
   });
   console.debug(`when condition whose values were fully replaced with boolean values: ${replacedWhen}`);
 
-  const whenScript = new vm.Script(replacedWhen);
-  const result = whenScript.runInContext(vm.createContext({})) as unknown;
+  const result = evaluateSimpleBooleanExpression(replacedWhen);
   if (typeof result !== "boolean") {
     throw new Error(`When condition "${when}" does not evaluate to boolean.`);
   }

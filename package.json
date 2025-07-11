@@ -5316,6 +5316,7 @@
     "eslint-config-prettier": "^10.1.5",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
+    "jsep": "^1.4.0",
     "lint-staged": "^16.1.2",
     "mocha": "^10.2.0",
     "prettier": "^3.6.2",
