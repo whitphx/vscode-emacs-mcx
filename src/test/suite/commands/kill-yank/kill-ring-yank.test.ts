@@ -1,7 +1,6 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
-import { compareVersions } from "compare-versions";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
@@ -519,21 +518,23 @@ ABCDEFGHIJ`,
 
 suite("yank pop with auto-indent", () => {
   let activeTextEditor: vscode.TextEditor;
+  let originalAutoIndentOnPaste: unknown;
 
-  teardown(cleanUpWorkspace);
-
-  test("Yank in a language that has auto-indent support", async function () {
-    if (compareVersions(vscode.version, "1.102") < 0) {
-      // Temporary fix for https://github.com/whitphx/vscode-emacs-mcx/issues/2278
-      // TODO: remove this when VSCode 1.102 is released
-      this.skip();
-    }
+  setup(async () => {
+    const editorConfig = vscode.workspace.getConfiguration("editor");
+    originalAutoIndentOnPaste = editorConfig.get("autoIndentOnPaste");
+    await editorConfig.update("autoIndentOnPaste", true, vscode.ConfigurationTarget.Global);
 
     activeTextEditor = await setupWorkspace("", { language: "javascript" });
-    activeTextEditor.options.tabSize = 4;
-    activeTextEditor.options.insertSpaces = true;
-    await delay(1000);
+  });
 
+  teardown(async () => {
+    const editorConfig = vscode.workspace.getConfiguration("editor");
+    await editorConfig.update("autoIndentOnPaste", originalAutoIndentOnPaste, vscode.ConfigurationTarget.Global);
+    await cleanUpWorkspace();
+  });
+
+  test("Yank in a language that has auto-indent support", async function () {
     const killRing = new KillRing(60);
     const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
@@ -550,22 +551,26 @@ suite("yank pop with auto-indent", () => {
     const initialText = "{\n\n}";
     await clearTextEditor(activeTextEditor, initialText);
     setEmptyCursors(activeTextEditor, [1, 0]);
-    await delay(100);
+    await delay(1000);
+
+    activeTextEditor.options.tabSize = 2;
+    activeTextEditor.options.insertSpaces = true;
+    await delay(1000);
 
     // Yank pastes "bar" with auto-indentation
     await emulator.runCommand("yank");
-    await delay(100);
-    assertTextEqual(activeTextEditor, "{\n    bar\n}");
+    await delay(1000);
+    assertTextEqual(activeTextEditor, "{\n  bar\n}");
 
     // YankPop pastes "foo" with auto-indentation
     await emulator.runCommand("yankPop");
-    await delay(100);
-    assertTextEqual(activeTextEditor, "{\n    foo\n}");
+    await delay(1000);
+    assertTextEqual(activeTextEditor, "{\n  foo\n}");
 
     // yankPop again
     await emulator.runCommand("yankPop");
-    await delay(100);
-    assertTextEqual(activeTextEditor, "{\n    bar\n}");
+    await delay(1000);
+    assertTextEqual(activeTextEditor, "{\n  bar\n}");
   });
 });
 

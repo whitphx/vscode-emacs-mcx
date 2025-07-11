@@ -5455,7 +5455,6 @@
     "@vscode/test-web": "^0.0.71",
     "@vscode/vsce": "^3.6.0",
     "assert": "^2.1.0",
-    "compare-versions": "^6.1.1",
     "eslint": "^9.30.1",
     "eslint-config-prettier": "^10.1.5",
     "glob": "^11.0.3",
