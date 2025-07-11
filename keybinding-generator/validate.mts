@@ -44,7 +44,7 @@ function ctrlEditsInFindWidgetOnWindowsOrLinux(keybindings: KeyBinding[]): strin
     if (binding.when == null) {
       // Unconditionally active.
       errors.push(
-        `Keybinding "${binding.key}" on Windows/Linux is activated unconditionally, which may leads to conflicting with edit/move keybindings in find widget.`,
+        `Keybinding "${binding.key}" on Windows/Linux is activated unconditionally, which may lead to conflicts with edit/move keybindings in find widget.`,
       );
       return;
     }
