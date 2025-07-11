@@ -2291,7 +2291,7 @@
       {
         "mac": "cmd+v",
         "command": "emacs-mcx.scrollDownCommand",
-        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd && !(findInputFocussed || replaceInputFocussed)"
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "escape v",
@@ -2322,7 +2322,7 @@
       {
         "mac": "cmd+v",
         "command": "emacs-mcx.isearchExit",
-        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && !(findInputFocussed || replaceInputFocussed)",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed",
         "args": {
           "then": "emacs-mcx.scrollDownCommand"
         }
@@ -3395,7 +3395,7 @@
       {
         "mac": "cmd+c",
         "command": "emacs-mcx.transformToTitlecase",
-        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd && !(findInputFocussed || replaceInputFocussed)"
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "escape c",
@@ -4868,7 +4868,7 @@
       {
         "mac": "cmd+x",
         "command": "workbench.action.showCommands",
-        "when": "config.emacs-mcx.useMetaPrefixMacCmd && !(findInputFocussed || replaceInputFocussed)"
+        "when": "config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "escape x",

@@ -255,12 +255,12 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
       if (binding.key == null) {
         // If `key` is null, it means this binding is for macOS.
-        binding.when = addWhenCond(binding.when, `!(findInputFocussed || replaceInputFocussed)`);
+        binding.when = addWhenCond(binding.when, `!findInputFocussed && !replaceInputFocussed`);
       } else {
         const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
         binding.when = addWhenCond(
           binding.when,
-          `!(${isMacOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
+          `!(${isMacOrSomethingElse} && !findInputFocussed && !replaceInputFocussed)`,
         );
       }
     }
