@@ -198,7 +198,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   }
 
   const keybindings: KeyBinding[] = [];
-  const isearchExitKeybindings: KeyBinding[] = [];
   whens.forEach((when) => {
     keys.forEach((key) => {
       keybindings.push(
@@ -212,7 +211,32 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     });
   });
 
-  // Add `isearchExit` keybindings if necessary
+  // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
+  keybindings.forEach((binding) => {
+    if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
+      const isWinOrLinuxOrSomethingElse = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms.
+      binding.when = addWhenCond(
+        binding.when,
+        `!(${isWinOrLinuxOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
+      );
+    }
+    const macKey = binding.mac ?? binding.key;
+    if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
+      if (binding.key == null) {
+        // If `key` is null, it means this binding is for macOS.
+        binding.when = addWhenCond(binding.when, `!findInputFocussed && !replaceInputFocussed`);
+      } else {
+        const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
+        binding.when = addWhenCond(
+          binding.when,
+          `!(${isMacOrSomethingElse} && !findInputFocussed && !replaceInputFocussed)`,
+        );
+      }
+    }
+  });
+
+  // Add isearchExit keybindings for isearchInterruptible commands.
+  const isearchExitKeybindings: KeyBinding[] = [];
   if (src.isearchInterruptible === true || src.isearchInterruptible === "interruptOnly") {
     const keys = getKeys(src);
     keys.forEach((key) => {
@@ -250,30 +274,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       isearchExitKeybindings.push(...isearchExitKeybindingsForThisKey);
     });
   }
-
-  // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
-  keybindings.forEach((binding) => {
-    if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
-      const isWinOrLinuxOrSomethingElse = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms.
-      binding.when = addWhenCond(
-        binding.when,
-        `!(${isWinOrLinuxOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
-      );
-    }
-    const macKey = binding.mac ?? binding.key;
-    if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
-      if (binding.key == null) {
-        // If `key` is null, it means this binding is for macOS.
-        binding.when = addWhenCond(binding.when, `!findInputFocussed && !replaceInputFocussed`);
-      } else {
-        const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
-        binding.when = addWhenCond(
-          binding.when,
-          `!(${isMacOrSomethingElse} && !findInputFocussed && !replaceInputFocussed)`,
-        );
-      }
-    }
-  });
 
   keybindings.push(...isearchExitKeybindings);
 
