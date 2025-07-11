@@ -200,29 +200,11 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   const isearchExitKeybindings: KeyBinding[] = [];
   whens.forEach((when) => {
     keys.forEach((key) => {
-      let _when = when;
-
-      if (
-        src.command &&
-        src.command.trim() !== "" &&
-        src.command.trim() !== "emacs-mcx.isearchExit" &&
-        FIND_EDIT_KEYS.includes(key)
-      ) {
-        // Keys such as `ctrl+f` and `ctrl+b` should not work in the find widget
-        // because Emacs users expect them to move the cursor in the find widget
-        // but VSCode doesn't support registering custom keybindings in the find widget.
-        // So we disable them in the find widget.
-        _when = addWhenCond(
-          _when,
-          `!((config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed) || replaceInputFocussed)`,
-        );
-      }
-
       keybindings.push(
         ...compileKeybinding({
           key,
           command: src.command,
-          when: _when,
+          when,
           args: src.args,
         }),
       );
