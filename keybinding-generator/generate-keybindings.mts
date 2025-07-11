@@ -214,11 +214,8 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
   keybindings.forEach((binding) => {
     if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
-      const isWinOrLinuxOrSomethingElse = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms.
-      binding.when = addWhenCond(
-        binding.when,
-        `!(${isWinOrLinuxOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
-      );
+      const isWinLinuxOrLike = "!isMac"; // Use negative cond of `isMac` to cover `isWeb` and other platforms in addition to Windows and Linux.
+      binding.when = addWhenCond(binding.when, `!(${isWinLinuxOrLike} && (findInputFocussed || replaceInputFocussed))`);
     }
     const macKey = binding.mac ?? binding.key;
     if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
