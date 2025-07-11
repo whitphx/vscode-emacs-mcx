@@ -120,7 +120,7 @@ The default is false.
 
 ### `emacs-mcx.cursorMoveOnFindWidget`
 
-If set to true, cursor move commands of this extension (`C-f`, `C-b`, `C-p`, `C-n`, `C-a`, `C-e`, `M-f`, `M-b`, and `M-m`) are disabled when the find widget is focused, to allow the widget to keep open and the cursor to move on it.
+If set to true, cursor move commands of this extension such as `C-f` and `C-b` are disabled when the find widget is focused, to allow the widget to keep open and the cursor to move on it.
 
 ### `emacs-mcx.enableOverridingTypeCommand`
 

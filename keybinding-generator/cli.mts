@@ -11,6 +11,7 @@ import {
   generateKeybindingsForTypeCharInRectMarkMode,
   generateKeybindingsForRegisterCommands,
 } from "./generate-keybindings.mjs";
+import { validate } from "./validate.mjs";
 
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
 const packageDotJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
@@ -47,6 +48,8 @@ keybindingSrcs.forEach((keybindingSrc) => {
   const keybindings = generateKeybindings(keybindingSrc);
   dstKeybindings.push(...keybindings);
 });
+
+validate(dstKeybindings);
 
 console.info(`Reading ${packageDotJsonPath} ...`);
 const packageJsonContent = fs.readFileSync(packageDotJsonPath, "utf8");
