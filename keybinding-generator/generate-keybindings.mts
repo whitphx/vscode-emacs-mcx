@@ -86,6 +86,87 @@ const FIND_EDIT_KEYS = [
 const NO_FIND_EXIT_KEYS_WIN_LINUX = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
 const NO_FIND_EXIT_KEYS_MAC = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
 
+function compileKeybinding(opts: { key: string; command?: string; when?: string; args?: unknown }): KeyBinding[] {
+  const { key, command, when, args } = opts;
+  const keybindings: KeyBinding[] = [];
+
+  if (!isValidKey(key)) {
+    throw new Error(`Unparsable key string: "${key}"`);
+  }
+
+  // For keybindings with modifiers to work in Emacs in the terminal.
+  // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode,
+  // when the user presses `ctrl+x`, VSCode interrupts the key sequence
+  // waiting for the second key stroke e.g. `ctrl+c`,
+  // and the first `ctrl+x` is never sent to the terminal.
+  // It makes impossible to use keybindings starting with `ctrl+x`
+  // in Emacs (and some other apps) in the terminal
+  // because they never receives `ctrl+x` from the terminal emulator.
+  // So we warn potentially problematic keybindings that may cause the problem.
+  const isUnconditional = when == null;
+  const keyElements = key.split("+");
+  const hasModifiers = keyElements.some((k) => ["ctrl", "shift", "alt"].includes(k));
+  // "meta" can be ignored. Looks like VSCode handles ESC in the terminal properly so that the problem above doesn't happen.
+  // So the user can use ESC as a meta key in the terminal without issues.
+  const hasMeta = keyElements.includes("meta");
+  if (isUnconditional && hasModifiers && !hasMeta) {
+    throw new Error(
+      `Keybinding "${key}" has a modifier but is unconditional. It may cause issues in Emacs in the terminal. ` +
+        `Consider adding "!terminalFocus" condition to the keybinding.`,
+    );
+  }
+
+  // Convert "meta" specifications
+  if (key.includes("meta")) {
+    // Generate a keybinding using ALT as meta.
+    keybindings.push({
+      key: replaceAll(key, "meta", "alt"),
+      command,
+      when: addWhenCond(when, "!config.emacs-mcx.useMetaPrefixMacCmd"),
+      ...(args ? { args } : {}),
+    });
+
+    // Generate a keybinding using CMD as meta for macOS.
+    keybindings.push({
+      mac: replaceAll(key, "meta", "cmd"),
+      command,
+      when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
+      ...(args ? { args } : {}),
+    });
+
+    // Generate keybindings using ESC and Ctrl+[ as meta.
+    const keystrokes = key.split(" ").filter((k) => k);
+    if (keystrokes.length === 1) {
+      const keyWithEscapeMeta = replaceMetaWithEscape(key);
+      keybindings.push({
+        key: keyWithEscapeMeta,
+        command,
+        when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
+        ...(args ? { args } : {}),
+      });
+      keybindings.push({
+        key: keyWithEscapeMeta.replace("escape", "ctrl+["),
+        command,
+        when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"),
+        ...(args ? { args } : {}),
+      });
+    } else {
+      console.warn(
+        `"${key}" includes more than one key strokes then it's meta key specification cannot be converted to "ESC" and "ctrl+[".`,
+      );
+    }
+  } else {
+    keybindings.push({
+      key,
+      command,
+      when,
+      ...(args ? { args } : {}),
+    });
+  }
+
+  return keybindings;
+}
+
 export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   let keys: string[];
   if (src.key) {
@@ -116,110 +197,45 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   const isearchExitKeybindings: KeyBinding[] = [];
   whens.forEach((when, whenIdx) => {
     keys.forEach((key) => {
-      if (!isValidKey(key)) {
-        throw new Error(`Unparsable key string: "${key}"`);
-      }
-
-      // For keybindings with modifiers to work in Emacs in the terminal.
-      // For example, if `ctrl+x ctrl+c` is assigned to some command in VSCode,
-      // when the user presses `ctrl+x`, VSCode interrupts the key sequence
-      // waiting for the second key stroke e.g. `ctrl+c`,
-      // and the first `ctrl+x` is never sent to the terminal.
-      // It makes impossible to use keybindings starting with `ctrl+x`
-      // in Emacs (and some other apps) in the terminal
-      // because they never receives `ctrl+x` from the terminal emulator.
-      // So we warn potentially problematic keybindings that may cause the problem.
-      const isUnconditional = when == null;
-      const keyElements = key.split("+");
-      const hasModifiers = keyElements.some((k) => ["ctrl", "shift", "alt"].includes(k));
-      // "meta" can be ignored. Looks like VSCode handles ESC in the terminal properly so that the problem above doesn't happen.
-      // So the user can use ESC as a meta key in the terminal without issues.
-      const hasMeta = keyElements.includes("meta");
-      if (isUnconditional && hasModifiers && !hasMeta) {
-        throw new Error(
-          `Keybinding "${key}" has a modifier but is unconditional. It may cause issues in Emacs in the terminal. ` +
-            `Consider adding "!terminalFocus" condition to the keybinding.`,
-        );
-      }
-
-      // Convert "meta" specifications
-      if (key.includes("meta")) {
-        // Generate a keybinding using ALT as meta.
-        keybindings.push({
-          key: replaceAll(key, "meta", "alt"),
-          command: src.command,
-          when: addWhenCond(when, "!config.emacs-mcx.useMetaPrefixMacCmd"),
-          ...(src.args ? { args: src.args } : {}),
-        });
-
-        // Generate a keybinding using CMD as meta for macOS.
-        keybindings.push({
-          mac: replaceAll(key, "meta", "cmd"),
-          command: src.command,
-          when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
-          ...(src.args ? { args: src.args } : {}),
-        });
-
-        // Generate keybindings using ESC and Ctrl+[ as meta.
-        const keystrokes = key.split(" ").filter((k) => k);
-        if (keystrokes.length === 1) {
-          const keyWithEscapeMeta = replaceMetaWithEscape(key);
-          keybindings.push({
-            key: keyWithEscapeMeta,
-            command: src.command,
-            when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
-            ...(src.args ? { args: src.args } : {}),
-          });
-          keybindings.push({
-            key: keyWithEscapeMeta.replace("escape", "ctrl+["),
-            command: src.command,
-            when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"),
-            ...(src.args ? { args: src.args } : {}),
-          });
-        } else {
-          console.warn(
-            `"${key}" includes more than one key strokes then it's meta key specification cannot be converted to "ESC" and "ctrl+[".`,
-          );
-        }
-      } else {
-        keybindings.push({
+      keybindings.push(
+        ...compileKeybinding({
           key,
           command: src.command,
           when,
-          ...(src.args ? { args: src.args } : {}),
-        });
+          args: src.args,
+        }),
+      );
+
+      // Run this block only once per key.
+      if (whenIdx === 0) {
+        // Add `isearchExit` keybindings if necessary
+        if (src.isearchInterruptible === true || src.isearchInterruptible === "interruptOnly") {
+          const whenElements = [];
+          whenElements.push(
+            "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+            // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
+          );
+          const isearchExitKeybindingsForThisKey = compileKeybinding({
+            key,
+            command: "emacs-mcx.isearchExit",
+            when: whenElements.join(" && "),
+            args:
+              src.isearchInterruptible === "interruptOnly"
+                ? undefined
+                : {
+                    then: src.command,
+                  },
+          });
+          isearchExitKeybindingsForThisKey.forEach((binding) => {
+            if (binding.key && FIND_EDIT_KEYS.includes(binding.key)) {
+              // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
+              binding.when = addWhenCond("!config.emacs-mcx.cursorMoveOnFindWidget", binding.when ?? "");
+            }
+          });
+          isearchExitKeybindings.push(...isearchExitKeybindingsForThisKey);
+        }
       }
     });
-
-    // Run this block only once per key.
-    if (whenIdx === 0) {
-      // Add `isearchExit` keybindings if necessary
-      if (src.isearchInterruptible === true || src.isearchInterruptible === "interruptOnly") {
-        const whenElements = [];
-        whenElements.push(
-          "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-          // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
-        );
-        const isearchExitKeybindingsForThisKey = generateKeybindings({
-          keys,
-          command: "emacs-mcx.isearchExit",
-          when: whenElements.join(" && "),
-          args:
-            src.isearchInterruptible === "interruptOnly"
-              ? undefined
-              : {
-                  then: src.command,
-                },
-        });
-        isearchExitKeybindingsForThisKey.forEach((binding) => {
-          if (binding.key && FIND_EDIT_KEYS.includes(binding.key)) {
-            // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
-            binding.when = addWhenCond("!config.emacs-mcx.cursorMoveOnFindWidget", binding.when ?? "");
-          }
-        });
-        isearchExitKeybindings.push(...isearchExitKeybindingsForThisKey);
-      }
-    }
   });
 
   keybindings.push(...isearchExitKeybindings);
@@ -319,7 +335,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   // Generate keybindings for numeric characters.
   for (let num = 0; num <= 9; ++num) {
     keybindings.push(
-      ...generateKeybindings({
+      ...compileKeybinding({
         key: num.toString(),
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus",
@@ -327,7 +343,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
       }),
     );
     keybindings.push(
-      ...generateKeybindings({
+      ...compileKeybinding({
         key: `meta+${num.toString()}`,
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
@@ -335,7 +351,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
       }),
     );
     keybindings.push(
-      ...generateKeybindings({
+      ...compileKeybinding({
         key: `meta+${num.toString()}`,
         command: "emacs-mcx.digitArgument",
         when: "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
@@ -352,7 +368,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
 
   // M--
   keybindings.push(
-    ...generateKeybindings({
+    ...compileKeybinding({
       key: "meta+-",
       when: "!emacs-mcx.acceptingArgument && editorTextFocus",
       command: "emacs-mcx.negativeArgument",
