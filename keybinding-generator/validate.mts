@@ -30,6 +30,62 @@ function evaluateWhenCondition(when: string, context: Record<string, boolean>, d
   return result;
 }
 
+function ctrlEditsInFindWidgetOnWindowsOrLinux(keybindings: KeyBinding[]): string[] {
+  const errors: string[] = [];
+
+  // Keybindings that we want to use in the find widget on Windows/Linux
+  // without being overridden by this extension's keybindings.
+  // For example, `ctrl+v` must be left unbound so the user has at least one way to paste in the find widget.
+  const ctrlEditKeybindings = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
+
+  keybindings.forEach((binding) => {
+    if (!ctrlEditKeybindings.some((k) => k === binding.key)) {
+      return;
+    }
+    if (binding.when == null) {
+      // Unconditionally active.
+      errors.push(
+        `Keybinding "${binding.key}" on Windows/Linux is activated unconditionally, which may leads to conflicting with edit/move keybindings in find widget.`,
+      );
+      return;
+    }
+
+    const context = {
+      isMac: false,
+      isWindows: false,
+      isLinux: false,
+      editorTextFocus: true,
+      editorReadonly: false,
+      suggestWidgetVisible: false,
+      terminalFocus: false,
+      findWidgetVisible: true,
+      findInputFocussed: true,
+      replaceInputFocussed: false,
+      isComposing: false,
+    };
+    const when = binding.when;
+
+    [true, false].forEach((isWindows) => {
+      const isMatched = evaluateWhenCondition(
+        when,
+        {
+          ...context,
+          isWindows,
+          isLinux: !isWindows,
+        },
+        true,
+      );
+      if (isMatched) {
+        errors.push(
+          `Keybinding "${binding.key}" on ${isWindows ? "Windows" : "Linux"} is activated in find widget, which may leads to conflicting with edit/move keybindings in find widget.`,
+        );
+        return;
+      }
+    });
+  });
+  return errors;
+}
+
 function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
   const errors: string[] = [];
 
@@ -40,13 +96,14 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
   const macCmdEditKeybindings = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
 
   keybindings.forEach((binding) => {
-    if (!macCmdEditKeybindings.some((k) => k === binding.mac)) {
+    const macKey = binding.mac ?? binding.key;
+    if (!macCmdEditKeybindings.some((k) => k === macKey)) {
       return;
     }
     if (binding.when == null) {
       // Unconditionally active.
       errors.push(
-        `Keybinding "${binding.mac}" on Mac is activated unconditionally, which may leads to conflicting with edit/move keybindings in find widget.`,
+        `Keybinding "${macKey}" on Mac is activated unconditionally, which may leads to conflicting with edit/move keybindings in find widget.`,
       );
       return;
     }
@@ -78,7 +135,7 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
       );
       if (isMatched) {
         errors.push(
-          `Keybinding "${binding.mac}" on Mac is activated in find widget, which may leads to conflicting with edit/move keybindings in find widget.`,
+          `Keybinding "${macKey}" on Mac is activated in find widget, which may leads to conflicting with edit/move keybindings in find widget.`,
         );
         return;
       }
@@ -94,6 +151,7 @@ export function validate(keybindings: KeyBinding[]) {
   // focusing on detecting possible issues.
 
   const errors: string[] = [];
+  errors.push(...ctrlEditsInFindWidgetOnWindowsOrLinux(keybindings));
   errors.push(...cmdEditsInFindWidgetOnMac(keybindings));
 
   if (errors.length > 0) {
