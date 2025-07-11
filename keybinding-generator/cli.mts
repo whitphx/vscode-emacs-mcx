@@ -10,7 +10,6 @@ import {
   generateKeybindingsForPrefixArgument,
   generateKeybindingsForTypeCharInRectMarkMode,
   generateKeybindingsForRegisterCommands,
-  postProcess,
 } from "./generate-keybindings.mjs";
 import { validate } from "./validate.mjs";
 
@@ -49,7 +48,6 @@ keybindingSrcs.forEach((keybindingSrc) => {
   const keybindings = generateKeybindings(keybindingSrc);
   dstKeybindings.push(...keybindings);
 });
-postProcess(dstKeybindings);
 
 validate(dstKeybindings);
 

@@ -259,10 +259,6 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
 
   keybindings.push(...isearchExitKeybindings);
 
-  return keybindings;
-}
-
-export function postProcess(keybindings: KeyBinding[]): void {
   // Modify the keybindings so that they don't work when they are conflicting with priority keybindings such as `ctrl+v` in the find widget.
   keybindings.forEach((binding) => {
     if (binding.key && NO_FIND_EXIT_KEYS_WIN_LINUX.includes(binding.key)) {
@@ -281,6 +277,8 @@ export function postProcess(keybindings: KeyBinding[]): void {
       );
     }
   });
+
+  return keybindings;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
