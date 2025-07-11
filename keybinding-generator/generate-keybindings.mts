@@ -245,9 +245,14 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
         whenElements.push("!config.emacs-mcx.cursorMoveOnFindWidget");
       }
+
       whenElements.push(
-        "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-        // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
+        ...[
+          "editorFocus",
+          "findWidgetVisible",
+          "!replaceInputFocussed", // In the original Emacs, navigation keys work in the minibuffer when replacing. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/466
+          "!isComposing", // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
+        ],
       );
       const isearchExitKeybindingsForThisKey = compileKeybinding({
         key,
