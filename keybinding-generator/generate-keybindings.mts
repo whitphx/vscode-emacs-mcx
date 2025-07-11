@@ -64,24 +64,25 @@ function replaceAll(src: string, search: string, replacement: string) {
 
 // Keys that should be left unbound in the find widget when `config.emacs-mcx.cursorMoveOnFindWidget` is true.
 const FIND_EDIT_KEYS = [
+  "right",
+  "left",
   "up",
   "down",
-  "left",
-  "right",
   "home",
   "end",
   "ctrl+f",
-  "ctrl+right",
   "ctrl+b",
-  "ctrl+left",
+  "ctrl+p",
+  "ctrl+n",
   "ctrl+a",
   "ctrl+e",
-  "ctrl+n",
-  "ctrl+p",
-  "meta+f",
-  "meta+right",
-  "meta+b",
-  "meta+left",
+  "meta+f", // forward-word
+  "meta+b", // backward-word
+  "meta+m",
+  "ctrl+right", // right-word
+  "meta+right", // right-word
+  "meta+left", // left-word
+  "ctrl+left", // left-word
 ];
 const NO_FIND_EXIT_KEYS_WIN_LINUX = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
 const NO_FIND_EXIT_KEYS_MAC = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
