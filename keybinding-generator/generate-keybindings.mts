@@ -253,11 +253,16 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     }
     const macKey = binding.mac ?? binding.key;
     if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
-      const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
-      binding.when = addWhenCond(
-        binding.when,
-        `!(${isMacOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
-      );
+      if (binding.key == null) {
+        // If `key` is null, it means this binding is for macOS.
+        binding.when = addWhenCond(binding.when, `!(findInputFocussed || replaceInputFocussed)`);
+      } else {
+        const isMacOrSomethingElse = "!(isLinux || isWindows)"; // Use negative cond of `isLinux || isWindows` to cover `isWeb` and other platforms.
+        binding.when = addWhenCond(
+          binding.when,
+          `!(${isMacOrSomethingElse} && (findInputFocussed || replaceInputFocussed))`,
+        );
+      }
     }
   });
 
