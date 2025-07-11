@@ -266,12 +266,16 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
         }
         const macKey = binding.mac ?? binding.key;
         if (macKey && NO_FIND_EXIT_KEYS_MAC.includes(macKey)) {
-          if (binding.key != null) {
-            binding.when = addWhenCond(binding.when, `(isLinux || isWindows)`);
+          if (binding.key == null) {
+            // binding has only mac keybinding and it's conflicting with a priority keybinding. So delete it.
+            binding.command = undefined;
+          } else {
+            // `binding.mac` is conflicting with a priority keybinding, so delete it.
+            binding.mac = undefined;
           }
         }
       });
-      isearchExitKeybindings.push(...isearchExitKeybindingsForThisKey);
+      isearchExitKeybindings.push(...isearchExitKeybindingsForThisKey.filter((b) => b.command != null));
     });
   }
 

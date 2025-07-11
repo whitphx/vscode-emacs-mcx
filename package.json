@@ -2320,14 +2320,6 @@
         }
       },
       {
-        "mac": "cmd+v",
-        "command": "emacs-mcx.isearchExit",
-        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "then": "emacs-mcx.scrollDownCommand"
-        }
-      },
-      {
         "key": "escape v",
         "command": "emacs-mcx.isearchExit",
         "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
