@@ -35,6 +35,8 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
 
   // Keybindings that we want to use in the find widget on Mac
   // without being overridden by this extension's keybindings.
+  // For example, `cmd+v` must be left unbound so the user has at least one way to paste in the find widget.
+  // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2042#issuecomment-2530005366
   const macCmdEditKeybindings = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
 
   keybindings.forEach((binding) => {
@@ -60,6 +62,7 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
       findWidgetVisible: true,
       findInputFocussed: true,
       replaceInputFocussed: false,
+      isComposing: false,
     };
     const when = binding.when;
 
