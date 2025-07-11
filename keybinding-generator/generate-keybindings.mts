@@ -234,14 +234,14 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     const keys = getKeys(src);
     keys.forEach((key) => {
       const whenElements = [];
-      whenElements.push(
-        "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
-        // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
-      );
       if (FIND_EDIT_KEYS.includes(key)) {
         // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
         whenElements.push("!config.emacs-mcx.cursorMoveOnFindWidget");
       }
+      whenElements.push(
+        "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
+      );
       const isearchExitKeybindingsForThisKey = compileKeybinding({
         key,
         command: "emacs-mcx.isearchExit",
