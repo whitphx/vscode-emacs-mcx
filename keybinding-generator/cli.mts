@@ -18,8 +18,14 @@ const packageDotJsonPath = url.fileURLToPath(import.meta.resolve("../package.jso
 
 console.info(`Reading ${srcFilePath} ...`);
 const srcContent = fs.readFileSync(srcFilePath, "utf8");
-const srcJSON = JSON.parse(stripJsonComments(srcContent));
-const keybindingSrcs: Array<any> = srcJSON["keybindings"]; // eslint-disable-line @typescript-eslint/no-explicit-any
+const srcJSON = JSON.parse(stripJsonComments(srcContent)) as unknown;
+if (srcJSON == null || typeof srcJSON !== "object") {
+  throw new Error(`Unexpected type for srcJSON: ${typeof srcJSON} (${String(srcJSON)})`);
+}
+if (!("keybindings" in srcJSON)) {
+  throw new Error("The key .keybindings doesn't exist in srcJSON");
+}
+const keybindingSrcs = srcJSON["keybindings"] as Array<unknown>;
 
 const dstKeybindings: KeyBinding[] = [];
 
