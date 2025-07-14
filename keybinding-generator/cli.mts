@@ -30,21 +30,27 @@ const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
 const dstKeybindings: KeyBinding[] = [];
 
 keybindingSrcs.forEach((keybindingSrc) => {
-  // XXX: Escape hatch for prefix argument keybindings.
-  if (keybindingSrc.$special === "universalArgumentTypes") {
-    console.log("Adding keybindings for types following universal argument");
-    dstKeybindings.push(...generateKeybindingsForPrefixArgument());
-    return;
+  if (keybindingSrc == null || typeof keybindingSrc !== "object") {
+    throw new Error(`srcJson["keybindings"][] is unexpectedly null or not an object: ${String(keybindingSrc)}`);
   }
-  if (keybindingSrc.$special === "rectMarkModeTypes") {
-    console.log("Adding keybindings for types in rectangle-mark-mode");
-    dstKeybindings.push(...generateKeybindingsForTypeCharInRectMarkMode());
-    return;
-  }
-  if (keybindingSrc.$special == "registerCommandTypes") {
-    console.log("Adding keybindings for register commands");
-    dstKeybindings.push(...generateKeybindingsForRegisterCommands());
-    return;
+
+  if ("$special" in keybindingSrc) {
+    // XXX: Escape hatch for prefix argument keybindings.
+    if (keybindingSrc.$special === "universalArgumentTypes") {
+      console.log("Adding keybindings for types following universal argument");
+      dstKeybindings.push(...generateKeybindingsForPrefixArgument());
+      return;
+    }
+    if (keybindingSrc.$special === "rectMarkModeTypes") {
+      console.log("Adding keybindings for types in rectangle-mark-mode");
+      dstKeybindings.push(...generateKeybindingsForTypeCharInRectMarkMode());
+      return;
+    }
+    if (keybindingSrc.$special == "registerCommandTypes") {
+      console.log("Adding keybindings for register commands");
+      dstKeybindings.push(...generateKeybindingsForRegisterCommands());
+      return;
+    }
   }
 
   if (!isKeyBindingSource(keybindingSrc)) {
