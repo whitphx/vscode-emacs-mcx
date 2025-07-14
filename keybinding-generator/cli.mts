@@ -59,7 +59,7 @@ validate(dstKeybindings);
 
 console.info(`Reading ${packageDotJsonPath} ...`);
 const packageJsonContent = fs.readFileSync(packageDotJsonPath, "utf8");
-const packageJson = JSON.parse(packageJsonContent);
+const packageJson = JSON.parse(packageJsonContent) as Record<string, Record<string, unknown>>;
 
 console.info(`Overwriting ${packageDotJsonPath} ...`);
 packageJson["contributes"]["keybindings"] = dstKeybindings;
