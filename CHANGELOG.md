@@ -4,10 +4,6 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
-### Fix
-
-- Refactoring the config system, [#2301](https://github.com/whitphx/vscode-emacs-mcx/pull/2301).
-
 ## [0.74.0] - 2025-07-14
 
 ### Change
