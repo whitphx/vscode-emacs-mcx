@@ -8,6 +8,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 - Refactoring the config system, [#2301](https://github.com/whitphx/vscode-emacs-mcx/pull/2301).
 
+## [0.74.0] - 2025-07-14
+
+### Change
+
+- Enable `alt` as meta always restoring the behavior of `<0.73.0`, [#2320](https://github.com/whitphx/vscode-emacs-mcx/pull/2320).
+
 ## [0.73.0] - 2025-07-12
 
 ### Change
