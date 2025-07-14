@@ -14,18 +14,18 @@ import {
 import { validate } from "./validate.mjs";
 
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
-const packageDotJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
+const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
 
 console.info(`Reading ${srcFilePath} ...`);
-const srcContent = fs.readFileSync(srcFilePath, "utf8");
-const srcJSON = JSON.parse(stripJsonComments(srcContent)) as unknown;
-if (srcJSON == null || typeof srcJSON !== "object") {
-  throw new Error(`Unexpected type for srcJSON: ${typeof srcJSON} (${String(srcJSON)})`);
+const srcJsonContent = fs.readFileSync(srcFilePath, "utf8");
+const srcJson = JSON.parse(stripJsonComments(srcJsonContent)) as unknown;
+if (srcJson == null || typeof srcJson !== "object") {
+  throw new Error(`Unexpected type for srcJson: ${typeof srcJson} (${String(srcJson)})`);
 }
-if (!("keybindings" in srcJSON)) {
-  throw new Error("The key .keybindings doesn't exist in srcJSON");
+if (!("keybindings" in srcJson)) {
+  throw new Error("The key .keybindings doesn't exist in srcJson");
 }
-const keybindingSrcs = srcJSON["keybindings"] as Array<unknown>;
+const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
 
 const dstKeybindings: KeyBinding[] = [];
 
@@ -57,10 +57,10 @@ keybindingSrcs.forEach((keybindingSrc) => {
 
 validate(dstKeybindings);
 
-console.info(`Reading ${packageDotJsonPath} ...`);
-const packageJsonContent = fs.readFileSync(packageDotJsonPath, "utf8");
+console.info(`Reading ${packageJsonPath} ...`);
+const packageJsonContent = fs.readFileSync(packageJsonPath, "utf8");
 const packageJson = JSON.parse(packageJsonContent) as Record<string, Record<string, unknown>>;
 
-console.info(`Overwriting ${packageDotJsonPath} ...`);
+console.info(`Overwriting ${packageJsonPath} ...`);
 packageJson["contributes"]["keybindings"] = dstKeybindings;
-fs.writeFileSync(packageDotJsonPath, JSON.stringify(packageJson, null, "  ") + "\n");
+fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, "  ") + "\n");
