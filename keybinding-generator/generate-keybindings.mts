@@ -286,8 +286,12 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   return keybindings;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isKeyBindingSource(maybeSrc: { [key: string]: any }): maybeSrc is KeyBindingSource {
+export function isKeyBindingSource(obj: unknown): obj is KeyBindingSource {
+  if (obj == null || typeof obj !== "object") {
+    return false;
+  }
+  const maybeSrc = obj as Record<string, unknown>;
+
   // Check for .key
   if (typeof maybeSrc.key !== "undefined" && typeof maybeSrc.key !== "string") {
     return false;
