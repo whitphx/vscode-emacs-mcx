@@ -38,7 +38,6 @@ describe("generateKeybindings", () => {
       {
         key: "alt+f",
         command: "emacs-mcx.forwardWord",
-        when: "!config.emacs-mcx.useMetaPrefixMacCmd",
       },
       {
         mac: "cmd+f",
@@ -69,7 +68,7 @@ describe("generateKeybindings", () => {
       {
         key: "alt+f",
         command: "emacs-mcx.forwardWord",
-        when: "editorTextFocus && !config.emacs-mcx.useMetaPrefixMacCmd",
+        when: "editorTextFocus",
       },
       {
         mac: "cmd+f",
@@ -99,7 +98,6 @@ describe("generateKeybindings", () => {
       {
         key: "alt+f",
         command: "emacs-mcx.forwardWord",
-        when: "!config.emacs-mcx.useMetaPrefixMacCmd",
       },
       {
         mac: "cmd+f",
@@ -119,7 +117,6 @@ describe("generateKeybindings", () => {
       {
         key: "alt+j",
         command: "emacs-mcx.forwardWord",
-        when: "!config.emacs-mcx.useMetaPrefixMacCmd",
       },
       {
         mac: "cmd+j",
@@ -149,7 +146,6 @@ describe("generateKeybindings", () => {
       {
         key: "alt+f alt+f",
         command: "emacs-mcx.forwardWord",
-        when: "!config.emacs-mcx.useMetaPrefixMacCmd",
       },
       {
         mac: "cmd+f cmd+f",
