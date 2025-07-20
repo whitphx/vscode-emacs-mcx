@@ -39,7 +39,6 @@ jobs:
 
       - name: Test keybinding generator
         run: npm run test-gen-keys
-        shell: bash
 
       - name: Check keybinding diff
         run: |
