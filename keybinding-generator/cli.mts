@@ -12,6 +12,10 @@ import {
   generateKeybindingsForRegisterCommands,
 } from "./generate-keybindings.mjs";
 import { validate } from "./validate.mjs";
+import { runVscDefaultKeybindingGetter } from "./vscode-keybindings.mjs";
+
+console.log("Run a script to get VSCode default keybindings in the VSCode environment ...");
+await runVscDefaultKeybindingGetter();
 
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
@@ -25,7 +29,18 @@ if (srcJson == null || typeof srcJson !== "object") {
 if (!("keybindings" in srcJson)) {
   throw new Error("The key .keybindings doesn't exist in srcJson");
 }
+if (!Array.isArray(srcJson["keybindings"])) {
+  throw new Error(`srcJson["keybindings"] is not an array: ${String(srcJson["keybindings"])}`);
+}
 const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
+
+console.info(`Reading VSCode default keybindings ...`);
+const vscDefaultKeybindingsDumpPath = url.fileURLToPath(import.meta.resolve("../vsc-default-keybindings.json"));
+const vscDefaultKeybindingsContent = fs.readFileSync(vscDefaultKeybindingsDumpPath, "utf8");
+const vscDefaultKeybindings = JSON.parse(stripJsonComments(vscDefaultKeybindingsContent)) as unknown;
+if (!Array.isArray(vscDefaultKeybindings)) {
+  throw new Error("vscodeDefaultKeybindings is not an array");
+}
 
 const dstKeybindings: KeyBinding[] = [];
 
@@ -49,6 +64,21 @@ keybindingSrcs.forEach((keybindingSrc) => {
     if (keybindingSrc.$special == "registerCommandTypes") {
       console.log("Adding keybindings for register commands");
       dstKeybindings.push(...generateKeybindingsForRegisterCommands());
+      return;
+    }
+    if (keybindingSrc.$special === "cancelKeybindings") {
+      const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
+        return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
+      });
+      const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings.map((binding) => {
+        return {
+          key: "ctrl+g",
+          command: binding.command,
+          when: binding.when,
+          args: binding.args,
+        };
+      });
+      dstKeybindings.push(...ctrlGKeybindings);
       return;
     }
   }

@@ -3455,13 +3455,43 @@
       },
       {
         "key": "ctrl+g",
+        "command": "editor.action.inlineSuggest.hide",
+        "when": "inInlineEditsPreviewEditor"
+      },
+      {
+        "key": "ctrl+g",
         "command": "editor.closeTestPeek",
         "when": "testing.isInPeek && !config.editor.stablePeek || testing.isPeekVisible && !config.editor.stablePeek"
       },
       {
         "key": "ctrl+g",
+        "command": "cancelSelection",
+        "when": "editorHasSelection && textInputFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "removeSecondaryCursors",
+        "when": "editorHasMultipleSelections && textInputFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "notebook.cell.chat.acceptChanges",
+        "when": "inlineChatFocused && notebookCellChatFocused && notebookChatUserDidEdit && !notebookCellEditorFocused"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlineChat.hideHint",
+        "when": "inlineChatShowingHint"
+      },
+      {
+        "key": "ctrl+g",
         "command": "notebook.cell.quitEdit",
-        "when": "inputFocus && notebookEditorFocused && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible"
+        "when": "inputFocus && notebookEditorFocused && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !inlineChatFocused"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.edit.chat.cancel",
+        "when": "chatSessionCurrentlyEditing && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || chatSessionCurrentlyEditingInput && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible"
       },
       {
         "key": "ctrl+g",
@@ -3470,8 +3500,18 @@
       },
       {
         "key": "ctrl+g",
-        "command": "editor.action.inlineSuggest.hide",
-        "when": "inlineSuggestionVisible"
+        "command": "editor.action.cancelSelectionAnchor",
+        "when": "editorTextFocus && selectionAnchorSet"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "editor.action.hideColorPicker",
+        "when": "standaloneColorPickerVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "editor.action.selectEditor",
+        "when": "stickyScrollFocused"
       },
       {
         "key": "ctrl+g",
@@ -3495,6 +3535,31 @@
       },
       {
         "key": "ctrl+g",
+        "command": "editor.hideDropWidget",
+        "when": "dropWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "editor.hidePasteWidget",
+        "when": "pasteWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlayHints.stopReadingLineWithHint",
+        "when": "isReadingLineWithInlayHints"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlineChat.discardHunkChange",
+        "when": "inlineChatHasProvider && inlineChatVisible && inlineChatResponseType == 'messagesAndEdits'"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "notebook.cell.chat.discard",
+        "when": "inlineChatFocused && notebookCellChatFocused && !notebookCellEditorFocused && !notebookChatUserDidEdit"
+      },
+      {
+        "key": "ctrl+g",
         "command": "search.action.focusQueryEditorWidget",
         "when": "inSearchEditor"
       },
@@ -3511,7 +3576,17 @@
       {
         "key": "ctrl+g",
         "command": "workbench.action.hideComment",
-        "when": "commentEditorFocused"
+        "when": "commentEditorFocused || commentFocused"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlineChat.close",
+        "when": "inlineChatHasProvider && inlineChatVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeFindWidget",
+        "when": "editorFocus && findWidgetVisible && !isComposing"
       },
       {
         "key": "ctrl+g",
@@ -3521,17 +3596,17 @@
       {
         "key": "ctrl+g",
         "command": "leaveSnippet",
-        "when": "editorTextFocus && inSnippetMode"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "closeDirtyDiff",
-        "when": "dirtyDiffVisible"
+        "when": "inSnippetMode && textInputFocus"
       },
       {
         "key": "ctrl+g",
         "command": "closeMarkersNavigation",
         "when": "editorFocus && markersNavigationVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "closeQuickDiff",
+        "when": "dirtyDiffVisible"
       },
       {
         "key": "ctrl+g",
@@ -3542,6 +3617,11 @@
         "key": "ctrl+g",
         "command": "closeParameterHints",
         "when": "editorFocus && parameterHintsVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "editor.action.inlineSuggest.hide",
+        "when": "inlineEditIsVisible || inlineSuggestionVisible"
       },
       {
         "key": "ctrl+g",
@@ -3560,13 +3640,18 @@
       },
       {
         "key": "ctrl+g",
-        "command": "closeAccessibilityHelp",
-        "when": "accessibilityHelpWidgetVisible && editorFocus"
+        "command": "closeReplaceInFilesWidget",
+        "when": "replaceInputBoxFocus && searchViewletVisible"
       },
       {
         "key": "ctrl+g",
-        "command": "closeReplaceInFilesWidget",
-        "when": "replaceInputBoxFocus && searchViewletVisible"
+        "command": "commentsClearFilterText",
+        "when": "commentsFilterFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlineChat2.close",
+        "when": "inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && !chatEdits.isRequestInProgress || inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.isRequestInProgress && chatEdits.requestCount == '0'"
       },
       {
         "key": "ctrl+g",
@@ -3575,8 +3660,23 @@
       },
       {
         "key": "ctrl+g",
+        "command": "keybindings.editor.rejectWhenExpression",
+        "when": "inKeybindings && whenFocus && !suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
         "command": "list.clear",
-        "when": "listFocus && listHasSelectionOrFocus && !inputFocus"
+        "when": "listFocus && listHasSelectionOrFocus && !inputFocus && !treestickyScrollFocused"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "list.closeFind",
+        "when": "listFocus && treeFindOpen"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "noteMultiCursor.exit",
+        "when": "config.notebook.multiCursor.enabled && isNotebookMultiSelect && activeEditor == 'workbench.editor.notebook'"
       },
       {
         "key": "ctrl+g",
@@ -3585,8 +3685,18 @@
       },
       {
         "key": "ctrl+g",
+        "command": "problems.action.clearFilterText",
+        "when": "problemsFilterFocus"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "scm.clearInput",
+        "when": "scmRepository && !editorHasSelection && !suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
         "command": "search.action.cancel",
-        "when": "listFocus && searchViewletVisible && !inputFocus && searchState != '0'"
+        "when": "listFocus && searchViewletVisible && !inputFocus && !treestickyScrollFocused && searchState != '0'"
       },
       {
         "key": "ctrl+g",
@@ -3600,23 +3710,23 @@
       },
       {
         "key": "ctrl+g",
-        "command": "workbench.action.hideInterfaceOverview",
-        "when": "interfaceOverviewVisible"
+        "command": "workbench.action.terminal.chat.close",
+        "when": "chatIsEnabled && terminalChatFocus && terminalChatVisible || chatIsEnabled && terminalChatVisible && terminalFocus"
       },
       {
         "key": "ctrl+g",
         "command": "workbench.action.terminal.clearSelection",
-        "when": "terminalFocus && terminalHasBeenCreated && terminalTextSelected && !terminalFindVisible || terminalFocus && terminalProcessSupported && terminalTextSelected && !terminalFindVisible"
+        "when": "terminalFocusInAny && terminalHasBeenCreated && terminalTextSelected && !terminalFindVisible || terminalFocusInAny && terminalProcessSupported && terminalTextSelected && !terminalFindVisible"
       },
       {
         "key": "ctrl+g",
         "command": "workbench.action.terminal.hideFind",
-        "when": "terminalFindVisible && terminalFocus && terminalHasBeenCreated || terminalFindVisible && terminalFocus && terminalProcessSupported"
+        "when": "terminalFindVisible && terminalFocusInAny && terminalHasBeenCreated || terminalFindVisible && terminalFocusInAny && terminalProcessSupported"
       },
       {
         "key": "ctrl+g",
-        "command": "workbench.action.terminal.navigationModeExit",
-        "when": "accessibilityModeEnabled && terminalA11yTreeFocus && terminalProcessSupported"
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus"
       },
       {
         "key": "ctrl+g",
@@ -3635,6 +3745,16 @@
       },
       {
         "key": "ctrl+g",
+        "command": "workbench.action.terminal.hideSuggestWidget",
+        "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "notebook.cell.quitEdit",
+        "when": "notebookEditorFocused && notebookOutputFocused"
+      },
+      {
+        "key": "ctrl+g",
         "command": "editor.closeCallHierarchy",
         "when": "callHierarchyVisible && !config.editor.stablePeek"
       },
@@ -3646,12 +3766,12 @@
       {
         "key": "ctrl+g",
         "command": "filesExplorer.cancelCut",
-        "when": "explorerResourceCut && explorerViewletVisible && filesExplorerFocus && !inputFocus"
+        "when": "explorerResourceCut && filesExplorerFocus && foldersViewVisible && !inputFocus"
       },
       {
         "key": "ctrl+g",
         "command": "closeReferenceSearch",
-        "when": "referenceSearchVisible && !config.editor.stablePeek"
+        "when": "editorTextFocus && referenceSearchVisible && !config.editor.stablePeek || referenceSearchVisible && !config.editor.stablePeek && !inputFocus"
       },
       {
         "key": "ctrl+g",
@@ -3662,6 +3782,36 @@
         "key": "ctrl+g",
         "command": "notifications.hideToasts",
         "when": "notificationFocus && notificationToastsVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.chat.stopListening",
+        "when": "voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || voiceChatInProgress && scopedVoiceChatInProgress == 'view'"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.chat.stopReadChatItemAloud",
+        "when": "scopedChatSynthesisInProgress"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.editorDictation.stop",
+        "when": "editorDictation.inProgress"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.speech.stopReadAloud",
+        "when": "scopedChatSynthesisInProgress && textToSpeechInProgress"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "hideCodeActionWidget",
+        "when": "codeActionMenuVisible"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "diffEditor.exitCompareMove",
+        "when": "comparingMovedCode"
       },
       {
         "key": "ctrl+space",
