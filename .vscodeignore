@@ -35,3 +35,4 @@ lint-staged.config.js
 eslint.config.mjs
 CLAUDE.md
 .claude
+vsc-default-keybindings.json
