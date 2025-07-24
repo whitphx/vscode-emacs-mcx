@@ -3731,6 +3731,11 @@
       },
       {
         "key": "ctrl+g",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus"
+      },
+      {
+        "key": "ctrl+g",
         "command": "workbench.banner.focusBanner",
         "when": "bannerFocused"
       },
