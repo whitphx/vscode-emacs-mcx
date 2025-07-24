@@ -65,14 +65,27 @@ keybindingSrcs.forEach((keybindingSrc) => {
       const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
         return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
       });
-      const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings.map((binding) => {
-        return {
-          key: "ctrl+g",
-          command: binding.command,
-          when: binding.when,
-          args: binding.args,
-        };
-      });
+      const conflictedCommands = [
+        "cancelSelection", // emacs-mcx.cancel
+        "removeSecondaryCursors", // emacs-mcx.cancel
+        "editor.action.cancelSelectionAnchor", // emacs-mcx.cancel
+        "closeFindWidget", // emacs-mcx.isearchAbort
+        "closeReplaceInFilesWidget", // emacs-mcx.isearchAbort
+        "keybindings.editor.rejectWhenExpression", // not sure what it is, but remove it just in case.
+      ];
+
+      const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings
+        .filter((binding) => {
+          return !conflictedCommands.includes(binding.command);
+        })
+        .map((binding) => {
+          return {
+            key: "ctrl+g",
+            command: binding.command,
+            when: binding.when,
+            args: binding.args,
+          };
+        });
       dstKeybindings.push(...ctrlGKeybindings);
       return;
     }

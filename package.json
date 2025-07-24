@@ -3471,16 +3471,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "cancelSelection",
-        "when": "editorHasSelection && textInputFocus"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "removeSecondaryCursors",
-        "when": "editorHasMultipleSelections && textInputFocus"
-      },
-      {
-        "key": "ctrl+g",
         "command": "notebook.cell.chat.acceptChanges",
         "when": "inlineChatFocused && notebookCellChatFocused && notebookChatUserDidEdit && !notebookCellEditorFocused"
       },
@@ -3503,11 +3493,6 @@
         "key": "ctrl+g",
         "command": "closeBreakpointWidget",
         "when": "breakpointWidgetVisible && textInputFocus"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "editor.action.cancelSelectionAnchor",
-        "when": "editorTextFocus && selectionAnchorSet"
       },
       {
         "key": "ctrl+g",
@@ -3591,11 +3576,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "closeFindWidget",
-        "when": "editorFocus && findWidgetVisible && !isComposing"
-      },
-      {
-        "key": "ctrl+g",
         "command": "leaveEditorMessage",
         "when": "messageVisible"
       },
@@ -3646,11 +3626,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "closeReplaceInFilesWidget",
-        "when": "replaceInputBoxFocus && searchViewletVisible"
-      },
-      {
-        "key": "ctrl+g",
         "command": "commentsClearFilterText",
         "when": "commentsFilterFocus"
       },
@@ -3663,11 +3638,6 @@
         "key": "ctrl+g",
         "command": "keybindings.editor.clearSearchResults",
         "when": "inKeybindings && inKeybindingsSearch"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "keybindings.editor.rejectWhenExpression",
-        "when": "inKeybindings && whenFocus && !suggestWidgetVisible"
       },
       {
         "key": "ctrl+g",
@@ -3728,11 +3698,6 @@
         "key": "ctrl+g",
         "command": "workbench.action.terminal.hideFind",
         "when": "terminalFindVisible && terminalFocusInAny && terminalHasBeenCreated || terminalFindVisible && terminalFocusInAny && terminalProcessSupported"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus"
       },
       {
         "key": "ctrl+g",
