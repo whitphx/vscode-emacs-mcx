@@ -124,4 +124,4 @@ dist
 .pnp.*
 
 # Dumped by keybinding-generator
-vsc-default-keybindings.json
+keybinding-generator/.tmp
