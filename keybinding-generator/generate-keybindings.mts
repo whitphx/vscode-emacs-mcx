@@ -123,7 +123,7 @@ function compileKeybinding(opts: { key: string; command?: string; when?: string;
     keybindings.push({
       key: replaceAll(key, "meta", "alt"),
       command,
-      ...(when ? { when } : {}),
+      when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixAlt"),
       ...(args ? { args } : {}),
     });
 

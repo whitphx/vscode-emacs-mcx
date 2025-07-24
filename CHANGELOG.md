@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.75.0] - 2025-07-24
+
+### Add
+
+- Add `emacs-mcx.useMetaPrefixAlt` config, [#2338](https://github.com/whitphx/vscode-emacs-mcx/pull/2338).
+
 ## [0.74.0] - 2025-07-14
 
 ### Change
