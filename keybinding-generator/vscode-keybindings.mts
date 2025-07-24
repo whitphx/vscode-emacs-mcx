@@ -44,7 +44,7 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   return true;
 }
 export async function loadDumpedVscDefaultKeybindings(): Promise<VscKeybinding[]> {
-  const vscDefaultKeybindingsDumpPath = path.resolve(__dirname, "../vsc-default-keybindings.json");
+  const vscDefaultKeybindingsDumpPath = path.resolve(__dirname, "./.tmp/vsc-default-keybindings.json");
   const vscDefaultKeybindingsContent = await fsPromises.readFile(vscDefaultKeybindingsDumpPath, "utf8");
   const vscDefaultKeybindings = JSON.parse(stripJsonComments(vscDefaultKeybindingsContent)) as unknown;
   if (!Array.isArray(vscDefaultKeybindings)) {
