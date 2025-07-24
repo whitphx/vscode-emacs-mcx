@@ -43,12 +43,12 @@ jobs:
       - name: Check keybinding diff
         run: |
           xvfb-run -a npm run gen-keys
-          git diff --quiet || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
+          git diff || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
         if: runner.os == 'Linux' && matrix.type == 'native'
       - name: Check keybinding diff
         run: |
           npm run gen-keys
-          git diff --quiet || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
+          git diff || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
         if: runner.os != 'Linux' && matrix.type == 'native'
 
       - name: Test
