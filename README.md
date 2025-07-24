@@ -105,7 +105,7 @@ If set as true, `ctrl+[` works as the Meta prefix like original Emacs.
 
 ### `emacs-mcx.useMetaPrefixAlt`
 
-If set as true, `alt` key works as the Meta prefix like original Emacs.
+If set as true, `alt` key (`option` (⌥) key on macOS) works as the Meta prefix.
 
 ### `emacs-mcx.useMetaPrefixMacCmd`
 
