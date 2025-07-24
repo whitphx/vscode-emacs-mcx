@@ -41,12 +41,12 @@ jobs:
         run: npm run test-gen-keys
         if: runner.os == 'Linux' && matrix.type == 'native'
 
-      - name: Check keybinding diff
+      - name: Check keybinding diff (Linux)
         run: |
           xvfb-run -a npm run gen-keys
           git diff --exit-code || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
         if: runner.os == 'Linux' && matrix.type == 'native'
-      - name: Check keybinding diff
+      - name: Check keybinding diff (not Linux)
         run: |
           npm run gen-keys
           git diff --exit-code || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
