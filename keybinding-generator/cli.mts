@@ -12,10 +12,10 @@ import {
   generateKeybindingsForRegisterCommands,
 } from "./generate-keybindings.mjs";
 import { validate } from "./validate.mjs";
-import { runVscDefaultKeybindingGetter } from "./vscode-keybindings.mjs";
+import { runVscDefaultKeybindingDumper, loadDumpedVscDefaultKeybindings } from "./vscode-keybindings.mjs";
 
 console.log("Run a script to get VSCode default keybindings in the VSCode environment ...");
-await runVscDefaultKeybindingGetter();
+await runVscDefaultKeybindingDumper();
 
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
@@ -35,12 +35,7 @@ if (!Array.isArray(srcJson["keybindings"])) {
 const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
 
 console.info(`Reading VSCode default keybindings ...`);
-const vscDefaultKeybindingsDumpPath = url.fileURLToPath(import.meta.resolve("../vsc-default-keybindings.json"));
-const vscDefaultKeybindingsContent = fs.readFileSync(vscDefaultKeybindingsDumpPath, "utf8");
-const vscDefaultKeybindings = JSON.parse(stripJsonComments(vscDefaultKeybindingsContent)) as unknown;
-if (!Array.isArray(vscDefaultKeybindings)) {
-  throw new Error("vscodeDefaultKeybindings is not an array");
-}
+const vscDefaultKeybindings = await loadDumpedVscDefaultKeybindings();
 
 const dstKeybindings: KeyBinding[] = [];
 
@@ -67,18 +62,10 @@ keybindingSrcs.forEach((keybindingSrc) => {
       return;
     }
     if (keybindingSrc.$special === "cancelKeybindings") {
-      const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding: unknown) => {
-        if (typeof binding !== "object" || binding == null || !("key" in binding) || !("command" in binding)) {
-          throw new Error(`Unexpected keybinding data structure in vscDefaultKeybindings: ${JSON.stringify(binding)}`);
-        }
-        if (typeof binding.key !== "string" || typeof binding.command !== "string") {
-          throw new Error(`Unexpected keybinding data structure in vscDefaultKeybindings: ${JSON.stringify(binding)}`);
-        }
+      const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
         return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
       });
-      const ctrlGKeybindings: KeyBinding[] = (
-        defaultEscapeKeybindings as Array<{ command: string; when?: string; args?: string }>
-      ).map((binding) => {
+      const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings.map((binding) => {
         return {
           key: "ctrl+g",
           command: binding.command,
