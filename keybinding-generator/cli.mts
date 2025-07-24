@@ -67,10 +67,18 @@ keybindingSrcs.forEach((keybindingSrc) => {
       return;
     }
     if (keybindingSrc.$special === "cancelKeybindings") {
-      const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
+      const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding: unknown) => {
+        if (typeof binding !== "object" || binding == null || !("key" in binding) || !("command" in binding)) {
+          throw new Error(`Unexpected keybinding data structure in vscDefaultKeybindings: ${JSON.stringify(binding)}`);
+        }
+        if (typeof binding.key !== "string" || typeof binding.command !== "string") {
+          throw new Error(`Unexpected keybinding data structure in vscDefaultKeybindings: ${JSON.stringify(binding)}`);
+        }
         return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
       });
-      const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings.map((binding) => {
+      const ctrlGKeybindings: KeyBinding[] = (
+        defaultEscapeKeybindings as Array<{ command: string; when?: string; args?: string }>
+      ).map((binding) => {
         return {
           key: "ctrl+g",
           command: binding.command,
