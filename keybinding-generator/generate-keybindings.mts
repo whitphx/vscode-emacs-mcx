@@ -1,3 +1,5 @@
+import { loadVscDefaultKeybindings } from "./vsc-default-keybindings.mjs";
+
 export interface KeyBindingSource {
   key?: string;
   keys?: string[];
@@ -437,6 +439,37 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
     args: " ",
   });
   return keybindings;
+}
+
+export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
+  const vscDefaultKeybindings = await loadVscDefaultKeybindings("linux");
+
+  const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
+    return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
+  });
+  const conflictedCommands = [
+    "cancelSelection", // emacs-mcx.cancel
+    "removeSecondaryCursors", // emacs-mcx.cancel
+    "editor.action.cancelSelectionAnchor", // emacs-mcx.cancel
+    "closeFindWidget", // emacs-mcx.isearchAbort
+    "closeReplaceInFilesWidget", // emacs-mcx.isearchAbort
+    "keybindings.editor.rejectWhenExpression", // not sure what it is, but remove it just in case.
+  ];
+
+  const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings
+    .filter((binding) => {
+      return !conflictedCommands.includes(binding.command);
+    })
+    .map((binding) => {
+      return {
+        key: "ctrl+g",
+        command: binding.command,
+        when: binding.when,
+        args: binding.args,
+      };
+    });
+
+  return ctrlGKeybindings;
 }
 
 function getAssignableKeys(includeNumerics: boolean): string[] {

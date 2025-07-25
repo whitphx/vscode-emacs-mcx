@@ -8,12 +8,11 @@ import {
   generateKeybindingsForPrefixArgument,
   generateKeybindingsForTypeCharInRectMarkMode,
   generateKeybindingsForRegisterCommands,
+  generateCtrlGKeybindings,
 } from "./generate-keybindings.mjs";
 import { validate } from "./validate.mjs";
-import { runVscDefaultKeybindingDumper, loadDumpedVscDefaultKeybindings } from "./vscode-keybindings.mjs";
 
 console.log("Run a script to get VSCode default keybindings in the VSCode environment ...");
-await runVscDefaultKeybindingDumper();
 
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
@@ -32,12 +31,9 @@ if (!Array.isArray(srcJson["keybindings"])) {
 }
 const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
 
-console.info(`Reading VSCode default keybindings ...`);
-const vscDefaultKeybindings = await loadDumpedVscDefaultKeybindings();
-
 const dstKeybindings: KeyBinding[] = [];
 
-keybindingSrcs.forEach((keybindingSrc) => {
+for (const keybindingSrc of keybindingSrcs) {
   if (keybindingSrc == null || typeof keybindingSrc !== "object") {
     throw new Error(`srcJson["keybindings"][] is unexpectedly null or not an object: ${String(keybindingSrc)}`);
   }
@@ -47,45 +43,22 @@ keybindingSrcs.forEach((keybindingSrc) => {
     if (keybindingSrc.$special === "universalArgumentTypes") {
       console.log("Adding keybindings for types following universal argument");
       dstKeybindings.push(...generateKeybindingsForPrefixArgument());
-      return;
+      continue;
     }
     if (keybindingSrc.$special === "rectMarkModeTypes") {
       console.log("Adding keybindings for types in rectangle-mark-mode");
       dstKeybindings.push(...generateKeybindingsForTypeCharInRectMarkMode());
-      return;
+      continue;
     }
     if (keybindingSrc.$special == "registerCommandTypes") {
       console.log("Adding keybindings for register commands");
       dstKeybindings.push(...generateKeybindingsForRegisterCommands());
-      return;
+      continue;
     }
     if (keybindingSrc.$special === "cancelKeybindings") {
-      const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
-        return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
-      });
-      const conflictedCommands = [
-        "cancelSelection", // emacs-mcx.cancel
-        "removeSecondaryCursors", // emacs-mcx.cancel
-        "editor.action.cancelSelectionAnchor", // emacs-mcx.cancel
-        "closeFindWidget", // emacs-mcx.isearchAbort
-        "closeReplaceInFilesWidget", // emacs-mcx.isearchAbort
-        "keybindings.editor.rejectWhenExpression", // not sure what it is, but remove it just in case.
-      ];
-
-      const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings
-        .filter((binding) => {
-          return !conflictedCommands.includes(binding.command);
-        })
-        .map((binding) => {
-          return {
-            key: "ctrl+g",
-            command: binding.command,
-            when: binding.when,
-            args: binding.args,
-          };
-        });
+      const ctrlGKeybindings = await generateCtrlGKeybindings();
       dstKeybindings.push(...ctrlGKeybindings);
-      return;
+      continue;
     }
   }
 
@@ -95,7 +68,7 @@ keybindingSrcs.forEach((keybindingSrc) => {
 
   const keybindings = generateKeybindings(keybindingSrc);
   dstKeybindings.push(...keybindings);
-});
+}
 
 validate(dstKeybindings);
 

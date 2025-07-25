@@ -122,6 +122,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# Dumped by keybinding-generator
-keybinding-generator/.tmp
