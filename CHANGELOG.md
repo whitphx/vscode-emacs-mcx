@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.76.0] - 2025-07-25
+
+### Change
+
+- Assign `C-g` to almost all commands that are originally assigned to `escape` so that `C-g` works as a cancel key in a wider range of cases, [#2332](https://github.com/whitphx/vscode-emacs-mcx/pull/2332).
+
 ## [0.75.0] - 2025-07-24
 
 ### Add
