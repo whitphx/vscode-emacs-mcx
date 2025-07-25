@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.78.0] - 2025-07-25
+
+### Add
+
+- `C-y` to paste from clipboard to the find widget, [#2342](https://github.com/whitphx/vscode-emacs-mcx/pull/2342).
+
 ## [0.77.1] - 2025-07-25
 
 ### Fix
