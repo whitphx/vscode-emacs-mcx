@@ -54,6 +54,17 @@ Refs:
 - [The official doc about `editor.find.seedSearchStringFromSelection` setting](basics#_seed-search-string-from-selection)
 - [The GitHub issue where we discuss about it](https://github.com/whitphx/vscode-emacs-mcx/issues/107)
 
+### I want to customize the META key (`ESC`, `ctrl+[`, `alt`, or Command (⌘) key on macOS).
+
+You can configure the key to be used as a META prefix with the following settings.
+
+- `emacs-mcx.useMetaPrefixAlt` (`true` by default)
+- `emacs-mcx.useMetaPrefixEscape`
+- `emacs-mcx.useMetaPrefixCtrlLeftBracket`
+- `emacs-mcx.useMetaPrefixMacCmd`
+
+Read [the extension settings section](#extension-settings) below for more details.
+
 ### I want to use keyboard macro
 
 Check out [Keyboard Macro Beta](https://marketplace.visualstudio.com/items?itemName=tshino.kb-macro) by [tshino](https://github.com/tshino) (`tshino.kb-macro`) and [its keybindings](https://github.com/tshino/vscode-kb-macro/blob/main/keymap-wrapper/tuttieee.emacs-mcx.json).
