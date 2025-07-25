@@ -26,6 +26,9 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
 export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Promise<VscKeybinding[]> {
   const url = `https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings/doc.keybindings.${platform}.json`;
   const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
+  }
   const vscDefaultKeybindingsContent = await response.text();
   const vscDefaultKeybindings = JSON.parse(vscDefaultKeybindingsContent) as unknown;
   if (!Array.isArray(vscDefaultKeybindings)) {
