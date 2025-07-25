@@ -18,7 +18,7 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   if ("when" in keybinding && typeof keybinding.when !== "string") {
     return false;
   }
-  if ("args" in keybinding && typeof keybinding.args !== "object") {
+  if ("args" in keybinding && (keybinding.args !== null && (typeof keybinding.args !== "object" || Array.isArray(keybinding.args)))) {
     return false;
   }
   return true;
