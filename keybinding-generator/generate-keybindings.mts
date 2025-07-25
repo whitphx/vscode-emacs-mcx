@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 export interface KeyBindingSource {
   key?: string;
   keys?: string[];

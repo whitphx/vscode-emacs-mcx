@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 import fs from "node:fs";
 import url from "node:url";
 import stripJsonComments from "strip-json-comments";
