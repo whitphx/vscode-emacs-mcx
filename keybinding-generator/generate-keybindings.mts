@@ -1,4 +1,4 @@
-/* eslint-env node */
+import { loadVscDefaultKeybindingsSet, VscKeybinding } from "./vsc-default-keybindings.mjs";
 
 export interface KeyBindingSource {
   key?: string;
@@ -439,6 +439,42 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
     args: " ",
   });
   return keybindings;
+}
+
+export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
+  const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = await loadVscDefaultKeybindingsSet();
+
+  function getCtrlGKeybindings(keybindings: VscKeybinding[], additionalWhen?: string): KeyBinding[] {
+    // Exclude keybindings that conflict with Emacs keybindings or seem to be not useful when assigned to `ctrl+g`.
+    const conflictedCommands = [
+      "cancelSelection", // emacs-mcx.cancel
+      "removeSecondaryCursors", // emacs-mcx.cancel
+      "editor.action.cancelSelectionAnchor", // emacs-mcx.cancel
+      "closeFindWidget", // emacs-mcx.isearchAbort
+      "closeReplaceInFilesWidget", // emacs-mcx.isearchAbort
+      "keybindings.editor.rejectWhenExpression", // not sure what this command is, but remove it just in case.
+    ];
+    return keybindings
+      .filter((binding) => binding.key === "escape" && !binding.command.startsWith("emacs-mcx."))
+      .filter((binding) => {
+        return !conflictedCommands.includes(binding.command);
+      })
+      .map((binding) => ({
+        key: "ctrl+g",
+        command: binding.command,
+        when: additionalWhen ? addWhenCond(binding.when, additionalWhen) : binding.when,
+        args: binding.args,
+      }));
+  }
+  const allPlatformsCtrlGKeybindings = getCtrlGKeybindings(allPlatforms);
+  const linuxSpecificCtrlGKeybindings = getCtrlGKeybindings(linuxSpecific, "isLinux");
+  const winSpecificCtrlGKeybindings = getCtrlGKeybindings(winSpecific, "isWindows");
+  const osxSpecificCtrlGKeybindings = getCtrlGKeybindings(osxSpecific, "isMac");
+
+  return allPlatformsCtrlGKeybindings
+    .concat(linuxSpecificCtrlGKeybindings)
+    .concat(winSpecificCtrlGKeybindings)
+    .concat(osxSpecificCtrlGKeybindings);
 }
 
 function getAssignableKeys(includeNumerics: boolean): string[] {

@@ -38,10 +38,12 @@ jobs:
           npm run check:prettier
 
       - name: Test keybinding generator
+        run: npm run test-gen-keys
+
+      - name: Check keybinding diff
         run: |
-          npm run test-gen-keys
           npm run gen-keys
-          git diff --quiet || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
+          git diff --exit-code || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
 
       - name: Test
         run: xvfb-run -a npm test

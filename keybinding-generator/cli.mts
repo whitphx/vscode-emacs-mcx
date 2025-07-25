@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 import fs from "node:fs";
 import url from "node:url";
 import stripJsonComments from "strip-json-comments";
@@ -10,6 +8,7 @@ import {
   generateKeybindingsForPrefixArgument,
   generateKeybindingsForTypeCharInRectMarkMode,
   generateKeybindingsForRegisterCommands,
+  generateCtrlGKeybindings,
 } from "./generate-keybindings.mjs";
 import { validate } from "./validate.mjs";
 
@@ -25,11 +24,14 @@ if (srcJson == null || typeof srcJson !== "object") {
 if (!("keybindings" in srcJson)) {
   throw new Error("The key .keybindings doesn't exist in srcJson");
 }
+if (!Array.isArray(srcJson["keybindings"])) {
+  throw new Error(`srcJson["keybindings"] is not an array: ${String(srcJson["keybindings"])}`);
+}
 const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
 
 const dstKeybindings: KeyBinding[] = [];
 
-keybindingSrcs.forEach((keybindingSrc) => {
+for (const keybindingSrc of keybindingSrcs) {
   if (keybindingSrc == null || typeof keybindingSrc !== "object") {
     throw new Error(`srcJson["keybindings"][] is unexpectedly null or not an object: ${String(keybindingSrc)}`);
   }
@@ -39,17 +41,22 @@ keybindingSrcs.forEach((keybindingSrc) => {
     if (keybindingSrc.$special === "universalArgumentTypes") {
       console.log("Adding keybindings for types following universal argument");
       dstKeybindings.push(...generateKeybindingsForPrefixArgument());
-      return;
+      continue;
     }
     if (keybindingSrc.$special === "rectMarkModeTypes") {
       console.log("Adding keybindings for types in rectangle-mark-mode");
       dstKeybindings.push(...generateKeybindingsForTypeCharInRectMarkMode());
-      return;
+      continue;
     }
     if (keybindingSrc.$special == "registerCommandTypes") {
       console.log("Adding keybindings for register commands");
       dstKeybindings.push(...generateKeybindingsForRegisterCommands());
-      return;
+      continue;
+    }
+    if (keybindingSrc.$special === "cancelKeybindings") {
+      const ctrlGKeybindings = await generateCtrlGKeybindings();
+      dstKeybindings.push(...ctrlGKeybindings);
+      continue;
     }
   }
 
@@ -59,7 +66,7 @@ keybindingSrcs.forEach((keybindingSrc) => {
 
   const keybindings = generateKeybindings(keybindingSrc);
   dstKeybindings.push(...keybindings);
-});
+}
 
 validate(dstKeybindings);
 
