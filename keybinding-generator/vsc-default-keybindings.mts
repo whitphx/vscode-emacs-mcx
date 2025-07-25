@@ -27,11 +27,8 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   }
   return true;
 }
-export async function loadVscDefaultKeybindings(
-  platform: "linux" | "win" | "osx",
-  baseUrl: string = "https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings",
-): Promise<VscKeybinding[]> {
-  const url = `${baseUrl}/doc.keybindings.${platform}.json`;
+export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Promise<VscKeybinding[]> {
+  const url = `https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings/doc.keybindings.${platform}.json`;
   let response: Response;
   try {
     response = await fetch(url);
