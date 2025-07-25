@@ -327,6 +327,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       ) {
         this.exitMarkMode();
       }
+      if (e.reason === vscode.TextDocumentChangeReason.Undo || e.reason === vscode.TextDocumentChangeReason.Redo) {
+        this.exitMarkMode();
+      }
 
       this.onDidInterruptTextEditor({ reason: "document-changed", originalEvent: e });
     }

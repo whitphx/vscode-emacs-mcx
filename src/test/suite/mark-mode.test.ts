@@ -36,19 +36,54 @@ ABCDEFGHIJ`;
   edits.forEach(([label, editOp]) => {
     test(`exit mark-mode when ${label} occurs`, async () => {
       // Enter mark-mode and select some characters
-      activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
+      setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.setMarkCommand();
       await emulator.runCommand("forwardChar");
+      assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
+      assert.ok(emulator.isInMarkMode);
 
       // Edit occurs
       await editOp();
 
-      // assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
-
       // After edit, mark-mode is no longer active
       await emulator.runCommand("forwardChar");
       assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
+      assert.ok(!emulator.isInMarkMode);
     });
+  });
+
+  test('exit mark-mode when "undo" or "redo" occurs', async () => {
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    // edit
+    await activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "foo"));
+
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+    assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
+    assert.ok(emulator.isInMarkMode);
+
+    // undo
+    await vscode.commands.executeCommand("undo");
+
+    // After undo, mark-mode is no longer active
+    await emulator.runCommand("forwardChar");
+    assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
+    assert.ok(!emulator.isInMarkMode);
+
+    // enter mark-mode again
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+    assert.ok(activeTextEditor.selections.every((selection) => !selection.isEmpty));
+    assert.ok(emulator.isInMarkMode);
+
+    // redo
+    await vscode.commands.executeCommand("redo");
+
+    // After redo, mark-mode is no longer active
+    await emulator.runCommand("forwardChar");
+    assert.ok(activeTextEditor.selections.every((selection) => selection.isEmpty));
+    assert.ok(!emulator.isInMarkMode);
   });
 
   test("successive set-mark-command resets the region to be empty", async () => {
