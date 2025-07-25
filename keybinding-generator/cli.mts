@@ -12,8 +12,6 @@ import {
 } from "./generate-keybindings.mjs";
 import { validate } from "./validate.mjs";
 
-console.log("Run a script to get VSCode default keybindings in the VSCode environment ...");
-
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
 
