@@ -5400,7 +5400,7 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "rimraf dist && npm run gen-keys && npm run webpack:prod && npm run package-web",
+    "vscode:prepublish": "npm install && rimraf dist && npm run gen-keys && npm run webpack:prod && npm run package-web",
     "webpack:dev": "webpack --mode development",
     "webpack:prod": "webpack --mode production --devtool hidden-source-map",
     "webpack": "npm run webpack:dev",
