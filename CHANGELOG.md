@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.77.0] - 2025-07-25
+
+### Add
+
+- `M-?` as xref-find-references, [#2340](https://github.com/whitphx/vscode-emacs-mcx/pull/2340).
+
 ## [0.76.0] - 2025-07-25
 
 ### Change
