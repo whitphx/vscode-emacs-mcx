@@ -5396,6 +5396,26 @@
         "key": "ctrl+[ ctrl+,",
         "command": "workbench.action.navigateForward",
         "when": "canNavigateForward && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+shift+/",
+        "command": "references-view.findReferences",
+        "when": "editorHasReferenceProvider && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+shift+/",
+        "command": "references-view.findReferences",
+        "when": "editorHasReferenceProvider && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape shift+/",
+        "command": "references-view.findReferences",
+        "when": "editorHasReferenceProvider && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ shift+/",
+        "command": "references-view.findReferences",
+        "when": "editorHasReferenceProvider && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       }
     ]
   },

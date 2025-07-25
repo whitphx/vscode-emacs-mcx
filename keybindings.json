@@ -836,6 +836,13 @@
       "key": "ctrl+meta+,",
       "command": "workbench.action.navigateForward",
       "when": "canNavigateForward"
+    },
+    {
+      // Copied from the VSCode default keybinding for "References: Find All References",
+      // which is a good alternative to Emacs' `xref-find-references`
+      "key": "meta+shift+/",  // "M-?". "?" is shift + "/" in US keyboard layout.
+      "command": "references-view.findReferences",
+      "when": "editorHasReferenceProvider"
     }
   ]
 }
