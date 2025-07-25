@@ -3149,7 +3149,7 @@
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "editorFocus && (findInputFocussed || replaceInputFocussed) && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed) && !isComposing"
       },
       {
         "key": "alt+y",
