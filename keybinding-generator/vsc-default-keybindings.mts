@@ -40,7 +40,7 @@ export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx
   }
   const vscDefaultKeybindings = (await response.json()) as unknown;
   if (!Array.isArray(vscDefaultKeybindings)) {
-    throw new Error("vscodeDefaultKeybindings is not an array");
+    throw new Error("vscDefaultKeybindings is not an array");
   }
 
   vscDefaultKeybindings.forEach((binding) => {
