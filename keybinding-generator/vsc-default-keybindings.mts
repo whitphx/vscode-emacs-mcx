@@ -56,10 +56,10 @@ export async function loadVscDefaultKeybindingsSet(): Promise<VscKeybindingPerPl
   const winJsons = win.map((b) => JSON.stringify(b));
   const osxJsons = osx.map((b) => JSON.stringify(b));
 
-  const allPlatformsJsons = new Set<string>([...linuxJsons, ...winJsons, ...osxJsons]);
-  const linuxOnlyJsons = linuxJsons.filter((b) => !allPlatformsJsons.has(b));
-  const winOnlyJsons = winJsons.filter((b) => !allPlatformsJsons.has(b));
-  const osxOnlyJsons = osxJsons.filter((b) => !allPlatformsJsons.has(b));
+  const allPlatformsJsons = linuxJsons.filter((b) => winJsons.includes(b) && osxJsons.includes(b));
+  const linuxOnlyJsons = linuxJsons.filter((b) => !winJsons.includes(b) && !osxJsons.includes(b));
+  const winOnlyJsons = winJsons.filter((b) => !linuxJsons.includes(b) && !osxJsons.includes(b));
+  const osxOnlyJsons = osxJsons.filter((b) => !linuxJsons.includes(b) && !winJsons.includes(b));
   const allPlatforms: VscKeybinding[] = Array.from(allPlatformsJsons).map((json) => JSON.parse(json) as VscKeybinding);
   const linuxOnly: VscKeybinding[] = linuxOnlyJsons.map((json) => JSON.parse(json) as VscKeybinding);
   const winOnly: VscKeybinding[] = winOnlyJsons.map((json) => JSON.parse(json) as VscKeybinding);
