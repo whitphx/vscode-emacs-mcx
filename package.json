@@ -5424,7 +5424,7 @@
     "@eslint/js": "^9.31.0",
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.1.0",
     "@types/sinon": "^17.0.4",
     "@types/vscode": "^1.89.0",
     "@types/webpack-env": "^1.18.8",
