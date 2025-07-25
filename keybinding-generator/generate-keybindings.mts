@@ -444,7 +444,8 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
 export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
   const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = await loadVscDefaultKeybindingsSet();
 
-  function excludeConflictedCommands(keybindings: VscKeybinding[]): VscKeybinding[] {
+  function getCtrlGKeybindings(keybindings: VscKeybinding[], additionalWhen?: string): KeyBinding[] {
+    // Exclude keybindings that conflict with Emacs keybindings.
     const conflictedCommands = [
       "cancelSelection", // emacs-mcx.cancel
       "removeSecondaryCursors", // emacs-mcx.cancel
@@ -457,40 +458,23 @@ export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
       .filter((binding) => binding.key === "escape" && !binding.command.startsWith("emacs-mcx."))
       .filter((binding) => {
         return !conflictedCommands.includes(binding.command);
-      });
+      })
+      .map((binding) => ({
+        key: "ctrl+g",
+        command: binding.command,
+        when: additionalWhen ? addWhenCond(binding.when, additionalWhen) : binding.when,
+        args: binding.args,
+      }));
   }
-  const allPlatformsCancelKeybindings = excludeConflictedCommands(allPlatforms);
-  const linuxOnlyCancelKeybindings = excludeConflictedCommands(linuxSpecific);
-  const winOnlyCancelKeybindings = excludeConflictedCommands(winSpecific);
-  const osxOnlyCancelKeybindings = excludeConflictedCommands(osxSpecific);
-
-  function convertToEmacsKeybinding(keybinding: VscKeybinding): KeyBinding {
-    return {
-      key: "ctrl+g",
-      command: keybinding.command,
-      when: keybinding.when,
-      args: keybinding.args,
-    };
-  }
-
-  const allPlatformsCtrlGKeybindings = allPlatformsCancelKeybindings.map(convertToEmacsKeybinding);
-  const linuxCtrlGKeybindings = linuxOnlyCancelKeybindings.map(convertToEmacsKeybinding).map((b) => ({
-    ...b,
-    when: addWhenCond(b.when, "isLinux"),
-  }));
-  const winCtrlGKeybindings = winOnlyCancelKeybindings.map(convertToEmacsKeybinding).map((b) => ({
-    ...b,
-    when: addWhenCond(b.when, "isWindows"),
-  }));
-  const osxCtrlGKeybindings = osxOnlyCancelKeybindings.map(convertToEmacsKeybinding).map((b) => ({
-    ...b,
-    when: addWhenCond(b.when, "isMac"),
-  }));
+  const allPlatformsCtrlGKeybindings = getCtrlGKeybindings(allPlatforms);
+  const linuxSpecificCtrlGKeybindings = getCtrlGKeybindings(linuxSpecific, "isLinux");
+  const winSpecificCtrlGKeybindings = getCtrlGKeybindings(winSpecific, "isWindows");
+  const osxSpecificCtrlGKeybindings = getCtrlGKeybindings(osxSpecific, "isMac");
 
   return allPlatformsCtrlGKeybindings
-    .concat(linuxCtrlGKeybindings)
-    .concat(winCtrlGKeybindings)
-    .concat(osxCtrlGKeybindings);
+    .concat(linuxSpecificCtrlGKeybindings)
+    .concat(winSpecificCtrlGKeybindings)
+    .concat(osxSpecificCtrlGKeybindings);
 }
 
 function getAssignableKeys(includeNumerics: boolean): string[] {
