@@ -3157,6 +3157,11 @@
         "when": "emacs-mcx.minibufferReading"
       },
       {
+        "key": "ctrl+y",
+        "command": "editor.action.clipboardPasteAction",
+        "when": "editorFocus && findWidgetVisible && !isComposing"
+      },
+      {
         "key": "alt+y",
         "command": "emacs-mcx.yank-pop",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"

@@ -324,9 +324,14 @@
       "key": "ctrl+w",
       "command": "emacs-mcx.killRegion",
       "when": "editorTextFocus && !editorReadonly"
-      // In original Emacs, `C-w` in isearch adds "^J" (= `\n`) **to the search string** like `C-j`.
-      // TODO: Find a way to add "\n" to the search string in isearch in VSCode.
     },
+    // {
+    //   In original Emacs, `C-w` in isearch appends the word next to the cursor to the search string.
+    //   TODO: Find a way to add a string to the search string in isearch in VSCode.
+    //   "key": "ctrl+w",
+    //   "command": "",
+    //   "when": "editorFocus && findWidgetVisible && !isComposing"
+    // },
     {
       "key": "meta+w",
       "command": "emacs-mcx.copyRegion",
@@ -342,12 +347,11 @@
       "command": "emacs-mcx.yank",
       "when": "emacs-mcx.minibufferReading"
     },
-    // {
-    // TODO: Find a command to set the search string.
-    //   "key": "ctrl+y",
-    //   "command": "emacs-mcx.isearchExit",
-    //   "when": "editorFocus && findWidgetVisible && !isComposing"
-    // },
+    {
+      "key": "ctrl+y",
+      "command": "editor.action.clipboardPasteAction",  // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+      "when": "editorFocus && findWidgetVisible && !isComposing"
+    },
     {
       "key": "meta+y",
       "command": "emacs-mcx.yank-pop",
