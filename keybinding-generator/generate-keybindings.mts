@@ -442,7 +442,7 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
 }
 
 export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
-  const { allPlatforms, linuxOnly, winOnly, osxOnly } = await loadVscDefaultKeybindingsSet();
+  const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = await loadVscDefaultKeybindingsSet();
 
   function excludeConflictedCommands(keybindings: VscKeybinding[]): VscKeybinding[] {
     const conflictedCommands = [
@@ -460,32 +460,37 @@ export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
       });
   }
   const allPlatformsCancelKeybindings = excludeConflictedCommands(allPlatforms);
-  const linuxOnlyCancelKeybindings = excludeConflictedCommands(linuxOnly);
-  const winOnlyCancelKeybindings = excludeConflictedCommands(winOnly);
-  const osxOnlyCancelKeybindings = excludeConflictedCommands(osxOnly);
-  if (
-    linuxOnlyCancelKeybindings.length > 0 ||
-    winOnlyCancelKeybindings.length > 0 ||
-    osxOnlyCancelKeybindings.length > 0
-  ) {
-    throw new Error(`Platform-specific ESCAPE keybindings exist. TODO: Add key-gen code to handle them.
-      \nLinux: ${JSON.stringify(linuxOnlyCancelKeybindings)}
-      \nWindows: ${JSON.stringify(winOnlyCancelKeybindings)}
-      \nmacOS: ${JSON.stringify(osxOnlyCancelKeybindings)}
+  const linuxOnlyCancelKeybindings = excludeConflictedCommands(linuxSpecific);
+  const winOnlyCancelKeybindings = excludeConflictedCommands(winSpecific);
+  const osxOnlyCancelKeybindings = excludeConflictedCommands(osxSpecific);
 
-At the moment when we implemented this method, we didn't have platform-specific ESCAPE keybindings in the VSCode default keybindings,
-so we didn't implement the code to handle them.
-      \nPlease implement the code to handle them and remove this error message.`);
-  }
-
-  return allPlatformsCancelKeybindings.map((binding) => {
+  function convertToEmacsKeybinding(keybinding: VscKeybinding): KeyBinding {
     return {
       key: "ctrl+g",
-      command: binding.command,
-      when: binding.when,
-      args: binding.args,
+      command: keybinding.command,
+      when: keybinding.when,
+      args: keybinding.args,
     };
-  });
+  }
+
+  const allPlatformsCtrlGKeybindings = allPlatformsCancelKeybindings.map(convertToEmacsKeybinding);
+  const linuxCtrlGKeybindings = linuxOnlyCancelKeybindings.map(convertToEmacsKeybinding).map((b) => ({
+    ...b,
+    when: addWhenCond(b.when, "isLinux"),
+  }));
+  const winCtrlGKeybindings = winOnlyCancelKeybindings.map(convertToEmacsKeybinding).map((b) => ({
+    ...b,
+    when: addWhenCond(b.when, "isWindows"),
+  }));
+  const osxCtrlGKeybindings = osxOnlyCancelKeybindings.map(convertToEmacsKeybinding).map((b) => ({
+    ...b,
+    when: addWhenCond(b.when, "isMac"),
+  }));
+
+  return allPlatformsCtrlGKeybindings
+    .concat(linuxCtrlGKeybindings)
+    .concat(winCtrlGKeybindings)
+    .concat(osxCtrlGKeybindings);
 }
 
 function getAssignableKeys(includeNumerics: boolean): string[] {

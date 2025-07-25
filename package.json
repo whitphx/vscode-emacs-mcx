@@ -3782,7 +3782,7 @@
       {
         "key": "ctrl+g",
         "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus"
+        "when": "outputFilterFocus && isMac"
       },
       {
         "key": "ctrl+space",

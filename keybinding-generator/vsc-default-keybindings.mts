@@ -43,9 +43,9 @@ export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx
 
 interface VscKeybindingPerPlatform {
   allPlatforms: VscKeybinding[];
-  linuxOnly: VscKeybinding[];
-  winOnly: VscKeybinding[];
-  osxOnly: VscKeybinding[];
+  linuxSpecific: VscKeybinding[];
+  winSpecific: VscKeybinding[];
+  osxSpecific: VscKeybinding[];
 }
 export async function loadVscDefaultKeybindingsSet(): Promise<VscKeybindingPerPlatform> {
   const linux = await loadVscDefaultKeybindings("linux");
@@ -57,18 +57,18 @@ export async function loadVscDefaultKeybindingsSet(): Promise<VscKeybindingPerPl
   const osxJsons = osx.map((b) => JSON.stringify(b));
 
   const allPlatformsJsons = linuxJsons.filter((b) => winJsons.includes(b) && osxJsons.includes(b));
-  const linuxOnlyJsons = linuxJsons.filter((b) => !winJsons.includes(b) && !osxJsons.includes(b));
-  const winOnlyJsons = winJsons.filter((b) => !linuxJsons.includes(b) && !osxJsons.includes(b));
-  const osxOnlyJsons = osxJsons.filter((b) => !linuxJsons.includes(b) && !winJsons.includes(b));
+  const linuxSpecificJsons = linuxJsons.filter((b) => !allPlatformsJsons.includes(b));
+  const winSpecificJsons = winJsons.filter((b) => !allPlatformsJsons.includes(b));
+  const osxSpecificJsons = osxJsons.filter((b) => !allPlatformsJsons.includes(b));
   const allPlatforms: VscKeybinding[] = Array.from(allPlatformsJsons).map((json) => JSON.parse(json) as VscKeybinding);
-  const linuxOnly: VscKeybinding[] = linuxOnlyJsons.map((json) => JSON.parse(json) as VscKeybinding);
-  const winOnly: VscKeybinding[] = winOnlyJsons.map((json) => JSON.parse(json) as VscKeybinding);
-  const osxOnly: VscKeybinding[] = osxOnlyJsons.map((json) => JSON.parse(json) as VscKeybinding);
+  const linuxSpecific: VscKeybinding[] = linuxSpecificJsons.map((json) => JSON.parse(json) as VscKeybinding);
+  const winSpecific: VscKeybinding[] = winSpecificJsons.map((json) => JSON.parse(json) as VscKeybinding);
+  const osxSpecific: VscKeybinding[] = osxSpecificJsons.map((json) => JSON.parse(json) as VscKeybinding);
 
   return {
     allPlatforms,
-    linuxOnly,
-    winOnly,
-    osxOnly,
+    linuxSpecific,
+    winSpecific,
+    osxSpecific,
   };
 }
