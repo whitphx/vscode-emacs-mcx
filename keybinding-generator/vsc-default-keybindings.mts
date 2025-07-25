@@ -18,18 +18,25 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   if ("when" in keybinding && typeof keybinding.when !== "string") {
     return false;
   }
-  if ("args" in keybinding && (keybinding.args !== null && (typeof keybinding.args !== "object" || Array.isArray(keybinding.args)))) {
+  if (
+    "args" in keybinding &&
+    keybinding.args !== null &&
+    (typeof keybinding.args !== "object" || Array.isArray(keybinding.args))
+  ) {
     return false;
   }
   return true;
 }
-export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx", baseUrl: string = "https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings"): Promise<VscKeybinding[]> {
+export async function loadVscDefaultKeybindings(
+  platform: "linux" | "win" | "osx",
+  baseUrl: string = "https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings",
+): Promise<VscKeybinding[]> {
   const url = `${baseUrl}/doc.keybindings.${platform}.json`;
   let response: Response;
   try {
     response = await fetch(url);
   } catch (error) {
-    throw new Error(`Failed to fetch keybindings from ${url}: ${error}`);
+    throw new Error(`Failed to fetch keybindings from ${url}: ${String(error)}`);
   }
   if (!response.ok) {
     throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
