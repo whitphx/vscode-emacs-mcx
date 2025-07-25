@@ -2,7 +2,7 @@
   "name": "emacs-mcx",
   "displayName": "Awesome Emacs Keymap",
   "description": "Emacs emulation for VSCode with multi-cursor support, clipboard-integrated kill-ring, well-emulated mark-mode, and more.",
-  "version": "0.76.0",
+  "version": "0.77.0",
   "publisher": "tuttieee",
   "repository": {
     "type": "git",
