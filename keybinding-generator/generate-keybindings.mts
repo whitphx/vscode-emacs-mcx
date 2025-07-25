@@ -1,4 +1,4 @@
-import { loadVscDefaultKeybindings } from "./vsc-default-keybindings.mjs";
+import { loadVscDefaultKeybindingsSet, VscKeybinding } from "./vsc-default-keybindings.mjs";
 
 export interface KeyBindingSource {
   key?: string;
@@ -442,34 +442,50 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
 }
 
 export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
-  const vscDefaultKeybindings = await loadVscDefaultKeybindings("linux");
+  const { allPlatforms, linuxOnly, winOnly, osxOnly } = await loadVscDefaultKeybindingsSet();
 
-  const defaultEscapeKeybindings = vscDefaultKeybindings.filter((binding) => {
-    return binding.key === "escape" && !binding.command.startsWith("emacs-mcx.");
+  function excludeConflictedCommands(keybindings: VscKeybinding[]): VscKeybinding[] {
+    const conflictedCommands = [
+      "cancelSelection", // emacs-mcx.cancel
+      "removeSecondaryCursors", // emacs-mcx.cancel
+      "editor.action.cancelSelectionAnchor", // emacs-mcx.cancel
+      "closeFindWidget", // emacs-mcx.isearchAbort
+      "closeReplaceInFilesWidget", // emacs-mcx.isearchAbort
+      "keybindings.editor.rejectWhenExpression", // not sure what it is, but remove it just in case.
+    ];
+    return keybindings
+      .filter((binding) => binding.key === "escape" && !binding.command.startsWith("emacs-mcx."))
+      .filter((binding) => {
+        return !conflictedCommands.includes(binding.command);
+      });
+  }
+  const allPlatformsCancelKeybindings = excludeConflictedCommands(allPlatforms);
+  const linuxOnlyCancelKeybindings = excludeConflictedCommands(linuxOnly);
+  const winOnlyCancelKeybindings = excludeConflictedCommands(winOnly);
+  const osxOnlyCancelKeybindings = excludeConflictedCommands(osxOnly);
+  if (
+    linuxOnlyCancelKeybindings.length > 0 ||
+    winOnlyCancelKeybindings.length > 0 ||
+    osxOnlyCancelKeybindings.length > 0
+  ) {
+    throw new Error(`Platform-specific ESCAPE keybindings exist. TODO: Add key-gen code to handle them.
+      \nLinux: ${JSON.stringify(linuxOnlyCancelKeybindings)}
+      \nWindows: ${JSON.stringify(winOnlyCancelKeybindings)}
+      \nmacOS: ${JSON.stringify(osxOnlyCancelKeybindings)}
+
+At the moment when we implemented this method, we didn't have platform-specific ESCAPE keybindings in the VSCode default keybindings,
+so we didn't implement the code to handle them.
+      \nPlease implement the code to handle them and remove this error message.`);
+  }
+
+  return allPlatformsCancelKeybindings.map((binding) => {
+    return {
+      key: "ctrl+g",
+      command: binding.command,
+      when: binding.when,
+      args: binding.args,
+    };
   });
-  const conflictedCommands = [
-    "cancelSelection", // emacs-mcx.cancel
-    "removeSecondaryCursors", // emacs-mcx.cancel
-    "editor.action.cancelSelectionAnchor", // emacs-mcx.cancel
-    "closeFindWidget", // emacs-mcx.isearchAbort
-    "closeReplaceInFilesWidget", // emacs-mcx.isearchAbort
-    "keybindings.editor.rejectWhenExpression", // not sure what it is, but remove it just in case.
-  ];
-
-  const ctrlGKeybindings: KeyBinding[] = defaultEscapeKeybindings
-    .filter((binding) => {
-      return !conflictedCommands.includes(binding.command);
-    })
-    .map((binding) => {
-      return {
-        key: "ctrl+g",
-        command: binding.command,
-        when: binding.when,
-        args: binding.args,
-      };
-    });
-
-  return ctrlGKeybindings;
 }
 
 function getAssignableKeys(includeNumerics: boolean): string[] {
