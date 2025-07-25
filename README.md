@@ -369,11 +369,12 @@ This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to 
 
 ### Looking up identifiers
 
-| Command | Desc                                                                                                                                             |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `M-.`   | Find definitions of an identifier (xref-find-definitions). It's just bound to VSCode's "Go to Definition" (`editor.action.revealDefinition`).    |
-| `M-,`   | Go back to where you previously invoked M-. and friends (xref-go-back). It's just bound to VSCode's "Go Back" (`workbench.action.navigateBack`). |
-| `C-M-,` | Go forward to where you previously invoked M-, (xref-go-forward). It's just bound to VSCode's "Go Forward" (`workbench.action.navigateForward`). |
+| Command                          | Desc                                                                                                                                                       |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `M-.`                            | Find definitions of an identifier (xref-find-definitions). It's just bound to VSCode's "Go to Definition" (`editor.action.revealDefinition`).              |
+| `M-,`                            | Go back to where you previously invoked M-. and friends (xref-go-back). It's just bound to VSCode's "Go Back" (`workbench.action.navigateBack`).           |
+| `C-M-,`                          | Go forward to where you previously invoked M-, (xref-go-forward). It's just bound to VSCode's "Go Forward" (`workbench.action.navigateForward`).           |
+| `M-S-/` (`M-?` with US keyboard) | Find references of an identifier (xref-find-references). It's just bound to VSCode's "References: Find All References" (`references-view.findReferences`). |
 
 ## Other commands
 
