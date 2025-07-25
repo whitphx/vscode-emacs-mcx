@@ -2847,11 +2847,6 @@
         "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
       },
       {
-        "key": "ctrl+y",
-        "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
-      },
-      {
         "key": "alt+y",
         "command": "",
         "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
@@ -2953,11 +2948,6 @@
       },
       {
         "key": "alt+w",
-        "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing"
-      },
-      {
-        "key": "ctrl+y",
         "command": "",
         "when": "isWindows && replaceInputFocussed && !isComposing"
       },
@@ -3159,7 +3149,7 @@
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "editorFocus && findWidgetVisible && !isComposing"
+        "when": "editorFocus && (findInputFocussed || replaceInputFocussed) && !isComposing"
       },
       {
         "key": "alt+y",

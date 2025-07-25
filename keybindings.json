@@ -252,7 +252,6 @@
         "ctrl+k",
         "ctrl+w",
         "alt+w",
-        "ctrl+y",
         "alt+y",
         "ctrl+m",
         "ctrl+j",
@@ -350,7 +349,7 @@
     {
       "key": "ctrl+y",
       "command": "editor.action.clipboardPasteAction",  // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
-      "when": "editorFocus && findWidgetVisible && !isComposing"
+      "when": "editorFocus && (findInputFocussed || replaceInputFocussed) && !isComposing"
     },
     {
       "key": "meta+y",
