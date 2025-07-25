@@ -38,8 +38,7 @@ export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx
   if (!response.ok) {
     throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
   }
-  const vscDefaultKeybindingsContent = await response.text();
-  const vscDefaultKeybindings = JSON.parse(vscDefaultKeybindingsContent) as unknown;
+  const vscDefaultKeybindings = (await response.json()) as unknown;
   if (!Array.isArray(vscDefaultKeybindings)) {
     throw new Error("vscodeDefaultKeybindings is not an array");
   }
