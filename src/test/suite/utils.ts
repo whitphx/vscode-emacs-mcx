@@ -111,25 +111,3 @@ export function assertSelectionsEqual(
     assert.deepStrictEqual(actualSelection, expectSelection);
   });
 }
-
-export function tryUntil<T>(
-  fn: () => T,
-  predicate: (result: T) => boolean,
-  timeout = 5000,
-  interval = 1000,
-): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const intervalObj = setInterval(() => {
-      const result = fn();
-      if (predicate(result)) {
-        clearInterval(intervalObj);
-        resolve(result);
-      }
-    }, interval);
-
-    setTimeout(() => {
-      clearInterval(intervalObj);
-      reject(new Error(`Timeout after ${timeout}ms`));
-    }, timeout);
-  });
-}

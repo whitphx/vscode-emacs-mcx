@@ -1,14 +1,13 @@
 import assert from "assert";
 import vscode from "vscode";
 import path from "path";
-import { tryUntil } from "./utils";
 
 import { Configuration } from "../../configuration/configuration";
 
 suite("package.json", () => {
   let packageJson: unknown;
 
-  setup(async () => {
+  setup(() => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     packageJson = require(path.join(__dirname, "../../../package.json"));
     assert.ok(packageJson, "package.json should be loaded");
@@ -16,12 +15,8 @@ suite("package.json", () => {
     // @ts-expect-error packageJson is not typed
     const extensionName: string = packageJson["publisher"] + "." + packageJson["name"];
 
-    // Wait for the extension to be available, with a timeout
-    const extension = await tryUntil(
-      () => vscode.extensions.getExtension(extensionName),
-      (ext) => ext !== undefined,
-    );
-    assert.ok(extension, `Extension '${extensionName}' should be available within 1000ms`);
+    const extension = vscode.extensions.getExtension(extensionName);
+    assert.ok(extension, `Extension '${extensionName}' should be available.`);
     extension?.activate();
   });
 
