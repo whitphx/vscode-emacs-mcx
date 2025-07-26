@@ -8,7 +8,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  test:
     strategy:
       fail-fast: false
       matrix:
@@ -45,20 +45,40 @@ jobs:
           npm run gen-keys
           git diff --exit-code || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
 
+      - name: Build for test
+        run: npm run webpack
+        if: matrix.type == 'native'
+
       - name: Test
         run: xvfb-run -a npm test
         if: runner.os == 'Linux' && matrix.type == 'native'
       - name: Test
-        run: npm run test
+        run: npm test
         if: runner.os != 'Linux' && matrix.type == 'native'
 
       - name: Test Web
         run: npm run test:web -- --headless
         if: matrix.type == 'web'
 
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
       - name: Build the vsix package on Linux
-        if: matrix.os == 'ubuntu-latest' && matrix.type == 'native'
         run: |
           if [ $IS_RELEASE = true ]; then
             VERSION=$(node -p "require('./package.json').version")
@@ -77,14 +97,6 @@ jobs:
 
       - name: Upload the vsix built on Linux
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.type == 'native' && ! startsWith(github.ref, 'refs/tags/v') }}
-        with:
-          path: emacs-mcx*.vsix
-          name: emacs-mcx
-
-      - name: Upload the vsix built on Linux (when pushed with a version tag)
-        uses: actions/upload-artifact@v4
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.type == 'native' && startsWith(github.ref, 'refs/tags/v') }}
         with:
           path: emacs-mcx*.vsix
           name: emacs-mcx
