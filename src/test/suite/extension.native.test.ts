@@ -50,16 +50,16 @@ suite("package.json", () => {
     assert.ok(pkgConfigurations, "package.json should have contributes.configuration.properties");
     const keys = Object.keys(pkgConfigurations);
     assert.notEqual(keys.length, 0, "package.json should have contributes.configuration.properties with keys");
+    assert.ok(keys.every((key) => key.startsWith("emacs-mcx.")));
 
     // @ts-expect-error packageJson is not typed
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const keybindings = packageJson.contributes.keybindings as Array<Record<string, unknown>>;
 
     const handlers = Object.keys(Configuration.instance);
-    const prefixedHandlerNames = handlers.map((h) => `emacs-mcx.${h}`);
     const unhandled = keys.filter((key) => {
-      const firstSegment = key.split(".").slice(0, 2).join("."); // e.g. "emacs-mcx.paredit"
-      if (prefixedHandlerNames.includes(firstSegment)) {
+      const keyFirstSegment = key.split(".")[1]; // Extract the first segment without the `emacs-mcx.` prefix from `key`, e.g. get `foo` from 'emacs-mcx.foo.bar.baz'.
+      if (keyFirstSegment != null && handlers.includes(keyFirstSegment)) {
         return false;
       }
 
