@@ -1,6 +1,6 @@
-import assert from "node:assert";
+import assert from "assert";
 import vscode from "vscode";
-import path from "node:path";
+import path from "path";
 import { tryUntil } from "./utils";
 
 import { Configuration } from "../../configuration/configuration";
