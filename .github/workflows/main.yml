@@ -48,9 +48,6 @@ jobs:
       - name: Build for test
         run: npm run webpack
         if: matrix.type == 'native'
-      - name: Build for test
-        run: npm run package-web
-        if: matrix.type == 'web'
 
       - name: Test
         run: xvfb-run -a npm test
