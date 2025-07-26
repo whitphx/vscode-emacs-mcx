@@ -1,16 +1,27 @@
 import assert from "node:assert";
 import vscode from "vscode";
 import path from "node:path";
+import { tryUntil } from "./utils";
 
 import { Configuration } from "../../configuration/configuration";
 
 suite("package.json", () => {
   let packageJson: unknown;
 
-  setup(() => {
+  setup(async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     packageJson = require(path.join(__dirname, "../../../package.json"));
     assert.ok(packageJson, "package.json should be loaded");
+
+    // @ts-expect-error packageJson is not typed
+    const extensionName: string = packageJson["publisher"] + "." + packageJson["name"];
+
+    // Wait for the extension to be available, with a timeout
+    const extension = await tryUntil(
+      () => vscode.extensions.getExtension(extensionName),
+      (ext) => ext !== undefined,
+    );
+    assert.ok(extension, `Extension '${extensionName}' should be available within 1000ms`);
   });
 
   test("all keys have handlers", async () => {
