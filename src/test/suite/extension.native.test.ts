@@ -43,7 +43,7 @@ suite("package.json", () => {
     }
   });
 
-  test("all defined configurations in package.json have handlers", () => {
+  test("all defined configurations in package.json have handlers in the Configuration class, or consumed in at least one when clause in package.json", () => {
     // @ts-expect-error packageJson is not typed
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const pkgConfigurations = packageJson.contributes?.configuration?.properties as unknown;
@@ -51,8 +51,24 @@ suite("package.json", () => {
     const keys = Object.keys(pkgConfigurations);
     assert.notEqual(keys.length, 0, "package.json should have contributes.configuration.properties with keys");
 
+    // @ts-expect-error packageJson is not typed
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const keybindings = packageJson.contributes.keybindings as Array<Record<string, unknown>>;
+
     const handlers = Object.keys(Configuration.instance);
-    const unhandled = keys.filter((k) => handlers.includes(k));
+    const prefixedHandlerNames = handlers.map((h) => `emacs-mcx.${h}`);
+    const unhandled = keys.filter((key) => {
+      const firstSegment = key.split(".").slice(0, 2).join("."); // e.g. "emacs-mcx.paredit"
+      if (prefixedHandlerNames.includes(firstSegment)) {
+        return false;
+      }
+
+      if (keybindings.some((kb) => kb.when && (kb.when as string).includes(key))) {
+        return false;
+      }
+
+      return true;
+    });
     assert.strictEqual(
       unhandled.length,
       0,
