@@ -22,6 +22,7 @@ suite("package.json", () => {
       (ext) => ext !== undefined,
     );
     assert.ok(extension, `Extension '${extensionName}' should be available within 1000ms`);
+    extension?.activate();
   });
 
   test("all keys have handlers", async () => {
