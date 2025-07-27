@@ -35,6 +35,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
   public strictEmacsMove = false;
 
+  public keepCursorInVisibleRange = false;
+
   public killWholeLine = false;
 
   public enableOverridingTypeCommand = false;

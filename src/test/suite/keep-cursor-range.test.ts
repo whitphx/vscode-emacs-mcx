@@ -4,7 +4,7 @@ import { EmacsEmulator } from "../../emulator";
 import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual, delay } from "./utils";
 import { Configuration } from "../../configuration/configuration";
 
-suite("onDidChangeTextEditorVisibleRanges event listener with strictEmacsMove", () => {
+suite("onDidChangeTextEditorVisibleRanges event listener with keepCursorInVisibleRange", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
@@ -24,8 +24,8 @@ suite("onDidChangeTextEditorVisibleRanges event listener with strictEmacsMove", 
     Configuration.reload();
   });
 
-  test("it should keep cursor position in the visible range when scrolling when strictEmacsMove = true", async () => {
-    Configuration.instance.strictEmacsMove = true;
+  test("it should keep cursor position in the visible range when scrolling when keepCursorInVisibleRange = true", async () => {
+    Configuration.instance.keepCursorInVisibleRange = true;
 
     setEmptyCursors(activeTextEditor, [0, 0]);
 
@@ -36,8 +36,8 @@ suite("onDidChangeTextEditorVisibleRanges event listener with strictEmacsMove", 
     Configuration.reload();
   });
 
-  test("it shouldn't keep cursor position in the visible range when scrolling when strictEmacsMove = false", async () => {
-    Configuration.instance.strictEmacsMove = false;
+  test("it shouldn't keep cursor position in the visible range when scrolling when keepCursorInVisibleRange = false", async () => {
+    Configuration.instance.keepCursorInVisibleRange = false;
 
     setEmptyCursors(activeTextEditor, [0, 0]);
 
@@ -48,8 +48,8 @@ suite("onDidChangeTextEditorVisibleRanges event listener with strictEmacsMove", 
     Configuration.reload();
   });
 
-  test("backspace works correctly keeping the cursor at the right position, when strictEmacsMove = true and the cursor is in the last line", async () => {
-    Configuration.instance.strictEmacsMove = true;
+  test("backspace works correctly keeping the cursor at the right position, when keepCursorInVisibleRange = true and the cursor is in the last line", async () => {
+    Configuration.instance.keepCursorInVisibleRange = true;
 
     const lastLine = activeTextEditor.document.lineCount - 1;
     const lastChar = activeTextEditor.document.lineAt(lastLine).text.length;
