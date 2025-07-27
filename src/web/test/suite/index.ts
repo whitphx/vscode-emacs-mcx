@@ -14,7 +14,7 @@ export function run(): Promise<void> {
 
     // bundles all files in the current directory matching `*.test`
     const importAll = (r: __WebpackModuleApi.RequireContext) => r.keys().forEach(r);
-    importAll(require.context("../../../test/suite", true, /\.test$/));
+    importAll(require.context("../../../test/suite", true, /(?<!\.native)\.test$/));
 
     try {
       // Run the mocha test
