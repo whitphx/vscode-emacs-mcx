@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.78.1] - 2025-07-27
+
+### Fix
+
+- Add test cases and modify the CI workflow, [#2345](https://github.com/whitphx/vscode-emacs-mcx/pull/2345).
+
 ## [0.78.0] - 2025-07-25
 
 ### Add
