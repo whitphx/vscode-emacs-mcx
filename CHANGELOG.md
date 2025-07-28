@@ -4,6 +4,16 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.79.0] - 2025-07-28
+
+### Add
+
+- Add `emacs-mcx.keepCursorInVisibleRange` config, [#2346](https://github.com/whitphx/vscode-emacs-mcx/pull/2346).
+
+### Change
+
+- Cursor behavior on scroll is based on `emacs-mcx.keepCursorInVisibleRange` instead of `emacs-mcx.strictEmacsMove`, [#2346](https://github.com/whitphx/vscode-emacs-mcx/pull/2346).
+
 ## [0.78.1] - 2025-07-27
 
 ### Fix
