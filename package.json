@@ -65,6 +65,11 @@
           "default": false,
           "description": "Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones"
         },
+        "emacs-mcx.keepCursorInVisibleRange": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, the cursor is kept in the visible range when scrolling up or down like Emacs."
+        },
         "emacs-mcx.emacsLikeTab": {
           "type": "boolean",
           "default": false,
