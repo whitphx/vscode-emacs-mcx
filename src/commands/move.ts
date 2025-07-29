@@ -230,10 +230,8 @@ export class MoveEndOfLine extends EmacsCommand {
         // This is not VSCode's default behavior, but an opinionated preference of this extension's author.
         const rightMostActive = textEditor.selections
           .map((selection) => selection.active)
-          .sort((a, b) => b.character - a.character)[0];
-        if (rightMostActive) {
-          textEditor.revealRange(new vscode.Range(rightMostActive, rightMostActive));
-        }
+          .sort((a, b) => b.character - a.character)[0]!; // textEditor.selections always has at least one selection.
+        textEditor.revealRange(new vscode.Range(rightMostActive, rightMostActive));
       });
 
     if (prefixArgument === undefined || prefixArgument === 1) {
