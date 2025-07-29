@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.80.1] - 2025-07-29
+
+### Fix
+
+- Disable `keepCursorInVisibleRange` in multi-cursor mode, [#2352](https://github.com/whitphx/vscode-emacs-mcx/pull/2352).
+
 ## [0.80.0] - 2025-07-29
 
 ### Change
