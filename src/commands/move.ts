@@ -137,7 +137,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
     }
 
-    let moveHomeCommandFunc: () => Thenable<void>;
+    let moveHomeCommandFunc: () => Thenable<void> | void;
     if (Configuration.instance.$moveBeginningOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the beginning of the line.
       if (Configuration.instance.lineMoveVisual) {
@@ -152,8 +152,25 @@ export class MoveBeginningOfLine extends EmacsCommand {
       }
     } else {
       // VSCode behavior: Move to the first non-empty character (indentation).
-      moveHomeCommandFunc = () =>
-        vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
+      if (Configuration.instance.lineMoveVisual) {
+        moveHomeCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
+      } else {
+        // Our original implementation that emulates VSCode's home behavior but with non-wrapped-line movement.
+        moveHomeCommandFunc = () => {
+          textEditor.selections = textEditor.selections.map((selection) => {
+            const line = textEditor.document.lineAt(selection.active);
+            const firstNonWhitespaceCharacter = line.firstNonWhitespaceCharacterIndex;
+            const isAllWhitespace = firstNonWhitespaceCharacter === line.text.length;
+            const activeChar =
+              isAllWhitespace || selection.active.character === firstNonWhitespaceCharacter
+                ? 0
+                : firstNonWhitespaceCharacter;
+            const newActive = new vscode.Position(selection.active.line, activeChar);
+            return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
+          });
+        };
+      }
     }
 
     if (prefixArgument === undefined || prefixArgument === 1) {
@@ -182,7 +199,6 @@ export class MoveEndOfLine extends EmacsCommand {
 
     let moveEndCommandFunc: () => Thenable<void>;
     if (Configuration.instance.$moveEndOfLineBehavior === "emacs") {
-      // Emacs behavior: Move to the end of the line.
       if (Configuration.instance.lineMoveVisual) {
         moveEndCommandFunc = () =>
           vscode.commands.executeCommand<void>("cursorMove", {
@@ -194,8 +210,12 @@ export class MoveEndOfLine extends EmacsCommand {
           vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
       }
     } else {
-      // VSCode behavior: Move to the end of the wrapped line.
-      moveEndCommandFunc = () => vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+      if (Configuration.instance.lineMoveVisual) {
+        moveEndCommandFunc = () => vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+      } else {
+        moveEndCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
+      }
     }
 
     if (prefixArgument === undefined || prefixArgument === 1) {
