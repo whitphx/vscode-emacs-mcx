@@ -63,7 +63,44 @@
         "emacs-mcx.strictEmacsMove": {
           "type": "boolean",
           "default": false,
-          "description": "Simulate strictly the original emacs's cursor movements or preserve VSCode's native ones"
+          "description": "Overrides moveBeginningOfLineBehavior, moveEndOfLineBehavior, scrollUpCommandBehavior, and scrollDownCommandBehavior to be 'emacs' mode",
+          "deprecationMessage": "Deprecated: Please use fine grained configs instead such as emacs-mcx.moveBeginningOfLineBehavior, emacs-mcx.moveEndOfLineBehavior, emacs-mcx.scrollUpCommandBehavior, and emacs-mcx.scrollDownCommandBehavior."
+        },
+        "emacs-mcx.moveBeginningOfLineBehavior": {
+          "type": "string",
+          "enum": [
+            "emacs",
+            "vscode"
+          ],
+          "default": "vscode",
+          "description": "Simulate Emacs's cursor movements or preserve VSCode's native ones"
+        },
+        "emacs-mcx.moveEndOfLineBehavior": {
+          "type": "string",
+          "enum": [
+            "emacs",
+            "vscode"
+          ],
+          "default": "vscode",
+          "description": "Simulate Emacs's cursor movements or preserve VSCode's native ones"
+        },
+        "emacs-mcx.scrollUpCommandBehavior": {
+          "type": "string",
+          "enum": [
+            "emacs",
+            "vscode"
+          ],
+          "default": "vscode",
+          "description": "Simulate Emacs's cursor movements or preserve VSCode's native ones"
+        },
+        "emacs-mcx.scrollDownCommandBehavior": {
+          "type": "string",
+          "enum": [
+            "emacs",
+            "vscode"
+          ],
+          "default": "vscode",
+          "description": "Simulate Emacs's cursor movements or preserve VSCode's native ones"
         },
         "emacs-mcx.keepCursorInVisibleRange": {
           "type": "boolean",

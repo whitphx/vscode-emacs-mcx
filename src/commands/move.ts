@@ -138,7 +138,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
     }
 
     let moveHomeCommandFunc: () => Thenable<void>;
-    if (Configuration.instance.moveBeginningOfLineBehavior === "emacs") {
+    if (Configuration.instance.$moveBeginningOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the beginning of the line.
       if (Configuration.instance.lineMoveVisual) {
         moveHomeCommandFunc = () =>
@@ -181,7 +181,7 @@ export class MoveEndOfLine extends EmacsCommand {
     }
 
     let moveEndCommandFunc: () => Thenable<void>;
-    if (Configuration.instance.moveEndOfLineBehavior === "emacs") {
+    if (Configuration.instance.$moveEndOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the end of the line.
       if (Configuration.instance.lineMoveVisual) {
         moveEndCommandFunc = () =>
@@ -386,7 +386,7 @@ export class ScrollUpCommand extends EmacsCommand {
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     }
 
-    if (Configuration.instance.scrollUpCommandBehavior === "emacs") {
+    if (Configuration.instance.$scrollUpCommandBehavior === "emacs") {
       return vscode.commands.executeCommand<void>("editorScroll", {
         to: "down",
         by: "page",
@@ -411,7 +411,7 @@ export class ScrollDownCommand extends EmacsCommand {
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     }
 
-    if (Configuration.instance.scrollDownCommandBehavior === "emacs") {
+    if (Configuration.instance.$scrollDownCommandBehavior === "emacs") {
       return vscode.commands.executeCommand<void>("editorScroll", {
         to: "up",
         by: "page",
