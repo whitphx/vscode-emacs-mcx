@@ -347,9 +347,14 @@
       "when": "emacs-mcx.minibufferReading"
     },
     {
+      "key": "ctrl+w",
+      "command": "editor.action.clipboardCutAction",  // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+      "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing" // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
+    },
+    {
       "key": "ctrl+y",
       "command": "editor.action.clipboardPasteAction",  // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
-      "when": "(findInputFocussed || replaceInputFocussed) && !isComposing"
+      "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing" // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
     },
     {
       "key": "meta+y",
