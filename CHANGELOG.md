@@ -4,6 +4,17 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.80.0] - 2025-07-29
+
+### Change
+
+- Deprecated `emacs-mcx.strictEmacsMove` config, [#2348](https://github.com/whitphx/vscode-emacs-mcx/pull/2348).
+
+### Add
+
+- Add `emacs-mcx.moveBeginningOfLineBehavior`, `emacs-mcx.moveEndOfLineBehavior`, `emacs-mcx.scrollUpCommandBehavior`, and `emacs-mcx.scrollDownCommandBehavior`, [#2348](https://github.com/whitphx/vscode-emacs-mcx/pull/2348).
+- Set `editor.find.seedSearchStringFromSelection` as `"never"` via the `configurationDefaults` contribution, [#2349](https://github.com/whitphx/vscode-emacs-mcx/pull/2349).
+
 ## [0.79.0] - 2025-07-28
 
 ### Add
