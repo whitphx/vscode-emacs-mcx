@@ -43,6 +43,19 @@ export class Configuration implements IConfiguration, vscode.Disposable {
 
   public lineMoveVisual = true;
 
+  public get moveBeginningOfLineBehavior() {
+    return this.strictEmacsMove ? "emacs" : "vscode";
+  }
+  public get moveEndOfLineBehavior() {
+    return this.strictEmacsMove ? "emacs" : "vscode";
+  }
+  public get scrollUpCommandBehavior() {
+    return this.strictEmacsMove ? "emacs" : "vscode";
+  }
+  public get scrollDownCommandBehavior() {
+    return this.strictEmacsMove ? "emacs" : "vscode";
+  }
+
   public paredit: IPareditConfiguration = {
     parentheses: { "[": "]", "(": ")", "{": "}" },
   };

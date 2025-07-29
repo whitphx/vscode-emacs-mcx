@@ -43,6 +43,11 @@ export interface IConfiguration {
    */
   lineMoveVisual: boolean;
 
+  moveBeginningOfLineBehavior: "vscode" | "emacs";
+  moveEndOfLineBehavior: "vscode" | "emacs";
+  scrollUpCommandBehavior: "vscode" | "emacs";
+  scrollDownCommandBehavior: "vscode" | "emacs";
+
   /**
    * Paredit configuration
    */

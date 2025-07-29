@@ -137,16 +137,24 @@ export class MoveBeginningOfLine extends EmacsCommand {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
     }
 
-    let moveHomeCommand: string;
-    if (Configuration.instance.strictEmacsMove) {
+    let moveHomeCommandFunc: () => Thenable<void>;
+    if (Configuration.instance.moveBeginningOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the beginning of the line.
-      moveHomeCommand = isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart";
+      if (Configuration.instance.lineMoveVisual) {
+        moveHomeCommandFunc = () =>
+          vscode.commands.executeCommand<void>("cursorMove", {
+            to: "wrappedLineStart",
+            select: isInMarkMode,
+          });
+      } else {
+        moveHomeCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart");
+      }
     } else {
       // VSCode behavior: Move to the first non-empty character (indentation).
-      moveHomeCommand = isInMarkMode ? "cursorHomeSelect" : "cursorHome";
+      moveHomeCommandFunc = () =>
+        vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
     }
-
-    const moveHomeCommandFunc = () => vscode.commands.executeCommand<void>(moveHomeCommand);
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveHomeCommandFunc();
@@ -154,7 +162,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
           to: "down",
-          by: "line",
+          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument - 1,
           isInMarkMode,
         })
@@ -172,15 +180,23 @@ export class MoveEndOfLine extends EmacsCommand {
       return;
     }
 
-    let moveEndCommand: string;
-    if (Configuration.instance.strictEmacsMove) {
+    let moveEndCommandFunc: () => Thenable<void>;
+    if (Configuration.instance.moveEndOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the end of the line.
-      moveEndCommand = isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd";
+      if (Configuration.instance.lineMoveVisual) {
+        moveEndCommandFunc = () =>
+          vscode.commands.executeCommand<void>("cursorMove", {
+            to: "wrappedLineEnd",
+            select: isInMarkMode,
+          });
+      } else {
+        moveEndCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
+      }
     } else {
       // VSCode behavior: Move to the end of the wrapped line.
-      moveEndCommand = isInMarkMode ? "cursorEndSelect" : "cursorEnd";
+      moveEndCommandFunc = () => vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
     }
-    const moveEndCommandFunc = () => vscode.commands.executeCommand<void>(moveEndCommand);
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveEndCommandFunc();
@@ -188,7 +204,7 @@ export class MoveEndOfLine extends EmacsCommand {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
           to: "down",
-          by: "line",
+          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument - 1,
           isInMarkMode,
         })
@@ -370,7 +386,7 @@ export class ScrollUpCommand extends EmacsCommand {
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     }
 
-    if (Configuration.instance.strictEmacsMove) {
+    if (Configuration.instance.scrollUpCommandBehavior === "emacs") {
       return vscode.commands.executeCommand<void>("editorScroll", {
         to: "down",
         by: "page",
@@ -395,7 +411,7 @@ export class ScrollDownCommand extends EmacsCommand {
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     }
 
-    if (Configuration.instance.strictEmacsMove) {
+    if (Configuration.instance.scrollDownCommandBehavior === "emacs") {
       return vscode.commands.executeCommand<void>("editorScroll", {
         to: "up",
         by: "page",

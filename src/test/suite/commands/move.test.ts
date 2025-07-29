@@ -18,9 +18,10 @@ suite("moveBeginning/EndOfLine", () => {
 
   teardown(cleanUpWorkspace);
 
-  suite("strictEmacsMove=true", () => {
+  suite("strictEmacsMove=true, lineMoveVisual=false", () => {
     setup(() => {
       Configuration.instance.strictEmacsMove = true;
+      Configuration.instance.lineMoveVisual = false;
     });
     teardown(() => {
       Configuration.reload();
@@ -53,6 +54,60 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, 1000));
+      });
+    });
+  });
+
+  suite("strictEmacsMove=true, lineMoveVisual=true", () => {
+    setup(() => {
+      Configuration.instance.strictEmacsMove = true;
+      Configuration.instance.lineMoveVisual = true;
+    });
+    teardown(() => {
+      Configuration.reload();
+    });
+
+    suite("moveBeginningOfLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 1000]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assert.ok(activeTextEditor.selection.active.line === 1);
+        assert.ok(
+          0 < activeTextEditor.selection.active.character && activeTextEditor.selection.active.character < 1000,
+        );
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 1000]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("moveBeginningOfLine");
+        assert.ok(activeTextEditor.selection.active.line === 1);
+        assert.ok(
+          0 < activeTextEditor.selection.active.character && activeTextEditor.selection.active.character < 1000,
+        );
+        assert.ok(activeTextEditor.selection.anchor.isEqual(new vscode.Position(1, 1000)));
+      });
+    });
+
+    suite("moveEndOfLine", () => {
+      test("normal", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.runCommand("moveEndOfLine");
+        assert.ok(activeTextEditor.selection.active.line === 1);
+        assert.ok(
+          0 < activeTextEditor.selection.active.character && activeTextEditor.selection.active.character < 1000,
+        );
+      });
+
+      test("with mark", async () => {
+        setEmptyCursors(activeTextEditor, [1, 0]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("moveEndOfLine");
+        assert.ok(activeTextEditor.selection.active.line === 1);
+        assert.ok(
+          0 < activeTextEditor.selection.active.character && activeTextEditor.selection.active.character < 1000,
+        );
+        assert.ok(activeTextEditor.selection.anchor.isEqual(new vscode.Position(1, 0)));
       });
     });
   });
