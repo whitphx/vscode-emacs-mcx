@@ -225,9 +225,11 @@ export class MoveEndOfLine extends EmacsCommand {
     }
 
     const moveEndCommandAndRevealFunc = () =>
+      // Reveal the right-most cursor after the operation. Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/306
+      // This is not VSCode's default behavior, but an opinionated preference of this extension's author.
       moveEndCommandFunc().then(() => {
-        // Reveal the right-most cursor after the operation. Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/306
-        // This is not VSCode's default behavior, but an opinionated preference of this extension's author.
+        // VSCode is not supporting RTL text editor yet (https://superuser.com/questions/1809942/visual-studio-code-write-from-right-to-left),
+        // so we only deal with the right-most cursor.
         const rightMostActive = textEditor.selections
           .map((selection) => selection.active)
           .sort((a, b) => b.character - a.character)[0]!; // textEditor.selections always has at least one selection.
