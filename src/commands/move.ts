@@ -137,16 +137,41 @@ export class MoveBeginningOfLine extends EmacsCommand {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
     }
 
-    let moveHomeCommand: string;
-    if (Configuration.instance.strictEmacsMove) {
+    let moveHomeCommandFunc: () => Thenable<void> | void;
+    if (Configuration.instance.$moveBeginningOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the beginning of the line.
-      moveHomeCommand = isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart";
+      if (Configuration.instance.lineMoveVisual) {
+        moveHomeCommandFunc = () =>
+          vscode.commands.executeCommand<void>("cursorMove", {
+            to: "wrappedLineStart",
+            select: isInMarkMode,
+          });
+      } else {
+        moveHomeCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineStartSelect" : "cursorLineStart");
+      }
     } else {
       // VSCode behavior: Move to the first non-empty character (indentation).
-      moveHomeCommand = isInMarkMode ? "cursorHomeSelect" : "cursorHome";
+      if (Configuration.instance.lineMoveVisual) {
+        moveHomeCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorHomeSelect" : "cursorHome");
+      } else {
+        // Our original implementation that emulates VSCode's home behavior but with non-wrapped-line movement.
+        moveHomeCommandFunc = () => {
+          textEditor.selections = textEditor.selections.map((selection) => {
+            const line = textEditor.document.lineAt(selection.active);
+            const firstNonWhitespaceCharacter = line.firstNonWhitespaceCharacterIndex;
+            const isAllWhitespace = firstNonWhitespaceCharacter === line.text.length;
+            const activeChar =
+              isAllWhitespace || selection.active.character === firstNonWhitespaceCharacter
+                ? 0
+                : firstNonWhitespaceCharacter;
+            const newActive = new vscode.Position(selection.active.line, activeChar);
+            return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
+          });
+        };
+      }
     }
-
-    const moveHomeCommandFunc = () => vscode.commands.executeCommand<void>(moveHomeCommand);
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveHomeCommandFunc();
@@ -154,7 +179,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
           to: "down",
-          by: "line",
+          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument - 1,
           isInMarkMode,
         })
@@ -172,15 +197,32 @@ export class MoveEndOfLine extends EmacsCommand {
       return;
     }
 
-    let moveEndCommand: string;
-    if (Configuration.instance.strictEmacsMove) {
-      // Emacs behavior: Move to the end of the line.
-      moveEndCommand = isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd";
+    let moveEndCommandFunc: () => Thenable<void>;
+    if (Configuration.instance.$moveEndOfLineBehavior === "emacs") {
+      if (Configuration.instance.lineMoveVisual) {
+        moveEndCommandFunc = () =>
+          vscode.commands
+            .executeCommand<void>("cursorMove", {
+              to: "wrappedLineEnd",
+              select: isInMarkMode,
+            })
+            // This workaround emulates the Emacs behavior of placing the cursor at the beginning of the next wrapped line.
+            // In VS Code, moving directly to "wrappedLineEnd" may leave the cursor in an inconsistent state.
+            // To address this, the cursor is first moved one step to the right and then back to the left, ensuring it is correctly positioned.
+            .then(() => vscode.commands.executeCommand<void>("cursorMove", { to: "right", select: isInMarkMode }))
+            .then(() => vscode.commands.executeCommand<void>("cursorMove", { to: "left", select: isInMarkMode }));
+      } else {
+        moveEndCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
+      }
     } else {
-      // VSCode behavior: Move to the end of the wrapped line.
-      moveEndCommand = isInMarkMode ? "cursorEndSelect" : "cursorEnd";
+      if (Configuration.instance.lineMoveVisual) {
+        moveEndCommandFunc = () => vscode.commands.executeCommand<void>(isInMarkMode ? "cursorEndSelect" : "cursorEnd");
+      } else {
+        moveEndCommandFunc = () =>
+          vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
+      }
     }
-    const moveEndCommandFunc = () => vscode.commands.executeCommand<void>(moveEndCommand);
 
     if (prefixArgument === undefined || prefixArgument === 1) {
       return moveEndCommandFunc();
@@ -188,7 +230,7 @@ export class MoveEndOfLine extends EmacsCommand {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
           to: "down",
-          by: "line",
+          by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument - 1,
           isInMarkMode,
         })
@@ -370,7 +412,7 @@ export class ScrollUpCommand extends EmacsCommand {
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     }
 
-    if (Configuration.instance.strictEmacsMove) {
+    if (Configuration.instance.$scrollUpCommandBehavior === "emacs") {
       return vscode.commands.executeCommand<void>("editorScroll", {
         to: "down",
         by: "page",
@@ -395,7 +437,7 @@ export class ScrollDownCommand extends EmacsCommand {
         .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     }
 
-    if (Configuration.instance.strictEmacsMove) {
+    if (Configuration.instance.$scrollDownCommandBehavior === "emacs") {
       return vscode.commands.executeCommand<void>("editorScroll", {
         to: "up",
         by: "page",

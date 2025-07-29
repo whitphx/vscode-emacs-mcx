@@ -85,12 +85,33 @@ You can configure those settings.
 
 Configurable options of this extension are the followings.
 
-### `emacs-mcx.strictEmacsMove`
+### `emacs-mcx.moveBeginningOfLineBehavior`
 
-If set as true, the original emacs's cursor movements are strictly simulated.
-If set as false, the VSCode's native cursor movements are preserved.
-For example, if set as true, when you type `C-a`, the cursor moves to the beginning of the line (Emacs' original behavior).
-If set as false, on the other hand, the cursor move to the first non-empty character in the line (VSCode's native behavior of Home key).
+Determines the behavior of the `move-beginning-of-line` command.
+If set as `'vscode'`, it works as VSCode's native `Home` key behavior.
+If set as `'emacs'`, it works as the original Emacs' `move-beginning-of-line`.
+
+### `emacs-mcx.moveEndOfLineBehavior`
+
+Determines the behavior of the `move-end-of-line` command.
+If set as `'vscode'`, it works as VSCode's native `End` key behavior.
+If set as `'emacs'`, it works as the original Emacs' `move-end-of-line`.
+
+### `emacs-mcx.scrollUpCommandBehavior`
+
+Determines the behavior of the `scroll-up-command` command.
+If set as `'vscode'`, it works as VSCode's native `Page Down` key behavior.
+If set as `'emacs'`, it works as the original Emacs' `scroll-up-command`.
+
+### `emacs-mcx.scrollDownCommandBehavior`
+
+Determines the behavior of the `scroll-down-command` command.
+If set as `'vscode'`, it works as VSCode's native `Page Up` key behavior.
+If set as `'emacs'`, it works as the original Emacs' `scroll-down-command`.
+
+### ~~`emacs-mcx.strictEmacsMove`~~ (deprecated)
+
+~~If set as `true`, all `emacs-mcx.moveBeginningOfLineBehavior`, `emacs-mcx.moveEndOfLineBehavior`, `emacs-mcx.scrollUpCommandBehavior`, and `emacs-mcx.scrollDownCommandBehavior` are set to `'emacs'`.~~
 
 ### `emacs-mcx.keepCursorInVisibleRange`
 
