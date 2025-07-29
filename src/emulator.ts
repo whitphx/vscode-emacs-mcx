@@ -175,6 +175,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.window.onDidChangeTextEditorVisibleRanges(
       () => {
         if (Configuration.instance.keepCursorInVisibleRange) {
+          if (this.hasMultipleSelections()) {
+            // This feature messes up the multi-cursors so disable it.
+            // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2126
+            return;
+          }
           // Keep the primary cursor in the visible range when scrolling
           MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
         }
