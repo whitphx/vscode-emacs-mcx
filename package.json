@@ -199,6 +199,9 @@
         }
       }
     },
+    "configurationDefaults": {
+      "editor.find.seedSearchStringFromSelection": "never"
+    },
     "commands": [
       {
         "command": "emacs-mcx.addSelectionToNextFindMatch",
