@@ -36,6 +36,8 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
         await emulator.runCommand("moveBeginningOfLine");
         assertCursorsEqual(activeTextEditor, [1, 0]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [1, 0]); // The cursor stays at the beginning of the line
       });
 
       test("with mark", async () => {
@@ -43,6 +45,8 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0));
+        await emulator.runCommand("moveBeginningOfLine");
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0)); // The cursor stays at the beginning of the line
       });
 
       test("ignore indentation", async () => {
@@ -57,6 +61,8 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
         await emulator.runCommand("moveEndOfLine");
         assertCursorsEqual(activeTextEditor, [1, 1000]);
+        await emulator.runCommand("moveEndOfLine");
+        assertCursorsEqual(activeTextEditor, [1, 1000]); // The cursor stays at the end of the line
       });
 
       test("with mark", async () => {
@@ -64,6 +70,8 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, 1000));
+        await emulator.runCommand("moveEndOfLine");
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, 1000)); // The cursor stays at the end of the line
       });
     });
   });
@@ -98,6 +106,8 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
         await emulator.runCommand("moveBeginningOfLine");
         assertCursorsEqual(activeTextEditor, [1, lastWrappedLineStart]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [1, lastWrappedLineStart]); // The cursor stays at the beginning of the wrapped line
       });
 
       test("with mark", async () => {
@@ -105,6 +115,11 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, lastWrappedLineStart));
+        await emulator.runCommand("moveBeginningOfLine");
+        assertSelectionsEqual(
+          activeTextEditor,
+          new vscode.Selection(1, 1000, 1, lastWrappedLineStart), // The cursor stays at the beginning of the wrapped line
+        );
       });
 
       test("ignore indentation", async () => {
@@ -119,6 +134,8 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 0]);
         await emulator.runCommand("moveEndOfLine");
         assertCursorsEqual(activeTextEditor, [1, wrappedLineWidth]);
+        await emulator.runCommand("moveEndOfLine");
+        assertCursorsEqual(activeTextEditor, [1, wrappedLineWidth * 2]);
       });
 
       test("with mark", async () => {
@@ -126,6 +143,8 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveEndOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, wrappedLineWidth));
+        await emulator.runCommand("moveEndOfLine");
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 0, 1, wrappedLineWidth * 2));
       });
     });
   });
@@ -160,6 +179,10 @@ suite("moveBeginning/EndOfLine", () => {
         setEmptyCursors(activeTextEditor, [1, 1000]);
         await emulator.runCommand("moveBeginningOfLine");
         assertCursorsEqual(activeTextEditor, [1, lastWrappedLineStart]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [1, 0]); // The cursor moves to the beginning of the line
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [1, 0]); // The cursor stays at the beginning of the line
       });
 
       test("with mark", async () => {
@@ -167,10 +190,16 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, lastWrappedLineStart));
+        await emulator.runCommand("moveBeginningOfLine");
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0)); // The cursor moves to the beginning of the line
+        await emulator.runCommand("moveBeginningOfLine");
+        assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0)); // The cursor stays at the beginning of the line
       });
 
       test("taking care of indentation", async () => {
-        setEmptyCursors(activeTextEditor, [2, wrappedLineWidth - 1]);
+        setEmptyCursors(activeTextEditor, [2, wrappedLineWidth + 1]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, wrappedLineWidth]); // Move to the beginning of the wrapped line
         await emulator.runCommand("moveBeginningOfLine");
         assertCursorsEqual(activeTextEditor, [2, indentLength]); // Move to the first character of the line
         await emulator.runCommand("moveBeginningOfLine");

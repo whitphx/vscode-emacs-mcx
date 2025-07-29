@@ -201,10 +201,14 @@ export class MoveEndOfLine extends EmacsCommand {
     if (Configuration.instance.$moveEndOfLineBehavior === "emacs") {
       if (Configuration.instance.lineMoveVisual) {
         moveEndCommandFunc = () =>
-          vscode.commands.executeCommand<void>("cursorMove", {
-            to: "wrappedLineEnd",
-            select: isInMarkMode,
-          });
+          vscode.commands
+            .executeCommand<void>("cursorMove", {
+              to: "wrappedLineEnd",
+              select: isInMarkMode,
+            })
+            // Move the cursor to right and then left as a workaround to set the cursor at the beginning of the next wrapped line, which is the same behavior as Emacs.
+            .then(() => vscode.commands.executeCommand<void>("cursorMove", { to: "right", select: isInMarkMode }))
+            .then(() => vscode.commands.executeCommand<void>("cursorMove", { to: "left", select: isInMarkMode }));
       } else {
         moveEndCommandFunc = () =>
           vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLineEndSelect" : "cursorLineEnd");
