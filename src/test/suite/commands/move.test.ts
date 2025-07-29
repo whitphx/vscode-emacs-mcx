@@ -10,8 +10,11 @@ suite("moveBeginning/EndOfLine", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
 
+  const indentLength = 4;
+
   setup(async () => {
-    const initialText = "x".repeat(1000) + "\n" + "a".repeat(1000) + "\n" + "x".repeat(1000);
+    const initialText =
+      "x".repeat(1000) + "\n" + "a".repeat(1000) + "\n" + " ".repeat(indentLength) + "b".repeat(1000 - indentLength);
     activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
     emulator = new EmacsEmulator(activeTextEditor);
   });
@@ -40,6 +43,12 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0));
+      });
+
+      test("ignore indentation", async () => {
+        setEmptyCursors(activeTextEditor, [2, 1000]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, 0]);
       });
     });
 
@@ -97,6 +106,12 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, lastWrappedLineStart));
       });
+
+      test("ignore indentation", async () => {
+        setEmptyCursors(activeTextEditor, [2, wrappedLineWidth - 1]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, 0]);
+      });
     });
 
     suite("moveEndOfLine", () => {
@@ -153,6 +168,16 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, lastWrappedLineStart));
       });
+
+      test("taking care of indentation", async () => {
+        setEmptyCursors(activeTextEditor, [2, wrappedLineWidth - 1]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, indentLength]); // Move to the first character of the line
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, 0]); // Move to the beginning of the line
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, indentLength]); // Move to the first character of the line again
+      });
     });
 
     suite("moveEndOfLine", () => {
@@ -193,6 +218,16 @@ suite("moveBeginning/EndOfLine", () => {
         await emulator.setMarkCommand();
         await emulator.runCommand("moveBeginningOfLine");
         assertSelectionsEqual(activeTextEditor, new vscode.Selection(1, 1000, 1, 0));
+      });
+
+      test("taking care of indentation", async () => {
+        setEmptyCursors(activeTextEditor, [2, 1000]);
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, indentLength]); // Move to the first character of the line
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, 0]); // Move to the beginning of the line
+        await emulator.runCommand("moveBeginningOfLine");
+        assertCursorsEqual(activeTextEditor, [2, indentLength]); // Move to the first character of the line again
       });
     });
 
