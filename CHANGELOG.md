@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.80.2] - 2025-07-29
+
+### Fix
+
+- `moveEndOfLine` command now reveals the cursor, [#2351](https://github.com/whitphx/vscode-emacs-mcx/pull/2351).
+
 ## [0.80.1] - 2025-07-29
 
 ### Fix
