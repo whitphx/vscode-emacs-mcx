@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.81.0] - 2025-07-29
+
+### Add
+
+- Assign `editor.action.clipboard(Cut|Paste)Action` to `C-w` and `C-y` in more conditions, [#2353](https://github.com/whitphx/vscode-emacs-mcx/pull/2353).
+
 ## [0.80.2] - 2025-07-29
 
 ### Fix
