@@ -191,7 +191,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
 export class MoveEndOfLine extends EmacsCommand {
   public readonly id = "moveEndOfLine";
 
-  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.end);
       return;
@@ -224,26 +224,29 @@ export class MoveEndOfLine extends EmacsCommand {
       }
     }
 
+    const moveEndCommandAndRevealFunc = () =>
+      moveEndCommandFunc().then(() => {
+        // Reveal the right-most cursor after the operation. Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/306
+        // This is not VSCode's default behavior, but an opinionated preference of this extension's author.
+        const rightMostActive = textEditor.selections
+          .map((selection) => selection.active)
+          .sort((a, b) => b.character - a.character)[0];
+        if (rightMostActive) {
+          textEditor.revealRange(new vscode.Range(rightMostActive, rightMostActive));
+        }
+      });
+
     if (prefixArgument === undefined || prefixArgument === 1) {
-      await moveEndCommandFunc();
+      return moveEndCommandAndRevealFunc();
     } else if (prefixArgument > 1) {
-      await vscode.commands
+      return vscode.commands
         .executeCommand<void>("cursorMove", {
           to: "down",
           by: Configuration.instance.lineMoveVisual ? "wrappedLine" : "line",
           value: prefixArgument - 1,
           isInMarkMode,
         })
-        .then(moveEndCommandFunc);
-    }
-
-    // Reveal the right-most cursor. Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/306
-    // This is not VSCode's default behavior, but an opinionated preference of this extension's author.
-    const rightMostActive = textEditor.selections
-      .map((selection) => selection.active)
-      .sort((a, b) => b.character - a.character)[0];
-    if (rightMostActive) {
-      textEditor.revealRange(new vscode.Range(rightMostActive, rightMostActive));
+        .then(moveEndCommandAndRevealFunc);
     }
   }
 }
