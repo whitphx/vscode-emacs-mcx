@@ -214,7 +214,10 @@
     },
     // Terminal, ref: https://github.com/whitphx/vscode-emacs-mcx/issues/1319
     {
-      "keys": ["ctrl+s", "ctrl+r"],
+      "keys": [
+        "ctrl+s"
+        // "ctrl+r" // We don't assign `ctrl+r` to the terminal find command because usually it is already used as a shortcut in terminals.
+      ],
       "command": "workbench.action.terminal.focusFind",
       "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
     },
