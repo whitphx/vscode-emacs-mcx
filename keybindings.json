@@ -241,6 +241,38 @@
       "command": "workbench.action.terminal.copySelection",
       "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
     },
+    {
+      "keys": ["ctrl+x 2", "ctrl+x 3"],  // VSCode terminal only supports horizontal split.
+      "command": "workbench.action.terminal.splitActiveTab",
+      "when": "terminalFocus"
+    },
+    {
+      "key": "ctrl+x 0",
+      "command": "workbench.action.terminal.unsplit",
+      "when": "terminalFocus"
+    },
+    // Suggestions
+    // Ref: https://company-mode.github.io/manual/Getting-Started.html
+    {
+      "keys": ["ctrl+meta+i", "meta+[Tab]"],
+      "command": "workbench.action.terminal.requestCompletions",
+      "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible"
+    },
+    {
+      "keys": ["ctrl+p", "meta+p"],
+      "command": "workbench.action.terminal.selectPrevSuggestion",
+      "when": "simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory"
+    },
+    {
+      "keys": ["ctrl+n", "meta+n"],
+      "command": "workbench.action.terminal.selectNextSuggestion",
+      "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+    },
+    {
+      "key": "ctrl+h",
+      "command": "workbench.action.terminal.suggestToggleDetails",
+      "when": "simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+    },
     // Pass through or translate the sequences to the terminal.
     // These explicit definitions are necessary to override the default keybindings in VSCode that conflict with Emacs-like keybindings.
     {
@@ -271,25 +303,25 @@
       "key": "ctrl+p",
       "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u0010" },
-      "when": "terminalFocus && terminalShellType != 'pwsh'"
+      "when": "terminalFocus && terminalShellType != 'pwsh' && !terminalSuggestWidgetVisible"
     },
     {
       "key": "ctrl+p",
       "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u001b[A" },
-      "when": "terminalFocus && terminalShellType == 'pwsh'"
+      "when": "terminalFocus && terminalShellType == 'pwsh' && !terminalSuggestWidgetVisible"
     },
     {
       "key": "ctrl+n",
       "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u000e" },
-      "when": "terminalFocus && terminalShellType != 'pwsh'"
+      "when": "terminalFocus && terminalShellType != 'pwsh' && !terminalSuggestWidgetVisible"
     },
     {
       "key": "ctrl+n",
       "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u001b[B" },
-      "when": "terminalFocus && terminalShellType == 'pwsh'"
+      "when": "terminalFocus && terminalShellType == 'pwsh' && !terminalSuggestWidgetVisible"
     },
     {
       "key": "ctrl+a",
