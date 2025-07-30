@@ -43,12 +43,12 @@ Make sure that **the CI has passed all coding style checks and unit tests** befo
 Keybindings of a VSCode extension must be defined in its `contributes.keybindings` section in `package.json` as described in [the doc](https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings),
 but you MUST NOT edit it directly in case of this extension.
 
-Instead, to change the keybindings, you have to edit `keybindings.json` and run `npm run gen-keys` to generate the resultant keybinding definitions and update `package.json` with them.
+Instead, to change the keybindings, you have to edit the JSON files in `keybindings` and run `npm run gen-keys` to generate the resultant keybinding definitions and update `package.json` with them.
 
-After that, you have to commit the auto-updated `package.json` in addition to `keybindings.json`.
+After that, you have to commit the auto-updated `package.json` in addition to `keybindings/*.json`.
 Please also edit the keybindings list in `README.md`.
 
-In `keybindings.json`, you can use some extended syntax described below.
+In the JSON files, you can use some extended syntax described below.
 
 ### `keys`, `whens`
 
@@ -69,6 +69,11 @@ You can use `"meta"` key in `key` and `keys` fields.
 It is converted basically to `"alt"` key, in addition, `"cmd"`, `"ctrl+["` and `"escape"` keys.
 Those keybindings except `"alt"` are generated with equivalent when-conditions like `"when": "config.emacs-mcx.useMetaPrefixEscape"`,
 which allows users to switch the keys as meta keys through the config.
+
+### `inheritWhenFromDefault`
+
+If `inheritWhenFromDefault` is `true`, the `when` condition of its keybinding is copied from the VSCode's default keybinding that has the same `command`.
+This is useful to define a new keybinding with an existing command, but with a different `key` or `keys`.
 
 ### Comments
 
