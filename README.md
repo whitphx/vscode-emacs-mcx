@@ -305,6 +305,12 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 
 See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Setting-Mark.html) and [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark-Ring.html) about the mark and the mark ring.
 
+## Intellisense
+
+| Command                        | Desc                                                                                                                                         |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `C-M-i`, `M-TAB`, `M-/`, `C-'` | Trigger suggest. These keybindings call `editor.action.triggerSuggest` command, alternating Emacs' `completion-at-point` or `dabbrev-expand` |
+
 ## Text registers
 
 | Command       | Desc                                              |
