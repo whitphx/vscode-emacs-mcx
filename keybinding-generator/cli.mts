@@ -20,7 +20,7 @@ await prepareVscDefaultKeybindingsSet();
 const srcDirPath = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "../keybindings/");
 const srcFileNames = fs
   .readdirSync(srcDirPath, { withFileTypes: true })
-  .filter((dirent) => dirent.isFile() && dirent.name.endsWith(".json"))
+  .filter((dirent) => dirent.isFile())
   .map((dirent) => dirent.name);
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
 

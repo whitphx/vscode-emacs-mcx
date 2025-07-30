@@ -1,0 +1,112 @@
+[
+  // i-search forward
+  {
+    "key": "ctrl+s",
+    "command": "emacs-mcx.isearchForward",
+    "when": "!findInputFocussed"
+  },
+  {
+    "key": "ctrl+s",
+    "command": "editor.action.nextMatchFindAction",
+    "when": "findInputFocussed"
+  },
+  // i-search backward
+  {
+    "key": "ctrl+r",
+    "command": "emacs-mcx.isearchBackward",
+    "when": "!findInputFocussed"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "editor.action.previousMatchFindAction",
+    "when": "findInputFocussed"
+  },
+  // On notebooks, only `notebook.find` is available so we can't use Emacs-like i-search.
+  // As a fallback, we use `notebook.find` for `ctrl+s` and `ctrl+r`.
+  {
+    "keys": ["ctrl+s", "ctrl+r"],
+    "command": "notebook.find",
+    "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
+  },
+  // i-search forward regexp
+  {
+    "key": "ctrl+meta+s",
+    "command": "emacs-mcx.isearchForwardRegexp",
+    "when": "!findInputFocussed"
+  },
+  {
+    "key": "ctrl+meta+s",
+    "command": "editor.action.nextMatchFindAction",
+    "when": "findInputFocussed"
+  },
+  // i-search backward regexp
+  {
+    "key": "ctrl+meta+r",
+    "command": "emacs-mcx.isearchBackwardRegexp",
+    "when": "!findInputFocussed"
+  },
+  {
+    "key": "ctrl+meta+r",
+    "command": "editor.action.previousMatchFindAction",
+    "when": "findInputFocussed"
+  },
+  // replace
+  {
+    "key": "meta+shift+5",
+    "command": "emacs-mcx.queryReplace",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+meta+shift+5",
+    "command": "emacs-mcx.queryReplaceRegexp",
+    "when": "editorFocus"
+  },
+  // addSelectionToNext/PreviousFindMatch
+  {
+    "key": "ctrl+meta+n",
+    "command": "emacs-mcx.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+meta+p",
+    "command": "emacs-mcx.addSelectionToPreviousFindMatch",
+    "when": "editorFocus"
+  },
+  // Disable Emacs-like keybindings on the find and replace widgets (native UI).
+  // See https://github.com/whitphx/vscode-emacs-mcx/issues/55
+  {
+    "keys": [
+      "ctrl+f",
+      "ctrl+b",
+      "ctrl+p",
+      "ctrl+n",
+      "ctrl+a",
+      "ctrl+e",
+      "alt+f",
+      "alt+b",
+      "alt+m",
+      "ctrl+d",
+      "ctrl+h",
+      "alt+d",
+      "ctrl+k",
+      "ctrl+w",
+      "alt+w",
+      "alt+y",
+      "ctrl+m",
+      "ctrl+j",
+      "alt+l",
+      "alt+u",
+      "alt+backspace"
+    ],
+    "whens": [
+      "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing",
+      "isWindows && replaceInputFocussed && !isComposing"
+    ],
+    "command": ""
+  },
+  // VSCode's quick search is like Emacs' Occur mode. Quick search is available since VSCode 1.89 (https://code.visualstudio.com/updates/v1_89#_quick-search).
+  {
+    "key": "meta+s o",
+    "command": "workbench.action.quickTextSearch"
+  }
+]

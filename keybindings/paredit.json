@@ -1,0 +1,32 @@
+[
+  {
+    "key": "ctrl+meta+f",
+    "command": "emacs-mcx.paredit.forwardSexp",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+meta+b",
+    "command": "emacs-mcx.paredit.backwardSexp",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+meta+shift+2",
+    "command": "emacs-mcx.paredit.markSexp",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+k",
+    "command": "emacs-mcx.paredit.pareditKill",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+meta+k",
+    "command": "emacs-mcx.paredit.killSexp",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+meta+backspace",
+    "command": "emacs-mcx.paredit.backwardKillSexp",
+    "when": "editorTextFocus"
+  }
+]

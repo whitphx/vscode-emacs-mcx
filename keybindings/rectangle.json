@@ -1,0 +1,83 @@
+[
+  {
+    "key": "ctrl+x space",
+    "command": "emacs-mcx.rectangleMarkMode",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+x r",
+    "command": "emacs-mcx.startRectCommand",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "k", // ctrl+x r k
+    "command": "emacs-mcx.killRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "s", // ctrl+x r s
+    "command": "emacs-mcx.copyToRegister",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "i", // ctrl+x r i
+    "command": "emacs-mcx.insertRegister",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "r", // ctrl+x r r
+    "command": "emacs-mcx.copyRectangleToRegister",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "space", // ctrl+x r SPC
+    "command": "emacs-mcx.pointToRegister",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "j", // ctrl+x r j
+    "command": "emacs-mcx.jumpToRegister",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "$special": "registerCommandTypes"
+  },
+  {
+    "key": "y", // ctrl+x r y
+    "command": "emacs-mcx.yankRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "d", // ctrl+x r d
+    "command": "emacs-mcx.deleteRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "meta+w", // ctrl+x r M-w
+    "command": "emacs-mcx.copyRectangleAsKill",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "o", // ctrl+x r o
+    "command": "emacs-mcx.openRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "c", // ctrl+x r c
+    "command": "emacs-mcx.clearRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "t", // ctrl+x r t
+    "command": "emacs-mcx.stringRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "key": "p", // ctrl+x r p
+    "command": "emacs-mcx.replaceKillRingToRectangle",
+    "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
+  },
+  {
+    "$special": "rectMarkModeTypes"
+  }
+]
