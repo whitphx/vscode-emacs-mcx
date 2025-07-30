@@ -225,6 +225,25 @@
       "when": "terminalFindFocused"
     },
     {
+      // Copied from the paste keybinding in the default keybindings.
+      "key": "ctrl+y",
+      "command": "workbench.action.terminal.paste",
+      "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+      "key": "ctrl+w",
+      "command": "workbench.action.terminal.copyAndClearSelection",  // There is no `cutSelection`. We believe this is a good alternative.
+      "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
+    },
+    {
+      // Copied from the copy keybinding in the default keybindings.
+      "key": "meta+y",
+      "command": "workbench.action.terminal.copySelection",
+      "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
+    },
+    // Pass through or translate the sequences to the terminal.
+    // These explicit definitions are necessary to override the default keybindings in VSCode that conflict with Emacs-like keybindings.
+    {
       "key": "ctrl+f",
       "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u0006" },
@@ -319,6 +338,12 @@
       "command": "workbench.action.terminal.sendSequence",
       "args": {"text":"\u001b[1;5D"},
       "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+k",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u000b" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
     {
       "key": "ctrl+d",

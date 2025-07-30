@@ -2657,6 +2657,36 @@
         "when": "terminalFindFocused"
       },
       {
+        "key": "ctrl+y",
+        "command": "workbench.action.terminal.paste",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+w",
+        "command": "workbench.action.terminal.copyAndClearSelection",
+        "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
+      },
+      {
+        "key": "alt+y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "ctrl+f",
         "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus && terminalShellType != 'pwsh'",
@@ -2878,6 +2908,14 @@
         "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
         "args": {
           "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "ctrl+k",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u000b"
         }
       },
       {
