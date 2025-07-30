@@ -228,12 +228,12 @@
   },
   {
     "key": "ctrl+w",
-    "command": "editor.action.clipboardCutAction",  // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    "command": "editor.action.clipboardCutAction", // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing" // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
   },
   {
     "key": "ctrl+y",
-    "command": "editor.action.clipboardPasteAction",  // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    "command": "editor.action.clipboardPasteAction", // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing" // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
   },
   {
@@ -257,7 +257,7 @@
     "key": "ctrl+m",
     "command": "emacs-mcx.newLine",
     "when": "editorTextFocus && !editorReadonly",
-    "isearchInterruptible": "interruptOnly"  // C-m in isearch exits isearch but doesn't insert a new line.
+    "isearchInterruptible": "interruptOnly" // C-m in isearch exits isearch but doesn't insert a new line.
   },
   {
     "key": "ctrl+j",
@@ -285,13 +285,13 @@
     "isearchInterruptible": true
   },
   {
-    "key": "ctrl+;",  // TODO: `C-x C-;` is true in the original Emacs.
+    "key": "ctrl+;", // TODO: `C-x C-;` is true in the original Emacs.
     "command": "editor.action.commentLine",
     "when": "editorTextFocus && !editorReadonly",
     "isearchInterruptible": true
   },
   {
-    "key": "meta+;",  // TODO: This is also different from the original Emacs.
+    "key": "meta+;", // TODO: This is also different from the original Emacs.
     "command": "editor.action.blockComment",
     "when": "editorTextFocus && !editorReadonly",
     "isearchInterruptible": true
@@ -363,7 +363,7 @@
   {
     // Copied from the VSCode default keybinding for "References: Find All References",
     // which is a good alternative to Emacs' `xref-find-references`
-    "key": "meta+shift+/",  // "M-?". "?" is shift + "/" in US keyboard layout.
+    "key": "meta+shift+/", // "M-?". "?" is shift + "/" in US keyboard layout.
     "command": "references-view.findReferences",
     "when": "editorHasReferenceProvider"
   }

@@ -1224,6 +1224,26 @@
         "when": "config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
+        "key": "ctrl+space",
+        "command": "emacs-mcx.setMarkCommand",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+shift+2",
+        "command": "emacs-mcx.setMarkCommand",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "escape space",
+        "command": "emacs-mcx.setMarkCommand",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+x ctrl+x",
+        "command": "emacs-mcx.exchangePointAndMark",
+        "when": "editorTextFocus"
+      },
+      {
         "key": "right",
         "command": "emacs-mcx.forwardChar",
         "when": "editorTextFocus"
@@ -2516,26 +2536,6 @@
         "key": "ctrl+[ shift+/",
         "command": "references-view.findReferences",
         "when": "editorHasReferenceProvider && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "ctrl+space",
-        "command": "emacs-mcx.setMarkCommand",
-        "when": "editorTextFocus"
-      },
-      {
-        "key": "ctrl+shift+2",
-        "command": "emacs-mcx.setMarkCommand",
-        "when": "editorTextFocus"
-      },
-      {
-        "key": "escape space",
-        "command": "emacs-mcx.setMarkCommand",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+x ctrl+x",
-        "command": "emacs-mcx.exchangePointAndMark",
-        "when": "editorTextFocus"
       },
       {
         "key": "ctrl+alt+f",
