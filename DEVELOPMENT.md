@@ -66,9 +66,8 @@ It's useful to define keybindings like below.
 ### `meta` key
 
 You can use `"meta"` key in `key` and `keys` fields.
-It is converted basically to `"alt"` key, in addition, `"cmd"`, `"ctrl+["` and `"escape"` keys.
-Those keybindings except `"alt"` are generated with equivalent when-conditions like `"when": "config.emacs-mcx.useMetaPrefixEscape"`,
-which allows users to switch the keys as meta keys through the config.
+A keybinding that had `"meta"` key will be converted to multiple keybindings with different actual meta keys, `"alt"`, `"cmd"`, `"ctrl+["` and `"escape"`.
+Each keybinding will have a `when` condition like `"when": "config.emacs-mcx.useMetaPrefixEscape"` that allows users to turn on/off the meta key behavior through the config.
 
 ### `inheritWhenFromDefault`
 
