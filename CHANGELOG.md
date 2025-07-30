@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.83.1] - 2025-07-31
+
+### Fix
+
+- Internal keybinding generator updates, [#2360](https://github.com/whitphx/vscode-emacs-mcx/pull/2360)
+
 ## [0.83.0] - 2025-07-31
 
 ### Add
