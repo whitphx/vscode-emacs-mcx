@@ -2785,6 +2785,70 @@
         "when": "terminalFindFocused"
       },
       {
+        "key": "ctrl+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[C"
+        }
+      },
+      {
+        "key": "ctrl+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[D"
+        }
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[A"
+        }
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[B"
+        }
+      },
+      {
+        "key": "ctrl+a",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[H"
+        }
+      },
+      {
+        "key": "ctrl+e",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[F"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "alt+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
         "key": "ctrl+alt+s",
         "command": "emacs-mcx.isearchForwardRegexp",
         "when": "!findInputFocussed && config.emacs-mcx.useMetaPrefixAlt"

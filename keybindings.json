@@ -236,6 +236,70 @@
       "command": "workbench.action.terminal.hideFind",
       "when": "terminalFindFocused"
     },
+    {
+      "key": "ctrl+f",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[C"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+b",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[D"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[A"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[B"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+a",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[H"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+e",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[F"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "alt+b",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[1;5D"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "alt+f",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {
+        "text": "\u001b[1;5C"
+      },
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
     // TODO: Automate defining such keybindings based on the default keybinding data.
     // i-search forward regexp
     {
