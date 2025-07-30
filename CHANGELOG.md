@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.82.0] - 2025-07-30
+
+### Add
+
+- Terminal keybindings, [#2356](https://github.com/whitphx/vscode-emacs-mcx/pull/2356).
+
 ## [0.81.0] - 2025-07-29
 
 ### Add
