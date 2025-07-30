@@ -4948,11 +4948,6 @@
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "ctrl+'",
-        "command": "editor.action.triggerSuggest",
-        "when": "editorTextFocus"
-      },
-      {
         "key": "alt+/",
         "command": "editor.action.triggerSuggest",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -4974,8 +4969,8 @@
       },
       {
         "key": "ctrl+'",
-        "command": "toggleSuggestionDetails",
-        "when": "editorTextFocus && suggestWidgetVisible"
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus"
       },
       {
         "key": "alt+/",
@@ -4996,6 +4991,11 @@
         "key": "ctrl+[ /",
         "command": "toggleSuggestionDetails",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+'",
+        "command": "toggleSuggestionDetails",
+        "when": "editorTextFocus && suggestWidgetVisible"
       },
       {
         "key": "ctrl+alt+i",
