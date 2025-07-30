@@ -1,0 +1,70 @@
+// Assign various up/down navigation commands to `ctrl+p` and `ctrl+n`.
+// They are assigned to `ctrl+p` and `ctrl+n` by default in VSCode only on macOS,
+// while this extension reassigns them on all platforms.
+[
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "showPrevParameterHint",
+    "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+  },
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "showNextParameterHint",
+    "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+  },
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+  },
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+  },
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "list.focusUp",
+    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+  },
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "list.focusDown",
+    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+  },
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen"
+  },
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inQuickOpen"
+  },
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "selectPrevCodeAction",
+    "when": "codeActionMenuVisible"
+  },
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "selectNextCodeAction",
+    "when": "codeActionMenuVisible"
+  }
+  // Don't assign `workbench.action.quickOpenNavigate*InFilePicker`
+  // because these commands immediately open the selected file when the user releases the key,
+  // which is not useful behavior,
+  // and the navigation is just possible with the `workbench.action.quickOpenSelect*` commands,
+  // which are already assigned to `ctrl+p` and `ctrl+n` above.
+  // {
+  //   "keys": ["up", "ctrl+p"],
+  //   "command": "workbench.action.quickOpenNavigatePreviousInFilePicker",
+  //   "when": "inFilesPicker && inQuickOpen"
+  // },
+  // {
+  //   "keys": ["down", "ctrl+n"],
+  //   "command": "workbench.action.quickOpenNavigateNextInFilePicker",
+  //   "when": "inFilesPicker && inQuickOpen"
+  // },
+]

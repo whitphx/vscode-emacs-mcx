@@ -3,6 +3,9 @@
   "files.exclude": {
     "out": false // set this to true to hide the "out" folder with the compiled JS files
   },
+  "files.associations": {
+    "**/keybindings/**/*.json": "jsonc" // treat keybindings JSON files as JSON with comments
+  },
   "search.exclude": {
     "out": true // set this to false to include "out" folder in search results
   },

@@ -1,0 +1,33 @@
+[
+  {
+    "key": "escape",
+    "command": "emacs-mcx.cancel",
+    "when": "editorTextFocus && editorHasSelection && !config.emacs-mcx.useMetaPrefixEscape"
+  },
+  {
+    "key": "escape",
+    "command": "emacs-mcx.cancel",
+    "when": "editorTextFocus && editorHasMultipleSelections && !config.emacs-mcx.useMetaPrefixEscape"
+  },
+  {
+    "key": "ctrl+g",
+    "command": "emacs-mcx.cancel",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+g",
+    "command": "emacs-mcx.isearchAbort",
+    "when": "editorFocus && findWidgetVisible && !isComposing"
+  },
+  {
+    "key": "enter",
+    "command": "emacs-mcx.isearchExit",
+    "when": "editorFocus && findInputFocussed && !isComposing" // `!isComposing` is necessary to avoid closing the find widget when hitting `Enter` to confirm the IME input.
+  },
+  { "key": "ctrl+g", "command": "noop", "when": "sideBarFocus" },
+  // Assign "C-g" to the commands which are assigned to "escape" by default.
+  // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/1190
+  {
+    "$special": "cancelKeybindings"
+  }
+]

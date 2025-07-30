@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 import url from "node:url";
 import stripJsonComments from "strip-json-comments";
 import {
@@ -16,22 +17,28 @@ import { validate } from "./validate.mjs";
 console.log("Loading the VSCode default keybindings...");
 await prepareVscDefaultKeybindingsSet();
 
-const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
+const srcDirPath = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "../keybindings/");
+const srcFileNames = fs
+  .readdirSync(srcDirPath, { withFileTypes: true })
+  .filter((dirent) => dirent.isFile())
+  .map((dirent) => dirent.name);
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
 
-console.info(`Reading ${srcFilePath} ...`);
-const srcJsonContent = fs.readFileSync(srcFilePath, "utf8");
-const srcJson = JSON.parse(stripJsonComments(srcJsonContent)) as unknown;
-if (srcJson == null || typeof srcJson !== "object") {
-  throw new Error(`Unexpected type for srcJson: ${typeof srcJson} (${String(srcJson)})`);
+const keybindingSrcs: Array<unknown> = [];
+for (const srcFileName of srcFileNames) {
+  const srcFilePath = path.join(srcDirPath, srcFileName);
+
+  console.info(`Reading ${srcFilePath} ...`);
+  const srcJsonContent = fs.readFileSync(srcFilePath, "utf8");
+  const srcJson = JSON.parse(stripJsonComments(srcJsonContent)) as unknown;
+  if (srcJson == null || typeof srcJson !== "object") {
+    throw new Error(`Unexpected type for srcJson: ${typeof srcJson} (${String(srcJson)})`);
+  }
+  if (!Array.isArray(srcJson)) {
+    throw new Error(`JSON content in ${srcFilePath} is not an array: ${JSON.stringify(srcJson)}`);
+  }
+  keybindingSrcs.push(...(srcJson as unknown[]));
 }
-if (!("keybindings" in srcJson)) {
-  throw new Error("The key .keybindings doesn't exist in srcJson");
-}
-if (!Array.isArray(srcJson["keybindings"])) {
-  throw new Error(`srcJson["keybindings"] is not an array: ${String(srcJson["keybindings"])}`);
-}
-const keybindingSrcs = srcJson["keybindings"] as Array<unknown>;
 
 const dstKeybindings: KeyBinding[] = [];
 

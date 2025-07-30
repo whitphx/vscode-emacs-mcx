@@ -1,0 +1,10 @@
+[
+  {
+    "key": "ctrl+u",
+    "command": "emacs-mcx.universalArgument",
+    "when": "editorTextFocus"
+  },
+  {
+    "$special": "universalArgumentTypes"
+  }
+]

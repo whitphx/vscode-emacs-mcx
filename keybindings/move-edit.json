@@ -1,0 +1,370 @@
+[
+  // right
+  {
+    "keys": ["right", "ctrl+f"],
+    "command": "emacs-mcx.forwardChar",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // left
+  {
+    "keys": ["left", "ctrl+b"],
+    "command": "emacs-mcx.backwardChar",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // up
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "emacs-mcx.previousLine",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // down
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "emacs-mcx.nextLine",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // home
+  {
+    "keys": ["home", "ctrl+a"],
+    "command": "emacs-mcx.moveBeginningOfLine",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // end
+  {
+    "keys": ["end", "ctrl+e"],
+    "command": "emacs-mcx.moveEndOfLine",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // forward word (meta + f)
+  {
+    "key": "meta+f",
+    "command": "emacs-mcx.forwardWord",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // backward word (meta + b)
+  {
+    "key": "meta+b",
+    "command": "emacs-mcx.backwardWord",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // right-word (ctrl + <right>)
+  // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
+  // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/775#issuecomment-1326595172
+  {
+    "keys": ["ctrl+right", "meta+right"],
+    "command": "emacs-mcx.forwardWord",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // left word (ctrl + <left>)
+  // In left-to-right languages, left-word is same as backward-word, and VSCode is not supporting RTL now.
+  // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/775#issuecomment-1326595172
+  {
+    "keys": ["ctrl+left", "meta+left"],
+    "command": "emacs-mcx.backwardWord",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // back-to-indentation (meta + m)
+  {
+    "key": "meta+m",
+    "command": "emacs-mcx.backToIndentation",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // page down (ctrl + v)
+  {
+    "keys": ["pagedown", "ctrl+v"],
+    "command": "emacs-mcx.scrollUpCommand",
+    "when": "editorTextFocus && !suggestWidgetVisible",
+    "isearchInterruptible": true
+  },
+  // page up (meta + v)
+  {
+    "keys": ["pageup", "meta+v"],
+    "command": "emacs-mcx.scrollDownCommand",
+    "when": "editorTextFocus && !suggestWidgetVisible",
+    "isearchInterruptible": true
+  },
+  // backward paragraph (meta + shift + [)
+  {
+    "keys": ["meta+shift+[", "ctrl+up"],
+    "command": "emacs-mcx.backwardParagraph",
+    "when": "editorTextFocus && !suggestWidgetVisible"
+  },
+  // forward paragraph (meta + shift + ])
+  {
+    "keys": ["meta+shift+]", "ctrl+down"],
+    "command": "emacs-mcx.forwardParagraph",
+    "when": "editorTextFocus && !suggestWidgetVisible"
+  },
+  // end of buffer (meta + >)
+  {
+    "key": "meta+shift+.",
+    "command": "emacs-mcx.endOfBuffer",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // beginning of buffer (meta + <)
+  {
+    "key": "meta+shift+,",
+    "command": "emacs-mcx.beginningOfBuffer",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // move-to-window-line-top-bottom
+  {
+    "key": "meta+r",
+    "command": "emacs-mcx.moveToWindowLineTopBottom",
+    "when": "editorTextFocus"
+  },
+  // go to line
+  {
+    "keys": ["meta+g meta+g", "meta+g g"],
+    "command": "emacs-mcx.gotoLine",
+    "when": "!terminalFocus",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "escape g",
+    "command": "emacs-mcx.gotoLine",
+    "when": "config.emacs-mcx.useMetaPrefixEscape"
+  },
+  // marker next
+  {
+    "keys": ["meta+g n", "meta+g meta+n"],
+    "command": "editor.action.marker.next",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+x `",
+    "command": "editor.action.marker.next",
+    "when": "editorTextFocus"
+  },
+  // marker prev
+  {
+    "keys": ["meta+g p", "meta+g meta+p"],
+    "command": "editor.action.marker.prev",
+    "when": "editorTextFocus"
+  },
+  // recenter-top-bottom
+  {
+    "key": "ctrl+l",
+    "command": "emacs-mcx.recenterTopBottom",
+    "when": "editorTextFocus"
+  },
+  ////////
+  // Edit commands
+  ////////
+  {
+    "key": "ctrl+d",
+    "command": "emacs-mcx.deleteForwardChar",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+h",
+    "command": "emacs-mcx.deleteBackwardChar",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+\\",
+    "command": "emacs-mcx.deleteHorizontalSpace",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+d",
+    "command": "emacs-mcx.killWord",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+backspace",
+    "command": "emacs-mcx.backwardKillWord",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "emacs-mcx.killLine",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+backspace",
+    "command": "emacs-mcx.killWholeLine",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+w",
+    "command": "emacs-mcx.killRegion",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // {
+  //   In original Emacs, `C-w` in isearch appends the word next to the cursor to the search string.
+  //   TODO: Find a way to add a string to the search string in isearch in VSCode.
+  //   "key": "ctrl+w",
+  //   "command": "",
+  //   "when": "editorFocus && findWidgetVisible && !isComposing"
+  // },
+  {
+    "key": "meta+w",
+    "command": "emacs-mcx.copyRegion",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+y",
+    "command": "emacs-mcx.yank",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+y",
+    "command": "emacs-mcx.yank",
+    "when": "emacs-mcx.minibufferReading"
+  },
+  {
+    "key": "ctrl+w",
+    "command": "editor.action.clipboardCutAction", // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing" // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
+  },
+  {
+    "key": "ctrl+y",
+    "command": "editor.action.clipboardPasteAction", // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing" // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
+  },
+  {
+    "key": "meta+y",
+    "command": "emacs-mcx.yank-pop",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // {
+  // TODO: Find a command to set the search string.
+  //   "key": "meta+y",
+  //   "command": "emacs-mcx.isearchExit",
+  //   "when": "editorFocus && findWidgetVisible && !isComposing"
+  // },
+  {
+    "key": "ctrl+o",
+    "command": "lineBreakInsert",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "ctrl+m",
+    "command": "emacs-mcx.newLine",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": "interruptOnly" // C-m in isearch exits isearch but doesn't insert a new line.
+  },
+  {
+    "key": "ctrl+j",
+    "command": "emacs-mcx.newLine",
+    "when": "editorTextFocus && !editorReadonly"
+    // In original Emacs, `C-j` in isearch adds "^J" (= `\n`) **to the search string**
+    // TODO: Find a way to add "\n" to the search string in isearch in VSCode.
+  },
+  {
+    "key": "ctrl+x ctrl+o",
+    "command": "emacs-mcx.deleteBlankLines",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "ctrl+x h",
+    "command": "editor.action.selectAll",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  {
+    "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
+    "command": "undo",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "ctrl+;", // TODO: `C-x C-;` is true in the original Emacs.
+    "command": "editor.action.commentLine",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "meta+;", // TODO: This is also different from the original Emacs.
+    "command": "editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "ctrl+x ctrl+l",
+    "command": "emacs-mcx.transformToLowercase",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+l",
+    "command": "emacs-mcx.transformToLowercase",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+x ctrl+u",
+    "command": "emacs-mcx.transformToUppercase",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+u",
+    "command": "emacs-mcx.transformToUppercase",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+c",
+    "command": "emacs-mcx.transformToTitlecase",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "meta+shift+6",
+    "command": "emacs-mcx.deleteIndentation",
+    "when": "editorTextFocus && !editorReadOnly"
+  },
+  // Assign `ctrl+i` to `tab` with the same condition as the VSCode default keybinding on `tab`.
+  {
+    "key": "ctrl+i",
+    "command": "tab",
+    "when": "editorTextFocus && !editorReadonly && !editorTabMovesFocus"
+  },
+  {
+    "keys": ["ctrl+i", "tab"],
+    "command": "emacs-mcx.tabToTabStop",
+    // This when clause was generated by Copilot 😜 I used most of the suggested conditions defensively. You may want to remove some of them.
+    "when": "config.emacs-mcx.emacsLikeTab && editorTextFocus && !editorReadonly && !inlineSuggestionVisible && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible && !inSnippetMode && !editorTabCompletion && !editorParameterHintsVisible"
+  },
+  // Looking up identifiers
+  {
+    "key": "meta+.",
+    // `emacs-mcx.findDefinitions` is a wrapper of `editor.action.revealDefinition` ("Go to Definition").
+    "command": "emacs-mcx.findDefinitions",
+    // The `when` clause is copied from the VSCode default keybinding for "Go to Definition".
+    "when": "editorHasDefinitionProvider && editorTextFocus"
+  },
+  {
+    // Copied from the VSCode default keybinding for "Go Back",
+    // which is a good alternative to Emacs' `xref-go-back`
+    "key": "meta+,",
+    "command": "workbench.action.navigateBack",
+    "when": "canNavigateBack"
+  },
+  {
+    // Copied from the VSCode default keybinding for "Go Forward",
+    // which is a good alternative to Emacs' `xref-go-forward`
+    "key": "ctrl+meta+,",
+    "command": "workbench.action.navigateForward",
+    "when": "canNavigateForward"
+  },
+  {
+    // Copied from the VSCode default keybinding for "References: Find All References",
+    // which is a good alternative to Emacs' `xref-find-references`
+    "key": "meta+shift+/", // "M-?". "?" is shift + "/" in US keyboard layout.
+    "command": "references-view.findReferences",
+    "when": "editorHasReferenceProvider"
+  }
+]
