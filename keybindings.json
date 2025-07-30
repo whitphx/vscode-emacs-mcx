@@ -58,12 +58,6 @@
       "when": "editorTextFocus",
       "isearchInterruptible": true
     },
-    { "key": "meta+f",            "command": "workbench.action.terminal.sendSequence",
-                                     "when": "terminalFocus && terminalShellType != 'pwsh'",
-                                     "args": {"text":"\u001bf"} },
-    { "key": "meta+f",            "command": "workbench.action.terminal.sendSequence",
-                                     "when": "terminalFocus && terminalShellType == 'pwsh'",
-                                     "args": {"text":"\u001b[1;5C"} },
     // backward word (meta + b)
     {
       "key": "meta+b",
@@ -71,12 +65,6 @@
       "when": "editorTextFocus",
       "isearchInterruptible": true
     },
-    { "key": "meta+b",            "command": "workbench.action.terminal.sendSequence",
-                                     "when": "terminalFocus && terminalShellType != 'pwsh'",
-                                     "args": {"text":"\u001bb"} },
-    { "key": "meta+b",            "command": "workbench.action.terminal.sendSequence",
-                                     "when": "terminalFocus && terminalShellType == 'pwsh'",
-                                     "args": {"text":"\u001b[1;5D"} },
     // right-word (ctrl + <right>)
     // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
     // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/775#issuecomment-1326595172
@@ -239,65 +227,61 @@
     {
       "key": "ctrl+f",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[C"
-      },
+      "args": { "text": "\u001b[C" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     {
       "key": "ctrl+b",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[D"
-      },
+      "args": { "text": "\u001b[D" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     {
       "key": "ctrl+p",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[A"
-      },
+      "args": { "text": "\u001b[A" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     {
       "key": "ctrl+n",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[B"
-      },
+      "args": { "text": "\u001b[B" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     {
       "key": "ctrl+a",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[H"
-      },
+      "args": { "text": "\u001b[H" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     {
       "key": "ctrl+e",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[F"
-      },
+      "args": { "text": "\u001b[F" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     {
-      "key": "alt+b",
+      "key": "meta+f",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[1;5D"
-      },
-      "when": "terminalFocus && terminalShellType == 'pwsh'"
+      "args": {"text":"\u001bf"},
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
     {
-      "key": "alt+f",
+      "key": "meta+f",
       "command": "workbench.action.terminal.sendSequence",
-      "args": {
-        "text": "\u001b[1;5C"
+      "args": {"text":"\u001b[1;5C"},
+      "when": "terminalFocus && terminalShellType == 'pwsh'"
       },
+    {
+      "key": "meta+b",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {"text":"\u001bb"},
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
+    },
+    {
+      "key": "meta+b",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": {"text":"\u001b[1;5D"},
       "when": "terminalFocus && terminalShellType == 'pwsh'"
     },
     // TODO: Automate defining such keybindings based on the default keybinding data.

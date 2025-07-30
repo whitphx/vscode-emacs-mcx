@@ -2009,70 +2009,6 @@
         }
       },
       {
-        "key": "alt+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "mac": "cmd+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "key": "escape f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "key": "ctrl+[ f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "key": "alt+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "mac": "cmd+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "key": "escape f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "key": "ctrl+[ f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
         "key": "alt+b",
         "command": "emacs-mcx.backwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -2122,70 +2058,6 @@
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
         "args": {
           "then": "emacs-mcx.backwardWord"
-        }
-      },
-      {
-        "key": "alt+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "mac": "cmd+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "key": "escape b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "key": "ctrl+[ b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "key": "alt+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "mac": "cmd+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "key": "escape b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "key": "ctrl+[ b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001b[1;5D"
         }
       },
       {
@@ -2833,19 +2705,131 @@
         }
       },
       {
-        "key": "alt+b",
+        "key": "alt+f",
         "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
         "args": {
-          "text": "\u001b[1;5D"
+          "text": "\u001bf"
+        }
+      },
+      {
+        "mac": "cmd+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "escape f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bf"
         }
       },
       {
         "key": "alt+f",
         "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
         "args": {
           "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "mac": "cmd+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "escape f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "mac": "cmd+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "escape b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "mac": "cmd+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "escape b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001b[1;5D"
         }
       },
       {
