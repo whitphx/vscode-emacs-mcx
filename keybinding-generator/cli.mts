@@ -10,7 +10,11 @@ import {
   generateKeybindingsForRegisterCommands,
   generateCtrlGKeybindings,
 } from "./generate-keybindings.mjs";
+import { prepareVscDefaultKeybindingsSet } from "./vsc-default-keybindings.mjs";
 import { validate } from "./validate.mjs";
+
+console.log("Loading the VSCode default keybindings...");
+await prepareVscDefaultKeybindingsSet();
 
 const srcFilePath = url.fileURLToPath(import.meta.resolve("../keybindings.json"));
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
@@ -54,7 +58,7 @@ for (const keybindingSrc of keybindingSrcs) {
       continue;
     }
     if (keybindingSrc.$special === "cancelKeybindings") {
-      const ctrlGKeybindings = await generateCtrlGKeybindings();
+      const ctrlGKeybindings = generateCtrlGKeybindings();
       dstKeybindings.push(...ctrlGKeybindings);
       continue;
     }

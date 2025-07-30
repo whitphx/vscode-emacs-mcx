@@ -83,3 +83,21 @@ export async function loadVscDefaultKeybindingsSet(): Promise<VscKeybindingPerPl
     osxSpecific,
   };
 }
+
+let defaultKeybindingsSetCache: VscKeybindingPerPlatform | null = null;
+export async function prepareVscDefaultKeybindingsSet(): Promise<void> {
+  defaultKeybindingsSetCache = await loadVscDefaultKeybindingsSet();
+}
+
+export function getVscDefaultKeybindingsSet(): VscKeybindingPerPlatform {
+  if (defaultKeybindingsSetCache) {
+    return defaultKeybindingsSetCache;
+  }
+
+  throw new Error("The default keybinding is not loaded. Call prepareVscDefaultKeybindingsSet() first.");
+}
+
+export function getVscDefaultKeybinding(command: string): VscKeybinding | undefined {
+  const { allPlatforms } = getVscDefaultKeybindingsSet();
+  return allPlatforms.find((keybinding) => keybinding.command === command);
+}

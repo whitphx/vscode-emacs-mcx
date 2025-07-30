@@ -256,22 +256,22 @@
     {
       "keys": ["ctrl+meta+i", "meta+[Tab]"],
       "command": "workbench.action.terminal.requestCompletions",
-      "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible"
+      "inheritWhenFromDefault": true
     },
     {
       "keys": ["ctrl+p", "meta+p"],
       "command": "workbench.action.terminal.selectPrevSuggestion",
-      "when": "simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory"
+      "inheritWhenFromDefault": true
     },
     {
       "keys": ["ctrl+n", "meta+n"],
       "command": "workbench.action.terminal.selectNextSuggestion",
-      "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+      "inheritWhenFromDefault": true
     },
     {
       "key": "ctrl+h",
       "command": "workbench.action.terminal.suggestToggleDetails",
-      "when": "simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+      "inheritWhenFromDefault": true
     },
     // Pass through or translate the sequences to the terminal.
     // These explicit definitions are necessary to override the default keybindings in VSCode that conflict with Emacs-like keybindings.
@@ -383,7 +383,6 @@
       "args": { "text": "\u0004" },
       "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
-    // TODO: Automate defining such keybindings based on the default keybinding data.
     // i-search forward regexp
     {
       "key": "ctrl+meta+s",

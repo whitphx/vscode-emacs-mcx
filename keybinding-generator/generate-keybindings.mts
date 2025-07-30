@@ -1,4 +1,4 @@
-import { loadVscDefaultKeybindingsSet, VscKeybinding } from "./vsc-default-keybindings.mjs";
+import { getVscDefaultKeybinding, getVscDefaultKeybindingsSet, VscKeybinding } from "./vsc-default-keybindings.mjs";
 
 export interface KeyBindingSource {
   key?: string;
@@ -6,6 +6,7 @@ export interface KeyBindingSource {
   command?: string;
   when?: string;
   whens?: string[];
+  inheritWhenFromDefault?: boolean;
   args?: unknown;
   isearchInterruptible?: boolean | "interruptOnly";
 }
@@ -185,6 +186,20 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   const keys = getKeys(src);
 
   let whens: (string | undefined)[] = [];
+  if (src.inheritWhenFromDefault) {
+    if (src.when || src.whens) {
+      throw new Error("inheritWhenFromDefault can't be used with .when or .whens");
+    }
+    const command = src.command;
+    if (command == null) {
+      throw new Error(`command must be defined when inheritWhenFromDefault = true`);
+    }
+    const defaultKeybinding = getVscDefaultKeybinding(command);
+    if (defaultKeybinding == null) {
+      throw new Error(`Command "${command}" was not found in the default keybindings`);
+    }
+    whens = [defaultKeybinding.when];
+  }
   if (src.when) {
     whens = [src.when];
     if (src.whens) {
@@ -441,8 +456,8 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   return keybindings;
 }
 
-export async function generateCtrlGKeybindings(): Promise<KeyBinding[]> {
-  const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = await loadVscDefaultKeybindingsSet();
+export function generateCtrlGKeybindings(): KeyBinding[] {
+  const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = getVscDefaultKeybindingsSet();
 
   function getCtrlGKeybindings(keybindings: VscKeybinding[], additionalWhen?: string): KeyBinding[] {
     // Exclude keybindings that conflict with Emacs keybindings or seem to be not useful when assigned to `ctrl+g`.
