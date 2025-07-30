@@ -2637,406 +2637,6 @@
         "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
       },
       {
-        "key": "ctrl+s",
-        "command": "workbench.action.terminal.focusFind",
-        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
-      },
-      {
-        "key": "ctrl+s",
-        "command": "workbench.action.terminal.findNext",
-        "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
-      },
-      {
-        "key": "ctrl+r",
-        "command": "workbench.action.terminal.findPrevious",
-        "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.action.terminal.hideFind",
-        "when": "terminalFindFocused"
-      },
-      {
-        "key": "ctrl+y",
-        "command": "workbench.action.terminal.paste",
-        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-      },
-      {
-        "key": "ctrl+w",
-        "command": "workbench.action.terminal.copyAndClearSelection",
-        "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
-      },
-      {
-        "key": "alt+y",
-        "command": "workbench.action.terminal.copySelection",
-        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixAlt"
-      },
-      {
-        "mac": "cmd+y",
-        "command": "workbench.action.terminal.copySelection",
-        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "escape y",
-        "command": "workbench.action.terminal.copySelection",
-        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+[ y",
-        "command": "workbench.action.terminal.copySelection",
-        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "ctrl+x 2",
-        "command": "workbench.action.terminal.splitActiveTab",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+x 3",
-        "command": "workbench.action.terminal.splitActiveTab",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+x 0",
-        "command": "workbench.action.terminal.unsplit",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+alt+i",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
-      },
-      {
-        "mac": "ctrl+cmd+i",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "escape ctrl+i",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+[ ctrl+i",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "alt+[Tab]",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
-      },
-      {
-        "mac": "cmd+[Tab]",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "escape [Tab]",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+[ [Tab]",
-        "command": "workbench.action.terminal.requestCompletions",
-        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "ctrl+p",
-        "command": "workbench.action.terminal.selectPrevSuggestion",
-        "when": "simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory"
-      },
-      {
-        "key": "alt+p",
-        "command": "workbench.action.terminal.selectPrevSuggestion",
-        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixAlt"
-      },
-      {
-        "mac": "cmd+p",
-        "command": "workbench.action.terminal.selectPrevSuggestion",
-        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "escape p",
-        "command": "workbench.action.terminal.selectPrevSuggestion",
-        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+[ p",
-        "command": "workbench.action.terminal.selectPrevSuggestion",
-        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "ctrl+n",
-        "command": "workbench.action.terminal.selectNextSuggestion",
-        "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
-      },
-      {
-        "key": "alt+n",
-        "command": "workbench.action.terminal.selectNextSuggestion",
-        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixAlt"
-      },
-      {
-        "mac": "cmd+n",
-        "command": "workbench.action.terminal.selectNextSuggestion",
-        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "escape n",
-        "command": "workbench.action.terminal.selectNextSuggestion",
-        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+[ n",
-        "command": "workbench.action.terminal.selectNextSuggestion",
-        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
-        "key": "ctrl+h",
-        "command": "workbench.action.terminal.suggestToggleDetails",
-        "when": "simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
-      },
-      {
-        "key": "ctrl+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh'",
-        "args": {
-          "text": "\u0006"
-        }
-      },
-      {
-        "key": "ctrl+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh'",
-        "args": {
-          "text": "\u001b[C"
-        }
-      },
-      {
-        "key": "ctrl+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh'",
-        "args": {
-          "text": "\u0002"
-        }
-      },
-      {
-        "key": "ctrl+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh'",
-        "args": {
-          "text": "\u001b[D"
-        }
-      },
-      {
-        "key": "ctrl+p",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && !terminalSuggestWidgetVisible",
-        "args": {
-          "text": "\u0010"
-        }
-      },
-      {
-        "key": "ctrl+p",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && !terminalSuggestWidgetVisible",
-        "args": {
-          "text": "\u001b[A"
-        }
-      },
-      {
-        "key": "ctrl+n",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && !terminalSuggestWidgetVisible",
-        "args": {
-          "text": "\u000e"
-        }
-      },
-      {
-        "key": "ctrl+n",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && !terminalSuggestWidgetVisible",
-        "args": {
-          "text": "\u001b[B"
-        }
-      },
-      {
-        "key": "ctrl+a",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh'",
-        "args": {
-          "text": "\u0001"
-        }
-      },
-      {
-        "key": "ctrl+a",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh'",
-        "args": {
-          "text": "\u001b[H"
-        }
-      },
-      {
-        "key": "ctrl+e",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh'",
-        "args": {
-          "text": "\u0005"
-        }
-      },
-      {
-        "key": "ctrl+e",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh'",
-        "args": {
-          "text": "\u001b[F"
-        }
-      },
-      {
-        "key": "alt+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "mac": "cmd+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "key": "escape f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "key": "ctrl+[ f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001bf"
-        }
-      },
-      {
-        "key": "alt+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "mac": "cmd+f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "key": "escape f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "key": "ctrl+[ f",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001b[1;5C"
-        }
-      },
-      {
-        "key": "alt+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "mac": "cmd+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "key": "escape b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "key": "ctrl+[ b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001bb"
-        }
-      },
-      {
-        "key": "alt+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "mac": "cmd+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "key": "escape b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "key": "ctrl+[ b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
-        "args": {
-          "text": "\u001b[1;5D"
-        }
-      },
-      {
-        "key": "ctrl+k",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh'",
-        "args": {
-          "text": "\u000b"
-        }
-      },
-      {
-        "key": "ctrl+d",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus && terminalShellType != 'pwsh'",
-        "args": {
-          "text": "\u0004"
-        }
-      },
-      {
         "key": "ctrl+alt+s",
         "command": "emacs-mcx.isearchForwardRegexp",
         "when": "!findInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
@@ -5396,6 +4996,406 @@
         "key": "ctrl+[ ctrl+space",
         "command": "workbench.action.toggleSidebarVisibility",
         "when": "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0006"
+        }
+      },
+      {
+        "key": "ctrl+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[C"
+        }
+      },
+      {
+        "key": "ctrl+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0002"
+        }
+      },
+      {
+        "key": "ctrl+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[D"
+        }
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && !terminalSuggestWidgetVisible",
+        "args": {
+          "text": "\u0010"
+        }
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && !terminalSuggestWidgetVisible",
+        "args": {
+          "text": "\u001b[A"
+        }
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && !terminalSuggestWidgetVisible",
+        "args": {
+          "text": "\u000e"
+        }
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && !terminalSuggestWidgetVisible",
+        "args": {
+          "text": "\u001b[B"
+        }
+      },
+      {
+        "key": "ctrl+a",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0001"
+        }
+      },
+      {
+        "key": "ctrl+a",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[H"
+        }
+      },
+      {
+        "key": "ctrl+e",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0005"
+        }
+      },
+      {
+        "key": "ctrl+e",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh'",
+        "args": {
+          "text": "\u001b[F"
+        }
+      },
+      {
+        "key": "alt+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "mac": "cmd+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "escape f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "alt+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "mac": "cmd+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "escape f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "mac": "cmd+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "escape b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "mac": "cmd+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "escape b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "ctrl+k",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u000b"
+        }
+      },
+      {
+        "key": "ctrl+d",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0004"
+        }
+      },
+      {
+        "key": "ctrl+s",
+        "command": "workbench.action.terminal.focusFind",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+s",
+        "command": "workbench.action.terminal.findNext",
+        "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "workbench.action.terminal.findPrevious",
+        "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.terminal.hideFind",
+        "when": "terminalFindFocused"
+      },
+      {
+        "key": "ctrl+alt+i",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "ctrl+cmd+i",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+i",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+i",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+[Tab]",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+[Tab]",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape [Tab]",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ [Tab]",
+        "command": "workbench.action.terminal.requestCompletions",
+        "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.terminal.selectPrevSuggestion",
+        "when": "simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory"
+      },
+      {
+        "key": "alt+p",
+        "command": "workbench.action.terminal.selectPrevSuggestion",
+        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+p",
+        "command": "workbench.action.terminal.selectPrevSuggestion",
+        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape p",
+        "command": "workbench.action.terminal.selectPrevSuggestion",
+        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ p",
+        "command": "workbench.action.terminal.selectPrevSuggestion",
+        "when": "(simpleSuggestWidgetHasNavigated && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasNavigated && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible || terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible && !config.terminal.integrated.suggest.upArrowNavigatesHistory) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.terminal.selectNextSuggestion",
+        "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+      },
+      {
+        "key": "alt+n",
+        "command": "workbench.action.terminal.selectNextSuggestion",
+        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+n",
+        "command": "workbench.action.terminal.selectNextSuggestion",
+        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape n",
+        "command": "workbench.action.terminal.selectNextSuggestion",
+        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ n",
+        "command": "workbench.action.terminal.selectNextSuggestion",
+        "when": "(terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+h",
+        "command": "workbench.action.terminal.suggestToggleDetails",
+        "when": "simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || simpleSuggestWidgetHasFocusedSuggestion && terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+y",
+        "command": "workbench.action.terminal.paste",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+w",
+        "command": "workbench.action.terminal.copyAndClearSelection",
+        "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
+      },
+      {
+        "key": "alt+y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ y",
+        "command": "workbench.action.terminal.copySelection",
+        "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+x 2",
+        "command": "workbench.action.terminal.splitActiveTab",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+x 3",
+        "command": "workbench.action.terminal.splitActiveTab",
+        "when": "terminalFocus"
+      },
+      {
+        "key": "ctrl+x 0",
+        "command": "workbench.action.terminal.unsplit",
+        "when": "terminalFocus"
       },
       {
         "key": "ctrl+x ctrl+c",
