@@ -1812,16 +1812,6 @@
       },
       {
         "key": "right",
-        "command": "emacs-mcx.forwardChar",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+f",
-        "command": "emacs-mcx.forwardChar",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "right",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
@@ -1845,16 +1835,6 @@
         "key": "ctrl+b",
         "command": "emacs-mcx.backwardChar",
         "when": "editorTextFocus"
-      },
-      {
-        "key": "left",
-        "command": "emacs-mcx.backwardChar",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+b",
-        "command": "emacs-mcx.backwardChar",
-        "when": "terminalFocus"
       },
       {
         "key": "left",
@@ -1884,16 +1864,6 @@
       },
       {
         "key": "up",
-        "command": "emacs-mcx.previousLine",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+p",
-        "command": "emacs-mcx.previousLine",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "up",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
@@ -1917,16 +1887,6 @@
         "key": "ctrl+n",
         "command": "emacs-mcx.nextLine",
         "when": "editorTextFocus"
-      },
-      {
-        "key": "down",
-        "command": "emacs-mcx.nextLine",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+n",
-        "command": "emacs-mcx.nextLine",
-        "when": "terminalFocus"
       },
       {
         "key": "down",
@@ -1956,16 +1916,6 @@
       },
       {
         "key": "home",
-        "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+a",
-        "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "home",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
@@ -1989,16 +1939,6 @@
         "key": "ctrl+e",
         "command": "emacs-mcx.moveEndOfLine",
         "when": "editorTextFocus"
-      },
-      {
-        "key": "end",
-        "command": "emacs-mcx.moveEndOfLine",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+e",
-        "command": "emacs-mcx.moveEndOfLine",
-        "when": "terminalFocus"
       },
       {
         "key": "end",
@@ -2069,6 +2009,70 @@
         }
       },
       {
+        "key": "alt+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "mac": "cmd+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "escape f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bf"
+        }
+      },
+      {
+        "key": "alt+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "mac": "cmd+f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "escape f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001b[1;5C"
+        }
+      },
+      {
         "key": "alt+b",
         "command": "emacs-mcx.backwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -2118,6 +2122,70 @@
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
         "args": {
           "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "mac": "cmd+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "escape b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001bb"
+        }
+      },
+      {
+        "key": "alt+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "mac": "cmd+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "escape b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "text": "\u001b[1;5D"
         }
       },
       {
@@ -2695,6 +2763,31 @@
         "key": "ctrl+r",
         "command": "notebook.find",
         "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
+      },
+      {
+        "key": "ctrl+s",
+        "command": "workbench.action.terminal.focusFind",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "workbench.action.terminal.focusFind",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+s",
+        "command": "workbench.action.terminal.findNext",
+        "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "workbench.action.terminal.findPrevious",
+        "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.terminal.hideFind",
+        "when": "terminalFindFocused"
       },
       {
         "key": "ctrl+alt+s",

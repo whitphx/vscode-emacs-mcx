@@ -13,42 +13,42 @@
     {
       "keys": ["right", "ctrl+f"],
       "command": "emacs-mcx.forwardChar",
-      "whens": ["editorTextFocus", "terminalFocus"],
+      "when": "editorTextFocus",
       "isearchInterruptible": true
     },
     // left
     {
       "keys": ["left", "ctrl+b"],
       "command": "emacs-mcx.backwardChar",
-      "whens": ["editorTextFocus", "terminalFocus"],
+      "when": "editorTextFocus",
       "isearchInterruptible": true
     },
     // up
     {
       "keys": ["up", "ctrl+p"],
       "command": "emacs-mcx.previousLine",
-      "whens": ["editorTextFocus", "terminalFocus"],
+      "when": "editorTextFocus",
       "isearchInterruptible": true
     },
     // down
     {
       "keys": ["down", "ctrl+n"],
       "command": "emacs-mcx.nextLine",
-      "whens": ["editorTextFocus", "terminalFocus"],
+      "when": "editorTextFocus",
       "isearchInterruptible": true
     },
     // home
     {
       "keys": ["home", "ctrl+a"],
       "command": "emacs-mcx.moveBeginningOfLine",
-      "whens": ["editorTextFocus", "terminalFocus"],
+      "when": "editorTextFocus",
       "isearchInterruptible": true
     },
     // end
     {
       "keys": ["end", "ctrl+e"],
       "command": "emacs-mcx.moveEndOfLine",
-      "whens": ["editorTextFocus", "terminalFocus"],
+      "when": "editorTextFocus",
       "isearchInterruptible": true
     },
     // forward word (meta + f)
@@ -58,6 +58,12 @@
       "when": "editorTextFocus",
       "isearchInterruptible": true
     },
+    { "key": "meta+f",            "command": "workbench.action.terminal.sendSequence",
+                                     "when": "terminalFocus && terminalShellType != 'pwsh'",
+                                     "args": {"text":"\u001bf"} },
+    { "key": "meta+f",            "command": "workbench.action.terminal.sendSequence",
+                                     "when": "terminalFocus && terminalShellType == 'pwsh'",
+                                     "args": {"text":"\u001b[1;5C"} },
     // backward word (meta + b)
     {
       "key": "meta+b",
@@ -65,6 +71,12 @@
       "when": "editorTextFocus",
       "isearchInterruptible": true
     },
+    { "key": "meta+b",            "command": "workbench.action.terminal.sendSequence",
+                                     "when": "terminalFocus && terminalShellType != 'pwsh'",
+                                     "args": {"text":"\u001bb"} },
+    { "key": "meta+b",            "command": "workbench.action.terminal.sendSequence",
+                                     "when": "terminalFocus && terminalShellType == 'pwsh'",
+                                     "args": {"text":"\u001b[1;5D"} },
     // right-word (ctrl + <right>)
     // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
     // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/775#issuecomment-1326595172
@@ -200,6 +212,28 @@
       "command": "notebook.find",
       "when": "notebookEditorFocused && activeEditor == 'workbench.editor.interactive' || notebookEditorFocused && activeEditor == 'workbench.editor.notebook'"
     },
+    // Terminal, ref: https://github.com/whitphx/vscode-emacs-mcx/issues/1319
+    {
+      "keys": ["ctrl+s", "ctrl+r"],
+      "command": "workbench.action.terminal.focusFind",
+      "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+    },
+    {
+      "key": "ctrl+s",
+      "command": "workbench.action.terminal.findNext",
+      "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
+    },
+    {
+      "key": "ctrl+r",
+      "command": "workbench.action.terminal.findPrevious",
+      "when": "terminalFindInputFocused && terminalHasBeenCreated || terminalFindInputFocused && terminalProcessSupported"
+    },
+    {
+      "key": "ctrl+g",
+      "command": "workbench.action.terminal.hideFind",
+      "when": "terminalFindFocused"
+    },
+    // TODO: Automate defining such keybindings based on the default keybinding data.
     // i-search forward regexp
     {
       "key": "ctrl+meta+s",
