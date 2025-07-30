@@ -578,23 +578,27 @@
     },
     // Suggestion
     {
-      "key": "ctrl+'",
+      "keys": [
+        "ctrl+meta+i", "meta+[Tab]",  // Emacs' completion-at-point
+        "meta+/", // Emacs' hippie expand. https://github.com/whitphx/vscode-emacs-mcx/pull/476
+        "ctrl+'" // For backward-compatibility
+      ],
       "command": "editor.action.triggerSuggest",
       "when": "editorTextFocus"
     },
     {
-      "key": "ctrl+'",
+      "keys": [
+        "meta+/", // Emacs' hippie expand. https://github.com/whitphx/vscode-emacs-mcx/pull/476
+        "ctrl+'" // For backward-compatibility
+      ],
       "command": "toggleSuggestionDetails",
       "when": "editorTextFocus && suggestWidgetVisible"
     },
     {
-      "key": "meta+/",
-      "command": "editor.action.triggerSuggest",
-      "when": "editorTextFocus"
-    },
-    {
-      "key": "meta+/",
-      "command": "toggleSuggestionDetails",
+      "keys": [
+        "ctrl+meta+i", "meta+[Tab]"  // Emacs' completion-at-point
+      ],
+      "command": "selectNextPageSuggestion",
       "when": "editorTextFocus && suggestWidgetVisible"
     },
     // Show commands

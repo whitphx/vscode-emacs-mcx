@@ -4908,14 +4908,44 @@
         ]
       },
       {
-        "key": "ctrl+'",
+        "key": "ctrl+alt+i",
         "command": "editor.action.triggerSuggest",
-        "when": "editorTextFocus"
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
-        "key": "ctrl+'",
-        "command": "toggleSuggestionDetails",
-        "when": "editorTextFocus && suggestWidgetVisible"
+        "mac": "ctrl+cmd+i",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+i",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+i",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+[Tab]",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+[Tab]",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape [Tab]",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ [Tab]",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+/",
@@ -4938,6 +4968,11 @@
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "ctrl+'",
+        "command": "editor.action.triggerSuggest",
+        "when": "editorTextFocus"
+      },
+      {
         "key": "alt+/",
         "command": "toggleSuggestionDetails",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
@@ -4955,6 +4990,51 @@
       {
         "key": "ctrl+[ /",
         "command": "toggleSuggestionDetails",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+'",
+        "command": "toggleSuggestionDetails",
+        "when": "editorTextFocus && suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+alt+i",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "ctrl+cmd+i",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+i",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+i",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+[Tab]",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+[Tab]",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape [Tab]",
+        "command": "selectNextPageSuggestion",
+        "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ [Tab]",
+        "command": "selectNextPageSuggestion",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
