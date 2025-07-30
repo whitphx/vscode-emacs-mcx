@@ -2659,9 +2659,25 @@
       {
         "key": "ctrl+f",
         "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0006"
+        }
+      },
+      {
+        "key": "ctrl+f",
+        "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus && terminalShellType == 'pwsh'",
         "args": {
           "text": "\u001b[C"
+        }
+      },
+      {
+        "key": "ctrl+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0002"
         }
       },
       {
@@ -2675,9 +2691,25 @@
       {
         "key": "ctrl+p",
         "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0010"
+        }
+      },
+      {
+        "key": "ctrl+p",
+        "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus && terminalShellType == 'pwsh'",
         "args": {
           "text": "\u001b[A"
+        }
+      },
+      {
+        "key": "ctrl+n",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u000e"
         }
       },
       {
@@ -2691,9 +2723,25 @@
       {
         "key": "ctrl+a",
         "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0001"
+        }
+      },
+      {
+        "key": "ctrl+a",
+        "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus && terminalShellType == 'pwsh'",
         "args": {
           "text": "\u001b[H"
+        }
+      },
+      {
+        "key": "ctrl+e",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0005"
         }
       },
       {
@@ -2830,6 +2878,14 @@
         "when": "terminalFocus && terminalShellType == 'pwsh' && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
         "args": {
           "text": "\u001b[1;5D"
+        }
+      },
+      {
+        "key": "ctrl+d",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus && terminalShellType != 'pwsh'",
+        "args": {
+          "text": "\u0004"
         }
       },
       {

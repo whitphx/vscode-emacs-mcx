@@ -227,8 +227,20 @@
     {
       "key": "ctrl+f",
       "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u0006" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
+    },
+    {
+      "key": "ctrl+f",
+      "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u001b[C" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+b",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u0002" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
     {
       "key": "ctrl+b",
@@ -239,8 +251,20 @@
     {
       "key": "ctrl+p",
       "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u0010" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
+    },
+    {
+      "key": "ctrl+p",
+      "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u001b[A" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+n",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u000e" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
     {
       "key": "ctrl+n",
@@ -251,8 +275,20 @@
     {
       "key": "ctrl+a",
       "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u0001" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
+    },
+    {
+      "key": "ctrl+a",
+      "command": "workbench.action.terminal.sendSequence",
       "args": { "text": "\u001b[H" },
       "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+e",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u0005" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
     {
       "key": "ctrl+e",
@@ -283,6 +319,12 @@
       "command": "workbench.action.terminal.sendSequence",
       "args": {"text":"\u001b[1;5D"},
       "when": "terminalFocus && terminalShellType == 'pwsh'"
+    },
+    {
+      "key": "ctrl+d",
+      "command": "workbench.action.terminal.sendSequence",
+      "args": { "text": "\u0004" },
+      "when": "terminalFocus && terminalShellType != 'pwsh'"
     },
     // TODO: Automate defining such keybindings based on the default keybinding data.
     // i-search forward regexp
