@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.83.0] - 2025-07-31
+
+### Add
+
+- `C-M-i` and `M-TAB` for code completions, [#2358](https://github.com/whitphx/vscode-emacs-mcx/pull/2358).
+
 ## [0.82.0] - 2025-07-30
 
 ### Add
