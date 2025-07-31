@@ -396,6 +396,18 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("registerNameCommand", args);
   });
 
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator, ...args) => {
+    return emulator.runCommand("scrollOtherWindow", args);
+  });
+
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator, ...args) => {
+    return emulator.runCommand("scrollOtherWindowDown", args);
+  });
+
+  registerEmulatorCommand("emacs-mcx.recenterOtherWindow", (emulator, ...args) => {
+    return emulator.runCommand("recenterOtherWindow", args);
+  });
+
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {
     if (typeof arg0 !== "object" || arg0 == null || Array.isArray(arg0)) {
       return;

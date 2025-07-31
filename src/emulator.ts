@@ -13,6 +13,7 @@ import * as NavigationCommands from "./commands/navigation";
 import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
 import * as RegisterCommands from "./commands/registers";
+import * as OtherWindowCommands from "./commands/other-window";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
@@ -193,9 +194,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.MoveToWindowLineTopBottom(this));
-    this.commandRegistry.register(new MoveCommands.ScrollOtherWindow(this));
-    this.commandRegistry.register(new MoveCommands.ScrollOtherWindowUp(this));
-    this.commandRegistry.register(new MoveCommands.RecenterOtherWindow(this));
     this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteForwardChar(this));
     this.commandRegistry.register(new EditCommands.DeleteHorizontalSpace(this));
@@ -270,6 +268,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new CaseCommands.TransformToUppercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToLowercase(this));
     this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this));
+
+    this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindow(this));
+    this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindowUp(this));
+    this.commandRegistry.register(new OtherWindowCommands.RecenterOtherWindow(this));
   }
 
   public setTextEditor(textEditor: TextEditor): void {
