@@ -2015,6 +2015,86 @@
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "ctrl+alt+v",
+        "command": "emacs-mcx.scrollOtherWindow",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "ctrl+cmd+v",
+        "command": "emacs-mcx.scrollOtherWindow",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+v",
+        "command": "emacs-mcx.scrollOtherWindow",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+v",
+        "command": "emacs-mcx.scrollOtherWindow",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+alt+v",
+        "command": "selectNextPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "ctrl+cmd+v",
+        "command": "selectNextPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+v",
+        "command": "selectNextPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+v",
+        "command": "selectNextPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+alt+shift+v",
+        "command": "emacs-mcx.scrollOtherWindowDown",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "ctrl+cmd+shift+v",
+        "command": "emacs-mcx.scrollOtherWindowDown",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+shift+v",
+        "command": "emacs-mcx.scrollOtherWindowDown",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+shift+v",
+        "command": "emacs-mcx.scrollOtherWindowDown",
+        "when": "editorTextFocus && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "ctrl+alt+shift+v",
+        "command": "selectPrevPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "ctrl+cmd+shift+v",
+        "command": "selectPrevPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape ctrl+shift+v",
+        "command": "selectPrevPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ ctrl+shift+v",
+        "command": "selectPrevPageSuggestion",
+        "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+g alt+g",
         "command": "emacs-mcx.gotoLine",
         "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
