@@ -425,10 +425,12 @@ export class ScrollUpCommand extends EmacsCommand {
     }
 
     if (Configuration.instance.$scrollUpCommandBehavior === "emacs") {
-      return vscode.commands.executeCommand<void>("editorScroll", {
-        to: "down",
-        by: "page",
-      });
+      return vscode.commands
+        .executeCommand<void>("editorScroll", {
+          to: "down",
+          by: "page",
+        })
+        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageDownSelect" : "cursorPageDown");
     }
@@ -450,10 +452,12 @@ export class ScrollDownCommand extends EmacsCommand {
     }
 
     if (Configuration.instance.$scrollDownCommandBehavior === "emacs") {
-      return vscode.commands.executeCommand<void>("editorScroll", {
-        to: "up",
-        by: "page",
-      });
+      return vscode.commands
+        .executeCommand<void>("editorScroll", {
+          to: "up",
+          by: "page",
+        })
+        .then(() => movePrimaryCursorIntoVisibleRange(textEditor, isInMarkMode, this.emacsController));
     } else {
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorPageUpSelect" : "cursorPageUp");
     }
