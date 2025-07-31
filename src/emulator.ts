@@ -173,7 +173,10 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this));
     this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this));
     vscode.window.onDidChangeTextEditorVisibleRanges(
-      () => {
+      (e) => {
+        if (e.textEditor !== this.textEditor) {
+          return;
+        }
         if (Configuration.instance.keepCursorInVisibleRange) {
           if (this.hasMultipleSelections()) {
             // This feature messes up the multi-cursors so disable it.
