@@ -2,12 +2,11 @@
   {
     "key": "escape",
     "command": "emacs-mcx.cancel",
-    "when": "editorTextFocus && editorHasSelection && !config.emacs-mcx.useMetaPrefixEscape"
-  },
-  {
-    "key": "escape",
-    "command": "emacs-mcx.cancel",
-    "when": "editorTextFocus && editorHasMultipleSelections && !config.emacs-mcx.useMetaPrefixEscape"
+    // ESC is used for other commands as well, so we need restrict the condition like this.
+    // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/49
+    // NOTE: Both `editorHasSelection` and `editorHasMultipleSelections` are needed because `editorHasSelection` doesn't include `editorHasMultipleSelections`
+    // where `editorHasSelection` is false and `editorHasMultipleSelections` is true when there are multiple cursors and all are empty.
+    "when": "editorTextFocus && (editorHasSelection || editorHasMultipleSelections) && !config.emacs-mcx.useMetaPrefixEscape"
   },
   {
     "key": "ctrl+g",

@@ -456,12 +456,7 @@
       {
         "key": "escape",
         "command": "emacs-mcx.cancel",
-        "when": "editorTextFocus && editorHasSelection && !config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "escape",
-        "command": "emacs-mcx.cancel",
-        "when": "editorTextFocus && editorHasMultipleSelections && !config.emacs-mcx.useMetaPrefixEscape"
+        "when": "editorTextFocus && (editorHasSelection || editorHasMultipleSelections) && !config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
