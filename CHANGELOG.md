@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.85.0] - 2025-07-31
+
+### Change
+
+- Refactoring internal keybinding definition, including adding platform-specific conditions to some commands, [#2363](https://github.com/whitphx/vscode-emacs-mcx/pull/2363).
+- Revert default setting of `editor.find.seedSearchStringFromSelection` that was introduced in 0.80.0, [#2364](https://github.com/whitphx/vscode-emacs-mcx/pull/2364).
+
 ## [0.84.0] - 2025-07-31
 
 ### Add
