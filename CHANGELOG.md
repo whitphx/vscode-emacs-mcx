@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.85.1] - 2025-08-01
+
+### Fix
+
+- Fix `scrollUpCommand` and `scrollDownCommand` to reveal the cursor when it's configured to behave like Emacs, [#2366](https://github.com/whitphx/vscode-emacs-mcx/pull/2366).
+- Fix the `onDidChangeTextEditorVisibleRanges` handler for the `emacs-mcx.keepCursorInVisibleRange` config, [#2367](https://github.com/whitphx/vscode-emacs-mcx/pull/2367).
+
 ## [0.85.0] - 2025-07-31
 
 ### Change

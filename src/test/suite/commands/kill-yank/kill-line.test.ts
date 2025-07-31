@@ -209,6 +209,9 @@ abcdefghij
     const ops: Array<[string, () => Thenable<unknown> | void]> = [...moves, ...edits, ...otherOps];
     ops.forEach(([label, op]) => {
       test(`it does not append the killed text after ${label}`, async () => {
+        Configuration.instance.scrollDownCommandBehavior = "vscode";
+        Configuration.instance.scrollUpCommandBehavior = "vscode";
+
         setEmptyCursors(activeTextEditor, [1, 5]);
 
         await emulator.runCommand("killLine"); // 2st line
