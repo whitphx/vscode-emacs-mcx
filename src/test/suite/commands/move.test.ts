@@ -3,14 +3,7 @@ import assert from "assert";
 import sinon from "sinon";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import {
-  assertCursorsEqual,
-  assertSelectionsEqual,
-  setEmptyCursors,
-  setupWorkspace,
-  cleanUpWorkspace,
-  delay,
-} from "../utils";
+import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("moveBeginning/EndOfLine", () => {
@@ -564,15 +557,13 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
-      Configuration.instance.scrollUpCommandBehavior = "emacs";
+      Configuration.instance.scrollDownCommandBehavior = "emacs";
 
       const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [endLine, 0]);
 
       await emulator.runCommand("scrollDownCommand");
-
-      await delay(100); // hmm
 
       assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo(activeTextEditor).endLine, 0]);
       assert.ok(
