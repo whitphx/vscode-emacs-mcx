@@ -147,6 +147,11 @@
     "command": "selectPrevPageSuggestion",
     "inheritWhenFromDefault": true
   },
+  {
+    "key": "ctrl+meta+shift+l",
+    "command": "emacs-mcx.recenterOtherWindow",
+    "when": "editorTextFocus"
+  },
   // go to line
   {
     "keys": ["meta+g meta+g", "meta+g g"],

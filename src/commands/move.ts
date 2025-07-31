@@ -30,6 +30,7 @@ export const moveCommandIds = [
   "moveToWindowLineTopBottom",
   "scrollOtherWindow",
   "scrollOtherWindowDown",
+  "recenterOtherWindow",
 ];
 
 export class ForwardChar extends EmacsCommand {
@@ -749,5 +750,13 @@ export class ScrollOtherWindowUp extends CommandInOtherWindow {
 
   public runInOtherWindow(): void | Thenable<void> {
     return vscode.commands.executeCommand<void>("emacs-mcx.scrollDownCommand");
+  }
+}
+
+export class RecenterOtherWindow extends CommandInOtherWindow {
+  public readonly id = "recenterOtherWindow";
+
+  public runInOtherWindow(): void | Thenable<void> {
+    return vscode.commands.executeCommand<void>("emacs-mcx.recenterTopBottom");
   }
 }
