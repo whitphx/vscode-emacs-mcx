@@ -2,7 +2,7 @@
   {
     "keys": [
       "ctrl+meta+i",
-      "meta+[Tab]", // Emacs' completion-at-point
+      "meta+tab", // Emacs' completion-at-point
       "meta+/", // Emacs' hippie expand. https://github.com/whitphx/vscode-emacs-mcx/pull/476
       "ctrl+'" // For backward-compatibility
     ],
@@ -20,7 +20,7 @@
   {
     "keys": [
       "ctrl+meta+i",
-      "meta+[Tab]" // Emacs' completion-at-point
+      "meta+tab" // Emacs' completion-at-point
     ],
     "command": "selectNextPageSuggestion",
     "when": "editorTextFocus && suggestWidgetVisible"
