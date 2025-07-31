@@ -93,7 +93,7 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
   }
 }
 
-export class ScrollOtherWindowUp extends CommandInOtherWindow {
+export class ScrollOtherWindowDown extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindowDown";
 
   public runInOtherWindow(): void | Thenable<void> {

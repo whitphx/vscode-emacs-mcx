@@ -270,7 +270,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this));
 
     this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindow(this));
-    this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindowUp(this));
+    this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindowDown(this));
     this.commandRegistry.register(new OtherWindowCommands.RecenterOtherWindow(this));
   }
 
