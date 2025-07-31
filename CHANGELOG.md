@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.83.1] - 2025-07-31
+
+### Fix
+
+- Fix keybindings such as `[Tab]` -> `tab`, and merging conditions of `ctrl+g`, [#2361](https://github.com/whitphx/vscode-emacs-mcx/pull/2361).
+
 ## [0.83.0] - 2025-07-31
 
 ### Fix
