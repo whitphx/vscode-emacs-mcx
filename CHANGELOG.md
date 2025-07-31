@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.84.0] - 2025-07-31
+
+### Add
+
+- `M-c` to toggle case sensitivity in find widgets, [#2362](https://github.com/whitphx/vscode-emacs-mcx/pull/2362).
+
 ## [0.83.1] - 2025-07-31
 
 ### Fix
