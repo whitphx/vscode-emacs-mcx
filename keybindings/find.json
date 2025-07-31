@@ -72,6 +72,26 @@
     "command": "emacs-mcx.addSelectionToPreviousFindMatch",
     "when": "editorFocus"
   },
+  {
+    "key": "meta+c",
+    "command": "toggleFindCaseSensitive",
+    "when": "findInputFocussed || replaceInputFocussed"
+  },
+  {
+    "key": "meta+c",
+    "command": "toggleSearchEditorCaseSensitive",
+    "inheritWhenFromDefault": true
+  },
+  {
+    "key": "meta+c",
+    "command": "workbench.action.terminal.toggleFindCaseSensitive",
+    "inheritWhenFromDefault": true
+  },
+  {
+    "key": "meta+c",
+    "command": "toggleSearchCaseSensitive",
+    "inheritWhenFromDefault": true
+  },
   // Disable Emacs-like keybindings on the find and replace widgets (native UI).
   // See https://github.com/whitphx/vscode-emacs-mcx/issues/55
   {

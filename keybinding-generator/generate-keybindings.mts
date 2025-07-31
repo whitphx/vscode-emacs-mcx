@@ -1,4 +1,9 @@
-import { getVscDefaultKeybinding, getVscDefaultKeybindingsSet, VscKeybinding } from "./vsc-default-keybindings.mjs";
+import {
+  getVscDefaultKeybindingWhenCondition,
+  getVscDefaultKeybindingsSet,
+  VscKeybinding,
+} from "./vsc-default-keybindings.mjs";
+import { addWhenCond } from "./utils.mjs";
 
 export interface KeyBindingSource {
   key?: string;
@@ -43,20 +48,6 @@ export function replaceMetaWithEscape(keyCombo: string): string {
   const metaIncluded = strokes.includes("meta");
 
   return (metaIncluded ? "escape " : "") + strokesWithoutMeta.join("+");
-}
-
-function addWhenCond(base: string | undefined, additional: string): string {
-  if (!base || base.trim() === "") {
-    return additional;
-  }
-  // XXX: This logic is not fully tested!
-  if (base.includes("||") && !base.trim().match(/\)\s*$/)) {
-    base = `(${base})`;
-  }
-  if (additional.includes("||") && !additional.trim().match(/^\s*!?\(/)) {
-    additional = `(${additional})`;
-  }
-  return `${base} && ${additional}`;
 }
 
 function replaceAll(src: string, search: string, replacement: string) {
@@ -194,11 +185,11 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     if (command == null) {
       throw new Error(`command must be defined when inheritWhenFromDefault = true`);
     }
-    const defaultKeybinding = getVscDefaultKeybinding(command);
-    if (defaultKeybinding == null) {
+    const defaultKeybindingWhen = getVscDefaultKeybindingWhenCondition(command);
+    if (defaultKeybindingWhen == null) {
       throw new Error(`Command "${command}" was not found in the default keybindings`);
     }
-    whens = [defaultKeybinding.when];
+    whens = [defaultKeybindingWhen];
   }
   if (src.when) {
     whens = [src.when];
@@ -457,7 +448,7 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
 }
 
 export function generateCtrlGKeybindings(): KeyBinding[] {
-  const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = getVscDefaultKeybindingsSet();
+  const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = getVscDefaultKeybindingsSet(false);
 
   function getCtrlGKeybindings(keybindings: VscKeybinding[], additionalWhen?: string): KeyBinding[] {
     // Exclude keybindings that conflict with Emacs keybindings or seem to be not useful when assigned to `ctrl+g`.

@@ -183,3 +183,14 @@ export class IsearchExit extends IsearchCommand {
     });
   }
 }
+
+export class IsearchToggleCaseFold extends IsearchCommand {
+  public readonly id = "isearchToggleCaseFold";
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.searchState.startSelections = textEditor.selections;
+    return this.openFindWidget({ isRegex: false }).then(() =>
+      vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction"),
+    );
+  }
+}
