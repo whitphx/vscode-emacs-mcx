@@ -401,8 +401,12 @@ suite("scroll-up/down-command", () => {
     await cleanUpWorkspace();
   });
 
-  function getVisibleRangeInfo(): { startLine: number; endLine: number; visibleLineCount: number } {
-    const visibleRanges = activeTextEditor.visibleRanges;
+  function getVisibleRangeInfo(textEditor: vscode.TextEditor): {
+    startLine: number;
+    endLine: number;
+    visibleLineCount: number;
+  } {
+    const visibleRanges = textEditor.visibleRanges;
     if (visibleRanges.length === 0) {
       throw new Error("No visible range available.");
     }
@@ -434,7 +438,7 @@ suite("scroll-up/down-command", () => {
     test("it scrolls one page without cursor move if the cursor remains in the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollUpCommandBehavior = "emacs";
 
-      const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
+      const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [endLine, 0]);
 
@@ -442,7 +446,7 @@ suite("scroll-up/down-command", () => {
 
       assertCursorsEqual(activeTextEditor, [endLine, 0]);
       assert.ok(
-        getVisibleRangeInfo().startLine >= startLine + pageLines - 2, // -2 for margin
+        getVisibleRangeInfo(activeTextEditor).startLine >= startLine + pageLines - 2, // -2 for margin
         "Expected the visible range has been scrolled one page",
       );
 
@@ -452,15 +456,15 @@ suite("scroll-up/down-command", () => {
     test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollUpCommandBehavior = "emacs";
 
-      const { startLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
+      const { startLine, visibleLineCount: pageLines } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [startLine, 0]);
 
       await emulator.runCommand("scrollUpCommand");
 
-      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo().startLine, 0]);
+      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo(activeTextEditor).startLine, 0]);
       assert.ok(
-        getVisibleRangeInfo().startLine >= startLine + pageLines - 2, // -2 for margin
+        getVisibleRangeInfo(activeTextEditor).startLine >= startLine + pageLines - 2, // -2 for margin
         "Expected the visible range has been scrolled one page",
       );
 
@@ -468,7 +472,7 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const { startLine, endLine } = getVisibleRangeInfo(activeTextEditor);
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
@@ -478,7 +482,7 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         startLine + 12,
         "Expected the visibleRange has been scrolled 12 lines",
       );
@@ -486,7 +490,7 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range", async () => {
-      const { startLine } = getVisibleRangeInfo();
+      const { startLine } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [startLine, 0]); // This line will be outside the visible range after scrolling.
 
@@ -495,15 +499,15 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         startLine + 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
-      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo().startLine, 0]);
+      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo(activeTextEditor).startLine, 0]);
     });
 
     test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range, keeping the selection", async () => {
-      const { startLine } = getVisibleRangeInfo();
+      const { startLine } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [startLine, 0]); // This line will be outside the visible range after scrolling.
 
@@ -516,14 +520,14 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         startLine + 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
       assertSelectionsEqual(activeTextEditor, [
         initCursorPosition.line,
         initCursorPosition.character,
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         0,
       ]);
     });
@@ -544,7 +548,7 @@ suite("scroll-up/down-command", () => {
     test("it scrolls one page without cursor move if the cursor remains in the visible range when scrollDownCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollDownCommandBehavior = "emacs";
 
-      const { startLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
+      const { startLine, visibleLineCount: pageLines } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [startLine, 0]);
 
@@ -552,7 +556,7 @@ suite("scroll-up/down-command", () => {
 
       assertCursorsEqual(activeTextEditor, [startLine, 0]);
       assert.ok(
-        getVisibleRangeInfo().startLine <= startLine - pageLines + 2, // +2 for a margin
+        getVisibleRangeInfo(activeTextEditor).startLine <= startLine - pageLines + 2, // +2 for a margin
         "Expected the visible range has been scrolled one page",
       );
 
@@ -562,7 +566,7 @@ suite("scroll-up/down-command", () => {
     test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollUpCommandBehavior = "emacs";
 
-      const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
+      const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [endLine, 0]);
 
@@ -570,9 +574,9 @@ suite("scroll-up/down-command", () => {
 
       await delay(100); // hmm
 
-      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo().endLine, 0]);
+      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo(activeTextEditor).endLine, 0]);
       assert.ok(
-        getVisibleRangeInfo().startLine <= startLine - pageLines + 2, // +2 for a margin
+        getVisibleRangeInfo(activeTextEditor).startLine <= startLine - pageLines + 2, // +2 for a margin
         "Expected the visible range has been scrolled one page",
       );
 
@@ -580,7 +584,7 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const { startLine, endLine } = getVisibleRangeInfo(activeTextEditor);
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
@@ -590,7 +594,7 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         startLine - 12,
         "Expected the visibleRange has been scrolled 2 lines",
       );
@@ -598,7 +602,7 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const { startLine, endLine } = getVisibleRangeInfo(activeTextEditor);
       setEmptyCursors(activeTextEditor, [endLine, 0]); // This line will be outside the visible range after scrolling.
 
       const initVisibleStartLine = startLine;
@@ -608,15 +612,15 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         initVisibleStartLine - 12,
         "Expected the visibleRange has been scrolled 12 lines",
       );
-      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo().endLine, 0]);
+      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo(activeTextEditor).endLine, 0]);
     });
 
     test("it scrolls with the specified number of lines by the prefix argument and moves the cursor if it goes outside the visible range, keeping the selection", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const { startLine, endLine } = getVisibleRangeInfo(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [endLine, 0]); // This line will be outside the visible range after scrolling.
 
@@ -629,14 +633,14 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
-        getVisibleRangeInfo().startLine,
+        getVisibleRangeInfo(activeTextEditor).startLine,
         startLine - 12,
         "Expected the visibleRange has been scrolled 12 lines",
       );
       assertSelectionsEqual(activeTextEditor, [
         initCursorPosition.line,
         initCursorPosition.character,
-        getVisibleRangeInfo().endLine,
+        getVisibleRangeInfo(activeTextEditor).endLine,
         0,
       ]);
     });
