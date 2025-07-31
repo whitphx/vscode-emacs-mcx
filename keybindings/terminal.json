@@ -120,7 +120,7 @@
       // "ctrl+r" // We don't assign `ctrl+r` to the terminal find command because usually it is already used as a shortcut in terminals.
     ],
     "command": "workbench.action.terminal.focusFind",
-    "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+    "inheritWhenFromDefault": true
   },
   {
     "key": "ctrl+s",

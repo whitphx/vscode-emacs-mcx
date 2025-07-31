@@ -5780,22 +5780,22 @@
       {
         "key": "up",
         "command": "workbench.action.quickOpenSelectPrevious",
-        "when": "inQuickOpen"
+        "when": "inQuickOpen && isMac"
       },
       {
         "key": "ctrl+p",
         "command": "workbench.action.quickOpenSelectPrevious",
-        "when": "inQuickOpen"
+        "when": "inQuickOpen && isMac"
       },
       {
         "key": "down",
         "command": "workbench.action.quickOpenSelectNext",
-        "when": "inQuickOpen"
+        "when": "inQuickOpen && isMac"
       },
       {
         "key": "ctrl+n",
         "command": "workbench.action.quickOpenSelectNext",
-        "when": "inQuickOpen"
+        "when": "inQuickOpen && isMac"
       },
       {
         "key": "up",

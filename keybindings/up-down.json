@@ -5,52 +5,52 @@
   {
     "keys": ["up", "ctrl+p"],
     "command": "showPrevParameterHint",
-    "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["down", "ctrl+n"],
     "command": "showNextParameterHint",
-    "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["up", "ctrl+p"],
     "command": "selectPrevSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["down", "ctrl+n"],
     "command": "selectNextSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["up", "ctrl+p"],
     "command": "list.focusUp",
-    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["down", "ctrl+n"],
     "command": "list.focusDown",
-    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["up", "ctrl+p"],
     "command": "workbench.action.quickOpenSelectPrevious",
-    "when": "inQuickOpen"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["down", "ctrl+n"],
     "command": "workbench.action.quickOpenSelectNext",
-    "when": "inQuickOpen"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["up", "ctrl+p"],
     "command": "selectPrevCodeAction",
-    "when": "codeActionMenuVisible"
+    "inheritWhenFromDefault": true
   },
   {
     "keys": ["down", "ctrl+n"],
     "command": "selectNextCodeAction",
-    "when": "codeActionMenuVisible"
+    "inheritWhenFromDefault": true
   }
   // Don't assign `workbench.action.quickOpenNavigate*InFilePicker`
   // because these commands immediately open the selected file when the user releases the key,
