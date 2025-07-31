@@ -5123,22 +5123,22 @@
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "alt+[Tab]",
+        "key": "alt+tab",
         "command": "editor.action.triggerSuggest",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
-        "mac": "cmd+[Tab]",
+        "mac": "cmd+tab",
         "command": "editor.action.triggerSuggest",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
-        "key": "escape [Tab]",
+        "key": "escape tab",
         "command": "editor.action.triggerSuggest",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
-        "key": "ctrl+[ [Tab]",
+        "key": "ctrl+[ tab",
         "command": "editor.action.triggerSuggest",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
@@ -5213,22 +5213,22 @@
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "alt+[Tab]",
+        "key": "alt+tab",
         "command": "selectNextPageSuggestion",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
-        "mac": "cmd+[Tab]",
+        "mac": "cmd+tab",
         "command": "selectNextPageSuggestion",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
-        "key": "escape [Tab]",
+        "key": "escape tab",
         "command": "selectNextPageSuggestion",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
-        "key": "ctrl+[ [Tab]",
+        "key": "ctrl+[ tab",
         "command": "selectNextPageSuggestion",
         "when": "editorTextFocus && suggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
@@ -5518,22 +5518,22 @@
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "alt+[Tab]",
+        "key": "alt+tab",
         "command": "workbench.action.terminal.requestCompletions",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
-        "mac": "cmd+[Tab]",
+        "mac": "cmd+tab",
         "command": "workbench.action.terminal.requestCompletions",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
-        "key": "escape [Tab]",
+        "key": "escape tab",
         "command": "workbench.action.terminal.requestCompletions",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
-        "key": "ctrl+[ [Tab]",
+        "key": "ctrl+[ tab",
         "command": "workbench.action.terminal.requestCompletions",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },

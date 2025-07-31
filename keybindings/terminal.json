@@ -141,7 +141,7 @@
   // Ref: https://company-mode.github.io/manual/Getting-Started.html
   // Ref: https://code.visualstudio.com/docs/terminal/shell-integration#_intellisense-preview
   {
-    "keys": ["ctrl+meta+i", "meta+[Tab]"],
+    "keys": ["ctrl+meta+i", "meta+tab"],
     "command": "workbench.action.terminal.requestCompletions",
     "inheritWhenFromDefault": true
   },
