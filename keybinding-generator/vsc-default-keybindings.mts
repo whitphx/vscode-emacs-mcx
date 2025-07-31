@@ -1,3 +1,5 @@
+import { addWhenCond } from "./utils.mjs";
+
 export interface VscKeybinding {
   key: string;
   mac?: string;
@@ -27,7 +29,7 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   }
   return true;
 }
-export async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Promise<VscKeybinding[]> {
+async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Promise<VscKeybinding[]> {
   const url = `https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings/doc.keybindings.${platform}.json`;
   let response: Response;
   try {
@@ -58,14 +60,15 @@ interface VscKeybindingPerPlatform {
   winSpecific: VscKeybinding[];
   osxSpecific: VscKeybinding[];
 }
-export async function loadVscDefaultKeybindingsSet(): Promise<VscKeybindingPerPlatform> {
-  const linux = await loadVscDefaultKeybindings("linux");
-  const win = await loadVscDefaultKeybindings("win");
-  const osx = await loadVscDefaultKeybindings("osx");
+function compileDefaultKeybindingsSet(
+  keybindings: { linux: VscKeybinding[]; win: VscKeybinding[]; osx: VscKeybinding[] },
+  ignoreKeys: boolean,
+): VscKeybindingPerPlatform {
+  const { linux, win, osx } = keybindings;
 
-  const linuxJsons = linux.map((b) => JSON.stringify(b));
-  const winJsons = win.map((b) => JSON.stringify(b));
-  const osxJsons = osx.map((b) => JSON.stringify(b));
+  const linuxJsons = linux.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
+  const winJsons = win.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
+  const osxJsons = osx.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
 
   const allPlatformsJsons = linuxJsons.filter((b) => winJsons.includes(b) && osxJsons.includes(b));
   const linuxSpecificJsons = linuxJsons.filter((b) => !allPlatformsJsons.includes(b));
@@ -84,20 +87,58 @@ export async function loadVscDefaultKeybindingsSet(): Promise<VscKeybindingPerPl
   };
 }
 
-let defaultKeybindingsSetCache: VscKeybindingPerPlatform | null = null;
+async function loadVscDefaultKeybindingsSet(): Promise<{
+  withKeys: VscKeybindingPerPlatform;
+  withoutKeys: VscKeybindingPerPlatform;
+}> {
+  const linux = await loadVscDefaultKeybindings("linux");
+  const win = await loadVscDefaultKeybindings("win");
+  const osx = await loadVscDefaultKeybindings("osx");
+
+  return {
+    withKeys: compileDefaultKeybindingsSet({ linux, win, osx }, false),
+    withoutKeys: compileDefaultKeybindingsSet({ linux, win, osx }, true),
+  };
+}
+
+let defaultKeybindingsSetCache: Awaited<ReturnType<typeof loadVscDefaultKeybindingsSet>> | null = null;
 export async function prepareVscDefaultKeybindingsSet(): Promise<void> {
   defaultKeybindingsSetCache = await loadVscDefaultKeybindingsSet();
 }
 
-export function getVscDefaultKeybindingsSet(): VscKeybindingPerPlatform {
+export function getVscDefaultKeybindingsSet(ignoreKeys: boolean): VscKeybindingPerPlatform {
   if (defaultKeybindingsSetCache) {
-    return defaultKeybindingsSetCache;
+    return ignoreKeys ? defaultKeybindingsSetCache.withoutKeys : defaultKeybindingsSetCache.withKeys;
   }
 
   throw new Error("The default keybinding is not loaded. Call prepareVscDefaultKeybindingsSet() first.");
 }
 
-export function getVscDefaultKeybinding(command: string): VscKeybinding | undefined {
-  const { allPlatforms } = getVscDefaultKeybindingsSet();
-  return allPlatforms.find((keybinding) => keybinding.command === command);
+export function getVscDefaultKeybindingWhenCondition(command: string): string | undefined {
+  const { allPlatforms, linuxSpecific, osxSpecific, winSpecific } = getVscDefaultKeybindingsSet(true);
+  const simple = allPlatforms.find((keybinding) => keybinding.command === command)?.when;
+  if (simple) {
+    return simple;
+  }
+
+  const linuxWhen = linuxSpecific.find((keybinding) => keybinding.command === command)?.when;
+  const osxWhen = osxSpecific.find((keybinding) => keybinding.command === command)?.when;
+  const winWhen = winSpecific.find((keybinding) => keybinding.command === command)?.when;
+  const whenParts = [];
+  if (linuxWhen) {
+    whenParts.push(addWhenCond(linuxWhen, "isLinux"));
+  }
+  if (osxWhen) {
+    whenParts.push(addWhenCond(osxWhen, "isMac"));
+  }
+  if (winWhen) {
+    whenParts.push(addWhenCond(winWhen, "isWindows"));
+  }
+  if (whenParts.length === 0) {
+    return undefined;
+  }
+  if (whenParts.length === 1) {
+    return whenParts[0];
+  }
+  return whenParts.map((cond) => `(${cond})`).join(" || ");
 }
