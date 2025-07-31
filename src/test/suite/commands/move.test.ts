@@ -553,7 +553,7 @@ suite("scroll-up/down-command", () => {
       );
     });
 
-    test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
+    test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollDownCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollDownCommandBehavior = "emacs";
 
       const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
