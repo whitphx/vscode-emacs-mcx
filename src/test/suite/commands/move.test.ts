@@ -391,6 +391,7 @@ suite("scroll-up/down-command", () => {
   });
   teardown(async () => {
     sinon.restore();
+    Configuration.reload();
     await cleanUpWorkspace();
   });
 
@@ -460,8 +461,6 @@ suite("scroll-up/down-command", () => {
         getVisibleRangeInfo().startLine >= startLine + pageLines - 2, // -2 for margin
         "Expected the visible range has been scrolled one page",
       );
-
-      Configuration.reload();
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
@@ -552,8 +551,6 @@ suite("scroll-up/down-command", () => {
         getVisibleRangeInfo().startLine <= startLine - pageLines + 2, // +2 for a margin
         "Expected the visible range has been scrolled one page",
       );
-
-      Configuration.reload();
     });
 
     test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
@@ -570,8 +567,6 @@ suite("scroll-up/down-command", () => {
         getVisibleRangeInfo().startLine <= startLine - pageLines + 2, // +2 for a margin
         "Expected the visible range has been scrolled one page",
       );
-
-      Configuration.reload();
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
