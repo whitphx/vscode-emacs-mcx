@@ -265,6 +265,7 @@ Alt key is mapped to the Meta prefix (`M`) by default and you can configure for 
 | `C-M-n`                              | Add selection to next find match                                                                                      |
 | `C-M-p`                              | Add selection to previous find match                                                                                  |
 | `M-s o`                              | Open [Quick Search](https://code.visualstudio.com/updates/v1_89#_quick-search), which is like Emacs' `occur` command. |
+| `M-c`                                | Toggles the case sensitivity of the find widget.                                                                      |
 
 ### Edit commands
 
