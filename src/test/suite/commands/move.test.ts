@@ -424,7 +424,7 @@ suite("scroll-up/down-command", () => {
       sinon.restore();
     });
 
-    test("it scrolls one page if the cursor remains in the visible range without cursor move with scrollUpCommandBehavior = 'emacs'", async () => {
+    test("it scrolls one page without cursor move if the cursor remains in the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollUpCommandBehavior = "emacs";
 
       const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
@@ -434,6 +434,24 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollUpCommand");
 
       assertCursorsEqual(activeTextEditor, [endLine, 0]);
+      assert.ok(
+        getVisibleRangeInfo().startLine >= startLine + pageLines - 2, // -2 for margin
+        "Expected the visible range has been scrolled one page",
+      );
+
+      Configuration.reload();
+    });
+
+    test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
+      Configuration.instance.scrollUpCommandBehavior = "emacs";
+
+      const { startLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
+
+      setEmptyCursors(activeTextEditor, [startLine, 0]);
+
+      await emulator.runCommand("scrollUpCommand");
+
+      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo().startLine, 0]);
       assert.ok(
         getVisibleRangeInfo().startLine >= startLine + pageLines - 2, // -2 for margin
         "Expected the visible range has been scrolled one page",
@@ -516,7 +534,7 @@ suite("scroll-up/down-command", () => {
       sinon.restore();
     });
 
-    test("it scrolls one page without cursor move if the cursor remains in the visible range with scrollDownCommandBehavior = 'emacs'", async () => {
+    test("it scrolls one page without cursor move if the cursor remains in the visible range when scrollDownCommandBehavior = 'emacs'", async () => {
       Configuration.instance.scrollDownCommandBehavior = "emacs";
 
       const { startLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
@@ -526,6 +544,24 @@ suite("scroll-up/down-command", () => {
       await emulator.runCommand("scrollDownCommand");
 
       assertCursorsEqual(activeTextEditor, [startLine, 0]);
+      assert.ok(
+        getVisibleRangeInfo().startLine <= startLine - pageLines + 2, // +2 for a margin
+        "Expected the visible range has been scrolled one page",
+      );
+
+      Configuration.reload();
+    });
+
+    test("it scrolls one page with cursor move if the cursor goes outside the visible range when scrollUpCommandBehavior = 'emacs'", async () => {
+      Configuration.instance.scrollUpCommandBehavior = "emacs";
+
+      const { startLine, endLine, visibleLineCount: pageLines } = getVisibleRangeInfo();
+
+      setEmptyCursors(activeTextEditor, [endLine, 0]);
+
+      await emulator.runCommand("scrollDownCommand");
+
+      assertCursorsEqual(activeTextEditor, [getVisibleRangeInfo().endLine, 0]);
       assert.ok(
         getVisibleRangeInfo().startLine <= startLine - pageLines + 2, // +2 for a margin
         "Expected the visible range has been scrolled one page",
