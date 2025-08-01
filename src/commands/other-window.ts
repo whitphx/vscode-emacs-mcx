@@ -3,46 +3,9 @@ import type { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 
 abstract class CommandInOtherWindow extends EmacsCommand {
-  abstract runInOtherWindow(): void | Thenable<void>;
-
-  static toCommandId(index: number): string | undefined {
-    switch (index) {
-      case 1:
-        return "workbench.action.focusFirstEditorGroup";
-      case 2:
-        return "workbench.action.focusSecondEditorGroup";
-      case 3:
-        return "workbench.action.focusThirdEditorGroup";
-      case 4:
-        return "workbench.action.focusFourthEditorGroup";
-      case 5:
-        return "workbench.action.focusFifthEditorGroup";
-      case 6:
-        return "workbench.action.focusSixthEditorGroup";
-      case 7:
-        return "workbench.action.focusSeventhEditorGroup";
-      case 8:
-        return "workbench.action.focusEighthEditorGroup";
-    }
-    return undefined;
-  }
-
-  static lock = false;
+  abstract runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown>;
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    /**
-     * The current implementation switches the focus among the editor groups
-     * to achieve command execution in another editor.
-     * However, when another command is executed before this command switches the focus back to the original editor,
-     * it can lead to unexpected behavior, such as executing the command in the wrong editor,
-     * and it can actually happens for example when the user keeps pressing the key bound to this command.
-     * To prevent it, we use a lock to ensure that this command is not executed in parallel with itself.
-     */
-    if (CommandInOtherWindow.lock) {
-      return;
-    }
-    CommandInOtherWindow.lock = true;
-
     const currentViewColumn = textEditor.viewColumn;
     if (currentViewColumn == null) {
       return;
@@ -64,47 +27,63 @@ abstract class CommandInOtherWindow extends EmacsCommand {
     if (nextVisibleTextEditor == null) {
       return;
     }
-    const nextViewColumn = nextVisibleTextEditor.viewColumn;
-    if (nextViewColumn == null) {
-      return;
-    }
 
-    const commandId = CommandInOtherWindow.toCommandId(nextViewColumn);
-    const revCommandId = CommandInOtherWindow.toCommandId(currentViewColumn);
-
-    if (commandId == null || revCommandId == null) {
-      return;
-    }
-
-    await vscode.commands
-      .executeCommand<void>(commandId)
-      .then(() => this.runInOtherWindow())
-      .then(() => vscode.commands.executeCommand<void>(revCommandId));
-
-    CommandInOtherWindow.lock = false;
+    await this.runInOtherWindow(nextVisibleTextEditor);
   }
 }
 
 export class ScrollOtherWindow extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindow";
 
-  public runInOtherWindow(): void | Thenable<void> {
-    return vscode.commands.executeCommand<void>("emacs-mcx.scrollUpCommand");
+  public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown> {
+    console.log(textEditor.visibleRanges);
+    const lastVisibleLine =
+      textEditor.visibleRanges[textEditor.visibleRanges.length - 1]?.end.line ?? textEditor.document.lineCount - 1;
+    const nextVisibleRange = new vscode.Range(
+      new vscode.Position(lastVisibleLine + 1, 0),
+      new vscode.Position(lastVisibleLine + 1, 0),
+    );
+    textEditor.revealRange(nextVisibleRange, vscode.TextEditorRevealType.AtTop);
+    textEditor.selections = textEditor.selections.map((selection, i) => {
+      if (i === 0) {
+        return new vscode.Selection(selection.anchor, nextVisibleRange.start);
+      } else {
+        return selection;
+      }
+    });
   }
 }
 
 export class ScrollOtherWindowDown extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindowDown";
 
-  public runInOtherWindow(): void | Thenable<void> {
-    return vscode.commands.executeCommand<void>("emacs-mcx.scrollDownCommand");
-  }
-}
+  public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<void> {
+    const firstVisibleLine = textEditor.visibleRanges[0]?.start.line ?? 0;
 
-export class RecenterOtherWindow extends CommandInOtherWindow {
-  public readonly id = "recenterOtherWindow";
+    // Calculate the number of lines to scroll.
+    // This may be incorrect when some parts of the document are folded,
+    // but it is the best we can do now.
+    let pageLineCount = 0;
+    textEditor.visibleRanges.forEach((range) => {
+      pageLineCount += range.end.line - range.start.line + 1;
+    });
 
-  public runInOtherWindow(): void | Thenable<void> {
-    return vscode.commands.executeCommand<void>("emacs-mcx.recenterTopBottom");
+    const marginLineCount = 3;
+    pageLineCount -= marginLineCount * 2; // Reserve some lines for margin
+
+    const nextFirstVisibleLine = Math.max(firstVisibleLine - pageLineCount + 1, 0);
+    const nextLastVisibleLine = Math.min(nextFirstVisibleLine + pageLineCount, textEditor.document.lineCount - 1);
+    const nextVisibleRange = new vscode.Range(
+      new vscode.Position(nextFirstVisibleLine, 0),
+      new vscode.Position(nextLastVisibleLine, 0),
+    );
+    textEditor.revealRange(nextVisibleRange);
+    textEditor.selections = textEditor.selections.map((selection, i) => {
+      if (i === 0) {
+        return new vscode.Selection(selection.anchor, new vscode.Position(nextLastVisibleLine, 0));
+      } else {
+        return selection;
+      }
+    });
   }
 }

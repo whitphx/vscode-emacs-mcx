@@ -2095,26 +2095,6 @@
         "when": "(suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "ctrl+alt+shift+l",
-        "command": "emacs-mcx.recenterOtherWindow",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
-      },
-      {
-        "mac": "ctrl+cmd+shift+l",
-        "command": "emacs-mcx.recenterOtherWindow",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
-      },
-      {
-        "key": "escape ctrl+shift+l",
-        "command": "emacs-mcx.recenterOtherWindow",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+[ ctrl+shift+l",
-        "command": "emacs-mcx.recenterOtherWindow",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
-      },
-      {
         "key": "alt+g alt+g",
         "command": "emacs-mcx.gotoLine",
         "when": "!terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
