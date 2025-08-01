@@ -36,11 +36,11 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindow";
 
   public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown> {
-    const lastVisibleLine =
+    const visibleRangeEndLine =
       textEditor.visibleRanges[textEditor.visibleRanges.length - 1]?.end.line ?? textEditor.document.lineCount - 1;
     const nextVisibleRange = new vscode.Range(
-      new vscode.Position(lastVisibleLine + 1, 0),
-      new vscode.Position(lastVisibleLine + 1, 0),
+      new vscode.Position(visibleRangeEndLine + 1, 0),
+      new vscode.Position(visibleRangeEndLine + 1, 0),
     );
 
     textEditor.revealRange(nextVisibleRange, vscode.TextEditorRevealType.AtTop);
@@ -60,7 +60,7 @@ export class ScrollOtherWindowDown extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindowDown";
 
   public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<void> {
-    const firstVisibleLine = textEditor.visibleRanges[0]?.start.line ?? 0;
+    const visibleLineStartLine = textEditor.visibleRanges[0]?.start.line ?? 0;
 
     // Calculate the number of lines to scroll.
     // This may be incorrect when some parts of the document are folded,
@@ -73,11 +73,14 @@ export class ScrollOtherWindowDown extends CommandInOtherWindow {
     const marginLineCount = 3;
     pageLineCount -= marginLineCount * 2; // Reserve some lines for margin
 
-    const nextFirstVisibleLine = Math.max(firstVisibleLine - pageLineCount + 1, 0);
-    const nextLastVisibleLine = Math.min(nextFirstVisibleLine + pageLineCount, textEditor.document.lineCount - 1);
+    const nextVisibleRangeStartLine = Math.max(visibleLineStartLine - pageLineCount + 1, 0);
+    const nextVisibleLineEndLine = Math.min(
+      nextVisibleRangeStartLine + pageLineCount,
+      textEditor.document.lineCount - 1,
+    );
     const nextVisibleRange = new vscode.Range(
-      new vscode.Position(nextFirstVisibleLine, 0),
-      new vscode.Position(nextLastVisibleLine, 0),
+      new vscode.Position(nextVisibleRangeStartLine, 0),
+      new vscode.Position(nextVisibleLineEndLine, 0),
     );
 
     textEditor.revealRange(nextVisibleRange);
@@ -85,7 +88,7 @@ export class ScrollOtherWindowDown extends CommandInOtherWindow {
     // Move the primary cursor into the visible range
     textEditor.selections = textEditor.selections.map((selection, i) => {
       if (i === 0) {
-        return new vscode.Selection(selection.anchor, new vscode.Position(nextLastVisibleLine, 0));
+        return new vscode.Selection(selection.anchor, new vscode.Position(nextVisibleLineEndLine, 0));
       } else {
         return selection;
       }
