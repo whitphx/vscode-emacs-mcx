@@ -30,17 +30,18 @@ export class RecenterTopBottom extends EmacsCommand implements ITextEditorInterr
       case RecenterPosition.Bottom: {
         // TextEditor.revealRange does not support to set the cursor at the bottom of window.
         // Therefore, the number of lines to scroll is calculated here.
-        const visibleRange = textEditor.visibleRanges[0];
-        if (visibleRange == null) {
+        const visibleRanges = textEditor.visibleRanges;
+        if (visibleRanges.length === 0) {
           return;
         }
-        const visibleTop = visibleRange.start.line;
-        const visibleBottom = visibleRange.end.line;
-        const visibleHeight = visibleBottom - visibleTop;
+        let visibleLineCount = 0;
+        for (const visibleRange of visibleRanges) {
+          visibleLineCount += visibleRange.end.line - visibleRange.start.line + 1;
+        }
 
-        const current = textEditor.selection.active.line;
+        const currentLine = textEditor.selection.active.line;
 
-        const nextVisibleTop = Math.max(current - visibleHeight, 1);
+        const nextVisibleTop = Math.max(currentLine - visibleLineCount, 0);
 
         // Scroll so that `nextVisibleTop` is the top of window
         const p = new vscode.Position(nextVisibleTop, 0);
