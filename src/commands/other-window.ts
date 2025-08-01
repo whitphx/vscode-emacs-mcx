@@ -3,9 +3,9 @@ import type { TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 
 abstract class CommandInOtherWindow extends EmacsCommand {
-  abstract runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown>;
+  abstract runInOtherWindow(textEditor: vscode.TextEditor): void;
 
-  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const currentViewColumn = textEditor.viewColumn;
     if (currentViewColumn == null) {
       return;
@@ -28,14 +28,14 @@ abstract class CommandInOtherWindow extends EmacsCommand {
       return;
     }
 
-    await this.runInOtherWindow(nextVisibleTextEditor);
+    this.runInOtherWindow(nextVisibleTextEditor);
   }
 }
 
 export class ScrollOtherWindow extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindow";
 
-  public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown> {
+  public runInOtherWindow(textEditor: vscode.TextEditor): void {
     const visibleRangeEndLine =
       textEditor.visibleRanges[textEditor.visibleRanges.length - 1]?.end.line ?? textEditor.document.lineCount - 1;
     const nextVisibleRangeStartLine = Math.min(visibleRangeEndLine + 1, textEditor.document.lineCount - 1);
@@ -60,7 +60,7 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
 export class ScrollOtherWindowDown extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindowDown";
 
-  public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<void> {
+  public runInOtherWindow(textEditor: vscode.TextEditor): void {
     const visibleLineStartLine = textEditor.visibleRanges[0]?.start.line ?? 0;
 
     // Calculate the number of lines to scroll.
