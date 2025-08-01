@@ -28,7 +28,6 @@ suite("Other window", () => {
       const initialVisibleRangesInAnotherEditor = anotherTextEditor.visibleRanges;
       const initialVisibleRangesInActiveEditor = activeTextEditor.visibleRanges;
 
-      // Scroll the other window.
       await emulator.runCommand("scrollOtherWindow");
 
       await delay(100);
@@ -55,7 +54,6 @@ suite("Other window", () => {
       const initialVisibleRangesInAnotherEditor = anotherTextEditor.visibleRanges;
       const initialVisibleRangesInActiveEditor = activeTextEditor.visibleRanges;
 
-      // Scroll the other window.
       await emulator.runCommand("scrollOtherWindowDown");
 
       await delay(100);
