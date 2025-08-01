@@ -4,7 +4,7 @@ import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { delay, setEmptyCursors, setupWorkspace } from "../utils";
 
-suite("scroll-other-window", () => {
+suite("Other window", () => {
   let anotherTextEditor: TextEditor;
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
