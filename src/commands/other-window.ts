@@ -36,7 +36,6 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
   public readonly id = "scrollOtherWindow";
 
   public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown> {
-    console.log(textEditor.visibleRanges);
     const lastVisibleLine =
       textEditor.visibleRanges[textEditor.visibleRanges.length - 1]?.end.line ?? textEditor.document.lineCount - 1;
     const nextVisibleRange = new vscode.Range(
