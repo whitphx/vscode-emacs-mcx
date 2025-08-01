@@ -41,7 +41,7 @@ export class RecenterTopBottom extends EmacsCommand implements ITextEditorInterr
 
         const currentLine = textEditor.selection.active.line;
 
-        const nextVisibleTop = Math.max(currentLine - visibleLineCount, 1);
+        const nextVisibleTop = Math.max(currentLine - visibleLineCount, 0);
 
         // Scroll so that `nextVisibleTop` is the top of window
         const p = new vscode.Position(nextVisibleTop, 0);
