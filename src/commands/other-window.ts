@@ -42,7 +42,10 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
       new vscode.Position(lastVisibleLine + 1, 0),
       new vscode.Position(lastVisibleLine + 1, 0),
     );
+
     textEditor.revealRange(nextVisibleRange, vscode.TextEditorRevealType.AtTop);
+
+    // Move the primary cursor into the visible range
     textEditor.selections = textEditor.selections.map((selection, i) => {
       if (i === 0) {
         return new vscode.Selection(selection.anchor, nextVisibleRange.start);
@@ -76,7 +79,10 @@ export class ScrollOtherWindowDown extends CommandInOtherWindow {
       new vscode.Position(nextFirstVisibleLine, 0),
       new vscode.Position(nextLastVisibleLine, 0),
     );
+
     textEditor.revealRange(nextVisibleRange);
+
+    // Move the primary cursor into the visible range
     textEditor.selections = textEditor.selections.map((selection, i) => {
       if (i === 0) {
         return new vscode.Selection(selection.anchor, new vscode.Position(nextLastVisibleLine, 0));
