@@ -2239,12 +2239,12 @@
       {
         "key": "ctrl+w",
         "command": "editor.action.clipboardCutAction",
-        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
       },
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
       },
       {
         "key": "alt+y",
