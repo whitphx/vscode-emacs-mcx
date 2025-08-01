@@ -2,7 +2,7 @@
   "name": "emacs-mcx",
   "displayName": "Awesome Emacs Keymap",
   "description": "Emacs emulation for VSCode with multi-cursor support, clipboard-integrated kill-ring, well-emulated mark-mode, and more.",
-  "version": "0.85.1",
+  "version": "0.85.2",
   "publisher": "tuttieee",
   "repository": {
     "type": "git",
@@ -2239,12 +2239,12 @@
       {
         "key": "ctrl+w",
         "command": "editor.action.clipboardCutAction",
-        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
       },
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || textInputFocus) && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
       },
       {
         "key": "alt+y",

@@ -8,6 +8,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 - Add `scroll-other-window` and `scroll-other-window-down` commands, [#2368](https://github.com/whitphx/vscode-emacs-mcx/pull/2368).
 
+## [0.85.2] - 2025-08-01
+
+### Fix
+
+- Fix `C-y` and `C-w` assignment, [#2371](https://github.com/whitphx/vscode-emacs-mcx/pull/2371).
+- Fix `recenter-top-bottom`, [#2372](https://github.com/whitphx/vscode-emacs-mcx/pull/2372).
+
 ## [0.85.1] - 2025-08-01
 
 ### Fix
