@@ -4,6 +4,10 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+### Add
+
+- Add `scroll-other-window` and `scroll-other-window-down` commands, [#2368](https://github.com/whitphx/vscode-emacs-mcx/pull/2368).
+
 ## [0.85.1] - 2025-08-01
 
 ### Fix
