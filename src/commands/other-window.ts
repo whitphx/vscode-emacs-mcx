@@ -38,9 +38,10 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
   public runInOtherWindow(textEditor: vscode.TextEditor): void | Thenable<unknown> {
     const visibleRangeEndLine =
       textEditor.visibleRanges[textEditor.visibleRanges.length - 1]?.end.line ?? textEditor.document.lineCount - 1;
+    const nextVisibleRangeStartLine = Math.min(visibleRangeEndLine + 1, textEditor.document.lineCount - 1);
     const nextVisibleRange = new vscode.Range(
-      new vscode.Position(visibleRangeEndLine + 1, 0),
-      new vscode.Position(visibleRangeEndLine + 1, 0),
+      new vscode.Position(nextVisibleRangeStartLine, 0),
+      new vscode.Position(nextVisibleRangeStartLine, 0), // We will call `revealRange()` with `AtTop` option, so the end position doesn't matter.
     );
 
     textEditor.revealRange(nextVisibleRange, vscode.TextEditorRevealType.AtTop);
