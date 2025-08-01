@@ -229,6 +229,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new KillCommands.CopyRegion(this, killYanker));
     this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
     this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
+    this.commandRegistry.register(new KillCommands.BrowseKillRing(this, killYanker));
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 

@@ -9,6 +9,7 @@ import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations
 import { revealPrimaryActive } from "./helpers/reveal";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { MessageManager } from "../message";
+import { KillRingEntity } from "src/kill-yank/kill-ring";
 
 function getWordSeparators(): WordCharacterClassifier {
   // Ref: https://github.com/VSCodeVim/Vim/blob/91ca71f8607458c0558f9aff61e230c6917d4b51/src/configuration/configuration.ts#L155
@@ -218,5 +219,59 @@ export class YankPop extends KillYankCommand {
     await this.killYanker.yankPop();
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
+  }
+}
+
+class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
+  public readonly label: string;
+
+  constructor(public readonly entity: KillRingEntity) {
+    this.label = entity.asString();
+  }
+}
+
+async function browseKillRing(killRing: KillRingEntity[]): Promise<KillRingEntity | undefined> {
+  const disposables: vscode.Disposable[] = [];
+  try {
+    return await new Promise<KillRingEntity | undefined>((resolve) => {
+      const input = vscode.window.createQuickPick<KillRingEntityQuickPickItem>();
+
+      input.items = killRing.map((entity) => new KillRingEntityQuickPickItem(entity));
+
+      disposables.push(
+        input.onDidChangeSelection((items) => {
+          const item = items[0];
+          if (item) {
+            resolve(item.entity);
+            input.hide();
+          }
+        }),
+        input.onDidHide(() => {
+          resolve(undefined);
+          input.dispose();
+        }),
+      );
+      input.show();
+    });
+  } finally {
+    disposables.forEach((disposable) => {
+      disposable.dispose();
+    });
+  }
+}
+
+export class BrowseKillRing extends KillYankCommand {
+  public readonly id = "browseKillRing";
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    const killRing = this.killYanker.killRing?.getItems();
+    if (!killRing) {
+      return;
+    }
+
+    MessageManager.showMessage(`${killRing.length} items in the kill ring.`);
+
+    const selectedEntity = await browseKillRing(killRing);
+    console.log("Selected", selectedEntity);
   }
 }

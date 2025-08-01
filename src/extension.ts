@@ -244,6 +244,10 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("yankPop");
   });
 
+  registerEmulatorCommand("emacs-mcx.browseKillRing", (emulator) => {
+    return emulator.runCommand("browseKillRing");
+  });
+
   registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator) => {
     return emulator.runCommand("startAcceptingRectCommand");
   });

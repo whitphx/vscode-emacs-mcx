@@ -41,4 +41,8 @@ export class KillRing {
     this.pointer = (this.pointer + 1) % this.killRing.length;
     return this.killRing[this.pointer];
   }
+
+  public getItems(): Array<KillRingEntity> {
+    return this.killRing;
+  }
 }
