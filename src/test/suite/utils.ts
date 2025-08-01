@@ -8,9 +8,11 @@ export async function setupWorkspace(
   {
     eol = vscode.EndOfLine.LF,
     language = "text",
+    column = undefined,
   }: {
     eol?: vscode.EndOfLine;
     language?: string;
+    column?: vscode.ViewColumn;
   } = {},
 ): Promise<vscode.TextEditor> {
   const doc = await vscode.workspace.openTextDocument({
@@ -18,7 +20,7 @@ export async function setupWorkspace(
     language,
   });
 
-  await vscode.window.showTextDocument(doc);
+  await vscode.window.showTextDocument(doc, column, false);
 
   const activeTextEditor = vscode.window.activeTextEditor;
   assert.ok(activeTextEditor);
