@@ -126,27 +126,6 @@
     "command": "emacs-mcx.moveToWindowLineTopBottom",
     "when": "editorTextFocus"
   },
-  // scroll-other-window
-  {
-    "key": "ctrl+meta+v",
-    "command": "emacs-mcx.scrollOtherWindow",
-    "when": "editorTextFocus && !suggestWidgetVisible"
-  },
-  {
-    "key": "ctrl+meta+v",
-    "command": "selectNextPageSuggestion",
-    "inheritWhenFromDefault": true
-  },
-  {
-    "key": "ctrl+meta+shift+v",
-    "command": "emacs-mcx.scrollOtherWindowDown",
-    "when": "editorTextFocus && !suggestWidgetVisible"
-  },
-  {
-    "key": "ctrl+meta+shift+v",
-    "command": "selectPrevPageSuggestion",
-    "inheritWhenFromDefault": true
-  },
   // go to line
   {
     "keys": ["meta+g meta+g", "meta+g g"],
