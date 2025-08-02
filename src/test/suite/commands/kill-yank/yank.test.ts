@@ -2,7 +2,14 @@ import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../../utils";
+import {
+  assertCursorsEqual,
+  assertTextEqual,
+  cleanUpWorkspace,
+  setEmptyCursors,
+  setupWorkspace,
+  clearTextEditor,
+} from "../../utils";
 
 [true, false].forEach((withKillRing) => {
   suite(`Yank from clipboard, without kill-ring, ${withKillRing ? "with" : "without"} killRing`, () => {
@@ -156,5 +163,54 @@ ABCDEFLorem ipsumJ`,
         });
       });
     });
+  });
+});
+
+suite("Yank", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = "\n\n";
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = new EmacsEmulator(activeTextEditor, new KillRing());
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("the clipboard text is pushed to the kill-ring if the kill ring is empty", async () => {
+    vscode.env.clipboard.writeText("Lorem ipsum");
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    await emulator.runCommand("yank");
+
+    assertCursorsEqual(activeTextEditor, [1, 11]);
+    assertTextEqual(activeTextEditor, "\nLorem ipsum\n");
+  });
+
+  test("the clipboard text is pushed to the kill-ring if it doesn't exist as the latest killed item", async () => {
+    await clearTextEditor(activeTextEditor, "foo");
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.runCommand("killLine");
+
+    await clearTextEditor(activeTextEditor);
+
+    vscode.env.clipboard.writeText("Lorem ipsum");
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.runCommand("yank");
+
+    assertCursorsEqual(activeTextEditor, [0, 11]);
+    assertTextEqual(activeTextEditor, "Lorem ipsum");
+
+    await emulator.runCommand("yankPop");
+
+    assertCursorsEqual(activeTextEditor, [0, 3]);
+    assertTextEqual(activeTextEditor, "foo");
+
+    await emulator.runCommand("yankPop");
+
+    assertCursorsEqual(activeTextEditor, [0, 11]);
+    assertTextEqual(activeTextEditor, "Lorem ipsum");
   });
 });
