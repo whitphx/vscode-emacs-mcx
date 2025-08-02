@@ -67,4 +67,46 @@ suite("KillRing", () => {
     assert.strictEqual(killRing.popNext(), undefined);
     assert.strictEqual(killRing.popNext(), undefined);
   });
+
+  test("addPointer", () => {
+    const killRing = new KillRing(3);
+    const entities = [
+      new ClipboardTextKillRingEntity("0"),
+      new ClipboardTextKillRingEntity("1"),
+      new ClipboardTextKillRingEntity("2"),
+    ];
+
+    entities.forEach((entity) => {
+      killRing.push(entity);
+    });
+    assert.strictEqual(killRing.getTop()?.asString(), "2");
+
+    killRing.addPointer(1);
+    assert.strictEqual(killRing.getTop()?.asString(), "1");
+
+    killRing.addPointer(1);
+    assert.strictEqual(killRing.getTop()?.asString(), "0");
+
+    killRing.addPointer(1);
+    assert.strictEqual(killRing.getTop()?.asString(), "2");
+
+    killRing.addPointer(-1);
+    assert.strictEqual(killRing.getTop()?.asString(), "0");
+
+    killRing.addPointer(-1);
+    assert.strictEqual(killRing.getTop()?.asString(), "1");
+
+    killRing.addPointer(-1);
+    assert.strictEqual(killRing.getTop()?.asString(), "2");
+
+    killRing.addPointer(0);
+    assert.strictEqual(killRing.getTop()?.asString(), "2");
+
+    // Large numbers
+    killRing.addPointer(10);
+    assert.strictEqual(killRing.getTop()?.asString(), "1");
+
+    killRing.addPointer(-10);
+    assert.strictEqual(killRing.getTop()?.asString(), "2");
+  });
 });
