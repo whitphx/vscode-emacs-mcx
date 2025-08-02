@@ -16,7 +16,7 @@ export { AppendDirection };
 
 export class KillYanker implements vscode.Disposable {
   private emacsController: IEmacsController;
-  public readonly killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
+  private readonly killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
   private minibuffer: Minibuffer;
 
   private get textEditor(): TextEditor {
@@ -241,10 +241,14 @@ export class KillYanker implements vscode.Disposable {
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
-  public async yank(): Promise<void> {
+  public async yank(prefixArgument: number | undefined): Promise<void> {
     if (this.killRing == null) {
       const text = await vscode.env.clipboard.readText();
       return this.pasteString(text);
+    }
+
+    if (prefixArgument != null) {
+      this.killRing.addPointer(prefixArgument - 1);
     }
 
     const latestKill = this.killRing.getLatest();
@@ -262,7 +266,7 @@ export class KillYanker implements vscode.Disposable {
     await this.yankKillRingEntity(killRingEntityToPaste);
   }
 
-  public async yankPop(): Promise<void> {
+  public async yankPop(prefixArgument: number | undefined): Promise<void> {
     if (this.killRing == null) {
       return;
     }
@@ -270,6 +274,10 @@ export class KillYanker implements vscode.Disposable {
     if (this.isYankInterrupted()) {
       MessageManager.showMessage("Previous command was not a yank");
       return;
+    }
+
+    if (prefixArgument != null) {
+      this.killRing.addPointer(prefixArgument - 1);
     }
 
     const prevKillRingEntity = this.killRing.getTop();
