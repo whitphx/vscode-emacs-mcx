@@ -258,8 +258,7 @@ export class KillYanker implements vscode.Disposable {
       }
     }
 
-    this.killRing.addPointer(delta - 1);
-    const killRingEntityToPaste = this.killRing.getTop();
+    const killRingEntityToPaste = this.killRing.pop(delta - 1);
     if (killRingEntityToPaste == null) {
       return;
     }
@@ -278,11 +277,10 @@ export class KillYanker implements vscode.Disposable {
     }
 
     const delta = prefixArgument ?? 1;
-    this.killRing.addPointer(delta - 1);
 
-    const prevKillRingEntity = this.killRing.getTop();
+    const prevKillRingEntity = this.killRing.pop(delta - 1);
 
-    const killRingEntity = this.killRing.popNext();
+    const killRingEntity = this.killRing.pop();
     if (killRingEntity == null) {
       return;
     }

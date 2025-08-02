@@ -40,21 +40,16 @@ export class KillRing {
     return this.killRing[0];
   }
 
-  public popNext(): KillRingEntity | undefined {
+  public pop(delta: number = 1): KillRingEntity | undefined {
     if (this.pointer === null || this.killRing.length === 0) {
       return undefined;
     }
 
-    this.pointer = (this.pointer + 1) % this.killRing.length;
-    return this.killRing[this.pointer];
-  }
-
-  public addPointer(delta: number): void {
-    if (this.pointer === null || this.killRing.length === 0) {
-      return;
+    this.pointer = (this.pointer + delta) % this.killRing.length;
+    if (this.pointer < 0) {
+      this.pointer += this.killRing.length;
     }
-
-    this.pointer = (((this.pointer + delta) % this.killRing.length) + this.killRing.length) % this.killRing.length;
+    return this.killRing[this.pointer];
   }
 
   public async browse(): Promise<KillRingEntity | undefined> {
