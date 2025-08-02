@@ -16,7 +16,7 @@ export { AppendDirection };
 
 export class KillYanker implements vscode.Disposable {
   private emacsController: IEmacsController;
-  private readonly killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
+  public readonly killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
   private minibuffer: Minibuffer;
 
   private get textEditor(): TextEditor {

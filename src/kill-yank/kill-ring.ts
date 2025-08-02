@@ -49,6 +49,14 @@ export class KillRing {
     return this.killRing[this.pointer];
   }
 
+  public addPointer(delta: number): void {
+    if (this.pointer === null || this.killRing.length === 0) {
+      return;
+    }
+
+    this.pointer = (this.pointer + delta + this.killRing.length) % this.killRing.length;
+  }
+
   public async browse(): Promise<KillRingEntity | undefined> {
     MessageManager.showMessage(`${this.killRing.length} items in the kill ring.`);
 
