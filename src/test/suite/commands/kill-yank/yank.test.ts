@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
+import { ClipboardTextKillRingEntity } from "../../../../kill-yank/kill-ring-entity";
 import {
   assertCursorsEqual,
   assertTextEqual,
@@ -162,6 +163,89 @@ ABCDEFLorem ipsumJ`,
           );
         });
       });
+    });
+  });
+});
+
+suite("Yank with prefix-argument", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace("");
+    const killRing = new KillRing();
+    // Push "0", "1", ..., "9" to the kill ring.
+    for (let i = 0; i < 10; i++) {
+      killRing.push(new ClipboardTextKillRingEntity(i.toString()));
+    }
+    vscode.env.clipboard.writeText("9"); // Emulate the kill behavior
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  (
+    [
+      ["prefixArgument is undefined", () => {}, "9"],
+      [
+        "prefixArgument is 1",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(1);
+        },
+        "9",
+      ],
+      [
+        "prefixArgument is 2",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(2);
+        },
+        "8",
+      ],
+      [
+        "prefixArgument is 0",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(0);
+        },
+        "0",
+      ],
+      [
+        "prefixArgument is -1",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.negativeArgument();
+        },
+        "1",
+      ],
+      [
+        "prefixArgument is 20",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(2);
+          await emulator.subsequentArgumentDigit(0);
+        },
+        "0",
+      ],
+      [
+        "prefixArgument is -20",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.negativeArgument();
+          await emulator.subsequentArgumentDigit(2);
+          await emulator.subsequentArgumentDigit(0);
+        },
+        "0",
+      ],
+    ] as Array<[string, () => Promise<void>, string]>
+  ).forEach(([desc, preFn, expectedText]) => {
+    test(desc, async () => {
+      await preFn();
+
+      await emulator.runCommand("yank");
+
+      assertTextEqual(activeTextEditor, expectedText);
     });
   });
 });
