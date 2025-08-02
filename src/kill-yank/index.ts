@@ -247,13 +247,16 @@ export class KillYanker implements vscode.Disposable {
       return this.pasteString(text);
     }
 
+    const latestKill = this.killRing.getLatest();
     const clipboardText = await vscode.env.clipboard.readText();
-    let killRingEntityToPaste = this.killRing.getTop();
-
-    if (killRingEntityToPaste == null || !killRingEntityToPaste.isSameClipboardText(clipboardText)) {
+    if (latestKill == null || !latestKill.isSameClipboardText(clipboardText)) {
       const newClipboardTextKillRingEntity = new ClipboardTextKillRingEntity(clipboardText);
       this.killRing.push(newClipboardTextKillRingEntity);
-      killRingEntityToPaste = newClipboardTextKillRingEntity;
+    }
+
+    const killRingEntityToPaste = this.killRing.getTop();
+    if (killRingEntityToPaste == null) {
+      return;
     }
 
     await this.yankKillRingEntity(killRingEntityToPaste);

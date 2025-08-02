@@ -32,6 +32,14 @@ export class KillRing {
     return this.killRing[this.pointer];
   }
 
+  public getLatest(): KillRingEntity | undefined {
+    if (this.killRing.length === 0) {
+      return undefined;
+    }
+
+    return this.killRing[0];
+  }
+
   public popNext(): KillRingEntity | undefined {
     if (this.pointer === null || this.killRing.length === 0) {
       return undefined;
