@@ -281,7 +281,9 @@ export class BrowseKillRing extends KillYankCommand {
 
     const selectedEntity = await quickPickKillRingEntity(killRingItems, killRing.getPointer() ?? 0);
     if (selectedEntity) {
+      await this.killYanker.revertPreviousYank();
       await this.killYanker.yankKillRingEntity(selectedEntity);
+      this.killYanker.interruptYank();
     }
   }
 }

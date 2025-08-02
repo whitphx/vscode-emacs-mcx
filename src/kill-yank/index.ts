@@ -22,9 +22,10 @@ export class KillYanker implements vscode.Disposable {
     return this.emacsController.textEditor;
   }
 
-  private isAppending = false;
+  private isAppending: boolean;
+  private yankInterrupted: boolean;
+  private docChangedAfterYank: boolean;
   private prevKillPositions: Position[];
-  private docChangedAfterYank = false;
   private prevYankPositions: Position[];
 
   private textChangeCount: number;
@@ -37,6 +38,8 @@ export class KillYanker implements vscode.Disposable {
     this.killRing = killRing;
     this.minibuffer = minibuffer;
 
+    this.isAppending = false;
+    this.yankInterrupted = false;
     this.docChangedAfterYank = false;
     this.prevKillPositions = [];
     this.prevYankPositions = [];
@@ -220,11 +223,22 @@ export class KillYanker implements vscode.Disposable {
     await vscode.commands.executeCommand("paste", { text: flattenedText });
   }
 
+  public async revertPreviousYank() {
+    if (this.isYankInterrupted()) {
+      return;
+    }
+
+    for (let i = 0; i < this.prevYankChanges; ++i) {
+      await vscode.commands.executeCommand("undo");
+    }
+  }
+
   public async yankKillRingEntity(killRingEntityToPaste: KillRingEntity): Promise<void> {
     this.textChangeCount = 0;
     await this.pasteKillRingEntity(killRingEntityToPaste);
     this.prevYankChanges = this.textChangeCount;
 
+    this.yankInterrupted = false;
     this.docChangedAfterYank = false;
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
@@ -265,9 +279,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     if (prevKillRingEntity != null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
-      for (let i = 0; i < this.prevYankChanges; ++i) {
-        await vscode.commands.executeCommand("undo");
-      }
+      await this.revertPreviousYank();
     }
 
     await this.yankKillRingEntity(killRingEntity);
@@ -307,7 +319,14 @@ export class KillYanker implements vscode.Disposable {
     return success;
   }
 
+  public interruptYank(): void {
+    this.yankInterrupted = true;
+  }
+
   private isYankInterrupted(): boolean {
+    if (this.yankInterrupted) {
+      return true;
+    }
     if (this.docChangedAfterYank) {
       return true;
     }
