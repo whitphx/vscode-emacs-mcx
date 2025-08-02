@@ -244,7 +244,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public async yank(): Promise<void> {
-    if (this.killRing === null) {
+    if (this.killRing == null) {
       const text = await vscode.env.clipboard.readText();
       return this.pasteString(text);
     }
@@ -262,7 +262,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public async yankPop(): Promise<void> {
-    if (this.killRing === null) {
+    if (this.killRing == null) {
       return;
     }
 
@@ -283,6 +283,20 @@ export class KillYanker implements vscode.Disposable {
     }
 
     await this.yankKillRingEntity(killRingEntity);
+  }
+
+  public async browseKillRing(): Promise<void> {
+    const killRing = this.killRing;
+    if (killRing == null) {
+      return;
+    }
+
+    const selectedEntity = await killRing.browse();
+    if (selectedEntity) {
+      await this.revertPreviousYank();
+      await this.yankKillRingEntity(selectedEntity);
+      this.interruptYank();
+    }
   }
 
   private async delete(ranges: readonly vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {

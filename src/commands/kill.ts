@@ -225,16 +225,7 @@ export class BrowseKillRing extends KillYankCommand {
   public readonly id = "browseKillRing";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const killRing = this.killYanker.killRing;
-    if (!killRing) {
-      return;
-    }
-
-    const selectedEntity = await killRing.browse();
-    if (selectedEntity) {
-      await this.killYanker.revertPreviousYank();
-      await this.killYanker.yankKillRingEntity(selectedEntity);
-      this.killYanker.interruptYank();
-    }
+    await this.killYanker.browseKillRing();
+    revealPrimaryActive(textEditor);
   }
 }
