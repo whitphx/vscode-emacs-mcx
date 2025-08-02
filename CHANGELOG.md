@@ -4,6 +4,8 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.87.0] - 2025-08-02
+
 ### Add
 
 - Add `browse-kill-ring`, [#2373](https://github.com/whitphx/vscode-emacs-mcx/pull/2373).
