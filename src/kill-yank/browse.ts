@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { KillRingEntity } from "./kill-ring-entity";
 
+// Ref: https://github.com/microsoft/vscode-extension-samples/blob/e0a4e7430cbda9310b47ffb86a07c6eaf445ffee/quickinput-sample/src/quickOpen.ts
+
 class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
   public readonly label: string;
 
