@@ -1,7 +1,17 @@
+import * as vscode from "vscode";
+import { MessageManager } from "../message";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 
 export type KillRingEntity = ClipboardTextKillRingEntity | EditorTextKillRingEntity;
+
+class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
+  public readonly label: string;
+
+  constructor(public readonly entity: KillRingEntity) {
+    this.label = entity.asString();
+  }
+}
 
 export class KillRing {
   private maxNum = 60;
@@ -42,11 +52,38 @@ export class KillRing {
     return this.killRing[this.pointer];
   }
 
-  public getItems(): readonly KillRingEntity[] {
-    return this.killRing;
-  }
+  public async browse(): Promise<KillRingEntity | undefined> {
+    MessageManager.showMessage(`${this.killRing.length} items in the kill ring.`);
 
-  public getPointer(): number | null {
-    return this.pointer;
+    const disposables: vscode.Disposable[] = [];
+    try {
+      return await new Promise<KillRingEntity | undefined>((resolve) => {
+        const input = vscode.window.createQuickPick<KillRingEntityQuickPickItem>();
+
+        input.items = this.killRing.map((entity) => new KillRingEntityQuickPickItem(entity));
+
+        const initialActiveItem = input.items[this.pointer ?? 0];
+        input.activeItems = initialActiveItem ? [initialActiveItem] : [];
+
+        disposables.push(
+          input.onDidChangeSelection((items) => {
+            const item = items[0];
+            if (item) {
+              resolve(item.entity);
+              input.dispose();
+            }
+          }),
+          input.onDidHide(() => {
+            resolve(undefined);
+            input.dispose();
+          }),
+        );
+        input.show();
+      });
+    } finally {
+      disposables.forEach((disposable) => {
+        disposable.dispose();
+      });
+    }
   }
 }
