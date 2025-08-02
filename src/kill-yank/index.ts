@@ -241,20 +241,22 @@ export class KillYanker implements vscode.Disposable {
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
-  public async yank(): Promise<void> {
+  public async yank(delta: number = 1): Promise<void> {
     if (this.killRing == null) {
       const text = await vscode.env.clipboard.readText();
       return this.pasteString(text);
     }
 
-    const latestKill = this.killRing.getLatest();
-    const clipboardText = await vscode.env.clipboard.readText();
-    if (latestKill == null || !latestKill.isSameClipboardText(clipboardText)) {
-      const newClipboardTextKillRingEntity = new ClipboardTextKillRingEntity(clipboardText);
-      this.killRing.push(newClipboardTextKillRingEntity);
+    if (delta === 1) {
+      const latestKill = this.killRing.getLatest();
+      const clipboardText = await vscode.env.clipboard.readText();
+      if (latestKill == null || !latestKill.isSameClipboardText(clipboardText)) {
+        const newClipboardTextKillRingEntity = new ClipboardTextKillRingEntity(clipboardText);
+        this.killRing.push(newClipboardTextKillRingEntity);
+      }
     }
 
-    const killRingEntityToPaste = this.killRing.getTop();
+    const killRingEntityToPaste = this.killRing.pop(delta - 1);
     if (killRingEntityToPaste == null) {
       return;
     }
@@ -262,7 +264,7 @@ export class KillYanker implements vscode.Disposable {
     await this.yankKillRingEntity(killRingEntityToPaste);
   }
 
-  public async yankPop(): Promise<void> {
+  public async yankPop(delta: number = 1): Promise<void> {
     if (this.killRing == null) {
       return;
     }
@@ -272,14 +274,12 @@ export class KillYanker implements vscode.Disposable {
       return;
     }
 
-    const prevKillRingEntity = this.killRing.getTop();
-
-    const killRingEntity = this.killRing.popNext();
+    const killRingEntity = this.killRing.pop(delta);
     if (killRingEntity == null) {
       return;
     }
 
-    if (prevKillRingEntity != null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
+    if (this.prevYankChanges > 0) {
       await this.revertPreviousYank();
     }
 

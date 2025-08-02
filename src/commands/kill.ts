@@ -205,7 +205,7 @@ export class Yank extends KillYankCommand {
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
-    await this.killYanker.yank();
+    await this.killYanker.yank(prefixArgument);
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
   }
@@ -215,7 +215,7 @@ export class YankPop extends KillYankCommand {
   public readonly id = "yankPop";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    await this.killYanker.yankPop();
+    await this.killYanker.yankPop(prefixArgument);
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
   }
