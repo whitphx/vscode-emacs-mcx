@@ -10,7 +10,7 @@ suite("browse-kill-ring", () => {
   let activeTextEditor: vscode.TextEditor;
 
   setup(async () => {
-    const initialText = "\n\n"; // 3 lines
+    const initialText = "";
     activeTextEditor = await setupWorkspace(initialText);
   });
 
@@ -25,21 +25,21 @@ suite("browse-kill-ring", () => {
 
     const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("Selected"));
 
-    setEmptyCursors(activeTextEditor, [1, 0]);
+    setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("browseKillRing");
 
     assert.strictEqual(browseStub.calledOnce, true);
     assert.strictEqual(browseStub.firstCall.args.length, 0);
 
-    assertTextEqual(activeTextEditor, "\nSelected\n");
+    assertTextEqual(activeTextEditor, "Selected");
 
     await emulator.runCommand("browseKillRing");
 
     assert.strictEqual(browseStub.calledTwice, true);
     assert.strictEqual(browseStub.secondCall.args.length, 0);
 
-    assertTextEqual(activeTextEditor, "\nSelectedSelected\n");
+    assertTextEqual(activeTextEditor, "SelectedSelected");
   });
 
   test("browse-kill-ring works as yank-pop when called after yank", async () => {
@@ -52,24 +52,24 @@ suite("browse-kill-ring", () => {
 
     const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("Selected"));
 
-    setEmptyCursors(activeTextEditor, [1, 0]);
+    setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("yank");
 
-    assertTextEqual(activeTextEditor, "\naaa\n");
+    assertTextEqual(activeTextEditor, "aaa");
 
     await emulator.runCommand("browseKillRing");
 
     assert.strictEqual(browseStub.calledOnce, true);
     assert.strictEqual(browseStub.firstCall.args.length, 0);
 
-    assertTextEqual(activeTextEditor, "\nSelected\n");
+    assertTextEqual(activeTextEditor, "Selected");
 
     await emulator.runCommand("browseKillRing");
 
     assert.strictEqual(browseStub.calledTwice, true);
     assert.strictEqual(browseStub.secondCall.args.length, 0);
 
-    assertTextEqual(activeTextEditor, "\nSelectedSelected\n");
+    assertTextEqual(activeTextEditor, "SelectedSelected");
   });
 });
