@@ -45,4 +45,8 @@ export class KillRing {
   public getItems(): Array<KillRingEntity> {
     return this.killRing;
   }
+
+  public getPointer(): number | null {
+    return this.pointer;
+  }
 }

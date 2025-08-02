@@ -230,20 +230,26 @@ class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
   }
 }
 
-async function browseKillRing(killRing: KillRingEntity[]): Promise<KillRingEntity | undefined> {
+async function quickPickKillRingEntity(
+  killRingEntities: KillRingEntity[],
+  initialActiveIndex: number,
+): Promise<KillRingEntity | undefined> {
   const disposables: vscode.Disposable[] = [];
   try {
     return await new Promise<KillRingEntity | undefined>((resolve) => {
       const input = vscode.window.createQuickPick<KillRingEntityQuickPickItem>();
 
-      input.items = killRing.map((entity) => new KillRingEntityQuickPickItem(entity));
+      input.items = killRingEntities.map((entity) => new KillRingEntityQuickPickItem(entity));
+
+      const initialActiveItem = input.items[initialActiveIndex];
+      input.activeItems = initialActiveItem ? [initialActiveItem] : [];
 
       disposables.push(
         input.onDidChangeSelection((items) => {
           const item = items[0];
           if (item) {
             resolve(item.entity);
-            input.hide();
+            input.dispose();
           }
         }),
         input.onDidHide(() => {
@@ -264,14 +270,18 @@ export class BrowseKillRing extends KillYankCommand {
   public readonly id = "browseKillRing";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    const killRing = this.killYanker.killRing?.getItems();
+    const killRing = this.killYanker.killRing;
     if (!killRing) {
       return;
     }
 
-    MessageManager.showMessage(`${killRing.length} items in the kill ring.`);
+    const killRingItems = killRing.getItems();
 
-    const selectedEntity = await browseKillRing(killRing);
-    console.log("Selected", selectedEntity);
+    MessageManager.showMessage(`${killRingItems.length} items in the kill ring.`);
+
+    const selectedEntity = await quickPickKillRingEntity(killRingItems, killRing.getPointer() ?? 0);
+    if (selectedEntity) {
+      await this.killYanker.yankKillRingEntity(selectedEntity);
+    }
   }
 }

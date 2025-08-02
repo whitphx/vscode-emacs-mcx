@@ -220,6 +220,15 @@ export class KillYanker implements vscode.Disposable {
     await vscode.commands.executeCommand("paste", { text: flattenedText });
   }
 
+  public async yankKillRingEntity(killRingEntityToPaste: KillRingEntity): Promise<void> {
+    this.textChangeCount = 0;
+    await this.pasteKillRingEntity(killRingEntityToPaste);
+    this.prevYankChanges = this.textChangeCount;
+
+    this.docChangedAfterYank = false;
+    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+  }
+
   public async yank(): Promise<void> {
     if (this.killRing === null) {
       const text = await vscode.env.clipboard.readText();
@@ -235,12 +244,7 @@ export class KillYanker implements vscode.Disposable {
       killRingEntityToPaste = newClipboardTextKillRingEntity;
     }
 
-    this.textChangeCount = 0;
-    await this.pasteKillRingEntity(killRingEntityToPaste);
-    this.prevYankChanges = this.textChangeCount;
-
-    this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+    await this.yankKillRingEntity(killRingEntityToPaste);
   }
 
   public async yankPop(): Promise<void> {
@@ -266,12 +270,7 @@ export class KillYanker implements vscode.Disposable {
       }
     }
 
-    this.textChangeCount = 0;
-    await this.pasteKillRingEntity(killRingEntity);
-    this.prevYankChanges = this.textChangeCount;
-
-    this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+    await this.yankKillRingEntity(killRingEntity);
   }
 
   private async delete(ranges: readonly vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
