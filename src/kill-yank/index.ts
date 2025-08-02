@@ -24,8 +24,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   private isAppending: boolean;
-  private yankInterrupted: boolean;
-  private docChangedAfterYank: boolean;
+  private continuousYankInterrupted: boolean;
   private prevKillPositions: readonly Position[];
   private prevYankPositions: readonly Position[];
 
@@ -40,8 +39,7 @@ export class KillYanker implements vscode.Disposable {
     this.minibuffer = minibuffer;
 
     this.isAppending = false;
-    this.yankInterrupted = false;
-    this.docChangedAfterYank = false;
+    this.continuousYankInterrupted = false;
     this.prevKillPositions = [];
     this.prevYankPositions = [];
 
@@ -63,8 +61,8 @@ export class KillYanker implements vscode.Disposable {
   public onDidChangeTextDocument = (e: vscode.TextDocumentChangeEvent): void => {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
-      this.docChangedAfterYank = true;
       this.isAppending = false;
+      this.continuousYankInterrupted = true;
     }
 
     this.textChangeCount++;
@@ -72,8 +70,8 @@ export class KillYanker implements vscode.Disposable {
 
   public onDidChangeTextEditorSelection = (e: vscode.TextEditorSelectionChangeEvent): void => {
     if (e.textEditor === this.textEditor) {
-      this.docChangedAfterYank = true;
       this.isAppending = false;
+      this.continuousYankInterrupted = true;
     }
   };
 
@@ -239,8 +237,7 @@ export class KillYanker implements vscode.Disposable {
     await this.pasteKillRingEntity(killRingEntityToPaste);
     this.prevYankChanges = this.textChangeCount;
 
-    this.yankInterrupted = false;
-    this.docChangedAfterYank = false;
+    this.continuousYankInterrupted = false;
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
@@ -338,14 +335,11 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public interruptYank(): void {
-    this.yankInterrupted = true;
+    this.continuousYankInterrupted = true;
   }
 
   private isYankInterrupted(): boolean {
-    if (this.yankInterrupted) {
-      return true;
-    }
-    if (this.docChangedAfterYank) {
+    if (this.continuousYankInterrupted) {
       return true;
     }
 
