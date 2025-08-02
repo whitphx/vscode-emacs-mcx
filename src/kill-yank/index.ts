@@ -291,7 +291,7 @@ export class KillYanker implements vscode.Disposable {
 
     const selectedEntity = await killRing.browse();
     if (selectedEntity) {
-      if (this.isContinuousYank()) {
+      if (!this.isYankInterrupted()) {
         // browse-kill-ring is called after yank, so it works as yank-pop.
         await this.revertPreviousYank();
       }
@@ -340,10 +340,6 @@ export class KillYanker implements vscode.Disposable {
 
     const currentActives = this.getCursorPositions();
     return !equalPositions(currentActives, this.prevYankPositions);
-  }
-
-  private isContinuousYank(): boolean {
-    return !this.isYankInterrupted();
   }
 
   private getCursorPositions(): readonly Position[] {
