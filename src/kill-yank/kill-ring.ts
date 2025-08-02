@@ -69,6 +69,10 @@ export class KillRing {
           input.onDidChangeSelection((items) => {
             const item = items[0];
             if (item) {
+              const index = input.items.indexOf(item);
+              if (0 <= index && index < input.items.length) {
+                this.pointer = index;
+              }
               resolve(item.entity);
               input.dispose();
             }
