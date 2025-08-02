@@ -247,11 +247,10 @@ export class KillYanker implements vscode.Disposable {
       return this.pasteString(text);
     }
 
-    if (prefixArgument != null) {
-      this.killRing.addPointer(prefixArgument - 1);
-    }
+    const delta = prefixArgument ?? 1;
+    this.killRing.addPointer(delta - 1);
 
-    if (prefixArgument === undefined || prefixArgument === 1) {
+    if (delta === 1) {
       const latestKill = this.killRing.getLatest();
       const clipboardText = await vscode.env.clipboard.readText();
       if (latestKill == null || !latestKill.isSameClipboardText(clipboardText)) {
@@ -278,9 +277,8 @@ export class KillYanker implements vscode.Disposable {
       return;
     }
 
-    if (prefixArgument != null) {
-      this.killRing.addPointer(prefixArgument - 1);
-    }
+    const delta = prefixArgument ?? 1;
+    this.killRing.addPointer(delta - 1);
 
     const prevKillRingEntity = this.killRing.getTop();
 
