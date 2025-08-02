@@ -25,8 +25,8 @@ export class KillYanker implements vscode.Disposable {
   private isAppending: boolean;
   private yankInterrupted: boolean;
   private docChangedAfterYank: boolean;
-  private prevKillPositions: Position[];
-  private prevYankPositions: Position[];
+  private prevKillPositions: readonly Position[];
+  private prevYankPositions: readonly Position[];
 
   private textChangeCount: number;
   private prevYankChanges: number;
