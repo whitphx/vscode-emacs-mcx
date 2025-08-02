@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.87.1] - 2025-08-02
+
+### Fix
+
+- Fix a `yank` bug that duplicates text in the kill ring, [#2374](https://github.com/whitphx/vscode-emacs-mcx/pull/2374).
+
 ## [0.87.0] - 2025-08-02
 
 ### Add
