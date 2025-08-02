@@ -248,7 +248,6 @@ export class KillYanker implements vscode.Disposable {
     }
 
     const delta = prefixArgument ?? 1;
-    this.killRing.addPointer(delta - 1);
 
     if (delta === 1) {
       const latestKill = this.killRing.getLatest();
@@ -259,6 +258,7 @@ export class KillYanker implements vscode.Disposable {
       }
     }
 
+    this.killRing.addPointer(delta - 1);
     const killRingEntityToPaste = this.killRing.getTop();
     if (killRingEntityToPaste == null) {
       return;
