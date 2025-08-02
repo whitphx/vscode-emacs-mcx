@@ -278,14 +278,12 @@ export class KillYanker implements vscode.Disposable {
 
     const delta = prefixArgument ?? 1;
 
-    const prevKillRingEntity = this.killRing.pop(delta - 1);
-
-    const killRingEntity = this.killRing.pop();
+    const killRingEntity = this.killRing.pop(delta);
     if (killRingEntity == null) {
       return;
     }
 
-    if (prevKillRingEntity != null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
+    if (this.prevYankChanges > 0) {
       await this.revertPreviousYank();
     }
 
