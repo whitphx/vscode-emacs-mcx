@@ -1,17 +1,6 @@
-import * as vscode from "vscode";
 import { MessageManager } from "../message";
-import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
-import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
-
-export type KillRingEntity = ClipboardTextKillRingEntity | EditorTextKillRingEntity;
-
-class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
-  public readonly label: string;
-
-  constructor(public readonly entity: KillRingEntity) {
-    this.label = entity.asString();
-  }
-}
+import { KillRingEntity } from "./kill-ring-entity";
+import { quickPickKillRing } from "./browse";
 
 export class KillRing {
   private maxNum = 60;
@@ -55,39 +44,16 @@ export class KillRing {
   public async browse(): Promise<KillRingEntity | undefined> {
     MessageManager.showMessage(`${this.killRing.length} items in the kill ring.`);
 
-    const disposables: vscode.Disposable[] = [];
-    try {
-      return await new Promise<KillRingEntity | undefined>((resolve) => {
-        const input = vscode.window.createQuickPick<KillRingEntityQuickPickItem>();
-
-        input.items = this.killRing.map((entity) => new KillRingEntityQuickPickItem(entity));
-
-        const initialActiveItem = input.items[this.pointer ?? 0];
-        input.activeItems = initialActiveItem ? [initialActiveItem] : [];
-
-        disposables.push(
-          input.onDidChangeSelection((items) => {
-            const item = items[0];
-            if (item) {
-              const index = input.items.indexOf(item);
-              if (0 <= index && index < input.items.length) {
-                this.pointer = index;
-              }
-              resolve(item.entity);
-              input.dispose();
-            }
-          }),
-          input.onDidHide(() => {
-            resolve(undefined);
-            input.dispose();
-          }),
-        );
-        input.show();
-      });
-    } finally {
-      disposables.forEach((disposable) => {
-        disposable.dispose();
-      });
+    const selectedEntity = await quickPickKillRing(this.killRing, this.pointer ?? 0);
+    if (selectedEntity === undefined) {
+      return undefined;
     }
+
+    const index = this.killRing.indexOf(selectedEntity);
+    if (0 <= index && index < this.killRing.length) {
+      this.pointer = index;
+    }
+
+    return selectedEntity;
   }
 }
