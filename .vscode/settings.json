@@ -25,6 +25,7 @@
     "nvmrc",
     "openvsx",
     "paredit",
-    "Sexp"
+    "Sexp",
+    "yanker"
   ]
 }

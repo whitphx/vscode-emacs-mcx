@@ -4,7 +4,8 @@ import { Position, Range, TextEditor } from "vscode";
 import { MessageManager } from "../message";
 import { equalPositions } from "../utils";
 import type { IEmacsController } from "../emulator";
-import { KillRing, KillRingEntity } from "./kill-ring";
+import { KillRing } from "./kill-ring";
+import { KillRingEntity } from "./kill-ring-entity";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { logger } from "../logger";
@@ -15,17 +16,17 @@ export { AppendDirection };
 
 export class KillYanker implements vscode.Disposable {
   private emacsController: IEmacsController;
-  private killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
+  private readonly killRing: KillRing | null; // If null, killRing is disabled and only clipboard is used.
   private minibuffer: Minibuffer;
 
   private get textEditor(): TextEditor {
     return this.emacsController.textEditor;
   }
 
-  private isAppending = false;
-  private prevKillPositions: Position[];
-  private docChangedAfterYank = false;
-  private prevYankPositions: Position[];
+  private isAppending: boolean;
+  private continuousYankInterrupted: boolean;
+  private prevKillPositions: readonly Position[];
+  private prevYankPositions: readonly Position[];
 
   private textChangeCount: number;
   private prevYankChanges: number;
@@ -37,7 +38,8 @@ export class KillYanker implements vscode.Disposable {
     this.killRing = killRing;
     this.minibuffer = minibuffer;
 
-    this.docChangedAfterYank = false;
+    this.isAppending = false;
+    this.continuousYankInterrupted = false;
     this.prevKillPositions = [];
     this.prevYankPositions = [];
 
@@ -59,8 +61,8 @@ export class KillYanker implements vscode.Disposable {
   public onDidChangeTextDocument = (e: vscode.TextDocumentChangeEvent): void => {
     // XXX: Is this a correct way to check the identity of document?
     if (e.document.uri.toString() === this.textEditor.document.uri.toString()) {
-      this.docChangedAfterYank = true;
       this.isAppending = false;
+      this.continuousYankInterrupted = true;
     }
 
     this.textChangeCount++;
@@ -68,8 +70,8 @@ export class KillYanker implements vscode.Disposable {
 
   public onDidChangeTextEditorSelection = (e: vscode.TextEditorSelectionChangeEvent): void => {
     if (e.textEditor === this.textEditor) {
-      this.docChangedAfterYank = true;
       this.isAppending = false;
+      this.continuousYankInterrupted = true;
     }
   };
 
@@ -220,8 +222,27 @@ export class KillYanker implements vscode.Disposable {
     await vscode.commands.executeCommand("paste", { text: flattenedText });
   }
 
+  public async revertPreviousYank() {
+    if (this.isYankInterrupted()) {
+      return;
+    }
+
+    for (let i = 0; i < this.prevYankChanges; ++i) {
+      await vscode.commands.executeCommand("undo");
+    }
+  }
+
+  public async yankKillRingEntity(killRingEntityToPaste: KillRingEntity, interrupt = false): Promise<void> {
+    this.textChangeCount = 0;
+    await this.pasteKillRingEntity(killRingEntityToPaste);
+    this.prevYankChanges = this.textChangeCount;
+
+    this.continuousYankInterrupted = interrupt;
+    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+  }
+
   public async yank(): Promise<void> {
-    if (this.killRing === null) {
+    if (this.killRing == null) {
       const text = await vscode.env.clipboard.readText();
       return this.pasteString(text);
     }
@@ -235,16 +256,11 @@ export class KillYanker implements vscode.Disposable {
       killRingEntityToPaste = newClipboardTextKillRingEntity;
     }
 
-    this.textChangeCount = 0;
-    await this.pasteKillRingEntity(killRingEntityToPaste);
-    this.prevYankChanges = this.textChangeCount;
-
-    this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+    await this.yankKillRingEntity(killRingEntityToPaste);
   }
 
   public async yankPop(): Promise<void> {
-    if (this.killRing === null) {
+    if (this.killRing == null) {
       return;
     }
 
@@ -261,17 +277,26 @@ export class KillYanker implements vscode.Disposable {
     }
 
     if (prevKillRingEntity != null && !prevKillRingEntity.isEmpty() && this.prevYankChanges > 0) {
-      for (let i = 0; i < this.prevYankChanges; ++i) {
-        await vscode.commands.executeCommand("undo");
-      }
+      await this.revertPreviousYank();
     }
 
-    this.textChangeCount = 0;
-    await this.pasteKillRingEntity(killRingEntity);
-    this.prevYankChanges = this.textChangeCount;
+    await this.yankKillRingEntity(killRingEntity);
+  }
 
-    this.docChangedAfterYank = false;
-    this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
+  public async browseKillRing(): Promise<void> {
+    const killRing = this.killRing;
+    if (killRing == null) {
+      return;
+    }
+
+    const selectedEntity = await killRing.browse();
+    if (selectedEntity) {
+      if (!this.isYankInterrupted()) {
+        // browse-kill-ring is called after yank, so it works as yank-pop.
+        await this.revertPreviousYank();
+      }
+      await this.yankKillRingEntity(selectedEntity, true);
+    }
   }
 
   private async delete(ranges: readonly vscode.Range[], rectMode: boolean, maxTrials = 3): Promise<boolean> {
@@ -309,7 +334,7 @@ export class KillYanker implements vscode.Disposable {
   }
 
   private isYankInterrupted(): boolean {
-    if (this.docChangedAfterYank) {
+    if (this.continuousYankInterrupted) {
       return true;
     }
 
@@ -317,7 +342,7 @@ export class KillYanker implements vscode.Disposable {
     return !equalPositions(currentActives, this.prevYankPositions);
   }
 
-  private getCursorPositions(): Position[] {
+  private getCursorPositions(): readonly Position[] {
     if (this.emacsController.inRectMarkMode) {
       return this.emacsController.nativeSelections.map((selection) => selection.active);
     } else {

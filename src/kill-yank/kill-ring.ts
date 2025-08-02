@@ -1,7 +1,6 @@
-import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
-import { EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
-
-export type KillRingEntity = ClipboardTextKillRingEntity | EditorTextKillRingEntity;
+import { MessageManager } from "../message";
+import { KillRingEntity } from "./kill-ring-entity";
+import { quickPickKillRing } from "./browse";
 
 export class KillRing {
   private maxNum = 60;
@@ -40,5 +39,21 @@ export class KillRing {
 
     this.pointer = (this.pointer + 1) % this.killRing.length;
     return this.killRing[this.pointer];
+  }
+
+  public async browse(): Promise<KillRingEntity | undefined> {
+    MessageManager.showMessage(`${this.killRing.length} items in the kill ring.`);
+
+    const selectedEntity = await quickPickKillRing(this.killRing, this.pointer ?? 0);
+    if (selectedEntity === undefined) {
+      return undefined;
+    }
+
+    const index = this.killRing.indexOf(selectedEntity);
+    if (0 <= index && index < this.killRing.length) {
+      this.pointer = index;
+    }
+
+    return selectedEntity;
   }
 }

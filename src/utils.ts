@@ -1,6 +1,6 @@
 import { Position, Range, TextEditor } from "vscode";
 
-export function equalPositions(positions1: Position[], positions2: Position[]): boolean {
+export function equalPositions(positions1: readonly Position[], positions2: readonly Position[]): boolean {
   if (positions1.length !== positions2.length) {
     return false;
   }

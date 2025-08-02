@@ -254,6 +254,11 @@
   //   "when": "editorFocus && findWidgetVisible && !isComposing"
   // },
   {
+    "key": "ctrl+c y",
+    "command": "emacs-mcx.browseKillRing",
+    "when": "!terminalFocus"
+  },
+  {
     "key": "ctrl+o",
     "command": "lineBreakInsert",
     "when": "editorTextFocus && !editorReadonly",

@@ -2267,6 +2267,11 @@
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "ctrl+c y",
+        "command": "emacs-mcx.browseKillRing",
+        "when": "!terminalFocus"
+      },
+      {
         "key": "ctrl+o",
         "command": "lineBreakInsert",
         "when": "editorTextFocus && !editorReadonly"

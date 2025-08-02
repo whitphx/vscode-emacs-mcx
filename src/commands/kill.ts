@@ -220,3 +220,12 @@ export class YankPop extends KillYankCommand {
     revealPrimaryActive(textEditor);
   }
 }
+
+export class BrowseKillRing extends KillYankCommand {
+  public readonly id = "browseKillRing";
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
+    await this.killYanker.browseKillRing();
+    revealPrimaryActive(textEditor);
+  }
+}
