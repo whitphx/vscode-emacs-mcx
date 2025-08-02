@@ -231,7 +231,7 @@ class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
 }
 
 async function quickPickKillRingEntity(
-  killRingEntities: KillRingEntity[],
+  killRingEntities: readonly KillRingEntity[],
   initialActiveIndex: number,
 ): Promise<KillRingEntity | undefined> {
   const disposables: vscode.Disposable[] = [];
