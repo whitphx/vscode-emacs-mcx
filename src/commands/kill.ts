@@ -218,6 +218,9 @@ export class YankPop extends KillYankCommand {
   public readonly id = "yankPop";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    if (prefixArgument != null) {
+      this.killYanker.killRing?.addPointer(prefixArgument - 1);
+    }
     await this.killYanker.yankPop();
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
