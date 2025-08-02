@@ -232,12 +232,12 @@ export class KillYanker implements vscode.Disposable {
     }
   }
 
-  public async yankKillRingEntity(killRingEntityToPaste: KillRingEntity): Promise<void> {
+  public async yankKillRingEntity(killRingEntityToPaste: KillRingEntity, interrupt = false): Promise<void> {
     this.textChangeCount = 0;
     await this.pasteKillRingEntity(killRingEntityToPaste);
     this.prevYankChanges = this.textChangeCount;
 
-    this.continuousYankInterrupted = false;
+    this.continuousYankInterrupted = interrupt;
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
@@ -295,8 +295,7 @@ export class KillYanker implements vscode.Disposable {
         // browse-kill-ring is called after yank, so it works as yank-pop.
         await this.revertPreviousYank();
       }
-      await this.yankKillRingEntity(selectedEntity);
-      this.interruptYank();
+      await this.yankKillRingEntity(selectedEntity, true);
     }
   }
 
@@ -332,10 +331,6 @@ export class KillYanker implements vscode.Disposable {
     }
 
     return success;
-  }
-
-  public interruptYank(): void {
-    this.continuousYankInterrupted = true;
   }
 
   private isYankInterrupted(): boolean {
