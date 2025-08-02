@@ -188,29 +188,102 @@ suite("Yank", () => {
     assertTextEqual(activeTextEditor, "\nLorem ipsum\n");
   });
 
-  test("the clipboard text is pushed to the kill-ring if it doesn't exist as the latest killed item", async () => {
-    await clearTextEditor(activeTextEditor, "foo");
-    setEmptyCursors(activeTextEditor, [0, 0]);
-    await emulator.runCommand("killLine");
+  (
+    [
+      ["prefixArgument is undefined", () => {}],
+      [
+        "prefixArgument is 1",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(1);
+        },
+      ],
+    ] as Array<[string, () => Promise<void>]>
+  ).forEach(([desc, preFn]) => {
+    test(`the clipboard text is pushed to the kill-ring if it doesn't exist as the latest killed item when ${desc}`, async () => {
+      await clearTextEditor(activeTextEditor, "foo");
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("killLine");
 
-    await clearTextEditor(activeTextEditor);
+      await clearTextEditor(activeTextEditor);
 
-    vscode.env.clipboard.writeText("Lorem ipsum");
-    setEmptyCursors(activeTextEditor, [0, 0]);
+      vscode.env.clipboard.writeText("Lorem ipsum");
+      setEmptyCursors(activeTextEditor, [0, 0]);
 
-    await emulator.runCommand("yank");
+      await preFn();
 
-    assertCursorsEqual(activeTextEditor, [0, 11]);
-    assertTextEqual(activeTextEditor, "Lorem ipsum");
+      await emulator.runCommand("yank");
 
-    await emulator.runCommand("yankPop");
+      assertCursorsEqual(activeTextEditor, [0, 11]);
+      assertTextEqual(activeTextEditor, "Lorem ipsum");
 
-    assertCursorsEqual(activeTextEditor, [0, 3]);
-    assertTextEqual(activeTextEditor, "foo");
+      await emulator.runCommand("yankPop");
 
-    await emulator.runCommand("yankPop");
+      assertCursorsEqual(activeTextEditor, [0, 3]);
+      assertTextEqual(activeTextEditor, "foo");
 
-    assertCursorsEqual(activeTextEditor, [0, 11]);
-    assertTextEqual(activeTextEditor, "Lorem ipsum");
+      await emulator.runCommand("yankPop");
+
+      assertCursorsEqual(activeTextEditor, [0, 11]);
+      assertTextEqual(activeTextEditor, "Lorem ipsum");
+    });
+  });
+
+  (
+    [
+      // Cases where prefixArgument is not 1.
+      [
+        "prefixArgument is 0",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(0);
+        },
+      ],
+      [
+        "prefixArgument is 2",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.subsequentArgumentDigit(2);
+        },
+      ],
+      [
+        "prefixArgument is -1",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.negativeArgument();
+        },
+      ],
+      [
+        "prefixArgument is -2",
+        async () => {
+          await emulator.universalArgument();
+          await emulator.negativeArgument();
+          await emulator.subsequentArgumentDigit(2);
+        },
+      ],
+    ] as Array<[string, () => Promise<void>]>
+  ).forEach(([desc, preFn]) => {
+    test(`the clipboard text is NOT pushed when (${desc})`, async () => {
+      await clearTextEditor(activeTextEditor, "foo");
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("killLine");
+
+      await clearTextEditor(activeTextEditor);
+
+      vscode.env.clipboard.writeText("Lorem ipsum");
+      setEmptyCursors(activeTextEditor, [0, 0]);
+
+      await preFn();
+
+      await emulator.runCommand("yank");
+
+      assertCursorsEqual(activeTextEditor, [0, 3]);
+      assertTextEqual(activeTextEditor, "foo");
+
+      await emulator.runCommand("yankPop");
+
+      assertCursorsEqual(activeTextEditor, [0, 3]);
+      assertTextEqual(activeTextEditor, "foo");
+    });
   });
 });
