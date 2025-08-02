@@ -54,7 +54,7 @@ export class KillRing {
       return;
     }
 
-    this.pointer = (this.pointer + delta + this.killRing.length) % this.killRing.length;
+    this.pointer = ((this.pointer + delta) % this.killRing.length + this.killRing.length) % this.killRing.length;
   }
 
   public async browse(): Promise<KillRingEntity | undefined> {
