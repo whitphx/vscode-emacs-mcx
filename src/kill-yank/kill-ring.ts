@@ -40,7 +40,7 @@ export class KillRing {
     return this.killRing[0];
   }
 
-  public pop(delta: number = 1): KillRingEntity | undefined {
+  public pop(delta: number): KillRingEntity | undefined {
     if (this.pointer === null || this.killRing.length === 0) {
       return undefined;
     }

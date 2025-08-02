@@ -241,13 +241,11 @@ export class KillYanker implements vscode.Disposable {
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
   }
 
-  public async yank(prefixArgument: number | undefined): Promise<void> {
+  public async yank(delta: number = 1): Promise<void> {
     if (this.killRing == null) {
       const text = await vscode.env.clipboard.readText();
       return this.pasteString(text);
     }
-
-    const delta = prefixArgument ?? 1;
 
     if (delta === 1) {
       const latestKill = this.killRing.getLatest();
@@ -266,7 +264,7 @@ export class KillYanker implements vscode.Disposable {
     await this.yankKillRingEntity(killRingEntityToPaste);
   }
 
-  public async yankPop(prefixArgument: number | undefined): Promise<void> {
+  public async yankPop(delta: number = 1): Promise<void> {
     if (this.killRing == null) {
       return;
     }
@@ -275,8 +273,6 @@ export class KillYanker implements vscode.Disposable {
       MessageManager.showMessage("Previous command was not a yank");
       return;
     }
-
-    const delta = prefixArgument ?? 1;
 
     const killRingEntity = this.killRing.pop(delta);
     if (killRingEntity == null) {
