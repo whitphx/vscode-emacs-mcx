@@ -116,7 +116,7 @@ function compileKeybinding(opts: { key: string; command?: string; when?: string;
       key: replaceAll(key, "meta", "alt"),
       command,
       when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixAlt"),
-      ...(args ? { args } : {}),
+      ...(args !== undefined ? { args } : {}),
     });
 
     // Generate a keybinding using CMD as meta for macOS.
@@ -124,7 +124,7 @@ function compileKeybinding(opts: { key: string; command?: string; when?: string;
       mac: replaceAll(key, "meta", "cmd"),
       command,
       when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixMacCmd"),
-      ...(args ? { args } : {}),
+      ...(args !== undefined ? { args } : {}),
     });
 
     // Generate keybindings using ESC and Ctrl+[ as meta.
@@ -135,13 +135,13 @@ function compileKeybinding(opts: { key: string; command?: string; when?: string;
         key: keyWithEscapeMeta,
         command,
         when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
-        ...(args ? { args } : {}),
+        ...(args !== undefined ? { args } : {}),
       });
       keybindings.push({
         key: keyWithEscapeMeta.replace("escape", "ctrl+["),
         command,
         when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixCtrlLeftBracket"),
-        ...(args ? { args } : {}),
+        ...(args !== undefined ? { args } : {}),
       });
     } else {
       console.warn(
@@ -153,7 +153,7 @@ function compileKeybinding(opts: { key: string; command?: string; when?: string;
       key,
       command,
       when,
-      ...(args ? { args } : {}),
+      ...(args !== undefined ? { args } : {}),
     });
   }
 
@@ -346,7 +346,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
         key: num.toString(),
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus",
-        args: [num],
+        args: num,
       }),
     );
     keybindings.push(
@@ -354,7 +354,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
         key: `meta+${num.toString()}`,
         command: "emacs-mcx.subsequentArgumentDigit",
         when: "emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
-        args: [num],
+        args: num,
       }),
     );
     keybindings.push(
@@ -362,14 +362,14 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
         key: `meta+${num.toString()}`,
         command: "emacs-mcx.digitArgument",
         when: "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.enableDigitArgument",
-        args: [num],
+        args: num,
       }),
     );
     keybindings.push({
       key: num.toString(),
       command: "emacs-mcx.typeChar",
       when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus",
-      args: [num.toString()],
+      args: num.toString(),
     });
   }
 
@@ -387,7 +387,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
       key: char,
       when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
       command: "emacs-mcx.typeChar",
-      args: [char],
+      args: char,
     });
   }
 
@@ -396,7 +396,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     key: "space",
     when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly",
     command: "emacs-mcx.typeChar",
-    args: [" "],
+    args: " ",
   });
   keybindings.push({
     key: "enter",
@@ -420,7 +420,7 @@ export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
       key: char,
       when: "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly",
       command: "emacs-mcx.typeChar",
-      args: [char],
+      args: char,
     });
   }
 
