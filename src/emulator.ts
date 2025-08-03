@@ -161,6 +161,13 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
     vscode.window.onDidChangeTextEditorVisibleRanges(this.onDidChangeTextEditorVisibleRanges, this, this.disposables);
 
+    const searchState: FindCommands.SearchState = {
+      startSelections: undefined,
+    };
+    const killYanker = new KillYanker(this, killRing, minibuffer);
+    this.killYanker = killYanker;
+    this.registerDisposable(killYanker);
+
     this.commandRegistry = new EmacsCommandRegistry();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,6 +198,24 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       TabCommands.TabToTabStop,
       IndentCommands.DeleteIndentation,
       [NavigationCommands.GotoLine, minibuffer],
+      NavigationCommands.FindDefinitions,
+      [FindCommands.IsearchForward, searchState],
+      [FindCommands.IsearchBackward, searchState],
+      [FindCommands.IsearchForwardRegexp, searchState],
+      [FindCommands.IsearchBackwardRegexp, searchState],
+      [FindCommands.QueryReplace, searchState],
+      [FindCommands.QueryReplaceRegexp, searchState],
+      [FindCommands.IsearchAbort, searchState],
+      [FindCommands.IsearchExit, searchState],
+      [KillCommands.KillWord, killYanker],
+      [KillCommands.BackwardKillWord, killYanker],
+      [KillCommands.KillLine, killYanker],
+      [KillCommands.KillWholeLine, killYanker],
+      [KillCommands.KillRegion, killYanker],
+      [KillCommands.CopyRegion, killYanker],
+      [KillCommands.Yank, killYanker],
+      [KillCommands.YankPop, killYanker],
+      [KillCommands.BrowseKillRing, killYanker],
     ];
     for (const item of commandClasses) {
       if (Array.isArray(item)) {
@@ -201,33 +226,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         this.commandRegistry.register(new CommandClass(this));
       }
     }
-
-    this.commandRegistry.register(new NavigationCommands.FindDefinitions(this));
-
-    const searchState: FindCommands.SearchState = {
-      startSelections: undefined,
-    };
-    this.commandRegistry.register(new FindCommands.IsearchForward(this, searchState));
-    this.commandRegistry.register(new FindCommands.IsearchBackward(this, searchState));
-    this.commandRegistry.register(new FindCommands.IsearchForwardRegexp(this, searchState));
-    this.commandRegistry.register(new FindCommands.IsearchBackwardRegexp(this, searchState));
-    this.commandRegistry.register(new FindCommands.QueryReplace(this, searchState));
-    this.commandRegistry.register(new FindCommands.QueryReplaceRegexp(this, searchState));
-    this.commandRegistry.register(new FindCommands.IsearchAbort(this, searchState));
-    this.commandRegistry.register(new FindCommands.IsearchExit(this, searchState));
-
-    const killYanker = new KillYanker(this, killRing, minibuffer);
-    this.commandRegistry.register(new KillCommands.KillWord(this, killYanker));
-    this.commandRegistry.register(new KillCommands.BackwardKillWord(this, killYanker));
-    this.commandRegistry.register(new KillCommands.KillLine(this, killYanker));
-    this.commandRegistry.register(new KillCommands.KillWholeLine(this, killYanker));
-    this.commandRegistry.register(new KillCommands.KillRegion(this, killYanker));
-    this.commandRegistry.register(new KillCommands.CopyRegion(this, killYanker));
-    this.commandRegistry.register(new KillCommands.Yank(this, killYanker));
-    this.commandRegistry.register(new KillCommands.YankPop(this, killYanker));
-    this.commandRegistry.register(new KillCommands.BrowseKillRing(this, killYanker));
-    this.killYanker = killYanker;
-    this.registerDisposable(killYanker);
 
     const registerCommandState = new RegisterCommands.RegisterCommandState();
     this.commandRegistry.register(new RegisterCommands.CopyToRegister(this, registerCommandState));
