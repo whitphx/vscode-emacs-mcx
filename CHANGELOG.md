@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.0] - 2025-08-03
+
+### Fix
+
+- `yank-pop` calls `yank-from-kill-ring` (same as `browse-kill-ring` in this extension) when the previous command was not a yank, [#2377](https://github.com/whitphx/vscode-emacs-mcx/pull/2377).
+
 ## [0.87.2] - 2025-08-03
 
 ### Fix
