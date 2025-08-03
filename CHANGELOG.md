@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.87.2] - 2025-08-03
+
+### Fix
+
+- `yank` and `yank-pop` accept prefix-argument, [#2376](https://github.com/whitphx/vscode-emacs-mcx/pull/2376).
+
 ## [0.87.1] - 2025-08-02
 
 ### Fix
