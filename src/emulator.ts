@@ -332,13 +332,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   };
 
   public onDidChangeTextEditorSelection = (e: vscode.TextEditorSelectionChangeEvent): void => {
+    if (e.textEditor !== this.textEditor) {
+      return;
+    }
+
     if (!this.rectMode) {
       this.nativeSelectionsStore.set(e.textEditor, e.textEditor.selections);
     }
-
-    if (e.textEditor === this.textEditor) {
-      this.onDidInterruptTextEditor({ reason: "selection-changed", originalEvent: e });
-    }
+    this.onDidInterruptTextEditor({ reason: "selection-changed", originalEvent: e });
   };
 
   public onDidChangeTextEditorVisibleRanges = (e: vscode.TextEditorVisibleRangesChangeEvent) => {
