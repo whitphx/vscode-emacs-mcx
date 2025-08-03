@@ -168,6 +168,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 
+    const registerCommandState = new RegisterCommands.RegisterCommandState();
+
     this.commandRegistry = new EmacsCommandRegistry();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -216,6 +218,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [KillCommands.Yank, killYanker],
       [KillCommands.YankPop, killYanker],
       [KillCommands.BrowseKillRing, killYanker],
+      [RegisterCommands.CopyToRegister, registerCommandState],
+      [RegisterCommands.InsertRegister, registerCommandState],
+      [RegisterCommands.CopyRectangleToRegister, registerCommandState],
+      [RegisterCommands.PointToRegister, registerCommandState],
+      [RegisterCommands.JumpToRegister, registerCommandState],
+      [RegisterCommands.RegisterNameCommand, registers, registerCommandState],
     ];
     for (const item of commandClasses) {
       if (Array.isArray(item)) {
@@ -226,14 +234,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         this.commandRegistry.register(new CommandClass(this));
       }
     }
-
-    const registerCommandState = new RegisterCommands.RegisterCommandState();
-    this.commandRegistry.register(new RegisterCommands.CopyToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.InsertRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.CopyRectangleToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.PointToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.JumpToRegister(this, registerCommandState));
-    this.commandRegistry.register(new RegisterCommands.RegisterNameCommand(this, registers, registerCommandState));
 
     this.commandRegistry.register(new RectangleCommands.StartAcceptingRectCommand(this));
     this.commandRegistry.register(new RectangleCommands.KillRectangle(this, rectangleState));
