@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import assert from "assert";
+import sinon from "sinon";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
@@ -369,5 +371,57 @@ suite("Yank", () => {
       assertCursorsEqual(activeTextEditor, [0, 3]);
       assertTextEqual(activeTextEditor, "foo");
     });
+  });
+});
+
+suite("yank-from-kill-ring", () => {
+  let activeTextEditor: vscode.TextEditor;
+  let killRing: KillRing;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = "\n\n";
+    activeTextEditor = await setupWorkspace(initialText);
+    killRing = new KillRing();
+    sinon.stub(killRing, "browse").callsFake(() => Promise.resolve(killRing.getTop()));
+    emulator = new EmacsEmulator(activeTextEditor, killRing);
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("the clipboard text is pushed to the kill-ring if the kill ring is empty", async () => {
+    vscode.env.clipboard.writeText("Lorem ipsum");
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    await emulator.runCommand("yankPop"); // yank-pop works as yank-from-kill-ring when called after a non-kill command.
+
+    assert.strictEqual(killRing.getTop()?.asString(), "Lorem ipsum");
+
+    assertCursorsEqual(activeTextEditor, [1, 11]);
+    assertTextEqual(activeTextEditor, "\nLorem ipsum\n");
+  });
+
+  test("the clipboard text is pushed to the kill-ring if it doesn't exist as the latest killed item", async () => {
+    await clearTextEditor(activeTextEditor, "foo");
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.runCommand("killLine");
+
+    assert.strictEqual(killRing.getTop()?.asString(), "foo");
+
+    await clearTextEditor(activeTextEditor);
+
+    vscode.env.clipboard.writeText("Lorem ipsum");
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.runCommand("yankPop"); // yank-pop works as yank-from-kill-ring when called after a non-kill command.
+
+    assert.strictEqual(killRing.getTop()?.asString(), "Lorem ipsum");
+    assertCursorsEqual(activeTextEditor, [0, 11]);
+    assertTextEqual(activeTextEditor, "Lorem ipsum");
+
+    await emulator.runCommand("yankPop"); // This yank-pop called after yank-from-kill-ring also works as yank-from-kill-ring.
+
+    assertCursorsEqual(activeTextEditor, [0, 22]);
+    assertTextEqual(activeTextEditor, "Lorem ipsumLorem ipsum");
   });
 });
