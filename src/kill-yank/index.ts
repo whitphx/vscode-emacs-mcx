@@ -286,7 +286,7 @@ export class KillYanker implements vscode.Disposable {
     await this.yankKillRingEntity(killRingEntity);
   }
 
-  public async browseKillRing(): Promise<void> {
+  public async yankFromKillRing(): Promise<void> {
     const killRing = this.killRing;
     if (killRing == null) {
       return;

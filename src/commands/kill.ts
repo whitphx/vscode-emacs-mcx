@@ -220,7 +220,7 @@ export class YankPop extends KillYankCommand {
       // When `M-y` is called after a non-kill command, it works as `yank-from-kill-ring`.
       // Ref: https://www.gnu.org/software/emacs/news/NEWS.28.html#org41bb559
       this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
-      await this.killYanker.browseKillRing();
+      await this.killYanker.yankFromKillRing();
       this.emacsController.exitMarkMode();
       MessageManager.showMessage("Mark set");
     } else {
@@ -235,7 +235,9 @@ export class BrowseKillRing extends KillYankCommand {
   public readonly id = "browseKillRing";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
-    await this.killYanker.browseKillRing();
+    // In Emacs, `browse-kill-ring` is different from `yank-from-kill-ring`,
+    // but we use `yank-from-kill-ring` here for simplicity in this extension.
+    await this.killYanker.yankFromKillRing();
     revealPrimaryActive(textEditor);
   }
 }
