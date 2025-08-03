@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.5] - 2025-08-04
+
+### Fix
+
+- Internal refactoring of the `onDidChangeTextEditorSelection` handler, which maybe fixes unexpected cursor position changes, [#2388](https://github.com/whitphx/vscode-emacs-mcx/pull/2388).
+
 ## [0.88.4] - 2025-08-04
 
 ### Fix
