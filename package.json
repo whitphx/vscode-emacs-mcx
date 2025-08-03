@@ -6048,7 +6048,7 @@
     "webpack": "npm run webpack:dev",
     "test-compile": "tsc && tsc-alias",
     "gen-keys": "tsx ./keybinding-generator/cli.mts",
-    "test-gen-keys": "mocha --import=tsx './keybinding-generator/*.test.*'",
+    "test-gen-keys": "mocha --import=tsx 'keybinding-generator/*.test.*'",
     "fix:prettier": "prettier --write .",
     "fix:eslint": "eslint src keybinding-generator --fix",
     "check:prettier": "prettier --check .",
