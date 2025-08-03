@@ -157,6 +157,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocument, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
+    vscode.window.onDidChangeTextEditorVisibleRanges(this.onDidChangeTextEditorVisibleRanges, this, this.disposables);
 
     this.commandRegistry = new EmacsCommandRegistry();
 
@@ -173,24 +174,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry.register(new MoveCommands.EndOfBuffer(this));
     this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this));
     this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this));
-    vscode.window.onDidChangeTextEditorVisibleRanges(
-      (e) => {
-        if (e.textEditor !== this.textEditor) {
-          return;
-        }
-        if (Configuration.instance.keepCursorInVisibleRange) {
-          if (this.hasMultipleSelections()) {
-            // This feature messes up the multi-cursors so disable it.
-            // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2126
-            return;
-          }
-          // Keep the primary cursor in the visible range when scrolling
-          MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
-        }
-      },
-      this,
-      this.disposables,
-    );
     this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
     this.commandRegistry.register(new MoveCommands.MoveToWindowLineTopBottom(this));
@@ -355,6 +338,21 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     if (e.textEditor === this.textEditor) {
       this.onDidInterruptTextEditor({ reason: "selection-changed", originalEvent: e });
+    }
+  };
+
+  public onDidChangeTextEditorVisibleRanges = (e: vscode.TextEditorVisibleRangesChangeEvent) => {
+    if (e.textEditor !== this.textEditor) {
+      return;
+    }
+    if (Configuration.instance.keepCursorInVisibleRange) {
+      if (this.hasMultipleSelections()) {
+        // This feature messes up the multi-cursors so disable it.
+        // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2126
+        return;
+      }
+      // Keep the primary cursor in the visible range when scrolling
+      MoveCommands.movePrimaryCursorIntoVisibleRange(this.textEditor, this.isInMarkMode, this);
     }
   };
 
