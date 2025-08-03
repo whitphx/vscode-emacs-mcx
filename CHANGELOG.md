@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.4] - 2025-08-04
+
+### Fix
+
+- Internal refactoring around the `keepCursorInVisibleRange` config, [#2386](https://github.com/whitphx/vscode-emacs-mcx/pull/2386).
+
 ## [0.88.3] - 2025-08-03
 
 ### Fix
