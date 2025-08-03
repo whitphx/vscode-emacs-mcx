@@ -19,6 +19,7 @@ export async function quickPickKillRing(
   try {
     return await new Promise<KillRingEntity | undefined>((resolve) => {
       const input = vscode.window.createQuickPick<KillRingEntityQuickPickItem>();
+      input.placeholder = "Kill Ring";
 
       input.items = killRing.map((entity) => new KillRingEntityQuickPickItem(entity));
 
