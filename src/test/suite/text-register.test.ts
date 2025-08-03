@@ -33,7 +33,7 @@ suite("Text registers", () => {
     await emulator.runCommand("forwardChar");
     assertSelectionsEqual(activeTextEditor, [0, 2, 1, 4]);
     await emulator.runCommand("copyToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [1, 4]);
     assert.equal(emulator.isInMarkMode, false);
@@ -42,7 +42,7 @@ suite("Text registers", () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
     await emulator.setMarkCommand();
     await emulator.runCommand("copyToRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
@@ -50,17 +50,17 @@ suite("Text registers", () => {
     await clearTextEditor(activeTextEditor);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["c"]);
+    await emulator.runCommand("registerNameCommand", "c");
     assertTextEqual(activeTextEditor, "");
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "");
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "23456789\nabcd");
     assertCursorsEqual(activeTextEditor, [1, 4]);
   });
@@ -74,7 +74,7 @@ suite("Text registers", () => {
     assertSelectionsEqual(activeTextEditor, [0, 2, 1, 4]);
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "01efghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
@@ -84,7 +84,7 @@ suite("Text registers", () => {
     await emulator.setMarkCommand();
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyToRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "01efghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
@@ -92,13 +92,13 @@ suite("Text registers", () => {
     // Insert
     setEmptyCursors(activeTextEditor, [0, 2]);
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
 
     // Insert empty string
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
   });
 
@@ -110,7 +110,7 @@ suite("Text registers", () => {
     await emulator.runCommand("forwardChar");
     assertSelectionsEqual(activeTextEditor, [0, 2, 1, 4]);
     await emulator.runCommand("copyRectangleToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [1, 4]);
     assert.equal(emulator.isInMarkMode, false);
@@ -118,7 +118,7 @@ suite("Text registers", () => {
     // Empty string
     setEmptyCursors(activeTextEditor, [0, 2]);
     await emulator.runCommand("copyRectangleToRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "0123456789\nabcdefghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
@@ -126,23 +126,23 @@ suite("Text registers", () => {
     await clearTextEditor(activeTextEditor);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["c"]);
+    await emulator.runCommand("registerNameCommand", "c");
     assertTextEqual(activeTextEditor, "");
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "");
 
     // Insert rectangle
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "23\ncd");
 
     // Insert rectangle in an indented line
     setEmptyCursors(activeTextEditor, [1, 2]);
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "23\ncd23\n  cd");
   });
 
@@ -155,7 +155,7 @@ suite("Text registers", () => {
     assertSelectionsEqual(activeTextEditor, [0, 2, 1, 4]);
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyRectangleToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "01456789\nabefghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [1, 2]); // Cursor is kept in the same line
     assert.equal(emulator.isInMarkMode, false);
@@ -164,7 +164,7 @@ suite("Text registers", () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyRectangleToRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "01456789\nabefghij\nABCDEFGHIJ");
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
@@ -172,23 +172,23 @@ suite("Text registers", () => {
     await clearTextEditor(activeTextEditor);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["c"]);
+    await emulator.runCommand("registerNameCommand", "c");
     assertTextEqual(activeTextEditor, "");
     assertCursorsEqual(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, "");
 
     // Insert rectangle
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "23\ncd");
 
     // Insert rectangle in an indented line
     setEmptyCursors(activeTextEditor, [1, 2]);
     await emulator.runCommand("insertRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, "23\ncd23\n  cd");
   });
 });
