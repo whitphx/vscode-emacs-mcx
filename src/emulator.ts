@@ -174,33 +174,33 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     type EmacsCommandClass = { new (emulator: EmacsEmulator, ...args: any[]): EmacsCommand };
-    const commandClasses: Array<EmacsCommandClass | [EmacsCommandClass, ...args: unknown[]]> = [
-      MoveCommands.ForwardChar,
-      MoveCommands.BackwardChar,
-      MoveCommands.NextLine,
-      MoveCommands.PreviousLine,
-      MoveCommands.MoveBeginningOfLine,
-      MoveCommands.MoveEndOfLine,
-      MoveCommands.ForwardWord,
-      MoveCommands.BackwardWord,
-      MoveCommands.BackToIndentation,
-      MoveCommands.BeginningOfBuffer,
-      MoveCommands.EndOfBuffer,
-      MoveCommands.ScrollUpCommand,
-      MoveCommands.ScrollDownCommand,
-      MoveCommands.ForwardParagraph,
-      MoveCommands.BackwardParagraph,
-      MoveCommands.MoveToWindowLineTopBottom,
-      EditCommands.DeleteBackwardChar,
-      EditCommands.DeleteForwardChar,
-      EditCommands.DeleteHorizontalSpace,
-      EditCommands.NewLine,
-      DeleteBlankLines,
-      RecenterTopBottom,
-      TabCommands.TabToTabStop,
-      IndentCommands.DeleteIndentation,
+    const commandClasses: Array<[EmacsCommandClass, ...args: unknown[]]> = [
+      [MoveCommands.ForwardChar],
+      [MoveCommands.BackwardChar],
+      [MoveCommands.NextLine],
+      [MoveCommands.PreviousLine],
+      [MoveCommands.MoveBeginningOfLine],
+      [MoveCommands.MoveEndOfLine],
+      [MoveCommands.ForwardWord],
+      [MoveCommands.BackwardWord],
+      [MoveCommands.BackToIndentation],
+      [MoveCommands.BeginningOfBuffer],
+      [MoveCommands.EndOfBuffer],
+      [MoveCommands.ScrollUpCommand],
+      [MoveCommands.ScrollDownCommand],
+      [MoveCommands.ForwardParagraph],
+      [MoveCommands.BackwardParagraph],
+      [MoveCommands.MoveToWindowLineTopBottom],
+      [EditCommands.DeleteBackwardChar],
+      [EditCommands.DeleteForwardChar],
+      [EditCommands.DeleteHorizontalSpace],
+      [EditCommands.NewLine],
+      [DeleteBlankLines],
+      [RecenterTopBottom],
+      [TabCommands.TabToTabStop],
+      [IndentCommands.DeleteIndentation],
       [NavigationCommands.GotoLine, minibuffer],
-      NavigationCommands.FindDefinitions,
+      [NavigationCommands.FindDefinitions],
       [FindCommands.IsearchForward, searchState],
       [FindCommands.IsearchBackward, searchState],
       [FindCommands.IsearchForwardRegexp, searchState],
@@ -241,22 +241,17 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [PareditCommands.KillSexp, killYanker],
       [PareditCommands.BackwardKillSexp, killYanker],
       [PareditCommands.PareditKill, killYanker],
-      AddSelectionToNextFindMatch,
-      AddSelectionToPreviousFindMatch,
-      CaseCommands.TransformToUppercase,
-      CaseCommands.TransformToLowercase,
-      CaseCommands.TransformToTitlecase,
-      OtherWindowCommands.ScrollOtherWindow,
-      OtherWindowCommands.ScrollOtherWindowDown,
+      [AddSelectionToNextFindMatch],
+      [AddSelectionToPreviousFindMatch],
+      [CaseCommands.TransformToUppercase],
+      [CaseCommands.TransformToLowercase],
+      [CaseCommands.TransformToTitlecase],
+      [OtherWindowCommands.ScrollOtherWindow],
+      [OtherWindowCommands.ScrollOtherWindowDown],
     ];
     for (const item of commandClasses) {
-      if (Array.isArray(item)) {
-        const [CommandClass, ...args] = item;
-        this.commandRegistry.register(new CommandClass(this, ...args));
-      } else {
-        const CommandClass = item;
-        this.commandRegistry.register(new CommandClass(this));
-      }
+      const [CommandClass, ...args] = item;
+      this.commandRegistry.register(new CommandClass(this, ...args));
     }
   }
 
