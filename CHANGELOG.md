@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.3] - 2025-08-03
+
+### Fix
+
+- Internal refactoring about the manner of argument passing, [#2379](https://github.com/whitphx/vscode-emacs-mcx/pull/2379) and [#2385](https://github.com/whitphx/vscode-emacs-mcx/pull/2385).
+- Remove `emacs-mcx.digitArgument` and `emacs-mcx.subsequentArgumentDigit` from the `commands` contribution point as they don't make sense, [#2385](https://github.com/whitphx/vscode-emacs-mcx/pull/2385).
+
 ## [0.88.2] - 2025-08-03
 
 ### Fix
