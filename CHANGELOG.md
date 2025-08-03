@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.6] - 2025-08-04
+
+### Fix
+
+- Share the killed rectangle across all editors, [#2390](https://github.com/whitphx/vscode-emacs-mcx/pull/2390).
+
 ## [0.88.5] - 2025-08-04
 
 ### Fix
