@@ -114,36 +114,24 @@ export function activate(context: vscode.ExtensionContext): void {
   }
 
   registerEmulatorCommand("emacs-mcx.subsequentArgumentDigit", (emulator, args) => {
-    if (!Array.isArray(args)) {
+    if (typeof args !== "number") {
       return;
     }
-    const arg = args[0];
-    if (typeof arg !== "number") {
-      return;
-    }
-    return emulator.subsequentArgumentDigit(arg);
+    return emulator.subsequentArgumentDigit(args);
   });
 
   registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
-    if (!Array.isArray(args)) {
+    if (typeof args !== "number") {
       return;
     }
-    const arg = args[0];
-    if (typeof arg !== "number") {
-      return;
-    }
-    return emulator.digitArgument(arg);
+    return emulator.digitArgument(args);
   });
 
   registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
-    if (!Array.isArray(args)) {
+    if (typeof args !== "string") {
       return;
     }
-    const arg = args[0];
-    if (typeof arg !== "string") {
-      return;
-    }
-    return emulator.typeChar(arg);
+    return emulator.typeChar(args);
   });
 
   moveCommandIds.map((commandName) => {
