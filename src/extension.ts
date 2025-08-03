@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import type { Registers } from "./commands/registers";
+import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
@@ -19,8 +20,11 @@ export function activate(context: vscode.ExtensionContext): void {
   const killRing = new KillRing(Configuration.instance.killRingMax);
   const minibuffer = new InputBoxMinibuffer();
   const registers: Registers = new Map();
+  const rectangleState: RectangleState = {
+    latestKilledRectangle: [],
+  };
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, registers);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, registers, rectangleState);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;
