@@ -102,44 +102,44 @@ export function activate(context: vscode.ExtensionContext): void {
   if (Configuration.instance.enableOverridingTypeCommand) {
     registerEmulatorCommand(
       "type",
-      (emulator, arg0) => {
-        const text = (arg0 as unknown as { text: string }).text; // XXX: The arguments of `type` is guaranteed to have this signature.
+      (emulator, args) => {
+        const text = (args as unknown as { text: string }).text; // XXX: The arguments of `type` is guaranteed to have this signature.
         // Capture typing characters for prefix argument functionality.
         logger.debug(`[type command]\t args.text = "${text}"`);
 
         return emulator.type(text);
       },
-      (arg0) => vscode.commands.executeCommand("default:type", arg0),
+      (args) => vscode.commands.executeCommand("default:type", args),
     );
   }
 
-  registerEmulatorCommand("emacs-mcx.subsequentArgumentDigit", (emulator, arg0) => {
-    if (!Array.isArray(arg0)) {
+  registerEmulatorCommand("emacs-mcx.subsequentArgumentDigit", (emulator, args) => {
+    if (!Array.isArray(args)) {
       return;
     }
-    const arg = arg0[0];
+    const arg = args[0];
     if (typeof arg !== "number") {
       return;
     }
     return emulator.subsequentArgumentDigit(arg);
   });
 
-  registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, arg0) => {
-    if (!Array.isArray(arg0)) {
+  registerEmulatorCommand("emacs-mcx.digitArgument", (emulator, args) => {
+    if (!Array.isArray(args)) {
       return;
     }
-    const arg = arg0[0];
+    const arg = args[0];
     if (typeof arg !== "number") {
       return;
     }
     return emulator.digitArgument(arg);
   });
 
-  registerEmulatorCommand("emacs-mcx.typeChar", (emulator, arg0) => {
-    if (!Array.isArray(arg0)) {
+  registerEmulatorCommand("emacs-mcx.typeChar", (emulator, args) => {
+    if (!Array.isArray(args)) {
       return;
     }
-    const arg = arg0[0];
+    const arg = args[0];
     if (typeof arg !== "string") {
       return;
     }
@@ -396,28 +396,28 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("jumpToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.registerNameCommand", (emulator, arg0) => {
-    return emulator.runCommand("registerNameCommand", arg0);
+  registerEmulatorCommand("emacs-mcx.registerNameCommand", (emulator, args) => {
+    return emulator.runCommand("registerNameCommand", args);
   });
 
-  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator, arg0) => {
-    return emulator.runCommand("scrollOtherWindow", arg0);
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator, args) => {
+    return emulator.runCommand("scrollOtherWindow", args);
   });
 
-  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator, arg0) => {
-    return emulator.runCommand("scrollOtherWindowDown", arg0);
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator, args) => {
+    return emulator.runCommand("scrollOtherWindowDown", args);
   });
 
-  registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {
-    if (typeof arg0 !== "object" || arg0 == null || Array.isArray(arg0)) {
+  registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {
+    if (typeof args !== "object" || args == null || Array.isArray(args)) {
       return;
     }
 
     if (
-      typeof arg0?.command === "string" &&
-      (typeof arg0?.prefixArgumentKey === "string" || arg0?.prefixArgumentKey == null)
+      typeof args?.command === "string" &&
+      (typeof args?.prefixArgumentKey === "string" || args?.prefixArgumentKey == null)
     ) {
-      return emulator.executeCommandWithPrefixArgument(arg0["command"], arg0["args"], arg0["prefixArgumentKey"]);
+      return emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
     }
   });
 }
