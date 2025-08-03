@@ -28,14 +28,14 @@ suite("Point registers", () => {
     // Save position
     setEmptyCursors(activeTextEditor, [0, 2]);
     await emulator.runCommand("pointToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [0, 2]);
 
     // Move cursor and jump back
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.runCommand("jumpToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [0, 2]);
   });
@@ -44,14 +44,14 @@ suite("Point registers", () => {
     // Save multiple cursor positions
     setEmptyCursors(activeTextEditor, [0, 2], [1, 3]);
     await emulator.runCommand("pointToRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [0, 2], [1, 3]);
 
     // Move cursors and jump back
     setEmptyCursors(activeTextEditor, [2, 5]);
     await emulator.runCommand("jumpToRegister");
-    await emulator.runCommand("registerNameCommand", ["b"]);
+    await emulator.runCommand("registerNameCommand", "b");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [0, 2], [1, 3]);
   });
@@ -63,7 +63,7 @@ suite("Point registers", () => {
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("pointToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assert.equal(emulator.isInMarkMode, true);
     assertTextEqual(activeTextEditor, initialText);
     assertSelectionsEqual(activeTextEditor, [0, 2, 1, 3]);
@@ -72,7 +72,7 @@ suite("Point registers", () => {
     emulator.exitMarkMode();
     setEmptyCursors(activeTextEditor, [2, 5]);
     await emulator.runCommand("jumpToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [1, 3]);
   });
@@ -81,7 +81,7 @@ suite("Point registers", () => {
     // Save position
     setEmptyCursors(activeTextEditor, [0, 2]);
     await emulator.runCommand("pointToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [0, 2]);
 
@@ -93,7 +93,7 @@ suite("Point registers", () => {
 
     // Move cursor and jump back
     await emulator.runCommand("jumpToRegister");
-    await emulator.runCommand("registerNameCommand", ["a"]);
+    await emulator.runCommand("registerNameCommand", "a");
     assertTextEqual(vscode.window.activeTextEditor!, initialText);
     assertCursorsEqual(vscode.window.activeTextEditor!, [0, 2]);
   });
@@ -101,7 +101,7 @@ suite("Point registers", () => {
   test("jump to non-existent register", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("jumpToRegister");
-    await emulator.runCommand("registerNameCommand", ["z"]);
+    await emulator.runCommand("registerNameCommand", "z");
     assertTextEqual(activeTextEditor, initialText);
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });

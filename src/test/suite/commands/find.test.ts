@@ -49,7 +49,7 @@ suite("isearch", () => {
 
     setEmptyCursors(activeTextEditor, [2, 0]);
 
-    await emulator.runCommand("isearchExit", [{ then: "cursorTop" }]);
+    await emulator.runCommand("isearchExit", { then: "cursorTop" });
 
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });
