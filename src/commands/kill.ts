@@ -221,6 +221,7 @@ export class YankPop extends KillYankCommand {
       // Ref: https://www.gnu.org/software/emacs/news/NEWS.28.html#org41bb559
       this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
       await this.killYanker.browseKillRing();
+      this.emacsController.exitMarkMode();
       MessageManager.showMessage("Mark set");
     } else {
       await this.killYanker.yankPop(prefixArgument);
