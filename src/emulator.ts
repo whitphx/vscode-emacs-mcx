@@ -224,6 +224,30 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [RegisterCommands.PointToRegister, registerCommandState],
       [RegisterCommands.JumpToRegister, registerCommandState],
       [RegisterCommands.RegisterNameCommand, registers, registerCommandState],
+      [RectangleCommands.StartAcceptingRectCommand],
+      [RectangleCommands.KillRectangle, rectangleState],
+      [RectangleCommands.CopyRectangleAsKill, rectangleState],
+      [RectangleCommands.DeleteRectangle, rectangleState],
+      [RectangleCommands.YankRectangle, rectangleState],
+      [RectangleCommands.OpenRectangle],
+      [RectangleCommands.ClearRectangle],
+      [RectangleCommands.StringRectangle, minibuffer],
+      [RectangleCommands.ReplaceKillRingToRectangle, killRing],
+      [PareditCommands.ForwardSexp],
+      [PareditCommands.BackwardSexp],
+      [PareditCommands.ForwardDownSexp],
+      [PareditCommands.BackwardUpSexp],
+      [PareditCommands.MarkSexp],
+      [PareditCommands.KillSexp, killYanker],
+      [PareditCommands.BackwardKillSexp, killYanker],
+      [PareditCommands.PareditKill, killYanker],
+      AddSelectionToNextFindMatch,
+      AddSelectionToPreviousFindMatch,
+      CaseCommands.TransformToUppercase,
+      CaseCommands.TransformToLowercase,
+      CaseCommands.TransformToTitlecase,
+      OtherWindowCommands.ScrollOtherWindow,
+      OtherWindowCommands.ScrollOtherWindowDown,
     ];
     for (const item of commandClasses) {
       if (Array.isArray(item)) {
@@ -234,35 +258,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         this.commandRegistry.register(new CommandClass(this));
       }
     }
-
-    this.commandRegistry.register(new RectangleCommands.StartAcceptingRectCommand(this));
-    this.commandRegistry.register(new RectangleCommands.KillRectangle(this, rectangleState));
-    this.commandRegistry.register(new RectangleCommands.CopyRectangleAsKill(this, rectangleState));
-    this.commandRegistry.register(new RectangleCommands.DeleteRectangle(this, rectangleState));
-    this.commandRegistry.register(new RectangleCommands.YankRectangle(this, rectangleState));
-    this.commandRegistry.register(new RectangleCommands.OpenRectangle(this));
-    this.commandRegistry.register(new RectangleCommands.ClearRectangle(this));
-    this.commandRegistry.register(new RectangleCommands.StringRectangle(this, minibuffer));
-    this.commandRegistry.register(new RectangleCommands.ReplaceKillRingToRectangle(this, killRing));
-
-    this.commandRegistry.register(new PareditCommands.ForwardSexp(this));
-    this.commandRegistry.register(new PareditCommands.BackwardSexp(this));
-    this.commandRegistry.register(new PareditCommands.ForwardDownSexp(this));
-    this.commandRegistry.register(new PareditCommands.BackwardUpSexp(this));
-    this.commandRegistry.register(new PareditCommands.MarkSexp(this));
-    this.commandRegistry.register(new PareditCommands.KillSexp(this, killYanker));
-    this.commandRegistry.register(new PareditCommands.BackwardKillSexp(this, killYanker));
-    this.commandRegistry.register(new PareditCommands.PareditKill(this, killYanker));
-
-    this.commandRegistry.register(new AddSelectionToNextFindMatch(this));
-    this.commandRegistry.register(new AddSelectionToPreviousFindMatch(this));
-
-    this.commandRegistry.register(new CaseCommands.TransformToUppercase(this));
-    this.commandRegistry.register(new CaseCommands.TransformToLowercase(this));
-    this.commandRegistry.register(new CaseCommands.TransformToTitlecase(this));
-
-    this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindow(this));
-    this.commandRegistry.register(new OtherWindowCommands.ScrollOtherWindowDown(this));
   }
 
   public setTextEditor(textEditor: TextEditor): void {
