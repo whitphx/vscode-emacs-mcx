@@ -2248,22 +2248,22 @@
       },
       {
         "key": "alt+y",
-        "command": "emacs-mcx.yank-pop",
+        "command": "emacs-mcx.yankPop",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+y",
-        "command": "emacs-mcx.yank-pop",
+        "command": "emacs-mcx.yankPop",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape y",
-        "command": "emacs-mcx.yank-pop",
+        "command": "emacs-mcx.yankPop",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ y",
-        "command": "emacs-mcx.yank-pop",
+        "command": "emacs-mcx.yankPop",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
