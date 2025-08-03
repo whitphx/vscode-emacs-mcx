@@ -400,12 +400,12 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("registerNameCommand", args);
   });
 
-  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator, args) => {
-    return emulator.runCommand("scrollOtherWindow", args);
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator) => {
+    return emulator.runCommand("scrollOtherWindow");
   });
 
-  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator, args) => {
-    return emulator.runCommand("scrollOtherWindowDown", args);
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator) => {
+    return emulator.runCommand("scrollOtherWindowDown");
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {
