@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.1] - 2025-08-03
+
+### Fix
+
+- `cmd+c` on search text input, [#2382](https://github.com/whitphx/vscode-emacs-mcx/pull/2382).
+
 ## [0.88.0] - 2025-08-03
 
 ### Fix
