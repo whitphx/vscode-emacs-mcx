@@ -1003,7 +1003,7 @@
       {
         "mac": "cmd+c",
         "command": "toggleFindCaseSensitive",
-        "when": "((findInputFocussed || replaceInputFocussed) && config.emacs-mcx.useMetaPrefixMacCmd) && !findInputFocussed && !replaceInputFocussed"
+        "when": "(findInputFocussed || replaceInputFocussed) && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "escape c",
@@ -1043,7 +1043,7 @@
       {
         "mac": "cmd+c",
         "command": "workbench.action.terminal.toggleFindCaseSensitive",
-        "when": "((terminalFindVisible && terminalHasBeenCreated || terminalFindVisible && terminalProcessSupported) && config.emacs-mcx.useMetaPrefixMacCmd) && !findInputFocussed && !replaceInputFocussed"
+        "when": "(terminalFindVisible && terminalHasBeenCreated || terminalFindVisible && terminalProcessSupported) && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "escape c",
@@ -1058,22 +1058,22 @@
       {
         "key": "alt+c",
         "command": "toggleSearchCaseSensitive",
-        "when": "(searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows) && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "((searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows)) && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+c",
         "command": "toggleSearchCaseSensitive",
-        "when": "((searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows) && config.emacs-mcx.useMetaPrefixMacCmd) && !findInputFocussed && !replaceInputFocussed"
+        "when": "((searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows)) && config.emacs-mcx.useMetaPrefixMacCmd && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "escape c",
         "command": "toggleSearchCaseSensitive",
-        "when": "(searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows) && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "((searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows)) && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ c",
         "command": "toggleSearchCaseSensitive",
-        "when": "(searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "((searchViewletFocus && isLinux) || (searchViewletFocus && !fileMatchOrFolderMatchFocus && isMac) || (searchViewletFocus && isWindows)) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+f",
