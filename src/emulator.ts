@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
+import type { EmacsCommand } from "./commands";
 import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
@@ -162,7 +163,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     this.commandRegistry = new EmacsCommandRegistry();
 
-    const commandClasses = [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type EmacsCommandClass = { new (emulator: EmacsEmulator, ...args: any[]): EmacsCommand };
+    const commandClasses: Array<EmacsCommandClass | [EmacsCommandClass, ...args: unknown[]]> = [
       MoveCommands.ForwardChar,
       MoveCommands.BackwardChar,
       MoveCommands.NextLine,
@@ -187,12 +190,18 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       RecenterTopBottom,
       TabCommands.TabToTabStop,
       IndentCommands.DeleteIndentation,
+      [NavigationCommands.GotoLine, minibuffer],
     ];
-    for (const CommandClass of commandClasses) {
-      this.commandRegistry.register(new CommandClass(this));
+    for (const item of commandClasses) {
+      if (Array.isArray(item)) {
+        const [CommandClass, ...args] = item;
+        this.commandRegistry.register(new CommandClass(this, ...args));
+      } else {
+        const CommandClass = item;
+        this.commandRegistry.register(new CommandClass(this));
+      }
     }
 
-    this.commandRegistry.register(new NavigationCommands.GotoLine(this, minibuffer));
     this.commandRegistry.register(new NavigationCommands.FindDefinitions(this));
 
     const searchState: FindCommands.SearchState = {
