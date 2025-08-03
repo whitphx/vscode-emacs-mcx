@@ -162,32 +162,35 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     this.commandRegistry = new EmacsCommandRegistry();
 
-    this.commandRegistry.register(new MoveCommands.ForwardChar(this));
-    this.commandRegistry.register(new MoveCommands.BackwardChar(this));
-    this.commandRegistry.register(new MoveCommands.NextLine(this));
-    this.commandRegistry.register(new MoveCommands.PreviousLine(this));
-    this.commandRegistry.register(new MoveCommands.MoveBeginningOfLine(this));
-    this.commandRegistry.register(new MoveCommands.MoveEndOfLine(this));
-    this.commandRegistry.register(new MoveCommands.ForwardWord(this));
-    this.commandRegistry.register(new MoveCommands.BackwardWord(this));
-    this.commandRegistry.register(new MoveCommands.BackToIndentation(this));
-    this.commandRegistry.register(new MoveCommands.BeginningOfBuffer(this));
-    this.commandRegistry.register(new MoveCommands.EndOfBuffer(this));
-    this.commandRegistry.register(new MoveCommands.ScrollUpCommand(this));
-    this.commandRegistry.register(new MoveCommands.ScrollDownCommand(this));
-    this.commandRegistry.register(new MoveCommands.ForwardParagraph(this));
-    this.commandRegistry.register(new MoveCommands.BackwardParagraph(this));
-    this.commandRegistry.register(new MoveCommands.MoveToWindowLineTopBottom(this));
-    this.commandRegistry.register(new EditCommands.DeleteBackwardChar(this));
-    this.commandRegistry.register(new EditCommands.DeleteForwardChar(this));
-    this.commandRegistry.register(new EditCommands.DeleteHorizontalSpace(this));
-    this.commandRegistry.register(new EditCommands.NewLine(this));
-    this.commandRegistry.register(new DeleteBlankLines(this));
-    this.commandRegistry.register(new RecenterTopBottom(this));
-
-    this.commandRegistry.register(new TabCommands.TabToTabStop(this));
-
-    this.commandRegistry.register(new IndentCommands.DeleteIndentation(this));
+    const commandClasses = [
+      MoveCommands.ForwardChar,
+      MoveCommands.BackwardChar,
+      MoveCommands.NextLine,
+      MoveCommands.PreviousLine,
+      MoveCommands.MoveBeginningOfLine,
+      MoveCommands.MoveEndOfLine,
+      MoveCommands.ForwardWord,
+      MoveCommands.BackwardWord,
+      MoveCommands.BackToIndentation,
+      MoveCommands.BeginningOfBuffer,
+      MoveCommands.EndOfBuffer,
+      MoveCommands.ScrollUpCommand,
+      MoveCommands.ScrollDownCommand,
+      MoveCommands.ForwardParagraph,
+      MoveCommands.BackwardParagraph,
+      MoveCommands.MoveToWindowLineTopBottom,
+      EditCommands.DeleteBackwardChar,
+      EditCommands.DeleteForwardChar,
+      EditCommands.DeleteHorizontalSpace,
+      EditCommands.NewLine,
+      DeleteBlankLines,
+      RecenterTopBottom,
+      TabCommands.TabToTabStop,
+      IndentCommands.DeleteIndentation,
+    ];
+    for (const CommandClass of commandClasses) {
+      this.commandRegistry.register(new CommandClass(this));
+    }
 
     this.commandRegistry.register(new NavigationCommands.GotoLine(this, minibuffer));
     this.commandRegistry.register(new NavigationCommands.FindDefinitions(this));
