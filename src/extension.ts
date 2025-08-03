@@ -240,7 +240,10 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("yank");
   });
 
-  registerEmulatorCommand("emacs-mcx.yank-pop", (emulator) => {
+  registerEmulatorCommand("emacs-mcx.yankPop", (emulator) => {
+    return emulator.runCommand("yankPop");
+  });
+  registerEmulatorCommand("emacs-mcx.yank-pop" /* For backward compatibility */, (emulator) => {
     return emulator.runCommand("yankPop");
   });
 
