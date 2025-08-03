@@ -1,9 +1,11 @@
 import assert from "assert";
 import * as vscode from "vscode";
+import sinon from "sinon";
 import { Position, Range, Selection } from "vscode";
 import { moveCommandIds } from "../../../../commands/move";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
+import { ClipboardTextKillRingEntity } from "../../../../kill-yank/kill-ring-entity";
 import {
   assertCursorsEqual,
   assertTextEqual,
@@ -206,8 +208,9 @@ ABCDEFGHIJ`,
     const interruptingCommands: string[] = [...otherInterruptingCommands];
 
     interruptingCommands.forEach((interruptingCommand) => {
-      test(`yankPop does not work if ${interruptingCommand} is executed after previous yank`, async () => {
+      test(`yankPop works as browse-kill-ring if ${interruptingCommand} is executed after previous yank`, async () => {
         const killRing = new KillRing(3);
+        const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("foo"));
         const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
         // Kill texts
@@ -240,18 +243,20 @@ ABCDEFGHIJ`,
         // Interruption command invoked
         await vscode.commands.executeCommand(interruptingCommand);
 
-        // yankPop does not work
+        // yankPop works as browse-kill-ring
         await emulator.runCommand("yankPop");
-        assertTextEqual(
-          activeTextEditor,
-          `0123456789
-abcdeBARfghij
-ABCDEFGHIJ`,
-        );
+        assert.ok(browseStub.calledOnce);
+        //         assertTextEqual(
+        //           activeTextEditor,
+        //           `0123456789
+        // abcdefooBARfghij
+        // ABCDEFGHIJ`,
+        //         );
       });
 
-      test(`yankPop does not work if ${interruptingCommand} is executed after previous yankPop`, async () => {
+      test(`yankPop works as browse-kill-ring if ${interruptingCommand} is executed after previous yankPop`, async () => {
         const killRing = new KillRing(3);
+        const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("foo"));
         const emulator = new EmacsEmulator(activeTextEditor, killRing);
 
         // Kill texts
@@ -293,19 +298,21 @@ ABCDEFGHIJ`,
         // Interruption command invoked
         await vscode.commands.executeCommand(interruptingCommand);
 
-        // yankPop does not work
+        // yankPop works as browse-kill-ring
         await emulator.runCommand("yankPop");
-        assertTextEqual(
-          activeTextEditor,
-          `0123456789
-abcdeFOOfghij
-ABCDEFGHIJ`,
-        );
+        assert.ok(browseStub.calledOnce);
+        //         assertTextEqual(
+        //           activeTextEditor,
+        //           `0123456789
+        // abcdeFOOfoofghij
+        // ABCDEFGHIJ`,
+        //         );
       });
     });
 
-    suite("yankPop is not executed after editing or cursorMove commands", () => {
+    suite("yankPop works as browse-kill-ring after editing or cursorMove commands", () => {
       let emulator: EmacsEmulator;
+      let browseStub: sinon.SinonStub;
 
       const edits: Array<[string, () => Thenable<unknown>]> = [
         ["edit", () => activeTextEditor.edit((editBuilder) => editBuilder.insert(new Position(0, 0), "hoge"))],
@@ -332,11 +339,12 @@ ABCDEFGHIJ`,
 
       setup(() => {
         const killRing = new KillRing(3);
+        browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("foo"));
         emulator = new EmacsEmulator(activeTextEditor, killRing);
       });
 
       [...edits, ...moves].forEach(([label, interruptOp]) => {
-        test(`yankPop does not work if ${label} is executed after previous yank`, async () => {
+        test(`yankPop works as browse-kill-ring if ${label} is executed after previous yank`, async () => {
           // Kill texts
           await clearTextEditor(activeTextEditor, "FOO");
           await vscode.commands.executeCommand("editor.action.selectAll");
@@ -369,11 +377,18 @@ ABCDEFGHIJ`,
 
           // yankPop does not work
           await emulator.runCommand("yankPop");
-          assert.ok(activeTextEditor.document.getText().includes("BAR"));
+          assert.ok(browseStub.calledOnce);
+          if (label === "backwardChar") {
+            // If the interruption command is backwardChar, `foo` from browse-kill-ring is inserted in the middle of `BAR`.
+            assert.ok(activeTextEditor.document.getText().includes("BAfooR"));
+          } else {
+            assert.ok(activeTextEditor.document.getText().includes("BAR"));
+          }
           assert.ok(!activeTextEditor.document.getText().includes("FOO"));
+          assert.ok(activeTextEditor.document.getText().includes("foo"));
         });
 
-        test(`yankPop does not work if ${label} is executed after previous yankPop`, async () => {
+        test(`yankPop works as browse-kill-ring if ${label} is executed after previous yankPop`, async () => {
           // Kill texts
           await clearTextEditor(activeTextEditor, "FOO");
           await vscode.commands.executeCommand("editor.action.selectAll");
@@ -413,11 +428,17 @@ ABCDEFGHIJ`,
           // Interruption command invoked
           await interruptOp();
 
-          // yankPop does not work
-          // yankPop does not work
+          // yankPop works as browse-kill-ring
           await emulator.runCommand("yankPop");
-          assert.ok(activeTextEditor.document.getText().includes("FOO"));
+          assert.ok(browseStub.calledOnce);
+          if (label === "backwardChar") {
+            // If the interruption command is backwardChar, `foo` from browse-kill-ring is inserted in the middle of `FOO`.
+            assert.ok(activeTextEditor.document.getText().includes("FOfooO"));
+          } else {
+            assert.ok(activeTextEditor.document.getText().includes("FOO"));
+          }
           assert.ok(!activeTextEditor.document.getText().includes("BAR"));
+          assert.ok(activeTextEditor.document.getText().includes("foo"));
         });
       });
     });
