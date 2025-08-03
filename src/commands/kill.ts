@@ -208,6 +208,7 @@ export class Yank extends KillYankCommand {
     await this.killYanker.yank(prefixArgument);
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
+    MessageManager.showMessage("Mark set"); // `yank` and `exitMarkMode` may close the message, so we call showMessage here.
   }
 }
 
@@ -215,8 +216,16 @@ export class YankPop extends KillYankCommand {
   public readonly id = "yankPop";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    await this.killYanker.yankPop(prefixArgument);
-    this.emacsController.exitMarkMode();
+    if (this.killYanker.isYankInterrupted()) {
+      // When `M-y` is called after a non-kill command, it works as `yank-from-kill-ring`.
+      // Ref: https://www.gnu.org/software/emacs/news/NEWS.28.html#org41bb559
+      this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
+      await this.killYanker.browseKillRing();
+      MessageManager.showMessage("Mark set");
+    } else {
+      await this.killYanker.yankPop(prefixArgument);
+      this.emacsController.exitMarkMode();
+    }
     revealPrimaryActive(textEditor);
   }
 }

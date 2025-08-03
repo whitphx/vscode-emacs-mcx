@@ -1,6 +1,7 @@
 import { Minibuffer } from "src/minibuffer";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
+import { MessageManager } from "../message";
 import { equalPositions } from "../utils";
 import type { IEmacsController } from "../emulator";
 import { KillRing } from "./kill-ring";
@@ -269,9 +270,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     if (this.isYankInterrupted()) {
-      // When `M-y` is called after a non-kill command, it works as `yank-from-kill-ring`.
-      // Ref: https://www.gnu.org/software/emacs/news/NEWS.28.html#org41bb559
-      await this.yankFromKillRing();
+      MessageManager.showMessage("Previous command was not a yank");
       return;
     }
 
@@ -285,12 +284,6 @@ export class KillYanker implements vscode.Disposable {
     }
 
     await this.yankKillRingEntity(killRingEntity);
-  }
-
-  public yankFromKillRing(): Promise<void> {
-    // In Emacs, `yank-from-kill-ring` and `browse-kill-ring` are different commands,
-    // but we can treat them the same in this extension.
-    return this.browseKillRing();
   }
 
   public async browseKillRing(): Promise<void> {
@@ -343,7 +336,7 @@ export class KillYanker implements vscode.Disposable {
     return success;
   }
 
-  private isYankInterrupted(): boolean {
+  public isYankInterrupted(): boolean {
     if (this.continuousYankInterrupted) {
       return true;
     }
