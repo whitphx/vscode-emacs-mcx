@@ -222,13 +222,26 @@ export class KillYanker implements vscode.Disposable {
     await vscode.commands.executeCommand("paste", { text: flattenedText });
   }
 
-  public async revertPreviousYank() {
+  private async revertPreviousYank() {
     if (this.isYankInterrupted()) {
       return;
     }
 
     for (let i = 0; i < this.prevYankChanges; ++i) {
       await vscode.commands.executeCommand("undo");
+    }
+  }
+
+  private async pushClipboardTextIfNeeded(): Promise<void> {
+    if (this.killRing == null) {
+      return;
+    }
+
+    const latestKill = this.killRing.getLatest();
+    const clipboardText = await vscode.env.clipboard.readText();
+    if (latestKill == null || !latestKill.isSameClipboardText(clipboardText)) {
+      const newClipboardTextKillRingEntity = new ClipboardTextKillRingEntity(clipboardText);
+      this.killRing.push(newClipboardTextKillRingEntity);
     }
   }
 
@@ -248,12 +261,7 @@ export class KillYanker implements vscode.Disposable {
     }
 
     if (delta === 1) {
-      const latestKill = this.killRing.getLatest();
-      const clipboardText = await vscode.env.clipboard.readText();
-      if (latestKill == null || !latestKill.isSameClipboardText(clipboardText)) {
-        const newClipboardTextKillRingEntity = new ClipboardTextKillRingEntity(clipboardText);
-        this.killRing.push(newClipboardTextKillRingEntity);
-      }
+      await this.pushClipboardTextIfNeeded();
     }
 
     const killRingEntityToPaste = this.killRing.pop(delta - 1);
@@ -286,11 +294,13 @@ export class KillYanker implements vscode.Disposable {
     await this.yankKillRingEntity(killRingEntity);
   }
 
-  public async browseKillRing(): Promise<void> {
+  public async yankFromKillRing(): Promise<void> {
     const killRing = this.killRing;
     if (killRing == null) {
       return;
     }
+
+    await this.pushClipboardTextIfNeeded();
 
     const selectedEntity = await killRing.browse();
     if (selectedEntity) {
@@ -336,7 +346,7 @@ export class KillYanker implements vscode.Disposable {
     return success;
   }
 
-  private isYankInterrupted(): boolean {
+  public isYankInterrupted(): boolean {
     if (this.continuousYankInterrupted) {
       return true;
     }
