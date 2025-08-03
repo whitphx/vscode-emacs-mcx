@@ -154,7 +154,7 @@ export class IsearchExit extends IsearchCommand {
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
-    args?: unknown[],
+    args?: unknown,
   ): Thenable<void> {
     return vscode.commands.executeCommand("closeFindWidget").then(() => {
       const startSelections = this.searchState.startSelections;
@@ -174,8 +174,7 @@ export class IsearchExit extends IsearchCommand {
         }
       }
 
-      const arg0 = args?.[0];
-      const maybeNextCommand = (arg0 as { then?: string } | undefined)?.then;
+      const maybeNextCommand = (args as { then?: string } | undefined)?.then;
       const nextCommand = typeof maybeNextCommand === "string" ? maybeNextCommand : undefined;
       if (nextCommand) {
         return vscode.commands.executeCommand(nextCommand);

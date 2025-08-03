@@ -79,22 +79,22 @@ export function activate(context: vscode.ExtensionContext): void {
 
   function registerEmulatorCommand(
     commandName: string,
-    callback: (emulator: EmacsEmulator, ...args: Unreliable<any>[]) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
-    onNoEmulator?: (...args: unknown[]) => unknown,
+    callback: (emulator: EmacsEmulator, args: Unreliable<any>) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
+    onNoEmulator?: (args: Unreliable<any>) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const disposable = vscode.commands.registerCommand(commandName, (...args: Unreliable<any>[]) => {
+    const disposable = vscode.commands.registerCommand(commandName, (args: Unreliable<any>) => {
       logger.debug(`[command]\t Command "${commandName}" executed with args (${JSON.stringify(args)})`);
 
       const emulator = getAndUpdateEmulator();
       if (!emulator) {
         if (typeof onNoEmulator === "function") {
-          return onNoEmulator(...args);
+          return onNoEmulator(args);
         }
         return;
       }
 
-      return callback(emulator, ...args);
+      return callback(emulator, args);
     });
     context.subscriptions.push(disposable);
   }
@@ -188,7 +188,7 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("isearchAbort");
   });
 
-  registerEmulatorCommand("emacs-mcx.isearchExit", (emulator, ...args) => {
+  registerEmulatorCommand("emacs-mcx.isearchExit", (emulator, args) => {
     return emulator.runCommand("isearchExit", args);
   });
 
@@ -396,16 +396,16 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("jumpToRegister");
   });
 
-  registerEmulatorCommand("emacs-mcx.registerNameCommand", (emulator, ...args) => {
-    return emulator.runCommand("registerNameCommand", args);
+  registerEmulatorCommand("emacs-mcx.registerNameCommand", (emulator, arg0) => {
+    return emulator.runCommand("registerNameCommand", arg0);
   });
 
-  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator, ...args) => {
-    return emulator.runCommand("scrollOtherWindow", args);
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindow", (emulator, arg0) => {
+    return emulator.runCommand("scrollOtherWindow", arg0);
   });
 
-  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator, ...args) => {
-    return emulator.runCommand("scrollOtherWindowDown", args);
+  registerEmulatorCommand("emacs-mcx.scrollOtherWindowDown", (emulator, arg0) => {
+    return emulator.runCommand("scrollOtherWindowDown", arg0);
   });
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, arg0) => {

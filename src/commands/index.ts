@@ -43,7 +43,7 @@ export abstract class EmacsCommand {
     textEditor: TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
-    args?: unknown[],
+    args?: unknown,
   ): void | Thenable<unknown>;
 
   public onDidInterruptTextEditor?(event: InterruptEvent): void;

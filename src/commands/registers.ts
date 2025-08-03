@@ -171,7 +171,7 @@ export class RegisterNameCommand extends EmacsCommand {
     textEditor: vscode.TextEditor,
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
-    args?: unknown[],
+    args?: unknown,
   ): void | Thenable<void> {
     const commandType = this.registerCommandState.acceptingRegisterName;
     if (!commandType) {
@@ -180,7 +180,7 @@ export class RegisterNameCommand extends EmacsCommand {
 
     this.registerCommandState.stopAcceptingRegisterName();
 
-    const registerName = args?.[0];
+    const registerName = args;
     if (typeof registerName !== "string" || registerName.length !== 1) {
       return;
     }
