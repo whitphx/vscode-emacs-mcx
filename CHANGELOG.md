@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.2] - 2025-08-03
+
+### Fix
+
+- Rename `emacs-mcx.yank-pop` to `emacs-mcx.yankPop` for consistency, [#2381](https://github.com/whitphx/vscode-emacs-mcx/pull/2381).
+
 ## [0.88.1] - 2025-08-03
 
 ### Fix
