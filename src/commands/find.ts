@@ -5,6 +5,7 @@ import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { WorkspaceConfigCache } from "../workspace-configuration";
+import { delay } from "../utils";
 
 export interface SearchState {
   startSelections: readonly vscode.Selection[] | undefined;
@@ -177,7 +178,7 @@ export class IsearchExit extends IsearchCommand {
       const maybeNextCommand = (args as { then?: string } | undefined)?.then;
       const nextCommand = typeof maybeNextCommand === "string" ? maybeNextCommand : undefined;
       if (nextCommand) {
-        return vscode.commands.executeCommand(nextCommand);
+        return delay().then(() => vscode.commands.executeCommand(nextCommand));
       }
     });
   }
