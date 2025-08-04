@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
-import type { EmacsCommand } from "./commands";
+import type { EmacsCommand, InterruptEvent } from "./commands";
 import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
 import { DeleteBlankLines } from "./commands/delete-blank-lines";
@@ -25,10 +25,9 @@ import { PrefixArgumentHandler } from "./prefix-argument";
 import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
-import { InputBoxMinibuffer, Minibuffer } from "./minibuffer";
+import { InputBoxMinibuffer, type Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
-import { InterruptEvent } from "./commands";
 
 export interface IEmacsController {
   readonly textEditor: TextEditor;
@@ -376,7 +375,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       return;
     }
 
-    if (repeat == 1) {
+    if (repeat === 1) {
       // It's better to use `type` command than `TextEditor.edit` method
       // because `type` command invokes features like auto-completion reacting to character inputs.
       return vscode.commands.executeCommand("type", { text: char });
