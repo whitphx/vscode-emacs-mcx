@@ -1,5 +1,7 @@
-import { logger } from "./logger";
+import { Logger } from "./logger";
 import { MessageManager } from "./message";
+
+const logger = Logger.get("PrefixArgumentHandler");
 
 interface PrefixArgumentHandlerState {
   isInPrefixArgumentMode: boolean;

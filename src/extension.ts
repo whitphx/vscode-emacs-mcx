@@ -7,10 +7,12 @@ import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
 import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-yank/kill-ring";
-import { logger } from "./logger";
+import { Logger } from "./logger";
 import { MessageManager } from "./message";
 import { InputBoxMinibuffer } from "./minibuffer";
 import type { Unreliable } from "./utils";
+
+const logger = Logger.get("Extension");
 
 export function activate(context: vscode.ExtensionContext): void {
   MessageManager.registerDispose(context);

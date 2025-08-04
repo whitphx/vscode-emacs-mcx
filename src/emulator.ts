@@ -19,7 +19,7 @@ import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
 import { KillRing } from "./kill-yank/kill-ring";
-import { logger } from "./logger";
+import { Logger } from "./logger";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Configuration } from "./configuration/configuration";
@@ -28,6 +28,8 @@ import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, type Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
+
+const logger = Logger.get("EmacsEmulator");
 
 export interface IEmacsController {
   readonly textEditor: TextEditor;
