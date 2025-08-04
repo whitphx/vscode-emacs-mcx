@@ -4,7 +4,9 @@ import { makeParallel, EmacsCommand } from ".";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
-import { logger } from "../logger";
+import { Logger } from "../logger";
+
+const logger = Logger.get("EditCommands");
 
 export class DeleteBackwardChar extends EmacsCommand {
   public readonly id = "deleteBackwardChar";

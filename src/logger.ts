@@ -7,6 +7,8 @@ export class Logger {
   private static configuration: IConfiguration | undefined = undefined;
 
   static get(prefix: string): ILogger {
+    prefix = "emacs-mcx." + prefix;
+
     let logger = Logger.cache.get(prefix);
     if (logger === undefined) {
       logger = LoggerImpl.get(prefix);
@@ -26,5 +28,3 @@ export class Logger {
     }
   }
 }
-
-export const logger = Logger.get(""); // Default logger, which is not recommended to use. Prefixed loggers should be used instead.

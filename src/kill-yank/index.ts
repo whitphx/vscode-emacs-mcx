@@ -8,11 +8,13 @@ import { KillRing } from "./kill-ring";
 import { KillRingEntity } from "./kill-ring-entity";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
-import { logger } from "../logger";
+import { Logger } from "../logger";
 import { convertSelectionToRectSelections, getRectText } from "../rectangle";
 import { getEolChar } from "../commands/helpers/eol";
 
 export { AppendDirection };
+
+const logger = Logger.get("KillYank");
 
 export class KillYanker implements vscode.Disposable {
   private emacsController: IEmacsController;

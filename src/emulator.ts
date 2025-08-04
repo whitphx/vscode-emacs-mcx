@@ -19,7 +19,7 @@ import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
 import { KillRing } from "./kill-yank/kill-ring";
-import { logger } from "./logger";
+import { Logger } from "./logger";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Configuration } from "./configuration/configuration";
@@ -28,6 +28,8 @@ import { convertSelectionToRectSelections } from "./rectangle";
 import { InputBoxMinibuffer, type Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
+
+const logger = Logger.get("EmacsEmulator");
 
 export interface IEmacsController {
   readonly textEditor: TextEditor;
@@ -398,7 +400,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     await this.prefixArgumentHandler.cancel();
 
-    logger.debug(`[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
+    logger.debug(`[type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
     if (prefixArgument !== undefined && prefixArgument >= 0) {
       const promises = [];
       for (let i = 0; i < prefixArgument; ++i) {
@@ -411,7 +413,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       return Promise.all(promises);
     }
 
-    logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
+    logger.debug(`[type]\t Execute "default:type" (text: "${text}")`);
     return vscode.commands.executeCommand("default:type", {
       text,
     });
@@ -446,7 +448,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onPrefixArgumentChange = (newPrefixArgument: number | undefined): Thenable<unknown> => {
-    logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
+    logger.debug(`[onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
 
     return Promise.all([
       vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument),
@@ -455,7 +457,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   };
 
   public onPrefixArgumentAcceptingStateChange = (newState: boolean): Thenable<unknown> => {
-    logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
+    logger.debug(`[onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
     return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   };
 

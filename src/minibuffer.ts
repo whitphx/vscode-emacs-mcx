@@ -1,5 +1,7 @@
 import vscode from "vscode";
-import { logger } from "./logger";
+import { Logger } from "./logger";
+
+const logger = Logger.get("Minibuffer");
 
 interface ReadFromMinibufferOption {
   prompt: string;
