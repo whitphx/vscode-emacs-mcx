@@ -4,6 +4,14 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.8] - 2025-08-04
+
+### Fix
+
+- Internal refactoring, [#2393](https://github.com/whitphx/vscode-emacs-mcx/pull/2393).
+- Add prefixes to loggers, [#2394](https://github.com/whitphx/vscode-emacs-mcx/pull/2394).
+- `isearch-exit`, [#2395](https://github.com/whitphx/vscode-emacs-mcx/pull/2395).
+
 ## [0.88.7] - 2025-08-04
 
 ### Fix
