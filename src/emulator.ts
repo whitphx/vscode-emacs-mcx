@@ -400,7 +400,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
     await this.prefixArgumentHandler.cancel();
 
-    logger.debug(`[EmacsEmulator.type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
+    logger.debug(`[type]\t Single char (text: "${text}", prefix argument: ${prefixArgument}).`);
     if (prefixArgument !== undefined && prefixArgument >= 0) {
       const promises = [];
       for (let i = 0; i < prefixArgument; ++i) {
@@ -413,7 +413,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       return Promise.all(promises);
     }
 
-    logger.debug(`[EmacsEmulator.type]\t Execute "default:type" (text: "${text}")`);
+    logger.debug(`[type]\t Execute "default:type" (text: "${text}")`);
     return vscode.commands.executeCommand("default:type", {
       text,
     });
@@ -448,7 +448,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public onPrefixArgumentChange = (newPrefixArgument: number | undefined): Thenable<unknown> => {
-    logger.debug(`[EmacsEmulator.onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
+    logger.debug(`[onPrefixArgumentChange]\t Prefix argument: ${newPrefixArgument}`);
 
     return Promise.all([
       vscode.commands.executeCommand("setContext", "emacs-mcx.prefixArgument", newPrefixArgument),
@@ -457,7 +457,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   };
 
   public onPrefixArgumentAcceptingStateChange = (newState: boolean): Thenable<unknown> => {
-    logger.debug(`[EmacsEmulator.onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
+    logger.debug(`[onPrefixArgumentAcceptingStateChange]\t Prefix accepting: ${newState}`);
     return vscode.commands.executeCommand("setContext", "emacs-mcx.acceptingArgument", newState);
   };
 
