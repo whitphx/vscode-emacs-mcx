@@ -178,6 +178,8 @@ export class IsearchExit extends IsearchCommand {
       const maybeNextCommand = (args as { then?: string } | undefined)?.then;
       const nextCommand = typeof maybeNextCommand === "string" ? maybeNextCommand : undefined;
       if (nextCommand) {
+        // The delay here resolves timing issues with command sequencing after isearch-exit.
+        // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2384
         return delay().then(() => vscode.commands.executeCommand(nextCommand));
       }
     });
