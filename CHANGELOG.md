@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.9] - 2025-08-05
+
+### Fix
+
+- Key strokes for the register commands are interrupted when the text editors are switched, [#2399](https://github.com/whitphx/vscode-emacs-mcx/pull/2399).
+
 ## [0.88.8] - 2025-08-04
 
 ### Fix
