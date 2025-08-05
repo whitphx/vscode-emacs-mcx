@@ -144,8 +144,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     killRing: KillRing | null,
     minibuffer: Minibuffer,
     registers: RegisterCommands.Registers,
-    rectangleState: RectangleCommands.RectangleState,
     registerCommandState: RegisterCommands.RegisterCommandState,
+    rectangleState: RectangleCommands.RectangleState,
   ) {
     this._textEditor = textEditor;
 

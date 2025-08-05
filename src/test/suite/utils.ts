@@ -61,7 +61,7 @@ export function createEmulator(
   const registers: Registers = new Map();
   const rectangleState: RectangleState = { latestKilledRectangle: [] };
   const registerCommandState = new RegisterCommandState();
-  return new EmacsEmulator(textEditor, killRing, minibuffer, registers, rectangleState, registerCommandState);
+  return new EmacsEmulator(textEditor, killRing, minibuffer, registers, registerCommandState, rectangleState);
 }
 
 export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>): void {
