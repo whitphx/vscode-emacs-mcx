@@ -46,6 +46,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+      registerCommandState.stopAcceptingRegisterName();
+
       if (editor == null) {
         return;
       }
