@@ -12,6 +12,7 @@ import {
   assertTextEqual,
   clearTextEditor,
   assertSelectionsEqual,
+  createEmulator,
 } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
@@ -23,7 +24,7 @@ suite("paredit commands", () => {
     const initialText = "(a b)";
 
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -76,7 +77,7 @@ suite("Parentheses config", () => {
     const initialText = "<<>>";
 
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
 
     getConfigurationStub = sinon.stub(vscode.workspace, "getConfiguration");
   });
@@ -127,7 +128,7 @@ suite("paredit.kill-sexp", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -234,7 +235,7 @@ suite("paredit.backward-kill-sexp", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -337,7 +338,7 @@ suite("paredit.paredit-kill kill to end-of-line", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -369,7 +370,7 @@ suite("paredit.paredit-kill kill inside sexp", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -401,7 +402,7 @@ suite("paredit.paredit-kill kill entire line", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -434,7 +435,7 @@ suite("paredit.paredit-kill kill inside string", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -474,7 +475,7 @@ suite("paredit.mark-sexp", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -566,7 +567,7 @@ suite("paredit commands with a long text that requires revealing", () => {
     const initialText = "(" + "\n".repeat(1000) + ")";
 
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -606,7 +607,7 @@ suite("paredit commands with prefix argument", () => {
     const initialText = "(0 1 2 3 4 5 6 7 8 9)";
 
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -643,7 +644,7 @@ suite("with semicolon", () => {
       activeTextEditor = await setupWorkspace(initialText, {
         language: "clojure",
       });
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -663,7 +664,7 @@ suite("with semicolon", () => {
       activeTextEditor = await setupWorkspace(initialText, {
         language: "csharp",
       });
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

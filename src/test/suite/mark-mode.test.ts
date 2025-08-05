@@ -2,7 +2,7 @@ import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual } from "./utils";
+import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual, createEmulator } from "./utils";
 
 suite("mark-mode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -13,7 +13,7 @@ suite("mark-mode", () => {
 abcdefghij
 ABCDEFGHIJ`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -123,7 +123,7 @@ suite("MarkRing", () => {
 abcdefghij
 ABCDEFGHIJ`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

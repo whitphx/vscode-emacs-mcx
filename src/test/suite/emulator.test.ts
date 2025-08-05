@@ -2,7 +2,7 @@ import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, clearTextEditor, setupWorkspace } from "./utils";
+import { createEmulator, cleanUpWorkspace, clearTextEditor, setupWorkspace } from "./utils";
 
 suite("Emulator with text editing", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -13,7 +13,7 @@ suite("Emulator with text editing", () => {
 abcdefghij
 ABCDEFGHIJ`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

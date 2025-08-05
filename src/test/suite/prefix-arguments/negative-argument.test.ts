@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import * as sinon from "sinon";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace, createEmulator } from "../utils";
 
 suite("Negative argument (M--)", () => {
   let activeTextEditor: TextEditor;
@@ -39,7 +39,7 @@ suite("Negative argument (M--)", () => {
   suite("Negative argument and single character input", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace();
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

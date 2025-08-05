@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
-import type { Registers } from "./commands/registers";
+import { type Registers, RegisterCommandState } from "./commands/registers";
 import type { RectangleState } from "./commands/rectangle";
-import { RegisterCommandState } from "./commands/registers";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
@@ -28,7 +27,7 @@ export function activate(context: vscode.ExtensionContext): void {
   };
   const registerCommandState = new RegisterCommandState();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, registers, rectangleState, registerCommandState);
+  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, registers, registerCommandState, rectangleState);
 
   function getAndUpdateEmulator() {
     const activeTextEditor = vscode.window.activeTextEditor;

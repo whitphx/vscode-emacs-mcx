@@ -1,7 +1,7 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual, delay } from "./utils";
+import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual, delay, createEmulator } from "./utils";
 import { Configuration } from "../../configuration/configuration";
 
 suite("onDidChangeTextEditorVisibleRanges event listener with keepCursorInVisibleRange", () => {
@@ -11,7 +11,7 @@ suite("onDidChangeTextEditorVisibleRanges event listener with keepCursorInVisibl
   setup(async () => {
     const initialText = "xxxx\n".repeat(1000).slice(0, -1); // Delete the last newline
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor); // `EmacsEmulator`'s constructor registers the event listener
+    emulator = createEmulator(activeTextEditor); // `EmacsEmulator`'s constructor registers the event listener
   });
 
   teardown(async () => {

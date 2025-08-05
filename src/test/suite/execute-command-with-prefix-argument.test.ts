@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import sinon from "sinon";
 import assert from "assert";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace } from "./utils";
+import { cleanUpWorkspace, setupWorkspace, createEmulator } from "./utils";
 
 suite("executeCommandWithPrefixArgument", () => {
   let commandMock: sinon.SinonExpectation;
@@ -16,7 +16,7 @@ suite("executeCommandWithPrefixArgument", () => {
     commandDisposable = vscode.commands.registerCommand("emacs-mcx-test.foo", commandMock);
 
     activeTextEditor = await setupWorkspace();
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(async () => {

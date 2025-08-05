@@ -12,6 +12,7 @@ import {
   setEmptyCursors,
   setupWorkspace,
   clearTextEditor,
+  createEmulator,
 } from "../../utils";
 
 [true, false].forEach((withKillRing) => {
@@ -23,9 +24,7 @@ import {
       setup(async () => {
         const initialText = "\n\n"; // 3 lines
         activeTextEditor = await setupWorkspace(initialText);
-        emulator = withKillRing
-          ? new EmacsEmulator(activeTextEditor, new KillRing())
-          : new EmacsEmulator(activeTextEditor);
+        emulator = withKillRing ? createEmulator(activeTextEditor, new KillRing()) : createEmulator(activeTextEditor);
       });
 
       teardown(cleanUpWorkspace);
@@ -181,7 +180,7 @@ suite("Yank with prefix-argument", () => {
       killRing.push(new ClipboardTextKillRingEntity(i.toString()));
     }
     vscode.env.clipboard.writeText("9"); // Emulate the kill behavior
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -259,7 +258,7 @@ suite("Yank", () => {
   setup(async () => {
     const initialText = "\n\n";
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor, new KillRing());
+    emulator = createEmulator(activeTextEditor, new KillRing());
   });
 
   teardown(cleanUpWorkspace);
@@ -384,7 +383,7 @@ suite("yank-from-kill-ring", () => {
     activeTextEditor = await setupWorkspace(initialText);
     killRing = new KillRing();
     sinon.stub(killRing, "browse").callsFake(() => Promise.resolve(killRing.getTop()));
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);

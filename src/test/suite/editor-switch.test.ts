@@ -1,7 +1,7 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertSelectionsEqual } from "./utils";
+import { createEmulator, cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertSelectionsEqual } from "./utils";
 
 suite("Emulator with multiple TextEditors on the same document", () => {
   let firstTextEditor: vscode.TextEditor;
@@ -15,7 +15,7 @@ ABCDEFGHIJ
 klmnopqrst
 KLMNOPQRST`;
     firstTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(firstTextEditor);
+    emulator = createEmulator(firstTextEditor);
 
     // Also, open another editor on the same document.
     await vscode.window.showTextDocument(firstTextEditor.document, vscode.ViewColumn.Two);

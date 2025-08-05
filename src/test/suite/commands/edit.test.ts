@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace, createEmulator } from "../utils";
 
 suite("deleteForwardChar", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -9,7 +9,7 @@ suite("deleteForwardChar", () => {
   setup(async () => {
     const initialText = "0123456789\nabcdefghij\nABCDEFGHIJ";
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -55,7 +55,7 @@ suite("deleteBackwardChar", () => {
   setup(async () => {
     const initialText = "0123456789\nabcdefghij\nABCDEFGHIJ";
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   test("it deletes a character on the right", async () => {

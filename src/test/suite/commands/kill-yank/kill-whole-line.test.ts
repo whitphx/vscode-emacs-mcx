@@ -3,7 +3,14 @@ import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setupWorkspace, setEmptyCursors } from "../../utils";
+import {
+  assertTextEqual,
+  cleanUpWorkspace,
+  clearTextEditor,
+  setupWorkspace,
+  setEmptyCursors,
+  createEmulator,
+} from "../../utils";
 
 [true, false].forEach((withKillRing) => {
   suite(`Emulator.killWholeLine, ${withKillRing ? "with" : "without"} killRing`, () => {
@@ -16,9 +23,7 @@ abcdefghij
 ABCDEFGHIJ`;
       activeTextEditor = await setupWorkspace(initialText);
 
-      emulator = withKillRing
-        ? new EmacsEmulator(activeTextEditor, new KillRing())
-        : new EmacsEmulator(activeTextEditor);
+      emulator = withKillRing ? createEmulator(activeTextEditor, new KillRing()) : createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

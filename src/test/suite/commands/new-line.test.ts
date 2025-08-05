@@ -1,7 +1,14 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, clearTextEditor, setEmptyCursors, setupWorkspace } from "../utils";
+import {
+  assertTextEqual,
+  cleanUpWorkspace,
+  clearTextEditor,
+  setEmptyCursors,
+  setupWorkspace,
+  createEmulator,
+} from "../utils";
 
 const eols: Array<[vscode.EndOfLine, string]> = [
   [vscode.EndOfLine.LF, "\n"],
@@ -17,7 +24,7 @@ eols.forEach(([eol, eolStr]) => {
       setup(async () => {
         const initialText = `0123456789${eolStr}abcdefghij${eolStr}ABCDEFGHIJ`;
         activeTextEditor = await setupWorkspace(initialText, { eol });
-        emulator = new EmacsEmulator(activeTextEditor);
+        emulator = createEmulator(activeTextEditor);
       });
 
       teardown(cleanUpWorkspace);
@@ -107,7 +114,7 @@ eols.forEach(([eol, eolStr]) => {
         const initialText = "()";
         activeTextEditor = await setupWorkspace(initialText, { eol });
         activeTextEditor.options.tabSize = 4;
-        emulator = new EmacsEmulator(activeTextEditor);
+        emulator = createEmulator(activeTextEditor);
 
         setEmptyCursors(activeTextEditor, [0, 1]);
 
@@ -137,7 +144,7 @@ eols.forEach(([eol, eolStr]) => {
             eol,
             language,
           });
-          emulator = new EmacsEmulator(activeTextEditor);
+          emulator = createEmulator(activeTextEditor);
 
           setEmptyCursors(activeTextEditor, [0, 3]);
 
@@ -149,7 +156,7 @@ eols.forEach(([eol, eolStr]) => {
             eol,
             language,
           });
-          emulator = new EmacsEmulator(activeTextEditor);
+          emulator = createEmulator(activeTextEditor);
 
           setEmptyCursors(activeTextEditor, [0, 3]);
 
@@ -167,7 +174,7 @@ eols.forEach(([eol, eolStr]) => {
         const initialText = "(a)";
         activeTextEditor = await setupWorkspace(initialText, { eol });
         activeTextEditor.options.tabSize = 4;
-        emulator = new EmacsEmulator(activeTextEditor);
+        emulator = createEmulator(activeTextEditor);
 
         setEmptyCursors(activeTextEditor, [0, 2]);
 
@@ -182,7 +189,7 @@ eols.forEach(([eol, eolStr]) => {
     test("working with a prefix argument and undo/redo", async () => {
       const initialText = "";
       activeTextEditor = await setupWorkspace(initialText, { eol });
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
 
       setEmptyCursors(activeTextEditor, [0, 0]);
 
@@ -207,7 +214,7 @@ eols.forEach(([eol, eolStr]) => {
         const initialText = "()";
         activeTextEditor = await setupWorkspace(initialText, { eol });
         activeTextEditor.options.tabSize = 4;
-        emulator = new EmacsEmulator(activeTextEditor);
+        emulator = createEmulator(activeTextEditor);
 
         setEmptyCursors(activeTextEditor, [0, 1]);
 
@@ -246,7 +253,7 @@ eols.forEach(([eol, eolStr]) => {
             eol,
             language,
           });
-          emulator = new EmacsEmulator(activeTextEditor);
+          emulator = createEmulator(activeTextEditor);
 
           setEmptyCursors(activeTextEditor, [0, 3]);
 
@@ -258,7 +265,7 @@ eols.forEach(([eol, eolStr]) => {
             eol,
             language,
           });
-          emulator = new EmacsEmulator(activeTextEditor);
+          emulator = createEmulator(activeTextEditor);
 
           setEmptyCursors(activeTextEditor, [0, 3]);
 

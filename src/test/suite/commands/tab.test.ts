@@ -1,6 +1,13 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
+import {
+  assertTextEqual,
+  cleanUpWorkspace,
+  setEmptyCursors,
+  assertCursorsEqual,
+  setupWorkspace,
+  createEmulator,
+} from "../utils";
 
 suite("TabToTabStop with a free-form language", () => {
   const language = "javascript";
@@ -16,7 +23,7 @@ console.log("hello");
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language });
       activeTextEditor.options.tabSize = tabSize;
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -49,7 +56,7 @@ console.log("hello");
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language });
       activeTextEditor.options.tabSize = tabSize;
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -87,7 +94,7 @@ console.log("hello");
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language });
       activeTextEditor.options.tabSize = tabSize;
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -127,7 +134,7 @@ console.log("hello");
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language });
       activeTextEditor.options.tabSize = tabSize;
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -175,7 +182,7 @@ print("hello")`;
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language });
       activeTextEditor.options.tabSize = tabSize;
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -227,7 +234,7 @@ print("hello")`,
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText, { language });
       activeTextEditor.options.tabSize = tabSize;
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

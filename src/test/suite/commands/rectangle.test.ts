@@ -8,6 +8,7 @@ import {
   assertCursorsEqual,
   setupWorkspace,
   assertSelectionsEqual,
+  createEmulator,
 } from "../utils";
 import { KillRing } from "../../../kill-yank/kill-ring";
 import { Minibuffer } from "src/minibuffer";
@@ -23,7 +24,7 @@ klmnopqrst
 KLMNOPQRST`;
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -175,7 +176,7 @@ klmnopqrst
 KLMNOPQRST`;
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -254,7 +255,7 @@ klmnopqrst
 KLMNOPQRST`;
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor, null, new MockMinibuffer("foo"));
+    emulator = createEmulator(activeTextEditor, undefined, new MockMinibuffer("foo"));
   });
 
   teardown(cleanUpWorkspace);
@@ -315,7 +316,7 @@ klmnopqrst
 KLMNOPQRST`;
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -378,9 +379,9 @@ KLMNOPQRST
 <r>`;
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText);
-    emulator_no_killring = new EmacsEmulator(activeTextEditor, null);
+    emulator_no_killring = createEmulator(activeTextEditor, undefined);
     killring = new KillRing(3);
-    emulator_has_killring = new EmacsEmulator(activeTextEditor, killring);
+    emulator_has_killring = createEmulator(activeTextEditor, killring);
   });
 
   teardown(cleanUpWorkspace);

@@ -1,10 +1,9 @@
 import * as vscode from "vscode";
 import * as sinon from "sinon";
 import * as assert from "assert";
-import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
 import { ClipboardTextKillRingEntity } from "../../../../kill-yank/kill-ring-entity/clipboard-text";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace, createEmulator } from "../../utils";
 
 suite("browse-kill-ring", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -21,7 +20,7 @@ suite("browse-kill-ring", () => {
 
   test("yanking a selected text, and the second call works as yank, not as yank-pop", async () => {
     const killRing = new KillRing();
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("Selected"));
 
@@ -44,7 +43,7 @@ suite("browse-kill-ring", () => {
 
   test("browse-kill-ring works as yank-pop when called after yank", async () => {
     const killRing = new KillRing();
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     const killRingEntity = new ClipboardTextKillRingEntity("aaa");
     sinon.stub(killRingEntity, "isSameClipboardText").returns(true);

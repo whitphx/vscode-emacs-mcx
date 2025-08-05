@@ -8,6 +8,7 @@ import {
   setupWorkspace,
   setEmptyCursors,
   assertSelectionsEqual,
+  createEmulator,
 } from "./utils";
 import assert from "assert";
 
@@ -19,7 +20,7 @@ suite("Point registers", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
     activeTextEditor.options.tabSize = 2;
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
