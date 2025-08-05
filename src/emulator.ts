@@ -145,6 +145,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     minibuffer: Minibuffer = new InputBoxMinibuffer(),
     registers: RegisterCommands.Registers = new Map(),
     rectangleState: RectangleCommands.RectangleState = { latestKilledRectangle: [] },
+    registerCommandState: RegisterCommands.RegisterCommandState = new RegisterCommands.RegisterCommandState(),
   ) {
     this._textEditor = textEditor;
 
@@ -168,8 +169,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     const killYanker = new KillYanker(this, killRing, minibuffer);
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
-
-    const registerCommandState = new RegisterCommands.RegisterCommandState();
 
     this.commandRegistry = new EmacsCommandRegistry();
 
