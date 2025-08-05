@@ -201,7 +201,7 @@ export class RegisterNameCommand extends EmacsCommand {
   }
 
   // copy-to-register, C-x r s <r>
-  public async runCopy(textEditor: vscode.TextEditor, registerName: string, deleteRegion: boolean): Promise<void> {
+  private async runCopy(textEditor: vscode.TextEditor, registerName: string, deleteRegion: boolean): Promise<void> {
     const selectionsAfterRectDisabled =
       this.emacsController.inRectMarkMode &&
       this.emacsController.nativeSelections.map((selection) => {
@@ -229,7 +229,7 @@ export class RegisterNameCommand extends EmacsCommand {
   }
 
   // insert-register, C-x r i <r>
-  public async runInsert(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
+  private async runInsert(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
     const selections = textEditor.selections;
 
     this.emacsController.pushMark(selections.map((s) => s.active));
@@ -258,7 +258,7 @@ export class RegisterNameCommand extends EmacsCommand {
   }
 
   // copy-rectangle-to-register, C-x r r <r>
-  public async runCopyRectangle(
+  private async runCopyRectangle(
     textEditor: vscode.TextEditor,
     registerName: string,
     deleteRegion: boolean,
@@ -277,7 +277,7 @@ export class RegisterNameCommand extends EmacsCommand {
   }
 
   // point-to-register, C-x r SPC <r>
-  public runPoint(textEditor: vscode.TextEditor, registerName: string): void {
+  private runPoint(textEditor: vscode.TextEditor, registerName: string): void {
     const positions = textEditor.selections.map((selection) => selection.active);
     this.registers.set(registerName, {
       type: "position",
@@ -287,7 +287,7 @@ export class RegisterNameCommand extends EmacsCommand {
   }
 
   // jump-to-register, C-x r j <r>
-  public async runJump(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
+  private async runJump(textEditor: vscode.TextEditor, registerName: string): Promise<void> {
     const data = this.registers.get(registerName);
     if (data == undefined || data.type !== "position") {
       MessageManager.showMessage("Register doesn't contain a buffer position or configuration");
