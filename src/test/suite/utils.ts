@@ -1,6 +1,12 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection, TextEditor } from "vscode";
+import { EmacsEmulator } from "../../emulator";
+import { KillRing } from "../../kill-yank/kill-ring";
+import { Minibuffer } from "../../minibuffer";
+import { Registers } from "../../commands/registers";
+import { RectangleState } from "../../commands/rectangle";
+import { RegisterCommandState } from "../../commands/registers";
 export { delay } from "../../utils";
 
 export async function setupWorkspace(
@@ -40,6 +46,23 @@ export async function clearTextEditor(textEditor: TextEditor, initializeWith = "
     editBuilder.insert(new Position(0, 0), initializeWith);
   });
   assert.strictEqual(doc.getText(), initializeWith);
+}
+
+class TestMiniBuffer implements Minibuffer {
+  readonly isReading = false;
+  paste = () => {};
+  readFromMinibuffer = () => Promise.resolve("foo");
+}
+
+export function createEmulator(
+  textEditor: TextEditor,
+  killRing: KillRing = new KillRing(),
+  minibuffer: Minibuffer = new TestMiniBuffer(),
+): EmacsEmulator {
+  const registers: Registers = new Map();
+  const rectangleState: RectangleState = { latestKilledRectangle: [] };
+  const registerCommandState = new RegisterCommandState();
+  return new EmacsEmulator(textEditor, killRing, minibuffer, registers, rectangleState, registerCommandState);
 }
 
 export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>): void {

@@ -3,7 +3,14 @@ import * as vscode from "vscode";
 import * as sinon from "sinon";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace } from "../utils";
+import {
+  assertCursorsEqual,
+  assertTextEqual,
+  cleanUpWorkspace,
+  setEmptyCursors,
+  setupWorkspace,
+  createEmulator,
+} from "../utils";
 
 suite("Universal argument (C-u)", () => {
   let activeTextEditor: TextEditor;
@@ -39,7 +46,7 @@ suite("Universal argument (C-u)", () => {
   suite("repeating single character", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace();
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -198,7 +205,7 @@ suite("Universal argument (C-u)", () => {
   suite("repeating EmacsEmulator's command (cursorMove (forwardChar)) with prefix command", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace("abcdefghijklmnopqrst\nabcdefghijklmnopqrst");
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -351,7 +358,7 @@ suite("Universal argument (C-u)", () => {
   suite("with forwardChar in multi-line text", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace("aaa\n".repeat(8));
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);
@@ -385,7 +392,7 @@ suite("Universal argument (C-u)", () => {
   suite("with backwardChar in multi-line text", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace("aaa\n".repeat(8));
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

@@ -1,7 +1,14 @@
 import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
-import { assertTextEqual, assertSelectionsEqual, clearTextEditor, setupWorkspace, cleanUpWorkspace } from "../../utils";
+import {
+  assertTextEqual,
+  assertSelectionsEqual,
+  clearTextEditor,
+  setupWorkspace,
+  cleanUpWorkspace,
+  createEmulator,
+} from "../../utils";
 
 [true, false].forEach((withKillRing) => {
   suite(`copyRegion, ${withKillRing ? "with" : "without"} killRing`, () => {
@@ -13,9 +20,7 @@ import { assertTextEqual, assertSelectionsEqual, clearTextEditor, setupWorkspace
 abcdefghij
 ABCDEFGHIJ`;
       activeTextEditor = await setupWorkspace(initialText);
-      emulator = withKillRing
-        ? new EmacsEmulator(activeTextEditor, new KillRing())
-        : new EmacsEmulator(activeTextEditor);
+      emulator = withKillRing ? createEmulator(activeTextEditor, new KillRing()) : createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

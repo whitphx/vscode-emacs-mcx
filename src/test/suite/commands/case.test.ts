@@ -1,7 +1,7 @@
 import assert from "assert";
 import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace } from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setupWorkspace, createEmulator } from "../utils";
 
 suite("transformToUppercase", () => {
   let activeTextEditor: TextEditor;
@@ -47,7 +47,7 @@ suite("transformToUppercase", () => {
     suite(`initialText is ${initialText}`, () => {
       setup(async () => {
         activeTextEditor = await setupWorkspace(initialText);
-        emulator = new EmacsEmulator(activeTextEditor);
+        emulator = createEmulator(activeTextEditor);
       });
 
       teardown(cleanUpWorkspace);
@@ -110,7 +110,7 @@ suite("transformToLowercase", () => {
     suite(`initialText is ${initialText}`, () => {
       setup(async () => {
         activeTextEditor = await setupWorkspace(initialText);
-        emulator = new EmacsEmulator(activeTextEditor);
+        emulator = createEmulator(activeTextEditor);
       });
 
       teardown(cleanUpWorkspace);

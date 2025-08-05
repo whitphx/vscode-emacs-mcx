@@ -18,14 +18,14 @@ import * as OtherWindowCommands from "./commands/other-window";
 import { RecenterTopBottom } from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
-import { KillRing } from "./kill-yank/kill-ring";
+import type { KillRing } from "./kill-yank/kill-ring";
 import { Logger } from "./logger";
 import { MessageManager } from "./message";
 import { PrefixArgumentHandler } from "./prefix-argument";
 import { Configuration } from "./configuration/configuration";
 import { MarkRing } from "./mark-ring";
 import { convertSelectionToRectSelections } from "./rectangle";
-import { InputBoxMinibuffer, type Minibuffer } from "./minibuffer";
+import type { Minibuffer } from "./minibuffer";
 import { PromiseDelegate } from "./promise-delegate";
 import { delay, type Unreliable } from "./utils";
 
@@ -141,11 +141,11 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
   constructor(
     textEditor: TextEditor,
-    killRing: KillRing | null = null,
-    minibuffer: Minibuffer = new InputBoxMinibuffer(),
-    registers: RegisterCommands.Registers = new Map(),
-    rectangleState: RectangleCommands.RectangleState = { latestKilledRectangle: [] },
-    registerCommandState: RegisterCommands.RegisterCommandState = new RegisterCommands.RegisterCommandState(),
+    killRing: KillRing | null,
+    minibuffer: Minibuffer,
+    registers: RegisterCommands.Registers,
+    rectangleState: RectangleCommands.RectangleState,
+    registerCommandState: RegisterCommands.RegisterCommandState,
   ) {
     this._textEditor = textEditor;
 

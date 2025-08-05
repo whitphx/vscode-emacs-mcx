@@ -9,6 +9,7 @@ import {
   setupWorkspace,
   setEmptyCursors,
   assertSelectionsEqual,
+  createEmulator,
 } from "./utils";
 
 suite("Text registers", () => {
@@ -20,7 +21,7 @@ suite("Text registers", () => {
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
     activeTextEditor.options.tabSize = 2;
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

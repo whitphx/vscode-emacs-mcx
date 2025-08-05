@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import assert from "assert";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { delay, setEmptyCursors, setupWorkspace } from "../utils";
+import { delay, setEmptyCursors, setupWorkspace, createEmulator } from "../utils";
 
 suite("Other window", () => {
   let anotherTextEditor: TextEditor;
@@ -18,7 +18,7 @@ suite("Other window", () => {
     setEmptyCursors(activeTextEditor, [100, 0]);
     activeTextEditor.revealRange(new vscode.Range(100, 0, 100, 0), vscode.TextEditorRevealType.InCenter);
 
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   suite("scroll-other-window", () => {

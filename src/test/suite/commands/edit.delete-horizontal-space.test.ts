@@ -1,6 +1,13 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual, setupWorkspace } from "../utils";
+import {
+  assertTextEqual,
+  cleanUpWorkspace,
+  setEmptyCursors,
+  assertCursorsEqual,
+  setupWorkspace,
+  createEmulator,
+} from "../utils";
 
 [" ", "\t"].forEach((space) => {
   suite(`delete-horizontal-space with ${JSON.stringify(space)}`, () => {
@@ -11,7 +18,7 @@ import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, assertCursorsEqual,
 
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText);
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     teardown(cleanUpWorkspace);

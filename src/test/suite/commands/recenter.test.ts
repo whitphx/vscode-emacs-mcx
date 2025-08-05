@@ -1,7 +1,7 @@
 import assert from "assert";
 import vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { setupWorkspace, cleanUpWorkspace, delay } from "../utils";
+import { setupWorkspace, cleanUpWorkspace, delay, createEmulator } from "../utils";
 
 suite("RecenterTopBottom", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -10,7 +10,7 @@ suite("RecenterTopBottom", () => {
   setup(async () => {
     const initialText = "\n".repeat(1000);
     activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

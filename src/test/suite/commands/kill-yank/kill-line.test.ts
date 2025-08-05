@@ -12,6 +12,7 @@ import {
   clearTextEditor,
   setEmptyCursors,
   setupWorkspace,
+  createEmulator,
 } from "../../utils";
 
 suite("killLine", () => {
@@ -31,7 +32,7 @@ ABCDEFGHIJ`;
 
   suite("without KillRing", () => {
     setup(() => {
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     test("it cuts the current line", async () => {
@@ -123,7 +124,7 @@ ABCDEFGHIJ`,
   suite("with KillRing", () => {
     setup(() => {
       const killRing = new KillRing(3);
-      emulator = new EmacsEmulator(activeTextEditor, killRing);
+      emulator = createEmulator(activeTextEditor, killRing);
     });
 
     test("it appends killed text if invoked continuously", async () => {
@@ -260,7 +261,7 @@ abcdefghij
 
   suite("when prefix argument specified", () => {
     setup(() => {
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     test("it kills multiple lines and does not leave a blank line (in case the cursor is at the beginning of the line)", async () => {
@@ -329,7 +330,7 @@ ABCDEFGHIJ`;
 
   suite("without KillRing", () => {
     setup(() => {
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     test("it cuts the current line with RET if the cursor is the the beginning of the line", async () => {
@@ -374,7 +375,7 @@ ABCDEFGHIJ`,
 
   suite("when prefix argument specified", () => {
     setup(() => {
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
     });
 
     test("it works in the same way to the default (in case the cursor is at the beginning of the line)", async () => {

@@ -1,6 +1,13 @@
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace, assertSelectionsEqual } from "../utils";
+import {
+  assertCursorsEqual,
+  setEmptyCursors,
+  setupWorkspace,
+  cleanUpWorkspace,
+  assertSelectionsEqual,
+  createEmulator,
+} from "../utils";
 
 suite("isearch", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -9,7 +16,7 @@ suite("isearch", () => {
   setup(async () => {
     const initialText = "aaa\nxxx\naaa";
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

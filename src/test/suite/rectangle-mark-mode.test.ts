@@ -1,7 +1,14 @@
 import * as vscode from "vscode";
 import assert from "assert";
-import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setEmptyCursors, setupWorkspace, delay, assertTextEqual, clearTextEditor } from "./utils";
+import {
+  cleanUpWorkspace,
+  setEmptyCursors,
+  setupWorkspace,
+  delay,
+  assertTextEqual,
+  clearTextEditor,
+  createEmulator,
+} from "./utils";
 import { KillRing } from "../../kill-yank/kill-ring";
 
 suite("RectangleMarkMode", () => {
@@ -20,7 +27,7 @@ KLMNOPQRST`;
 
   test("expanding the rect from top left to right bottom and toggling and cancelling rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
-    const emulator = new EmacsEmulator(activeTextEditor);
+    const emulator = createEmulator(activeTextEditor);
 
     emulator.rectangleMarkMode();
 
@@ -53,7 +60,7 @@ KLMNOPQRST`;
 
   test("expanding the rect from right bottom to left top and toggling rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [2, 4]);
-    const emulator = new EmacsEmulator(activeTextEditor);
+    const emulator = createEmulator(activeTextEditor);
 
     emulator.rectangleMarkMode();
 
@@ -86,7 +93,7 @@ KLMNOPQRST`;
   test("killing and yanking in rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
     const killRing = new KillRing(3);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     emulator.rectangleMarkMode();
 
@@ -133,7 +140,7 @@ KLcdMNOPQRST
   test("killing in rectangle-mark-mode followed by another kill command that appends the killed text", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
     const killRing = new KillRing(3);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     emulator.rectangleMarkMode();
 
@@ -193,7 +200,7 @@ KLcdMNOPQRST
   test("killing in rectangle-mark-mode followed by multiple kill command that append killed texts including multiple lines", async () => {
     setEmptyCursors(activeTextEditor, [0, 8]);
     const killRing = new KillRing(3);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     emulator.rectangleMarkMode();
 
@@ -253,7 +260,7 @@ klmnopqrst
   test("killing in rectangle-mark-mode followed by multiple kill command that append killed texts including multiple lines, then yanking the killed text to a buffer with an enough number of lines", async () => {
     setEmptyCursors(activeTextEditor, [0, 8]);
     const killRing = new KillRing(3);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     emulator.rectangleMarkMode();
 
@@ -335,7 +342,7 @@ KLMNOPQRST`,
     setEmptyCursors(activeTextEditor, [0, 2]);
 
     const killRing = new KillRing(3);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     emulator.rectangleMarkMode();
     await emulator.runCommand("forwardChar");
@@ -375,9 +382,9 @@ KLMNOPQRST`,
     assertTextEqual(
       activeTextEditor,
       `23
-  
+
 cd
-  
+
 CD
   `,
     );
@@ -385,7 +392,7 @@ CD
 
   test("typing a character in rectangle-mark-mode", async () => {
     setEmptyCursors(activeTextEditor, [1, 2]);
-    const emulator = new EmacsEmulator(activeTextEditor);
+    const emulator = createEmulator(activeTextEditor);
 
     emulator.rectangleMarkMode();
 

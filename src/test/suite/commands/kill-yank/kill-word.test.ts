@@ -8,6 +8,7 @@ import {
   clearTextEditor,
   setEmptyCursors,
   setupWorkspace,
+  createEmulator,
 } from "../../utils";
 
 suite("killWord and backwardKillWord with JSON document", () => {
@@ -23,7 +24,7 @@ suite("killWord and backwardKillWord with JSON document", () => {
 `;
     activeTextEditor = await setupWorkspace(initialText, { language: "json" });
     const killRing = new KillRing(3);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -87,7 +88,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
     const initialText = "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit,";
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(3);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -397,7 +398,7 @@ suite("Combination killing", () => {
     const initialText = "aaa bbb ccc ddd";
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(3);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);

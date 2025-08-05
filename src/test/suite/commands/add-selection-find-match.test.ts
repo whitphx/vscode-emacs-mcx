@@ -1,7 +1,7 @@
 import assert from "assert";
 import { Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertSelectionsEqual, cleanUpWorkspace, setupWorkspace } from "../utils";
+import { assertSelectionsEqual, cleanUpWorkspace, setupWorkspace, createEmulator } from "../utils";
 
 suite("addSelectionTo(Next|Previous)FindMatch", () => {
   let activeTextEditor: TextEditor;
@@ -15,7 +15,7 @@ aaa
 bbb
 ccc`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

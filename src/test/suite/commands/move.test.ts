@@ -3,7 +3,14 @@ import assert from "assert";
 import sinon from "sinon";
 import { TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertCursorsEqual, assertSelectionsEqual, setEmptyCursors, setupWorkspace, cleanUpWorkspace } from "../utils";
+import {
+  assertCursorsEqual,
+  assertSelectionsEqual,
+  setEmptyCursors,
+  setupWorkspace,
+  cleanUpWorkspace,
+  createEmulator,
+} from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("moveBeginning/EndOfLine", () => {
@@ -16,7 +23,7 @@ suite("moveBeginning/EndOfLine", () => {
     const initialText =
       "x".repeat(1000) + "\n" + "a".repeat(1000) + "\n" + " ".repeat(indentLength) + "b".repeat(1000 - indentLength);
     activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -284,7 +291,7 @@ suite("nextLine/previousLine", () => {
   setup(async () => {
     const initialText = "x".repeat(1000) + "\n" + "a".repeat(1000) + "\n" + "x".repeat(1000);
     activeTextEditor = await setupWorkspace(initialText, { language: "markdown" }); // language=markdown sets wordWrap = true
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -385,7 +392,7 @@ suite("scroll-up/down-command", () => {
   setup(async () => {
     const initialText = "a\n".repeat(400);
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
 
     await vscode.commands.executeCommand("editorScroll", { to: "down", by: "page", value: 2 });
   });
@@ -647,7 +654,7 @@ ddd
 eee
 fff`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -677,7 +684,7 @@ ddd
 eee
 fff`;
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);
@@ -700,7 +707,7 @@ suite("beginning/endOfBuffer", () => {
   setup(async () => {
     const initialText = "aaa" + "\n".repeat(100) + "bbb";
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
   });
 
   teardown(cleanUpWorkspace);

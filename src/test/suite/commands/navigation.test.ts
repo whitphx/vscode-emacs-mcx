@@ -10,6 +10,7 @@ import {
   setupWorkspace,
   cleanUpWorkspace,
   clearTextEditor,
+  createEmulator,
 } from "../utils";
 
 class MockMinibuffer implements Minibuffer {
@@ -60,7 +61,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -71,7 +72,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [20, 5]);
 
       mockMinibuffer = new MockMinibuffer(["1"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -83,7 +84,7 @@ suite("GotoLine", () => {
       const lastLineNumber = activeTextEditor.document.lineCount;
 
       mockMinibuffer = new MockMinibuffer([lastLineNumber.toString()]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -95,7 +96,7 @@ suite("GotoLine", () => {
       const lastLineNumber = activeTextEditor.document.lineCount;
 
       mockMinibuffer = new MockMinibuffer(["9999"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -106,7 +107,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["-5"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -118,7 +119,7 @@ suite("GotoLine", () => {
     test("uses prefix argument 8 as target line", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument(); // C-u
       await emulator.subsequentArgumentDigit(8); // 8
 
@@ -130,7 +131,7 @@ suite("GotoLine", () => {
     test("uses prefix argument 1 to go to first line", async () => {
       setEmptyCursors(activeTextEditor, [20, 5]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument(); // C-u
       await emulator.subsequentArgumentDigit(1); // 1
 
@@ -143,7 +144,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
       const lastLineNumber = activeTextEditor.document.lineCount;
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(9);
       await emulator.subsequentArgumentDigit(9);
@@ -158,7 +159,7 @@ suite("GotoLine", () => {
     test("clamps prefix argument when too low (zero)", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(0); // 0
 
@@ -170,7 +171,7 @@ suite("GotoLine", () => {
     test("handles negative prefix argument", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.negativeArgument(); // M--
       await emulator.subsequentArgumentDigit(5); // -5
 
@@ -182,7 +183,7 @@ suite("GotoLine", () => {
     test("C-u 4 uses 4 as target line", async () => {
       setEmptyCursors(activeTextEditor, [10, 2]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument(); // C-u
       await emulator.subsequentArgumentDigit(4); // 4
 
@@ -194,7 +195,7 @@ suite("GotoLine", () => {
     test("C-u alone (universal argument without digits) uses 4 as target line (this is different from origin Emacs behavior though)", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument(); // C-u alone gives 4
 
       await emulator.runCommand("gotoLine");
@@ -205,7 +206,7 @@ suite("GotoLine", () => {
     test("Multiple C-u (C-u C-u) gives prefix argument 16 (this is different from origin Emacs behavior though)", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument(); // C-u (4)
       await emulator.universalArgument(); // C-u (16)
 
@@ -220,7 +221,7 @@ suite("GotoLine", () => {
     test("prefix argument sets mark when not in mark mode", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
       await emulator.subsequentArgumentDigit(0); // 20
@@ -238,7 +239,7 @@ suite("GotoLine", () => {
     test("preserves selection and does not set new mark when in mark mode", async () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(1);
@@ -264,7 +265,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -280,7 +281,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("gotoLine");
@@ -293,7 +294,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("gotoLine");
@@ -317,7 +318,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["abc", "xyz", "10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -335,7 +336,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["", "10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -347,7 +348,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["   ", "10"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -360,7 +361,7 @@ suite("GotoLine", () => {
         setEmptyCursors(activeTextEditor, [5, 3]);
 
         mockMinibuffer = new MockMinibuffer([input]);
-        emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+        emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
         await emulator.runCommand("gotoLine");
 
@@ -373,7 +374,7 @@ suite("GotoLine", () => {
       const originalPosition = activeTextEditor.selection.active;
 
       mockMinibuffer = new MockMinibuffer([undefined]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -386,7 +387,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["10.7"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -404,7 +405,7 @@ suite("GotoLine", () => {
       ];
 
       mockMinibuffer = new MockMinibuffer(["20"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -421,7 +422,7 @@ suite("GotoLine", () => {
         new vscode.Selection(15, 1, 15, 1),
       ];
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(2);
       await emulator.subsequentArgumentDigit(5); // 25
@@ -442,7 +443,7 @@ suite("GotoLine", () => {
       ];
 
       mockMinibuffer = new MockMinibuffer(["20"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("gotoLine");
@@ -460,7 +461,7 @@ suite("GotoLine", () => {
         new vscode.Selection(15, 1, 15, 1),
       ];
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(3);
@@ -475,7 +476,7 @@ suite("GotoLine", () => {
 
     test("uses primary cursor anchor for mark mode", async () => {
       mockMinibuffer = new MockMinibuffer(["20"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       // Set up multiple cursors with different anchors
       activeTextEditor.selections = [
@@ -505,7 +506,7 @@ suite("GotoLine", () => {
     test("handles single line document", async () => {
       await clearTextEditor(activeTextEditor, "single line");
       const minibuffer = new MockMinibuffer(["1"]);
-      const emulator = new EmacsEmulator(activeTextEditor, null, minibuffer);
+      const emulator = createEmulator(activeTextEditor, undefined, minibuffer);
 
       setEmptyCursors(activeTextEditor, [0, 5]);
 
@@ -517,7 +518,7 @@ suite("GotoLine", () => {
     test("handles empty document", async () => {
       await clearTextEditor(activeTextEditor, "");
       const minibuffer = new MockMinibuffer(["1"]);
-      const emulator = new EmacsEmulator(activeTextEditor, null, minibuffer);
+      const emulator = createEmulator(activeTextEditor, undefined, minibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -529,7 +530,7 @@ suite("GotoLine", () => {
       setEmptyCursors(activeTextEditor, [5, 3]);
 
       mockMinibuffer = new MockMinibuffer(["0"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -542,7 +543,7 @@ suite("GotoLine", () => {
       const lastLineNumber = activeTextEditor.document.lineCount;
 
       mockMinibuffer = new MockMinibuffer(["999999999"]);
-      emulator = new EmacsEmulator(activeTextEditor, null, mockMinibuffer);
+      emulator = createEmulator(activeTextEditor, undefined, mockMinibuffer);
 
       await emulator.runCommand("gotoLine");
 
@@ -578,7 +579,7 @@ baz();
     test("executes revealDefinition command", async () => {
       setEmptyCursors(activeTextEditor, [1, 9]); // Position on "bar"
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.runCommand("findDefinitions");
 
       assertCursorsEqual(activeTextEditor, [4, 9]); // Should move to "bar" definition
@@ -587,7 +588,7 @@ baz();
     test("sets mark when not in mark mode", async () => {
       setEmptyCursors(activeTextEditor, [1, 9]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.runCommand("findDefinitions");
 
       // Should be at definition location
@@ -603,7 +604,7 @@ baz();
     test("preserves selection and does not set new mark when in mark mode", async () => {
       setEmptyCursors(activeTextEditor, [1, 9]);
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("findDefinitions");
 
@@ -624,7 +625,7 @@ baz();
     test("handles multiple selections (VSCode typically removes non-primary)", async () => {
       activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.runCommand("findDefinitions");
 
       // Should be at definition location with only primary selection
@@ -642,7 +643,7 @@ baz();
       // Set up multiple cursors
       activeTextEditor.selections = [new vscode.Selection(1, 9, 1, 9), new vscode.Selection(2, 5, 2, 5)];
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
       await emulator.setMarkCommand(); // Enter mark mode
       await emulator.runCommand("findDefinitions");
 
@@ -656,7 +657,7 @@ baz();
     test("handles command failure gracefully", async () => {
       setEmptyCursors(activeTextEditor, [8, 0]); // Position on "baz()" that has no definition
 
-      emulator = new EmacsEmulator(activeTextEditor);
+      emulator = createEmulator(activeTextEditor);
 
       await emulator.runCommand("findDefinitions");
 

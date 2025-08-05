@@ -11,6 +11,7 @@ import {
   cleanUpWorkspace,
   clearTextEditor,
   delay,
+  createEmulator,
 } from "../utils";
 
 suite("calcTargetLine", () => {
@@ -63,7 +64,7 @@ suite("moveToWindowLineTopBottom", () => {
   setup(async () => {
     const initialText = "line\n".repeat(100);
     activeTextEditor = await setupWorkspace(initialText);
-    emulator = new EmacsEmulator(activeTextEditor);
+    emulator = createEmulator(activeTextEditor);
 
     // Position cursor in the middle of the document and scroll to make it visible
     setEmptyCursors(activeTextEditor, [50, 0]);

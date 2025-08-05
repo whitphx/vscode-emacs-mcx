@@ -14,6 +14,7 @@ import {
   delay,
   setEmptyCursors,
   setupWorkspace,
+  createEmulator,
 } from "../../utils";
 
 suite("kill, yank, yank-pop", () => {
@@ -29,7 +30,7 @@ suite("kill, yank, yank-pop", () => {
 
     test("it holds the past kills and takes them for yank", async () => {
       const killRing = new KillRing(3);
-      const emulator = new EmacsEmulator(activeTextEditor, killRing);
+      const emulator = createEmulator(activeTextEditor, killRing);
 
       // kill 3 times with different texts
       await clearTextEditor(activeTextEditor, "Lorem ipsum");
@@ -131,7 +132,7 @@ ABCDEFGHIJ`,
 
     test("works with clipboard", async () => {
       const killRing = new KillRing(3);
-      const emulator = new EmacsEmulator(activeTextEditor, killRing);
+      const emulator = createEmulator(activeTextEditor, killRing);
 
       // Kill first
       await clearTextEditor(activeTextEditor, "Lorem ipsum");
@@ -211,7 +212,7 @@ ABCDEFGHIJ`,
       test(`yankPop works as browse-kill-ring if ${interruptingCommand} is executed after previous yank`, async () => {
         const killRing = new KillRing(3);
         const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("foo"));
-        const emulator = new EmacsEmulator(activeTextEditor, killRing);
+        const emulator = createEmulator(activeTextEditor, killRing);
 
         // Kill texts
         await clearTextEditor(activeTextEditor, "FOO");
@@ -257,7 +258,7 @@ ABCDEFGHIJ`,
       test(`yankPop works as browse-kill-ring if ${interruptingCommand} is executed after previous yankPop`, async () => {
         const killRing = new KillRing(3);
         const browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("foo"));
-        const emulator = new EmacsEmulator(activeTextEditor, killRing);
+        const emulator = createEmulator(activeTextEditor, killRing);
 
         // Kill texts
         await clearTextEditor(activeTextEditor, "FOO");
@@ -340,7 +341,7 @@ ABCDEFGHIJ`,
       setup(() => {
         const killRing = new KillRing(3);
         browseStub = sinon.stub(killRing, "browse").resolves(new ClipboardTextKillRingEntity("foo"));
-        emulator = new EmacsEmulator(activeTextEditor, killRing);
+        emulator = createEmulator(activeTextEditor, killRing);
       });
 
       [...edits, ...moves].forEach(([label, interruptOp]) => {
@@ -455,7 +456,7 @@ ABCDEFGHIJ`,
 
     test("yank works with empty string", async () => {
       const killRing = new KillRing(3);
-      const emulator = new EmacsEmulator(activeTextEditor, killRing);
+      const emulator = createEmulator(activeTextEditor, killRing);
 
       // Kill text
       await vscode.commands.executeCommand("editor.action.selectAll");
@@ -497,7 +498,7 @@ ABCDEFGHIJ`,
 
     test("yank works with multi cursor and empty string", async () => {
       const killRing = new KillRing(3);
-      const emulator = new EmacsEmulator(activeTextEditor, killRing);
+      const emulator = createEmulator(activeTextEditor, killRing);
 
       // Kill text
       activeTextEditor.selections = [
@@ -557,7 +558,7 @@ suite("yank pop with auto-indent", () => {
 
   test("Yank in a language that has auto-indent support", async function () {
     const killRing = new KillRing(60);
-    const emulator = new EmacsEmulator(activeTextEditor, killRing);
+    const emulator = createEmulator(activeTextEditor, killRing);
 
     // Kill texts
     await clearTextEditor(activeTextEditor, "foo"); // No indent
@@ -603,7 +604,7 @@ suite("Kill and yank with multi cursor, killing at 2 cursors in different lines"
     activeTextEditor = await setupWorkspace();
 
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
 
     await clearTextEditor(activeTextEditor, "hoge\nfuga\npiyo");
     // Kill texts from multiple selections
@@ -689,7 +690,7 @@ suite("Kill and yank with multi cursor, killing at 2 cursors in one line", () =>
     activeTextEditor = await setupWorkspace();
 
     const killRing = new KillRing(60);
-    emulator = new EmacsEmulator(activeTextEditor, killRing);
+    emulator = createEmulator(activeTextEditor, killRing);
 
     await clearTextEditor(activeTextEditor, "hoge fuga piyo");
     // Kill texts from multiple selections
@@ -778,7 +779,7 @@ suite("With not only single text editor", () => {
     const killRing = new KillRing(3);
 
     const activeTextEditor0 = await setupWorkspace();
-    const emulator0 = new EmacsEmulator(activeTextEditor0, killRing);
+    const emulator0 = createEmulator(activeTextEditor0, killRing);
 
     // Kill texts from one text editor
     await clearTextEditor(activeTextEditor0, "FOO");
@@ -790,7 +791,7 @@ suite("With not only single text editor", () => {
     await emulator0.runCommand("killRegion");
 
     const activeTextEditor1 = await setupWorkspace("");
-    const emulator1 = new EmacsEmulator(activeTextEditor1, killRing);
+    const emulator1 = createEmulator(activeTextEditor1, killRing);
 
     // The killed texts are yanked on another text editor
     await emulator1.runCommand("yank");
