@@ -4,9 +4,8 @@ import { Position, Range, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../emulator";
 import { KillRing } from "../../kill-yank/kill-ring";
 import { Minibuffer } from "../../minibuffer";
-import { Registers } from "../../commands/registers";
+import { Registers, RegisterCommandState } from "../../commands/registers";
 import { RectangleState } from "../../commands/rectangle";
-import { RegisterCommandState } from "../../commands/registers";
 export { delay } from "../../utils";
 
 export async function setupWorkspace(
