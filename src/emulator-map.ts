@@ -3,6 +3,7 @@ import { EmacsEmulator } from "./emulator";
 import type { KillRing } from "./kill-yank/kill-ring";
 import type { Registers } from "./commands/registers";
 import type { RectangleState } from "./commands/rectangle";
+import type { RegisterCommandState } from "./commands/registers";
 import type { Minibuffer } from "./minibuffer";
 
 export class EmacsEmulatorMap {
@@ -13,6 +14,7 @@ export class EmacsEmulatorMap {
     private minibuffer: Minibuffer,
     private registers: Registers,
     private rectangleState: RectangleState,
+    private registerCommandState: RegisterCommandState,
   ) {
     this.emacsEmulatorMap = new Map();
   }
@@ -25,7 +27,14 @@ export class EmacsEmulatorMap {
 
     if (!emacsEmulator) {
       isNew = true;
-      emacsEmulator = new EmacsEmulator(editor, this.killRing, this.minibuffer, this.registers, this.rectangleState);
+      emacsEmulator = new EmacsEmulator(
+        editor,
+        this.killRing,
+        this.minibuffer,
+        this.registers,
+        this.rectangleState,
+        this.registerCommandState,
+      );
       this.emacsEmulatorMap.set(editorId, emacsEmulator);
     } else {
       emacsEmulator.setTextEditor(editor);
