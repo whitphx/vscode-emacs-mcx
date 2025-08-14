@@ -49,8 +49,6 @@ jobs:
             This PR automatically updates the keybindings in `package.json` by running `npm run gen-keys`.
 
             The keybinding generator depends on remote files that are sometimes updated, so this ensures our keybinding definitions stay up-to-date.
-
-            🤖 Generated with [Claude Code](https://claude.ai/code)
           branch: auto-update-keybindings
           delete-branch: true
           labels: |
