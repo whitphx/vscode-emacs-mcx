@@ -5592,7 +5592,7 @@
     "@vscode/test-web": "^0.0.72",
     "@vscode/vsce": "^3.6.0",
     "assert": "^2.1.0",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
