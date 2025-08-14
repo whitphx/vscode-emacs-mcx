@@ -96,6 +96,7 @@ export function activate(context: vscode.ExtensionContext): void {
         }
 
         const emulator = emulatorMap.getOrCreate(activeTextEditor);
+        emulator.setTextEditor(activeTextEditor);
 
         return callback(emulator, args);
       }),

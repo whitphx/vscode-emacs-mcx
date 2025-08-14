@@ -13,7 +13,6 @@ export class EmacsEmulatorMap {
 
     const emacsEmulator = this.get(documentId);
     if (emacsEmulator) {
-      emacsEmulator.setTextEditor(editor);
       return emacsEmulator;
     }
 
