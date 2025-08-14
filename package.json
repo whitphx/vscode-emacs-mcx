@@ -644,6 +644,11 @@
       },
       {
         "key": "ctrl+g",
+        "command": "inlineChat2.close",
+        "when": "inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && !chatEdits.isRequestInProgress || inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.isRequestInProgress && chatEdits.requestCount == '0'"
+      },
+      {
+        "key": "ctrl+g",
         "command": "keybindings.editor.clearSearchResults",
         "when": "inKeybindings && inKeybindingsSearch"
       },
@@ -791,11 +796,6 @@
         "key": "ctrl+g",
         "command": "diffEditor.exitCompareMove",
         "when": "comparingMovedCode"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isMac"
       },
       {
         "key": "ctrl+s",
