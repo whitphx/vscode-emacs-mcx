@@ -4,6 +4,14 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.11] - 2025-08-14
+
+### Fix
+
+- Update `C-g` keybindings, [#2414](https://github.com/whitphx/vscode-emacs-mcx/pull/2414).
+- Internal refactoring, [#2413](https://github.com/whitphx/vscode-emacs-mcx/pull/2413).
+- Internal package updates.
+
 ## [0.88.10] - 2025-08-05
 
 ### Fix
