@@ -1,44 +1,28 @@
-import type { TextEditor } from "vscode";
-import { EmacsEmulator } from "./emulator";
-import type { KillRing } from "./kill-yank/kill-ring";
-import type { Registers, RegisterCommandState } from "./commands/registers";
-import type { RectangleState } from "./commands/rectangle";
-import type { Minibuffer } from "./minibuffer";
+import type { TextEditor, ExtensionContext } from "vscode";
+import type { EmacsEmulator } from "./emulator";
 
 export class EmacsEmulatorMap {
   private emacsEmulatorMap: Map<string, EmacsEmulator>;
 
   constructor(
-    private killRing: KillRing,
-    private minibuffer: Minibuffer,
-    private registers: Registers,
-    private registerCommandState: RegisterCommandState,
-    private rectangleState: RectangleState,
+    private context: ExtensionContext,
+    private factory: (textEditor: TextEditor) => EmacsEmulator,
   ) {
     this.emacsEmulatorMap = new Map();
   }
 
-  public getOrCreate(editor: TextEditor): [EmacsEmulator, boolean] {
-    const editorId = editor.document.uri.toString();
+  public getOrCreate(editor: TextEditor): EmacsEmulator {
+    const documentId = editor.document.uri.toString();
 
-    let isNew = false;
-    let emacsEmulator = this.get(editorId);
-
-    if (!emacsEmulator) {
-      isNew = true;
-      emacsEmulator = new EmacsEmulator(
-        editor,
-        this.killRing,
-        this.minibuffer,
-        this.registers,
-        this.registerCommandState,
-        this.rectangleState,
-      );
-      this.emacsEmulatorMap.set(editorId, emacsEmulator);
-    } else {
-      emacsEmulator.setTextEditor(editor);
+    const emacsEmulator = this.get(documentId);
+    if (emacsEmulator) {
+      return emacsEmulator;
     }
-    return [emacsEmulator, isNew];
+
+    const newEmacsEmulator = this.factory(editor);
+    this.emacsEmulatorMap.set(documentId, newEmacsEmulator);
+    this.context.subscriptions.push(newEmacsEmulator);
+    return newEmacsEmulator;
   }
 
   public get(uriString: string): EmacsEmulator | undefined {

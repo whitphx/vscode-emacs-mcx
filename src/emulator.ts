@@ -265,6 +265,13 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
    * when the active text editor is switched.
    */
   public async switchTextEditor(textEditor: TextEditor): Promise<void> {
+    if (this.textEditor === textEditor) {
+      // NOTE: `switchTextEditor()`'s behavior is flaky
+      // as it depends on a delay with an ad-hoc duration,
+      // so it's important to avoid calling it when it's not necessary.
+      return;
+    }
+
     this.setTextEditor(textEditor);
 
     // For example when the active text editor is switched by the code jump feature,
