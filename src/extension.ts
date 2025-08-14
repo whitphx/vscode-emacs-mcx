@@ -5,7 +5,6 @@ import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
-import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-yank/kill-ring";
 import { Logger } from "./logger";
 import { MessageManager } from "./message";
@@ -27,7 +26,7 @@ export function activate(context: vscode.ExtensionContext): void {
   };
   const registerCommandState = new RegisterCommandState();
 
-  const emulatorFactory = (editor: vscode.TextEditor): EmacsEmulator => {
+  const createEmacsEmulator = (editor: vscode.TextEditor): EmacsEmulator => {
     const emacsEmulator = new EmacsEmulator(
       editor,
       killRing,
@@ -40,7 +39,7 @@ export function activate(context: vscode.ExtensionContext): void {
     return emacsEmulator;
   };
 
-  const emulatorMap = new EmacsEmulatorMap(emulatorFactory);
+  const emacsEmulatorMap = new Map<string, EmacsEmulator>();
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(async (editor) => {
@@ -50,8 +49,11 @@ export function activate(context: vscode.ExtensionContext): void {
         return;
       }
 
-      const curEmulator = emulatorMap.getOrCreate(editor);
-      await curEmulator.switchTextEditor(editor);
+      const documentId = editor.document.uri.toString();
+      const emulator = emacsEmulatorMap.get(documentId);
+      if (emulator) {
+        await emulator.switchTextEditor(editor);
+      }
     }),
   );
 
@@ -60,10 +62,11 @@ export function activate(context: vscode.ExtensionContext): void {
       const documents = vscode.workspace.textDocuments;
 
       // Delete emulators once all tabs of this document have been closed
-      for (const uri of emulatorMap.keys()) {
-        const emulator = emulatorMap.get(uri);
+      for (const uri of emacsEmulatorMap.keys()) {
+        const emulator = emacsEmulatorMap.get(uri);
         if (emulator == null || !documents.includes(emulator.getTextEditor().document)) {
-          emulatorMap.delete(uri);
+          emulator?.dispose();
+          emacsEmulatorMap.delete(uri);
         }
       }
     }),
@@ -95,8 +98,14 @@ export function activate(context: vscode.ExtensionContext): void {
           return;
         }
 
-        const emulator = emulatorMap.getOrCreate(activeTextEditor);
-        emulator.setTextEditor(activeTextEditor);
+        const documentId = activeTextEditor.document.uri.toString();
+        let emulator = emacsEmulatorMap.get(documentId);
+        if (emulator == null) {
+          emulator = createEmacsEmulator(activeTextEditor);
+          emacsEmulatorMap.set(documentId, emulator);
+        } else {
+          emulator.setTextEditor(activeTextEditor);
+        }
 
         return callback(emulator, args);
       }),
