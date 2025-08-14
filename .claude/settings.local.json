@@ -8,8 +8,11 @@
       "Bash(npm test)",
       "Bash(npm test:*)",
       "Bash(node:*)",
-      "Bash(npm run test:*)"
+      "Bash(npm run test:*)",
+      "Bash(mkdir:*)",
+      "Bash(python3:*)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "acceptEdits"
   }
 }

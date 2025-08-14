@@ -1,0 +1,55 @@
+name: Update Keybindings
+
+on:
+  schedule:
+    # Run daily at 02:00 UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-keybindings:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate keybindings
+        run: npm run gen-keys
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet package.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update keybindings in package.json"
+          title: "chore: Update keybindings from latest remote definitions"
+          body: |
+            This PR automatically updates the keybindings in `package.json` by running `npm run gen-keys`.
+
+            The keybinding generator depends on remote files that are sometimes updated, so this ensures our keybinding definitions stay up-to-date.
+
+            🤖 Generated with [Claude Code](https://claude.ai/code)
+          branch: auto-update-keybindings
+          delete-branch: true
+          labels: |
+            automated
+            keybindings
