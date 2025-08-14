@@ -1,13 +1,10 @@
-import type { TextEditor, ExtensionContext } from "vscode";
+import type { TextEditor } from "vscode";
 import type { EmacsEmulator } from "./emulator";
 
 export class EmacsEmulatorMap {
   private emacsEmulatorMap: Map<string, EmacsEmulator>;
 
-  constructor(
-    private context: ExtensionContext,
-    private factory: (textEditor: TextEditor) => EmacsEmulator,
-  ) {
+  constructor(private factory: (textEditor: TextEditor) => EmacsEmulator) {
     this.emacsEmulatorMap = new Map();
   }
 
@@ -21,7 +18,6 @@ export class EmacsEmulatorMap {
 
     const newEmacsEmulator = this.factory(editor);
     this.emacsEmulatorMap.set(documentId, newEmacsEmulator);
-    this.context.subscriptions.push(newEmacsEmulator);
     return newEmacsEmulator;
   }
 

@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext): void {
     return emacsEmulator;
   };
 
-  const emulatorMap = new EmacsEmulatorMap(context, emulatorFactory);
+  const emulatorMap = new EmacsEmulatorMap(emulatorFactory);
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(async (editor) => {
