@@ -5,7 +5,6 @@ import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
 import { EmacsEmulator } from "./emulator";
-import { EmacsEmulatorMap } from "./emulator-map";
 import { KillRing } from "./kill-yank/kill-ring";
 import { Logger } from "./logger";
 import { MessageManager } from "./message";
@@ -27,21 +26,20 @@ export function activate(context: vscode.ExtensionContext): void {
   };
   const registerCommandState = new RegisterCommandState();
 
-  const emulatorMap = new EmacsEmulatorMap(killRing, minibuffer, registers, registerCommandState, rectangleState);
+  const createEmacsEmulator = (editor: vscode.TextEditor): EmacsEmulator => {
+    const emacsEmulator = new EmacsEmulator(
+      editor,
+      killRing,
+      minibuffer,
+      registers,
+      registerCommandState,
+      rectangleState,
+    );
+    context.subscriptions.push(emacsEmulator);
+    return emacsEmulator;
+  };
 
-  function getAndUpdateEmulator() {
-    const activeTextEditor = vscode.window.activeTextEditor;
-    if (activeTextEditor == null) {
-      return undefined;
-    }
-
-    const [curEmulator, isNew] = emulatorMap.getOrCreate(activeTextEditor);
-    if (isNew) {
-      context.subscriptions.push(curEmulator);
-    }
-
-    return curEmulator;
-  }
+  const emacsEmulatorMap = new Map<string, EmacsEmulator>();
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(async (editor) => {
@@ -51,15 +49,10 @@ export function activate(context: vscode.ExtensionContext): void {
         return;
       }
 
-      const [curEmulator, isNew] = emulatorMap.getOrCreate(editor);
-      if (isNew) {
-        context.subscriptions.push(curEmulator);
-      } else {
-        // NOTE: `switchTextEditor()`'s behavior is flaky
-        // as it depends on a delay with an ad-hoc duration,
-        // so it's important to put this call at this else block
-        // and avoid calling it when it's not necessary.
-        await curEmulator.switchTextEditor(editor);
+      const documentId = editor.document.uri.toString();
+      const emulator = emacsEmulatorMap.get(documentId);
+      if (emulator) {
+        await emulator.switchTextEditor(editor);
       }
     }),
   );
@@ -69,10 +62,11 @@ export function activate(context: vscode.ExtensionContext): void {
       const documents = vscode.workspace.textDocuments;
 
       // Delete emulators once all tabs of this document have been closed
-      for (const uri of emulatorMap.keys()) {
-        const emulator = emulatorMap.get(uri);
+      for (const uri of emacsEmulatorMap.keys()) {
+        const emulator = emacsEmulatorMap.get(uri);
         if (emulator == null || !documents.includes(emulator.getTextEditor().document)) {
-          emulatorMap.delete(uri);
+          emulator?.dispose();
+          emacsEmulatorMap.delete(uri);
         }
       }
     }),
@@ -91,21 +85,31 @@ export function activate(context: vscode.ExtensionContext): void {
     callback: (emulator: EmacsEmulator, args: Unreliable<any>) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
     onNoEmulator?: (args: Unreliable<any>) => unknown, // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const disposable = vscode.commands.registerCommand(commandName, (args: Unreliable<any>) => {
-      logger.debug(`[command]\t Command "${commandName}" executed with args ${JSON.stringify(args)}`);
+    context.subscriptions.push(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      vscode.commands.registerCommand(commandName, (args: Unreliable<any>) => {
+        logger.debug(`[command]\t Command "${commandName}" executed with args ${JSON.stringify(args)}`);
 
-      const emulator = getAndUpdateEmulator();
-      if (!emulator) {
-        if (typeof onNoEmulator === "function") {
-          return onNoEmulator(args);
+        const activeTextEditor = vscode.window.activeTextEditor;
+        if (activeTextEditor == null) {
+          if (typeof onNoEmulator === "function") {
+            return onNoEmulator(args);
+          }
+          return;
         }
-        return;
-      }
 
-      return callback(emulator, args);
-    });
-    context.subscriptions.push(disposable);
+        const documentId = activeTextEditor.document.uri.toString();
+        let emulator = emacsEmulatorMap.get(documentId);
+        if (emulator == null) {
+          emulator = createEmacsEmulator(activeTextEditor);
+          emacsEmulatorMap.set(documentId, emulator);
+        } else {
+          emulator.setTextEditor(activeTextEditor);
+        }
+
+        return callback(emulator, args);
+      }),
+    );
   }
 
   if (Configuration.instance.enableOverridingTypeCommand) {
