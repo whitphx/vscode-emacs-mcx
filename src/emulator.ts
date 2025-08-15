@@ -467,7 +467,17 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       throw Error(`command ${commandName} is not found`);
     }
 
-    const prefixArgument = this.prefixArgumentHandler.getPrefixArgument();
+    // `args["prefixArgument"]` overrides the prefix argument.
+    const maybePrefixArgumentOverride =
+      args != null && typeof args === "object" && !Array.isArray(args) && "prefixArgument" in args
+        ? args.prefixArgument
+        : undefined;
+    const prefixArgumentOverride =
+      typeof maybePrefixArgumentOverride === "number" && !isNaN(maybePrefixArgumentOverride)
+        ? maybePrefixArgumentOverride
+        : undefined;
+
+    const prefixArgument = prefixArgumentOverride ?? this.prefixArgumentHandler.getPrefixArgument();
 
     return Promise.all([
       command.isIntermediateCommand ? null : this.prefixArgumentHandler.cancel(),

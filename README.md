@@ -419,7 +419,7 @@ This extension makes use of [paredit.js](https://github.com/rksm/paredit.js) to 
 | `C-M-,`                          | Go forward to where you previously invoked M-, (xref-go-forward). It's just bound to VSCode's "Go Forward" (`workbench.action.navigateForward`).           |
 | `M-S-/` (`M-?` with US keyboard) | Find references of an identifier (xref-find-references). It's just bound to VSCode's "References: Find All References" (`references-view.findReferences`). |
 
-## Other commands
+## Other commands/APIs
 
 ### `emacs-mcx.executeCommandWithPrefixArgument`
 
@@ -474,6 +474,24 @@ You can change the key name of the prefix argument.
 
 - `C-x e` will call the command `foo` with the argument `{}`.
 - `C-u C-x e` will call the command `foo` with the argument `{ repeat: 4 }`.
+
+### Overriding the prefix argument
+
+When you define a keybinding for `emacs-mcx.*` commands, you can override the prefix argument by specifying the `prefixArgument` in the keybinding's arguments.
+
+For example:
+
+```json
+{
+  "key": "alt+shift+y",
+  "command": "emacs-mcx.yankPop",
+  "args": {
+    "prefixArgument": -1
+  }
+}
+```
+
+With this keybinding, you can call `emacs-mcx.yankPop` command with a prefix argument `-1` by pressing `alt+shift+y`.
 
 ## Conflicts with default key bindings
 
