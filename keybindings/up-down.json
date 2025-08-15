@@ -51,6 +51,17 @@
     "keys": ["down", "ctrl+n"],
     "command": "selectNextCodeAction",
     "inheritWhenFromDefault": true
+  },
+  // ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2415
+  {
+    "keys": ["up", "ctrl+p"],
+    "command": "interactive.history.previous",
+    "when": "isCompositeNotebook && !notebookEditorFocused && !suggestWidgetVisible && interactiveInputCursorAtBoundary != 'bottom' && interactiveInputCursorAtBoundary != 'none'"
+  },
+  {
+    "keys": ["down", "ctrl+n"],
+    "command": "interactive.history.next",
+    "when": "isCompositeNotebook && !notebookEditorFocused && !suggestWidgetVisible && interactiveInputCursorAtBoundary != 'none' && interactiveInputCursorAtBoundary != 'top'"
   }
   // Don't assign `workbench.action.quickOpenNavigate*InFilePicker`
   // because these commands immediately open the selected file when the user releases the key,
