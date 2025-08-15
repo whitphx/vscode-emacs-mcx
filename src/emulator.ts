@@ -469,7 +469,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     // `args["prefixArgument"]` overrides the prefix argument.
     const maybePrefixArgumentOverride =
-      args != null && typeof args === "object" && !Array.isArray(args) && "prefixArgument" in args ? args.prefixArgument : undefined;
+      args != null && typeof args === "object" && !Array.isArray(args) && "prefixArgument" in args
+        ? args.prefixArgument
+        : undefined;
     const prefixArgumentOverride =
       typeof maybePrefixArgumentOverride === "number" && !isNaN(maybePrefixArgumentOverride)
         ? maybePrefixArgumentOverride
