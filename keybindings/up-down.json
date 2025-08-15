@@ -52,6 +52,7 @@
     "command": "selectNextCodeAction",
     "inheritWhenFromDefault": true
   },
+  // ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2415
   {
     "keys": ["up", "ctrl+p"],
     "command": "interactive.history.previous",
