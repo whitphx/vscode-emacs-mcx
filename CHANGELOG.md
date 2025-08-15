@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.88.12] - 2025-08-15
+
+### Fix
+
+- Configure `up/down/C-p/C-n` keybindings for Jupyter interactive window, [#2418](https://github.com/whitphx/vscode-emacs-mcx/pull/2418).
+
 ## [0.88.11] - 2025-08-14
 
 ### Fix
