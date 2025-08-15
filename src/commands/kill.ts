@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import { Position, Range, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
-import { IEmacsController } from "../emulator";
-import { AppendDirection, KillYanker } from "../kill-yank";
+import { AppendDirection } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
 import { WordCharacterClassifier, getMapForWordSeparators } from "vs/editor/common/controller/wordCharacterClassifier";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
@@ -17,16 +16,6 @@ function getWordSeparators(): WordCharacterClassifier {
   const maybeWordSeparators = vscode.workspace.getConfiguration("editor", resource).wordSeparators as unknown;
   // Ref: https://github.com/microsoft/vscode/blob/bc9f2577cd8e297b003e5ca652e19685504a1e50/src/vs/editor/contrib/wordOperations/wordOperations.ts#L45
   return getMapForWordSeparators(typeof maybeWordSeparators === "string" ? maybeWordSeparators : "");
-}
-
-export abstract class KillYankCommand extends EmacsCommand {
-  protected killYanker: KillYanker;
-
-  public constructor(emacsController: IEmacsController, killYanker: KillYanker) {
-    super(emacsController);
-
-    this.killYanker = killYanker;
-  }
 }
 
 function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1) {
@@ -45,7 +34,7 @@ function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1
   return range.isEmpty ? undefined : range;
 }
 
-export class KillWord extends KillYankCommand {
+export class KillWord extends EmacsCommand {
   public readonly id = "killWord";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
@@ -60,7 +49,7 @@ export class KillWord extends KillYankCommand {
     const killRanges = textEditor.selections
       .map((selection) => findNextKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
-    await this.killYanker.kill(killRanges, false);
+    await this.emacsController.killYanker.kill(killRanges, false);
     revealPrimaryActive(textEditor);
   }
 }
@@ -82,7 +71,7 @@ function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat
   return range.isEmpty ? undefined : range;
 }
 
-export class BackwardKillWord extends KillYankCommand {
+export class BackwardKillWord extends EmacsCommand {
   public readonly id = "backwardKillWord";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
@@ -97,12 +86,12 @@ export class BackwardKillWord extends KillYankCommand {
     const killRanges = textEditor.selections
       .map((selection) => findPreviousKillWordRange(textEditor.document, selection.active, repeat))
       .filter(<T>(maybeRange: T | undefined): maybeRange is T => maybeRange != null);
-    await this.killYanker.kill(killRanges, false, AppendDirection.Backward);
+    await this.emacsController.killYanker.kill(killRanges, false, AppendDirection.Backward);
     revealPrimaryActive(textEditor);
   }
 }
 
-export class KillLine extends KillYankCommand {
+export class KillLine extends EmacsCommand {
   public readonly id = "killLine";
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
@@ -143,11 +132,11 @@ export class KillLine extends KillYankCommand {
       }
     });
 
-    return this.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
+    return this.emacsController.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
   }
 }
 
-export class KillWholeLine extends KillYankCommand {
+export class KillWholeLine extends EmacsCommand {
   public readonly id = "killWholeLine";
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
@@ -159,20 +148,20 @@ export class KillWholeLine extends KillYankCommand {
         // From the beginning of the line to the beginning of the next line
         new Range(new Position(selection.active.line, 0), new Position(selection.active.line + 1, 0)),
     );
-    return this.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
+    return this.emacsController.killYanker.kill(ranges, false).then(() => revealPrimaryActive(textEditor));
   }
 }
 
-export class KillRegion extends KillYankCommand {
+export class KillRegion extends EmacsCommand {
   public readonly id = "killRegion";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
       const ranges = this.emacsController.nativeSelections;
-      await this.killYanker.kill(ranges, true);
+      await this.emacsController.killYanker.kill(ranges, true);
     } else {
       const ranges = getNonEmptySelections(textEditor);
-      await this.killYanker.kill(ranges, false);
+      await this.emacsController.killYanker.kill(ranges, false);
     }
 
     revealPrimaryActive(textEditor);
@@ -182,62 +171,62 @@ export class KillRegion extends KillYankCommand {
 }
 
 // TODO: Rename to kill-ring-save (original emacs command name)
-export class CopyRegion extends KillYankCommand {
+export class CopyRegion extends EmacsCommand {
   public readonly id = "copyRegion";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
       const ranges = this.emacsController.nativeSelections;
-      await this.killYanker.copy(ranges, true);
+      await this.emacsController.killYanker.copy(ranges, true);
     } else {
       const ranges = getNonEmptySelections(textEditor);
-      await this.killYanker.copy(ranges, false);
+      await this.emacsController.killYanker.copy(ranges, false);
     }
     this.emacsController.exitMarkMode();
-    this.killYanker.cancelKillAppend();
+    this.emacsController.killYanker.cancelKillAppend();
     makeSelectionsEmpty(textEditor);
     revealPrimaryActive(textEditor);
   }
 }
 
-export class Yank extends KillYankCommand {
+export class Yank extends EmacsCommand {
   public readonly id = "yank";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
-    await this.killYanker.yank(prefixArgument);
+    await this.emacsController.killYanker.yank(prefixArgument);
     this.emacsController.exitMarkMode();
     revealPrimaryActive(textEditor);
     MessageManager.showMessage("Mark set"); // `yank` and `exitMarkMode` may close the message, so we call showMessage here.
   }
 }
 
-export class YankPop extends KillYankCommand {
+export class YankPop extends EmacsCommand {
   public readonly id = "yankPop";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    if (this.killYanker.isYankInterrupted()) {
+    if (this.emacsController.killYanker.isYankInterrupted()) {
       // When `M-y` is called after a non-kill command, it works as `yank-from-kill-ring`.
       // Ref: https://www.gnu.org/software/emacs/news/NEWS.28.html#org41bb559
       this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
-      await this.killYanker.yankFromKillRing();
+      await this.emacsController.killYanker.yankFromKillRing();
       this.emacsController.exitMarkMode();
       MessageManager.showMessage("Mark set");
     } else {
-      await this.killYanker.yankPop(prefixArgument);
+      await this.emacsController.killYanker.yankPop(prefixArgument);
       this.emacsController.exitMarkMode();
     }
     revealPrimaryActive(textEditor);
   }
 }
 
-export class BrowseKillRing extends KillYankCommand {
+export class BrowseKillRing extends EmacsCommand {
   public readonly id = "browseKillRing";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     // In Emacs, `browse-kill-ring` is different from `yank-from-kill-ring`,
     // but we use `yank-from-kill-ring` here for simplicity in this extension.
-    await this.killYanker.yankFromKillRing();
+    await this.emacsController.killYanker.yankFromKillRing();
     revealPrimaryActive(textEditor);
   }
 }

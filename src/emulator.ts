@@ -43,6 +43,9 @@ export interface IEmacsController {
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
+
+  readonly killYanker: KillYanker;
+  readonly searchState: FindCommands.SearchState;
 }
 
 class NativeSelectionsStore {
@@ -134,7 +137,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.applyNativeSelectionsAsRect();
   }
 
-  private killYanker: KillYanker;
+  readonly searchState: FindCommands.SearchState;
+  readonly killYanker: KillYanker;
   private prefixArgumentHandler: PrefixArgumentHandler;
 
   private disposables: vscode.Disposable[];
@@ -163,12 +167,12 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
     vscode.window.onDidChangeTextEditorVisibleRanges(this.onDidChangeTextEditorVisibleRanges, this, this.disposables);
 
-    const searchState: FindCommands.SearchState = {
+    this.searchState = {
       startSelections: undefined,
     };
-    const killYanker = new KillYanker(this, killRing, minibuffer);
-    this.killYanker = killYanker;
-    this.registerDisposable(killYanker);
+
+    this.killYanker = new KillYanker(this, killRing, minibuffer);
+    this.registerDisposable(this.killYanker);
 
     this.commandRegistry = new EmacsCommandRegistry();
 
@@ -201,23 +205,23 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [IndentCommands.DeleteIndentation],
       [NavigationCommands.GotoLine, minibuffer],
       [NavigationCommands.FindDefinitions],
-      [FindCommands.IsearchForward, searchState],
-      [FindCommands.IsearchBackward, searchState],
-      [FindCommands.IsearchForwardRegexp, searchState],
-      [FindCommands.IsearchBackwardRegexp, searchState],
-      [FindCommands.QueryReplace, searchState],
-      [FindCommands.QueryReplaceRegexp, searchState],
-      [FindCommands.IsearchAbort, searchState],
-      [FindCommands.IsearchExit, searchState],
-      [KillCommands.KillWord, killYanker],
-      [KillCommands.BackwardKillWord, killYanker],
-      [KillCommands.KillLine, killYanker],
-      [KillCommands.KillWholeLine, killYanker],
-      [KillCommands.KillRegion, killYanker],
-      [KillCommands.CopyRegion, killYanker],
-      [KillCommands.Yank, killYanker],
-      [KillCommands.YankPop, killYanker],
-      [KillCommands.BrowseKillRing, killYanker],
+      [FindCommands.IsearchForward],
+      [FindCommands.IsearchBackward],
+      [FindCommands.IsearchForwardRegexp],
+      [FindCommands.IsearchBackwardRegexp],
+      [FindCommands.QueryReplace],
+      [FindCommands.QueryReplaceRegexp],
+      [FindCommands.IsearchAbort],
+      [FindCommands.IsearchExit],
+      [KillCommands.KillWord],
+      [KillCommands.BackwardKillWord],
+      [KillCommands.KillLine],
+      [KillCommands.KillWholeLine],
+      [KillCommands.KillRegion],
+      [KillCommands.CopyRegion],
+      [KillCommands.Yank],
+      [KillCommands.YankPop],
+      [KillCommands.BrowseKillRing],
       [RegisterCommands.CopyToRegister, registerCommandState],
       [RegisterCommands.InsertRegister, registerCommandState],
       [RegisterCommands.CopyRectangleToRegister, registerCommandState],
@@ -238,9 +242,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [PareditCommands.ForwardDownSexp],
       [PareditCommands.BackwardUpSexp],
       [PareditCommands.MarkSexp],
-      [PareditCommands.KillSexp, killYanker],
-      [PareditCommands.BackwardKillSexp, killYanker],
-      [PareditCommands.PareditKill, killYanker],
+      [PareditCommands.KillSexp],
+      [PareditCommands.BackwardKillSexp],
+      [PareditCommands.PareditKill],
       [AddSelectionToNextFindMatch],
       [AddSelectionToPreviousFindMatch],
       [CaseCommands.TransformToUppercase],
