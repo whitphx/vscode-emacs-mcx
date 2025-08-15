@@ -1,7 +1,6 @@
 import * as paredit from "paredit.js";
 import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
 import { EmacsCommand } from ".";
-import { KillYankCommand } from "./kill";
 import { AppendDirection } from "../kill-yank";
 import { revealPrimaryActive } from "./helpers/reveal";
 
@@ -120,7 +119,7 @@ export class MarkSexp extends EmacsCommand {
   }
 }
 
-export class KillSexp extends KillYankCommand {
+export class KillSexp extends EmacsCommand {
   public readonly id = "paredit.killSexp";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
@@ -137,13 +136,13 @@ export class KillSexp extends KillYankCommand {
       return new Range(selection.anchor, newActivePosition);
     });
 
-    await this.killYanker.kill(killRanges, false);
+    await this.emacsController.killYanker.kill(killRanges, false);
 
     revealPrimaryActive(textEditor);
   }
 }
 
-export class BackwardKillSexp extends KillYankCommand {
+export class BackwardKillSexp extends EmacsCommand {
   public readonly id = "paredit.backwardKillSexp";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
@@ -160,13 +159,13 @@ export class BackwardKillSexp extends KillYankCommand {
       return new Range(selection.anchor, newActivePosition);
     });
 
-    await this.killYanker.kill(killRanges, false, AppendDirection.Backward);
+    await this.emacsController.killYanker.kill(killRanges, false, AppendDirection.Backward);
 
     revealPrimaryActive(textEditor);
   }
 }
 
-export class PareditKill extends KillYankCommand {
+export class PareditKill extends EmacsCommand {
   public readonly id = "paredit.pareditKill";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
@@ -204,7 +203,7 @@ export class PareditKill extends KillYankCommand {
       return new Range(selection.anchor, newActivePosition);
     });
 
-    await this.killYanker.kill(
+    await this.emacsController.killYanker.kill(
       killRanges.filter((range) => !range.isEmpty),
       false,
     );

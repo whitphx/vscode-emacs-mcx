@@ -43,6 +43,8 @@ export interface IEmacsController {
   readonly inRectMarkMode: boolean;
   readonly nativeSelections: readonly vscode.Selection[];
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
+
+  readonly killYanker: KillYanker;
 }
 
 class NativeSelectionsStore {
@@ -134,7 +136,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.applyNativeSelectionsAsRect();
   }
 
-  private killYanker: KillYanker;
+  readonly killYanker: KillYanker;
   private prefixArgumentHandler: PrefixArgumentHandler;
 
   private disposables: vscode.Disposable[];
@@ -166,9 +168,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     const searchState: FindCommands.SearchState = {
       startSelections: undefined,
     };
-    const killYanker = new KillYanker(this, killRing, minibuffer);
-    this.killYanker = killYanker;
-    this.registerDisposable(killYanker);
+
+    this.killYanker = new KillYanker(this, killRing, minibuffer);
+    this.registerDisposable(this.killYanker);
 
     this.commandRegistry = new EmacsCommandRegistry();
 
@@ -209,15 +211,15 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [FindCommands.QueryReplaceRegexp, searchState],
       [FindCommands.IsearchAbort, searchState],
       [FindCommands.IsearchExit, searchState],
-      [KillCommands.KillWord, killYanker],
-      [KillCommands.BackwardKillWord, killYanker],
-      [KillCommands.KillLine, killYanker],
-      [KillCommands.KillWholeLine, killYanker],
-      [KillCommands.KillRegion, killYanker],
-      [KillCommands.CopyRegion, killYanker],
-      [KillCommands.Yank, killYanker],
-      [KillCommands.YankPop, killYanker],
-      [KillCommands.BrowseKillRing, killYanker],
+      [KillCommands.KillWord],
+      [KillCommands.BackwardKillWord],
+      [KillCommands.KillLine],
+      [KillCommands.KillWholeLine],
+      [KillCommands.KillRegion],
+      [KillCommands.CopyRegion],
+      [KillCommands.Yank],
+      [KillCommands.YankPop],
+      [KillCommands.BrowseKillRing],
       [RegisterCommands.CopyToRegister, registerCommandState],
       [RegisterCommands.InsertRegister, registerCommandState],
       [RegisterCommands.CopyRectangleToRegister, registerCommandState],
@@ -238,9 +240,9 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [PareditCommands.ForwardDownSexp],
       [PareditCommands.BackwardUpSexp],
       [PareditCommands.MarkSexp],
-      [PareditCommands.KillSexp, killYanker],
-      [PareditCommands.BackwardKillSexp, killYanker],
-      [PareditCommands.PareditKill, killYanker],
+      [PareditCommands.KillSexp],
+      [PareditCommands.BackwardKillSexp],
+      [PareditCommands.PareditKill],
       [AddSelectionToNextFindMatch],
       [AddSelectionToPreviousFindMatch],
       [CaseCommands.TransformToUppercase],
