@@ -5418,6 +5418,26 @@
         "when": "codeActionMenuVisible"
       },
       {
+        "key": "up",
+        "command": "interactive.history.previous",
+        "when": "isCompositeNotebook && !notebookEditorFocused && !suggestWidgetVisible && interactiveInputCursorAtBoundary != 'bottom' && interactiveInputCursorAtBoundary != 'none'"
+      },
+      {
+        "key": "ctrl+p",
+        "command": "interactive.history.previous",
+        "when": "isCompositeNotebook && !notebookEditorFocused && !suggestWidgetVisible && interactiveInputCursorAtBoundary != 'bottom' && interactiveInputCursorAtBoundary != 'none'"
+      },
+      {
+        "key": "down",
+        "command": "interactive.history.next",
+        "when": "isCompositeNotebook && !notebookEditorFocused && !suggestWidgetVisible && interactiveInputCursorAtBoundary != 'none' && interactiveInputCursorAtBoundary != 'top'"
+      },
+      {
+        "key": "ctrl+n",
+        "command": "interactive.history.next",
+        "when": "isCompositeNotebook && !notebookEditorFocused && !suggestWidgetVisible && interactiveInputCursorAtBoundary != 'none' && interactiveInputCursorAtBoundary != 'top'"
+      },
+      {
         "key": "alt+x",
         "command": "workbench.action.showCommands",
         "when": "config.emacs-mcx.useMetaPrefixAlt"
