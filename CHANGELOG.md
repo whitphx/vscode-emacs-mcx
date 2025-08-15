@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.89.0] - 2025-08-15
+
+### Add
+
+- `prefixArgument` overrides, [#2419](https://github.com/whitphx/vscode-emacs-mcx/pull/2419).
+
 ## [0.88.12] - 2025-08-15
 
 ### Fix
