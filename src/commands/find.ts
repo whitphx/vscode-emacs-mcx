@@ -24,10 +24,10 @@ interface FindArgs {
 abstract class IsearchCommand extends EmacsCommand {
   protected searchState: SearchState;
 
-  public constructor(emacsController: IEmacsController, searchState: SearchState) {
+  public constructor(emacsController: IEmacsController) {
     super(emacsController);
 
-    this.searchState = searchState;
+    this.searchState = this.emacsController.searchState;
   }
 
   protected openFindWidget(opts: { isRegex: boolean; replaceString?: string }): Thenable<void> {

@@ -45,6 +45,7 @@ export interface IEmacsController {
   moveRectActives: (navigateFn: (currentActives: vscode.Position, index: number) => vscode.Position) => void;
 
   readonly killYanker: KillYanker;
+  readonly searchState: FindCommands.SearchState;
 }
 
 class NativeSelectionsStore {
@@ -136,6 +137,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.applyNativeSelectionsAsRect();
   }
 
+  readonly searchState: FindCommands.SearchState;
   readonly killYanker: KillYanker;
   private prefixArgumentHandler: PrefixArgumentHandler;
 
@@ -165,7 +167,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     vscode.window.onDidChangeTextEditorSelection(this.onDidChangeTextEditorSelection, this, this.disposables);
     vscode.window.onDidChangeTextEditorVisibleRanges(this.onDidChangeTextEditorVisibleRanges, this, this.disposables);
 
-    const searchState: FindCommands.SearchState = {
+    this.searchState = {
       startSelections: undefined,
     };
 
@@ -203,14 +205,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       [IndentCommands.DeleteIndentation],
       [NavigationCommands.GotoLine, minibuffer],
       [NavigationCommands.FindDefinitions],
-      [FindCommands.IsearchForward, searchState],
-      [FindCommands.IsearchBackward, searchState],
-      [FindCommands.IsearchForwardRegexp, searchState],
-      [FindCommands.IsearchBackwardRegexp, searchState],
-      [FindCommands.QueryReplace, searchState],
-      [FindCommands.QueryReplaceRegexp, searchState],
-      [FindCommands.IsearchAbort, searchState],
-      [FindCommands.IsearchExit, searchState],
+      [FindCommands.IsearchForward],
+      [FindCommands.IsearchBackward],
+      [FindCommands.IsearchForwardRegexp],
+      [FindCommands.IsearchBackwardRegexp],
+      [FindCommands.QueryReplace],
+      [FindCommands.QueryReplaceRegexp],
+      [FindCommands.IsearchAbort],
+      [FindCommands.IsearchExit],
       [KillCommands.KillWord],
       [KillCommands.BackwardKillWord],
       [KillCommands.KillLine],
