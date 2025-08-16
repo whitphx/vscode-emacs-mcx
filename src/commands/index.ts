@@ -24,8 +24,12 @@ export interface DocumentChangedInterruptEvent extends InterruptEventBase {
 }
 export type InterruptEvent = UserCancelInterruptEvent | SelectionChangedInterruptEvent | DocumentChangedInterruptEvent;
 
+// - `ensureCommandId` is intended to be called when defining a command class
+//   so that the command ID is added to `COMMAND_IDS`,
+//   which makes it possible to list all command IDs later.
+// - The branded type `CommandId` is introduced to make sure that
+//   `ensureCommandId` is called when defining a command class.
 type CommandId = string & { readonly __brand: "commandId" };
-
 const COMMAND_IDS: { id: string; tag?: string }[] = [];
 export type COMMAND_TAG = "move";
 export function ensureCommandId(id: string, tag?: COMMAND_TAG): CommandId {
