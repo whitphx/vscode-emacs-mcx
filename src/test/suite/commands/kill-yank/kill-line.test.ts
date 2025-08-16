@@ -2,7 +2,7 @@ import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range } from "vscode";
 import { Configuration } from "../../../../configuration/configuration";
-import { moveCommandIds } from "../../../../commands/move";
+import { getCommandIds } from "../../../../commands";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
 import {
@@ -185,7 +185,7 @@ abcdefghij
     });
 
     // Test kill appending is not enabled after cursorMoves, editing, or some other ops
-    const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | void] => [
+    const moves = getCommandIds("move").map((commandName): [string, () => Thenable<unknown> | void] => [
       commandName,
       () => emulator.runCommand(commandName),
     ]);

@@ -26,10 +26,17 @@ export type InterruptEvent = UserCancelInterruptEvent | SelectionChangedInterrup
 
 type CommandId = string & { readonly __brand: "commandId" };
 
-export const COMMAND_IDS: string[] = [];
-export function ensureCommandId(commandId: string): CommandId {
-  COMMAND_IDS.push(commandId);
-  return commandId as CommandId;
+const COMMAND_IDS: { id: string; tag?: string }[] = [];
+export type COMMAND_TAG = "move";
+export function ensureCommandId(id: string, tag?: COMMAND_TAG): CommandId {
+  COMMAND_IDS.push({ id, tag });
+  return id as CommandId;
+}
+export function getCommandIds(tag?: COMMAND_TAG): string[] {
+  if (tag) {
+    return COMMAND_IDS.filter(({ tag: cmdTag }) => cmdTag === tag).map(({ id }) => id);
+  }
+  return COMMAND_IDS.map(({ id }) => id);
 }
 
 export abstract class EmacsCommand {

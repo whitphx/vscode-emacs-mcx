@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { COMMAND_IDS } from "./commands";
+import { getCommandIds } from "./commands";
 import { type Registers, RegisterCommandState } from "./commands/registers";
 import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
@@ -147,7 +147,7 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.typeChar(args);
   });
 
-  COMMAND_IDS.forEach((commandId) => {
+  getCommandIds().forEach((commandId) => {
     registerEmulatorCommand(`emacs-mcx.${commandId}`, (emulator, args) => {
       return emulator.runCommand(commandId, args);
     });
