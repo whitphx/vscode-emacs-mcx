@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { moveCommandIds } from "./commands/move";
+import { COMMAND_IDS } from "./commands";
 import { type Registers, RegisterCommandState } from "./commands/registers";
 import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
@@ -112,12 +112,6 @@ export function activate(context: vscode.ExtensionContext): void {
     );
   }
 
-  function bindEmulatorCommand(name: string) {
-    registerEmulatorCommand(`emacs-mcx.${name}`, (emulator, args) => {
-      return emulator.runCommand(name, args);
-    });
-  }
-
   if (Configuration.instance.enableOverridingTypeCommand) {
     registerEmulatorCommand(
       "type",
@@ -153,37 +147,11 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.typeChar(args);
   });
 
-  moveCommandIds.map((commandName) => {
-    registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator, args) => {
-      return emulator.runCommand(commandName, args);
+  COMMAND_IDS.forEach((commandId) => {
+    registerEmulatorCommand(`emacs-mcx.${commandId}`, (emulator, args) => {
+      return emulator.runCommand(commandId, args);
     });
   });
-
-  bindEmulatorCommand("gotoLine");
-
-  bindEmulatorCommand("findDefinitions");
-
-  bindEmulatorCommand("isearchForward");
-
-  bindEmulatorCommand("isearchBackward");
-
-  bindEmulatorCommand("isearchForwardRegexp");
-
-  bindEmulatorCommand("isearchBackwardRegexp");
-
-  bindEmulatorCommand("queryReplace");
-
-  bindEmulatorCommand("queryReplaceRegexp");
-
-  bindEmulatorCommand("isearchAbort");
-
-  bindEmulatorCommand("isearchExit");
-
-  bindEmulatorCommand("deleteBackwardChar");
-
-  bindEmulatorCommand("deleteForwardChar");
-
-  bindEmulatorCommand("deleteHorizontalSpace");
 
   registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
     return emulator.universalArgument();
@@ -193,47 +161,14 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.negativeArgument();
   });
 
-  bindEmulatorCommand("killLine");
-
-  bindEmulatorCommand("killWord");
-
-  bindEmulatorCommand("backwardKillWord");
-
-  bindEmulatorCommand("killWholeLine");
-
-  bindEmulatorCommand("killRegion");
-
-  bindEmulatorCommand("copyRegion");
-
-  bindEmulatorCommand("yank");
-
-  bindEmulatorCommand("yankPop");
   registerEmulatorCommand("emacs-mcx.yank-pop" /* For backward compatibility */, (emulator, args) => {
     logger.warn('The command "emacs-mcx.yank-pop" is deprecated. Please use "emacs-mcx.yankPop" instead.');
     return emulator.runCommand("yankPop", args);
   });
 
-  bindEmulatorCommand("browseKillRing");
-
   registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator, args) => {
     return emulator.runCommand("startAcceptingRectCommand", args);
   });
-
-  bindEmulatorCommand("killRectangle");
-
-  bindEmulatorCommand("copyRectangleAsKill");
-
-  bindEmulatorCommand("deleteRectangle");
-
-  bindEmulatorCommand("yankRectangle");
-
-  bindEmulatorCommand("openRectangle");
-
-  bindEmulatorCommand("clearRectangle");
-
-  bindEmulatorCommand("stringRectangle");
-
-  bindEmulatorCommand("replaceKillRingToRectangle");
 
   registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
     return emulator.setMarkCommand();
@@ -251,61 +186,9 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.exchangePointAndMark();
   });
 
-  bindEmulatorCommand("addSelectionToNextFindMatch");
-
-  bindEmulatorCommand("addSelectionToPreviousFindMatch");
-
   registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {
     return emulator.cancel();
   });
-
-  bindEmulatorCommand("newLine");
-
-  bindEmulatorCommand("transformToUppercase");
-
-  bindEmulatorCommand("transformToLowercase");
-
-  bindEmulatorCommand("transformToTitlecase");
-
-  bindEmulatorCommand("deleteBlankLines");
-
-  bindEmulatorCommand("recenterTopBottom");
-
-  bindEmulatorCommand("tabToTabStop");
-
-  bindEmulatorCommand("deleteIndentation");
-
-  bindEmulatorCommand("paredit.forwardSexp");
-
-  bindEmulatorCommand("paredit.forwardDownSexp");
-
-  bindEmulatorCommand("paredit.backwardSexp");
-
-  bindEmulatorCommand("paredit.backwardUpSexp");
-
-  bindEmulatorCommand("paredit.markSexp");
-
-  bindEmulatorCommand("paredit.killSexp");
-
-  bindEmulatorCommand("paredit.pareditKill");
-
-  bindEmulatorCommand("paredit.backwardKillSexp");
-
-  bindEmulatorCommand("copyToRegister");
-
-  bindEmulatorCommand("insertRegister");
-
-  bindEmulatorCommand("copyRectangleToRegister");
-
-  bindEmulatorCommand("pointToRegister");
-
-  bindEmulatorCommand("jumpToRegister");
-
-  bindEmulatorCommand("registerNameCommand");
-
-  bindEmulatorCommand("scrollOtherWindow");
-
-  bindEmulatorCommand("scrollOtherWindowDown");
 
   registerEmulatorCommand("emacs-mcx.executeCommandWithPrefixArgument", (emulator, args) => {
     if (typeof args !== "object" || args == null || Array.isArray(args)) {

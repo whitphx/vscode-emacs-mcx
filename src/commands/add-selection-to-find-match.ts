@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 
 export class AddSelectionToNextFindMatch extends EmacsCommand {
-  public readonly id = "addSelectionToNextFindMatch";
+  public static readonly id = ensureCommandId("addSelectionToNextFindMatch");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.emacsController.enterMarkMode(false);
@@ -12,7 +12,7 @@ export class AddSelectionToNextFindMatch extends EmacsCommand {
 }
 
 export class AddSelectionToPreviousFindMatch extends EmacsCommand {
-  public readonly id = "addSelectionToPreviousFindMatch";
+  public static readonly id = ensureCommandId("addSelectionToPreviousFindMatch");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.emacsController.enterMarkMode(false);

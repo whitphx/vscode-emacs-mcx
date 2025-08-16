@@ -10,8 +10,8 @@ export class EmacsCommandRegistry {
     this.interruptionHandlers = [];
   }
 
-  public register(command: EmacsCommand): void {
-    this.commands.set(command.id, command);
+  public register(id: string, command: EmacsCommand): void {
+    this.commands.set(id, command);
     if (isTextEditorInterruptionHandler(command)) {
       this.interruptionHandlers.push(command);
     }

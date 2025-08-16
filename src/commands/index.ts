@@ -24,8 +24,16 @@ export interface DocumentChangedInterruptEvent extends InterruptEventBase {
 }
 export type InterruptEvent = UserCancelInterruptEvent | SelectionChangedInterruptEvent | DocumentChangedInterruptEvent;
 
+type CommandId = string & { readonly __brand: "commandId" };
+
+export const COMMAND_IDS: string[] = [];
+export function ensureCommandId(commandId: string): CommandId {
+  COMMAND_IDS.push(commandId);
+  return commandId as CommandId;
+}
+
 export abstract class EmacsCommand {
-  public abstract readonly id: string;
+  public static readonly id: CommandId;
 
   /**
    * Some commands are a part of a longer command sequence, such as `C-x r` that is followed by `i` or `s` to consist a complete command sequence `C-x r i` or `C-x r s`.

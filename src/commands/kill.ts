@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Position, Range, TextDocument, TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 import { IEmacsController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
@@ -46,7 +46,7 @@ function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1
 }
 
 export class KillWord extends KillYankCommand {
-  public readonly id = "killWord";
+  public static readonly id = ensureCommandId("killWord");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -83,7 +83,7 @@ function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat
 }
 
 export class BackwardKillWord extends KillYankCommand {
-  public readonly id = "backwardKillWord";
+  public static readonly id = ensureCommandId("backwardKillWord");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -103,7 +103,7 @@ export class BackwardKillWord extends KillYankCommand {
 }
 
 export class KillLine extends KillYankCommand {
-  public readonly id = "killLine";
+  public static readonly id = ensureCommandId("killLine");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const killWholeLine = Configuration.instance.killWholeLine;
@@ -148,7 +148,7 @@ export class KillLine extends KillYankCommand {
 }
 
 export class KillWholeLine extends KillYankCommand {
-  public readonly id = "killWholeLine";
+  public static readonly id = ensureCommandId("killWholeLine");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.emacsController.exitMarkMode();
@@ -164,7 +164,7 @@ export class KillWholeLine extends KillYankCommand {
 }
 
 export class KillRegion extends KillYankCommand {
-  public readonly id = "killRegion";
+  public static readonly id = ensureCommandId("killRegion");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
@@ -183,7 +183,7 @@ export class KillRegion extends KillYankCommand {
 
 // TODO: Rename to kill-ring-save (original emacs command name)
 export class CopyRegion extends KillYankCommand {
-  public readonly id = "copyRegion";
+  public static readonly id = ensureCommandId("copyRegion");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {
@@ -201,7 +201,7 @@ export class CopyRegion extends KillYankCommand {
 }
 
 export class Yank extends KillYankCommand {
-  public readonly id = "yank";
+  public static readonly id = ensureCommandId("yank");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
@@ -213,7 +213,7 @@ export class Yank extends KillYankCommand {
 }
 
 export class YankPop extends KillYankCommand {
-  public readonly id = "yankPop";
+  public static readonly id = ensureCommandId("yankPop");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.killYanker.isYankInterrupted()) {
@@ -232,7 +232,7 @@ export class YankPop extends KillYankCommand {
 }
 
 export class BrowseKillRing extends KillYankCommand {
-  public readonly id = "browseKillRing";
+  public static readonly id = ensureCommandId("browseKillRing");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined) {
     // In Emacs, `browse-kill-ring` is different from `yank-from-kill-ring`,

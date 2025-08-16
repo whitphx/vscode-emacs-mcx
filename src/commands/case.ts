@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 
 function hasNonEmptySelection(textEditor: TextEditor): boolean {
   return textEditor.selections.some((selection) => !selection.isEmpty);
 }
 
 export class TransformToUppercase extends EmacsCommand {
-  public readonly id = "transformToUppercase";
+  public static readonly id = ensureCommandId("transformToUppercase");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (!hasNonEmptySelection(textEditor)) {
@@ -18,7 +18,7 @@ export class TransformToUppercase extends EmacsCommand {
 }
 
 export class TransformToLowercase extends EmacsCommand {
-  public readonly id = "transformToLowercase";
+  public static readonly id = ensureCommandId("transformToLowercase");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (!hasNonEmptySelection(textEditor)) {
@@ -29,7 +29,7 @@ export class TransformToLowercase extends EmacsCommand {
 }
 
 export class TransformToTitlecase extends EmacsCommand {
-  public readonly id = "transformToTitlecase";
+  public static readonly id = ensureCommandId("transformToTitlecase");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (!hasNonEmptySelection(textEditor)) {

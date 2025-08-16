@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import type { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 
 abstract class CommandInOtherWindow extends EmacsCommand {
   abstract runInOtherWindow(textEditor: vscode.TextEditor): void;
@@ -33,7 +33,7 @@ abstract class CommandInOtherWindow extends EmacsCommand {
 }
 
 export class ScrollOtherWindow extends CommandInOtherWindow {
-  public readonly id = "scrollOtherWindow";
+  public static readonly id = ensureCommandId("scrollOtherWindow");
 
   public runInOtherWindow(textEditor: vscode.TextEditor): void {
     const visibleRangeEndLine =
@@ -58,7 +58,7 @@ export class ScrollOtherWindow extends CommandInOtherWindow {
 }
 
 export class ScrollOtherWindowDown extends CommandInOtherWindow {
-  public readonly id = "scrollOtherWindowDown";
+  public static readonly id = ensureCommandId("scrollOtherWindowDown");
 
   public runInOtherWindow(textEditor: vscode.TextEditor): void {
     const visibleLineStartLine = textEditor.visibleRanges[0]?.start.line ?? 0;
