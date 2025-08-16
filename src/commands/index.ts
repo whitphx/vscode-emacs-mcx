@@ -46,6 +46,10 @@ export function getCommandIds(tag?: COMMAND_TAG): string[] {
 export abstract class EmacsCommand {
   public static readonly id: CommandId;
 
+  get id() {
+    return (this.constructor as typeof EmacsCommand).id;
+  }
+
   /**
    * Some commands are a part of a longer command sequence, such as `C-x r` that is followed by `i` or `s` to consist a complete command sequence `C-x r i` or `C-x r s`.
    * Such commands are flagged as intermediate commands so that they should not call `prefixArgumentHandler.cancel` to cancel the prefix argument in `EmacsEmulator.runCommand`.

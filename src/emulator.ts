@@ -173,7 +173,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.commandRegistry = new EmacsCommandRegistry();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type EmacsCommandClass = { new (emulator: EmacsEmulator, ...args: any[]): EmacsCommand; id: string };
+    type EmacsCommandClass = { new (emulator: EmacsEmulator, ...args: any[]): EmacsCommand };
     const commandClasses: Array<[EmacsCommandClass, ...args: unknown[]]> = [
       [MoveCommands.ForwardChar],
       [MoveCommands.BackwardChar],
@@ -251,7 +251,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     ];
     for (const item of commandClasses) {
       const [CommandClass, ...args] = item;
-      this.commandRegistry.register(CommandClass.id, new CommandClass(this, ...args));
+      this.commandRegistry.register(new CommandClass(this, ...args));
     }
   }
 
