@@ -1,9 +1,9 @@
 import { Position, Range } from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 
 export class DeleteBlankLines extends EmacsCommand {
-  public readonly id = "deleteBlankLines";
+  public static readonly id = ensureCommandId("deleteBlankLines");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const document = textEditor.document;

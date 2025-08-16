@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
-import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
+import { EmacsCommand, ITextEditorInterruptionHandler, ensureCommandId } from ".";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle";
 import { deleteRanges } from "../utils";
@@ -52,7 +52,7 @@ export class RegisterCommandState {
 
 // Will be bound to C-x r s
 export class CopyToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "copyToRegister";
+  public static readonly id = ensureCommandId("copyToRegister");
   override isIntermediateCommand = true;
 
   constructor(
@@ -73,7 +73,7 @@ export class CopyToRegister extends EmacsCommand implements ITextEditorInterrupt
 
 // Will be bound to C-x r i
 export class InsertRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "insertRegister";
+  public static readonly id = ensureCommandId("insertRegister");
   override isIntermediateCommand = true;
 
   constructor(
@@ -94,7 +94,7 @@ export class InsertRegister extends EmacsCommand implements ITextEditorInterrupt
 
 // Will be bound to C-x r r
 export class CopyRectangleToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "copyRectangleToRegister";
+  public static readonly id = ensureCommandId("copyRectangleToRegister");
   override isIntermediateCommand = true;
 
   constructor(
@@ -115,7 +115,7 @@ export class CopyRectangleToRegister extends EmacsCommand implements ITextEditor
 
 // Will be bound to C-x r SPC
 export class PointToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "pointToRegister";
+  public static readonly id = ensureCommandId("pointToRegister");
   override isIntermediateCommand = true;
 
   constructor(
@@ -136,7 +136,7 @@ export class PointToRegister extends EmacsCommand implements ITextEditorInterrup
 
 // Will be bound to C-x r j
 export class JumpToRegister extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "jumpToRegister";
+  public static readonly id = ensureCommandId("jumpToRegister");
   override isIntermediateCommand = true;
 
   constructor(
@@ -157,7 +157,7 @@ export class JumpToRegister extends EmacsCommand implements ITextEditorInterrupt
 
 // Will be bound to all characters (a, b, c, ...) following the commands above (C-x r s, C-x r i) making use of the acceptingRegisterName context.
 export class RegisterNameCommand extends EmacsCommand {
-  public readonly id = "registerNameCommand";
+  public static readonly id = ensureCommandId("registerNameCommand");
 
   constructor(
     emacsController: IEmacsController,

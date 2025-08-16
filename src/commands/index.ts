@@ -24,8 +24,31 @@ export interface DocumentChangedInterruptEvent extends InterruptEventBase {
 }
 export type InterruptEvent = UserCancelInterruptEvent | SelectionChangedInterruptEvent | DocumentChangedInterruptEvent;
 
+// - `ensureCommandId` is intended to be called when defining a command class
+//   so that the command ID is added to `COMMAND_IDS`,
+//   which makes it possible to list all command IDs later.
+// - The branded type `CommandId` is introduced to make sure that
+//   `ensureCommandId` is called when defining a command class.
+type CommandId = string & { readonly __brand: "commandId" };
+const COMMAND_IDS: { id: string; tag?: string }[] = [];
+export type COMMAND_TAG = "move";
+export function ensureCommandId(id: string, tag?: COMMAND_TAG): CommandId {
+  COMMAND_IDS.push({ id, tag });
+  return id as CommandId;
+}
+export function getCommandIds(tag?: COMMAND_TAG): string[] {
+  if (tag) {
+    return COMMAND_IDS.filter(({ tag: cmdTag }) => cmdTag === tag).map(({ id }) => id);
+  }
+  return COMMAND_IDS.map(({ id }) => id);
+}
+
 export abstract class EmacsCommand {
-  public abstract readonly id: string;
+  public static readonly id: CommandId;
+
+  get id() {
+    return (this.constructor as typeof EmacsCommand).id;
+  }
 
   /**
    * Some commands are a part of a longer command sequence, such as `C-x r` that is followed by `i` or `s` to consist a complete command sequence `C-x r i` or `C-x r s`.

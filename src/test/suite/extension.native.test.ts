@@ -3,6 +3,7 @@ import vscode from "vscode";
 import path from "path";
 
 import { Configuration } from "../../configuration/configuration";
+import { getCommandIds } from "../../commands";
 
 suite("package.json", () => {
   let packageJson: unknown;
@@ -40,6 +41,16 @@ suite("package.json", () => {
         registeredCommands.includes(command) || exceptions.includes(command),
         `Command '${command}' should be registered.`,
       );
+    }
+  });
+
+  test("all command IDs are registered", async () => {
+    const registeredCommands = await vscode.commands.getCommands();
+    const commandIds = getCommandIds();
+    const expectedExtensionCommandIds = commandIds.map((id) => `emacs-mcx.${id}`);
+
+    for (const commandId of expectedExtensionCommandIds) {
+      assert.ok(registeredCommands.includes(commandId), `Command ID '${commandId}' should be registered.`);
     }
   });
 

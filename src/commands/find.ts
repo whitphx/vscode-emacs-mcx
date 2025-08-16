@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
@@ -62,7 +62,7 @@ abstract class IsearchCommand extends EmacsCommand {
 }
 
 export class IsearchForward extends IsearchCommand {
-  public readonly id = "isearchForward";
+  public static readonly id = ensureCommandId("isearchForward");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
@@ -74,7 +74,7 @@ export class IsearchForward extends IsearchCommand {
 }
 
 export class IsearchBackward extends IsearchCommand {
-  public readonly id = "isearchBackward";
+  public static readonly id = ensureCommandId("isearchBackward");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
@@ -85,7 +85,7 @@ export class IsearchBackward extends IsearchCommand {
 }
 
 export class IsearchForwardRegexp extends IsearchCommand {
-  public readonly id = "isearchForwardRegexp";
+  public static readonly id = ensureCommandId("isearchForwardRegexp");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
@@ -96,7 +96,7 @@ export class IsearchForwardRegexp extends IsearchCommand {
 }
 
 export class IsearchBackwardRegexp extends IsearchCommand {
-  public readonly id = "isearchBackwardRegexp";
+  public static readonly id = ensureCommandId("isearchBackwardRegexp");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
@@ -107,7 +107,7 @@ export class IsearchBackwardRegexp extends IsearchCommand {
 }
 
 export class QueryReplace extends IsearchCommand {
-  public readonly id = "queryReplace";
+  public static readonly id = ensureCommandId("queryReplace");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
@@ -119,7 +119,7 @@ export class QueryReplace extends IsearchCommand {
 }
 
 export class QueryReplaceRegexp extends IsearchCommand {
-  public readonly id = "queryReplaceRegexp";
+  public static readonly id = ensureCommandId("queryReplaceRegexp");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;
@@ -133,7 +133,7 @@ export class QueryReplaceRegexp extends IsearchCommand {
  * C-g
  */
 export class IsearchAbort extends IsearchCommand {
-  public readonly id = "isearchAbort";
+  public static readonly id = ensureCommandId("isearchAbort");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     if (this.searchState.startSelections) {
@@ -149,7 +149,7 @@ export class IsearchAbort extends IsearchCommand {
  * Enter, etc
  */
 export class IsearchExit extends IsearchCommand {
-  public readonly id = "isearchExit";
+  public static readonly id = ensureCommandId("isearchExit");
 
   public run(
     textEditor: TextEditor,
@@ -187,7 +187,7 @@ export class IsearchExit extends IsearchCommand {
 }
 
 export class IsearchToggleCaseFold extends IsearchCommand {
-  public readonly id = "isearchToggleCaseFold";
+  public static readonly id = ensureCommandId("isearchToggleCaseFold");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     this.searchState.startSelections = textEditor.selections;

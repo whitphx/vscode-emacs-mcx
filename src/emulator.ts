@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
 import type { EmacsCommand, InterruptEvent } from "./commands";
-import { AddSelectionToNextFindMatch, AddSelectionToPreviousFindMatch } from "./commands/add-selection-to-find-match";
+import * as AddSelectionCommands from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
-import { DeleteBlankLines } from "./commands/delete-blank-lines";
+import * as DeleteBlankLinesCommands from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
 import * as TabCommands from "./commands/tab";
 import * as IndentCommands from "./commands/indent";
@@ -15,7 +15,7 @@ import * as PareditCommands from "./commands/paredit";
 import * as RectangleCommands from "./commands/rectangle";
 import * as RegisterCommands from "./commands/registers";
 import * as OtherWindowCommands from "./commands/other-window";
-import { RecenterTopBottom } from "./commands/recenter";
+import * as RecenterCommands from "./commands/recenter";
 import { EmacsCommandRegistry } from "./commands/registry";
 import { KillYanker } from "./kill-yank";
 import type { KillRing } from "./kill-yank/kill-ring";
@@ -170,88 +170,85 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     this.killYanker = killYanker;
     this.registerDisposable(killYanker);
 
-    this.commandRegistry = new EmacsCommandRegistry();
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type EmacsCommandClass = { new (emulator: EmacsEmulator, ...args: any[]): EmacsCommand };
-    const commandClasses: Array<[EmacsCommandClass, ...args: unknown[]]> = [
-      [MoveCommands.ForwardChar],
-      [MoveCommands.BackwardChar],
-      [MoveCommands.NextLine],
-      [MoveCommands.PreviousLine],
-      [MoveCommands.MoveBeginningOfLine],
-      [MoveCommands.MoveEndOfLine],
-      [MoveCommands.ForwardWord],
-      [MoveCommands.BackwardWord],
-      [MoveCommands.BackToIndentation],
-      [MoveCommands.BeginningOfBuffer],
-      [MoveCommands.EndOfBuffer],
-      [MoveCommands.ScrollUpCommand],
-      [MoveCommands.ScrollDownCommand],
-      [MoveCommands.ForwardParagraph],
-      [MoveCommands.BackwardParagraph],
-      [MoveCommands.MoveToWindowLineTopBottom],
-      [EditCommands.DeleteBackwardChar],
-      [EditCommands.DeleteForwardChar],
-      [EditCommands.DeleteHorizontalSpace],
-      [EditCommands.NewLine],
-      [DeleteBlankLines],
-      [RecenterTopBottom],
-      [TabCommands.TabToTabStop],
-      [IndentCommands.DeleteIndentation],
-      [NavigationCommands.GotoLine, minibuffer],
-      [NavigationCommands.FindDefinitions],
-      [FindCommands.IsearchForward, searchState],
-      [FindCommands.IsearchBackward, searchState],
-      [FindCommands.IsearchForwardRegexp, searchState],
-      [FindCommands.IsearchBackwardRegexp, searchState],
-      [FindCommands.QueryReplace, searchState],
-      [FindCommands.QueryReplaceRegexp, searchState],
-      [FindCommands.IsearchAbort, searchState],
-      [FindCommands.IsearchExit, searchState],
-      [KillCommands.KillWord, killYanker],
-      [KillCommands.BackwardKillWord, killYanker],
-      [KillCommands.KillLine, killYanker],
-      [KillCommands.KillWholeLine, killYanker],
-      [KillCommands.KillRegion, killYanker],
-      [KillCommands.CopyRegion, killYanker],
-      [KillCommands.Yank, killYanker],
-      [KillCommands.YankPop, killYanker],
-      [KillCommands.BrowseKillRing, killYanker],
-      [RegisterCommands.CopyToRegister, registerCommandState],
-      [RegisterCommands.InsertRegister, registerCommandState],
-      [RegisterCommands.CopyRectangleToRegister, registerCommandState],
-      [RegisterCommands.PointToRegister, registerCommandState],
-      [RegisterCommands.JumpToRegister, registerCommandState],
-      [RegisterCommands.RegisterNameCommand, registers, registerCommandState],
-      [RectangleCommands.StartAcceptingRectCommand],
-      [RectangleCommands.KillRectangle, rectangleState],
-      [RectangleCommands.CopyRectangleAsKill, rectangleState],
-      [RectangleCommands.DeleteRectangle, rectangleState],
-      [RectangleCommands.YankRectangle, rectangleState],
-      [RectangleCommands.OpenRectangle],
-      [RectangleCommands.ClearRectangle],
-      [RectangleCommands.StringRectangle, minibuffer],
-      [RectangleCommands.ReplaceKillRingToRectangle, killRing],
-      [PareditCommands.ForwardSexp],
-      [PareditCommands.BackwardSexp],
-      [PareditCommands.ForwardDownSexp],
-      [PareditCommands.BackwardUpSexp],
-      [PareditCommands.MarkSexp],
-      [PareditCommands.KillSexp, killYanker],
-      [PareditCommands.BackwardKillSexp, killYanker],
-      [PareditCommands.PareditKill, killYanker],
-      [AddSelectionToNextFindMatch],
-      [AddSelectionToPreviousFindMatch],
-      [CaseCommands.TransformToUppercase],
-      [CaseCommands.TransformToLowercase],
-      [CaseCommands.TransformToTitlecase],
-      [OtherWindowCommands.ScrollOtherWindow],
-      [OtherWindowCommands.ScrollOtherWindowDown],
+    const commands: EmacsCommand[] = [
+      new MoveCommands.ForwardChar(this),
+      new MoveCommands.BackwardChar(this),
+      new MoveCommands.NextLine(this),
+      new MoveCommands.PreviousLine(this),
+      new MoveCommands.MoveBeginningOfLine(this),
+      new MoveCommands.MoveEndOfLine(this),
+      new MoveCommands.ForwardWord(this),
+      new MoveCommands.BackwardWord(this),
+      new MoveCommands.BackToIndentation(this),
+      new MoveCommands.BeginningOfBuffer(this),
+      new MoveCommands.EndOfBuffer(this),
+      new MoveCommands.ScrollUpCommand(this),
+      new MoveCommands.ScrollDownCommand(this),
+      new MoveCommands.ForwardParagraph(this),
+      new MoveCommands.BackwardParagraph(this),
+      new MoveCommands.MoveToWindowLineTopBottom(this),
+      new EditCommands.DeleteBackwardChar(this),
+      new EditCommands.DeleteForwardChar(this),
+      new EditCommands.DeleteHorizontalSpace(this),
+      new EditCommands.NewLine(this),
+      new DeleteBlankLinesCommands.DeleteBlankLines(this),
+      new RecenterCommands.RecenterTopBottom(this),
+      new TabCommands.TabToTabStop(this),
+      new IndentCommands.DeleteIndentation(this),
+      new NavigationCommands.GotoLine(this, minibuffer),
+      new NavigationCommands.FindDefinitions(this),
+      new FindCommands.IsearchForward(this, searchState),
+      new FindCommands.IsearchBackward(this, searchState),
+      new FindCommands.IsearchForwardRegexp(this, searchState),
+      new FindCommands.IsearchBackwardRegexp(this, searchState),
+      new FindCommands.QueryReplace(this, searchState),
+      new FindCommands.QueryReplaceRegexp(this, searchState),
+      new FindCommands.IsearchAbort(this, searchState),
+      new FindCommands.IsearchExit(this, searchState),
+      new KillCommands.KillWord(this, killYanker),
+      new KillCommands.BackwardKillWord(this, killYanker),
+      new KillCommands.KillLine(this, killYanker),
+      new KillCommands.KillWholeLine(this, killYanker),
+      new KillCommands.KillRegion(this, killYanker),
+      new KillCommands.CopyRegion(this, killYanker),
+      new KillCommands.Yank(this, killYanker),
+      new KillCommands.YankPop(this, killYanker),
+      new KillCommands.BrowseKillRing(this, killYanker),
+      new RegisterCommands.CopyToRegister(this, registerCommandState),
+      new RegisterCommands.InsertRegister(this, registerCommandState),
+      new RegisterCommands.CopyRectangleToRegister(this, registerCommandState),
+      new RegisterCommands.PointToRegister(this, registerCommandState),
+      new RegisterCommands.JumpToRegister(this, registerCommandState),
+      new RegisterCommands.RegisterNameCommand(this, registers, registerCommandState),
+      new RectangleCommands.StartAcceptingRectCommand(this),
+      new RectangleCommands.KillRectangle(this, rectangleState),
+      new RectangleCommands.CopyRectangleAsKill(this, rectangleState),
+      new RectangleCommands.DeleteRectangle(this, rectangleState),
+      new RectangleCommands.YankRectangle(this, rectangleState),
+      new RectangleCommands.OpenRectangle(this),
+      new RectangleCommands.ClearRectangle(this),
+      new RectangleCommands.StringRectangle(this, minibuffer),
+      new RectangleCommands.ReplaceKillRingToRectangle(this, killRing),
+      new PareditCommands.ForwardSexp(this),
+      new PareditCommands.BackwardSexp(this),
+      new PareditCommands.ForwardDownSexp(this),
+      new PareditCommands.BackwardUpSexp(this),
+      new PareditCommands.MarkSexp(this),
+      new PareditCommands.KillSexp(this, killYanker),
+      new PareditCommands.BackwardKillSexp(this, killYanker),
+      new PareditCommands.PareditKill(this, killYanker),
+      new AddSelectionCommands.AddSelectionToNextFindMatch(this),
+      new AddSelectionCommands.AddSelectionToPreviousFindMatch(this),
+      new CaseCommands.TransformToUppercase(this),
+      new CaseCommands.TransformToLowercase(this),
+      new CaseCommands.TransformToTitlecase(this),
+      new OtherWindowCommands.ScrollOtherWindow(this),
+      new OtherWindowCommands.ScrollOtherWindowDown(this),
     ];
-    for (const item of commandClasses) {
-      const [CommandClass, ...args] = item;
-      this.commandRegistry.register(new CommandClass(this, ...args));
+
+    this.commandRegistry = new EmacsCommandRegistry();
+    for (const command of commands) {
+      this.commandRegistry.register(command);
     }
   }
 

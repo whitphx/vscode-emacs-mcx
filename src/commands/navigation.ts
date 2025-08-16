@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
 import type { TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 import type { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { Minibuffer } from "../minibuffer";
 import { revealPrimaryActive } from "./helpers/reveal";
 
 export class GotoLine extends EmacsCommand {
-  public readonly id = "gotoLine";
+  public static readonly id = ensureCommandId("gotoLine");
 
   private minibuffer: Minibuffer;
 
@@ -52,7 +52,7 @@ export class GotoLine extends EmacsCommand {
 }
 
 export class FindDefinitions extends EmacsCommand {
-  public readonly id = "findDefinitions";
+  public static readonly id = ensureCommandId("findDefinitions");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const anchors = textEditor.selections.map((selection) => selection.anchor);

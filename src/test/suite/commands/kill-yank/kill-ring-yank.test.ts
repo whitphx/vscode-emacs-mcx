@@ -2,7 +2,7 @@ import assert from "assert";
 import * as vscode from "vscode";
 import sinon from "sinon";
 import { Position, Range, Selection } from "vscode";
-import { moveCommandIds } from "../../../../commands/move";
+import { getCommandIds } from "../../../../commands";
 import { EmacsEmulator } from "../../../../emulator";
 import { KillRing } from "../../../../kill-yank/kill-ring";
 import { ClipboardTextKillRingEntity } from "../../../../kill-yank/kill-ring-entity";
@@ -333,7 +333,7 @@ ABCDEFGHIJ`,
         ],
       ];
 
-      const moves = moveCommandIds.map((commandName): [string, () => Thenable<unknown> | void] => [
+      const moves = getCommandIds("move").map((commandName): [string, () => Thenable<unknown> | void] => [
         commandName,
         () => emulator.runCommand(commandName),
       ]);

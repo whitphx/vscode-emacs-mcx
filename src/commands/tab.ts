@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
-import { makeParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand, ensureCommandId } from ".";
 
 const offsideRuleLanguageIds = ["python"];
 
 export class TabToTabStop extends EmacsCommand {
-  public readonly id = "tabToTabStop";
+  public static readonly id = ensureCommandId("tabToTabStop");
 
   private latestTextEditor: TextEditor | undefined;
   private latestSelections: readonly vscode.Selection[] = [];

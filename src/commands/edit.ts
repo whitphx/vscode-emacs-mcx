@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Range, Selection, TextEditor } from "vscode";
-import { makeParallel, EmacsCommand } from ".";
+import { makeParallel, EmacsCommand, ensureCommandId } from ".";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
@@ -9,7 +9,7 @@ import { Logger } from "../logger";
 const logger = Logger.get("EditCommands");
 
 export class DeleteBackwardChar extends EmacsCommand {
-  public readonly id = "deleteBackwardChar";
+  public static readonly id = ensureCommandId("deleteBackwardChar");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<unknown> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -18,7 +18,7 @@ export class DeleteBackwardChar extends EmacsCommand {
 }
 
 export class DeleteForwardChar extends EmacsCommand {
-  public readonly id = "deleteForwardChar";
+  public static readonly id = ensureCommandId("deleteForwardChar");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -29,7 +29,7 @@ export class DeleteForwardChar extends EmacsCommand {
 }
 
 export class DeleteHorizontalSpace extends EmacsCommand {
-  public readonly id = "deleteHorizontalSpace";
+  public static readonly id = ensureCommandId("deleteHorizontalSpace");
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
     const onlyBefore = prefixArgument === undefined ? false : prefixArgument > 0;
@@ -74,7 +74,7 @@ export class DeleteHorizontalSpace extends EmacsCommand {
 }
 
 export class NewLine extends EmacsCommand {
-  public readonly id = "newLine";
+  public static readonly id = ensureCommandId("newLine");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     this.emacsController.exitMarkMode();

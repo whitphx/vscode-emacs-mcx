@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
+import { EmacsCommand, ITextEditorInterruptionHandler, ensureCommandId } from ".";
 import { IEmacsController } from "../emulator";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections, copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle";
@@ -16,7 +16,7 @@ import { Minibuffer } from "src/minibuffer";
  * Then, `kill-rectangle` can be executed through `C-x r k`.
  */
 export class StartAcceptingRectCommand extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "startAcceptingRectCommand";
+  public static readonly id = ensureCommandId("startAcceptingRectCommand");
   override isIntermediateCommand = true;
 
   private acceptingRectCommand = false;
@@ -57,7 +57,7 @@ export abstract class RectangleKillYankCommand extends EmacsCommand {
 }
 
 export class DeleteRectangle extends RectangleKillYankCommand {
-  public readonly id = "deleteRectangle";
+  public static readonly id = ensureCommandId("deleteRectangle");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     await copyOrDeleteRect(this.emacsController, textEditor, {
@@ -68,7 +68,7 @@ export class DeleteRectangle extends RectangleKillYankCommand {
 }
 
 export class CopyRectangleAsKill extends RectangleKillYankCommand {
-  public readonly id = "copyRectangleAsKill";
+  public static readonly id = ensureCommandId("copyRectangleAsKill");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
@@ -82,7 +82,7 @@ export class CopyRectangleAsKill extends RectangleKillYankCommand {
 }
 
 export class KillRectangle extends RectangleKillYankCommand {
-  public readonly id = "killRectangle";
+  public static readonly id = ensureCommandId("killRectangle");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const copiedRectTexts = await copyOrDeleteRect(this.emacsController, textEditor, {
@@ -96,7 +96,7 @@ export class KillRectangle extends RectangleKillYankCommand {
 }
 
 export class YankRectangle extends RectangleKillYankCommand {
-  public readonly id = "yankRectangle";
+  public static readonly id = ensureCommandId("yankRectangle");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const killedRect = this.rectangleState.latestKilledRectangle;
@@ -106,7 +106,7 @@ export class YankRectangle extends RectangleKillYankCommand {
 }
 
 export class OpenRectangle extends EmacsCommand {
-  public readonly id = "openRectangle";
+  public static readonly id = ensureCommandId("openRectangle");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
@@ -132,7 +132,7 @@ export class OpenRectangle extends EmacsCommand {
 }
 
 export class ClearRectangle extends EmacsCommand {
-  public readonly id = "clearRectangle";
+  public static readonly id = ensureCommandId("clearRectangle");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const selections = getNonEmptySelections(textEditor);
@@ -156,7 +156,7 @@ export class ClearRectangle extends EmacsCommand {
 }
 
 export class StringRectangle extends EmacsCommand {
-  public readonly id = "stringRectangle";
+  public static readonly id = ensureCommandId("stringRectangle");
 
   private minibuffer: Minibuffer;
 
@@ -192,7 +192,7 @@ export class StringRectangle extends EmacsCommand {
 }
 
 export class ReplaceKillRingToRectangle extends EmacsCommand {
-  public readonly id = "replaceKillRingToRectangle";
+  public static readonly id = ensureCommandId("replaceKillRingToRectangle");
   private killring: KillRing | null;
 
   public constructor(emacsController: IEmacsController, killring: KillRing | null) {

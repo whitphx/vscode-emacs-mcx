@@ -1,6 +1,6 @@
 import * as paredit from "paredit.js";
 import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, ensureCommandId } from ".";
 import { KillYankCommand } from "./kill";
 import { AppendDirection } from "../kill-yank";
 import { revealPrimaryActive } from "./helpers/reveal";
@@ -61,27 +61,27 @@ abstract class PareditNavigatorCommand extends EmacsCommand {
 }
 
 export class ForwardSexp extends PareditNavigatorCommand {
-  public readonly id = "paredit.forwardSexp";
+  public static readonly id = ensureCommandId("paredit.forwardSexp");
   public readonly pareditNavigatorFn = paredit.navigator.forwardSexp;
 }
 
 export class BackwardSexp extends PareditNavigatorCommand {
-  public readonly id = "paredit.backwardSexp";
+  public static readonly id = ensureCommandId("paredit.backwardSexp");
   public readonly pareditNavigatorFn = paredit.navigator.backwardSexp;
 }
 
 export class ForwardDownSexp extends PareditNavigatorCommand {
-  public readonly id = "paredit.forwardDownSexp";
+  public static readonly id = ensureCommandId("paredit.forwardDownSexp");
   public readonly pareditNavigatorFn = paredit.navigator.forwardDownSexp;
 }
 
 export class BackwardUpSexp extends PareditNavigatorCommand {
-  public readonly id = "paredit.backwardUpSexp";
+  public static readonly id = ensureCommandId("paredit.backwardUpSexp");
   public readonly pareditNavigatorFn = paredit.navigator.backwardUpSexp;
 }
 
 export class MarkSexp extends EmacsCommand {
-  public readonly id = "paredit.markSexp";
+  public static readonly id = ensureCommandId("paredit.markSexp");
   private continuing = false;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
@@ -121,7 +121,7 @@ export class MarkSexp extends EmacsCommand {
 }
 
 export class KillSexp extends KillYankCommand {
-  public readonly id = "paredit.killSexp";
+  public static readonly id = ensureCommandId("paredit.killSexp");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -144,7 +144,7 @@ export class KillSexp extends KillYankCommand {
 }
 
 export class BackwardKillSexp extends KillYankCommand {
-  public readonly id = "paredit.backwardKillSexp";
+  public static readonly id = ensureCommandId("paredit.backwardKillSexp");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -167,7 +167,7 @@ export class BackwardKillSexp extends KillYankCommand {
 }
 
 export class PareditKill extends KillYankCommand {
-  public readonly id = "paredit.pareditKill";
+  public static readonly id = ensureCommandId("paredit.pareditKill");
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
