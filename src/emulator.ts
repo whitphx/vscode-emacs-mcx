@@ -16,7 +16,7 @@ import * as RectangleCommands from "./commands/rectangle";
 import * as RegisterCommands from "./commands/registers";
 import * as OtherWindowCommands from "./commands/other-window";
 import * as RecenterCommands from "./commands/recenter";
-import { EmacsCommandRegistry } from "./commands/registry";
+import { EmacsCommandRegistry } from "./command-registry";
 import { KillYanker } from "./kill-yank";
 import type { KillRing } from "./kill-yank/kill-ring";
 import { Logger } from "./logger";

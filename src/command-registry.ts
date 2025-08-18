@@ -1,5 +1,5 @@
-import { isTextEditorInterruptionHandler } from ".";
-import type { EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
+import { isTextEditorInterruptionHandler } from "./commands";
+import type { EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from "./commands";
 
 export class EmacsCommandRegistry {
   private commands: Map<string, EmacsCommand>;
