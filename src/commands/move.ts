@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import type { TextEditor } from "vscode";
-import { makeParallel, EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
+import { EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
+import { makeParallel } from "./helpers/parallel";
 import { Configuration } from "../configuration/configuration";
 import {
   travelForward as travelForwardParagraph,

@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Range, Selection, TextEditor } from "vscode";
-import { makeParallel, EmacsCommand } from ".";
+import { EmacsCommand } from ".";
+import { makeParallel } from "./helpers/parallel";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";

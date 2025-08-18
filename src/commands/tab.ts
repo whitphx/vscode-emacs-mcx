@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Selection, TextEditor } from "vscode";
-import { makeParallel, EmacsCommand } from ".";
+import { EmacsCommand } from ".";
+import { makeParallel } from "./helpers/parallel";
 
 const offsideRuleLanguageIds = ["python"];
 
