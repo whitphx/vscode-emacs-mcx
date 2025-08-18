@@ -55,7 +55,9 @@ export class KillRing {
   public async browse(): Promise<KillRingEntity | undefined> {
     MessageManager.showMessage(`${this.killRing.length} items in the kill ring.`);
 
-    const selectedEntity = await quickPickKillRing(this.killRing, this.pointer ?? 0);
+    const selectedEntity = await quickPickKillRing(this.killRing, this.pointer ?? 0, (entity) => {
+      this.delete(entity);
+    });
     if (selectedEntity === undefined) {
       return undefined;
     }
@@ -66,5 +68,24 @@ export class KillRing {
     }
 
     return selectedEntity;
+  }
+
+  public delete(entity: KillRingEntity): void {
+    const index = this.killRing.indexOf(entity);
+    if (index !== -1) {
+      this.killRing.splice(index, 1);
+
+      if (this.pointer !== null) {
+        if (index < this.pointer) {
+          this.pointer = Math.max(0, this.pointer - 1);
+        } else if (index === this.pointer) {
+          this.pointer = Math.min(this.pointer, this.killRing.length - 1);
+        }
+
+        if (this.killRing.length === 0) {
+          this.pointer = null;
+        }
+      }
+    }
   }
 }
