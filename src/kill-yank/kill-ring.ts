@@ -57,10 +57,6 @@ export class KillRing {
 
     const selectedEntity = await quickPickKillRing(this.killRing, this.pointer ?? 0, (entity) => {
       this.delete(entity);
-      return {
-        killRing: this.killRing,
-        activeIndex: this.pointer ?? 0,
-      };
     });
     if (selectedEntity === undefined) {
       return undefined;
@@ -78,8 +74,17 @@ export class KillRing {
     const index = this.killRing.indexOf(entity);
     if (index !== -1) {
       this.killRing.splice(index, 1);
-      if (this.pointer !== null && this.pointer >= this.killRing.length) {
-        this.pointer = this.killRing.length - 1;
+
+      if (this.pointer !== null) {
+        if (index < this.pointer) {
+          this.pointer = Math.max(0, this.pointer - 1);
+        } else if (index === this.pointer) {
+          this.pointer = Math.min(this.pointer, this.killRing.length - 1);
+        }
+
+        if (this.killRing.length === 0) {
+          this.pointer = null;
+        }
       }
     }
   }

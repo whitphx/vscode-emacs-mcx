@@ -23,7 +23,7 @@ class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
 export async function quickPickKillRing(
   killRing: KillRingEntity[],
   initialActiveIndex: number,
-  requestDelete: (entity: KillRingEntity) => { killRing: KillRingEntity[]; activeIndex: number },
+  requestDelete: (entity: KillRingEntity) => void,
 ): Promise<KillRingEntity | undefined> {
   const disposables: vscode.Disposable[] = [];
   try {
@@ -50,11 +50,15 @@ export async function quickPickKillRing(
         }),
         input.onDidTriggerItemButton((e) => {
           if (e.button instanceof KillRingEntityDeleteButton) {
-            const entity = e.button.entity;
-            const { killRing: nextKillRing, activeIndex: nextActiveIndex } = requestDelete(entity);
-            input.items = nextKillRing.map((entity) => new KillRingEntityQuickPickItem(entity));
-            const nextActiveItem = input.items[nextActiveIndex];
-            input.activeItems = nextActiveItem ? [nextActiveItem] : [];
+            const entityToDelete = e.button.entity;
+            requestDelete(entityToDelete);
+            const activeItem = input.activeItems[0];
+            const newActiveItem =
+              activeItem?.entity === entityToDelete
+                ? (input.items[input.items.indexOf(activeItem) + 1] ?? input.items[input.items.indexOf(activeItem) - 1])
+                : activeItem;
+            input.items = input.items.filter((item) => item.entity !== entityToDelete);
+            input.activeItems = newActiveItem ? [newActiveItem] : [];
           }
         }),
       );
