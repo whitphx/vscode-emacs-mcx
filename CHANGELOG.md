@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.89.2] - 2025-08-18
+
+### Fix
+
+- Internal refactoring, [#2426](https://github.com/whitphx/vscode-emacs-mcx/pull/2426), [#2427](https://github.com/whitphx/vscode-emacs-mcx/pull/2427).
+
 ## [0.89.1] - 2025-08-18
 
 ### Fix
