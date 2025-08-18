@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.90.0] - 2025-08-19
+
+### Add
+
+- Delete button for kill ring items, [#2428](https://github.com/whitphx/vscode-emacs-mcx/pull/2428).
+
 ## [0.89.2] - 2025-08-18
 
 ### Fix
