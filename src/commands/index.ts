@@ -2,10 +2,6 @@ import { TextEditor } from "vscode";
 import type { TextEditorSelectionChangeEvent, TextDocumentChangeEvent } from "vscode";
 import type { IEmacsController } from "../emulator";
 
-export function makeParallel<T>(concurrency: number, promiseFactory: () => Thenable<T>): Thenable<T[]> {
-  return Promise.all(Array.from({ length: concurrency }, promiseFactory));
-}
-
 export type InterruptReason = "user-cancel" | "selection-changed" | "document-changed";
 export interface InterruptEventBase {
   reason: InterruptReason;
