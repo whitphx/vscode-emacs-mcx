@@ -3,17 +3,27 @@ import { KillRingEntity } from "./kill-ring-entity";
 
 // Ref: https://github.com/microsoft/vscode-extension-samples/blob/e0a4e7430cbda9310b47ffb86a07c6eaf445ffee/quickinput-sample/src/quickOpen.ts
 
+class KillRingEntityDeleteButton implements vscode.QuickInputButton {
+  public readonly iconPath = new vscode.ThemeIcon("trash");
+  public readonly tooltip = "Delete";
+
+  constructor(public readonly entity: KillRingEntity) {}
+}
+
 class KillRingEntityQuickPickItem implements vscode.QuickPickItem {
   public readonly label: string;
+  public readonly buttons: vscode.QuickInputButton[];
 
   constructor(public readonly entity: KillRingEntity) {
     this.label = entity.asString();
+    this.buttons = [new KillRingEntityDeleteButton(entity)];
   }
 }
 
 export async function quickPickKillRing(
   killRing: KillRingEntity[],
   initialActiveIndex: number,
+  requestDelete: (entity: KillRingEntity) => { killRing: KillRingEntity[]; activeIndex: number },
 ): Promise<KillRingEntity | undefined> {
   const disposables: vscode.Disposable[] = [];
   try {
@@ -37,6 +47,15 @@ export async function quickPickKillRing(
         input.onDidHide(() => {
           resolve(undefined);
           input.dispose();
+        }),
+        input.onDidTriggerItemButton((e) => {
+          if (e.button instanceof KillRingEntityDeleteButton) {
+            const entity = e.button.entity;
+            const { killRing: nextKillRing, activeIndex: nextActiveIndex } = requestDelete(entity);
+            input.items = nextKillRing.map((entity) => new KillRingEntityQuickPickItem(entity));
+            const nextActiveItem = input.items[nextActiveIndex];
+            input.activeItems = nextActiveItem ? [nextActiveItem] : [];
+          }
         }),
       );
       input.show();
