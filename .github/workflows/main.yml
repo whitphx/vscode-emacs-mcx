@@ -113,7 +113,13 @@ jobs:
 
       - name: List files in VSIX
         run: |
-          unzip -l emacs-mcx*.vsix > vsix_file_tree.txt
+          set -e
+          VSIX_FILE=$(ls emacs-mcx*.vsix | head -n 1)
+          if [ -z "$VSIX_FILE" ]; then
+            echo "No VSIX file found matching emacs-mcx*.vsix"
+            exit 1
+          fi
+          unzip -l "$VSIX_FILE" > vsix_file_tree.txt
 
       - name: Post file tree to PR
         if: github.event_name == 'pull_request'
