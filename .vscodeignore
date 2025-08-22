@@ -7,6 +7,7 @@ yarn.lock
 out/
 src/
 keybinding-generator/
+keybindings/
 scripts/
 vendor/
 .gitignore
