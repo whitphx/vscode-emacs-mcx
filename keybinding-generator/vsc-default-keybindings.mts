@@ -121,9 +121,23 @@ export function getVscDefaultKeybindingWhenCondition(command: string): string | 
     return simple;
   }
 
-  const linuxWhen = linuxSpecific.find((keybinding) => keybinding.command === command)?.when;
-  const osxWhen = osxSpecific.find((keybinding) => keybinding.command === command)?.when;
-  const winWhen = winSpecific.find((keybinding) => keybinding.command === command)?.when;
+  const srcLinuxWhen = linuxSpecific.find((keybinding) => keybinding.command === command)?.when;
+  const srcOsxWhen = osxSpecific.find((keybinding) => keybinding.command === command)?.when;
+  const srcWinWhen = winSpecific.find((keybinding) => keybinding.command === command)?.when;
+
+  // Even when the command is only defined in a specific platform,
+  // we define its keybinding on all platforms from this extension.
+  const srcDefaultWhen = srcOsxWhen ?? srcWinWhen ?? srcLinuxWhen; // OSX is the top priority because I use it :)
+
+  const linuxWhen = srcLinuxWhen && srcLinuxWhen !== srcDefaultWhen ? srcLinuxWhen : srcDefaultWhen;
+  const osxWhen = srcOsxWhen && srcOsxWhen !== srcDefaultWhen ? srcOsxWhen : srcDefaultWhen;
+  const winWhen = srcWinWhen && srcWinWhen !== srcDefaultWhen ? srcWinWhen : srcDefaultWhen;
+
+  if (osxWhen === linuxWhen && linuxWhen === winWhen) {
+    // All platforms share the same condition
+    return osxWhen;
+  }
+
   const whenParts = [];
   if (linuxWhen) {
     whenParts.push(addWhenCond(linuxWhen, "isLinux"));
