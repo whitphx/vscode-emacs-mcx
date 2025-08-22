@@ -15,9 +15,12 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 ## Reference
 
 <!--
-If the request is related to a specific Emacs feature or behavior, please provide a link to the relevant Emacs documentation or discussion.
-For example, in the case of requesting the `C-f` command, you should put the link to
-If the request is related to a specific VSCode feature, command, or behavior, please provide a link to the relevant VSCode documentation or discussion.
-For example, in the case of requesting the `Go to File...` command, you should put the link to
-https://code.visualstudio.com/docs/editor/editingevolved#_go-to-file
+Please put the links to relevant documentation or discussion.
+
+For example, provide the link to the Emacs document about the requested command,
+like https://www.gnu.org/software/emacs/manual/html_node/emacs/Words.html for `C-f`.
+
+VSCode document can also be the reference
+if the requested feature seems to be implemented as an enhancement of an existing VSCode feature,
+like https://code.visualstudio.com/docs/editing/editingevolved#_go-to-type-definition
 -->
