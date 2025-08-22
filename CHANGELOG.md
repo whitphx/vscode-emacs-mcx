@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.90.1] - 2025-08-22
+
+### Fix
+
+- Bind `C-p` and `C-n` to `workbench.action.quickOpenSelectPrevious` and `workbench.action.quickOpenSelectNext` respectively for all platforms, [#2432](https://github.com/whitphx/vscode-emacs-mcx/pull/2432)
+- Ignore the unnecessary `keybindings/` directory in the package, [#2433](https://github.com/whitphx/vscode-emacs-mcx/pull/2433).
+
 ## [0.90.0] - 2025-08-19
 
 ### Add
