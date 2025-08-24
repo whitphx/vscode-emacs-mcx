@@ -54,6 +54,7 @@ jobs:
 
   artifact-analysis:
     needs: [get-build-info]
+    if: ${{ needs.get-build-info.outputs.pr-number != '' }}
 
     runs-on: ubuntu-latest
     permissions:
