@@ -117,6 +117,7 @@ jobs:
         with:
           files: emacs-mcx*.vsix
           generate_release_notes: true
+          tag_name: ${{ needs.get-build-info.outputs.tag }}
 
   publish:
     if: ${{ startsWith(needs.get-build-info.outputs.tag, 'v') }}
