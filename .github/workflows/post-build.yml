@@ -82,10 +82,6 @@ jobs:
           fi
           VSIX_FILE="${VSIX_FILES[0]}"
 
-          gh attestation verify "$VSIX_FILE" \
-            --repo ${{ github.repository }} \
-            --predicate-type https://slsa.dev/provenance/v1
-
           VERIFICATION_RESULT=$(gh attestation verify "$VSIX_FILE" \
             --repo ${{ github.repository }} \
             --predicate-type https://slsa.dev/provenance/v1 \
@@ -93,11 +89,6 @@ jobs:
           jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.path' <<< "$VERIFICATION_RESULT" | \
             grep -x ".github/workflows/test-build.yml" || {
               echo "Error: Attestation does not match expected workflow definition path" >&2
-              exit 1
-            }
-          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.ref' <<< "$VERIFICATION_RESULT" | \
-            grep "refs/tags/v" || {
-              echo "Error: Attestation does not match expected workflow trigger ref" >&2
               exit 1
             }
         env:
@@ -151,6 +142,34 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Verify artifact attestation
+        run: |
+          echo "Verifying attestation for desktop package..."
+          VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
+          if [ ${#VSIX_FILES[@]} -eq 0 ]; then
+            echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
+            exit 1
+          elif [ ${#VSIX_FILES[@]} -gt 1 ]; then
+            echo "Error: Multiple VSIX files found matching emacs-mcx*.vsix: ${VSIX_FILES[*]}" >&2
+            exit 1
+          fi
+          VSIX_FILE="${VSIX_FILES[0]}"
+
+          VERIFICATION_RESULT=$(gh attestation verify "$VSIX_FILE" \
+            --repo ${{ github.repository }} \
+            --predicate-type https://slsa.dev/provenance/v1 \
+            --format json)
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.path' <<< "$VERIFICATION_RESULT" | \
+            grep -x ".github/workflows/test-build.yml" || {
+              echo "Error: Attestation does not match expected workflow definition path" >&2
+              exit 1
+            }
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.ref' <<< "$VERIFICATION_RESULT" | \
+            grep "refs/tags/v" || {
+              echo "Error: Attestation does not match expected workflow trigger ref" >&2
+              exit 1
+            }
+
       - name: Create a new release
         uses: softprops/action-gh-release@v2
         with:
@@ -175,6 +194,34 @@ jobs:
           name: emacs-mcx
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify artifact attestation
+        run: |
+          echo "Verifying attestation for desktop package..."
+          VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
+          if [ ${#VSIX_FILES[@]} -eq 0 ]; then
+            echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
+            exit 1
+          elif [ ${#VSIX_FILES[@]} -gt 1 ]; then
+            echo "Error: Multiple VSIX files found matching emacs-mcx*.vsix: ${VSIX_FILES[*]}" >&2
+            exit 1
+          fi
+          VSIX_FILE="${VSIX_FILES[0]}"
+
+          VERIFICATION_RESULT=$(gh attestation verify "$VSIX_FILE" \
+            --repo ${{ github.repository }} \
+            --predicate-type https://slsa.dev/provenance/v1 \
+            --format json)
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.path' <<< "$VERIFICATION_RESULT" | \
+            grep -x ".github/workflows/test-build.yml" || {
+              echo "Error: Attestation does not match expected workflow definition path" >&2
+              exit 1
+            }
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.ref' <<< "$VERIFICATION_RESULT" | \
+            grep "refs/tags/v" || {
+              echo "Error: Attestation does not match expected workflow trigger ref" >&2
+              exit 1
+            }
 
       - run: |
           files=( emacs-mcx*.vsix )
