@@ -230,7 +230,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
-          files=( emacs-mcx*.vsix )
+          files=( ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix )
           echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
       - if: matrix.target == 'marketplace'
         name: Publish to Visual Studio Marketplace
