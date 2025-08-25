@@ -80,6 +80,7 @@ jobs:
             exit 1
           fi
           VSIX_FILE="${VSIX_FILES[0]}"
+
           gh attestation verify "$VSIX_FILE" \
             --repo ${{ github.repository }} \
             --predicate-type https://slsa.dev/provenance/v1
