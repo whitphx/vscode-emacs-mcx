@@ -105,6 +105,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write # Necessary for creating releases: https://github.com/softprops/action-gh-release#permissions
+
     steps:
       - uses: actions/download-artifact@v5
         with:
