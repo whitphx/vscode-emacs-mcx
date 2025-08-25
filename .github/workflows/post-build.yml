@@ -144,7 +144,7 @@ jobs:
 
       - name: Verify artifact attestation
         run: |
-          echo "Verifying attestation for desktop package..."
+          echo "Verifying attestation..."
           VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
           if [ ${#VSIX_FILES[@]} -eq 0 ]; then
             echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
@@ -169,6 +169,8 @@ jobs:
               echo "Error: Attestation does not match expected workflow trigger ref" >&2
               exit 1
             }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create a new release
         uses: softprops/action-gh-release@v2
@@ -197,7 +199,7 @@ jobs:
 
       - name: Verify artifact attestation
         run: |
-          echo "Verifying attestation for desktop package..."
+          echo "Verifying attestation..."
           VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
           if [ ${#VSIX_FILES[@]} -eq 0 ]; then
             echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
@@ -222,6 +224,8 @@ jobs:
               echo "Error: Attestation does not match expected workflow trigger ref" >&2
               exit 1
             }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
           files=( emacs-mcx*.vsix )
