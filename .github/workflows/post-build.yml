@@ -139,6 +139,7 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: emacs-mcx
+          path: ${{ runner.temp }}/emacs-mcx
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -194,6 +195,7 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: emacs-mcx
+          path: ${{ runner.temp }}/emacs-mcx
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
