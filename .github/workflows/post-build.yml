@@ -64,8 +64,33 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: emacs-mcx
+          path: ${{ runner.temp }}/emacs-mcx
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify artifact attestation
+        run: |
+          echo "Verifying attestation for desktop package..."
+          gh attestation verify ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix \
+            --repo ${{ github.repository }} \
+            --predicate-type https://slsa.dev/provenance/v1
+
+          VERIFICATION_RESULT=$(gh attestation verify ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix \
+            --repo ${{ github.repository }} \
+            --predicate-type https://slsa.dev/provenance/v1 \
+            --format json)
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.path' <<< "$VERIFICATION_RESULT" | \
+            grep -x ".github/workflows/test-build.yml" || {
+              echo "Error: Attestation does not match expected workflow definition path" >&2
+              exit 1
+            }
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.ref' <<< "$VERIFICATION_RESULT" | \
+            grep "refs/tags/v" || {
+              echo "Error: Attestation does not match expected workflow trigger ref" >&2
+              exit 1
+            }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List files in VSIX
         run: |
