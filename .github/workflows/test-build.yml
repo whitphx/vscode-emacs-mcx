@@ -117,6 +117,10 @@ jobs:
   build:
     needs: [test, set-build-info]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
