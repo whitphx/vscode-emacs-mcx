@@ -7,6 +7,8 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions: {}
+
 jobs:
   set-build-info:
     runs-on: ubuntu-latest
@@ -131,6 +133,7 @@ jobs:
 
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
       - name: Build the vsix package on Linux
+        id: build
         run: |
           if [ $IS_RELEASE = true ]; then
             VERSION=$(node -p "require('./package.json').version")
@@ -142,13 +145,26 @@ jobs:
           else
             FLAGS=""
           fi
-          npm exec -- vsce package -o emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix ${FLAGS}
+          OUTPUT_FILE_NAME=emacs-mcx-${VERSION}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.vsix
+
+          npm exec -- vsce package -o ${OUTPUT_FILE_NAME} ${FLAGS}
+
+          echo "filename=${OUTPUT_FILE_NAME}" >> $GITHUB_OUTPUT
         env:
           IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
           IS_PRE_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') && endsWith(github.ref, '-pre') }}
 
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: ${{ steps.build.outputs.filename }}
+        # This step may fail when the PR is created by an external contributor and the CI is run in their scope.
+        # We can ignore such failures because the following jobs such as E2E-testing in the post-build workflow don't necessarily need the attestation,
+        # while the verification is done when publishing the artifact.
+        continue-on-error: true
+
       - name: Upload the vsix built on Linux
         uses: actions/upload-artifact@v4
         with:
-          path: emacs-mcx*.vsix
+          path: ${{ steps.build.outputs.filename }}
           name: emacs-mcx
