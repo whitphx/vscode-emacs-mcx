@@ -71,11 +71,20 @@ jobs:
       - name: Verify artifact attestation
         run: |
           echo "Verifying attestation for desktop package..."
-          gh attestation verify ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix \
+          VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
+          if [ ${#VSIX_FILES[@]} -eq 0 ]; then
+            echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
+            exit 1
+          elif [ ${#VSIX_FILES[@]} -gt 1 ]; then
+            echo "Error: Multiple VSIX files found matching emacs-mcx*.vsix: ${VSIX_FILES[*]}" >&2
+            exit 1
+          fi
+          VSIX_FILE="${VSIX_FILES[0]}"
+          gh attestation verify "$VSIX_FILE" \
             --repo ${{ github.repository }} \
             --predicate-type https://slsa.dev/provenance/v1
 
-          VERIFICATION_RESULT=$(gh attestation verify ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix \
+          VERIFICATION_RESULT=$(gh attestation verify "$VSIX_FILE" \
             --repo ${{ github.repository }} \
             --predicate-type https://slsa.dev/provenance/v1 \
             --format json)
