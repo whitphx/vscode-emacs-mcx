@@ -138,7 +138,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
       this.emacsController.moveRectActives((curActive) => textEditor.document.lineAt(curActive.line).range.start);
     }
 
-    let moveHomeCommandFunc: () => Thenable<void> | void;
+    let moveHomeCommandFunc: () => Thenable<void>;
     if (Configuration.instance.$moveBeginningOfLineBehavior === "emacs") {
       // Emacs behavior: Move to the beginning of the line.
       if (Configuration.instance.lineMoveVisual) {
@@ -170,12 +170,25 @@ export class MoveBeginningOfLine extends EmacsCommand {
             const newActive = new vscode.Position(selection.active.line, activeChar);
             return new vscode.Selection(isInMarkMode ? selection.anchor : newActive, newActive);
           });
+          return Promise.resolve();
         };
       }
     }
 
+    const moveHomeCommandAndRevealFunc = () =>
+      // Reveal the left-most cursor after the operation. Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/306
+      // This is not VSCode's default behavior, but an opinionated preference of this extension's author.
+      moveHomeCommandFunc().then(() => {
+        // VSCode is not supporting RTL text editor yet (https://superuser.com/questions/1809942/visual-studio-code-write-from-right-to-left),
+        // so we only deal with the left-most cursor.
+        const leftMostActive = textEditor.selections
+          .map((selection) => selection.active)
+          .sort((a, b) => a.character - b.character)[0]!; // textEditor.selections always has at least one selection.
+        textEditor.revealRange(new vscode.Range(leftMostActive, leftMostActive));
+      });
+
     if (prefixArgument === undefined || prefixArgument === 1) {
-      return moveHomeCommandFunc();
+      return moveHomeCommandAndRevealFunc();
     } else if (prefixArgument > 1) {
       return vscode.commands
         .executeCommand<void>("cursorMove", {
@@ -184,7 +197,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
           value: prefixArgument - 1,
           isInMarkMode,
         })
-        .then(moveHomeCommandFunc);
+        .then(moveHomeCommandAndRevealFunc);
     }
   }
 }
