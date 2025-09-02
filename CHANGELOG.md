@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.90.8] - 2025-09-02
+
+### Fix
+
+- Fix `move-beginning-of-line` to reveal the left-most cursor, [#2444](https://github.com/whitphx/vscode-emacs-mcx/pull/2444).
+
 ## [0.90.7] - 2025-08-25
 
 ### Fix
