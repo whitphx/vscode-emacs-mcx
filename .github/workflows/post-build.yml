@@ -97,11 +97,16 @@ jobs:
       - name: List files in VSIX
         run: |
           set -e
-          VSIX_FILE=$(ls emacs-mcx*.vsix | head -n 1)
-          if [ -z "$VSIX_FILE" ]; then
-            echo "No VSIX file found matching emacs-mcx*.vsix"
+          VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
+          if [ ${#VSIX_FILES[@]} -eq 0 ]; then
+            echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
+            exit 1
+          elif [ ${#VSIX_FILES[@]} -gt 1 ]; then
+            echo "Error: Multiple VSIX files found matching emacs-mcx*.vsix: ${VSIX_FILES[*]}" >&2
             exit 1
           fi
+          VSIX_FILE="${VSIX_FILES[0]}"
+
           unzip -l "$VSIX_FILE" > vsix_file_tree.txt
 
       - name: Post file tree to PR
