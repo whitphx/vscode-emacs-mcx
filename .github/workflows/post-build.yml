@@ -110,7 +110,7 @@ jobs:
           unzip -l "$VSIX_FILE" > vsix_file_tree.txt
 
       - name: Post file tree to PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           PR_NUMBER: ${{ needs.get-build-info.outputs.pr-number }}
         with:
