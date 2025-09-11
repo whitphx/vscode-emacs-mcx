@@ -78,7 +78,7 @@ jobs:
         with:
           submodules: recursive
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: "npm"
@@ -127,7 +127,7 @@ jobs:
         with:
           submodules: recursive
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: "npm"
