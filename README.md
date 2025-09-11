@@ -1,6 +1,7 @@
 # Awesome Emacs Keymap (emacs-mcx)
 
-[![Test, Build, and Publish](https://github.com/whitphx/vscode-emacs-mcx/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/whitphx/vscode-emacs-mcx/actions/workflows/main.yml)
+[![Test and Build](https://github.com/whitphx/vscode-emacs-mcx/actions/workflows/test-build.yml/badge.svg)](https://github.com/whitphx/vscode-emacs-mcx/actions/workflows/test-build.yml)
+[![Post-build](https://github.com/whitphx/vscode-emacs-mcx/actions/workflows/post-build.yml/badge.svg)](https://github.com/whitphx/vscode-emacs-mcx/actions/workflows/post-build.yml)
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/tuttieee.emacs-mcx?label=Visual%20Studio%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx)
 [![Visual Studio Marketplace Installs - Azure DevOps Extension](https://img.shields.io/visual-studio-marketplace/azure-devops/installs/total/tuttieee.emacs-mcx)](https://marketplace.visualstudio.com/items?itemName=tuttieee.emacs-mcx)
