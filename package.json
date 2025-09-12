@@ -798,6 +798,16 @@
         "when": "comparingMovedCode"
       },
       {
+        "key": "ctrl+g",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isWindows"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isMac"
+      },
+      {
         "key": "ctrl+s",
         "command": "emacs-mcx.isearchForward",
         "when": "!findInputFocussed"
