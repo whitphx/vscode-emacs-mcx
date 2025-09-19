@@ -5313,21 +5313,6 @@
         "when": "(terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused) && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "ctrl+x 2",
-        "command": "workbench.action.terminal.splitActiveTab",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+x 3",
-        "command": "workbench.action.terminal.splitActiveTab",
-        "when": "terminalFocus"
-      },
-      {
-        "key": "ctrl+x 0",
-        "command": "workbench.action.terminal.unsplit",
-        "when": "terminalFocus"
-      },
-      {
         "key": "up",
         "command": "showPrevParameterHint",
         "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
