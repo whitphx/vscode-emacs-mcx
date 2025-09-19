@@ -4,6 +4,12 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.91.0] - 2025-09-19
+
+### Changed
+
+- Delete `ctrl+x 2`, `ctrl+x 3`, and `ctrl+x 0` keybindings in the terminal to avoid conflicts with terminal input, [#2461](https://github.com/whitphx/vscode-emacs-mcx/pull/2461).
+
 ## [0.90.8] - 2025-09-02
 
 ### Fix
