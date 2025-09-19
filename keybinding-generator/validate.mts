@@ -143,6 +143,58 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
   return errors;
 }
 
+function ctrlXOnTerminal(keybindings: KeyBinding[]): string[] {
+  // Keybindings starting with `ctrl+x` on Terminal should not be defined because
+  // it causes VSCode to interrupt the `ctrl+x` sequence and wait for the next key,
+  // which makes a single `ctrl+x` not to be sent to the terminal and it's not what we want.
+  const errors: string[] = [];
+
+  keybindings.forEach((binding) => {
+    if (binding.key == null) {
+      return;
+    }
+    if (!binding.key.startsWith("ctrl+x")) {
+      return;
+    }
+    if (binding.when == null) {
+      // Unconditionally active.
+      errors.push(
+        `Keybinding "${JSON.stringify(binding)}" starting with "ctrl+x" is activated unconditionally, which may lead to conflicts with terminal input.`,
+      );
+      return;
+    }
+
+    const context = {
+      isMac: false,
+      isWindows: false,
+      isLinux: false,
+      editorTextFocus: false,
+      editorReadonly: false,
+      suggestWidgetVisible: false,
+      terminalFocus: true,
+      findWidgetVisible: false,
+      findInputFocussed: false,
+      replaceInputFocussed: false,
+      isComposing: false,
+    };
+    const when = binding.when;
+
+    const isMatched = evaluateWhenCondition(when, context, true);
+    if (isMatched) {
+      errors.push(
+        `Keybinding "${JSON.stringify(binding)}" starting with "ctrl+x" is activated in terminal, which may leads to conflicting with terminal input.`,
+      );
+      return;
+    }
+  });
+  return errors;
+}
+
+/**
+ * Validates the generated keybindings.
+ * Throws an error if any potential issues are found.
+ */
+
 export function validate(keybindings: KeyBinding[]) {
   // NOTE: This validation process is not perfect.
   // We define ad-hoc rules to detect potential issues in keybindings.
@@ -152,6 +204,7 @@ export function validate(keybindings: KeyBinding[]) {
   const errors: string[] = [];
   errors.push(...ctrlEditsInFindWidgetOnWindowsOrLinux(keybindings));
   errors.push(...cmdEditsInFindWidgetOnMac(keybindings));
+  errors.push(...ctrlXOnTerminal(keybindings));
 
   if (errors.length > 0) {
     throw new Error("Keybinding validation failed:\n" + errors.join("\n"));

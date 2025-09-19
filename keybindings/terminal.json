@@ -177,16 +177,5 @@
     "key": "meta+y",
     "command": "workbench.action.terminal.copySelection",
     "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
-  },
-  {
-    "keys": ["ctrl+x 2", "ctrl+x 3"], // VSCode terminal only supports horizontal split.
-    "command": "workbench.action.terminal.splitActiveTab",
-    "when": "terminalFocus"
-  },
-  // Splitting
-  {
-    "key": "ctrl+x 0",
-    "command": "workbench.action.terminal.unsplit",
-    "when": "terminalFocus"
   }
 ]
