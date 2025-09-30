@@ -5630,7 +5630,7 @@
   },
   "dependencies": {
     "paredit.js": "./vendor/paredit.js",
-    "winston": "^3.17.0",
+    "winston": "^3.18.2",
     "winston-console-for-electron": "^0.0.7",
     "winston-transport": "^4.9.0"
   }
