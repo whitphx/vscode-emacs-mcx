@@ -5604,7 +5604,7 @@
     "@types/vscode": "^1.89.0",
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/test-web": "^0.0.73",
+    "@vscode/test-web": "^0.0.74",
     "@vscode/vsce": "^3.6.2",
     "assert": "^2.1.0",
     "eslint": "^9.37.0",
