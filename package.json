@@ -679,6 +679,11 @@
       },
       {
         "key": "ctrl+g",
+        "command": "quickInput.hide",
+        "when": "inQuickInput"
+      },
+      {
+        "key": "ctrl+g",
         "command": "scm.clearInput",
         "when": "scmRepository && !editorHasSelection && !suggestWidgetVisible"
       },
@@ -796,16 +801,6 @@
         "key": "ctrl+g",
         "command": "diffEditor.exitCompareMove",
         "when": "comparingMovedCode"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isMac"
       },
       {
         "key": "ctrl+s",
