@@ -13,6 +13,7 @@
     // assign `ESC ESC ESC` to `emacs-mcx.cancel`, which complements above `ESC` assignment.
     // NOTE: Original Emacs assigns `ESC ESC ESC` to `keyboard-escape-quit` that is different from `C-g`,
     // but we assign it to the same `cancel` command for now because we don't have needs to distinguish them.
+    // Ref: https://www.gnu.org/software/emacs/manual/html_node/emacs/Quitting.html
     "key": "escape escape escape",
     "command": "emacs-mcx.cancel",
     "when": "config.emacs-mcx.useMetaPrefixEscape && editorTextFocus && (editorHasSelection || editorHasMultipleSelections)"
