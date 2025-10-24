@@ -468,6 +468,10 @@
         "when": "sideBarFocus"
       },
       {
+        "key": "escape escape escape",
+        "command": "emacs-mcx.cancel"
+      },
+      {
         "key": "ctrl+g",
         "command": "closeReferenceSearch",
         "when": "inReferenceSearchEditor && !config.editor.stablePeek"
