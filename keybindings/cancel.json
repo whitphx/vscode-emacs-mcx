@@ -29,6 +29,14 @@
     "when": "editorFocus && findWidgetVisible && !isComposing"
   },
   {
+    // `ESC ESC ESC` is bound to `isearch-abort` in original Emacs so we bind it here as well,
+    // while it's enabled only when `config.emacs-mcx.useMetaPrefixEscape` is true so that
+    // we leave the single `ESC` for normal cancel commands when `useMetaPrefixEscape` is false.
+    "key": "escape escape escape",
+    "command": "emacs-mcx.isearchAbort",
+    "when": "config.emacs-mcx.useMetaPrefixEscape && editorFocus && findWidgetVisible && !isComposing"
+  },
+  {
     "key": "enter",
     "command": "emacs-mcx.isearchExit",
     "when": "editorFocus && findInputFocussed && !isComposing" // `!isComposing` is necessary to avoid closing the find widget when hitting `Enter` to confirm the IME input.

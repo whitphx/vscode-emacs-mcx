@@ -463,6 +463,11 @@
         "when": "editorFocus && findWidgetVisible && !isComposing"
       },
       {
+        "key": "escape escape escape",
+        "command": "emacs-mcx.isearchAbort",
+        "when": "config.emacs-mcx.useMetaPrefixEscape && editorFocus && findWidgetVisible && !isComposing"
+      },
+      {
         "key": "enter",
         "command": "emacs-mcx.isearchExit",
         "when": "editorFocus && findInputFocussed && !isComposing"
