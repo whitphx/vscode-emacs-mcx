@@ -1,5 +1,27 @@
 # Development of Awesome Emacs Keymap
 
+## Setup
+
+Install dependencies.
+
+```shell
+npm install
+```
+
+Open this repository in VSCode.
+
+```shell
+code .
+```
+
+Go to the "Run and Debug" side panel
+
+- Run "Launch Extension" for testing the extension in VSCode, like https://code.visualstudio.com/api/get-started/your-first-extension#debugging-the-extension
+- Run "Extension Tests" for running unit tests.
+- "Run Web Extension in VS Code" and "Extension Tests in VS Code" are also available for web extension development.
+
+https://code.visualstudio.com/docs/editor/debugging may help you.
+
 ## Unit test, linter, and CI
 
 This repository has introduced linter (ESLint), code formatter (Prettier), and unit testing.
@@ -22,15 +44,10 @@ $ npm run fix:prettier
 
 ### Unit tests
 
-To run unit tests, open VSCode's debug sidebar and run "Extension Tests".
+To run unit tests,
 
-Hint: You can also launch a new VSCode window with the extension under development by "Launch Extension".
-
-<video autoplay loop muted playsinline controls>
-  <source src="https://code.visualstudio.com/api/working-with-extensions/testing-extension/debug.mp4" type="video/mp4">
-</video>
-
-See also https://code.visualstudio.com/docs/editor/debugging
+- open VSCode's debug sidebar and run "Extension Tests".
+- or run `npm test` in the terminal.
 
 ### CI
 
