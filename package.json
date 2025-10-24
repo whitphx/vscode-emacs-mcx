@@ -445,7 +445,12 @@
       {
         "key": "escape",
         "command": "emacs-mcx.cancel",
-        "when": "editorTextFocus && (editorHasSelection || editorHasMultipleSelections) && !config.emacs-mcx.useMetaPrefixEscape"
+        "when": "!config.emacs-mcx.useMetaPrefixEscape && editorTextFocus && (editorHasSelection || editorHasMultipleSelections)"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "emacs-mcx.cancel",
+        "when": "config.emacs-mcx.useMetaPrefixEscape && editorTextFocus && (editorHasSelection || editorHasMultipleSelections)"
       },
       {
         "key": "ctrl+g",
@@ -466,10 +471,6 @@
         "key": "ctrl+g",
         "command": "noop",
         "when": "sideBarFocus"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "emacs-mcx.cancel"
       },
       {
         "key": "ctrl+g",
