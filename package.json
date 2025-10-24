@@ -2310,6 +2310,19 @@
         }
       },
       {
+        "key": "ctrl+x ctrl+t",
+        "command": "emacs-mcx.transposeLines",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+x ctrl+t",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": "emacs-mcx.transposeLines"
+        }
+      },
+      {
         "key": "ctrl+x h",
         "command": "editor.action.selectAll",
         "when": "editorTextFocus"

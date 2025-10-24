@@ -269,6 +269,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   bindEmulatorCommand("deleteBlankLines");
 
+  bindEmulatorCommand("transposeLines");
+
   bindEmulatorCommand("recenterTopBottom");
 
   bindEmulatorCommand("tabToTabStop");
