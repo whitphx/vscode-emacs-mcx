@@ -1,7 +1,14 @@
 import assert from "assert";
 import * as vscode from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { createEmulator, cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual } from "./utils";
+import {
+  createEmulator,
+  cleanUpWorkspace,
+  setupWorkspace,
+  setEmptyCursors,
+  assertCursorsEqual,
+  assertSelectionsEqual,
+} from "./utils";
 
 suite("transpose-lines", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -107,7 +114,7 @@ line 5`,
 
     // Verify mark mode is active with selection
     assert.ok(emulator.isInMarkMode);
-    assert.ok(!activeTextEditor.selections[0]!.isEmpty);
+    assertSelectionsEqual(activeTextEditor, [1, 0, 1, 4]);
 
     await emulator.runCommand("transposeLines");
 
@@ -139,9 +146,7 @@ line 5`,
 
     // Verify mark mode is active with multi-line selection
     assert.ok(emulator.isInMarkMode);
-    assert.ok(!activeTextEditor.selections[0]!.isEmpty);
-    assert.strictEqual(activeTextEditor.selections[0]!.start.line, 1);
-    assert.strictEqual(activeTextEditor.selections[0]!.end.line, 2);
+    assertSelectionsEqual(activeTextEditor, [1, 0, 2, 4]);
 
     await emulator.runCommand("transposeLines");
 
