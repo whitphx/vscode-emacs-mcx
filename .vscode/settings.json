@@ -17,6 +17,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "Bksp",
     "gitmodules",
     "Interruptible",
     "isearch",
