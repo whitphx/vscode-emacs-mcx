@@ -15,27 +15,22 @@ export class TransposeLines extends EmacsCommand {
     // Process lines >= 1
     const linesToTranspose = lineNumbers.filter((line) => line > 0);
 
-    // Gather all replacements upfront to batch in a single edit
-    const replacements: { range: Range; newText: string }[] = [];
+    // Process each line sequentially from top to bottom
     for (const lineNum of linesToTranspose) {
-      const currentLine = textEditor.document.lineAt(lineNum);
-      const previousLine = textEditor.document.lineAt(lineNum - 1);
+      await textEditor.edit((editBuilder) => {
+        const currentLine = textEditor.document.lineAt(lineNum);
+        const previousLine = textEditor.document.lineAt(lineNum - 1);
 
-      const currentLineText = currentLine.text;
-      const previousLineText = previousLine.text;
+        const currentLineText = currentLine.text;
+        const previousLineText = previousLine.text;
 
-      const rangeToReplace = new Range(previousLine.range.start, currentLine.range.end);
+        const rangeToReplace = new Range(previousLine.range.start, currentLine.range.end);
 
-      const newText = currentLineText + "\n" + previousLineText;
-      replacements.push({ range: rangeToReplace, newText });
+        const newText = currentLineText + "\n" + previousLineText;
+        editBuilder.replace(rangeToReplace, newText);
+      });
     }
 
-    // Apply all replacements in a single edit
-    await textEditor.edit((editBuilder) => {
-      for (const { range, newText } of replacements) {
-        editBuilder.replace(range, newText);
-      }
-    });
     // Update cursor positions - map each original selection to its new position
     // Always create empty selections (collapsed cursors) since the edit will exit mark mode
     const newSelections = textEditor.selections.map((selection) => {
