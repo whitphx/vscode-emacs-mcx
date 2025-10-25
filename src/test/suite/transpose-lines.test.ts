@@ -58,24 +58,24 @@ line 5`,
     assertCursorsEqual(activeTextEditor, [2, 0]);
   });
 
-  test("First line should not transpose (no previous line)", async () => {
+  test("First line transposes with second line", async () => {
     // Place cursor on line 1
     setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("transposeLines");
 
-    // Text should remain unchanged
+    // Lines 1 and 2 should be swapped
     assert.strictEqual(
       activeTextEditor.document.getText(),
-      `line 1
-line 2
+      `line 2
+line 1
 line 3
 line 4
 line 5`,
     );
 
-    // Cursor should remain in place
-    assertCursorsEqual(activeTextEditor, [0, 0]);
+    // Cursor should move to beginning of line 3
+    assertCursorsEqual(activeTextEditor, [2, 0]);
   });
 
   test("Multi-cursor transpose", async () => {
@@ -186,5 +186,25 @@ line 1
 line 4
 line 5`,
     );
+  });
+
+  test("Cursors on lines 1 and 2 both transpose lines 1 and 2", async () => {
+    // Place cursors on lines 1 and 2
+    setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
+
+    await emulator.runCommand("transposeLines");
+
+    // Both should transpose the same pair (lines 1 and 2), so only one swap occurs
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 2
+line 1
+line 3
+line 4
+line 5`,
+    );
+
+    // Both cursors should move to line 3
+    assertCursorsEqual(activeTextEditor, [2, 0], [2, 0]);
   });
 });

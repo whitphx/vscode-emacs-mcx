@@ -7,9 +7,12 @@ export class TransposeLines extends EmacsCommand {
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     // Get unique line numbers to transpose, sorted from top to bottom
     // Process top-to-bottom so adjacent line transposes cascade correctly
-    const lineNumbers = [...new Set(textEditor.selections.map((s) => s.active.line))].sort((a, b) => a - b);
+    // When on line 0, treat it as line 1 (swap lines 0 and 1, cursor moves to line 2)
+    const lineNumbers = [...new Set(textEditor.selections.map((s) => (s.active.line === 0 ? 1 : s.active.line)))].sort(
+      (a, b) => a - b,
+    );
 
-    // Remove line 0 (can't transpose first line)
+    // Process lines >= 1
     const linesToTranspose = lineNumbers.filter((line) => line > 0);
 
     // Process each line sequentially from top to bottom
@@ -32,24 +35,22 @@ export class TransposeLines extends EmacsCommand {
     const newSelections = textEditor.selections.map((selection) => {
       const currentLineNum = selection.active.line;
 
-      // If this line wasn't transposed (line 0), keep selection as-is
-      if (currentLineNum === 0) {
-        return selection;
-      }
+      // For line 0, treat it as line 1 (cursor moves to line 2)
+      const effectiveLineNum = currentLineNum === 0 ? 1 : currentLineNum;
 
       // Cursor moves to the beginning of the next line after transpose
-      const newLine = currentLineNum + 1;
+      const newLine = effectiveLineNum + 1;
       const newActive = new Position(newLine, 0);
 
       if (isInMarkMode && !selection.anchor.isEqual(selection.active)) {
         // Adjust the anchor position if it was on one of the transposed lines
         let newAnchor = selection.anchor;
-        if (selection.anchor.line === currentLineNum) {
+        if (selection.anchor.line === currentLineNum || selection.anchor.line === 0) {
           // Anchor was on current line, which moved to previous line position
-          newAnchor = new Position(currentLineNum - 1, selection.anchor.character);
-        } else if (selection.anchor.line === currentLineNum - 1) {
+          newAnchor = new Position(effectiveLineNum - 1, selection.anchor.character);
+        } else if (selection.anchor.line === effectiveLineNum - 1) {
           // Anchor was on previous line, which moved to current line position
-          newAnchor = new Position(currentLineNum, selection.anchor.character);
+          newAnchor = new Position(effectiveLineNum, selection.anchor.character);
         }
         return new Selection(newAnchor, newActive);
       } else {
