@@ -21,7 +21,7 @@ line 5`;
   teardown(cleanUpWorkspace);
 
   test("Basic transpose: swap current line with previous line", async () => {
-    // Place cursor on line 2 (index 1)
+    // Place cursor on line 2
     setEmptyCursors(activeTextEditor, [1, 0]);
 
     await emulator.runCommand("transposeLines");
@@ -35,7 +35,7 @@ line 4
 line 5`,
     );
 
-    // Cursor should move to beginning of next line (line 3, index 2)
+    // Cursor should move to beginning of next line
     assertCursorsEqual(activeTextEditor, [2, 0]);
   });
 
@@ -59,7 +59,7 @@ line 5`,
   });
 
   test("First line should not transpose (no previous line)", async () => {
-    // Place cursor on line 1 (index 0)
+    // Place cursor on line 1
     setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("transposeLines");
@@ -74,7 +74,7 @@ line 4
 line 5`,
     );
 
-    // Cursor should remain on line 1
+    // Cursor should remain in place
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
@@ -133,10 +133,10 @@ line 4
 line 5`,
     );
 
-    // Cursor is now on line 3 (index 2)
+    // Cursor moves to next line
     assertCursorsEqual(activeTextEditor, [2, 0]);
 
-    // Second transpose - this will swap "line 1" (now at index 1) with "line 3" (at index 2)
+    // Second transpose swaps "line 1" with "line 3"
     await emulator.runCommand("transposeLines");
 
     assert.strictEqual(
@@ -148,12 +148,12 @@ line 4
 line 5`,
     );
 
-    // Cursor should be on line 4 (index 3)
+    // Cursor moves to next line again
     assertCursorsEqual(activeTextEditor, [3, 0]);
   });
 
   test("Transpose last line", async () => {
-    // Place cursor on last line (line 5, index 4)
+    // Place cursor on last line
     setEmptyCursors(activeTextEditor, [4, 0]);
 
     await emulator.runCommand("transposeLines");
@@ -167,7 +167,7 @@ line 5
 line 4`,
     );
 
-    // Cursor should move to next line (which would be beyond the document, so line 5)
+    // Cursor should move to next line (beyond the document)
     assertCursorsEqual(activeTextEditor, [5, 0]);
   });
 
