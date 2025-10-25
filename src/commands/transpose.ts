@@ -6,159 +6,58 @@ export class TransposeChars extends EmacsCommand {
   public readonly id = "transposeChars";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    const offset = prefixArgument == null ? 1 : prefixArgument;
+    const transposeOffset = prefixArgument == null ? 1 : prefixArgument;
 
-    if (offset === 0) {
+    if (transposeOffset === 0) {
       return;
     }
 
     const doc = textEditor.document;
-    const newSelections: Selection[] = [];
 
-    // Process each selection sequentially to avoid overlapping edits
-    // (transpose-chars can modify multiple lines in cross-line operations)
-    for (const selection of textEditor.selections) {
+    const uniqueActives = [...new Set(textEditor.selections.map((s) => s.active))].sort((a, b) => {
+      if (a.line === b.line) {
+        return a.character - b.character;
+      }
+      return a.line - b.line;
+    });
+
+    const newActiveOffsets: number[] = [];
+    for (const active of uniqueActives) {
+      const docLastOffset = doc.offsetAt(doc.lineAt(doc.lineCount - 1).range.end);
+
+      const activeLine = doc.lineAt(active.line);
+      const activeOffset = doc.offsetAt(active);
+      const fromOffset = Math.max((active.isEqual(activeLine.range.end) ? activeOffset - 1 : activeOffset) - 1, -1);
+      const toOffset = fromOffset + transposeOffset;
+
+      if (toOffset === fromOffset) {
+        return;
+      }
+
+      if (fromOffset < 0 || toOffset < 0) {
+        await this.emacsController.runCommand("beginningOfBuffer");
+        return;
+      }
+
+      if (fromOffset > docLastOffset || toOffset > docLastOffset) {
+        await this.emacsController.runCommand("endOfBuffer");
+        return;
+      }
+
+      newActiveOffsets.push(toOffset + 1);
+      const fromChar = doc.getText(new Selection(doc.positionAt(fromOffset), doc.positionAt(fromOffset + 1)));
       await textEditor.edit((editBuilder) => {
-        const pos = selection.active;
-        const line = doc.lineAt(pos.line);
-        const lineText = line.text;
-
-        // At the very beginning of the document, do nothing
-        if (pos.line === 0 && pos.character === 0) {
-          newSelections.push(selection);
-          return;
-        }
-
-        // Cross-line transpose at beginning of non-first line
-        if (pos.character === 0 && pos.line > 0 && offset === 1) {
-          const prevLine = doc.lineAt(pos.line - 1);
-          const prevLineText = prevLine.text;
-
-          if (lineText.length === 0) {
-            // Current line is empty: move last char of previous line to current line
-            if (prevLineText.length === 0) {
-              // Both lines are empty: cannot transpose
-              newSelections.push(selection);
-              return;
-            }
-
-            const lastCharOfPrevLine = prevLineText[prevLineText.length - 1]!;
-
-            // Remove last char from previous line
-            const newPrevLineText = prevLineText.substring(0, prevLineText.length - 1);
-            editBuilder.replace(prevLine.range, newPrevLineText);
-
-            // Add it to current (empty) line
-            const newCurLineText = lastCharOfPrevLine;
-            editBuilder.replace(line.range, newCurLineText);
-
-            // Cursor moves to position 1 (after the moved character)
-            const newPos = new Position(pos.line, 1);
-            newSelections.push(new Selection(newPos, newPos));
-            return;
-          } else {
-            // Current line is non-empty: move first char to end of previous line
-            const firstCharOfCurLine = lineText[0]!;
-
-            // Add first char of current line to end of previous line
-            const newPrevLineText = prevLineText + firstCharOfCurLine;
-            editBuilder.replace(prevLine.range, newPrevLineText);
-
-            // Remove first character from current line
-            const newCurLineText = lineText.substring(1);
-            editBuilder.replace(line.range, newCurLineText);
-
-            // Cursor stays at position 0
-            const newPos = new Position(pos.line, 0);
-            newSelections.push(new Selection(newPos, newPos));
-            return;
-          }
-        }
-
-        // Cannot transpose if line is too short
-        if (lineText.length < 2) {
-          newSelections.push(selection);
-          return;
-        }
-
-        let charIndex: number;
-        let swapWithIndex: number;
-
-        if (offset > 0) {
-          // Forward transpose
-          if (pos.character === 0) {
-            // At beginning of line (but offset != 1 or line == 0): transpose first two characters
-            charIndex = 0;
-            swapWithIndex = charIndex + offset;
-          } else if (pos.character >= lineText.length) {
-            // At or beyond end of line: transpose the two characters before point
-            charIndex = lineText.length - 2;
-            swapWithIndex = charIndex + 1;
-          } else {
-            // In middle: transpose character before point with character at offset
-            charIndex = pos.character - 1;
-            swapWithIndex = charIndex + offset;
-          }
-        } else {
-          // Backward transpose (negative offset)
-          if (pos.character === 0) {
-            // At beginning: cannot transpose backward within line
-            newSelections.push(selection);
-            return;
-          } else if (pos.character >= lineText.length) {
-            // At or beyond end: transpose backward from last character
-            charIndex = lineText.length - 1;
-            swapWithIndex = charIndex + offset;
-          } else {
-            // In middle: transpose character before point backward
-            charIndex = pos.character - 1;
-            swapWithIndex = charIndex + offset;
-          }
-        }
-
-        // Check bounds
-        if (swapWithIndex < 0 || swapWithIndex >= lineText.length || charIndex === swapWithIndex) {
-          newSelections.push(selection);
-          return;
-        }
-
-        // Ensure charIndex < swapWithIndex for consistent ordering
-        const minIndex = Math.min(charIndex, swapWithIndex);
-        const maxIndex = Math.max(charIndex, swapWithIndex);
-
-        const charAtMin = lineText[minIndex]!;
-        const charAtMax = lineText[maxIndex]!;
-
-        // Build new line text by replacing the two characters
-        const newLineText =
-          lineText.substring(0, minIndex) +
-          charAtMax +
-          lineText.substring(minIndex + 1, maxIndex) +
-          charAtMin +
-          lineText.substring(maxIndex + 1);
-
-        editBuilder.replace(line.range, newLineText);
-
-        // Calculate new cursor position
-        let newCharPos: number;
-        if (offset > 0) {
-          if (pos.character === 0) {
-            newCharPos = 2; // After transposing first two chars, move to position 2
-          } else if (pos.character >= lineText.length) {
-            newCharPos = pos.character; // Stay at end
-          } else {
-            newCharPos = pos.character + 1; // Move forward
-          }
-        } else {
-          newCharPos = Math.max(0, pos.character - 1); // Move backward
-        }
-
-        const newPos = new Position(pos.line, Math.min(newCharPos, newLineText.length));
-        newSelections.push(new Selection(newPos, newPos));
+        const toInsertPos = doc.positionAt(fromOffset < toOffset ? toOffset + 1 : toOffset);
+        editBuilder.insert(toInsertPos, fromChar);
+        editBuilder.delete(new Selection(doc.positionAt(fromOffset), doc.positionAt(fromOffset + 1)));
       });
     }
 
-    textEditor.selections = newSelections;
+    this.emacsController.exitMarkMode();
+    textEditor.selections = newActiveOffsets.map((activeOffset) => {
+      const newActive = doc.positionAt(activeOffset);
+      return new Selection(newActive, newActive);
+    });
   }
 }
 
@@ -234,6 +133,7 @@ export class TransposeLines extends EmacsCommand {
       });
     }
 
+    this.emacsController.exitMarkMode();
     textEditor.selections = transposeLineNumPairs.map(({ to }) => {
       // Cursor moves to the beginning of the next line after transpose
       const newLine = to + 1;

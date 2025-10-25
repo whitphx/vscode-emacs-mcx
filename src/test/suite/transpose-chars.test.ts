@@ -93,8 +93,8 @@ suite("transpose-chars", () => {
 
     // Character at index 1 ('b') swaps with character at index 3 ('d')
     // Result: a[d]c[b]efgh where swapped chars are in brackets
-    assertTextEqual(activeTextEditor, "adcbefgh");
-    assertCursorsEqual(activeTextEditor, [0, 3]);
+    assertTextEqual(activeTextEditor, "acdbefgh");
+    assertCursorsEqual(activeTextEditor, [0, 4]);
   });
 
   test("Transpose with prefix argument 3", async () => {
@@ -105,33 +105,29 @@ suite("transpose-chars", () => {
     await emulator.runCommand("transposeChars");
 
     // Character at index 1 ('b') swaps with character at index 4 ('e')
-    assertTextEqual(activeTextEditor, "aecdbfgh");
-    assertCursorsEqual(activeTextEditor, [0, 3]);
+    assertTextEqual(activeTextEditor, "acdebfgh");
+    assertCursorsEqual(activeTextEditor, [0, 5]);
   });
 
   test("Transpose with negative prefix argument (-1)", async () => {
-    // Start at index 4 (after 'e')
     setEmptyCursors(activeTextEditor, [0, 4]);
 
     await emulator.negativeArgument();
     await emulator.runCommand("transposeChars");
 
-    // Character at index 3 ('d') swaps with character at index 2 ('c')
     assertTextEqual(activeTextEditor, "abdcefgh");
     assertCursorsEqual(activeTextEditor, [0, 3]);
   });
 
   test("Transpose with negative prefix argument (-2)", async () => {
-    // Start at index 4 (after 'e')
     setEmptyCursors(activeTextEditor, [0, 4]);
 
     await emulator.negativeArgument();
     await emulator.subsequentArgumentDigit(2);
     await emulator.runCommand("transposeChars");
 
-    // Character at index 3 ('d') swaps with character at index 1 ('b')
-    assertTextEqual(activeTextEditor, "adcbefgh");
-    assertCursorsEqual(activeTextEditor, [0, 3]);
+    assertTextEqual(activeTextEditor, "adbcefgh");
+    assertCursorsEqual(activeTextEditor, [0, 2]);
   });
 
   test("Transpose at beginning with negative prefix does nothing", async () => {
@@ -155,9 +151,10 @@ suite("transpose-chars", () => {
 
     await emulator.runCommand("transposeChars");
 
-    // No change
+    // No change on the text
     assertTextEqual(activeTextEditor, "a");
-    assertCursorsEqual(activeTextEditor, [0, 1]);
+    // Cursor moves to the beginning
+    assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
   test("Transpose with prefix argument beyond line end does nothing", async () => {
@@ -169,9 +166,10 @@ suite("transpose-chars", () => {
     await emulator.subsequentArgumentDigit(0);
     await emulator.runCommand("transposeChars");
 
-    // No change
+    // No change on the text
     assertTextEqual(activeTextEditor, "abcdefgh");
-    assertCursorsEqual(activeTextEditor, [0, 2]);
+    // Cursor moves to the end of the buffer
+    assertCursorsEqual(activeTextEditor, [0, 8]);
   });
 
   test("Transpose with mark mode active", async () => {
