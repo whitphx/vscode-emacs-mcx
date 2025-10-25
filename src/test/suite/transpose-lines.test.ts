@@ -2,7 +2,7 @@ import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { createEmulator, cleanUpWorkspace, setupWorkspace, setEmptyCursors } from "./utils";
+import { createEmulator, cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual } from "./utils";
 
 suite("transpose-lines", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -36,9 +36,7 @@ line 5`,
     );
 
     // Cursor should move to beginning of next line (line 3, index 2)
-    assert.strictEqual(activeTextEditor.selections.length, 1);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 2);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.character, 0);
+    assertCursorsEqual(activeTextEditor, [2, 0]);
   });
 
   test("Transpose from middle of line", async () => {
@@ -57,8 +55,7 @@ line 5`,
     );
 
     // Cursor should still move to beginning of next line
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 2);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.character, 0);
+    assertCursorsEqual(activeTextEditor, [2, 0]);
   });
 
   test("First line should not transpose (no previous line)", async () => {
@@ -78,7 +75,7 @@ line 5`,
     );
 
     // Cursor should remain on line 1
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 0);
+    assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
   test("Multi-cursor transpose", async () => {
@@ -97,11 +94,7 @@ line 5`,
     );
 
     // Both cursors should move down
-    assert.strictEqual(activeTextEditor.selections.length, 2);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 2);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.character, 0);
-    assert.strictEqual(activeTextEditor.selections[1]!.active.line, 4);
-    assert.strictEqual(activeTextEditor.selections[1]!.active.character, 0);
+    assertCursorsEqual(activeTextEditor, [2, 0], [4, 0]);
   });
 
   test("Transpose with mark mode (selection)", async () => {
@@ -121,8 +114,7 @@ line 5`,
     );
 
     // Cursor should move to next line
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 2);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.character, 0);
+    assertCursorsEqual(activeTextEditor, [2, 0]);
   });
 
   test("Sequential transpose moves line down two positions", async () => {
@@ -142,7 +134,7 @@ line 5`,
     );
 
     // Cursor is now on line 3 (index 2)
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 2);
+    assertCursorsEqual(activeTextEditor, [2, 0]);
 
     // Second transpose - this will swap "line 1" (now at index 1) with "line 3" (at index 2)
     await emulator.runCommand("transposeLines");
@@ -157,7 +149,7 @@ line 5`,
     );
 
     // Cursor should be on line 4 (index 3)
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 3);
+    assertCursorsEqual(activeTextEditor, [3, 0]);
   });
 
   test("Transpose last line", async () => {
@@ -176,8 +168,7 @@ line 4`,
     );
 
     // Cursor should move to next line (which would be beyond the document, so line 5)
-    assert.strictEqual(activeTextEditor.selections[0]!.active.line, 5);
-    assert.strictEqual(activeTextEditor.selections[0]!.active.character, 0);
+    assertCursorsEqual(activeTextEditor, [5, 0]);
   });
 
   test("Transpose adjacent lines with multi-cursor", async () => {
