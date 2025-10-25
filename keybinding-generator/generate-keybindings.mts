@@ -465,12 +465,28 @@ export function generateCtrlGKeybindings(): KeyBinding[] {
       .filter((binding) => {
         return !conflictedCommands.includes(binding.command);
       })
-      .map((binding) => ({
-        key: "ctrl+g",
-        command: binding.command,
-        when: additionalWhen ? addWhenCond(binding.when, additionalWhen) : binding.when,
-        args: binding.args,
-      }));
+      .flatMap((binding) => {
+        const when = additionalWhen ? addWhenCond(binding.when, additionalWhen) : binding.when;
+        return [
+          {
+            key: "ctrl+g",
+            command: binding.command,
+            when,
+            args: binding.args,
+          },
+          // When config.emacs-mcx.useMetaPrefixEscape is true where ESC is used as a Meta key,
+          // assign `ESC ESC ESC` to `emacs-mcx.cancel` because ESC no longer works as a cancel key.
+          // `ESC ESC ESC` is actually used for such purposes in the original Emacs, Ref: https://www.gnu.org/software/emacs/manual/html_node/emacs/Quitting.html
+          // while `ESC ESC ESC` on original Emacs is bound to `keyboard-escape-quit` that is different from `C-g`,
+          // but we assign it to the same cancel commands for now because we don't have needs to distinguish them.
+          {
+            key: "escape escape escape",
+            command: binding.command,
+            when: addWhenCond(when, "config.emacs-mcx.useMetaPrefixEscape"),
+            args: binding.args,
+          },
+        ];
+      });
   }
   const allPlatformsCtrlGKeybindings = getCtrlGKeybindings(allPlatforms);
   const linuxSpecificCtrlGKeybindings = getCtrlGKeybindings(linuxSpecific, "isLinux");

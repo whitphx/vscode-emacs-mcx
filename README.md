@@ -356,14 +356,15 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-R
 
 ### Other Commands
 
-| Command       | Desc                                      |
-| ------------- | ----------------------------------------- |
-| `C-g` (`ESC`) | Cancel                                    |
-| `C-'` (`M-/`) | IntelliSense Suggestion                   |
-| `M-x`         | Open command palette                      |
-| `C-M-SPC`     | Toggle SideBar visibility                 |
-| `C-x z`       | Toggle Zen Mode                           |
-| `C-x C-c`     | Close window (save-buffers-kill-terminal) |
+| Command       | Desc                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------ |
+| `C-g` (`ESC`) | Quit                                                                                 |
+| `ESC ESC ESC` | Quit (`keyboard-escape-quit`, but this extension does not distinguish it from `C-g`) |
+| `C-'` (`M-/`) | IntelliSense Suggestion                                                              |
+| `M-x`         | Open command palette                                                                 |
+| `C-M-SPC`     | Toggle SideBar visibility                                                            |
+| `C-x z`       | Toggle Zen Mode                                                                      |
+| `C-x C-c`     | Close window (save-buffers-kill-terminal)                                            |
 
 ### File Commands
 
