@@ -12,7 +12,9 @@ export class TransposeChars extends EmacsCommand {
       return;
     }
 
-    // Group selections by line to handle multiple cursors on the same line
+    const doc = textEditor.document;
+
+    // Group selections by line to handle multi-cursor on same line
     const selectionsByLine = new Map<number, Selection[]>();
     for (const selection of textEditor.selections) {
       const lineNum = selection.active.line;
@@ -22,26 +24,77 @@ export class TransposeChars extends EmacsCommand {
       selectionsByLine.get(lineNum)!.push(selection);
     }
 
-    await textEditor.edit((editBuilder) => {
-      const doc = textEditor.document;
-      const newSelections: Selection[] = [];
+    const newSelections: Selection[] = [];
 
-      // Process each line that has selections
+    await textEditor.edit((editBuilder) => {
       for (const [lineNum, selections] of selectionsByLine) {
         const line = doc.lineAt(lineNum);
         let lineText = line.text;
 
-        // Cannot transpose if line is too short
-        if (lineText.length < 2) {
-          newSelections.push(...selections);
-          continue;
-        }
+        // Track which character indices to swap
+        const swaps: Array<{ index1: number; index2: number; newPos: number }> = [];
+        const crossLineTranspose: Array<{ selection: Selection; newPos: number }> = [];
 
-        // Process each selection on this line sequentially
-        for (const selection of selections.sort(
-          (a: Selection, b: Selection) => a.active.character - b.active.character,
-        )) {
+        for (const selection of selections) {
           const pos = selection.active;
+
+          // At the very beginning of the document, do nothing
+          if (pos.line === 0 && pos.character === 0) {
+            newSelections.push(selection);
+            continue;
+          }
+
+          // Cross-line transpose at beginning of non-first line
+          if (pos.character === 0 && pos.line > 0 && offset === 1) {
+            const prevLine = doc.lineAt(pos.line - 1);
+            const prevLineText = prevLine.text;
+
+            if (lineText.length === 0) {
+              // Current line is empty: move last char of previous line to current line
+              if (prevLineText.length === 0) {
+                // Both lines are empty: cannot transpose
+                newSelections.push(selection);
+                continue;
+              }
+
+              const lastCharOfPrevLine = prevLineText[prevLineText.length - 1]!;
+
+              // Remove last char from previous line
+              const newPrevLineText = prevLineText.substring(0, prevLineText.length - 1);
+              editBuilder.replace(prevLine.range, newPrevLineText);
+
+              // Add it to current (empty) line
+              const newCurLineText = lastCharOfPrevLine;
+              editBuilder.replace(line.range, newCurLineText);
+              lineText = newCurLineText; // Update for subsequent selections on same line
+
+              // Cursor moves to position 1 (after the moved character)
+              crossLineTranspose.push({ selection, newPos: 1 });
+              continue;
+            } else {
+              // Current line is non-empty: move first char to end of previous line
+              const firstCharOfCurLine = lineText[0]!;
+
+              // Add first char of current line to end of previous line
+              const newPrevLineText = prevLineText + firstCharOfCurLine;
+              editBuilder.replace(prevLine.range, newPrevLineText);
+
+              // Remove first character from current line
+              const newCurLineText = lineText.substring(1);
+              editBuilder.replace(line.range, newCurLineText);
+              lineText = newCurLineText; // Update for subsequent selections on same line
+
+              // Cursor stays at position 0
+              crossLineTranspose.push({ selection, newPos: 0 });
+              continue;
+            }
+          }
+
+          // Cannot transpose if line is too short
+          if (lineText.length < 2) {
+            newSelections.push(selection);
+            continue;
+          }
 
           let charIndex: number;
           let swapWithIndex: number;
@@ -49,7 +102,7 @@ export class TransposeChars extends EmacsCommand {
           if (offset > 0) {
             // Forward transpose
             if (pos.character === 0) {
-              // At beginning of line: transpose first two characters
+              // At beginning of line (but offset != 1 or line == 0): transpose first two characters
               charIndex = 0;
               swapWithIndex = charIndex + offset;
             } else if (pos.character >= lineText.length) {
@@ -64,7 +117,7 @@ export class TransposeChars extends EmacsCommand {
           } else {
             // Backward transpose (negative offset)
             if (pos.character === 0) {
-              // At beginning: cannot transpose backward
+              // At beginning: cannot transpose backward within line
               newSelections.push(selection);
               continue;
             } else if (pos.character >= lineText.length) {
@@ -84,22 +137,7 @@ export class TransposeChars extends EmacsCommand {
             continue;
           }
 
-          // Ensure charIndex < swapWithIndex for consistent ordering
-          const minIndex = Math.min(charIndex, swapWithIndex);
-          const maxIndex = Math.max(charIndex, swapWithIndex);
-
-          const charAtMin = lineText[minIndex];
-          const charAtMax = lineText[maxIndex];
-
-          // Build new line text by replacing the two characters
-          lineText =
-            lineText.substring(0, minIndex) +
-            charAtMax +
-            lineText.substring(minIndex + 1, maxIndex) +
-            charAtMin +
-            lineText.substring(maxIndex + 1);
-
-          // Move cursor forward by 1 for positive offset, backward for negative
+          // Calculate new cursor position
           let newCharPos: number;
           if (offset > 0) {
             if (pos.character === 0) {
@@ -113,12 +151,35 @@ export class TransposeChars extends EmacsCommand {
             newCharPos = Math.max(0, pos.character - 1); // Move backward
           }
 
-          const newPos = new Position(pos.line, Math.min(newCharPos, lineText.length));
-          newSelections.push(new Selection(newPos, newPos));
+          swaps.push({ index1: charIndex, index2: swapWithIndex, newPos: newCharPos });
         }
 
-        // Replace the line once with all transposes applied
-        editBuilder.replace(line.range, lineText);
+        // Apply all swaps to the line if there are any
+        if (swaps.length > 0 && crossLineTranspose.length === 0) {
+          const chars = lineText.split("");
+
+          // Apply all swaps
+          for (const swap of swaps) {
+            const temp = chars[swap.index1]!;
+            chars[swap.index1] = chars[swap.index2]!;
+            chars[swap.index2] = temp;
+          }
+
+          const newLineText = chars.join("");
+          editBuilder.replace(line.range, newLineText);
+
+          // Add new selections
+          for (const swap of swaps) {
+            const newPos = new Position(lineNum, Math.min(swap.newPos, newLineText.length));
+            newSelections.push(new Selection(newPos, newPos));
+          }
+        }
+
+        // Add cross-line transpose selections
+        for (const { newPos } of crossLineTranspose) {
+          const pos = new Position(lineNum, newPos);
+          newSelections.push(new Selection(pos, pos));
+        }
       }
 
       textEditor.selections = newSelections;

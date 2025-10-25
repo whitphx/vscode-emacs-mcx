@@ -46,15 +46,15 @@ suite("transpose-chars", () => {
     assertCursorsEqual(activeTextEditor, [0, 8]);
   });
 
-  test("Transpose at beginning of line: transpose first two characters", async () => {
-    // Place cursor at beginning (index 0)
+  test("Transpose at beginning of document: do nothing", async () => {
+    // Place cursor at very beginning of document (line 0, char 0)
     setEmptyCursors(activeTextEditor, [0, 0]);
 
     await emulator.runCommand("transposeChars");
 
-    assertTextEqual(activeTextEditor, "bacdefgh");
-    // Cursor moves to position 2
-    assertCursorsEqual(activeTextEditor, [0, 2]);
+    // No change
+    assertTextEqual(activeTextEditor, "abcdefgh");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
   test("Sequential transpose moves character forward", async () => {
@@ -196,7 +196,7 @@ suite("transpose-chars", () => {
     assertCursorsEqual(activeTextEditor, [0, 6]);
   });
 
-  test("Transpose on empty line does nothing", async () => {
+  test("Transpose on empty line: move last char of previous line to current line", async () => {
     const multiLineText = `abc\n\ndef`;
     activeTextEditor = await setupWorkspace(multiLineText);
     emulator = createEmulator(activeTextEditor);
@@ -206,9 +206,10 @@ suite("transpose-chars", () => {
 
     await emulator.runCommand("transposeChars");
 
-    // No change
-    assertTextEqual(activeTextEditor, "abc\n\ndef");
-    assertCursorsEqual(activeTextEditor, [1, 0]);
+    // Last character 'c' of previous line moves to current (empty) line
+    assertTextEqual(activeTextEditor, "ab\nc\ndef");
+    // Cursor moves to position 1 (after the moved character)
+    assertCursorsEqual(activeTextEditor, [1, 1]);
   });
 
   test("Transpose with multi-line document", async () => {
@@ -239,5 +240,53 @@ suite("transpose-chars", () => {
     // Transposes last two characters of first line
     assertTextEqual(activeTextEditor, "acb\ndef\nghi");
     assertCursorsEqual(activeTextEditor, [0, 3]);
+  });
+
+  test("Transpose at beginning of non-first line: move first char to end of previous line, cursor stays", async () => {
+    const multiLineText = `abc\ndef\nghi`;
+    activeTextEditor = await setupWorkspace(multiLineText);
+    emulator = createEmulator(activeTextEditor);
+
+    // Place cursor at beginning of second line
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    await emulator.runCommand("transposeChars");
+
+    // Transposes EOL with first char of second line ('d'), moving 'd' to end of first line
+    assertTextEqual(activeTextEditor, "abcd\nef\nghi");
+    // Cursor stays at position 0 on second line
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+  });
+
+  test("Transpose at beginning of non-first line with empty previous line: move first char to previous line, cursor stays", async () => {
+    const multiLineText = `abc\n\ndef`;
+    activeTextEditor = await setupWorkspace(multiLineText);
+    emulator = createEmulator(activeTextEditor);
+
+    // Place cursor at beginning of third line (after empty line)
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    await emulator.runCommand("transposeChars");
+
+    // First character 'd' moves to the empty previous line
+    assertTextEqual(activeTextEditor, "abc\nd\nef");
+    // Cursor stays at position 0
+    assertCursorsEqual(activeTextEditor, [2, 0]);
+  });
+
+  test("Transpose on empty non-first line: move last char of previous line to current line", async () => {
+    const multiLineText = `abc\n\ndef`;
+    activeTextEditor = await setupWorkspace(multiLineText);
+    emulator = createEmulator(activeTextEditor);
+
+    // Place cursor at beginning of empty line
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    await emulator.runCommand("transposeChars");
+
+    // Last character 'c' of previous line moves to current (empty) line
+    assertTextEqual(activeTextEditor, "ab\nc\ndef");
+    // Cursor moves to position 1 (after the moved character)
+    assertCursorsEqual(activeTextEditor, [1, 1]);
   });
 });
