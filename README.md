@@ -19,24 +19,20 @@
 
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/whitphx?label=Sponsor%20me%20on%20GitHub%20Sponsors&style=social)](https://github.com/sponsors/whitphx)
 
-This Visual Studio Code extension provides Emacs-like keybindings and operations.
-This is inspired by [the great VSCcode extension by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [vscode-emacs-improved by rkwan94](https://github.com/rkwan94/vscode-emacs), and [vscode-emacs-neon by NotKyon](https://github.com/NotKyon/vscode-emacs-neon).
+**Emacs emulation for Visual Studio Code**
 
-Though there were such great extensions, this extension is written from scratch because it was hard to achieve the goals listed below by extending the existing codebase.
+- Emacs-like cursor movements and editing commands
+- Customizable meta key assignment (`alt`, `ESC`, `ctrl+[`, or `command` on macOS)
+- Search behavior like Emacs' isearch
+- Compatibility with VSCode's built-in multi cursor feature
+- Kill-ring integrated with the system clipboard
+- Mark-ring
+- Prefix argument
+- Rectangle commands
+- Text/position/rectangle registers
+- Sexp operations (with ParEdit commands)
 
-This extension aims
-
-- to provide Emacs-like keybindings
-- to be fully compatible with multi cursor
-- to support kill-ring integrated with the system clipboard
-- to support mark-ring
-- to support prefix argument
-- to support sexp
-- to fix some bugs in the existing extensions such as
-  - mark-mode states are shared among all editors
-
-This extension makes use of code in the existent extensions listed above and, in addition, [VSCode](https://github.com/microsoft/vscode) and [VSCode Vim extension](https://github.com/VSCodeVim/Vim). Thanks for all these great works.
-Mainly, almost all keybinding settings are derived from [vscode-emacs-friendly by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly).
+It's inspired by [Emacs Keymap by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [Emacs Friendly Keymap by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [Emacs Keymap Improved by rkwan94](https://github.com/rkwan94/vscode-emacs), and [Emacs Friendly Keybindings (Neon) by NotKyon](https://github.com/NotKyon/vscode-emacs-neon), but totally revamped and improved for better feature coverage, emacs emulation, and usability (also getting rid of some bugs).
 
 ## FAQ/Tips
 
@@ -226,7 +222,7 @@ _number | undefined_
 
 This is a currently input prefix argument.
 
-## Keymaps
+## Keybindings
 
 Alt key is mapped to the Meta prefix (`M`) by default and you can configure for Escape, `ctrl+[`, or Command (⌘) key (macOS only) to work as it with the settings above.
 
