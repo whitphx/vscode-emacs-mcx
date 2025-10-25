@@ -1,6 +1,5 @@
 import assert from "assert";
 import * as vscode from "vscode";
-import { Position, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
 import { createEmulator, cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual } from "./utils";
 
@@ -99,8 +98,16 @@ line 5`,
 
   test("Transpose with mark mode (selection)", async () => {
     // Create a selection on line 2
-    activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 4))];
+    setEmptyCursors(activeTextEditor, [1, 0]);
     emulator.enterMarkMode();
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+
+    // Verify mark mode is active with selection
+    assert.ok(emulator.isInMarkMode);
+    assert.ok(!activeTextEditor.selections[0]!.isEmpty);
 
     await emulator.runCommand("transposeLines");
 
@@ -115,6 +122,9 @@ line 5`,
 
     // Cursor should move to next line
     assertCursorsEqual(activeTextEditor, [2, 0]);
+
+    // Mark mode should be exited
+    assert.ok(!emulator.isInMarkMode);
   });
 
   test("Sequential transpose moves line down two positions", async () => {

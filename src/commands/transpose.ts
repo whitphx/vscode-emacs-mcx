@@ -32,6 +32,7 @@ export class TransposeLines extends EmacsCommand {
     }
 
     // Update cursor positions - map each original selection to its new position
+    // Always create empty selections (collapsed cursors) since the edit will exit mark mode
     const newSelections = textEditor.selections.map((selection) => {
       const currentLineNum = selection.active.line;
 
@@ -42,20 +43,7 @@ export class TransposeLines extends EmacsCommand {
       const newLine = effectiveLineNum + 1;
       const newActive = new Position(newLine, 0);
 
-      if (isInMarkMode && !selection.anchor.isEqual(selection.active)) {
-        // Adjust the anchor position if it was on one of the transposed lines
-        let newAnchor = selection.anchor;
-        if (selection.anchor.line === currentLineNum || selection.anchor.line === 0) {
-          // Anchor was on current line, which moved to previous line position
-          newAnchor = new Position(effectiveLineNum - 1, selection.anchor.character);
-        } else if (selection.anchor.line === effectiveLineNum - 1) {
-          // Anchor was on previous line, which moved to current line position
-          newAnchor = new Position(effectiveLineNum, selection.anchor.character);
-        }
-        return new Selection(newAnchor, newActive);
-      } else {
-        return new Selection(newActive, newActive);
-      }
+      return new Selection(newActive, newActive);
     });
 
     textEditor.selections = newSelections;
