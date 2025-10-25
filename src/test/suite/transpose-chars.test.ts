@@ -84,32 +84,27 @@ suite("transpose-chars", () => {
     assertCursorsEqual(activeTextEditor, [0, 3], [0, 6]);
   });
 
-  test("Transpose with prefix argument 2", async () => {
-    // Start at position 2 (between 'b' and 'c')
+  test("Transpose with prefix argument 2: move char before point forward by 2", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
 
     await emulator.digitArgument(2);
     await emulator.runCommand("transposeChars");
 
-    // Character at index 1 ('b') swaps with character at index 3 ('d')
-    // Result: a[d]c[b]efgh where swapped chars are in brackets
     assertTextEqual(activeTextEditor, "acdbefgh");
     assertCursorsEqual(activeTextEditor, [0, 4]);
   });
 
-  test("Transpose with prefix argument 3", async () => {
-    // Start at index 2 (after 'b')
+  test("Transpose with prefix argument 3: move char before point forward by 3", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
 
     await emulator.digitArgument(3);
     await emulator.runCommand("transposeChars");
 
-    // Character at index 1 ('b') swaps with character at index 4 ('e')
     assertTextEqual(activeTextEditor, "acdebfgh");
     assertCursorsEqual(activeTextEditor, [0, 5]);
   });
 
-  test("Transpose with negative prefix argument (-1)", async () => {
+  test("Transpose with negative prefix argument (-1): move char before point backward by 1", async () => {
     setEmptyCursors(activeTextEditor, [0, 4]);
 
     await emulator.negativeArgument();
@@ -119,7 +114,7 @@ suite("transpose-chars", () => {
     assertCursorsEqual(activeTextEditor, [0, 3]);
   });
 
-  test("Transpose with negative prefix argument (-2)", async () => {
+  test("Transpose with negative prefix argument (-2): move char before point backward by 2", async () => {
     setEmptyCursors(activeTextEditor, [0, 4]);
 
     await emulator.negativeArgument();
@@ -157,8 +152,8 @@ suite("transpose-chars", () => {
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
-  test("Transpose with prefix argument beyond line end does nothing", async () => {
-    // Start at index 2
+  test("Transpose with prefix argument beyond line end: cursor moves to end", async () => {
+    // Start at position 2
     setEmptyCursors(activeTextEditor, [0, 2]);
 
     // Try to transpose with offset 10 (beyond line end)
