@@ -4,6 +4,13 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.92.0] - 2025-10-25
+
+### Add
+
+- `ESC ESC ESC` to cancel operations, [#2507](https://github.com/whitphx/vscode-emacs-mcx/pull/2507).
+- `transpose-lines` command, [#2508](https://github.com/whitphx/vscode-emacs-mcx/pull/2508).
+
 ## [0.91.0] - 2025-09-19
 
 ### Changed
