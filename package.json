@@ -425,6 +425,14 @@
         "title": "Emacs-MCX: Transform To Uppercase"
       },
       {
+        "command": "emacs-mcx.transposeChars",
+        "title": "Emacs-MCX: Transpose Chars"
+      },
+      {
+        "command": "emacs-mcx.transposeLines",
+        "title": "Emacs-MCX: Transpose Lines"
+      },
+      {
         "command": "emacs-mcx.universalArgument",
         "title": "Emacs-MCX: Universal Argument"
       },
@@ -2652,6 +2660,19 @@
         "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
           "then": "emacs-mcx.deleteBlankLines"
+        }
+      },
+      {
+        "key": "ctrl+t",
+        "command": "emacs-mcx.transposeChars",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+t",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": "emacs-mcx.transposeChars"
         }
       },
       {

@@ -2,6 +2,65 @@ import { Position, Selection, TextEditor, EndOfLine } from "vscode";
 import { EmacsCommand } from ".";
 import { MessageManager } from "../message";
 
+export class TransposeChars extends EmacsCommand {
+  public readonly id = "transposeChars";
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    const transposeOffset = prefixArgument == null ? 1 : prefixArgument;
+
+    if (transposeOffset === 0) {
+      return;
+    }
+
+    const doc = textEditor.document;
+
+    const uniqueActives = [...new Set(textEditor.selections.map((s) => s.active))].sort((a, b) => {
+      if (a.line === b.line) {
+        return a.character - b.character;
+      }
+      return a.line - b.line;
+    });
+
+    const newActiveOffsets: number[] = [];
+    for (const active of uniqueActives) {
+      const docLastOffset = doc.offsetAt(doc.lineAt(doc.lineCount - 1).range.end);
+
+      const activeLine = doc.lineAt(active.line);
+      const activeOffset = doc.offsetAt(active);
+      const fromOffset = Math.max((active.isEqual(activeLine.range.end) ? activeOffset - 1 : activeOffset) - 1, -1);
+      const toOffset = fromOffset + transposeOffset;
+
+      if (toOffset === fromOffset) {
+        return;
+      }
+
+      if (fromOffset < 0 || toOffset < 0) {
+        await this.emacsController.runCommand("beginningOfBuffer");
+        return;
+      }
+
+      if (fromOffset > docLastOffset || toOffset > docLastOffset) {
+        await this.emacsController.runCommand("endOfBuffer");
+        return;
+      }
+
+      newActiveOffsets.push(toOffset + 1);
+      const fromChar = doc.getText(new Selection(doc.positionAt(fromOffset), doc.positionAt(fromOffset + 1)));
+      await textEditor.edit((editBuilder) => {
+        const toInsertPos = doc.positionAt(fromOffset < toOffset ? toOffset + 1 : toOffset);
+        editBuilder.insert(toInsertPos, fromChar);
+        editBuilder.delete(new Selection(doc.positionAt(fromOffset), doc.positionAt(fromOffset + 1)));
+      });
+    }
+
+    this.emacsController.exitMarkMode();
+    textEditor.selections = newActiveOffsets.map((activeOffset) => {
+      const newActive = doc.positionAt(activeOffset);
+      return new Selection(newActive, newActive);
+    });
+  }
+}
+
 export class TransposeLines extends EmacsCommand {
   public readonly id = "transposeLines";
 
@@ -74,6 +133,7 @@ export class TransposeLines extends EmacsCommand {
       });
     }
 
+    this.emacsController.exitMarkMode();
     textEditor.selections = transposeLineNumPairs.map(({ to }) => {
       // Cursor moves to the beginning of the next line after transpose
       const newLine = to + 1;
