@@ -187,7 +187,8 @@ line 4`,
 
     await emulator.runCommand("transposeLines");
 
-    // Line 2 swaps with line 1, line 3 swaps with line 2 (now original line 1)
+    // Transpositions are processed sequentially top-to-bottom:
+    // Line 2 swaps with line 1, then line 3 swaps with the line now at position 2 (which is now line 2 after the first swap).
     assert.strictEqual(
       activeTextEditor.document.getText(),
       `line 2
