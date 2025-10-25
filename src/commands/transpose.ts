@@ -24,8 +24,8 @@ export class TransposeLines extends EmacsCommand {
       };
     });
 
-    const outOfBoundsLines = transposeLineNumPairs.some(({ to }) => to < 0);
-    if (outOfBoundsLines) {
+    const hasNegativeLineNumbers = transposeLineNumPairs.some(({ to }) => to < 0);
+    if (hasNegativeLineNumbers) {
       MessageManager.showMessage("Don't have two things to transpose");
       return;
     }
