@@ -96,7 +96,7 @@ line 5`,
     assertCursorsEqual(activeTextEditor, [2, 0], [4, 0]);
   });
 
-  test("Transpose with mark mode (selection)", async () => {
+  test("Transpose with mark mode (single line selection)", async () => {
     // Create a selection on line 2
     setEmptyCursors(activeTextEditor, [1, 0]);
     emulator.enterMarkMode();
@@ -122,6 +122,41 @@ line 5`,
 
     // Cursor should move to next line
     assertCursorsEqual(activeTextEditor, [2, 0]);
+
+    // Mark mode should be exited
+    assert.ok(!emulator.isInMarkMode);
+  });
+
+  test("Transpose with mark mode (multi-line selection)", async () => {
+    // Create a multi-line selection starting from line 2
+    setEmptyCursors(activeTextEditor, [1, 0]);
+    emulator.enterMarkMode();
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+
+    // Verify mark mode is active with multi-line selection
+    assert.ok(emulator.isInMarkMode);
+    assert.ok(!activeTextEditor.selections[0]!.isEmpty);
+    assert.strictEqual(activeTextEditor.selections[0]!.start.line, 1);
+    assert.strictEqual(activeTextEditor.selections[0]!.end.line, 2);
+
+    await emulator.runCommand("transposeLines");
+
+    // Transpose is based on active line (line 3), so lines 2 and 3 are swapped
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 1
+line 3
+line 2
+line 4
+line 5`,
+    );
+
+    // Cursor should move to next line after the active line
+    assertCursorsEqual(activeTextEditor, [3, 0]);
 
     // Mark mode should be exited
     assert.ok(!emulator.isInMarkMode);
