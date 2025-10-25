@@ -10,7 +10,7 @@ import {
   assertSelectionsEqual,
 } from "./utils";
 
-suite.only("transpose-lines", () => {
+suite("transpose-lines", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
@@ -327,5 +327,120 @@ line 5`,
 
     // Cursor should be at line 2
     assertCursorsEqual(activeTextEditor, [1, 0]);
+  });
+
+  test("Transpose with large positive prefix argument beyond document", async () => {
+    // Start on line 3 (index 2)
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    // Transpose with prefix 10
+    await emulator.digitArgument(1);
+    await emulator.subsequentArgumentDigit(0);
+    await emulator.runCommand("transposeLines");
+
+    // Line at index 1 ("line 2") is moved far down with blank lines created
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 1
+line 3
+line 4
+line 5
+
+
+
+
+
+
+line 2
+`,
+    );
+
+    // Document has 12 lines total
+    assert.strictEqual(activeTextEditor.document.lineCount, 12);
+
+    // Cursor at line 12
+    assertCursorsEqual(activeTextEditor, [12, 0]);
+  });
+
+  test("Transpose backward with large negative prefix argument beyond first line", async () => {
+    // Start on line 3 (index 2)
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    // Transpose with prefix -10 (would move line 2 to negative position)
+    await emulator.negativeArgument();
+    await emulator.subsequentArgumentDigit(1);
+    await emulator.subsequentArgumentDigit(0);
+    await emulator.runCommand("transposeLines");
+
+    // Cursor at index 2 means currentLineNumbers = [2]
+    // from = 2 - 1 = 1 (line 2), to = 1 + (-10) = -9
+    // This is out of bounds, so the command should show error and not change document
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 1
+line 2
+line 3
+line 4
+line 5`,
+    );
+
+    // Cursor should not move
+    assertCursorsEqual(activeTextEditor, [2, 0]);
+  });
+
+  test("Transpose last line with prefix argument 2", async () => {
+    // Start on last line (line 5, index 4)
+    setEmptyCursors(activeTextEditor, [4, 0]);
+
+    // Transpose with prefix 2
+    await emulator.digitArgument(2);
+    await emulator.runCommand("transposeLines");
+
+    // Line at index 3 ("line 4") swaps with line at index 4 ("line 5")
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 1
+line 2
+line 3
+line 5
+line 4
+`,
+    );
+
+    // Document has 6 lines total
+    assert.strictEqual(activeTextEditor.document.lineCount, 6);
+
+    // Cursor at line 6
+    assertCursorsEqual(activeTextEditor, [6, 0]);
+  });
+
+  test("Transpose on second-to-last line with large prefix argument", async () => {
+    // Start on line 4 (index 3)
+    setEmptyCursors(activeTextEditor, [3, 0]);
+
+    // Transpose with prefix 5 (moves line 3 to position 7)
+    await emulator.digitArgument(5);
+    await emulator.runCommand("transposeLines");
+
+    // Cursor at index 3 means currentLineNumbers = [3]
+    // from = 3 - 1 = 2 (line 3), to = 2 + 5 = 7
+    // Line 3 is moved to position 7, creating blank lines in between
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 1
+line 2
+line 4
+line 5
+
+
+line 3
+`,
+    );
+
+    // Document now has 8 lines (0-7)
+    assert.strictEqual(activeTextEditor.document.lineCount, 8);
+
+    // Cursor moves to line 8 (to + 1)
+    assertCursorsEqual(activeTextEditor, [8, 0]);
   });
 });
