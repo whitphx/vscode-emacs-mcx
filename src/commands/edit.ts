@@ -74,6 +74,145 @@ export class DeleteHorizontalSpace extends EmacsCommand {
   }
 }
 
+export class CycleSpacing extends EmacsCommand {
+  public readonly id = "cycleSpacing";
+
+  private cycleState = 0; // 0: one space, 1: no space, 2: restore
+  private originalSpacing: Array<{ before: string; after: string; from: number }> = [];
+  private latestTextEditor: TextEditor | null = null;
+  private latestSelections: readonly vscode.Selection[] = [];
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    // Check if this is a continuation of the previous cycle-spacing call
+    const isContinuation =
+      this.latestTextEditor === textEditor &&
+      this.latestSelections.length === textEditor.selections.length &&
+      this.latestSelections.every((latestSelection, i) => {
+        const activeSelection = textEditor.selections[i];
+        return activeSelection && latestSelection.isEqual(activeSelection);
+      });
+
+    if (!isContinuation) {
+      // Start a new cycle
+      this.cycleState = 0;
+      this.originalSpacing = [];
+    }
+
+    const currentState = this.cycleState;
+
+    return textEditor
+      .edit((editBuilder) => {
+        textEditor.selections.forEach((selection, index) => {
+          const line = selection.active.line;
+          const lineText = textEditor.document.lineAt(line).text;
+          const cursorChar = selection.active.character;
+
+          if (currentState === 0 || currentState === 1) {
+            // Find the range of spaces/tabs around the cursor for states 0 and 1
+            let from = cursorChar;
+            while (from > 0) {
+              const char = lineText[from - 1];
+              if (char !== " " && char !== "\t") {
+                break;
+              }
+              from -= 1;
+            }
+
+            let to = cursorChar;
+            const lineEnd = lineText.length;
+            while (to < lineEnd) {
+              const char = lineText[to];
+              if (char !== " " && char !== "\t") {
+                break;
+              }
+              to += 1;
+            }
+
+            // Store original spacing on first call of the cycle
+            if (currentState === 0) {
+              const beforeSpacing = lineText.substring(from, cursorChar);
+              const afterSpacing = lineText.substring(cursorChar, to);
+              this.originalSpacing[index] = { before: beforeSpacing, after: afterSpacing, from };
+            }
+
+            const range = new Range(line, from, line, to);
+
+            if (currentState === 0) {
+              // First call: delete all but one space
+              editBuilder.replace(range, " ");
+            } else {
+              // Second call: delete all spaces
+              editBuilder.delete(range);
+            }
+          } else {
+            // Third call (state 2): restore original spacing
+            const original = this.originalSpacing[index];
+            if (original) {
+              // Always use insert at the original position
+              editBuilder.insert(new vscode.Position(line, original.from), original.before + original.after);
+            }
+          }
+        });
+      })
+      .then((success) => {
+        if (!success) {
+          logger.warn("cycleSpacing failed");
+        }
+      })
+      .then(() => {
+        // Update cursor positions based on the state
+        textEditor.selections = textEditor.selections.map((selection, index) => {
+          const line = selection.active.line;
+          const original = this.originalSpacing[index];
+
+          if (currentState === 0) {
+            // After replacing with one space, cursor should be after the space
+            if (original) {
+              const newPos = new vscode.Position(line, original.from + 1);
+              return new Selection(newPos, newPos);
+            }
+          } else if (currentState === 1) {
+            // After deleting all spaces, cursor at the position where spaces were
+            if (original) {
+              const newPos = new vscode.Position(line, original.from);
+              return new Selection(newPos, newPos);
+            }
+          } else {
+            // After restoring original spacing, place cursor at original position
+            if (original) {
+              const newPos = new vscode.Position(line, original.from + original.before.length);
+              return new Selection(newPos, newPos);
+            }
+          }
+          return new Selection(selection.active, selection.active);
+        });
+
+        // Advance to next state and save the state for interruption checking
+        this.cycleState = (this.cycleState + 1) % 3;
+        this.latestTextEditor = textEditor;
+        this.latestSelections = textEditor.selections;
+      });
+  }
+
+  public onDidInterruptTextEditor(): void {
+    // Check if the interruption was caused by this command's own changes
+    const interruptedBySelf =
+      this.latestTextEditor === vscode.window.activeTextEditor &&
+      this.latestSelections.every((latestSelection, i) => {
+        const activeSelection = vscode.window.activeTextEditor?.selections[i];
+        return activeSelection && latestSelection.isEqual(activeSelection);
+      });
+
+    if (!interruptedBySelf) {
+      // Reset state only if interrupted by another command
+      this.cycleState = 0;
+      this.originalSpacing = [];
+      this.latestTextEditor = null;
+      this.latestSelections = [];
+    }
+  }
+}
+
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
