@@ -16,6 +16,7 @@ import * as RectangleCommands from "./commands/rectangle";
 import * as RegisterCommands from "./commands/registers";
 import * as OtherWindowCommands from "./commands/other-window";
 import * as RecenterCommands from "./commands/recenter";
+import * as TransposeCommands from "./commands/transpose";
 import { EmacsCommandRegistry } from "./command-registry";
 import { KillYanker } from "./kill-yank";
 import type { KillRing } from "./kill-yank/kill-ring";
@@ -192,6 +193,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       new EditCommands.DeleteHorizontalSpace(this),
       new EditCommands.NewLine(this),
       new DeleteBlankLinesCommands.DeleteBlankLines(this),
+      new TransposeCommands.TransposeLines(this),
       new RecenterCommands.RecenterTopBottom(this),
       new TabCommands.TabToTabStop(this),
       new IndentCommands.DeleteIndentation(this),
