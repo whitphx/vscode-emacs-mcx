@@ -10,7 +10,7 @@ import {
   assertSelectionsEqual,
 } from "./utils";
 
-suite("transpose-lines", () => {
+suite.only("transpose-lines", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
 
@@ -256,6 +256,76 @@ line 5`,
     );
 
     // Both cursors should move to line 3
-    assertCursorsEqual(activeTextEditor, [2, 0], [2, 0]);
+    assertCursorsEqual(activeTextEditor, [2, 0]);
+  });
+
+  test("Transpose with positive prefix argument (2)", async () => {
+    // Start on line 2
+    setEmptyCursors(activeTextEditor, [1, 0]);
+
+    // Transpose twice (prefix argument 2)
+    await emulator.digitArgument(2);
+    await emulator.runCommand("transposeLines");
+
+    // First transpose: line 2 swaps with line 1
+    // Second transpose: line 1 (now at position 2) swaps with line 2 (now at position 1)
+    // Result: line 2, line 3, line 1, line 4, line 5
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 2
+line 3
+line 1
+line 4
+line 5`,
+    );
+
+    // Cursor should move forward 2 lines (to line 4)
+    assertCursorsEqual(activeTextEditor, [3, 0]);
+  });
+
+  test("Transpose with negative prefix argument (-1)", async () => {
+    // Start on line 3
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    // Transpose backward once (prefix argument -1)
+    await emulator.negativeArgument();
+    await emulator.runCommand("transposeLines");
+
+    // Line 3 swaps with line 4 (backward means swap with next line)
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 2
+line 1
+line 3
+line 4
+line 5`,
+    );
+
+    // Cursor should move backward (to line 2)
+    assertCursorsEqual(activeTextEditor, [1, 0]);
+  });
+
+  test("Transpose with negative prefix argument (-2)", async () => {
+    // Start on line 4
+    setEmptyCursors(activeTextEditor, [3, 0]);
+
+    // Transpose backward twice (prefix argument -2)
+    await emulator.negativeArgument();
+    await emulator.subsequentArgumentDigit(2);
+    await emulator.runCommand("transposeLines");
+
+    // First transpose backward: line 2 swaps with line 3, cursor moves to index 0
+    // Second transpose backward: line 1 swaps with line 3, cursor stays at index 0
+    assert.strictEqual(
+      activeTextEditor.document.getText(),
+      `line 3
+line 1
+line 2
+line 4
+line 5`,
+    );
+
+    // Cursor should be at line 2
+    assertCursorsEqual(activeTextEditor, [1, 0]);
   });
 });

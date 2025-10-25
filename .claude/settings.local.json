@@ -14,7 +14,8 @@
       "WebFetch(domain:github.com)",
       "Bash(npm run check:eslint:*)",
       "Bash(npm run check:prettier:*)",
-      "Bash(npm run fix:prettier:*)"
+      "Bash(npm run fix:prettier:*)",
+      "WebFetch(domain:www.gnu.org)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits"
