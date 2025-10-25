@@ -33,7 +33,7 @@ jobs:
       pr-number: ${{ steps.build-info.outputs.pr-number }}
     steps:
       - name: Download build info
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: build-info
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -62,7 +62,7 @@ jobs:
       attestations: read # Necessary for verifying artifact attestations
 
     steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: emacs-mcx
           path: ${{ runner.temp }}/emacs-mcx
@@ -141,7 +141,7 @@ jobs:
       contents: write # Necessary for creating releases: https://github.com/softprops/action-gh-release#permissions
 
     steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: emacs-mcx
           path: ${{ runner.temp }}/emacs-mcx
@@ -197,7 +197,7 @@ jobs:
         target: [marketplace, openvsx]
 
     steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: emacs-mcx
           path: ${{ runner.temp }}/emacs-mcx
