@@ -284,6 +284,12 @@
     "isearchInterruptible": true
   },
   {
+    "key": "ctrl+t",
+    "command": "emacs-mcx.transposeChars",
+    "when": "editorTextFocus && !editorReadonly",
+    "isearchInterruptible": true
+  },
+  {
     "key": "ctrl+x ctrl+t",
     "command": "emacs-mcx.transposeLines",
     "when": "editorTextFocus && !editorReadonly",

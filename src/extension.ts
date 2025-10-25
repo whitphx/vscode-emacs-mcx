@@ -269,6 +269,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   bindEmulatorCommand("deleteBlankLines");
 
+  bindEmulatorCommand("transposeChars");
+
   bindEmulatorCommand("transposeLines");
 
   bindEmulatorCommand("recenterTopBottom");
