@@ -4,6 +4,11 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.93.0] - 2025-10-26
+
+- Update README intro, [#2512](https://github.com/whitphx/vscode-emacs-mcx/pull/2512).
+- `transpose-chars` command, [#2511](https://github.com/whitphx/vscode-emacs-mcx/pull/2511).
+
 ## [0.92.0] - 2025-10-25
 
 ### Add
