@@ -185,6 +185,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   bindEmulatorCommand("deleteHorizontalSpace");
 
+  bindEmulatorCommand("cycleSpacing");
+
   registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
     return emulator.universalArgument();
   });
