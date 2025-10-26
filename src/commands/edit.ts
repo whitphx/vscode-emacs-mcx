@@ -81,8 +81,10 @@ export class CycleSpacing extends EmacsCommand {
   private originalSpacing: Array<{ before: string; after: string; from: number }> = [];
   private latestTextEditor: TextEditor | null = null;
   private latestSelections: readonly vscode.Selection[] = [];
+  private isRunning = false; // Flag to track when we're actively executing
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    this.isRunning = true;
     // Check if this is a continuation of the previous cycle-spacing call
     const isContinuation =
       this.latestTextEditor === textEditor &&
@@ -99,6 +101,9 @@ export class CycleSpacing extends EmacsCommand {
     }
 
     const currentState = this.cycleState;
+
+    // Calculate expected cursor positions before edit to prevent interruption during edit
+    const expectedCursorPositions: vscode.Position[] = [];
 
     return textEditor
       .edit((editBuilder) => {
@@ -128,21 +133,36 @@ export class CycleSpacing extends EmacsCommand {
               to += 1;
             }
 
-            // Store original spacing on first call of the cycle
-            if (currentState === 0) {
-              const beforeSpacing = lineText.substring(from, cursorChar);
-              const afterSpacing = lineText.substring(cursorChar, to);
-              this.originalSpacing[index] = { before: beforeSpacing, after: afterSpacing, from };
-            }
-
-            const range = new Range(line, from, line, to);
-
-            if (currentState === 0) {
-              // First call: delete all but one space
-              editBuilder.replace(range, " ");
+            // Check if there's any whitespace - if not, do nothing
+            if (from === to) {
+              expectedCursorPositions[index] = new vscode.Position(line, cursorChar);
             } else {
-              // Second call: delete all spaces
-              editBuilder.delete(range);
+              // Store original spacing on first call of the cycle
+              if (currentState === 0) {
+                const beforeSpacing = lineText.substring(from, cursorChar);
+                const afterSpacing = lineText.substring(cursorChar, to);
+                this.originalSpacing[index] = { before: beforeSpacing, after: afterSpacing, from };
+              }
+
+              const range = new Range(line, from, line, to);
+
+              if (currentState === 0) {
+                // First call: delete all but one space
+                editBuilder.replace(range, " ");
+                // Calculate expected cursor position
+                const original = this.originalSpacing[index];
+                if (original) {
+                  expectedCursorPositions[index] = new vscode.Position(line, original.from + 1);
+                }
+              } else {
+                // Second call: delete all spaces
+                editBuilder.delete(range);
+                // Calculate expected cursor position
+                const original = this.originalSpacing[index];
+                if (original) {
+                  expectedCursorPositions[index] = new vscode.Position(line, original.from);
+                }
+              }
             }
           } else {
             // Third call (state 2): restore original spacing
@@ -150,9 +170,16 @@ export class CycleSpacing extends EmacsCommand {
             if (original) {
               // Always use insert at the original position
               editBuilder.insert(new vscode.Position(line, original.from), original.before + original.after);
+              // Calculate expected cursor position - preserve original position within spacing
+              expectedCursorPositions[index] = new vscode.Position(line, original.from + original.before.length);
             }
           }
         });
+
+        // Save state and editor before edit completes
+        // Note: We advance the state here (not in .then()) to prevent race conditions with interruption handler
+        this.cycleState = (currentState + 1) % 3;
+        this.latestTextEditor = textEditor;
       })
       .then((success) => {
         if (!success) {
@@ -160,48 +187,37 @@ export class CycleSpacing extends EmacsCommand {
         }
       })
       .then(() => {
-        // Update cursor positions based on the state
+        // Update cursor positions based on calculated positions
         textEditor.selections = textEditor.selections.map((selection, index) => {
-          const line = selection.active.line;
-          const original = this.originalSpacing[index];
-
-          if (currentState === 0) {
-            // After replacing with one space, cursor should be after the space
-            if (original) {
-              const newPos = new vscode.Position(line, original.from + 1);
-              return new Selection(newPos, newPos);
-            }
-          } else if (currentState === 1) {
-            // After deleting all spaces, cursor at the position where spaces were
-            if (original) {
-              const newPos = new vscode.Position(line, original.from);
-              return new Selection(newPos, newPos);
-            }
-          } else {
-            // After restoring original spacing, place cursor at original position
-            if (original) {
-              const newPos = new vscode.Position(line, original.from + original.before.length);
-              return new Selection(newPos, newPos);
-            }
+          const expectedPos = expectedCursorPositions[index];
+          if (expectedPos) {
+            return new Selection(expectedPos, expectedPos);
           }
           return new Selection(selection.active, selection.active);
         });
 
-        // Advance to next state and save the state for interruption checking
-        this.cycleState = (this.cycleState + 1) % 3;
-        this.latestTextEditor = textEditor;
+        // Update saved selections to match actual selections
         this.latestSelections = textEditor.selections;
+        this.isRunning = false; // Clear running flag
       });
   }
 
   public onDidInterruptTextEditor(): void {
     // Check if the interruption was caused by this command's own changes
-    const interruptedBySelf =
-      this.latestTextEditor === vscode.window.activeTextEditor &&
+    // If we're actively running, don't reset (it's our own edit causing the interruption)
+    if (this.isRunning) {
+      return; // Ignore interruptions while we're running
+    }
+
+    const sameEditor = this.latestTextEditor === vscode.window.activeTextEditor;
+    const selectionsMatch =
+      this.latestSelections.length > 0 &&
       this.latestSelections.every((latestSelection, i) => {
         const activeSelection = vscode.window.activeTextEditor?.selections[i];
         return activeSelection && latestSelection.isEqual(activeSelection);
       });
+
+    const interruptedBySelf = sameEditor && selectionsMatch;
 
     if (!interruptedBySelf) {
       // Reset state only if interrupted by another command
