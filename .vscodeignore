@@ -34,5 +34,7 @@ lint-staged.config.js
 .gitmodules
 .nvmrc
 eslint.config.mjs
+.changeset
+AGENTS.md
 CLAUDE.md
 .claude
