@@ -142,7 +142,7 @@
   // Ref: https://code.visualstudio.com/docs/terminal/shell-integration#_intellisense-preview
   {
     "keys": ["ctrl+meta+i", "meta+tab"],
-    "command": "workbench.action.terminal.requestCompletions",
+    "command": "workbench.action.terminal.triggerSuggest",
     "inheritWhenFromDefault": true
   },
   {
