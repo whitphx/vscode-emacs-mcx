@@ -6,7 +6,6 @@
   "linked": [],
   "access": "restricted",
   "baseBranch": "main",
-  "tagFormat": "v${version}",
   "updateInternalDependencies": "patch",
   "ignore": []
 }
