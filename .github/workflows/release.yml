@@ -28,10 +28,8 @@ jobs:
         run: npm ci
 
       - name: Create Release Pull Request or Tag
-        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1
+        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3
         with:
-          title: "chore: release"
-          commit: "chore: release"
-          publish: npm run release
+          publish: npm run changeset:release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

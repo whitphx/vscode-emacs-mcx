@@ -5969,7 +5969,7 @@
     "package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js",
     "prepare": "husky",
     "changeset": "changeset",
-    "release": "changeset tag && git push --follow-tags"
+    "changeset:release": "changeset tag && git push --follow-tags"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
