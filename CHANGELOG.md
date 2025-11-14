@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.94.6
+
+### Patch Changes
+
+- [#2540](https://github.com/whitphx/vscode-emacs-mcx/pull/2540) [`07cfb57`](https://github.com/whitphx/vscode-emacs-mcx/commit/07cfb57a5de2727bf74b46faab0b5cf8815f1bb4) Thanks [@whitphx](https://github.com/whitphx)! - Fix permission settings in the changeset workflow
+
 ## 0.94.5
 
 ### Patch Changes
