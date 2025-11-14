@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.94.4
+
+### Patch Changes
+
+- c68ab52: Fix the release workflow to make each GitHub release contain vsix files
+
 ## 0.94.3
 
 ### Patch Changes
