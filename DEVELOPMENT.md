@@ -117,8 +117,10 @@ Edit `keybindings.json` and run `npm run gen-keys` instead as described above.
 
 # Release the extension (only for maintainers)
 
-```
-$ vi CHANGELOG.md
-$ ./scripts/new-version.sh <version>
-$ git push origin main --tags
-```
+Releases are now driven by [Changesets](https://github.com/changesets/changesets) and the automated workflow in `.github/workflows/release.yml`.
+
+1. Whenever a PR changes behavior or strings, run `npm run changeset` locally, select the correct bump type, and describe the change. Commit the generated file under `.changeset/`.
+2. After the PR merges, the Release workflow opens a "chore: release" PR that bumps `package.json`, regenerates `CHANGELOG.md`, and removes consumed changesets. Review and merge it like any other PR.
+3. Once the release PR lands, the same workflow executes `npm run release` to create a `v<version>` git tag and push it. That tag automatically kicks off the existing Test/Build and Post-build workflows, which package and publish to the Visual Studio Marketplace and Open VSX.
+
+Only fall back to `scripts/new-version.sh` for emergency manual releases, and always ensure CI succeeded before cutting a tag.
