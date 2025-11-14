@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.94.7
+
+### Patch Changes
+
+- [#2544](https://github.com/whitphx/vscode-emacs-mcx/pull/2544) [`2afb34d`](https://github.com/whitphx/vscode-emacs-mcx/commit/2afb34d0b4bee075d98ec1ffa868a72bcd3ca8d4) Thanks [@whitphx](https://github.com/whitphx)! - Fix changesets config
+
 ## 0.94.6
 
 ### Patch Changes
