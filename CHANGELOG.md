@@ -1,11 +1,5 @@
 # Change Log
 
-## 0.94.1
-
-### Patch Changes
-
-- 492f1f1: Introduce Changesets for versioning and publishing
-
 All notable changes to the "emacs-mcx" extension will be documented in this file.
 
 ## [Unreleased]
