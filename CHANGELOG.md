@@ -30,10 +30,6 @@
 
 - 090e13c: Introduce Changesets for versioning and publishing
 
-All notable changes to the "emacs-mcx" extension will be documented in this file.
-
-## [Unreleased]
-
 ## [0.94.0] - 2025-11-14
 
 ### Fix
