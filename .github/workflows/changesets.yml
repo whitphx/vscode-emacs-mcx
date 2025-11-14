@@ -4,9 +4,7 @@ on:
   push:
     branches: ["main"]
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {} # No permissions needed as we use a PAT. Make sure the PAT has the proper permissions. See below.
 
 jobs:
   release:
