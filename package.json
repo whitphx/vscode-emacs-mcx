@@ -9,7 +9,7 @@
     "url": "https://github.com/whitphx/vscode-emacs-mcx"
   },
   "engines": {
-    "vscode": "^1.89.0"
+    "vscode": "^1.106.0"
   },
   "categories": [
     "Other",
@@ -517,16 +517,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "notebook.cell.chat.acceptChanges",
-        "when": "inlineChatFocused && notebookCellChatFocused && notebookChatUserDidEdit && !notebookCellEditorFocused"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "notebook.cell.chat.acceptChanges",
-        "when": "inlineChatFocused && notebookCellChatFocused && notebookChatUserDidEdit && !notebookCellEditorFocused && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "inlineChat.hideHint",
         "when": "inlineChatShowingHint"
       },
@@ -554,6 +544,16 @@
         "key": "escape escape escape",
         "command": "workbench.edit.chat.cancel",
         "when": "(chatSessionCurrentlyEditing && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || chatSessionCurrentlyEditingInput && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible) && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -658,22 +658,12 @@
       {
         "key": "ctrl+g",
         "command": "inlineChat.discardHunkChange",
-        "when": "inlineChatHasProvider && inlineChatVisible && inlineChatResponseType == 'messagesAndEdits'"
+        "when": "inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && inlineChatResponseType == 'messagesAndEdits' || inlineChatHasProvider && inlineChatVisible && inlineChatResponseType == 'messagesAndEdits' && activeEditor != 'workbench.editor.notebook'"
       },
       {
         "key": "escape escape escape",
         "command": "inlineChat.discardHunkChange",
-        "when": "inlineChatHasProvider && inlineChatVisible && inlineChatResponseType == 'messagesAndEdits' && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "notebook.cell.chat.discard",
-        "when": "inlineChatFocused && notebookCellChatFocused && !notebookCellEditorFocused && !notebookChatUserDidEdit"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "notebook.cell.chat.discard",
-        "when": "inlineChatFocused && notebookCellChatFocused && !notebookCellEditorFocused && !notebookChatUserDidEdit && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "(inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && inlineChatResponseType == 'messagesAndEdits' || inlineChatHasProvider && inlineChatVisible && inlineChatResponseType == 'messagesAndEdits' && activeEditor != 'workbench.editor.notebook') && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -718,12 +708,22 @@
       {
         "key": "ctrl+g",
         "command": "inlineChat.close",
-        "when": "inlineChatHasProvider && inlineChatVisible"
+        "when": "inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || inlineChatHasProvider && inlineChatVisible && activeEditor != 'workbench.editor.notebook'"
       },
       {
         "key": "escape escape escape",
         "command": "inlineChat.close",
-        "when": "inlineChatHasProvider && inlineChatVisible && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "(inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || inlineChatHasProvider && inlineChatVisible && activeEditor != 'workbench.editor.notebook') && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "notebook.hideFind",
+        "when": "findWidgetVisible && notebookEditorFocused"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "notebook.hideFind",
+        "when": "findWidgetVisible && notebookEditorFocused && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -837,16 +837,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "inlineChat2.close",
-        "when": "inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && !chatEdits.isRequestInProgress || inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.isRequestInProgress && chatEdits.requestCount == '0'"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "inlineChat2.close",
-        "when": "(inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && !chatEdits.isRequestInProgress || inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.isRequestInProgress && chatEdits.requestCount == '0') && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "keybindings.editor.clearSearchResults",
         "when": "inKeybindings && inKeybindingsSearch"
       },
@@ -884,16 +874,6 @@
         "key": "escape escape escape",
         "command": "noteMultiCursor.exit",
         "when": "config.notebook.multiCursor.enabled && isNotebookMultiSelect && activeEditor == 'workbench.editor.notebook' && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "notebook.hideFind",
-        "when": "notebookEditorFocused && notebookFindWidgetFocused"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "notebook.hideFind",
-        "when": "notebookEditorFocused && notebookFindWidgetFocused && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1017,6 +997,16 @@
       },
       {
         "key": "ctrl+g",
+        "command": "inlineChat2.close",
+        "when": "chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && activeEditor != 'workbench.editor.notebook' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor != 'workbench.editor.notebook' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook'"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "inlineChat2.close",
+        "when": "(chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && activeEditor != 'workbench.editor.notebook' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor != 'workbench.editor.notebook' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook') && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
         "command": "workbench.action.terminal.hideSuggestWidget",
         "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
       },
@@ -1134,6 +1124,16 @@
         "key": "escape escape escape",
         "command": "workbench.action.speech.stopReadAloud",
         "when": "scopedChatSynthesisInProgress && textToSpeechInProgress && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.terminal.stopVoice",
+        "when": "terminalDictationInProgress"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.action.terminal.stopVoice",
+        "when": "terminalDictationInProgress && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -5563,42 +5563,42 @@
       },
       {
         "key": "ctrl+alt+i",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "ctrl+cmd+i",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape ctrl+i",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ ctrl+i",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+tab",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+tab",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape tab",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ tab",
-        "command": "workbench.action.terminal.requestCompletions",
+        "command": "workbench.action.terminal.triggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
