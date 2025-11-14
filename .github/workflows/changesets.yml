@@ -32,4 +32,4 @@ jobs:
         with:
           publish: npm run changeset:release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_PAT }} # PRs created using `GITHUB_TOKEN` doesn't trigger CI workflows, so we use a PAT. The PAT should be fine-grained and its permissions are properly configured (R/W for Contents and Pull Requests). Ref: https://github.com/orgs/community/discussions/55906
