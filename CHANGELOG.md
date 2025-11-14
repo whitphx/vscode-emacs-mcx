@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.94.5
+
+### Patch Changes
+
+- [#2539](https://github.com/whitphx/vscode-emacs-mcx/pull/2539) [`e78a50d`](https://github.com/whitphx/vscode-emacs-mcx/commit/e78a50d26d19bb6591072314fa608db025e43220) Thanks [@whitphx](https://github.com/whitphx)! - Update changelog generator to use GitHub info
+
 ## 0.94.4
 
 ### Patch Changes
