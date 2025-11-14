@@ -5972,6 +5972,7 @@
     "changeset:release": "changeset tag && git push --follow-tags"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@eslint/js": "^9.39.1",
     "@types/glob": "^9.0.0",
