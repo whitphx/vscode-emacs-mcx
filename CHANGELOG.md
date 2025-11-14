@@ -4,7 +4,19 @@ All notable changes to the "emacs-mcx" extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.94.0] - 2025-11-14
+
+### Fix
+
+- Fix terminal keybinding for code completions, [#2529](https://github.com/whitphx/vscode-emacs-mcx/pull/2529).
+
+### Change
+
+- Set the minimum supported VSCode version to 1.106.0, [#2529](https://github.com/whitphx/vscode-emacs-mcx/pull/2529).
+
 ## [0.93.0] - 2025-10-26
+
+### Add
 
 - Update README intro, [#2512](https://github.com/whitphx/vscode-emacs-mcx/pull/2512).
 - `transpose-chars` command, [#2511](https://github.com/whitphx/vscode-emacs-mcx/pull/2511).
