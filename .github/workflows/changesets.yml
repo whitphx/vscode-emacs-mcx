@@ -34,8 +34,8 @@ jobs:
         id: generate-token
         uses: actions/create-github-app-token@v2
         with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          app-id: ${{ vars.PERSONAL_CHANGESETS_APP_ID }}
+          private-key: ${{ secrets.PERSONAL_CHANGESETS_APP_PRIVATE_KEY }}
 
       - name: Create Release Pull Request or Tag
         uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3
