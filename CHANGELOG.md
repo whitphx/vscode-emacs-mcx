@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.94.3
+
+### Patch Changes
+
+- 110e040: Introduce Changesets for versioning and publishing
+
 ## 0.94.2
 
 ### Patch Changes
