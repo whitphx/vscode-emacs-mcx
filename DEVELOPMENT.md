@@ -121,6 +121,6 @@ Releases are now driven by [Changesets](https://github.com/changesets/changesets
 
 1. Whenever a PR changes behavior or strings, run `npm run changeset` locally, select the correct bump type, and describe the change. Commit the generated file under `.changeset/`.
 2. After the PR merges, the Release workflow opens a "chore: release" PR that bumps `package.json`, regenerates `CHANGELOG.md`, and removes consumed changesets. Review and merge it like any other PR.
-3. Once the release PR lands, the same workflow executes `npm run release` to create a `v<version>` git tag and push it. That tag automatically kicks off the existing Test/Build and Post-build workflows, which package and publish to the Visual Studio Marketplace and Open VSX.
+3. Once the release PR lands, the workflow runs `changeset version` (via the action) to update package.json and CHANGELOG.md, commits those changes, and creates a `v<version>` git tag. It then executes `npm run release` to push the tag, which automatically triggers the existing Test/Build and Post-build workflows, which package and publish to the Visual Studio Marketplace and Open VSX.
 
 Only fall back to `scripts/new-version.sh` for emergency manual releases, and always ensure CI succeeded before cutting a tag.
