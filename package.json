@@ -6003,7 +6003,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4",
+    "typescript-eslint": "^8.47.0",
     "webpack": "^5.103.0",
     "webpack-cli": "^6.0.1"
   },
