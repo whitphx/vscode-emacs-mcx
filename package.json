@@ -5995,7 +5995,7 @@
     "mocha": "^11.7.1",
     "prettier": "^3.6.2",
     "process": "^0.11.10",
-    "rimraf": "^6.1.0",
+    "rimraf": "^6.1.2",
     "sinon": "^21.0.0",
     "strip-json-comments": "^5.0.3",
     "ts-loader": "^9.5.4",
