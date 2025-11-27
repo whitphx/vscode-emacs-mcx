@@ -5984,7 +5984,7 @@
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.76",
-    "@vscode/vsce": "^3.7.0",
+    "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
