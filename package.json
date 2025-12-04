@@ -5973,7 +5973,7 @@
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.7",
+    "@changesets/cli": "^2.29.8",
     "@changesets/write": "^0.4.0",
     "@eslint/js": "^9.39.1",
     "@types/glob": "^9.0.0",
