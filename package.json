@@ -6001,7 +6001,7 @@
     "ts-loader": "^9.5.4",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0",
     "webpack": "^5.103.0",
