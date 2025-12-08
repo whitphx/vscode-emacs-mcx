@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.94.9
+
+### Patch Changes
+
+- [#2583](https://github.com/whitphx/vscode-emacs-mcx/pull/2583) [`cc844dd`](https://github.com/whitphx/vscode-emacs-mcx/commit/cc844dd8861094f76855b5cb00eafc6351a65529) Thanks [@whitphx](https://github.com/whitphx)! - Fix `C-x <SPC>` to always enable rectangle-mark-mode when prefix argument exists
+
+- [#2581](https://github.com/whitphx/vscode-emacs-mcx/pull/2581) [`1ed05e2`](https://github.com/whitphx/vscode-emacs-mcx/commit/1ed05e2b3f115f49123ff4e876b7dbd086d23d86) Thanks [@whitphx](https://github.com/whitphx)! - Run rectangle commands from rectangle-mark-mode
+
 ## 0.94.8
 
 ### Patch Changes
