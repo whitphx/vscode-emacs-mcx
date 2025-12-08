@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { getEolChar } from "./commands/helpers/eol";
-import { getNonEmptySelections, makeSelectionsEmpty } from "./commands/helpers/selection";
+import { makeSelectionsEmpty } from "./commands/helpers/selection";
 import { revealPrimaryActive } from "./commands/helpers/reveal";
 import { IEmacsController } from "./emulator";
 import { deleteRanges } from "./utils";
@@ -47,16 +47,14 @@ export async function copyOrDeleteRect(
   textEditor: vscode.TextEditor,
   options: CopyOrDeleteRectOptions,
 ): Promise<RectangleTexts | null> {
-  const selections = getNonEmptySelections(textEditor);
-
-  if (selections.length !== 1) {
+  const selections = emacsController.inRectMarkMode ? emacsController.nativeSelections : textEditor.selections;
+  const nonEmptySelections = selections.filter((selection) => !selection.isEmpty);
+  if (nonEmptySelections.length !== 1) {
     // Multiple cursors not supported
     return null;
   }
   const selection = selections[0]!;
-
   const notReversedSelection = new vscode.Selection(selection.start, selection.end);
-
   const rectSelections = convertSelectionToRectSelections(textEditor.document, notReversedSelection);
 
   // Copy
@@ -67,13 +65,14 @@ export async function copyOrDeleteRect(
     copiedRectText = rectText;
   }
 
+  emacsController.exitMarkMode();
+
   // Delete
   if (options.delete) {
     await deleteRanges(textEditor, rectSelections);
     revealPrimaryActive(textEditor);
   }
 
-  emacsController.exitMarkMode();
   makeSelectionsEmpty(textEditor);
 
   return copiedRectText;
