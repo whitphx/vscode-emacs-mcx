@@ -26,7 +26,7 @@
   {
     "key": "ctrl+g",
     "command": "emacs-mcx.isearchAbort",
-    "when": "editorFocus && findWidgetVisible && !isComposing"
+    "when": "editorFocus && findInputFocussed && !isComposing"
   },
   {
     // `ESC ESC ESC` is bound to `isearch-abort` in original Emacs so we bind it here as well,
