@@ -468,7 +468,7 @@
       {
         "key": "ctrl+g",
         "command": "emacs-mcx.isearchAbort",
-        "when": "editorFocus && findWidgetVisible && !isComposing"
+        "when": "editorFocus && findInputFocussed && !isComposing"
       },
       {
         "key": "escape escape escape",
