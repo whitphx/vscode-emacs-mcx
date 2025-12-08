@@ -29,7 +29,7 @@ KLMNOPQRST`;
     setEmptyCursors(activeTextEditor, [1, 2]);
     const emulator = createEmulator(activeTextEditor);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 1, 2)]);
 
@@ -42,11 +42,11 @@ KLMNOPQRST`;
       new vscode.Selection(2, 2, 2, 4),
     ]);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 2, 4)]);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [
       new vscode.Selection(1, 2, 1, 4),
@@ -62,7 +62,7 @@ KLMNOPQRST`;
     setEmptyCursors(activeTextEditor, [2, 4]);
     const emulator = createEmulator(activeTextEditor);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 4, 2, 4)]);
 
@@ -75,11 +75,11 @@ KLMNOPQRST`;
       new vscode.Selection(1, 4, 1, 2),
     ]);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 4, 1, 2)]);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [
       new vscode.Selection(2, 4, 2, 2),
@@ -95,7 +95,7 @@ KLMNOPQRST`;
     const killRing = new KillRing(3);
     const emulator = createEmulator(activeTextEditor, killRing);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -142,7 +142,7 @@ KLcdMNOPQRST
     const killRing = new KillRing(3);
     const emulator = createEmulator(activeTextEditor, killRing);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -202,7 +202,7 @@ KLcdMNOPQRST
     const killRing = new KillRing(3);
     const emulator = createEmulator(activeTextEditor, killRing);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -262,7 +262,7 @@ klmnopqrst
     const killRing = new KillRing(3);
     const emulator = createEmulator(activeTextEditor, killRing);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
@@ -344,7 +344,7 @@ KLMNOPQRST`,
     const killRing = new KillRing(3);
     const emulator = createEmulator(activeTextEditor, killRing);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
@@ -394,7 +394,7 @@ CD
     setEmptyCursors(activeTextEditor, [1, 2]);
     const emulator = createEmulator(activeTextEditor);
 
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
 
     assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(1, 2, 1, 2)]);
 
