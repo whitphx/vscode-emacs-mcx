@@ -104,7 +104,7 @@ BCDEFGHIJ`,
         if (mode === "mark-mode") {
           await emulator.setMarkCommand();
         } else if (mode === "rectangle-mode") {
-          emulator.rectangleMarkMode();
+          await emulator.rectangleMarkMode();
         }
         await emulator.runCommand("nextLine");
         await emulator.runCommand("forwardChar");

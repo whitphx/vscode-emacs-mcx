@@ -135,6 +135,10 @@ export class PrefixArgumentHandler {
     return promise;
   }
 
+  public get isInPrefixArgumentMode(): boolean {
+    return this.state.isInPrefixArgumentMode;
+  }
+
   public get minusSignAcceptable(): boolean {
     return this.state.isAcceptingPrefixArgument && this.state.prefixArgumentStr === "";
   }
