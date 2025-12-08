@@ -467,7 +467,7 @@ KLMNOPQRST`;
       },
     ] as (() => void | Promise<void>)[]
   ).forEach((initiator) => {
-    test(`opening a rectangle ${initiator.name}`, async () => {
+    test(`opening a rectangle (${initiator.name})`, async () => {
       await initiator();
 
       await emulator.runCommand("openRectangle");
