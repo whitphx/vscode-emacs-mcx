@@ -109,7 +109,11 @@ export function assertTextEqual(textEditor: TextEditor, expectedText: string): v
 }
 
 export function assertCursorsEqual(textEditor: TextEditor, ...positions: Array<[number, number]>): void {
-  assert.strictEqual(textEditor.selections.length, positions.length);
+  assert.strictEqual(
+    textEditor.selections.length,
+    positions.length,
+    "Number of selections does not match expected positions.",
+  );
   textEditor.selections.forEach((selection, idx) => {
     // `textEditor.selections.length === positions.length` has already been checked,
     // so noUncheckedIndexedAccess rule can be skipped here.
@@ -126,7 +130,11 @@ export function assertSelectionsEqual(
   textEditor: TextEditor,
   ...selections: Array<Selection | [number, number, number, number]>
 ): void {
-  assert.strictEqual(textEditor.selections.length, selections.length);
+  assert.strictEqual(
+    textEditor.selections.length,
+    selections.length,
+    "Number of selections does not match expected selections.",
+  );
   textEditor.selections.forEach((actualSelection, idx) => {
     const maybeExpectedSelection = selections[idx];
     const expectSelection = Array.isArray(maybeExpectedSelection)
