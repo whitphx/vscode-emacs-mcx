@@ -33,7 +33,7 @@ KLMNOPQRST`;
     test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
       setEmptyCursors(activeTextEditor, [1, 5]);
       if (useRectMarkMode) {
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
       }
       await emulator.runCommand("killRectangle");
       assertTextEqual(activeTextEditor, initialText);
@@ -43,7 +43,7 @@ KLMNOPQRST`;
     test(`nothing happens when the selections are empty (useRectMarkMode=${useRectMarkMode})`, async () => {
       setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
       if (useRectMarkMode) {
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
       }
       await emulator.runCommand("killRectangle");
       assertTextEqual(activeTextEditor, initialText);
@@ -68,7 +68,7 @@ KLMNOPQRST`;
       },
       async function setSelectionViaRectangleMarkMode() {
         setEmptyCursors(activeTextEditor, [0, 3]);
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
         await emulator.runCommand("nextLine");
         await emulator.runCommand("nextLine");
         await emulator.runCommand("forwardChar");
@@ -195,7 +195,7 @@ KLMNOPQRST`,
       },
       async function setSelectionViaRectangleMarkMode() {
         setEmptyCursors(activeTextEditor, [2, 7]);
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
         await emulator.runCommand("previousLine");
         await emulator.runCommand("previousLine");
         await emulator.runCommand("backwardChar");
@@ -253,7 +253,7 @@ KLMNOPQRST`;
     test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
       setEmptyCursors(activeTextEditor, [1, 5]);
       if (useRectMarkMode) {
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
       }
       await emulator.runCommand("clearRectangle");
       assertTextEqual(activeTextEditor, initialText);
@@ -263,7 +263,7 @@ KLMNOPQRST`;
     test(`nothing happens when the selections are empty (useRectMarkMode=${useRectMarkMode})`, async () => {
       setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
       if (useRectMarkMode) {
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
       }
       await emulator.runCommand("clearRectangle");
       assertTextEqual(activeTextEditor, initialText);
@@ -288,7 +288,7 @@ KLMNOPQRST`;
       },
       async function setSelectionViaRectangleMarkMode() {
         setEmptyCursors(activeTextEditor, [0, 3]);
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
         await emulator.runCommand("nextLine");
         await emulator.runCommand("nextLine");
         await emulator.runCommand("forwardChar");
@@ -457,7 +457,7 @@ KLMNOPQRST`;
       },
       async function setSelectionViaRectangleMarkMode() {
         setEmptyCursors(activeTextEditor, [0, 3]);
-        emulator.rectangleMarkMode();
+        await emulator.rectangleMarkMode();
         await emulator.runCommand("nextLine");
         await emulator.runCommand("nextLine");
         await emulator.runCommand("forwardChar");
