@@ -131,7 +131,7 @@ KLMNO3456P3456QRST
       );
     });
 
-    test(`deleting a rectangle ${initiator.name}`, async () => {
+    test(`deleting a rectangle (${initiator.name})`, async () => {
       await initiator();
 
       await emulator.runCommand("deleteRectangle");
@@ -251,20 +251,20 @@ KLMNOPQRST`;
 
   [false, true].forEach((useRectMarkMode) => {
     test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      setEmptyCursors(activeTextEditor, [1, 5]);
       if (useRectMarkMode) {
         emulator.rectangleMarkMode();
       }
-      setEmptyCursors(activeTextEditor, [1, 5]);
       await emulator.runCommand("clearRectangle");
       assertTextEqual(activeTextEditor, initialText);
       assertCursorsEqual(activeTextEditor, [1, 5]);
     });
 
     test(`nothing happens when the selections are empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
       if (useRectMarkMode) {
         emulator.rectangleMarkMode();
       }
-      setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
       await emulator.runCommand("clearRectangle");
       assertTextEqual(activeTextEditor, initialText);
       assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
