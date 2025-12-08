@@ -465,7 +465,7 @@ KLMNOPQRST`;
         await emulator.runCommand("forwardChar");
         await emulator.runCommand("forwardChar");
       },
-    ] as (() => Promise<void>)[]
+    ] as (() => void | Promise<void>)[]
   ).forEach((initiator) => {
     test(`opening a rectangle ${initiator.name}`, async () => {
       await initiator();
