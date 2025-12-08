@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { TextEditor } from "vscode";
 import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
 import { IEmacsController } from "../emulator";
-import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
+import { makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections, copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle";
 import { KillRing } from "../kill-yank/kill-ring";
 import { Minibuffer } from "src/minibuffer";
@@ -109,12 +109,15 @@ export class OpenRectangle extends EmacsCommand {
   public readonly id = "openRectangle";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    const selections = getNonEmptySelections(textEditor);
-    if (selections.length === 0) {
+    const selections = this.emacsController.inRectMarkMode
+      ? this.emacsController.nativeSelections
+      : textEditor.selections;
+    const nonEmptySelections = selections.filter((selection) => !selection.isEmpty);
+    if (nonEmptySelections.length === 0) {
       return;
     }
 
-    const starts = textEditor.selections.map((selection) => selection.start);
+    const starts = selections.map((selection) => selection.start);
 
     const rectSelections = selections
       .map(convertSelectionToRectSelections.bind(null, textEditor.document))
@@ -135,10 +138,11 @@ export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    const selections = (
-      this.emacsController.inRectMarkMode ? this.emacsController.nativeSelections : textEditor.selections
-    ).filter((selection) => !selection.isEmpty);
-    if (selections.length === 0) {
+    const selections = this.emacsController.inRectMarkMode
+      ? this.emacsController.nativeSelections
+      : textEditor.selections;
+    const nonEmptySelections = selections.filter((selection) => !selection.isEmpty);
+    if (nonEmptySelections.length === 0) {
       return;
     }
 
@@ -174,14 +178,15 @@ export class StringRectangle extends EmacsCommand {
       return;
     }
 
-    const selections = (
-      this.emacsController.inRectMarkMode ? this.emacsController.nativeSelections : textEditor.selections
-    ).filter((selection) => !selection.isEmpty);
-    if (selections.length === 0) {
+    const selections = this.emacsController.inRectMarkMode
+      ? this.emacsController.nativeSelections
+      : textEditor.selections;
+    const nonEmptySelections = selections.filter((selection) => !selection.isEmpty);
+    if (nonEmptySelections.length === 0) {
       return;
     }
 
-    const rectSelections = selections
+    const rectSelections = nonEmptySelections
       .map(convertSelectionToRectSelections.bind(null, textEditor.document))
       .reduce((a, b) => a.concat(b), []);
     await textEditor.edit((edit) => {
@@ -218,15 +223,16 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
       return;
     }
 
-    const selections = (
-      this.emacsController.inRectMarkMode ? this.emacsController.nativeSelections : textEditor.selections
-    ).filter((selection) => !selection.isEmpty);
+    const selections = this.emacsController.inRectMarkMode
+      ? this.emacsController.nativeSelections
+      : textEditor.selections;
+    const nonEmptySelections = selections.filter((selection) => !selection.isEmpty);
 
-    if (selections.length !== 1) {
+    if (nonEmptySelections.length !== 1) {
       // Multiple cursors not supported
       return;
     }
-    const selection = selections[0]!;
+    const selection = nonEmptySelections[0]!;
 
     const insertChar = Math.min(selection.start.character, selection.end.character);
     const finalCursorLine = selection.active.line;

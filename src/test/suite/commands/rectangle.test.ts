@@ -440,18 +440,47 @@ KLMNOPQRST`;
     assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
   });
 
-  test("opening a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("openRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012    3456789
+  (
+    [
+      function setSelectionViaAPI() {
+        activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+      },
+      async function setSelectionViaMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+      async function setSelectionViaRectangleMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        emulator.rectangleMarkMode();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+    ] as (() => Promise<void>)[]
+  ).forEach((initiator) => {
+    test(`opening a rectangle ${initiator.name}`, async () => {
+      await initiator();
+
+      await emulator.runCommand("openRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012    3456789
 abc    defghij
 ABC    DEFGHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [0, 3]);
+      );
+      assertCursorsEqual(activeTextEditor, [0, 3]);
+    });
   });
 
   test("opening rectangles", async () => {
