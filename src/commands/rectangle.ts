@@ -117,8 +117,6 @@ export class OpenRectangle extends EmacsCommand {
       return;
     }
 
-    const starts = selections.map((selection) => selection.start);
-
     const rectSelections = selections
       .map(convertSelectionToRectSelections.bind(null, textEditor.document))
       .reduce((a, b) => a.concat(b), []);
@@ -130,6 +128,8 @@ export class OpenRectangle extends EmacsCommand {
     });
 
     this.emacsController.exitMarkMode();
+
+    const starts = selections.map((selection) => selection.start);
     textEditor.selections = starts.map((s) => new vscode.Selection(s, s));
   }
 }
