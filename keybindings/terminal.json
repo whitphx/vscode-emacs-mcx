@@ -8,7 +8,7 @@
   {
     "key": "ctrl+f",
     "command": "workbench.action.terminal.sendSequence",
-    "args": { "text": "\u0006" },
+    "args": { "text": "\u0006" }, // 0b00011111 & ASCII('f') == 0b00000110 = 0x06 = Ctrl+F
     "when": "terminalFocus && terminalShellType != 'pwsh'"
   },
   {
@@ -113,15 +113,18 @@
     "args": { "text": "\u0004" },
     "when": "terminalFocus && terminalShellType != 'pwsh'"
   },
-  // Find: https://github.com/whitphx/vscode-emacs-mcx/issues/1319
   {
-    "keys": [
-      "ctrl+s"
-      // "ctrl+r" // We don't assign `ctrl+r` to the terminal find command because usually it is already used as a shortcut in terminals.
-    ],
-    "command": "workbench.action.terminal.focusFind",
-    "inheritWhenFromDefault": true
+    "key": "ctrl+space",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": { "text": "\u0000" },
+    "when": "terminalFocus && terminalShellType != 'pwsh'"
   },
+  // Find
+  // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/1319
+  // We assign `C-s` and `C-r` just for find navigation,
+  // but we avoid assigning `C-s` and `C-r` to open the find widget because
+  // - `C-s` conflicts for example when the user sends the keystroke `C-x C-s` to the terminal to save a file in `emacs` running in the terminal.
+  // - `C-r` is often used in terminals (e.g., reverse-i-search in bash/zsh).
   {
     "key": "ctrl+s",
     "command": "workbench.action.terminal.findNext",
@@ -141,7 +144,12 @@
   // Ref: https://company-mode.github.io/manual/Getting-Started.html
   // Ref: https://code.visualstudio.com/docs/terminal/shell-integration#_intellisense-preview
   {
-    "keys": ["ctrl+meta+i", "meta+tab"],
+    "keys": [
+      "ctrl+meta+i",
+      "meta+tab", // Emacs' completion-at-point
+      "meta+/", // Emacs' hippie expand. https://github.com/whitphx/vscode-emacs-mcx/pull/476
+      "ctrl+'" // For backward-compatibility
+    ],
     "command": "workbench.action.terminal.triggerSuggest",
     "inheritWhenFromDefault": true
   },
