@@ -157,7 +157,7 @@ KLMNOPQRST`,
       );
     });
 
-    test(`copy and yank a rectangle ${initiator.name}`, async () => {
+    test(`copy and yank a rectangle (${initiator.name})`, async () => {
       await initiator();
 
       await emulator.runCommand("copyRectangleAsKill");
