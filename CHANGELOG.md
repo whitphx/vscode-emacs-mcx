@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.95.0
+
+### Minor Changes
+
+- [#2585](https://github.com/whitphx/vscode-emacs-mcx/pull/2585) [`6d02b36`](https://github.com/whitphx/vscode-emacs-mcx/commit/6d02b36fcb21630e5abfe3f63494e5c608657ace) Thanks [@whitphx](https://github.com/whitphx)! - Fix terminal keybindings; `C-SPC` and `C-x C-s` work in Emacs in the terminal, `C-s` is removed from the terminal-level keybinding to open VSC find widget, keybindings to open suggestions same as the editor
+
 ## 0.94.9
 
 ### Patch Changes
