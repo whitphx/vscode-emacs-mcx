@@ -29,7 +29,7 @@ KLMNOPQRST`;
 
   teardown(cleanUpWorkspace);
 
-  [true, false].forEach((useRectMarkMode) => {
+  [false, true].forEach((useRectMarkMode) => {
     test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
       setEmptyCursors(activeTextEditor, [1, 5]);
       if (useRectMarkMode) {
