@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.95.1
+
+### Patch Changes
+
+- [#2587](https://github.com/whitphx/vscode-emacs-mcx/pull/2587) [`39c74ce`](https://github.com/whitphx/vscode-emacs-mcx/commit/39c74ce048012795e3c13b3de8852b0ee5718d1a) Thanks [@whitphx](https://github.com/whitphx)! - isearchAbort (C-g) is triggered when findInputFocussed not findWidgetVisible because C-g during findWidgetVisible but not findInputFocussed is typically intended to cancel some operation on the browser but not isearch
+
 ## 0.95.0
 
 ### Minor Changes
