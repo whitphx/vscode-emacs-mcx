@@ -29,139 +29,207 @@ KLMNOPQRST`;
 
   teardown(cleanUpWorkspace);
 
-  test("nothing happens when the selection is empty", async () => {
-    setEmptyCursors(activeTextEditor, [1, 5]);
-    await emulator.runCommand("killRectangle");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [1, 5]);
+  [false, true].forEach((useRectMarkMode) => {
+    test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      setEmptyCursors(activeTextEditor, [1, 5]);
+      if (useRectMarkMode) {
+        await emulator.rectangleMarkMode();
+      }
+      await emulator.runCommand("killRectangle");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 5]);
+    });
+
+    test(`nothing happens when the selections are empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
+      if (useRectMarkMode) {
+        await emulator.rectangleMarkMode();
+      }
+      await emulator.runCommand("killRectangle");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
+    });
   });
 
-  test("nothing happens when the selections are empty", async () => {
-    setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
-    await emulator.runCommand("killRectangle");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
-  });
+  (
+    [
+      function setSelectionViaAPI() {
+        activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+      },
+      async function setSelectionViaMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+      async function setSelectionViaRectangleMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.rectangleMarkMode();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+    ] as (() => void | Promise<void>)[]
+  ).forEach((initiator) => {
+    test(`killing and yanking a rectangle (${initiator.name})`, async () => {
+      await initiator();
 
-  test("killing and yanking a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("killRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012789
+      await emulator.runCommand("killRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012789
 abchij
 ABCHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [2, 3]);
+      );
+      assertCursorsEqual(activeTextEditor, [2, 3]);
 
-    setEmptyCursors(activeTextEditor, [0, 0]);
-    await emulator.runCommand("yankRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `3456012789
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yankRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `3456012789
 defgabchij
 DEFGABCHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
+      );
 
-    // Yank on an out-of-range area
-    setEmptyCursors(activeTextEditor, [4, 5]);
-    await emulator.runCommand("yankRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `3456012789
+      // Yank on an out-of-range area
+      setEmptyCursors(activeTextEditor, [4, 5]);
+      await emulator.runCommand("yankRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `3456012789
 defgabchij
 DEFGABCHIJ
 klmnopqrst
 KLMNO3456PQRST
      defg
      DEFG`,
-    );
+      );
 
-    setEmptyCursors(activeTextEditor, [4, 10]);
-    await emulator.runCommand("yankRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `3456012789
+      setEmptyCursors(activeTextEditor, [4, 10]);
+      await emulator.runCommand("yankRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `3456012789
 defgabchij
 DEFGABCHIJ
 klmnopqrst
 KLMNO3456P3456QRST
      defg defg
      DEFG DEFG`,
-    );
-  });
+      );
+    });
 
-  test("deleting a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("deleteRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012789
+    test(`deleting a rectangle (${initiator.name})`, async () => {
+      await initiator();
+
+      await emulator.runCommand("deleteRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012789
 abchij
 ABCHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [2, 3]);
+      );
+      assertCursorsEqual(activeTextEditor, [2, 3]);
 
-    setEmptyCursors(activeTextEditor, [0, 0]);
-    await emulator.runCommand("yankRectangle"); // Nothing yanked as there is no killed rectangle.
-    assertTextEqual(
-      activeTextEditor,
-      `012789
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yankRectangle"); // Nothing yanked as there is no killed rectangle.
+      assertTextEqual(
+        activeTextEditor,
+        `012789
 abchij
 ABCHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-  });
+      );
+    });
 
-  test("kill and yank with reversed range", async () => {
-    activeTextEditor.selections = [new vscode.Selection(2, 7, 0, 3)]; // Rigth bottom to top left
-    await emulator.runCommand("killRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012789
-abchij
-ABCHIJ
-klmnopqrst
-KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [0, 3]);
+    test(`copy and yank a rectangle (${initiator.name})`, async () => {
+      await initiator();
 
-    setEmptyCursors(activeTextEditor, [0, 0]);
-    await emulator.runCommand("yankRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `3456012789
-defgabchij
-DEFGABCHIJ
-klmnopqrst
-KLMNOPQRST`,
-    );
-  });
+      await emulator.runCommand("copyRectangleAsKill");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [2, 7]);
+      assert.equal(emulator.isInMarkMode, false);
 
-  test("copy and yank a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("copyRectangleAsKill");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [2, 7]);
-    assert.equal(emulator.isInMarkMode, false);
-
-    setEmptyCursors(activeTextEditor, [0, 0]);
-    await emulator.runCommand("yankRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `34560123456789
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yankRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `34560123456789
 defgabcdefghij
 DEFGABCDEFGHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
+      );
+    });
+  });
+
+  (
+    [
+      function setSelectionViaAPI() {
+        activeTextEditor.selections = [new vscode.Selection(2, 7, 0, 3)]; // Right bottom to top left
+      },
+      async function setSelectionViaMarkMode() {
+        setEmptyCursors(activeTextEditor, [2, 7]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("previousLine");
+        await emulator.runCommand("previousLine");
+        await emulator.runCommand("backwardChar");
+        await emulator.runCommand("backwardChar");
+        await emulator.runCommand("backwardChar");
+        await emulator.runCommand("backwardChar");
+      },
+      async function setSelectionViaRectangleMarkMode() {
+        setEmptyCursors(activeTextEditor, [2, 7]);
+        await emulator.rectangleMarkMode();
+        await emulator.runCommand("previousLine");
+        await emulator.runCommand("previousLine");
+        await emulator.runCommand("backwardChar");
+        await emulator.runCommand("backwardChar");
+        await emulator.runCommand("backwardChar");
+        await emulator.runCommand("backwardChar");
+      },
+    ] as (() => void | Promise<void>)[]
+  ).forEach((initiator) => {
+    test(`kill and yank with reversed range (${initiator.name})`, async () => {
+      await initiator();
+
+      await emulator.runCommand("killRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012789
+abchij
+ABCHIJ
+klmnopqrst
+KLMNOPQRST`,
+      );
+      assertCursorsEqual(activeTextEditor, [0, 3]);
+
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("yankRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `3456012789
+defgabchij
+DEFGABCHIJ
+klmnopqrst
+KLMNOPQRST`,
+      );
+    });
   });
 });
 
@@ -181,32 +249,69 @@ KLMNOPQRST`;
 
   teardown(cleanUpWorkspace);
 
-  test("nothing happens when the selection is empty", async () => {
-    setEmptyCursors(activeTextEditor, [1, 5]);
-    await emulator.runCommand("clearRectangle");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [1, 5]);
+  [false, true].forEach((useRectMarkMode) => {
+    test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      setEmptyCursors(activeTextEditor, [1, 5]);
+      if (useRectMarkMode) {
+        await emulator.rectangleMarkMode();
+      }
+      await emulator.runCommand("clearRectangle");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 5]);
+    });
+
+    test(`nothing happens when the selections are empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
+      if (useRectMarkMode) {
+        await emulator.rectangleMarkMode();
+      }
+      await emulator.runCommand("clearRectangle");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
+    });
   });
 
-  test("nothing happens when the selections are empty", async () => {
-    setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
-    await emulator.runCommand("clearRectangle");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
-  });
+  (
+    [
+      function setSelectionViaAPI() {
+        activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+      },
+      async function setSelectionViaMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+      async function setSelectionViaRectangleMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.rectangleMarkMode();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+    ] as (() => void | Promise<void>)[]
+  ).forEach((initiator) => {
+    test(`clearing a rectangle (${initiator.name})`, async () => {
+      await initiator();
 
-  test("clearing a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("clearRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012    789
+      await emulator.runCommand("clearRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012    789
 abc    hij
 ABC    HIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [2, 7]);
+      );
+      assertCursorsEqual(activeTextEditor, [2, 7]);
+    });
   });
 
   test("clearing rectangles", async () => {
@@ -335,18 +440,47 @@ KLMNOPQRST`;
     assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
   });
 
-  test("opening a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("openRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012    3456789
+  (
+    [
+      function setSelectionViaAPI() {
+        activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+      },
+      async function setSelectionViaMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+      async function setSelectionViaRectangleMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.rectangleMarkMode();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+    ] as (() => void | Promise<void>)[]
+  ).forEach((initiator) => {
+    test(`opening a rectangle (${initiator.name})`, async () => {
+      await initiator();
+
+      await emulator.runCommand("openRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012    3456789
 abc    defghij
 ABC    DEFGHIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [0, 3]);
+      );
+      assertCursorsEqual(activeTextEditor, [0, 3]);
+    });
   });
 
   test("opening rectangles", async () => {
