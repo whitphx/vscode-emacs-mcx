@@ -249,32 +249,69 @@ KLMNOPQRST`;
 
   teardown(cleanUpWorkspace);
 
-  test("nothing happens when the selection is empty", async () => {
-    setEmptyCursors(activeTextEditor, [1, 5]);
-    await emulator.runCommand("clearRectangle");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [1, 5]);
+  [false, true].forEach((useRectMarkMode) => {
+    test(`nothing happens when the selection is empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      if (useRectMarkMode) {
+        emulator.rectangleMarkMode();
+      }
+      setEmptyCursors(activeTextEditor, [1, 5]);
+      await emulator.runCommand("clearRectangle");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 5]);
+    });
+
+    test(`nothing happens when the selections are empty (useRectMarkMode=${useRectMarkMode})`, async () => {
+      if (useRectMarkMode) {
+        emulator.rectangleMarkMode();
+      }
+      setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
+      await emulator.runCommand("clearRectangle");
+      assertTextEqual(activeTextEditor, initialText);
+      assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
+    });
   });
 
-  test("nothing happens when the selections are empty", async () => {
-    setEmptyCursors(activeTextEditor, [1, 5], [2, 7]);
-    await emulator.runCommand("clearRectangle");
-    assertTextEqual(activeTextEditor, initialText);
-    assertCursorsEqual(activeTextEditor, [1, 5], [2, 7]);
-  });
+  (
+    [
+      function setSelectionViaAPI() {
+        activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
+      },
+      async function setSelectionViaMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        await emulator.setMarkCommand();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+      async function setSelectionViaRectangleMarkMode() {
+        setEmptyCursors(activeTextEditor, [0, 3]);
+        emulator.rectangleMarkMode();
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("nextLine");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+        await emulator.runCommand("forwardChar");
+      },
+    ] as (() => void | Promise<void>)[]
+  ).forEach((initiator) => {
+    test(`clearing a rectangle (${initiator.name})`, async () => {
+      await initiator();
 
-  test("clearing a rectangle", async () => {
-    activeTextEditor.selections = [new vscode.Selection(0, 3, 2, 7)];
-    await emulator.runCommand("clearRectangle");
-    assertTextEqual(
-      activeTextEditor,
-      `012    789
+      await emulator.runCommand("clearRectangle");
+      assertTextEqual(
+        activeTextEditor,
+        `012    789
 abc    hij
 ABC    HIJ
 klmnopqrst
 KLMNOPQRST`,
-    );
-    assertCursorsEqual(activeTextEditor, [2, 7]);
+      );
+      assertCursorsEqual(activeTextEditor, [2, 7]);
+    });
   });
 
   test("clearing rectangles", async () => {

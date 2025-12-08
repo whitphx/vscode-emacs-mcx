@@ -47,9 +47,10 @@ export async function copyOrDeleteRect(
   textEditor: vscode.TextEditor,
   options: CopyOrDeleteRectOptions,
 ): Promise<RectangleTexts | null> {
-  const selections = emacsController.inRectMarkMode ? emacsController.nativeSelections : textEditor.selections;
-  const nonEmptySelections = selections.filter((selection) => !selection.isEmpty);
-  if (nonEmptySelections.length !== 1) {
+  const selections = (emacsController.inRectMarkMode ? emacsController.nativeSelections : textEditor.selections).filter(
+    (selection) => !selection.isEmpty,
+  );
+  if (selections.length !== 1) {
     // Multiple cursors not supported
     return null;
   }

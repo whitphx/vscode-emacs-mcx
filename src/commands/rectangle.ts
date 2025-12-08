@@ -135,7 +135,9 @@ export class ClearRectangle extends EmacsCommand {
   public readonly id = "clearRectangle";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    const selections = getNonEmptySelections(textEditor);
+    const selections = (
+      this.emacsController.inRectMarkMode ? this.emacsController.nativeSelections : textEditor.selections
+    ).filter((selection) => !selection.isEmpty);
     if (selections.length === 0) {
       return;
     }
@@ -172,7 +174,9 @@ export class StringRectangle extends EmacsCommand {
       return;
     }
 
-    const selections = getNonEmptySelections(textEditor);
+    const selections = (
+      this.emacsController.inRectMarkMode ? this.emacsController.nativeSelections : textEditor.selections
+    ).filter((selection) => !selection.isEmpty);
     if (selections.length === 0) {
       return;
     }
@@ -214,7 +218,9 @@ export class ReplaceKillRingToRectangle extends EmacsCommand {
       return;
     }
 
-    const selections = getNonEmptySelections(textEditor);
+    const selections = (
+      this.emacsController.inRectMarkMode ? this.emacsController.nativeSelections : textEditor.selections
+    ).filter((selection) => !selection.isEmpty);
 
     if (selections.length !== 1) {
       // Multiple cursors not supported
