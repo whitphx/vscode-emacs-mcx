@@ -73,7 +73,7 @@ KLMNOPQRST`;
     // On the first editor, start the rectangle mark mode and move the cursor.
     emulator.setTextEditor(firstTextEditor);
     setEmptyCursors(firstTextEditor, [0, 0]);
-    emulator.rectangleMarkMode();
+    await emulator.rectangleMarkMode();
     await emulator.runCommand("forwardChar");
     await emulator.runCommand("nextLine");
     await emulator.runCommand("forwardChar");

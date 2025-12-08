@@ -509,10 +509,14 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   /**
    * C-x <SPC>
    */
-  public rectangleMarkMode(): void {
-    if (this.inRectMarkMode) {
+  public async rectangleMarkMode(): Promise<void> {
+    if (
+      this.inRectMarkMode &&
+      !this.prefixArgumentHandler.isInPrefixArgumentMode // `C-x <SPC>` always enable rectangle-mark-mode when prefix argument is given on original Emacs, somehow.
+    ) {
       this.exitRectangleMarkMode();
     } else {
+      await this.prefixArgumentHandler.cancel();
       this.enterRectangleMarkMode();
     }
   }
