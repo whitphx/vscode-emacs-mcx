@@ -2502,6 +2502,26 @@
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "alt+space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+d",
         "command": "emacs-mcx.killWord",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
