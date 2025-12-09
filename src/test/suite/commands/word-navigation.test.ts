@@ -40,6 +40,14 @@ suite("wordNavigationStyle", () => {
       assertCursorsEqual(activeTextEditor, [1, 3]);
     });
 
+    test("backwardWord crosses lines", async () => {
+      setEmptyCursors(activeTextEditor, [1, 0]);
+
+      await emulator.runCommand("backwardWord");
+
+      assertCursorsEqual(activeTextEditor, [0, 5]);
+    });
+
     test("killWord uses the same word boundaries", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
@@ -49,6 +57,15 @@ suite("wordNavigationStyle", () => {
 
       assertTextEqual(activeTextEditor, " y;");
       assertCursorsEqual(activeTextEditor, [0, 0]);
+    });
+
+    test("backwardKillWord crosses lines", async () => {
+      setEmptyCursors(activeTextEditor, [1, 0]);
+
+      await emulator.runCommand("backwardKillWord");
+
+      assertTextEqual(activeTextEditor, "int xint y;");
+      assertCursorsEqual(activeTextEditor, [0, 5]);
     });
   });
 
@@ -71,6 +88,14 @@ suite("wordNavigationStyle", () => {
       assertCursorsEqual(activeTextEditor, [0, 6]);
     });
 
+    test("backwardWord follows VS Code navigation", async () => {
+      setEmptyCursors(activeTextEditor, [0, 6]);
+
+      await emulator.runCommand("backwardWord");
+
+      assertCursorsEqual(activeTextEditor, [0, 4]);
+    });
+
     test("killWord aligns with VS Code word stops", async () => {
       setEmptyCursors(activeTextEditor, [0, 0]);
 
@@ -81,38 +106,14 @@ suite("wordNavigationStyle", () => {
       assertTextEqual(activeTextEditor, "\nint y;");
       assertCursorsEqual(activeTextEditor, [0, 0]);
     });
-  });
-});
 
-suite("wordNavigationStyle cross-line backward navigation (emacs)", () => {
-  let activeTextEditor: TextEditor;
-  let emulator: EmacsEmulator;
+    test("backwardKillWord aligns with VS Code word stops", async () => {
+      setEmptyCursors(activeTextEditor, [0, 6]);
 
-  setup(async () => {
-    activeTextEditor = await setupWorkspace("foo\n\nbar");
-    emulator = createEmulator(activeTextEditor);
-    Configuration.instance.wordNavigationStyle = "emacs";
-  });
+      await emulator.runCommand("backwardKillWord");
 
-  teardown(() => {
-    Configuration.reload();
-    return cleanUpWorkspace();
-  });
-
-  test("backwardWord skips blank lines when crossing lines", async () => {
-    setEmptyCursors(activeTextEditor, [2, 0]);
-
-    await emulator.runCommand("backwardWord");
-
-    assertCursorsEqual(activeTextEditor, [0, 0]);
-  });
-
-  test("backwardKillWord skips blank lines when crossing lines", async () => {
-    setEmptyCursors(activeTextEditor, [2, 0]);
-
-    await emulator.runCommand("backwardKillWord");
-
-    assertTextEqual(activeTextEditor, "bar");
-    assertCursorsEqual(activeTextEditor, [0, 0]);
+      assertTextEqual(activeTextEditor, "int x\nint y;");
+      assertCursorsEqual(activeTextEditor, [0, 5]);
+    });
   });
 });
