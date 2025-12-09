@@ -21,5 +21,6 @@
     // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     // "noUnusedParameters": true,  /* Report errors on unused parameters. */
   },
+  "include": ["src", "eslint.config.mjs", "webpack.config.js"],
   "exclude": ["node_modules", ".vscode-test", "keybinding-generator"]
 }

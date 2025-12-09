@@ -1,15 +1,15 @@
 // @ts-check
 
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import path from "node:path";
 
 const config = defineConfig(
+  eslint.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
+  globalIgnores(["src/vs/**"]),
   {
-    basePath: "src",
-    ignores: ["vs/**"],
-    extends: [eslint.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     // Ref: https://typescript-eslint.io/getting-started/typed-linting/
     languageOptions: {
       parserOptions: {
@@ -17,6 +17,14 @@ const config = defineConfig(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+  },
+  {
+    // Ref: https://typescript-eslint.io/troubleshooting/typed-linting/#how-can-i-disable-type-aware-linting-for-a-set-of-files
+    files: ["**/*.js", "**/*.mjs"],
+    extends: [tseslint.configs.disableTypeChecked],
+  },
+  {
+    basePath: "src",
     rules: {
       "@typescript-eslint/no-unused-vars": [
         "error",
