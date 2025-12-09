@@ -293,6 +293,18 @@ export function findPreviousWordStart(
     new Position(lineNumber, character),
   );
 
+  if (allowCrossLineWordNavigation && !prevWordOnLine && lineNumber > 0) {
+    // Skip empty/whitespace-only lines when crossing lines.
+    do {
+      lineNumber = lineNumber - 1;
+      prevWordOnLine = findPreviousWordOnLine(
+        doc.lineAt(lineNumber).text,
+        wordSeparators,
+        doc.lineAt(lineNumber).range.end,
+      );
+    } while (!prevWordOnLine && lineNumber > 0);
+  }
+
   // Emacs-like behavior that does not stop word search at line breaks.
   if (
     allowCrossLineWordNavigation &&

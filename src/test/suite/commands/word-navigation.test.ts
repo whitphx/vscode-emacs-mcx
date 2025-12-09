@@ -83,3 +83,36 @@ suite("wordNavigationStyle", () => {
     });
   });
 });
+
+suite("wordNavigationStyle cross-line backward navigation (emacs)", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace("foo\n\nbar");
+    emulator = createEmulator(activeTextEditor);
+    Configuration.instance.wordNavigationStyle = "emacs";
+  });
+
+  teardown(() => {
+    Configuration.reload();
+    return cleanUpWorkspace();
+  });
+
+  test("backwardWord skips blank lines when crossing lines", async () => {
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    await emulator.runCommand("backwardWord");
+
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+  });
+
+  test("backwardKillWord skips blank lines when crossing lines", async () => {
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    await emulator.runCommand("backwardKillWord");
+
+    assertTextEqual(activeTextEditor, "bar");
+    assertCursorsEqual(activeTextEditor, [0, 0]);
+  });
+});
