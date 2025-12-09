@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.96.0
+
+### Minor Changes
+
+- [`52f7614`](https://github.com/whitphx/vscode-emacs-mcx/commit/52f761401216403523350f548465de900da9a469) Thanks [@whitphx](https://github.com/whitphx)! - Add word boundary mode config to emulate VSCode/Emacs word boundary better with forwardWord/backwardWord/killWord/backwardKillWord commands.
+  https://github.com/whitphx/vscode-emacs-mcx/pull/2592
+
+### Patch Changes
+
+- [#2597](https://github.com/whitphx/vscode-emacs-mcx/pull/2597) [`1ffcf03`](https://github.com/whitphx/vscode-emacs-mcx/commit/1ffcf0371e1acd536f1a4515c661cc3c40cc0f9c) Thanks [@whitphx](https://github.com/whitphx)! - Internal refactoring around pasting by kill-yank commands
+
 ## 0.95.1
 
 ### Patch Changes
