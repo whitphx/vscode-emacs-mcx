@@ -6025,6 +6025,7 @@
     "assert": "^2.1.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-mocha": "^11.2.0",
     "glob": "^13.0.0",
     "husky": "^9.1.7",
     "jsep": "^1.4.0",
