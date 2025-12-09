@@ -130,13 +130,15 @@ export class KillYanker implements vscode.Disposable {
     this.isAppending = false;
   }
 
-  private async pasteString(text: string): Promise<void> {
+  private async pasteClipboardSimple(): Promise<void> {
     if (this.minibuffer.isReading) {
+      const text = await vscode.env.clipboard.readText();
       this.minibuffer.paste(text);
       return;
     }
 
-    return vscode.commands.executeCommand("paste", { text });
+    // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    return vscode.commands.executeCommand("editor.action.clipboardPasteAction");
   }
 
   private async pasteKillRingEntity(killRingEntity: KillRingEntity): Promise<void> {
@@ -258,8 +260,7 @@ export class KillYanker implements vscode.Disposable {
 
   public async yank(delta: number = 1): Promise<void> {
     if (this.killRing == null) {
-      const text = await vscode.env.clipboard.readText();
-      return this.pasteString(text);
+      return this.pasteClipboardSimple();
     }
 
     if (delta === 1) {
