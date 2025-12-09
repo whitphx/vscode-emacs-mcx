@@ -1,4 +1,4 @@
-import { TextDocument, Position } from "vscode";
+import { Position, TextDocument } from "vscode";
 import { WordCharacterClass, WordCharacterClassifier } from "vs/editor/common/controller/wordCharacterClassifier";
 
 // Derived from https://github.com/microsoft/vscode/blob/246aab4a05c5f314b1711dac9e775921e93e786e/src/vs/editor/common/controller/cursorWordOperations.ts
@@ -211,6 +211,7 @@ export function findNextWordEnd(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
+  allowCrossLineWordNavigation: boolean,
 ): Position {
   let lineNumber = position.line;
   let character = position.character;
@@ -230,6 +231,7 @@ export function findNextWordEnd(
 
   // Emacs-like behavior that does not stop word search at line breaks.
   if (
+    allowCrossLineWordNavigation &&
     nextWordOnLine &&
     nextWordOnLine.wordType === WordType.Separator &&
     lineNumber < doc.lineCount - 1 &&
@@ -273,6 +275,7 @@ export function findPreviousWordStart(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
+  allowCrossLineWordNavigation: boolean,
 ): Position {
   let lineNumber = position.line;
   let character = position.character;
@@ -292,6 +295,7 @@ export function findPreviousWordStart(
 
   // Emacs-like behavior that does not stop word search at line breaks.
   if (
+    allowCrossLineWordNavigation &&
     prevWordOnLine &&
     prevWordOnLine.wordType === WordType.Separator &&
     lineNumber > 0 &&

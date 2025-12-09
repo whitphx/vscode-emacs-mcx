@@ -47,27 +47,32 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   public moveEndOfLineBehavior: "vscode" | "emacs" = "vscode";
   public scrollUpCommandBehavior: "vscode" | "emacs" = "vscode";
   public scrollDownCommandBehavior: "vscode" | "emacs" = "vscode";
+  public wordNavigationStyle: "vscode" | "emacs" = "vscode";
 
   public get $moveBeginningOfLineBehavior(): "vscode" | "emacs" {
     if (this.strictEmacsMove) {
+      // For backward-compatibility
       return "emacs";
     }
     return this.moveBeginningOfLineBehavior;
   }
   public get $moveEndOfLineBehavior(): "vscode" | "emacs" {
     if (this.strictEmacsMove) {
+      // For backward-compatibility
       return "emacs";
     }
     return this.moveEndOfLineBehavior;
   }
   public get $scrollUpCommandBehavior(): "vscode" | "emacs" {
     if (this.strictEmacsMove) {
+      // For backward-compatibility
       return "emacs";
     }
     return this.scrollUpCommandBehavior;
   }
   public get $scrollDownCommandBehavior(): "vscode" | "emacs" {
     if (this.strictEmacsMove) {
+      // For backward-compatibility
       return "emacs";
     }
     return this.scrollDownCommandBehavior;
