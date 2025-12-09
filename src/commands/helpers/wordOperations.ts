@@ -237,7 +237,11 @@ export function findNextWordEnd(
     lineNumber < doc.lineCount - 1 &&
     nextWordOnLine.end === doc.lineAt(lineNumber).range.end.character
   ) {
-    lineNumber = lineNumber + 1;
+    let nextNonEmptyLine = lineNumber + 1;
+    while (nextNonEmptyLine < doc.lineCount && doc.lineAt(nextNonEmptyLine).isEmptyOrWhitespace) {
+      nextNonEmptyLine = nextNonEmptyLine + 1;
+    }
+    lineNumber = nextNonEmptyLine;
     character = 0;
     nextWordOnLine = findNextWordOnLine(
       doc.lineAt(lineNumber).text,
@@ -313,7 +317,11 @@ export function findPreviousWordStart(
     lineNumber > 0 &&
     prevWordOnLine.start === 0
   ) {
-    lineNumber = lineNumber - 1;
+    let prevNonEmptyLine = lineNumber - 1;
+    while (prevNonEmptyLine >= 0 && doc.lineAt(prevNonEmptyLine).isEmptyOrWhitespace) {
+      prevNonEmptyLine = prevNonEmptyLine - 1;
+    }
+    lineNumber = prevNonEmptyLine;
     prevWordOnLine = findPreviousWordOnLine(
       doc.lineAt(lineNumber).text,
       wordSeparators,
