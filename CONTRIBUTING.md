@@ -115,6 +115,8 @@ Finally, bind the exposed command to key strokes.
 It's typically done by editing `package.json` though, it's incorrect in this extension.
 Edit `keybindings.json` and run `npm run gen-keys` instead as described above.
 
+It is strongly encouraged to add unit tests for the new command.
+
 # Release the extension (only for maintainers)
 
 Releases are now driven by [Changesets](https://github.com/changesets/changesets) and the automated workflow in `.github/workflows/release.yml`.
