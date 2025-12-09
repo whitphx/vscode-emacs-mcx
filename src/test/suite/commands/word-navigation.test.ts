@@ -45,7 +45,7 @@ suite("wordNavigationStyle", () => {
 
       await emulator.runCommand("backwardWord");
 
-      assertCursorsEqual(activeTextEditor, [0, 5]);
+      assertCursorsEqual(activeTextEditor, [0, 4]);
     });
 
     test("killWord uses the same word boundaries", async () => {
@@ -64,8 +64,8 @@ suite("wordNavigationStyle", () => {
 
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(activeTextEditor, "int xint y;");
-      assertCursorsEqual(activeTextEditor, [0, 5]);
+      assertTextEqual(activeTextEditor, "int int y;");
+      assertCursorsEqual(activeTextEditor, [0, 4]);
     });
   });
 
@@ -112,8 +112,8 @@ suite("wordNavigationStyle", () => {
 
       await emulator.runCommand("backwardKillWord");
 
-      assertTextEqual(activeTextEditor, "int x\nint y;");
-      assertCursorsEqual(activeTextEditor, [0, 5]);
+      assertTextEqual(activeTextEditor, "int \nint y;");
+      assertCursorsEqual(activeTextEditor, [0, 4]);
     });
   });
 });
