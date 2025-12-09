@@ -105,6 +105,12 @@ Determines the behavior of the `scroll-down-command` command.
 If set as `'vscode'`, it works as VSCode's native `Page Up` key behavior.
 If set as `'emacs'`, it works as the original Emacs' `scroll-down-command`.
 
+### `emacs-mcx.wordNavigationStyle`
+
+Determines the behavior of word navigation and word killing commands such as `forward-word`, `backward-word`, `kill-word`, and `backward-kill-word`.
+If set as `'vscode'` (default), they work as VSCode's native word navigation.
+If set as `'emacs'`, they follow Emacs-like word boundary detection.
+
 ### ~~`emacs-mcx.strictEmacsMove`~~ (deprecated)
 
 ~~If set as `true`, all `emacs-mcx.moveBeginningOfLineBehavior`, `emacs-mcx.moveEndOfLineBehavior`, `emacs-mcx.scrollUpCommandBehavior`, and `emacs-mcx.scrollDownCommandBehavior` are set to `'emacs'`.~~

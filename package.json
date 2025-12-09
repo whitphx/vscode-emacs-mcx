@@ -102,6 +102,15 @@
           "default": "vscode",
           "description": "Simulate Emacs's cursor movements or preserve VSCode's native ones"
         },
+        "emacs-mcx.wordNavigationStyle": {
+          "type": "string",
+          "enum": [
+            "emacs",
+            "vscode"
+          ],
+          "default": "vscode",
+          "description": "Simulate Emacs's word boundary behavior or preserve VSCode's native one for forward/backward word and kill word commands"
+        },
         "emacs-mcx.keepCursorInVisibleRange": {
           "type": "boolean",
           "default": false,

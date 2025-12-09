@@ -10,6 +10,7 @@ import {
   setupWorkspace,
   createEmulator,
 } from "../../utils";
+import { Configuration } from "../../../../configuration/configuration";
 
 suite("killWord and backwardKillWord with JSON document", () => {
   let activeTextEditor: TextEditor;
@@ -89,6 +90,14 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
     activeTextEditor = await setupWorkspace(initialText);
     const killRing = new KillRing(3);
     emulator = createEmulator(activeTextEditor, killRing);
+  });
+
+  setup(() => {
+    Configuration.instance.wordNavigationStyle = "emacs";
+  });
+
+  teardown(() => {
+    Configuration.reload();
   });
 
   teardown(cleanUpWorkspace);

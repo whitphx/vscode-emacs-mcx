@@ -47,6 +47,7 @@ export interface IConfiguration {
   moveEndOfLineBehavior: "vscode" | "emacs";
   scrollUpCommandBehavior: "vscode" | "emacs";
   scrollDownCommandBehavior: "vscode" | "emacs";
+  wordNavigationStyle: "vscode" | "emacs";
 
   /**
    * Paredit configuration

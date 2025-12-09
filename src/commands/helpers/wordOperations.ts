@@ -1,4 +1,4 @@
-import { TextDocument, Position } from "vscode";
+import { Position, TextDocument } from "vscode";
 import { WordCharacterClass, WordCharacterClassifier } from "vs/editor/common/controller/wordCharacterClassifier";
 
 // Derived from https://github.com/microsoft/vscode/blob/246aab4a05c5f314b1711dac9e775921e93e786e/src/vs/editor/common/controller/cursorWordOperations.ts
@@ -211,6 +211,7 @@ export function findNextWordEnd(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
+  allowCrossLineWordNavigation: boolean,
 ): Position {
   let lineNumber = position.line;
   let character = position.character;
@@ -230,12 +231,17 @@ export function findNextWordEnd(
 
   // Emacs-like behavior that does not stop word search at line breaks.
   if (
+    allowCrossLineWordNavigation &&
     nextWordOnLine &&
     nextWordOnLine.wordType === WordType.Separator &&
     lineNumber < doc.lineCount - 1 &&
     nextWordOnLine.end === doc.lineAt(lineNumber).range.end.character
   ) {
-    lineNumber = lineNumber + 1;
+    let nextNonEmptyLine = lineNumber + 1;
+    while (nextNonEmptyLine < doc.lineCount && doc.lineAt(nextNonEmptyLine).isEmptyOrWhitespace) {
+      nextNonEmptyLine = nextNonEmptyLine + 1;
+    }
+    lineNumber = nextNonEmptyLine;
     character = 0;
     nextWordOnLine = findNextWordOnLine(
       doc.lineAt(lineNumber).text,
@@ -273,6 +279,7 @@ export function findPreviousWordStart(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
+  allowCrossLineWordNavigation: boolean,
 ): Position {
   let lineNumber = position.line;
   let character = position.character;
@@ -290,14 +297,31 @@ export function findPreviousWordStart(
     new Position(lineNumber, character),
   );
 
+  if (allowCrossLineWordNavigation && !prevWordOnLine && lineNumber > 0) {
+    // Skip empty/whitespace-only lines when crossing lines.
+    do {
+      lineNumber = lineNumber - 1;
+      prevWordOnLine = findPreviousWordOnLine(
+        doc.lineAt(lineNumber).text,
+        wordSeparators,
+        doc.lineAt(lineNumber).range.end,
+      );
+    } while (!prevWordOnLine && lineNumber > 0);
+  }
+
   // Emacs-like behavior that does not stop word search at line breaks.
   if (
+    allowCrossLineWordNavigation &&
     prevWordOnLine &&
     prevWordOnLine.wordType === WordType.Separator &&
     lineNumber > 0 &&
     prevWordOnLine.start === 0
   ) {
-    lineNumber = lineNumber - 1;
+    let prevNonEmptyLine = lineNumber - 1;
+    while (prevNonEmptyLine >= 0 && doc.lineAt(prevNonEmptyLine).isEmptyOrWhitespace) {
+      prevNonEmptyLine = prevNonEmptyLine - 1;
+    }
+    lineNumber = prevNonEmptyLine;
     prevWordOnLine = findPreviousWordOnLine(
       doc.lineAt(lineNumber).text,
       wordSeparators,

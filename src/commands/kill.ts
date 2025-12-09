@@ -1,23 +1,13 @@
-import * as vscode from "vscode";
 import { Position, Range, TextDocument, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { IEmacsController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
-import { WordCharacterClassifier, getMapForWordSeparators } from "vs/editor/common/controller/wordCharacterClassifier";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
+import { getWordSeparators } from "./helpers/wordSeparators";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { MessageManager } from "../message";
-
-function getWordSeparators(): WordCharacterClassifier {
-  // Ref: https://github.com/VSCodeVim/Vim/blob/91ca71f8607458c0558f9aff61e230c6917d4b51/src/configuration/configuration.ts#L155
-  const activeTextEditor = vscode.window.activeTextEditor;
-  const resource = activeTextEditor ? activeTextEditor.document.uri : null;
-  const maybeWordSeparators = vscode.workspace.getConfiguration("editor", resource).wordSeparators as unknown;
-  // Ref: https://github.com/microsoft/vscode/blob/bc9f2577cd8e297b003e5ca652e19685504a1e50/src/vs/editor/contrib/wordOperations/wordOperations.ts#L45
-  return getMapForWordSeparators(typeof maybeWordSeparators === "string" ? maybeWordSeparators : "");
-}
 
 export abstract class KillYankCommand extends EmacsCommand {
   protected killYanker: KillYanker;
@@ -34,11 +24,12 @@ function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1
     throw new Error(`Invalid repeat ${repeat}`);
   }
 
-  const wordSeparators = getWordSeparators();
+  const wordSeparators = getWordSeparators(doc);
+  const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
 
   let wordEnd = position;
   for (let i = 0; i < repeat; ++i) {
-    wordEnd = findNextWordEnd(doc, wordSeparators, wordEnd);
+    wordEnd = findNextWordEnd(doc, wordSeparators, wordEnd, allowCrossLineWordNavigation);
   }
 
   const range = new Range(position, wordEnd);
@@ -70,11 +61,12 @@ function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat
     throw new Error(`Invalid repeat ${repeat}`);
   }
 
-  const wordSeparators = getWordSeparators();
+  const wordSeparators = getWordSeparators(doc);
+  const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
 
   let wordStart = position;
   for (let i = 0; i < repeat; ++i) {
-    wordStart = findPreviousWordStart(doc, wordSeparators, wordStart);
+    wordStart = findPreviousWordStart(doc, wordSeparators, wordStart, allowCrossLineWordNavigation);
   }
 
   const range = new Range(wordStart, position);

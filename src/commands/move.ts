@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import type { TextEditor } from "vscode";
 import { EmacsCommand, ITextEditorInterruptionHandler, InterruptEvent } from ".";
-import { makeParallel } from "./helpers/parallel";
 import { Configuration } from "../configuration/configuration";
+import { makeParallel } from "./helpers/parallel";
 import {
   travelForward as travelForwardParagraph,
   travelBackward as travelBackwardParagraph,
@@ -10,6 +10,8 @@ import {
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { IEmacsController } from "src/emulator";
+import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
+import { getWordSeparators } from "./helpers/wordSeparators";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -279,9 +281,30 @@ export class ForwardWord extends EmacsCommand {
     }
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return makeParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight"),
-    );
+    if (repeat <= 0) {
+      return;
+    }
+
+    const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
+    // Use VS Code's native commands in native mode to mirror editor defaults exactly.
+    if (!allowCrossLineWordNavigation) {
+      return makeParallel(repeat, () =>
+        vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight"),
+      );
+    }
+
+    const wordSeparators = getWordSeparators(textEditor.document);
+    const doc = textEditor.document;
+
+    textEditor.selections = textEditor.selections.map((selection) => {
+      let active = selection.active;
+      for (let i = 0; i < repeat; i++) {
+        active = findNextWordEnd(doc, wordSeparators, active, allowCrossLineWordNavigation);
+      }
+      const anchor = isInMarkMode ? selection.anchor : active;
+      return new vscode.Selection(anchor, active);
+    });
+    revealPrimaryActive(textEditor);
   }
 }
 
@@ -299,9 +322,30 @@ export class BackwardWord extends EmacsCommand {
     }
 
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
-    return makeParallel(repeat, () =>
-      vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft"),
-    );
+    if (repeat <= 0) {
+      return;
+    }
+
+    const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
+    // Use VS Code's native commands in native mode to mirror editor defaults exactly.
+    if (!allowCrossLineWordNavigation) {
+      return makeParallel(repeat, () =>
+        vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft"),
+      );
+    }
+
+    const wordSeparators = getWordSeparators(textEditor.document);
+    const doc = textEditor.document;
+
+    textEditor.selections = textEditor.selections.map((selection) => {
+      let active = selection.active;
+      for (let i = 0; i < repeat; i++) {
+        active = findPreviousWordStart(doc, wordSeparators, active, allowCrossLineWordNavigation);
+      }
+      const anchor = isInMarkMode ? selection.anchor : active;
+      return new vscode.Selection(anchor, active);
+    });
+    revealPrimaryActive(textEditor);
   }
 }
 
