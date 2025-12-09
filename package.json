@@ -6045,6 +6045,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
+    "eslint-plugin-mocha": "^11.2.0",
     "paredit.js": "./vendor/paredit.js",
     "winston": "^3.19.0",
     "winston-console-for-electron": "^0.0.7",

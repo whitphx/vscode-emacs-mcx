@@ -3,6 +3,8 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import mochaPlugin from "eslint-plugin-mocha";
+
 import path from "node:path";
 
 const config = defineConfig(
@@ -44,6 +46,15 @@ const config = defineConfig(
         projectService: true,
         tsconfigRootDir: path.join(import.meta.dirname, "keybinding-generator"),
       },
+    },
+  },
+  {
+    files: ["**/*.test.ts"],
+    plugins: {
+      mocha: mochaPlugin,
+    },
+    rules: {
+      "mocha/no-exclusive-tests": "error",
     },
   },
 );
