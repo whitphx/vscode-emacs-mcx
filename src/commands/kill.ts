@@ -24,7 +24,7 @@ function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1
     throw new Error(`Invalid repeat ${repeat}`);
   }
 
-  const wordSeparators = getWordSeparators();
+  const wordSeparators = getWordSeparators(doc);
   const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
 
   let wordEnd = position;
@@ -61,7 +61,7 @@ function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat
     throw new Error(`Invalid repeat ${repeat}`);
   }
 
-  const wordSeparators = getWordSeparators();
+  const wordSeparators = getWordSeparators(doc);
   const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
 
   let wordStart = position;

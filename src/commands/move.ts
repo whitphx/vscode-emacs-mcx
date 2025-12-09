@@ -293,7 +293,7 @@ export class ForwardWord extends EmacsCommand {
       );
     }
 
-    const wordSeparators = getWordSeparators();
+    const wordSeparators = getWordSeparators(textEditor.document);
     const doc = textEditor.document;
 
     textEditor.selections = textEditor.selections.map((selection) => {
@@ -334,7 +334,7 @@ export class BackwardWord extends EmacsCommand {
       );
     }
 
-    const wordSeparators = getWordSeparators();
+    const wordSeparators = getWordSeparators(textEditor.document);
     const doc = textEditor.document;
 
     textEditor.selections = textEditor.selections.map((selection) => {
