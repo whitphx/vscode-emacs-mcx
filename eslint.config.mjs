@@ -49,7 +49,7 @@ const config = defineConfig(
     },
   },
   {
-    files: ["**/*.test.ts"],
+    files: ["**/*.test.{ts,mts}"],
     plugins: {
       mocha: mochaPlugin,
     },
