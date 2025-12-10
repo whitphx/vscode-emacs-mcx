@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.97.0
+
+### Minor Changes
+
+- [#2605](https://github.com/whitphx/vscode-emacs-mcx/pull/2605) [`7cf738f`](https://github.com/whitphx/vscode-emacs-mcx/commit/7cf738ffbfd919ab26a480323c4e6a0afa8dd840) Thanks [@whitphx](https://github.com/whitphx)! - Rename copyRegion to killRingSave
+
+### Patch Changes
+
+- [`015c7a2`](https://github.com/whitphx/vscode-emacs-mcx/commit/015c7a271d2a0a2090077fbd17b7117ade85f3f4) Thanks [@whitphx](https://github.com/whitphx)! - Refactoring to fix typo: https://github.com/whitphx/vscode-emacs-mcx/pull/2606
+
+- [#2603](https://github.com/whitphx/vscode-emacs-mcx/pull/2603) [`c9be890`](https://github.com/whitphx/vscode-emacs-mcx/commit/c9be8902b9c592c81f9aab23d337c47f57fcf5d3) Thanks [@whitphx](https://github.com/whitphx)! - Fix the condition check to fall back to the built-in paste command
+
+- [#2600](https://github.com/whitphx/vscode-emacs-mcx/pull/2600) [`50972de`](https://github.com/whitphx/vscode-emacs-mcx/commit/50972de66a7f1be0e5b83ca3d14d9df7083850e2) Thanks [@whitphx](https://github.com/whitphx)! - Fix yank to fall back to the built-in paste command when possible to make use of rich paste features such as multimedia data handling
+
+- [#2602](https://github.com/whitphx/vscode-emacs-mcx/pull/2602) [`fbd85bb`](https://github.com/whitphx/vscode-emacs-mcx/commit/fbd85bbb399eda6efa2fb33f8173ef7125913559) Thanks [@whitphx](https://github.com/whitphx)! - Support forwardWord and backwardWord in rectangle-mark-mode
+
 ## 0.96.0
 
 ### Minor Changes
