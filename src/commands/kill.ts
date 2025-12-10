@@ -173,9 +173,8 @@ export class KillRegion extends KillYankCommand {
   }
 }
 
-// TODO: Rename to kill-ring-save (original emacs command name)
-export class CopyRegion extends KillYankCommand {
-  public readonly id = "copyRegion";
+export class KillRingSave extends KillYankCommand {
+  public readonly id = "killRingSave";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     if (this.emacsController.inRectMarkMode) {

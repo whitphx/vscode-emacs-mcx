@@ -11,7 +11,7 @@ import {
 } from "../../utils";
 
 [true, false].forEach((withKillRing) => {
-  suite(`copyRegion, ${withKillRing ? "with" : "without"} killRing`, () => {
+  suite(`killRingSave, ${withKillRing ? "with" : "without"} killRing`, () => {
     let activeTextEditor: TextEditor;
     let emulator: EmacsEmulator;
 
@@ -28,7 +28,7 @@ ABCDEFGHIJ`;
     test("mark-mode is disabled and selections are unset after copy region", async () => {
       activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 5))];
 
-      await emulator.runCommand("copyRegion");
+      await emulator.runCommand("killRingSave");
 
       // Selection is unset
       assertSelectionsEqual(activeTextEditor, new Selection(0, 5, 0, 5));
@@ -50,7 +50,7 @@ ABCDEFGHIJ`;
         new Selection(new Position(2, 0), new Position(2, 5)),
       ];
 
-      await emulator.runCommand("copyRegion");
+      await emulator.runCommand("killRingSave");
 
       // Selections are unset
       assertSelectionsEqual(

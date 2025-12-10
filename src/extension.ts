@@ -203,7 +203,11 @@ export function activate(context: vscode.ExtensionContext): void {
 
   bindEmulatorCommand("killRegion");
 
-  bindEmulatorCommand("copyRegion");
+  bindEmulatorCommand("killRingSave");
+  registerEmulatorCommand("emacs-mcx.copyRegion" /* For backward compatibility */, (emulator, args) => {
+    logger.warn('The command "emacs-mcx.copyRegion" is deprecated. Please use "emacs-mcx.killRingSave" instead.');
+    return emulator.runCommand("killRingSave", args);
+  });
 
   bindEmulatorCommand("yank");
 
