@@ -60,7 +60,7 @@ xxx    yyy
   });
 
   suite("cursors are at the beginning or the middle of non-empty lines", () => {
-    const cursorPositionsLint: Array<Array<[number, number]>> = [
+    const cursorPositionsList: Array<Array<[number, number]>> = [
       [
         [0, 0],
         [0, 0],
@@ -86,7 +86,7 @@ xxx    yyy
         [12, 5],
       ], // At the middle of the last non-empty line
     ];
-    cursorPositionsLint.forEach((cursorPositions) => {
+    cursorPositionsList.forEach((cursorPositions) => {
       test("nothing happens", async () => {
         setEmptyCursors(activeTextEditor, ...cursorPositions);
 
