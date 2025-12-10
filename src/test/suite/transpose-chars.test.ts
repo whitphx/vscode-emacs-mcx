@@ -10,6 +10,8 @@ import {
   assertTextEqual,
 } from "./utils";
 
+/* cSpell:disable */
+
 suite("transpose-chars", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;

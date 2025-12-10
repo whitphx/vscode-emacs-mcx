@@ -13,6 +13,8 @@ import {
 import { KillRing } from "../../../kill-yank/kill-ring";
 import { Minibuffer } from "src/minibuffer";
 
+/* cSpell:disable */
+
 suite("Kill, copy, and yank rectangle", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;

@@ -6005,6 +6005,7 @@
     "watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
     "package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js",
     "prepare": "husky",
+    "cspell": "cspell lint --no-progress --cache --config ./cspell.json .",
     "changeset": "changeset",
     "changeset:release": "changeset tag && git push --follow-tags"
   },
@@ -6023,6 +6024,7 @@
     "@vscode/test-web": "^0.0.77",
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
+    "cspell": "^9.4.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",

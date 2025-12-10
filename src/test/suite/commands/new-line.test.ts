@@ -45,6 +45,7 @@ eols.forEach(([eol, eolStr]) => {
 
           await emulator.runCommand("newLine");
 
+          /* cspell:disable-next-line */
           assertTextEqual(activeTextEditor, `0123456789${eolStr}abcde${eolStr}fghij${eolStr}ABCDEFGHIJ`);
         });
 
@@ -73,6 +74,7 @@ eols.forEach(([eol, eolStr]) => {
 
           await emulator.runCommand("newLine");
 
+          /* cspell:disable-next-line */
           assertTextEqual(activeTextEditor, `0123456789${eolStr}abcdefghij${eolStr}ABCDE${eolStr}FGHIJ`);
         });
 

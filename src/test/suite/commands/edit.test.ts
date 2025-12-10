@@ -17,14 +17,14 @@ suite("deleteForwardChar", () => {
   test("it deletes a character on the right", async () => {
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.runCommand("deleteForwardChar");
-    assertTextEqual(activeTextEditor, "0123456789\nabcdeghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "0123456789\nabcdeghij\nABCDEFGHIJ"); // cspell:disable-line
   });
 
   test("it works with prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.universalArgument();
     await emulator.runCommand("deleteForwardChar");
-    assertTextEqual(activeTextEditor, "0123456789\nabcdej\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "0123456789\nabcdej\nABCDEFGHIJ"); // cspell:disable-line
 
     await emulator.runCommand("deleteForwardChar");
     assertTextEqual(activeTextEditor, "0123456789\nabcde\nABCDEFGHIJ"); // prefix argument is disabled
@@ -35,7 +35,7 @@ suite("deleteForwardChar", () => {
     await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(8);
     await emulator.runCommand("deleteForwardChar");
-    assertTextEqual(activeTextEditor, "0123456789\nabcdeCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "0123456789\nabcdeCDEFGHIJ"); // cspell:disable-line
   });
 
   test("it works in shorter text than specified by prefix argument", async () => {
@@ -61,17 +61,17 @@ suite("deleteBackwardChar", () => {
   test("it deletes a character on the right", async () => {
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.runCommand("deleteBackwardChar");
-    assertTextEqual(activeTextEditor, "0123456789\nabcdfghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "0123456789\nabcdfghij\nABCDEFGHIJ"); // cspell:disable-line
   });
 
   test("it works with prefix argument", async () => {
     setEmptyCursors(activeTextEditor, [1, 5]);
     await emulator.universalArgument();
     await emulator.runCommand("deleteBackwardChar");
-    assertTextEqual(activeTextEditor, "0123456789\nafghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "0123456789\nafghij\nABCDEFGHIJ"); // cspell:disable-line
 
     await emulator.runCommand("deleteBackwardChar");
-    assertTextEqual(activeTextEditor, "0123456789\nfghij\nABCDEFGHIJ"); // prefix argument is disabled
+    assertTextEqual(activeTextEditor, "0123456789\nfghij\nABCDEFGHIJ"); // prefix argument is disabled // cspell:disable-line
   });
 
   test("it works in multi lines with prefix argument", async () => {
@@ -79,7 +79,7 @@ suite("deleteBackwardChar", () => {
     await emulator.universalArgument();
     await emulator.subsequentArgumentDigit(8);
     await emulator.runCommand("deleteBackwardChar");
-    assertTextEqual(activeTextEditor, "01234567fghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "01234567fghij\nABCDEFGHIJ"); // cspell:disable-line
   });
 
   test("it works in shorter text than specified by prefix argument", async () => {
@@ -88,6 +88,6 @@ suite("deleteBackwardChar", () => {
     await emulator.universalArgument();
     await emulator.universalArgument();
     await emulator.runCommand("deleteBackwardChar");
-    assertTextEqual(activeTextEditor, "fghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "fghij\nABCDEFGHIJ"); // cspell:disable-line
   });
 });

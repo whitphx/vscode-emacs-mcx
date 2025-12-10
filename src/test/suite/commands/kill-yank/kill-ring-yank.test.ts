@@ -17,6 +17,8 @@ import {
   createEmulator,
 } from "../../utils";
 
+/* cSpell:disable */
+
 suite("kill, yank, yank-pop", () => {
   let activeTextEditor: vscode.TextEditor;
 
@@ -775,7 +777,7 @@ suite("With not only single text editor", () => {
 
   teardown(cleanUpWorkspace);
 
-  test("shares killRing amoung multiple editors", async function () {
+  test("shares killRing among multiple editors", async function () {
     const killRing = new KillRing(3);
 
     const activeTextEditor0 = await setupWorkspace();

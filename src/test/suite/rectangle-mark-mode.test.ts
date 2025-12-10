@@ -12,6 +12,8 @@ import {
 import { KillRing } from "../../kill-yank/kill-ring";
 import { Configuration } from "../../configuration/configuration";
 
+// cSpell:words klmnopqrst abefghij klopqrst mnopqrst ABCDEFGHKLMNOPQRST BCDEFGHKLMNOPQRST EFGHIJ
+
 suite("RectangleMarkMode", () => {
   let activeTextEditor: vscode.TextEditor;
 

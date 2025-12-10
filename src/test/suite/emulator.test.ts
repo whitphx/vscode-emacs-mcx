@@ -28,12 +28,14 @@ ABCDEFGHIJ`;
       ];
       await emulator.runCommand("killRegion");
 
+      /* cSpell:disable */
       assert.strictEqual(
         activeTextEditor.document.getText(),
         `3456789
 defghij
 DEFGHIJ`,
       );
+      /* cSpell:enable */
 
       await clearTextEditor(activeTextEditor);
 

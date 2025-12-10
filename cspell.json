@@ -22,6 +22,46 @@
     "/@[a-zA-Z0-9-_]{4,}/g", // Username
     "/%([2-7][0-9A-Fa-f])/" // Encoded URL string
   ],
-  "ignorePaths": [],
-  "words": []
+  "ignorePaths": ["src/vs", "vendor", "**/*.svg"],
+  "words": [
+    // Emacs terms
+    "paredit",
+    "minibuffer",
+    "reindent",
+    "Bksp",
+    "dabbrev-expand",
+    // npm
+    "unproxify",
+    "jsep",
+    "wscript",
+    "jscoverage",
+    // VSCode API
+    "webvieweditor",
+    "treesticky",
+    "reindentselectedlines",
+    "editoridentity",
+    // Names
+    "Yuichiro",
+    "Tachibana",
+    "Tsuchiya",
+    "tuttieee",
+    "haruhi-s.sexp",
+    "Zaha",
+    "hiro-sun",
+    "rkwan94",
+    "NotKyon",
+    "tshino",
+    "Bodil",
+    "Stokke",
+    "bodil.file-browser",
+    // Documentation
+    "vendorized",
+    "screencasts",
+    "yanker",
+    "hoge",
+    "fuga",
+    "piyo",
+    "abcdefghij",
+    "klmnopqrst"
+  ]
 }
