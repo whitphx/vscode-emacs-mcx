@@ -10,6 +10,7 @@ import {
   createEmulator,
 } from "./utils";
 import { KillRing } from "../../kill-yank/kill-ring";
+import { Configuration } from "../../configuration/configuration";
 
 suite("RectangleMarkMode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -420,5 +421,48 @@ ABCDxEFGHIJ
 klmnopqrst
 KLMNOPQRST`,
     );
+  });
+});
+
+suite("RectangleMarkMode with word-based movement", () => {
+  let activeTextEditor: vscode.TextEditor;
+
+  setup(async () => {
+    const initialText = `lorem ipsum dolor sit amet,
+consectetur adipiscing elit.
+Sed do eiusmod tempor incididunt
+ut labore et dolore magna aliqua.
+Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`;
+    activeTextEditor = await setupWorkspace(initialText);
+  });
+
+  setup(() => {
+    Configuration.instance.wordNavigationStyle = "emacs";
+  });
+
+  teardown(() => {
+    Configuration.reload();
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("expanding the rect with word-based movement commands", async () => {
+    setEmptyCursors(activeTextEditor, [0, 2]);
+    const emulator = createEmulator(activeTextEditor);
+
+    await emulator.rectangleMarkMode();
+
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(0, 2, 0, 2)]);
+
+    await emulator.runCommand("forwardWord");
+    await emulator.runCommand("forwardWord");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("forwardWord");
+
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(0, 2, 0, 22),
+      new vscode.Selection(1, 2, 1, 22),
+    ]);
   });
 });
