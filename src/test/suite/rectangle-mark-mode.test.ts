@@ -447,7 +447,7 @@ quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequa
 
   teardown(cleanUpWorkspace);
 
-  test("expanding the rect with word-based movement commands", async () => {
+  test("expanding the rect with forwardWord", async () => {
     setEmptyCursors(activeTextEditor, [0, 2]);
     const emulator = createEmulator(activeTextEditor);
 
@@ -463,6 +463,25 @@ quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequa
     assert.deepStrictEqual(activeTextEditor.selections, [
       new vscode.Selection(0, 2, 0, 22),
       new vscode.Selection(1, 2, 1, 22),
+    ]);
+  });
+
+  test("expanding the rect with backwardWord", async () => {
+    setEmptyCursors(activeTextEditor, [2, 26]);
+    const emulator = createEmulator(activeTextEditor);
+
+    await emulator.rectangleMarkMode();
+
+    assert.deepStrictEqual(activeTextEditor.selections, [new vscode.Selection(2, 26, 2, 26)]);
+
+    await emulator.runCommand("backwardWord");
+    await emulator.runCommand("backwardWord");
+    await emulator.runCommand("previousLine");
+    await emulator.runCommand("backwardWord");
+
+    assert.deepStrictEqual(activeTextEditor.selections, [
+      new vscode.Selection(2, 26, 2, 12),
+      new vscode.Selection(1, 26, 1, 12),
     ]);
   });
 });
