@@ -1,0 +1,27 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "useGitignore": true,
+  "cache": {
+    "cacheLocation": ".cspellcache"
+  },
+  "dictionaries": [
+    "en-gb",
+    "lorem-ipsum",
+    "shellscript",
+    "npm",
+    "cpp",
+    "cpp-refined",
+    "fullstack",
+    "html",
+    "css",
+    "node",
+    "people-names"
+  ],
+  "ignoreRegExpList": [
+    "/@[a-zA-Z0-9-_]{4,}/g", // Username
+    "/%([2-7][0-9A-Fa-f])/" // Encoded URL string
+  ],
+  "ignorePaths": [],
+  "words": []
+}
