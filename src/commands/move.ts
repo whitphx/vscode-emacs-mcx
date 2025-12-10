@@ -275,26 +275,32 @@ export class ForwardWord extends EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
   ): void | Thenable<unknown> {
-    if (this.emacsController.inRectMarkMode) {
-      // TODO: Not supported
-      return;
-    }
-
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
 
-    const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     // Use VS Code's native commands in native mode to mirror editor defaults exactly.
-    if (!allowCrossLineWordNavigation) {
+    if (Configuration.instance.wordNavigationStyle === "vscode" && !this.emacsController.inRectMarkMode) {
       return makeParallel(repeat, () =>
         vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordRightSelect" : "cursorWordRight"),
       );
     }
 
+    const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     const wordSeparators = getWordSeparators(textEditor.document);
     const doc = textEditor.document;
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActive) => {
+        let active = curActive;
+        for (let i = 0; i < repeat; i++) {
+          active = findNextWordEnd(doc, wordSeparators, active, allowCrossLineWordNavigation);
+        }
+        return active;
+      });
+      return;
+    }
 
     textEditor.selections = textEditor.selections.map((selection) => {
       let active = selection.active;
@@ -316,26 +322,32 @@ export class BackwardWord extends EmacsCommand {
     isInMarkMode: boolean,
     prefixArgument: number | undefined,
   ): void | Thenable<unknown> {
-    if (this.emacsController.inRectMarkMode) {
-      // TODO: Not supported
-      return;
-    }
-
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
     if (repeat <= 0) {
       return;
     }
 
-    const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     // Use VS Code's native commands in native mode to mirror editor defaults exactly.
-    if (!allowCrossLineWordNavigation) {
+    if (Configuration.instance.wordNavigationStyle === "vscode" && !this.emacsController.inRectMarkMode) {
       return makeParallel(repeat, () =>
         vscode.commands.executeCommand<void>(isInMarkMode ? "cursorWordLeftSelect" : "cursorWordLeft"),
       );
     }
 
+    const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     const wordSeparators = getWordSeparators(textEditor.document);
     const doc = textEditor.document;
+
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.moveRectActives((curActive) => {
+        let active = curActive;
+        for (let i = 0; i < repeat; i++) {
+          active = findPreviousWordStart(doc, wordSeparators, active, allowCrossLineWordNavigation);
+        }
+        return active;
+      });
+      return;
+    }
 
     textEditor.selections = textEditor.selections.map((selection) => {
       let active = selection.active;
