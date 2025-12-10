@@ -139,12 +139,14 @@ ABCDEFGHIJ`;
 
           await emulator.runCommand("yank");
 
+          /* cSpell:disable */
           assertTextEqual(
             activeTextEditor,
             `0123456789
 Lorem ipsumefghij
 ABCDEFGHIJ`,
           );
+          /* cSpell:enable */
         });
 
         test("it works with multiple non-empty cursor (selected text are removed)", async () => {
@@ -156,12 +158,14 @@ ABCDEFGHIJ`,
 
           await emulator.runCommand("yank");
 
+          /* cSpell:disable */
           assertTextEqual(
             activeTextEditor,
             `012Lorem ipsum6789
 Lorem ipsumdefghij
 ABCDEFLorem ipsumJ`,
           );
+          /* cSpell:enable */
         });
       });
     });

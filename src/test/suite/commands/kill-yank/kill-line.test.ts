@@ -52,7 +52,7 @@ ABCDEFGHIJ`,
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
 
-      assertTextEqual(activeTextEditor, "bcdefghij");
+      assertTextEqual(activeTextEditor, "bcdefghij"); // cspell:disable-line
     });
 
     test("it removes line break if invoked at the end of line", async () => {
@@ -90,12 +90,14 @@ A`,
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
 
+      /* cSpell:disable */
       assertTextEqual(
         activeTextEditor,
         `123456789
 bcdefghij
 BCDEFGHIJ`,
       );
+      /* cSpell:enable */
     });
 
     (["mark-mode", "rectangle-mode"] as const).forEach((mode) => {
@@ -176,11 +178,11 @@ abcdefghij
         if (!secondKillAtEndOfDoc) {
           // If the second killLine was at the end of the doc, it didn't work.
           assert.ok(
-            !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
+            !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here. // cspell:disable-line
           );
         }
         await emulator.runCommand("yankPop");
-        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
+        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here. // cspell:disable-line
       });
     });
 
@@ -235,11 +237,11 @@ abcdefghij
         if (!secondKillAtEndOfDoc) {
           // If the second killLine was at the end of the doc, it didn't work.
           assert.ok(
-            !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here
+            !activeTextEditor.document.getText().includes("fghij\n"), // First 2 kills does not appear here. // cspell:disable-line
           );
         }
         await emulator.runCommand("yankPop");
-        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here
+        assert.strictEqual(activeTextEditor.document.getText(), "fghij\n"); // First 2 kills appear here. // cspell:disable-line
       });
     });
 
@@ -369,7 +371,7 @@ ABCDEFGHIJ`,
       setEmptyCursors(activeTextEditor, [0, 0]);
       await emulator.runCommand("yank");
 
-      assertTextEqual(activeTextEditor, "bcdefghij");
+      assertTextEqual(activeTextEditor, "bcdefghij"); // cspell:disable-line
     });
   });
 
