@@ -36,6 +36,8 @@
     // VSCode API
     "webvieweditor",
     "treesticky",
+    "reindentselectedlines",
+    "editoridentity",
     // Names
     "Yuichiro",
     "Tachibana",

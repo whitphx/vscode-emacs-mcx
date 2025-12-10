@@ -346,7 +346,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       assertTextEqual(activeTextEditor, "sit amet,\nconsectetur adipiscing");
     });
 
-    test("working with prefix argument with reaching the beginnig of document and comma", async () => {
+    test("working with prefix argument with reaching the beginning of document and comma", async () => {
       setEmptyCursors(activeTextEditor, [0, 11]);
 
       // Prefix argument '4'
@@ -394,7 +394,7 @@ suite("killWord and backwardKillWord with Lorem ipsum", () => {
       // Now the cursor is at [1, 1]
 
       await emulator.runCommand("backwardKillWord");
-      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit amet,\nonsectetur adipiscing elit,");
+      assertTextEqual(activeTextEditor, "Lorem ipsum dolor sit amet,\nonsectetur adipiscing elit,"); // cspell:disable-line
     });
   });
 });

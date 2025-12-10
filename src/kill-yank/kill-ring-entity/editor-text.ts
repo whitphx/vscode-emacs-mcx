@@ -106,7 +106,7 @@ export class EditorTextKillRingEntity implements IKillRingEntity {
   public append(entity: EditorTextKillRingEntity, appendDirection: AppendDirection = AppendDirection.Forward): void {
     const additional = entity.getRegionTextsList();
     if (additional.length !== this.regionTextsList.length) {
-      throw Error("Not appendable");
+      throw Error("Unable to append");
     }
 
     this.regionTextsList.map(

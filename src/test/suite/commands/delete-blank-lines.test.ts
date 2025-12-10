@@ -29,7 +29,7 @@ xxx    yyy
   teardown(cleanUpWorkspace);
 
   suite("cursors are in the blanks", () => {
-    const cursorPositionsLinst: Array<Array<[number, number]>> = [
+    const cursorPositionsList: Array<Array<[number, number]>> = [
       [
         [1, 0],
         [7, 0],
@@ -43,7 +43,7 @@ xxx    yyy
         [11, 0],
       ], // At the end of each blanks
     ];
-    cursorPositionsLinst.forEach((cursorPositions) => {
+    cursorPositionsList.forEach((cursorPositions) => {
       test("removing all but 1 lines around the cursor", async () => {
         setEmptyCursors(activeTextEditor, ...cursorPositions);
 
@@ -60,7 +60,7 @@ xxx    yyy
   });
 
   suite("cursors are at the beginning or the middle of non-empty lines", () => {
-    const cursorPositionsLinst: Array<Array<[number, number]>> = [
+    const cursorPositionsLint: Array<Array<[number, number]>> = [
       [
         [0, 0],
         [0, 0],
@@ -86,7 +86,7 @@ xxx    yyy
         [12, 5],
       ], // At the middle of the last non-empty line
     ];
-    cursorPositionsLinst.forEach((cursorPositions) => {
+    cursorPositionsLint.forEach((cursorPositions) => {
       test("nothing happens", async () => {
         setEmptyCursors(activeTextEditor, ...cursorPositions);
 
@@ -98,13 +98,13 @@ xxx    yyy
   });
 
   suite("cursors are at the end of non-empty lines", () => {
-    const cursorPositionsLinst: Array<Array<[number, number]>> = [
+    const cursorPositionsList: Array<Array<[number, number]>> = [
       [
         [0, 10],
         [6, 10],
       ],
     ];
-    cursorPositionsLinst.forEach((cursorPositions) => {
+    cursorPositionsList.forEach((cursorPositions) => {
       test("removing all following lines", async () => {
         setEmptyCursors(activeTextEditor, ...cursorPositions);
 

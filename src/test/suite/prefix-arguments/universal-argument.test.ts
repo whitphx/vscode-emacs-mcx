@@ -222,7 +222,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 4]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 4]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("repeating cursorMove for the given argument 0", async () => {
@@ -237,7 +237,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 1]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 1]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("repeating cursorMove for the given argument prefixed by 0", async () => {
@@ -253,7 +253,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 4]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 4]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("repeating cursorMove for the given argument with multiple digits", async () => {
@@ -269,7 +269,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 13]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 13]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("repeating cursorMove for the default argument (4)", async () => {
@@ -283,7 +283,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 5]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 5]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("repeating character input with double C-u", async () => {
@@ -298,7 +298,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 17]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 17]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("C-u stops prefix argument input", async () => {
@@ -319,7 +319,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 13]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 13]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("numerical input cancels previous repeated C-u", async () => {
@@ -336,7 +336,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 4]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 4]); // The command normally worked since it has exited from universal argument mode.
     });
 
     test("multicursor with given argument", async () => {
@@ -351,7 +351,7 @@ suite("Universal argument (C-u)", () => {
       assertPrefixArgumentContext(undefined);
 
       await emulator.runCommand("forwardChar");
-      assertCursorsEqual(activeTextEditor, [0, 4], [1, 4]); // The command normaly worked since it has exited from universal argument mode.
+      assertCursorsEqual(activeTextEditor, [0, 4], [1, 4]); // The command normally worked since it has exited from universal argument mode.
     });
   });
 

@@ -1192,7 +1192,7 @@ Skipped due to an error.
 ### Fixed
 
 - Keybindings starting with `C-x` are still disabled in the terminals, but enabled in other focuses such as sidebar.
-- `C-p` and `C-n` are fixed to work as cursor movement when intelli-sense is visible the number of whose items is just one.
+- `C-p` and `C-n` are fixed to work as cursor movement when intellisense is visible the number of whose items is just one.
 
 ## [0.20.1] - 2020-07-12
 
@@ -1481,7 +1481,7 @@ Skipped due to an error.
 
 ### Added
 
-- New kill-ring and yank implementation to append continuous invokation of `C-k` (kill-line) (#26).
+- New kill-ring and yank implementation to append continuous invocation of `C-k` (kill-line) (#26).
 - Add sexp functionalities by importing [`haruhi-s.sexp`](https://marketplace.visualstudio.com/items?itemName=haruhi-s.sexp) (#27).
 
 ## [0.1.1] - 2019-01-12
