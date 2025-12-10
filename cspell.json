@@ -33,6 +33,8 @@
     // npm
     "unproxify",
     "jsep",
+    "wscript",
+    "jscoverage",
     // VSCode API
     "webvieweditor",
     "treesticky",
