@@ -223,9 +223,15 @@ export class KillYanker implements vscode.Disposable {
       }
     }
 
-    if (killRingEntity.type === "clipboard" && flattenedText === (await vscode.env.clipboard.readText())) {
+    if (
+      killRingEntity.type === "clipboard" &&
+      killRingEntity === this.killRing?.getLatest() &&
+      flattenedText === (await vscode.env.clipboard.readText())
+    ) {
       // We want to use the default paste command when possible
       // because it has more features such as special handling for multimedia content.
+      // It's the case when the kill ring entity to paste is the current clipboard content.
+      // This if-clause is an approximation to check the situation.
       // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2591
       await vscode.commands.executeCommand("editor.action.clipboardPasteAction");
       return;
