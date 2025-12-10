@@ -223,6 +223,14 @@ export class KillYanker implements vscode.Disposable {
       }
     }
 
+    if (killRingEntity.type === "clipboard" && flattenedText === (await vscode.env.clipboard.readText())) {
+      // We want to use the default paste command when possible
+      // because it has more features such as special handling for multimedia content.
+      // Ref: https://github.com/whitphx/vscode-emacs-mcx/issues/2591
+      await vscode.commands.executeCommand("editor.action.clipboardPasteAction");
+      return;
+    }
+
     await vscode.commands.executeCommand("paste", { text: flattenedText });
   }
 
