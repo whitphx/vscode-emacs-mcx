@@ -76,7 +76,7 @@ suite("Text registers", () => {
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyToRegister");
     await emulator.runCommand("registerNameCommand", "a");
-    assertTextEqual(activeTextEditor, "01efghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "01efghij\nABCDEFGHIJ"); // cspell:disable-line
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
 
@@ -86,7 +86,7 @@ suite("Text registers", () => {
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyToRegister");
     await emulator.runCommand("registerNameCommand", "b");
-    assertTextEqual(activeTextEditor, "01efghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "01efghij\nABCDEFGHIJ"); // cspell:disable-line
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
 
@@ -157,7 +157,7 @@ suite("Text registers", () => {
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyRectangleToRegister");
     await emulator.runCommand("registerNameCommand", "a");
-    assertTextEqual(activeTextEditor, "01456789\nabefghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "01456789\nabefghij\nABCDEFGHIJ"); // cspell:disable-line
     assertCursorsEqual(activeTextEditor, [1, 2]); // Cursor is kept in the same line
     assert.equal(emulator.isInMarkMode, false);
 
@@ -166,7 +166,7 @@ suite("Text registers", () => {
     await emulator.universalArgument(); // C-u
     await emulator.runCommand("copyRectangleToRegister");
     await emulator.runCommand("registerNameCommand", "b");
-    assertTextEqual(activeTextEditor, "01456789\nabefghij\nABCDEFGHIJ");
+    assertTextEqual(activeTextEditor, "01456789\nabefghij\nABCDEFGHIJ"); // cspell:disable-line
     assertCursorsEqual(activeTextEditor, [0, 2]);
     assert.equal(emulator.isInMarkMode, false);
 

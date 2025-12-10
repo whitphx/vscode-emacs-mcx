@@ -17,6 +17,8 @@ import {
   createEmulator,
 } from "../../utils";
 
+/* cSpell:disable */
+
 suite("kill, yank, yank-pop", () => {
   let activeTextEditor: vscode.TextEditor;
 

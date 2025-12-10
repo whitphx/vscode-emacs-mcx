@@ -10,7 +10,7 @@ import {
   assertTextEqual,
 } from "./utils";
 
-// cSpell:words abdcefgh abcdefhg
+/* cSpell:disable */
 
 suite("transpose-chars", () => {
   let activeTextEditor: vscode.TextEditor;
