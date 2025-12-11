@@ -1691,6 +1691,22 @@
         }
       },
       {
+        "key": "ctrl+shift+f",
+        "command": "emacs-mcx.forwardChar",
+        "when": "editorTextFocus",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "ctrl+shift+f",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": "emacs-mcx.forwardChar"
+        }
+      },
+      {
         "key": "left",
         "command": "emacs-mcx.backwardChar",
         "when": "editorTextFocus"
@@ -1712,6 +1728,22 @@
         "key": "ctrl+b",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": "emacs-mcx.backwardChar"
+        }
+      },
+      {
+        "key": "ctrl+shift+b",
+        "command": "emacs-mcx.backwardChar",
+        "when": "editorTextFocus",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "ctrl+shift+b",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
           "then": "emacs-mcx.backwardChar"
         }
@@ -1873,6 +1905,70 @@
         }
       },
       {
+        "key": "alt+shift+f",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "mac": "cmd+shift+f",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "escape shift+f",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "ctrl+[ shift+f",
+        "command": "emacs-mcx.forwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "alt+shift+f",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "mac": "cmd+shift+f",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "escape shift+f",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
+        "key": "ctrl+[ shift+f",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "then": "emacs-mcx.forwardWord"
+        }
+      },
+      {
         "key": "alt+b",
         "command": "emacs-mcx.backwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -1920,6 +2016,70 @@
         "key": "ctrl+[ b",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "alt+shift+b",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "mac": "cmd+shift+b",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "escape shift+b",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "ctrl+[ shift+b",
+        "command": "emacs-mcx.backwardWord",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "alt+shift+b",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "mac": "cmd+shift+b",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "escape shift+b",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "then": "emacs-mcx.backwardWord"
+        }
+      },
+      {
+        "key": "ctrl+[ shift+b",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
         "args": {
           "then": "emacs-mcx.backwardWord"
         }
