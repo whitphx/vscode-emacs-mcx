@@ -45,7 +45,7 @@ export class ForwardChar extends EmacsCommand {
     }
 
     if (charDelta === 1) {
-      if (!isInMarkMode) {
+      if (!isInMarkMode && Configuration.instance.clearSelectionBeforeCharMove) {
         makeSelectionsEmpty(textEditor); // If the selection is not empty, VSCode's cursor commands don't move the selection and just collapse it. So we need to make selections empty here explicitly before running the command.
       }
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
@@ -76,7 +76,7 @@ export class BackwardChar extends EmacsCommand {
     }
 
     if (charDelta === 1) {
-      if (!isInMarkMode) {
+      if (!isInMarkMode && Configuration.instance.clearSelectionBeforeCharMove) {
         makeSelectionsEmpty(textEditor); // If the selection is not empty, VSCode's cursor commands don't move the selection and just collapse it. So we need to make selections empty here explicitly before running the command.
       }
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");

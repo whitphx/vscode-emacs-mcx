@@ -36,6 +36,11 @@ export interface IConfiguration {
    */
   strictEmacsMove: boolean;
 
+  /**
+   * Clear selections before forwardChar/backwardChar when mark mode is off (Emacs-like) or keep VS Code's default collapse behavior
+   */
+  clearSelectionBeforeCharMove: boolean;
+
   enableOverridingTypeCommand: boolean;
 
   /**

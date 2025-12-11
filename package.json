@@ -66,6 +66,11 @@
           "description": "Overrides moveBeginningOfLineBehavior, moveEndOfLineBehavior, scrollUpCommandBehavior, and scrollDownCommandBehavior to be 'emacs' mode",
           "deprecationMessage": "Deprecated: Please use fine grained configs instead such as emacs-mcx.moveBeginningOfLineBehavior, emacs-mcx.moveEndOfLineBehavior, emacs-mcx.scrollUpCommandBehavior, and emacs-mcx.scrollDownCommandBehavior."
         },
+        "emacs-mcx.clearSelectionBeforeCharMove": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, forwardChar/backwardChar clear existing selections when mark mode is off (Emacs-like). If false, they follow VS Code behavior and collapse selections."
+        },
         "emacs-mcx.moveBeginningOfLineBehavior": {
           "type": "string",
           "enum": [

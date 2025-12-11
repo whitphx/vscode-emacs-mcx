@@ -1,11 +1,19 @@
 import * as vscode from "vscode";
 import assert from "assert";
 import { EmacsEmulator } from "../../../emulator";
+import { Configuration } from "../../../configuration/configuration";
 import { assertSelectionsEqual, cleanUpWorkspace, createEmulator, setEmptyCursors, setupWorkspace } from "../utils";
 
 suite("shift selection move commands", () => {
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
+
+  setup(() => {
+    Configuration.instance.clearSelectionBeforeCharMove = true;
+  });
+  teardown(() => {
+    Configuration.reload();
+  });
 
   setup(async () => {
     activeTextEditor = await setupWorkspace("abc def");
