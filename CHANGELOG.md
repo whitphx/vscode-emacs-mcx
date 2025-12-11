@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.97.1
+
+### Patch Changes
+
+- [#2612](https://github.com/whitphx/vscode-emacs-mcx/pull/2612) [`15a7e37`](https://github.com/whitphx/vscode-emacs-mcx/commit/15a7e37bd21c6f54571ca433f1fabddb6ecaf965) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2615](https://github.com/whitphx/vscode-emacs-mcx/pull/2615) [`eba1921`](https://github.com/whitphx/vscode-emacs-mcx/commit/eba192188d804dc9d111ea4074e332292c9777f7) Thanks [@whitphx](https://github.com/whitphx)! - Fix popMark() to deactivate mark mode
+
 ## 0.97.0
 
 ### Minor Changes
