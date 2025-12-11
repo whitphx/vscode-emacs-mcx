@@ -12,6 +12,7 @@ import { revealPrimaryActive } from "./helpers/reveal";
 import { IEmacsController } from "src/emulator";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
 import { getWordSeparators } from "./helpers/wordSeparators";
+import { makeSelectionsEmpty } from "./helpers/selection";
 
 // TODO: be unnecessary
 export const moveCommandIds = [
@@ -44,6 +45,9 @@ export class ForwardChar extends EmacsCommand {
     }
 
     if (charDelta === 1) {
+      if (!isInMarkMode) {
+        makeSelectionsEmpty(textEditor); // If the selection is not empty, VSCode's cursor commands don't move the selection and just collapse it. So we need to make selections empty here explicitly before running the command.
+      }
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorRightSelect" : "cursorRight");
     } else if (charDelta > 0) {
       const doc = textEditor.document;
@@ -72,6 +76,9 @@ export class BackwardChar extends EmacsCommand {
     }
 
     if (charDelta === 1) {
+      if (!isInMarkMode) {
+        makeSelectionsEmpty(textEditor); // If the selection is not empty, VSCode's cursor commands don't move the selection and just collapse it. So we need to make selections empty here explicitly before running the command.
+      }
       return vscode.commands.executeCommand<void>(isInMarkMode ? "cursorLeftSelect" : "cursorLeft");
     } else if (charDelta > 0) {
       const doc = textEditor.document;
