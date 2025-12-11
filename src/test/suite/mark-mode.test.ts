@@ -2,7 +2,14 @@ import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Range, Selection } from "vscode";
 import { EmacsEmulator } from "../../emulator";
-import { cleanUpWorkspace, setupWorkspace, setEmptyCursors, assertCursorsEqual, createEmulator } from "./utils";
+import {
+  cleanUpWorkspace,
+  setupWorkspace,
+  setEmptyCursors,
+  assertCursorsEqual,
+  createEmulator,
+  assertSelectionsEqual,
+} from "./utils";
 
 suite("mark-mode", () => {
   let activeTextEditor: vscode.TextEditor;
@@ -278,6 +285,19 @@ ABCDEFGHIJ`;
 
     emulator.popMark();
     assertCursorsEqual(activeTextEditor, [2, 6]);
+  });
+
+  test("pop-mark deactivates mark mode", async () => {
+    setEmptyCursors(activeTextEditor, [0, 2]);
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+    assertSelectionsEqual(activeTextEditor, [0, 2, 0, 3]);
+
+    assert.ok(emulator.isInMarkMode);
+
+    emulator.popMark();
+    assertCursorsEqual(activeTextEditor, [0, 2]);
+    assert.ok(!emulator.isInMarkMode);
   });
 
   test("Ctrl-u Ctrl-Space works as pop-mark", async () => {
