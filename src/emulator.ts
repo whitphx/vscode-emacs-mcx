@@ -485,11 +485,15 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     const shift =
       args != null && typeof args === "object" && !Array.isArray(args) && "shift" in args ? args.shift === true : false;
     const shiftSelectionStarted = !this._shifted && shift;
+    const shiftSelectionEnded = this._shifted && !shift;
     if (shiftSelectionStarted) {
       // Shift Selection
       // > If you hold down the shift key while typing a cursor motion command, this sets the mark before moving point, so that the region extends from the original position of point to its new position.
       // Ref: https://www.gnu.org/software/emacs/manual/html_node/emacs/Shift-Selection.html
       this.enterMarkMode();
+    }
+    if (shiftSelectionEnded) {
+      this.exitMarkMode();
     }
     this._shifted = shift;
 
