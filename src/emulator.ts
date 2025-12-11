@@ -481,7 +481,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
 
     const prefixArgument = prefixArgumentOverride ?? this.prefixArgumentHandler.getPrefixArgument();
 
-    // `args["shift"]
+    // `args["shift"]` indicates whether the shift key is held down.
     const shift =
       args != null && typeof args === "object" && !Array.isArray(args) && "shift" in args ? args.shift === true : false;
     const shiftSelectionStarted = !this._shifted && shift;
