@@ -605,6 +605,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
   }
 
   public popMark(): void {
+    this.exitMarkMode();
     const prevMark = this.markRing.pop();
     if (prevMark) {
       this.textEditor.selections = prevMark.map((position) => new Selection(position, position));
