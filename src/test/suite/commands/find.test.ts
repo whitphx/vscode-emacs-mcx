@@ -56,9 +56,21 @@ suite("isearch", () => {
 
     setEmptyCursors(activeTextEditor, [2, 0]);
 
-    await emulator.runCommand("isearchExit", { then: "cursorTop" });
+    await emulator.runCommand("isearchExit", { then: { command: "cursorTop" } });
 
     assertCursorsEqual(activeTextEditor, [0, 0]);
+  });
+
+  test("isearchExit accepts the `then` arg and execute the specified command with args after exiting the find widget", async () => {
+    setEmptyCursors(activeTextEditor, [1, 1]);
+
+    await emulator.runCommand("isearchForward");
+
+    setEmptyCursors(activeTextEditor, [2, 0]);
+
+    await emulator.runCommand("isearchExit", { then: { command: "cursorMove", args: { to: "right", select: true } } });
+
+    assertSelectionsEqual(activeTextEditor, [2, 0, 2, 1]);
   });
 
   test("isearchExit keeps the selection of the mark mode", async () => {
