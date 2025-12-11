@@ -526,16 +526,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "inlineChat.hideHint",
-        "when": "inlineChatShowingHint"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "inlineChat.hideHint",
-        "when": "inlineChatShowingHint && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "notebook.cell.quitEdit",
         "when": "inputFocus && notebookEditorFocused && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !inlineChatFocused"
       },
