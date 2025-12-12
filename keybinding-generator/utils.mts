@@ -26,3 +26,19 @@ export function addWhenCond(base: string | undefined, additional: string): strin
   }
   return `${base} && ${additional}`;
 }
+
+export function isKeyBindingEqual(a: string, b: string): boolean {
+  const normalize = (key: string) =>
+    key
+      .split(" ")
+      .map((part) =>
+        part
+          .split("+")
+          .map((k) => k.trim().toLowerCase())
+          .sort()
+          .join("+"),
+      )
+      .sort()
+      .join(" ");
+  return normalize(a) === normalize(b);
+}
