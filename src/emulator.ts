@@ -299,10 +299,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     }
   }
 
-  public getTextEditor(): TextEditor {
-    return this.textEditor;
-  }
-
   public registerDisposable(disposable: vscode.Disposable): void {
     this.disposables.push(disposable);
   }
