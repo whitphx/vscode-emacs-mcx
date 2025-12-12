@@ -27,7 +27,7 @@ export class MessageManager implements vscode.Disposable {
     this.instance.removeMessage();
   }
 
-  private static inst: MessageManager;
+  private static inst: MessageManager | undefined;
 
   private timeout: number;
   private messageDisposable: vscode.Disposable | null = null;
@@ -89,5 +89,7 @@ export class MessageManager implements vscode.Disposable {
     for (const disposable of this.disposables) {
       disposable.dispose();
     }
+
+    MessageManager.inst = undefined;
   }
 }
