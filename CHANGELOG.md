@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.98.1
+
+### Patch Changes
+
+- [#2619](https://github.com/whitphx/vscode-emacs-mcx/pull/2619) [`60d8fbf`](https://github.com/whitphx/vscode-emacs-mcx/commit/60d8fbf3b5203f4d57bef9137414a71f1be09c4a) Thanks [@whitphx](https://github.com/whitphx)! - Fix keybinding definition in package.json to use kill-ring-save instead of copy-region
+
 ## 0.98.0
 
 ### Minor Changes
