@@ -12,12 +12,10 @@ interface PrefixArgumentHandlerState {
 
 export class PrefixArgumentHandler {
   private state: PrefixArgumentHandlerState;
-  private onPrefixArgumentChange: (newPrefixArgument: number | undefined) => Thenable<unknown>;
-  private onAcceptingStateChange: (newState: boolean) => Thenable<unknown>;
 
   public constructor(
-    onPrefixArgumentChange: (newPrefixArgument: number | undefined) => Thenable<unknown>,
-    onAcceptingStateChange: (newState: boolean) => Thenable<unknown>,
+    private onPrefixArgumentChange: (newPrefixArgument: number | undefined) => Thenable<unknown>,
+    private onAcceptingStateChange: (newState: boolean) => Thenable<unknown>,
   ) {
     this.state = {
       isInPrefixArgumentMode: false,
@@ -25,8 +23,6 @@ export class PrefixArgumentHandler {
       cuCount: 0,
       prefixArgumentStr: "",
     };
-    this.onPrefixArgumentChange = onPrefixArgumentChange;
-    this.onAcceptingStateChange = onAcceptingStateChange;
   }
 
   private updateState(newState: Partial<PrefixArgumentHandlerState>): Promise<unknown> {
