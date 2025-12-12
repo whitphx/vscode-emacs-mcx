@@ -2918,22 +2918,22 @@
       },
       {
         "key": "alt+w",
-        "command": "emacs-mcx.copyRegion",
+        "command": "emacs-mcx.killRingSave",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+w",
-        "command": "emacs-mcx.copyRegion",
+        "command": "emacs-mcx.killRingSave",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape w",
-        "command": "emacs-mcx.copyRegion",
+        "command": "emacs-mcx.killRingSave",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ w",
-        "command": "emacs-mcx.copyRegion",
+        "command": "emacs-mcx.killRingSave",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
