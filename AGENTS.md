@@ -37,3 +37,13 @@ Queue user-visible updates with `npm run changeset` and commit the generated not
 ## Keybinding Workflow Tips
 
 Never edit the `contributes.keybindings` array directly; instead update the declarative source JSON, run `npm run gen-keys`, and verify the diff. Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `DEVELOPMENT.md` to keep definitions DRY. Commit the regenerated `package.json` alongside `keybindings/*.json`, and mention new bindings in `README.md` so users see them in the public matrix.
+
+## Behavior Alignment
+
+When emulating an Emacs command that has an equivalent or close counterpart in VS Code, default to the VS Code-like behavior to stay aligned with the editor. If an Emacs-like variant is also useful, add it behind a configuration option and keep the VS Code-like value as the default.
+
+Examples:
+
+- Char moves: keep VS Code's default of collapsing selections, with an opt-in config for Emacs-like pre-clearing selections (`emacs-mcx.clearSelectionBeforeCharMove`).
+- Word moves: default to VS Code's word boundary rules, with a configuration switch for Emacs-style word parsing (`emacs-mcx.wordNavigationStyle`).
+- Line start/end: default to VS Code behavior for home/end movement (`emacs-mcx.moveBeginningOfLineBehavior` / `moveEndOfLineBehavior`), with Emacs-like options available.

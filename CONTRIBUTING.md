@@ -117,6 +117,16 @@ Edit `keybindings.json` and run `npm run gen-keys` instead as described above.
 
 It is strongly encouraged to add unit tests for the new command.
 
+## Behavior alignment policy
+
+When implementing a feature that emulates an Emacs command and VS Code already has an equivalent or similar behavior, prefer matching VS Code's default behavior so the extension feels native to VS Code users. It is encouraged to also offer an Emacs-like variant behind a configuration option; if added, default the option to the VS Code-like behavior.
+
+Examples:
+
+- Char motion selection: default to VS Code behavior (collapsing selections) with an opt-in flag for Emacs-like pre-clear selection (`emacs-mcx.clearSelectionBeforeCharMove`).
+- Word navigation: default to VS Code word boundaries (`wordNavigationStyle = "vscode"`), with an option for Emacs-style word parsing.
+- Line movement: default to VS Code line/indent behavior (`emacs-mcx.moveBeginningOfLineBehavior = "vscode"`, `emacs-mcx.moveEndOfLineBehavior = "vscode"`), with opt-in Emacs-like variants.
+
 # Release the extension (only for maintainers)
 
 Releases are now driven by [Changesets](https://github.com/changesets/changesets) and the automated workflow in `.github/workflows/release.yml`.
