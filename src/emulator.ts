@@ -114,6 +114,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     return this._isInMarkMode && this.rectMode;
   }
 
+  private _shifted = false;
+
   private nativeSelectionsStore: NativeSelectionsStore = new NativeSelectionsStore();
   public get nativeSelections(): readonly vscode.Selection[] {
     return this.nativeSelectionsStore.get(this.textEditor);
@@ -478,6 +480,22 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
         : undefined;
 
     const prefixArgument = prefixArgumentOverride ?? this.prefixArgumentHandler.getPrefixArgument();
+
+    // `args["shift"]` indicates whether the shift key is held down.
+    const shift =
+      args != null && typeof args === "object" && !Array.isArray(args) && "shift" in args ? args.shift === true : false;
+    const shiftSelectionStarted = !this._shifted && shift;
+    const shiftSelectionEnded = this._shifted && !shift;
+    if (shiftSelectionStarted) {
+      // Shift Selection
+      // > If you hold down the shift key while typing a cursor motion command, this sets the mark before moving point, so that the region extends from the original position of point to its new position.
+      // Ref: https://www.gnu.org/software/emacs/manual/html_node/emacs/Shift-Selection.html
+      this.enterMarkMode();
+    }
+    if (shiftSelectionEnded) {
+      this.exitMarkMode();
+    }
+    this._shifted = shift;
 
     return Promise.all([
       command.isIntermediateCommand ? null : this.prefixArgumentHandler.cancel(),

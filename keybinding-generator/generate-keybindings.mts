@@ -3,7 +3,7 @@ import {
   getVscDefaultKeybindingsSet,
   VscKeybinding,
 } from "./vsc-default-keybindings.mjs";
-import { addWhenCond } from "./utils.mjs";
+import { addWhenCond, isKeyBindingEqual } from "./utils.mjs";
 
 export interface KeyBindingSource {
   key?: string;
@@ -55,7 +55,7 @@ function replaceAll(src: string, search: string, replacement: string) {
 }
 
 // Keys that should be left unbound in the find widget when `config.emacs-mcx.cursorMoveOnFindWidget` is true.
-const FIND_EDIT_KEYS = [
+let FIND_EDIT_KEYS = [
   "right",
   "left",
   "up",
@@ -76,6 +76,7 @@ const FIND_EDIT_KEYS = [
   "meta+left", // left-word
   "ctrl+left", // left-word
 ];
+FIND_EDIT_KEYS = FIND_EDIT_KEYS.concat(FIND_EDIT_KEYS.map((key) => `shift+${key}`)); // Shift variants
 const NO_FIND_EXIT_KEYS_WIN_LINUX = ["ctrl+z", "ctrl+x", "ctrl+c", "ctrl+v"];
 const NO_FIND_EXIT_KEYS_MAC = ["cmd+z", "cmd+x", "cmd+c", "cmd+v"];
 
@@ -244,18 +245,16 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     const keys = getKeys(src);
     keys.forEach((key) => {
       const whenElements = [];
-      if (FIND_EDIT_KEYS.includes(key)) {
+      if (FIND_EDIT_KEYS.some((k) => isKeyBindingEqual(k, key))) {
         // Enable isearchExit for this key only when cursorMoveOnFindWidget is OFF.
         whenElements.push("!config.emacs-mcx.cursorMoveOnFindWidget");
       }
 
       whenElements.push(
-        ...[
-          "editorFocus",
-          "findWidgetVisible",
-          "!replaceInputFocussed", // In the original Emacs, navigation keys work in the minibuffer when replacing. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/466
-          "!isComposing", // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
-        ],
+        "editorFocus",
+        "findWidgetVisible",
+        "!replaceInputFocussed", // In the original Emacs, navigation keys work in the minibuffer when replacing. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/466
+        "!isComposing", // `isComposing` is necessary to avoid closing the find widget when using IME. Ref: https://github.com/whitphx/vscode-emacs-mcx/pull/549
       );
       const isearchExitKeybindingsForThisKey = compileKeybinding({
         key,
@@ -265,7 +264,14 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
           src.isearchInterruptible === "interruptOnly"
             ? undefined
             : {
-                then: src.command,
+                then: {
+                  command: src.command,
+                  ...("args" in src && src.args != null
+                    ? {
+                        args: src.args,
+                      }
+                    : {}),
+                },
               },
       });
       isearchExitKeybindingsForThisKey.forEach((binding) => {

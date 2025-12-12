@@ -6,10 +6,26 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true
   },
+  // right with selection
+  {
+    "keys": ["shift+right", "shift+ctrl+f"],
+    "command": "emacs-mcx.forwardChar",
+    "args": { "shift": true },
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
   // left
   {
     "keys": ["left", "ctrl+b"],
     "command": "emacs-mcx.backwardChar",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  // left with selection
+  {
+    "keys": ["shift+left", "shift+ctrl+b"],
+    "command": "emacs-mcx.backwardChar",
+    "args": { "shift": true },
     "when": "editorTextFocus",
     "isearchInterruptible": true
   },
@@ -48,10 +64,24 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true
   },
+  {
+    "key": "shift+meta+f",
+    "command": "emacs-mcx.forwardWord",
+    "args": { "shift": true },
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
   // backward word (meta + b)
   {
     "key": "meta+b",
     "command": "emacs-mcx.backwardWord",
+    "when": "editorTextFocus",
+    "isearchInterruptible": true
+  },
+  {
+    "key": "shift+meta+b",
+    "command": "emacs-mcx.backwardWord",
+    "args": { "shift": true },
     "when": "editorTextFocus",
     "isearchInterruptible": true
   },
