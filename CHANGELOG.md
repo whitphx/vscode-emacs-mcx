@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.98.0
+
+### Minor Changes
+
+- [#2616](https://github.com/whitphx/vscode-emacs-mcx/pull/2616) [`bd8f84b`](https://github.com/whitphx/vscode-emacs-mcx/commit/bd8f84b78435463d12bb9a08e8c5df9881487ac7) Thanks [@whitphx](https://github.com/whitphx)! - Change the structure of 'then' arg passed to isearchExit
+
+- [#2616](https://github.com/whitphx/vscode-emacs-mcx/pull/2616) [`bd8f84b`](https://github.com/whitphx/vscode-emacs-mcx/commit/bd8f84b78435463d12bb9a08e8c5df9881487ac7) Thanks [@whitphx](https://github.com/whitphx)! - Add `emacs-mcx.clearSelectionBeforeCharMove` to control whether forwardChar/backwardChar clear selections (Emacs-like) or keep VS Code’s default collapse behavior.
+
+- [#2616](https://github.com/whitphx/vscode-emacs-mcx/pull/2616) [`bd8f84b`](https://github.com/whitphx/vscode-emacs-mcx/commit/bd8f84b78435463d12bb9a08e8c5df9881487ac7) Thanks [@whitphx](https://github.com/whitphx)! - Add Shift variants for forward/backward char/word with selection (C-S-f/C-S-b/M-S-f/M-S-b) and support a `shift` flag in move commands to extend selections without entering mark mode.
+
 ## 0.97.1
 
 ### Patch Changes
