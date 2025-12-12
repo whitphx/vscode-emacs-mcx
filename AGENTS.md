@@ -46,4 +46,4 @@ Examples:
 
 - Char moves: keep VS Code's default of collapsing selections, with an opt-in config for Emacs-like pre-clearing selections (`emacs-mcx.clearSelectionBeforeCharMove`).
 - Word moves: default to VS Code's word boundary rules, with a configuration switch for Emacs-style word parsing (`emacs-mcx.wordNavigationStyle`).
-- Line start/end: default to VS Code behavior for home/end movement (`emacs-mcx.moveBeginningOfLineBehavior` / `moveEndOfLineBehavior`), with Emacs-like options available.
+- Line start/end: default to VS Code behavior for home/end movement (`emacs-mcx.moveBeginningOfLineBehavior` / `emacs-mcx.moveEndOfLineBehavior`), with Emacs-like options available.
