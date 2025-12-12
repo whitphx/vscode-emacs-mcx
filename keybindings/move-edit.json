@@ -243,7 +243,7 @@
   // },
   {
     "key": "meta+w",
-    "command": "emacs-mcx.copyRegion",
+    "command": "emacs-mcx.killRingSave",
     "when": "editorTextFocus"
   },
   {
