@@ -64,7 +64,7 @@ export function activate(context: vscode.ExtensionContext): void {
       // Delete emulators once all tabs of this document have been closed
       for (const uri of emacsEmulatorMap.keys()) {
         const emulator = emacsEmulatorMap.get(uri);
-        if (emulator == null || !documents.includes(emulator.getTextEditor().document)) {
+        if (emulator == null || !documents.includes(emulator.textEditor.document)) {
           emulator?.dispose();
           emacsEmulatorMap.delete(uri);
         }
