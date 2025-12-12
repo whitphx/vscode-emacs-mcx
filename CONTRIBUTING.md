@@ -124,7 +124,7 @@ When implementing a feature that emulates an Emacs command and VS Code already h
 Examples:
 
 - Char motion selection: default to VS Code behavior (collapsing selections) with an opt-in flag for Emacs-like pre-clear selection (`emacs-mcx.clearSelectionBeforeCharMove`).
-- Word navigation: default to VS Code word boundaries (`wordNavigationStyle = "vscode"`), with an option for Emacs-style word parsing.
+- Word navigation: default to VS Code word boundaries (`emacs-mcx.wordNavigationStyle = "vscode"`), with an option for Emacs-style word parsing.
 - Line movement: default to VS Code line/indent behavior (`emacs-mcx.moveBeginningOfLineBehavior = "vscode"`, `emacs-mcx.moveEndOfLineBehavior = "vscode"`), with opt-in Emacs-like variants.
 
 # Release the extension (only for maintainers)
