@@ -1700,7 +1700,7 @@
         }
       },
       {
-        "key": "ctrl+shift+f",
+        "key": "shift+right",
         "command": "emacs-mcx.forwardChar",
         "when": "editorTextFocus",
         "args": {
@@ -1708,7 +1708,28 @@
         }
       },
       {
-        "key": "ctrl+shift+f",
+        "key": "shift+ctrl+f",
+        "command": "emacs-mcx.forwardChar",
+        "when": "editorTextFocus",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "shift+right",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": {
+            "command": "emacs-mcx.forwardChar",
+            "args": {
+              "shift": true
+            }
+          }
+        }
+      },
+      {
+        "key": "shift+ctrl+f",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
@@ -1751,7 +1772,7 @@
         }
       },
       {
-        "key": "ctrl+shift+b",
+        "key": "shift+left",
         "command": "emacs-mcx.backwardChar",
         "when": "editorTextFocus",
         "args": {
@@ -1759,7 +1780,28 @@
         }
       },
       {
-        "key": "ctrl+shift+b",
+        "key": "shift+ctrl+b",
+        "command": "emacs-mcx.backwardChar",
+        "when": "editorTextFocus",
+        "args": {
+          "shift": true
+        }
+      },
+      {
+        "key": "shift+left",
+        "command": "emacs-mcx.isearchExit",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "args": {
+          "then": {
+            "command": "emacs-mcx.backwardChar",
+            "args": {
+              "shift": true
+            }
+          }
+        }
+      },
+      {
+        "key": "shift+ctrl+b",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
         "args": {
@@ -1952,7 +1994,7 @@
         }
       },
       {
-        "key": "alt+shift+f",
+        "key": "shift+alt+f",
         "command": "emacs-mcx.forwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
         "args": {
@@ -1960,7 +2002,7 @@
         }
       },
       {
-        "mac": "cmd+shift+f",
+        "mac": "shift+cmd+f",
         "command": "emacs-mcx.forwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
@@ -1984,7 +2026,7 @@
         }
       },
       {
-        "key": "alt+shift+f",
+        "key": "shift+alt+f",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
         "args": {
@@ -1997,7 +2039,7 @@
         }
       },
       {
-        "mac": "cmd+shift+f",
+        "mac": "shift+cmd+f",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
@@ -2096,7 +2138,7 @@
         }
       },
       {
-        "key": "alt+shift+b",
+        "key": "shift+alt+b",
         "command": "emacs-mcx.backwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
         "args": {
@@ -2104,7 +2146,7 @@
         }
       },
       {
-        "mac": "cmd+shift+b",
+        "mac": "shift+cmd+b",
         "command": "emacs-mcx.backwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {
@@ -2128,7 +2170,7 @@
         }
       },
       {
-        "key": "alt+shift+b",
+        "key": "shift+alt+b",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
         "args": {
@@ -2141,7 +2183,7 @@
         }
       },
       {
-        "mac": "cmd+shift+b",
+        "mac": "shift+cmd+b",
         "command": "emacs-mcx.isearchExit",
         "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
         "args": {

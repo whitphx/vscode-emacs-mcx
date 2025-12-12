@@ -8,7 +8,7 @@
   },
   // right with selection
   {
-    "key": "ctrl+shift+f",
+    "keys": ["shift+right", "shift+ctrl+f"],
     "command": "emacs-mcx.forwardChar",
     "args": { "shift": true },
     "when": "editorTextFocus",
@@ -23,7 +23,7 @@
   },
   // left with selection
   {
-    "key": "ctrl+shift+b",
+    "keys": ["shift+left", "shift+ctrl+b"],
     "command": "emacs-mcx.backwardChar",
     "args": { "shift": true },
     "when": "editorTextFocus",
@@ -65,7 +65,7 @@
     "isearchInterruptible": true
   },
   {
-    "key": "meta+shift+f",
+    "key": "shift+meta+f",
     "command": "emacs-mcx.forwardWord",
     "args": { "shift": true },
     "when": "editorTextFocus",
@@ -79,7 +79,7 @@
     "isearchInterruptible": true
   },
   {
-    "key": "meta+shift+b",
+    "key": "shift+meta+b",
     "command": "emacs-mcx.backwardWord",
     "args": { "shift": true },
     "when": "editorTextFocus",
