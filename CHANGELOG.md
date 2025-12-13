@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.98.2
+
+### Patch Changes
+
+- [#2624](https://github.com/whitphx/vscode-emacs-mcx/pull/2624) [`276b89b`](https://github.com/whitphx/vscode-emacs-mcx/commit/276b89b335955828e90e95d491753964c724d7a1) Thanks [@whitphx](https://github.com/whitphx)! - Refactoring EmacsEmulator
+
+- [#2623](https://github.com/whitphx/vscode-emacs-mcx/pull/2623) [`eea4099`](https://github.com/whitphx/vscode-emacs-mcx/commit/eea409984e1e93aca8715169fcd9693d8f870b16) Thanks [@whitphx](https://github.com/whitphx)! - Refactoring PrefixArgumentHandler constructor
+
+- [#2621](https://github.com/whitphx/vscode-emacs-mcx/pull/2621) [`7be2d85`](https://github.com/whitphx/vscode-emacs-mcx/commit/7be2d8598aa765b811f067a28d5b8180b1286b51) Thanks [@whitphx](https://github.com/whitphx)! - Update MessageManager.dispose() to unset the singleton instance
+
+- [#2625](https://github.com/whitphx/vscode-emacs-mcx/pull/2625) [`abaa12a`](https://github.com/whitphx/vscode-emacs-mcx/commit/abaa12a6ee0885e185d9fa47840c64db77904941) Thanks [@whitphx](https://github.com/whitphx)! - Update the keybinding generator to handle shift variants
+
 ## 0.98.1
 
 ### Patch Changes
