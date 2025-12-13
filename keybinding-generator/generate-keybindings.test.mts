@@ -190,6 +190,81 @@ describe("generateKeybindings", () => {
     ];
     assert.deepStrictEqual(generateKeybindings(src), expected);
   });
+
+  it("converts src with shiftVariants", () => {
+    const src: KeyBindingSource = {
+      keys: ["ctrl+d", "ctrl+f"],
+      command: "emacs-mcx.forwardChar",
+      when: "editorTextFocus",
+      args: { repeat: 2 },
+      shiftVariants: true,
+    };
+    const expected: KeyBinding[] = [
+      {
+        key: "ctrl+d",
+        command: "emacs-mcx.forwardChar",
+        when: "editorTextFocus",
+        args: { repeat: 2 },
+      },
+      {
+        key: "ctrl+f",
+        command: "emacs-mcx.forwardChar",
+        when: "editorTextFocus",
+        args: { repeat: 2 },
+      },
+      {
+        key: "shift+ctrl+d",
+        command: "emacs-mcx.forwardChar",
+        when: "editorTextFocus",
+        args: { repeat: 2, shift: true },
+      },
+      {
+        key: "shift+ctrl+f",
+        command: "emacs-mcx.forwardChar",
+        when: "editorTextFocus",
+        args: { repeat: 2, shift: true },
+      },
+    ];
+    assert.deepStrictEqual(generateKeybindings(src), expected);
+  });
+
+  it("converts src with shiftVariants and isearchInterruptible", () => {
+    const src: KeyBindingSource = {
+      key: "ctrl+n",
+      command: "emacs-mcx.nextLine",
+      when: "editorTextFocus",
+      args: { repeat: 3 },
+      shiftVariants: true,
+      isearchInterruptible: true,
+    };
+    const expected: KeyBinding[] = [
+      {
+        key: "ctrl+n",
+        command: "emacs-mcx.nextLine",
+        when: "editorTextFocus",
+        args: { repeat: 3 },
+      },
+      {
+        key: "ctrl+n",
+        command: "emacs-mcx.isearchExit",
+        when: "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        args: { then: { command: "emacs-mcx.nextLine", args: { repeat: 3 } } },
+      },
+      {
+        key: "shift+ctrl+n",
+        command: "emacs-mcx.nextLine",
+        when: "editorTextFocus",
+        args: { repeat: 3, shift: true },
+      },
+      {
+        key: "shift+ctrl+n",
+        command: "emacs-mcx.isearchExit",
+        when: "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        args: { then: { command: "emacs-mcx.nextLine", args: { repeat: 3, shift: true } } },
+      },
+    ];
+    assert.deepStrictEqual(generateKeybindings(src), expected);
+  });
 });
 
 describe("isValidKey", () => {
