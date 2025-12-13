@@ -4,30 +4,16 @@
     "keys": ["right", "ctrl+f"],
     "command": "emacs-mcx.forwardChar",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
-  },
-  // right with selection
-  {
-    "keys": ["shift+right", "shift+ctrl+f"],
-    "command": "emacs-mcx.forwardChar",
-    "args": { "shift": true },
-    "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // left
   {
     "keys": ["left", "ctrl+b"],
     "command": "emacs-mcx.backwardChar",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
-  },
-  // left with selection
-  {
-    "keys": ["shift+left", "shift+ctrl+b"],
-    "command": "emacs-mcx.backwardChar",
-    "args": { "shift": true },
-    "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // up
   {
@@ -62,28 +48,16 @@
     "key": "meta+f",
     "command": "emacs-mcx.forwardWord",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
-  },
-  {
-    "key": "shift+meta+f",
-    "command": "emacs-mcx.forwardWord",
-    "args": { "shift": true },
-    "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // backward word (meta + b)
   {
     "key": "meta+b",
     "command": "emacs-mcx.backwardWord",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
-  },
-  {
-    "key": "shift+meta+b",
-    "command": "emacs-mcx.backwardWord",
-    "args": { "shift": true },
-    "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // right-word (ctrl + <right>)
   // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
