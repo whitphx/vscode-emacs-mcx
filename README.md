@@ -21,6 +21,7 @@
 
 - Emacs-like cursor movements and editing commands
 - Customizable meta key assignment (`alt`, `ESC`, `ctrl+[`, or `command` on macOS)
+- Shift-selection with movement commands
 - Search behavior like Emacs' isearch
 - Compatibility with VSCode's built-in multi cursor feature
 - Kill-ring integrated with the system clipboard

@@ -20,28 +20,32 @@
     "keys": ["up", "ctrl+p"],
     "command": "emacs-mcx.previousLine",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // down
   {
     "keys": ["down", "ctrl+n"],
     "command": "emacs-mcx.nextLine",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // home
   {
     "keys": ["home", "ctrl+a"],
     "command": "emacs-mcx.moveBeginningOfLine",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // end
   {
     "keys": ["end", "ctrl+e"],
     "command": "emacs-mcx.moveEndOfLine",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // forward word (meta + f)
   {
@@ -66,7 +70,8 @@
     "keys": ["ctrl+right", "meta+right"],
     "command": "emacs-mcx.forwardWord",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // left word (ctrl + <left>)
   // In left-to-right languages, left-word is same as backward-word, and VSCode is not supporting RTL now.
@@ -75,7 +80,8 @@
     "keys": ["ctrl+left", "meta+left"],
     "command": "emacs-mcx.backwardWord",
     "when": "editorTextFocus",
-    "isearchInterruptible": true
+    "isearchInterruptible": true,
+    "shiftVariants": true
   },
   // back-to-indentation (meta + m)
   {
