@@ -35,6 +35,7 @@
     "jsep",
     "wscript",
     "jscoverage",
+    "openvsx",
     // VSCode API
     "webvieweditor",
     "treesticky",
