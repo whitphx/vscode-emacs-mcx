@@ -52,7 +52,7 @@ jobs:
           echo "head-sha=$(cat head-sha)" >> $GITHUB_OUTPUT
           echo "pr-number=$(cat pr-number)" >> $GITHUB_OUTPUT
       - name: Upload build info
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: build-info
           path: |
@@ -168,7 +168,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload the vsix built on Linux
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           path: ${{ steps.build.outputs.filename }}
           name: emacs-mcx
