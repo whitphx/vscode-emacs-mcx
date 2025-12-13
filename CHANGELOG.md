@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.99.0
+
+### Minor Changes
+
+- [#2629](https://github.com/whitphx/vscode-emacs-mcx/pull/2629) [`1135d95`](https://github.com/whitphx/vscode-emacs-mcx/commit/1135d95043f2dc6512ad3f96186f4f38940f5776) Thanks [@whitphx](https://github.com/whitphx)! - Add shift-selection variations of nextLine, previousLine, moveBeginningOfLine, moveEndOfLine, forwardWord, and backwardWord
+
 ## 0.98.2
 
 ### Patch Changes
