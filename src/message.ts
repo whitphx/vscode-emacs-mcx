@@ -59,7 +59,6 @@ export class MessageManager implements vscode.Disposable {
     vscode.window.onDidChangeTextEditorViewColumn(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorVisibleRanges(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeVisibleTextEditors(this.onInterrupt, this, this.disposables);
-    // vscode.window.onDidChangeWindowState(this.onInterrupt, this, this.disposables); // Emacs doesn't interrupt on window focus change.
     vscode.window.onDidCloseTerminal(this.onInterrupt, this, this.disposables);
     vscode.window.onDidOpenTerminal(this.onInterrupt, this, this.disposables);
 
@@ -67,6 +66,11 @@ export class MessageManager implements vscode.Disposable {
     vscode.workspace.onDidCloseTextDocument(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidOpenTextDocument(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidSaveTextDocument(this.onInterrupt, this, this.disposables);
+
+    // We don't listen to the following events:
+    // `vscode.window.onDidChangeTextEditorOptions`: Text editor options change shouldn't interrupt the message. Specifically, some commands change the cursor style option temporarily and it should not interrupt the message.
+    // `vscode.window.onDidChangeWindowState`: Emacs doesn't interrupt on window focus change.
+    // `vscode.workspace.onWillSaveTextDocument`: This event listener pauses the saving, which is not desired. Instead we rely on `onDidSaveTextDocument`.
   }
 
   public onInterrupt = (): void => {
