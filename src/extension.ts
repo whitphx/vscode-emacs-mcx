@@ -92,7 +92,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
         // Some commands make changes to the editor or the document right after showing a message,
         // which causes the message to disappear immediately.
-        // To prevent this, we defer hiding the message until after the command has fully executed.
+        // To prevent this, we defer showing the message until after the command has fully executed.
         return MessageManager.withMessageDefer(() => {
           const activeTextEditor = vscode.window.activeTextEditor;
           if (activeTextEditor == null) {
