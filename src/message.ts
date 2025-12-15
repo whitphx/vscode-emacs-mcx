@@ -19,8 +19,22 @@ export class MessageManager implements vscode.Disposable {
     context.subscriptions.push(this.instance);
   }
 
+  public static async withMessageDefer<T>(innerFn: () => T): Promise<Awaited<T>> {
+    this.instance.startDeferringMessage();
+    try {
+      const res = await innerFn();
+      return res;
+    } finally {
+      this.instance.showDeferredMessage();
+    }
+  }
+
   public static showMessage(text: string): void {
     this.instance.showMessage(text);
+  }
+
+  public static showMessageImmediately(text: string): void {
+    this.instance.showMessageImmediately(text);
   }
 
   public static removeMessage(): void {
@@ -41,22 +55,18 @@ export class MessageManager implements vscode.Disposable {
 
     vscode.window.onDidChangeActiveTerminal(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeActiveTextEditor(this.onInterrupt, this, this.disposables);
-    vscode.window.onDidChangeTextEditorOptions(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorViewColumn(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorVisibleRanges(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeVisibleTextEditors(this.onInterrupt, this, this.disposables);
-    vscode.window.onDidChangeWindowState(this.onInterrupt, this, this.disposables);
+    // vscode.window.onDidChangeWindowState(this.onInterrupt, this, this.disposables); // Emacs doesn't interrupt on window focus change.
     vscode.window.onDidCloseTerminal(this.onInterrupt, this, this.disposables);
     vscode.window.onDidOpenTerminal(this.onInterrupt, this, this.disposables);
 
-    vscode.workspace.onDidChangeConfiguration(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidChangeTextDocument(this.onInterrupt, this, this.disposables);
-    vscode.workspace.onDidChangeWorkspaceFolders(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidCloseTextDocument(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidOpenTextDocument(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidSaveTextDocument(this.onInterrupt, this, this.disposables);
-    vscode.workspace.onWillSaveTextDocument(this.onInterrupt, this, this.disposables);
   }
 
   public onInterrupt = (): void => {
@@ -68,7 +78,37 @@ export class MessageManager implements vscode.Disposable {
     this.messageDisposable = null;
   };
 
+  private isDeferringMessage = false;
+  private deferredMessage: string | null = null;
+
+  public startDeferringMessage(): void {
+    this.isDeferringMessage = true;
+  }
+
+  public showDeferredMessage(): void {
+    this.isDeferringMessage = false;
+    if (this.deferredMessage != null) {
+      const message = this.deferredMessage;
+      this.deferredMessage = null;
+      setTimeout(() => {
+        this.showMessageImmediately(message);
+      }, 1000 / 30);
+    }
+  }
+
   public showMessage(text: string): void {
+    if (this.isDeferringMessage) {
+      this.deferMessage(text);
+    } else {
+      this.showMessageImmediately(text);
+    }
+  }
+
+  public deferMessage(text: string): void {
+    this.deferredMessage = text;
+  }
+
+  public showMessageImmediately(text: string): void {
     if (this.messageDisposable) {
       this.messageDisposable.dispose();
     }
