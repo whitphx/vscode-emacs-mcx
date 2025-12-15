@@ -104,8 +104,11 @@ export class MessageManager implements vscode.Disposable {
       this.deferredMessage = null;
       this.interruptionSuspended = true;
       setTimeout(() => {
-        this.showMessageImmediately(message);
-        this.interruptionSuspended = false;
+        try {
+          this.showMessageImmediately(message);
+        } finally {
+          this.interruptionSuspended = false;
+        }
       }, MESSAGE_DISPLAY_DELAY_MS);
     }
   }
