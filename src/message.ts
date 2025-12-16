@@ -120,6 +120,9 @@ export class MessageManager implements vscode.Disposable {
   }
 
   public deferMessage(text: string): void {
+    // Only the latest deferred message is kept
+    // since the message area shows only one message at a time
+    // and earlier messages would be overwritten anyway.
     this.deferredMessage = text;
   }
 
