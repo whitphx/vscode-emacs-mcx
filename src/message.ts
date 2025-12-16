@@ -22,14 +22,12 @@ export class MessageManager implements vscode.Disposable {
     context.subscriptions.push(this.instance);
   }
 
-  public static async withMessageDefer<T>(innerFn: () => T): Promise<Awaited<T>> {
+  public static startDeferringMessage(): void {
     this.instance.startDeferringMessage();
-    try {
-      const res = await innerFn();
-      return res;
-    } finally {
-      this.instance.showDeferredMessage();
-    }
+  }
+
+  public static showDeferredMessage(): void {
+    this.instance.showDeferredMessage();
   }
 
   public static showMessage(text: string): void {
