@@ -6780,7 +6780,7 @@
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
     "cspell": "^9.4.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",
     "glob": "^13.0.0",
