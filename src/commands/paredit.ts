@@ -4,6 +4,7 @@ import { EmacsCommand } from ".";
 import { KillYankCommand } from "./kill";
 import { AppendDirection } from "../kill-yank";
 import { revealPrimaryActive } from "./helpers/reveal";
+import { MessageManager } from "../message";
 
 type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
 
@@ -103,8 +104,7 @@ export class MarkSexp extends EmacsCommand {
       this.emacsController.enterMarkMode(false);
     }
 
-    // TODO: Print "Mark set" message. With the current implementation, the message will disappear just after showing because MessageManager.onInterrupt() is asynchronously called for setting the new selections and revealPrimaryActive() below.
-
+    MessageManager.showMessage("Mark set");
     this.emacsController.pushMark(
       newSelections.map((newSelection) => newSelection.active),
       this.continuing,
