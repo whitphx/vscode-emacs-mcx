@@ -93,29 +93,26 @@ export function activate(context: vscode.ExtensionContext): void {
         // Some commands make changes to the editor or the document right after showing a message,
         // which causes the message to disappear immediately.
         // To prevent this, we defer showing the message until after the command has fully executed.
-        MessageManager.startDeferringMessage();
-
-        const activeTextEditor = vscode.window.activeTextEditor;
-        if (activeTextEditor == null) {
-          if (typeof onNoEmulator === "function") {
-            return onNoEmulator(args);
+        return MessageManager.withMessageDefer(() => {
+          const activeTextEditor = vscode.window.activeTextEditor;
+          if (activeTextEditor == null) {
+            if (typeof onNoEmulator === "function") {
+              return onNoEmulator(args);
+            }
+            return;
           }
-          return;
-        }
 
-        const documentId = activeTextEditor.document.uri.toString();
-        let emulator = emacsEmulatorMap.get(documentId);
-        if (emulator == null) {
-          emulator = createEmacsEmulator(activeTextEditor);
-          emacsEmulatorMap.set(documentId, emulator);
-        } else {
-          emulator.setTextEditor(activeTextEditor);
-        }
+          const documentId = activeTextEditor.document.uri.toString();
+          let emulator = emacsEmulatorMap.get(documentId);
+          if (emulator == null) {
+            emulator = createEmacsEmulator(activeTextEditor);
+            emacsEmulatorMap.set(documentId, emulator);
+          } else {
+            emulator.setTextEditor(activeTextEditor);
+          }
 
-        const res = await callback(emulator, args);
-
-        MessageManager.showDeferredMessage();
-        return res;
+          return callback(emulator, args);
+        });
       }),
     );
   }
