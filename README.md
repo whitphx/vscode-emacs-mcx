@@ -30,6 +30,7 @@
 - Rectangle commands
 - Text/position/rectangle registers
 - Sexp operations (with ParEdit commands)
+- Available both in Desktop and [Web](https://code.visualstudio.com/api/extension-guides/web-extensions)
 
 It's inspired by [Emacs Keymap by hiro-sun](https://github.com/hiro-sun/vscode-emacs) and its forks such as [Emacs Friendly Keymap by Sebastian Zaha](https://github.com/SebastianZaha/vscode-emacs-friendly), [Emacs Keymap Improved by rkwan94](https://github.com/rkwan94/vscode-emacs), and [Emacs Friendly Keybindings (Neon) by NotKyon](https://github.com/NotKyon/vscode-emacs-neon), but totally revamped and improved for better feature coverage, Emacs emulation, and usability (also getting rid of some bugs).
 
