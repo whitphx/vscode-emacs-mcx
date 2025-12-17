@@ -32,10 +32,11 @@ export const moveCommandIds = [
   "backwardParagraph",
   "backToIndentation",
   "moveToWindowLineTopBottom",
-];
+] as const;
+type MoveCommandId = (typeof moveCommandIds)[number];
 
 export class ForwardChar extends EmacsCommand {
-  public readonly id = "forwardChar";
+  public readonly id = "forwardChar" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
@@ -64,7 +65,7 @@ export class ForwardChar extends EmacsCommand {
 }
 
 export class BackwardChar extends EmacsCommand {
-  public readonly id = "backwardChar";
+  public readonly id = "backwardChar" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const charDelta = prefixArgument == undefined ? 1 : prefixArgument;
@@ -95,7 +96,7 @@ export class BackwardChar extends EmacsCommand {
 }
 
 export class NextLine extends EmacsCommand {
-  public readonly id = "nextLine";
+  public readonly id = "nextLine" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
@@ -118,7 +119,7 @@ export class NextLine extends EmacsCommand {
 }
 
 export class PreviousLine extends EmacsCommand {
-  public readonly id = "previousLine";
+  public readonly id = "previousLine" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const lineDelta = prefixArgument == undefined ? 1 : prefixArgument;
@@ -140,7 +141,7 @@ export class PreviousLine extends EmacsCommand {
 }
 
 export class MoveBeginningOfLine extends EmacsCommand {
-  public readonly id = "moveBeginningOfLine";
+  public readonly id = "moveBeginningOfLine" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
@@ -212,7 +213,7 @@ export class MoveBeginningOfLine extends EmacsCommand {
 }
 
 export class MoveEndOfLine extends EmacsCommand {
-  public readonly id = "moveEndOfLine";
+  public readonly id = "moveEndOfLine" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
@@ -275,7 +276,7 @@ export class MoveEndOfLine extends EmacsCommand {
 }
 
 export class ForwardWord extends EmacsCommand {
-  public readonly id = "forwardWord";
+  public readonly id = "forwardWord" satisfies MoveCommandId;
 
   public run(
     textEditor: TextEditor,
@@ -322,7 +323,7 @@ export class ForwardWord extends EmacsCommand {
 }
 
 export class BackwardWord extends EmacsCommand {
-  public readonly id = "backwardWord";
+  public readonly id = "backwardWord" satisfies MoveCommandId;
 
   public run(
     textEditor: TextEditor,
@@ -369,7 +370,7 @@ export class BackwardWord extends EmacsCommand {
 }
 
 export class BackToIndentation extends EmacsCommand {
-  public readonly id = "backToIndentation";
+  public readonly id = "backToIndentation" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     const doc = textEditor.document;
@@ -396,7 +397,7 @@ export class BackToIndentation extends EmacsCommand {
 }
 
 export class BeginningOfBuffer extends EmacsCommand {
-  public readonly id = "beginningOfBuffer";
+  public readonly id = "beginningOfBuffer" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
@@ -414,7 +415,7 @@ export class BeginningOfBuffer extends EmacsCommand {
 }
 
 export class EndOfBuffer extends EmacsCommand {
-  public readonly id = "endOfBuffer";
+  public readonly id = "endOfBuffer" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (this.emacsController.inRectMarkMode) {
@@ -488,7 +489,7 @@ export function movePrimaryCursorIntoVisibleRange(
 }
 
 export class ScrollUpCommand extends EmacsCommand {
-  public readonly id = "scrollUpCommand";
+  public readonly id = "scrollUpCommand" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
@@ -515,7 +516,7 @@ export class ScrollUpCommand extends EmacsCommand {
 }
 
 export class ScrollDownCommand extends EmacsCommand {
-  public readonly id = "scrollDownCommand";
+  public readonly id = "scrollDownCommand" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void | Thenable<void> {
     if (prefixArgument != null) {
@@ -542,7 +543,7 @@ export class ScrollDownCommand extends EmacsCommand {
 }
 
 export class ForwardParagraph extends EmacsCommand {
-  public readonly id = "forwardParagraph";
+  public readonly id = "forwardParagraph" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -570,7 +571,7 @@ export class ForwardParagraph extends EmacsCommand {
 }
 
 export class BackwardParagraph extends EmacsCommand {
-  public readonly id = "backwardParagraph";
+  public readonly id = "backwardParagraph" satisfies MoveCommandId;
 
   public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): void {
     const repeat = prefixArgument === undefined ? 1 : prefixArgument;
@@ -635,7 +636,7 @@ export function calcMiddleLine(visibleRanges: readonly vscode.Range[]): number |
 }
 
 export class MoveToWindowLineTopBottom extends EmacsCommand implements ITextEditorInterruptionHandler {
-  public readonly id = "moveToWindowLineTopBottom";
+  public readonly id = "moveToWindowLineTopBottom" satisfies MoveCommandId;
 
   private movePosition: MoveToWindowLinePosition = MoveToWindowLinePosition.Middle;
   private lastSetSelection: vscode.Selection | undefined = undefined;
