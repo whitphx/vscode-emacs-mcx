@@ -90,15 +90,21 @@ export class MessageManager implements vscode.Disposable {
     this.messageDisposable = null;
   };
 
-  private isDeferringMessage = false;
+  private messageDeferLocks = 0;
   private deferredMessage: string | null = null;
 
   public startDeferringMessage(): void {
-    this.isDeferringMessage = true;
+    this.messageDeferLocks += 1;
   }
 
   public showDeferredMessage(): void {
-    this.isDeferringMessage = false;
+    if (this.messageDeferLocks <= 0) {
+      throw new Error("Mismatched showDeferredMessage call");
+    }
+    this.messageDeferLocks -= 1;
+    if (this.messageDeferLocks > 0) {
+      return;
+    }
     if (this.deferredMessage != null) {
       const message = this.deferredMessage;
       this.deferredMessage = null;
@@ -114,7 +120,7 @@ export class MessageManager implements vscode.Disposable {
   }
 
   public showMessage(text: string): void {
-    if (this.isDeferringMessage) {
+    if (this.messageDeferLocks > 0) {
       this.deferMessage(text);
     } else {
       this.showMessageImmediately(text);
