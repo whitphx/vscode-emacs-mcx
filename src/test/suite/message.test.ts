@@ -2,7 +2,7 @@ import assert from "assert";
 import * as sinon from "sinon";
 import * as vscode from "vscode";
 import { MessageManager } from "../../message";
-import { delay } from "src/utils";
+import { delay } from "./utils";
 
 const MESSAGE_DISPLAY_DELAY_MS = 1000 / 30;
 
