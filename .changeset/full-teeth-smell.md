@@ -2,4 +2,4 @@
 "emacs-mcx": patch
 ---
 
-Defer showing a message until command execution finishes not to be interrupted by changes made by the command itself
+Defer showing messages until command execution finishes to prevent them from being interrupted by changes made by the command itself
