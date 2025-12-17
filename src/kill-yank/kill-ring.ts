@@ -53,7 +53,7 @@ export class KillRing {
   }
 
   public async browse(): Promise<KillRingEntity | undefined> {
-    MessageManager.showMessage(`${this.killRing.length} items in the kill ring.`);
+    MessageManager.showMessageImmediately(`${this.killRing.length} items in the kill ring.`);
 
     const selectedEntity = await quickPickKillRing(this.killRing, this.pointer ?? 0, (entity) => {
       this.delete(entity);
