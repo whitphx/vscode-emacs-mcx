@@ -35,7 +35,7 @@ suite("MessageManager", () => {
       await Promise.resolve(); // Nothing happens but we put `await` here to emphasize the async context
     });
 
-    await delay(MESSAGE_DISPLAY_DELAY_MS);
+    await delay(MESSAGE_DISPLAY_DELAY_MS + 10);
 
     assert.strictEqual(setStatusBarMessageStub.callCount, 1);
     assert.strictEqual(setStatusBarMessageStub.firstCall.args[0], "Deferred");
