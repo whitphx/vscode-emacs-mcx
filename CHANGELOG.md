@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.99.2
+
+### Patch Changes
+
+- [#2641](https://github.com/whitphx/vscode-emacs-mcx/pull/2641) [`452dca3`](https://github.com/whitphx/vscode-emacs-mcx/commit/452dca356ff6ff11812a5d44ece2b314984718d8) Thanks [@whitphx](https://github.com/whitphx)! - Fix mark-sexp command to show a message
+
+- [#2642](https://github.com/whitphx/vscode-emacs-mcx/pull/2642) [`867b547`](https://github.com/whitphx/vscode-emacs-mcx/commit/867b547b4da81ea9680cc48a9288283cf5714901) Thanks [@whitphx](https://github.com/whitphx)! - Update README.md about web extension compatibility
+
 ## 0.99.1
 
 ### Patch Changes
