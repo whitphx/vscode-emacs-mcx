@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.99.1
+
+### Patch Changes
+
+- [#2631](https://github.com/whitphx/vscode-emacs-mcx/pull/2631) [`23239d1`](https://github.com/whitphx/vscode-emacs-mcx/commit/23239d10f279fbedfabd47e3f4bb1129d01a9396) Thanks [@whitphx](https://github.com/whitphx)! - Defer showing messages until command execution finishes to prevent them from being interrupted by changes made by the command itself
+
+- [#2637](https://github.com/whitphx/vscode-emacs-mcx/pull/2637) [`3d099e5`](https://github.com/whitphx/vscode-emacs-mcx/commit/3d099e5b6db098ecb78b726c362cb6531f30137b) Thanks [@whitphx](https://github.com/whitphx)! - Refactoring type annotations on move commands
+
 ## 0.99.0
 
 ### Minor Changes
