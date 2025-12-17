@@ -6,12 +6,10 @@ import { delay } from "./utils";
 
 suite("MessageManager", () => {
   let sandbox: sinon.SinonSandbox;
-  let clock: sinon.SinonFakeTimers;
   let setStatusBarMessageStub: sinon.SinonStub;
 
   setup(() => {
     sandbox = sinon.createSandbox();
-    clock = sandbox.useFakeTimers();
     setStatusBarMessageStub = sandbox
       .stub(vscode.window, "setStatusBarMessage")
       .callsFake(() => new vscode.Disposable(() => {}));
@@ -34,10 +32,10 @@ suite("MessageManager", () => {
     await MessageManager.withMessageDefer(async () => {
       MessageManager.showMessage("Deferred");
       assert.strictEqual(setStatusBarMessageStub.callCount, 0);
-      await delay(0); // Nothing happens but we put `await` here to emphasize the async context
+      await Promise.resolve(); // Nothing happens but we put `await` here to emphasize the async context
     });
 
-    await clock.tickAsync(MESSAGE_DISPLAY_DELAY_MS);
+    await delay(MESSAGE_DISPLAY_DELAY_MS);
 
     assert.strictEqual(setStatusBarMessageStub.callCount, 1);
     assert.strictEqual(setStatusBarMessageStub.firstCall.args[0], "Deferred");
