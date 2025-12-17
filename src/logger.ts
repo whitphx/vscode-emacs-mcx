@@ -1,6 +1,6 @@
-import { ILogger } from "src/platform/common/logger";
+import type { ILogger } from "./platform/common/logger";
 import { LoggerImpl } from "platform/loggerImpl";
-import { IConfiguration } from "src/configuration/iconfiguration";
+import type { IConfiguration } from "./configuration/iconfiguration";
 
 export class Logger {
   private static readonly cache = new Map<string, ILogger>();

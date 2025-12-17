@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import { TextEditor } from "vscode";
-import { EmacsCommand, ITextEditorInterruptionHandler } from ".";
-import { IEmacsController } from "../emulator";
+import { EmacsCommand, type ITextEditorInterruptionHandler } from ".";
+import type { IEmacsController } from "../emulator";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { convertSelectionToRectSelections, copyOrDeleteRect, insertRect, type RectangleTexts } from "../rectangle";
-import { KillRing } from "../kill-yank/kill-ring";
-import { Minibuffer } from "src/minibuffer";
+import type { KillRing } from "../kill-yank/kill-ring";
+import type { Minibuffer } from "../minibuffer";
 
 /**
  * This command is assigned to `C-x r` and sets `emacs-mcx.acceptingRectCommand` context

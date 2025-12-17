@@ -1,11 +1,11 @@
-import { Minibuffer } from "src/minibuffer";
+import type { Minibuffer } from "../minibuffer";
 import * as vscode from "vscode";
 import { Position, Range, TextEditor } from "vscode";
 import { MessageManager } from "../message";
 import { equalPositions } from "../utils";
 import type { IEmacsController } from "../emulator";
-import { KillRing } from "./kill-ring";
-import { KillRingEntity } from "./kill-ring-entity";
+import type { KillRing } from "./kill-ring";
+import type { KillRingEntity } from "./kill-ring-entity";
 import { ClipboardTextKillRingEntity } from "./kill-ring-entity/clipboard-text";
 import { AppendDirection, EditorTextKillRingEntity } from "./kill-ring-entity/editor-text";
 import { Logger } from "../logger";
