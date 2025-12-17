@@ -1,10 +1,8 @@
 import assert from "assert";
 import * as sinon from "sinon";
 import * as vscode from "vscode";
-import { MessageManager } from "../../message";
+import { MessageManager, MESSAGE_DISPLAY_DELAY_MS } from "../../message";
 import { delay } from "./utils";
-
-const MESSAGE_DISPLAY_DELAY_MS = 1000 / 30;
 
 suite("MessageManager", () => {
   let sandbox: sinon.SinonSandbox;

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 
 // Delay in milliseconds before showing the message to avoid it being immediately cleared by subsequent editor changes.
-const MESSAGE_DISPLAY_DELAY_MS = 1000 / 30;
+export const MESSAGE_DISPLAY_DELAY_MS = 1000 / 30;
 
 /**
  * Shows emacs-like status bar message which disappears when any other command is invoked.
