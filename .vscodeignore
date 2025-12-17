@@ -15,6 +15,7 @@ vendor/
 .gitignore
 .eslintignore
 .prettierignore
+cspell.json
 eslint.config.mjs
 lint-staged.config.js
 DEVELOPMENT.md
