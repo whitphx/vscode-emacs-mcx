@@ -94,6 +94,10 @@ export class MessageManager implements vscode.Disposable {
   private deferredMessage: string | null = null;
 
   public startDeferringMessage(): void {
+    if (this.messageDeferLocks === 0) {
+      // Defensive reset in case a previous deferral path leaked a deferred message.
+      this.deferredMessage = null;
+    }
     this.messageDeferLocks += 1;
   }
 
@@ -151,6 +155,9 @@ export class MessageManager implements vscode.Disposable {
     if (this.messageDisposable !== null) {
       this.messageDisposable.dispose();
     }
+
+    this.messageDeferLocks = 0;
+    this.deferredMessage = null;
 
     for (const disposable of this.disposables) {
       disposable.dispose();
