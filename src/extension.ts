@@ -87,27 +87,32 @@ export function activate(context: vscode.ExtensionContext): void {
   ) {
     context.subscriptions.push(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      vscode.commands.registerCommand(commandName, (args: Unreliable<any>) => {
+      vscode.commands.registerCommand(commandName, async (args: Unreliable<any>) => {
         logger.debug(`[command]\t Command "${commandName}" executed with args ${JSON.stringify(args)}`);
 
-        const activeTextEditor = vscode.window.activeTextEditor;
-        if (activeTextEditor == null) {
-          if (typeof onNoEmulator === "function") {
-            return onNoEmulator(args);
+        // Some commands make changes to the editor or the document right after showing a message,
+        // which causes the message to disappear immediately.
+        // To prevent this, we defer showing the message until after the command has fully executed.
+        return MessageManager.withMessageDefer(() => {
+          const activeTextEditor = vscode.window.activeTextEditor;
+          if (activeTextEditor == null) {
+            if (typeof onNoEmulator === "function") {
+              return onNoEmulator(args);
+            }
+            return;
           }
-          return;
-        }
 
-        const documentId = activeTextEditor.document.uri.toString();
-        let emulator = emacsEmulatorMap.get(documentId);
-        if (emulator == null) {
-          emulator = createEmacsEmulator(activeTextEditor);
-          emacsEmulatorMap.set(documentId, emulator);
-        } else {
-          emulator.setTextEditor(activeTextEditor);
-        }
+          const documentId = activeTextEditor.document.uri.toString();
+          let emulator = emacsEmulatorMap.get(documentId);
+          if (emulator == null) {
+            emulator = createEmacsEmulator(activeTextEditor);
+            emacsEmulatorMap.set(documentId, emulator);
+          } else {
+            emulator.setTextEditor(activeTextEditor);
+          }
 
-        return callback(emulator, args);
+          return callback(emulator, args);
+        });
       }),
     );
   }

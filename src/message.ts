@@ -1,5 +1,8 @@
 import * as vscode from "vscode";
 
+// Delay in milliseconds before showing the message to avoid it being immediately cleared by subsequent editor changes.
+export const MESSAGE_DISPLAY_DELAY_MS = 1000 / 30;
+
 /**
  * Shows emacs-like status bar message which disappears when any other command is invoked.
  */
@@ -19,8 +22,22 @@ export class MessageManager implements vscode.Disposable {
     context.subscriptions.push(this.instance);
   }
 
+  public static async withMessageDefer<T>(innerFn: () => T): Promise<Awaited<T>> {
+    this.instance.startDeferringMessage();
+    try {
+      const res = await innerFn();
+      return res;
+    } finally {
+      this.instance.showDeferredMessage();
+    }
+  }
+
   public static showMessage(text: string): void {
     this.instance.showMessage(text);
+  }
+
+  public static showMessageImmediately(text: string): void {
+    this.instance.showMessageImmediately(text);
   }
 
   public static removeMessage(): void {
@@ -41,25 +58,30 @@ export class MessageManager implements vscode.Disposable {
 
     vscode.window.onDidChangeActiveTerminal(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeActiveTextEditor(this.onInterrupt, this, this.disposables);
-    vscode.window.onDidChangeTextEditorOptions(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorSelection(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorViewColumn(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeTextEditorVisibleRanges(this.onInterrupt, this, this.disposables);
     vscode.window.onDidChangeVisibleTextEditors(this.onInterrupt, this, this.disposables);
-    vscode.window.onDidChangeWindowState(this.onInterrupt, this, this.disposables);
     vscode.window.onDidCloseTerminal(this.onInterrupt, this, this.disposables);
     vscode.window.onDidOpenTerminal(this.onInterrupt, this, this.disposables);
 
-    vscode.workspace.onDidChangeConfiguration(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidChangeTextDocument(this.onInterrupt, this, this.disposables);
-    vscode.workspace.onDidChangeWorkspaceFolders(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidCloseTextDocument(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidOpenTextDocument(this.onInterrupt, this, this.disposables);
     vscode.workspace.onDidSaveTextDocument(this.onInterrupt, this, this.disposables);
-    vscode.workspace.onWillSaveTextDocument(this.onInterrupt, this, this.disposables);
+
+    // We don't listen to the following events:
+    // `vscode.window.onDidChangeTextEditorOptions`: Text editor options change shouldn't interrupt the message. Specifically, some commands change the cursor style option temporarily and it should not interrupt the message.
+    // `vscode.window.onDidChangeWindowState`: Emacs doesn't interrupt on window focus change.
+    // `vscode.workspace.onWillSaveTextDocument`: This event listener pauses the saving, which is not desired. Instead we rely on `onDidSaveTextDocument`.
   }
 
+  private interruptionSuspended = false;
   public onInterrupt = (): void => {
+    if (this.interruptionSuspended) {
+      return;
+    }
+
     if (this.messageDisposable === null) {
       return;
     }
@@ -68,7 +90,55 @@ export class MessageManager implements vscode.Disposable {
     this.messageDisposable = null;
   };
 
+  private messageDeferLocks = 0;
+  private deferredMessage: string | null = null;
+
+  public startDeferringMessage(): void {
+    if (this.messageDeferLocks === 0) {
+      // Defensive reset in case a previous deferral path leaked a deferred message.
+      this.deferredMessage = null;
+    }
+    this.messageDeferLocks += 1;
+  }
+
+  public showDeferredMessage(): void {
+    if (this.messageDeferLocks <= 0) {
+      throw new Error("Mismatched showDeferredMessage call");
+    }
+    this.messageDeferLocks -= 1;
+    if (this.messageDeferLocks > 0) {
+      return;
+    }
+    if (this.deferredMessage != null) {
+      const message = this.deferredMessage;
+      this.deferredMessage = null;
+      this.interruptionSuspended = true;
+      setTimeout(() => {
+        try {
+          this.showMessageImmediately(message);
+        } finally {
+          this.interruptionSuspended = false;
+        }
+      }, MESSAGE_DISPLAY_DELAY_MS);
+    }
+  }
+
   public showMessage(text: string): void {
+    if (this.messageDeferLocks > 0) {
+      this.deferMessage(text);
+    } else {
+      this.showMessageImmediately(text);
+    }
+  }
+
+  public deferMessage(text: string): void {
+    // Only the latest deferred message is kept
+    // since the message area shows only one message at a time
+    // and earlier messages would be overwritten anyway.
+    this.deferredMessage = text;
+  }
+
+  public showMessageImmediately(text: string): void {
     if (this.messageDisposable) {
       this.messageDisposable.dispose();
     }
@@ -85,6 +155,9 @@ export class MessageManager implements vscode.Disposable {
     if (this.messageDisposable !== null) {
       this.messageDisposable.dispose();
     }
+
+    this.messageDeferLocks = 0;
+    this.deferredMessage = null;
 
     for (const disposable of this.disposables) {
       disposable.dispose();
