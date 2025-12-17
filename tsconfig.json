@@ -6,10 +6,9 @@
     "lib": ["ESNext", "WebWorker"],
     "sourceMap": true,
     "rootDir": "src",
-    "baseUrl": "./",
     "paths": {
-      "vs/*": ["src/vs/*"],
-      "platform/*": ["src/platform/node/*"]
+      "vs/*": ["./src/vs/*"],
+      "platform/*": ["./src/platform/node/*"]
     },
     "strict": true,
     "strictBuiltinIteratorReturn": false, // To work around an error from `lru-cache`: https://github.com/isaacs/node-lru-cache/issues/348#issuecomment-2296786407

@@ -2,8 +2,8 @@
  * This file is derived from https://github.com/VSCodeVim/Vim/tree/104cf4779a221e951a90ef5daa1e5aa7a161b0f7
  */
 
-import { IConfiguration } from "../../configuration/iconfiguration";
-import { ILogger } from "src/platform/common/logger";
+import type { IConfiguration } from "../../configuration/iconfiguration";
+import type { ILogger } from "../common/logger";
 
 const logPriorities: string[] = ["error", "warn", "info", "verbose", "debug", "silly"];
 

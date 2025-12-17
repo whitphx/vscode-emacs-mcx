@@ -9,7 +9,7 @@ import {
 } from "./helpers/paragraph";
 import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
-import { IEmacsController } from "src/emulator";
+import type { IEmacsController } from "../emulator";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
 import { getWordSeparators } from "./helpers/wordSeparators";
 import { makeSelectionsEmpty } from "./helpers/selection";

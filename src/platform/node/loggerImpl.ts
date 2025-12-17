@@ -6,8 +6,8 @@ import TransportStream from "winston-transport";
 import * as vscode from "vscode";
 import * as winston from "winston";
 import { ConsoleForElectron } from "winston-console-for-electron";
-import { IConfiguration } from "../../configuration/iconfiguration";
-import { ILogger } from "../common/logger";
+import type { IConfiguration } from "../../configuration/iconfiguration";
+import type { ILogger } from "../common/logger";
 
 interface VsCodeMessageOptions extends TransportStream.TransportStreamOptions {
   prefix?: string;

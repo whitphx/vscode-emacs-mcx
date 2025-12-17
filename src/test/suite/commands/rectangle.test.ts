@@ -11,7 +11,7 @@ import {
   createEmulator,
 } from "../utils";
 import { KillRing } from "../../../kill-yank/kill-ring";
-import { Minibuffer } from "src/minibuffer";
+import type { Minibuffer } from "../../../minibuffer";
 
 /* cSpell:disable */
 
