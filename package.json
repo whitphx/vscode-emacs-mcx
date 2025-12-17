@@ -6745,6 +6745,7 @@
     "webpack:dev": "webpack --mode development",
     "webpack:prod": "webpack --mode production --devtool hidden-source-map",
     "webpack": "npm run webpack:dev",
+    "typecheck": "tsc --noEmit",
     "test-compile": "tsc && tsc-alias",
     "gen-keys": "tsx ./keybinding-generator/cli.mts",
     "test-gen-keys": "mocha --import=tsx ./keybinding-generator/*.test.*",
