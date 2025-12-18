@@ -297,18 +297,21 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
   keybindings.push(...isearchExitKeybindings);
 
   if (src.shiftVariants) {
-    keybindings.push(
-      ...generateKeybindings({
-        ...src,
-        key: src.key ? `shift+${src.key}` : undefined,
-        keys: src.keys ? src.keys.map((k) => `shift+${k}`) : undefined,
-        args: {
-          ...(typeof src.args === "object" ? src.args : {}),
-          shift: true,
-        },
-        shiftVariants: false,
-      }),
-    );
+    const shiftedKeybindings = generateKeybindings({
+      ...src,
+      key: src.key ? `shift+${src.key}` : undefined,
+      keys: src.keys ? src.keys.map((k) => `shift+${k}`) : undefined,
+      args: {
+        ...(typeof src.args === "object" ? src.args : {}),
+        shift: true,
+      },
+      shiftVariants: false,
+    }).map((binding) => ({
+      ...binding,
+      when: addWhenCond(binding.when, "config.emacs-mcx.shiftSelectMode"),
+    }));
+
+    keybindings.push(...shiftedKeybindings);
   }
 
   return keybindings;
