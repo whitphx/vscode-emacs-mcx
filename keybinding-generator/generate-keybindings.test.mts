@@ -215,13 +215,13 @@ describe("generateKeybindings", () => {
       {
         key: "shift+ctrl+d",
         command: "emacs-mcx.forwardChar",
-        when: "editorTextFocus",
+        when: "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         args: { repeat: 2, shift: true },
       },
       {
         key: "shift+ctrl+f",
         command: "emacs-mcx.forwardChar",
-        when: "editorTextFocus",
+        when: "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         args: { repeat: 2, shift: true },
       },
     ];
@@ -253,13 +253,13 @@ describe("generateKeybindings", () => {
       {
         key: "shift+ctrl+n",
         command: "emacs-mcx.nextLine",
-        when: "editorTextFocus",
+        when: "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         args: { repeat: 3, shift: true },
       },
       {
         key: "shift+ctrl+n",
         command: "emacs-mcx.isearchExit",
-        when: "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        when: "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         args: { then: { command: "emacs-mcx.nextLine", args: { repeat: 3, shift: true } } },
       },
     ];

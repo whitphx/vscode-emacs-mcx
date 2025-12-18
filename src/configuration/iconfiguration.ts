@@ -41,6 +41,11 @@ export interface IConfiguration {
    */
   clearSelectionBeforeCharMove: boolean;
 
+  /**
+   * Enable Shift Selection behavior on movement commands
+   */
+  enableShiftSelection: boolean;
+
   enableOverridingTypeCommand: boolean;
 
   /**

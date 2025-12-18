@@ -36,6 +36,7 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   public strictEmacsMove = false;
 
   public clearSelectionBeforeCharMove = false;
+  public enableShiftSelection = true;
 
   public keepCursorInVisibleRange = false;
 

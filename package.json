@@ -71,6 +71,11 @@
           "default": false,
           "description": "If true, forwardChar/backwardChar clear existing selections when mark mode is off (Emacs-like). If false, they follow VS Code behavior and collapse selections."
         },
+        "emacs-mcx.enableShiftSelection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Shift Selection (auto mark mode) for movement commands when holding the Shift key."
+        },
         "emacs-mcx.moveBeginningOfLineBehavior": {
           "type": "string",
           "enum": [
@@ -1702,7 +1707,7 @@
       {
         "key": "shift+right",
         "command": "emacs-mcx.forwardChar",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1710,7 +1715,7 @@
       {
         "key": "shift+ctrl+f",
         "command": "emacs-mcx.forwardChar",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1718,7 +1723,7 @@
       {
         "key": "shift+right",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardChar",
@@ -1731,7 +1736,7 @@
       {
         "key": "shift+ctrl+f",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardChar",
@@ -1774,7 +1779,7 @@
       {
         "key": "shift+left",
         "command": "emacs-mcx.backwardChar",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1782,7 +1787,7 @@
       {
         "key": "shift+ctrl+b",
         "command": "emacs-mcx.backwardChar",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1790,7 +1795,7 @@
       {
         "key": "shift+left",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardChar",
@@ -1803,7 +1808,7 @@
       {
         "key": "shift+ctrl+b",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardChar",
@@ -1846,7 +1851,7 @@
       {
         "key": "shift+up",
         "command": "emacs-mcx.previousLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1854,7 +1859,7 @@
       {
         "key": "shift+ctrl+p",
         "command": "emacs-mcx.previousLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1862,7 +1867,7 @@
       {
         "key": "shift+up",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.previousLine",
@@ -1875,7 +1880,7 @@
       {
         "key": "shift+ctrl+p",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.previousLine",
@@ -1918,7 +1923,7 @@
       {
         "key": "shift+down",
         "command": "emacs-mcx.nextLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1926,7 +1931,7 @@
       {
         "key": "shift+ctrl+n",
         "command": "emacs-mcx.nextLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1934,7 +1939,7 @@
       {
         "key": "shift+down",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.nextLine",
@@ -1947,7 +1952,7 @@
       {
         "key": "shift+ctrl+n",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.nextLine",
@@ -1990,7 +1995,7 @@
       {
         "key": "shift+home",
         "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -1998,7 +2003,7 @@
       {
         "key": "shift+ctrl+a",
         "command": "emacs-mcx.moveBeginningOfLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2006,7 +2011,7 @@
       {
         "key": "shift+home",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.moveBeginningOfLine",
@@ -2019,7 +2024,7 @@
       {
         "key": "shift+ctrl+a",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.moveBeginningOfLine",
@@ -2062,7 +2067,7 @@
       {
         "key": "shift+end",
         "command": "emacs-mcx.moveEndOfLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2070,7 +2075,7 @@
       {
         "key": "shift+ctrl+e",
         "command": "emacs-mcx.moveEndOfLine",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2078,7 +2083,7 @@
       {
         "key": "shift+end",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.moveEndOfLine",
@@ -2091,7 +2096,7 @@
       {
         "key": "shift+ctrl+e",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.moveEndOfLine",
@@ -2164,7 +2169,7 @@
       {
         "key": "shift+alt+f",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2172,7 +2177,7 @@
       {
         "mac": "shift+cmd+f",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2180,7 +2185,7 @@
       {
         "key": "escape shift+f",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2188,7 +2193,7 @@
       {
         "key": "ctrl+[ shift+f",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2196,7 +2201,7 @@
       {
         "key": "shift+alt+f",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2209,7 +2214,7 @@
       {
         "mac": "shift+cmd+f",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2222,7 +2227,7 @@
       {
         "key": "escape shift+f",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2235,7 +2240,7 @@
       {
         "key": "ctrl+[ shift+f",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2308,7 +2313,7 @@
       {
         "key": "shift+alt+b",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2316,7 +2321,7 @@
       {
         "mac": "shift+cmd+b",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2324,7 +2329,7 @@
       {
         "key": "escape shift+b",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2332,7 +2337,7 @@
       {
         "key": "ctrl+[ shift+b",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2340,7 +2345,7 @@
       {
         "key": "shift+alt+b",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2353,7 +2358,7 @@
       {
         "mac": "shift+cmd+b",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2366,7 +2371,7 @@
       {
         "key": "escape shift+b",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2379,7 +2384,7 @@
       {
         "key": "ctrl+[ shift+b",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2467,7 +2472,7 @@
       {
         "key": "shift+ctrl+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2475,7 +2480,7 @@
       {
         "key": "shift+alt+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2483,7 +2488,7 @@
       {
         "mac": "shift+cmd+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2491,7 +2496,7 @@
       {
         "key": "escape shift+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2499,7 +2504,7 @@
       {
         "key": "ctrl+[ shift+right",
         "command": "emacs-mcx.forwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2507,7 +2512,7 @@
       {
         "key": "shift+ctrl+right",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2520,7 +2525,7 @@
       {
         "key": "shift+alt+right",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2533,7 +2538,7 @@
       {
         "mac": "shift+cmd+right",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2546,7 +2551,7 @@
       {
         "key": "escape shift+right",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2559,7 +2564,7 @@
       {
         "key": "ctrl+[ shift+right",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.forwardWord",
@@ -2647,7 +2652,7 @@
       {
         "key": "shift+ctrl+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2655,7 +2660,7 @@
       {
         "key": "shift+alt+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2663,7 +2668,7 @@
       {
         "mac": "shift+cmd+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2671,7 +2676,7 @@
       {
         "key": "escape shift+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2679,7 +2684,7 @@
       {
         "key": "ctrl+[ shift+left",
         "command": "emacs-mcx.backwardWord",
-        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "shift": true
         }
@@ -2687,7 +2692,7 @@
       {
         "key": "shift+ctrl+left",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2700,7 +2705,7 @@
       {
         "key": "shift+alt+left",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2713,7 +2718,7 @@
       {
         "mac": "shift+cmd+left",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2726,7 +2731,7 @@
       {
         "key": "escape shift+left",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
@@ -2739,7 +2744,7 @@
       {
         "key": "ctrl+[ shift+left",
         "command": "emacs-mcx.isearchExit",
-        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "when": "!config.emacs-mcx.cursorMoveOnFindWidget && editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket && config.emacs-mcx.enableShiftSelection",
         "args": {
           "then": {
             "command": "emacs-mcx.backwardWord",
