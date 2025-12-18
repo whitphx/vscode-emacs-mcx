@@ -44,7 +44,7 @@ export interface IConfiguration {
   /**
    * Enable Shift Selection behavior on movement commands
    */
-  enableShiftSelection: boolean;
+  shiftSelectMode: boolean;
 
   enableOverridingTypeCommand: boolean;
 

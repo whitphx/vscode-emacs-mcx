@@ -179,9 +179,9 @@ Note that this config makes use of VSCode API's `type` command under the hood an
 Indicates whether `M-<digit>` (the `emacs-mcx.digitArgument` command) is enabled.
 Set `false` when `M-<digit>` conflicts with some other necessary commands. See https://github.com/whitphx/vscode-emacs-mcx/issues/1208 for the background.
 
-### `emacs-mcx.enableShiftSelection`
+### `emacs-mcx.shiftSelectMode`
 
-Toggle Shift Selection. When `true` (default), holding Shift while running movement commands starts mark mode to extend the selection; set `false` to disable this behavior.
+Toggle Shift Selection (Emacs `shift-select-mode`). When `true` (default), holding Shift while running movement commands starts mark mode to extend the selection; set `false` to disable this behavior.
 
 ### `emacs-mcx.lineMoveVisual`
 

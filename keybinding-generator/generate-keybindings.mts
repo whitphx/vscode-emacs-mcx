@@ -308,7 +308,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       shiftVariants: false,
     }).map((binding) => ({
       ...binding,
-      when: addWhenCond(binding.when, "config.emacs-mcx.enableShiftSelection"),
+      when: addWhenCond(binding.when, "config.emacs-mcx.shiftSelectMode"),
     }));
 
     keybindings.push(...shiftedKeybindings);
