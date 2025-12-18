@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.100.0
+
+### Minor Changes
+
+- [#2647](https://github.com/whitphx/vscode-emacs-mcx/pull/2647) [`2bddf3c`](https://github.com/whitphx/vscode-emacs-mcx/commit/2bddf3c550a47d53744cd749d0dcb13110220d49) Thanks [@whitphx](https://github.com/whitphx)! - Add shiftSelectMode option to turn on and off the shift-selection feature
+
 ## 0.99.2
 
 ### Patch Changes
