@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.101.0
+
+### Minor Changes
+
+- [#2654](https://github.com/whitphx/vscode-emacs-mcx/pull/2654) [`6cf4644`](https://github.com/whitphx/vscode-emacs-mcx/commit/6cf4644400ec6e6ce2f0cf8fc98d993aefeb455e) Thanks [@whitphx](https://github.com/whitphx)! - Disable shift-select-mode by default to avoid conflict of ctrl+shift+p
+
 ## 0.100.0
 
 ### Minor Changes
