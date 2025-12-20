@@ -25,7 +25,7 @@ You can find the version information from the menu as follows.
 * On macOS: Navigate to Code > About Visual Studio Code in the menu bar.
 * On Windows and Linux: Navigate to Help > About in the menu bar.
 
-Please provide the version information enough to identify the environment,
+Please provide enough version information to identify the environment,
 i.e. just copy and paste all the information in the dialog like the following example.
 ```
 Version: 1.106.3 (Universal)
