@@ -74,7 +74,7 @@
         "emacs-mcx.shiftSelectMode": {
           "type": "boolean",
           "default": false,
-          "description": "Enable Shift Selection (Emacs shift-select-mode) for movement commands when holding the Shift key. Default is false to avoid Ctrl+Shift+P conflicts with the Command Palette on Windows/Linux."
+          "description": "Enable Shift Selection (Emacs shift-select-mode) for movement commands when holding the Shift key. Default is false to avoid `ctrl+shift+p` conflicts with the Command Palette on Windows/Linux."
         },
         "emacs-mcx.moveBeginningOfLineBehavior": {
           "type": "string",
