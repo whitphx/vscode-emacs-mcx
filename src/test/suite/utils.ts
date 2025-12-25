@@ -5,6 +5,7 @@ import { EmacsEmulator } from "../../emulator";
 import { KillRing } from "../../kill-yank/kill-ring";
 import { Minibuffer } from "../../minibuffer";
 import { Registers, RegisterCommandState } from "../../commands/registers";
+import { ZapCommandState } from "../../commands/edit";
 import { RectangleState } from "../../commands/rectangle";
 export { delay } from "../../utils";
 
@@ -61,7 +62,16 @@ export function createEmulator(
   const registers: Registers = new Map();
   const rectangleState: RectangleState = { latestKilledRectangle: [] };
   const registerCommandState = new RegisterCommandState();
-  return new EmacsEmulator(textEditor, killRing, minibuffer, registers, registerCommandState, rectangleState);
+  const zapCommandState = new ZapCommandState();
+  return new EmacsEmulator(
+    textEditor,
+    killRing,
+    minibuffer,
+    registers,
+    registerCommandState,
+    rectangleState,
+    zapCommandState,
+  );
 }
 
 export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>): void {
