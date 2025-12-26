@@ -55,6 +55,11 @@ CI runs coding style checks and unit tests (See also the `build` job defined in 
 
 Make sure that **the CI has passed all coding style checks and unit tests** before requesting PR reviews.
 
+## Add a changeset to your PR
+
+When you submit a PR, please run `npm run changeset` locally to generate a changeset describing the changes made in the PR and add the generated file under `.changeset/` to the PR.
+The changeset needs to have the version bump type (patch, minor, or major) and a description of the changes. Use `patch` for bug fixes and small changes, `minor` for new features that are backward-compatible, and `major` for breaking changes. (`major` won't be used before v1.0.0.)
+
 ## Keybindings generation
 
 Keybindings of a VSCode extension must be defined in its `contributes.keybindings` section in `package.json` as described in [the doc](https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings),
@@ -131,8 +136,9 @@ Examples:
 
 Releases are now driven by [Changesets](https://github.com/changesets/changesets) and the automated workflow in `.github/workflows/release.yml`.
 
-1. Whenever a PR changes behavior or strings, run `npm run changeset` locally, select the correct bump type, and describe the change. Commit the generated file under `.changeset/`.
-2. After the PR merges, the Release workflow opens a "chore: release" PR that bumps `package.json`, regenerates `CHANGELOG.md`, and removes consumed changesets. Review and merge it like any other PR.
-3. Once the release PR lands, the workflow runs `changeset version` (via the action) to update package.json and CHANGELOG.md, commits those changes, and creates a `v<version>` git tag. It then executes `npm run changeset:release` to push the tag, which automatically triggers the existing Test/Build and Post-build workflows, which package and publish to the Visual Studio Marketplace and Open VSX.
+1. PRs must include a changeset (see above) to describe the changes made.
+   - If the PR author forgets to add a changeset, maintainers can add it during review, or even if the PR is merged without changeset, maintainers can add it afterward on the main branch.
+2. After the PR merges, the Changesets workflow automatically opens a "Version Packages" PR that bumps `package.json`, updates `CHANGELOG.md`, and removes consumed changesets. Review and merge it once it's ready to release.
+3. Once the release PR merged, the workflow automatically triggers the release process. It creates and pushes a new version tag `v<version>`, which triggers the "Test and Build" workflow followed by "Postbuild". They build and publish the extension package to the Visual Studio Marketplace and Open VSX.
 
 Only fall back to `scripts/new-version.sh` for emergency manual releases, and always ensure CI succeeded before cutting a tag.
