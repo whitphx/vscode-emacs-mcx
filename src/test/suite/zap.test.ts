@@ -57,4 +57,11 @@ suite("ZapCommands", () => {
     assertTextEqual(activeTextEditor, "abcd\ncdef\n");
     assertCursorsEqual(activeTextEditor, [1, 0]);
   });
+
+  test("includes stopChar when at cursor position", async () => {
+    setEmptyCursors(activeTextEditor, [0, 2]);
+    await emulator.runCommand("zapCharCommand", "c");
+    assertTextEqual(activeTextEditor, "abd\nabcdef\n");
+    assertCursorsEqual(activeTextEditor, [0, 2]);
+  });
 });
