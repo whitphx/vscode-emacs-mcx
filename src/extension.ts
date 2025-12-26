@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import { type Registers, RegisterCommandState } from "./commands/registers";
+import { ZapCommandState } from "./commands/edit";
 import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
@@ -25,6 +26,7 @@ export function activate(context: vscode.ExtensionContext): void {
     latestKilledRectangle: [],
   };
   const registerCommandState = new RegisterCommandState();
+  const zapCommandState = new ZapCommandState();
 
   const createEmacsEmulator = (editor: vscode.TextEditor): EmacsEmulator => {
     const emacsEmulator = new EmacsEmulator(
@@ -34,6 +36,7 @@ export function activate(context: vscode.ExtensionContext): void {
       registers,
       registerCommandState,
       rectangleState,
+      zapCommandState,
     );
     context.subscriptions.push(emacsEmulator);
     return emacsEmulator;
@@ -44,6 +47,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(async (editor) => {
       registerCommandState.stopAcceptingRegisterName();
+      zapCommandState.stopAccepting();
 
       if (editor == null) {
         return;
@@ -189,6 +193,9 @@ export function activate(context: vscode.ExtensionContext): void {
   bindEmulatorCommand("deleteForwardChar");
 
   bindEmulatorCommand("deleteHorizontalSpace");
+
+  bindEmulatorCommand("zapToChar");
+  bindEmulatorCommand("zapCharCommand");
 
   registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
     return emulator.universalArgument();

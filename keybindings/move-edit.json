@@ -399,5 +399,13 @@
     "key": "meta+shift+/", // "M-?". "?" is shift + "/" in US keyboard layout.
     "command": "references-view.findReferences",
     "inheritWhenFromDefault": true
+  },
+  {
+    "key": "meta+z",
+    "command": "emacs-mcx.zapToChar",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "$special": "zapCommandTypes"
   }
 ]

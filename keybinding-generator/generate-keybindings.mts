@@ -472,6 +472,26 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   return keybindings;
 }
 
+export function generateKeybindingsForZapCommands(): KeyBinding[] {
+  const keybindings: KeyBinding[] = [];
+
+  for (const char of ASSIGNABLE_KEYS) {
+    keybindings.push({
+      key: char,
+      when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
+      command: "emacs-mcx.zapCharCommand",
+      args: char,
+    });
+  }
+  keybindings.push({
+    key: "space",
+    when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
+    command: "emacs-mcx.zapCharCommand",
+    args: " ",
+  });
+  return keybindings;
+}
+
 export function generateCtrlGKeybindings(): KeyBinding[] {
   const { allPlatforms, linuxSpecific, winSpecific, osxSpecific } = getVscDefaultKeybindingsSet(false);
 

@@ -9,6 +9,7 @@ import {
   generateKeybindingsForPrefixArgument,
   generateKeybindingsForTypeCharInRectMarkMode,
   generateKeybindingsForRegisterCommands,
+  generateKeybindingsForZapCommands,
   generateCtrlGKeybindings,
 } from "./generate-keybindings.mjs";
 import { prepareVscDefaultKeybindingsSet } from "./vsc-default-keybindings.mjs";
@@ -62,6 +63,11 @@ for (const keybindingSrc of keybindingSrcs) {
     if (keybindingSrc.$special == "registerCommandTypes") {
       console.log("Adding keybindings for register commands");
       dstKeybindings.push(...generateKeybindingsForRegisterCommands());
+      continue;
+    }
+    if (keybindingSrc.$special == "zapCommandTypes") {
+      console.log("Adding keybindings for zap commands");
+      dstKeybindings.push(...generateKeybindingsForZapCommands());
       continue;
     }
     if (keybindingSrc.$special === "cancelKeybindings") {
