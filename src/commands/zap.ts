@@ -45,6 +45,28 @@ export class ZapToChar extends EmacsCommand implements ITextEditorInterruptionHa
   }
 }
 
+// Find the first occurrence of stopChar at or after the given position.
+function findCharForward(
+  document: vscode.TextDocument,
+  active: vscode.Position,
+  stopChar: string,
+): vscode.Position | undefined {
+  let lineIndex = active.line;
+  let charIndex = active.character;
+  while (lineIndex < document.lineCount) {
+    const lineText = document.lineAt(lineIndex).text;
+    while (charIndex < lineText.length) {
+      if (lineText[charIndex] === stopChar) {
+        return new vscode.Position(lineIndex, charIndex + 1);
+      }
+      charIndex++;
+    }
+    lineIndex++;
+    charIndex = 0;
+  }
+  return undefined;
+}
+
 export class ZapCharCommand extends EmacsCommand {
   public readonly id = "zapCharCommand";
 
@@ -65,34 +87,12 @@ export class ZapCharCommand extends EmacsCommand {
       textEditor.selections.forEach((selection) => {
         const active = selection.active;
         const document = textEditor.document;
-        const foundPosition = this.findCharForward(active, document, stopChar);
+        const foundPosition = findCharForward(document, active, stopChar);
         if (foundPosition) {
           editBuilder.delete(new Range(active, foundPosition));
         }
       });
     });
     revealPrimaryActive(textEditor);
-  }
-
-  // Find the first occurrence of stopChar at or after the given position.
-  private findCharForward(
-    active: vscode.Position,
-    document: vscode.TextDocument,
-    stopChar: string,
-  ): vscode.Position | undefined {
-    let lineIndex = active.line;
-    let charIndex = active.character;
-    while (lineIndex < document.lineCount) {
-      const lineText = document.lineAt(lineIndex).text;
-      while (charIndex < lineText.length) {
-        if (lineText[charIndex] === stopChar) {
-          return new vscode.Position(lineIndex, charIndex + 1);
-        }
-        charIndex++;
-      }
-      lineIndex++;
-      charIndex = 0;
-    }
-    return undefined;
   }
 }
