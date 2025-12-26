@@ -37,14 +37,14 @@ suite("ZapCommands", () => {
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
-  test("nomatch 0", async () => {
+  test("does nothing when target character does not exist", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("zapCharCommand", "z");
     assertTextEqual(activeTextEditor, "abcd\nabcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
-  test("stopchar before the cursor ", async () => {
+  test("stopchar before the cursor", async () => {
     setEmptyCursors(activeTextEditor, [0, 1]);
     await emulator.runCommand("zapCharCommand", "a");
     assertTextEqual(activeTextEditor, "abcdef\n");
