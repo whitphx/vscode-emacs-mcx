@@ -226,13 +226,6 @@ export class ZapToChar extends EmacsCommand implements ITextEditorInterruptionHa
 export class ZapCharCommand extends EmacsCommand {
   public readonly id = "zapCharCommand";
 
-  constructor(
-    emacsController: IEmacsController,
-    private readonly zapCommandState: ZapCommandState,
-  ) {
-    super(emacsController);
-  }
-
   public async run(
     textEditor: TextEditor,
     isInMarkMode: boolean,
