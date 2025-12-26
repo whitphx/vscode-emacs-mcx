@@ -195,7 +195,6 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       new EditCommands.DeleteForwardChar(this),
       new EditCommands.DeleteHorizontalSpace(this),
       new EditCommands.NewLine(this),
-      new EditCommands.NewLine(this),
       new EditCommands.ZapToChar(this, zapCommandState),
       new EditCommands.ZapCharCommand(this, zapCommandState),
       new DeleteBlankLinesCommands.DeleteBlankLines(this),

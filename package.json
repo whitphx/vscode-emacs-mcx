@@ -297,7 +297,7 @@
       },
       {
         "command": "emacs-mcx.forwardChar",
-        "title": "Emacs-MCX: XXX Forward Char"
+        "title": "Emacs-MCX: Forward Char"
       },
       {
         "command": "emacs-mcx.forwardParagraph",
