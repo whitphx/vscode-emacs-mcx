@@ -30,6 +30,13 @@ suite("ZapCommands", () => {
     assertCursorsEqual(activeTextEditor, [0, 0]);
   });
 
+  test("zaps across lines to target in next line", async () => {
+    setEmptyCursors(activeTextEditor, [0, 3]);
+    await emulator.runCommand("zapCharCommand", "c");
+    assertTextEqual(activeTextEditor, "abcdef\n");
+    assertCursorsEqual(activeTextEditor, [0, 3]);
+  });
+
   test("delete middle character in first line", async () => {
     setEmptyCursors(activeTextEditor, [0, 0]);
     await emulator.runCommand("zapCharCommand", "c");
