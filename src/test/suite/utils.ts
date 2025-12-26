@@ -5,7 +5,7 @@ import { EmacsEmulator } from "../../emulator";
 import { KillRing } from "../../kill-yank/kill-ring";
 import { Minibuffer } from "../../minibuffer";
 import { Registers, RegisterCommandState } from "../../commands/registers";
-import { ZapCommandState } from "../../commands/edit";
+import { ZapCommandState } from "../../commands/zap";
 import { RectangleState } from "../../commands/rectangle";
 export { delay } from "../../utils";
 
