@@ -5,6 +5,7 @@ import * as AddSelectionCommands from "./commands/add-selection-to-find-match";
 import * as CaseCommands from "./commands/case";
 import * as DeleteBlankLinesCommands from "./commands/delete-blank-lines";
 import * as EditCommands from "./commands/edit";
+import * as ZapCommands from "./commands/zap";
 import * as TabCommands from "./commands/tab";
 import * as IndentCommands from "./commands/indent";
 import * as FindCommands from "./commands/find";
@@ -149,7 +150,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     registers: RegisterCommands.Registers,
     registerCommandState: RegisterCommands.RegisterCommandState,
     rectangleState: RectangleCommands.RectangleState,
-    zapCommandState: EditCommands.ZapCommandState,
+    zapCommandState: ZapCommands.ZapCommandState,
   ) {
     this._textEditor = textEditor;
 
@@ -195,8 +196,8 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       new EditCommands.DeleteForwardChar(this),
       new EditCommands.DeleteHorizontalSpace(this),
       new EditCommands.NewLine(this),
-      new EditCommands.ZapToChar(this, zapCommandState),
-      new EditCommands.ZapCharCommand(this),
+      new ZapCommands.ZapToChar(this, zapCommandState),
+      new ZapCommands.ZapCharCommand(this),
       new DeleteBlankLinesCommands.DeleteBlankLines(this),
       new TransposeCommands.TransposeChars(this),
       new TransposeCommands.TransposeLines(this),

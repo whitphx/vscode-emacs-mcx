@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import { type Registers, RegisterCommandState } from "./commands/registers";
-import { ZapCommandState } from "./commands/edit";
+import { ZapCommandState } from "./commands/zap";
 import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
