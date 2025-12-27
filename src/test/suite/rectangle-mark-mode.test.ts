@@ -8,6 +8,8 @@ import {
   assertTextEqual,
   clearTextEditor,
   createEmulator,
+  assertCursorsEqual,
+  assertSelectionsEqual,
 } from "./utils";
 import { KillRing } from "../../kill-yank/kill-ring";
 import { Configuration } from "../../configuration/configuration";
@@ -391,6 +393,68 @@ cd
 CD
   `,
     );
+  });
+
+  test("yanking in rectangle-mark-mode exits the mode before yanking", async () => {
+    setEmptyCursors(activeTextEditor, [1, 2]);
+    const killRing = new KillRing(3);
+    const emulator = createEmulator(activeTextEditor, killRing);
+
+    await emulator.rectangleMarkMode();
+
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+
+    assertSelectionsEqual(activeTextEditor, [1, 2, 1, 4], [2, 2, 2, 4], [3, 2, 3, 4]);
+
+    await emulator.runCommand("killRegion");
+
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+klopqrst
+KLMNOPQRST`,
+    );
+
+    assertCursorsEqual(activeTextEditor, [3, 2]);
+    assert.strictEqual(emulator.inRectMarkMode, false);
+
+    // Move the cursor to (2, 0)
+    await emulator.runCommand("backwardChar");
+    await emulator.runCommand("backwardChar");
+    await emulator.runCommand("previousLine");
+    assertCursorsEqual(activeTextEditor, [2, 0]);
+    // Then enter the rect-mark-mode again and expand the selection to (4,2)
+    await emulator.rectangleMarkMode();
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("forwardChar");
+    await emulator.runCommand("nextLine");
+    await emulator.runCommand("nextLine");
+    assertSelectionsEqual(
+      activeTextEditor,
+      [2, 0, 2, 2],
+      [3, 0, 3, 2],
+      [4, 0, 4, 2], // The active cursor is at (4,2)
+    );
+    // Yank the text killed in the rect-mark-mode, in the rect-mark-mode.
+    // The mark-mode is exited before yanking.
+    // The text is yanked as a rectangle and automatically indented.
+    await emulator.runCommand("yank");
+    assertTextEqual(
+      activeTextEditor,
+      `0123456789
+abefghij
+ABEFGHIJ
+klopqrst
+KLcdMNOPQRST
+  CD
+  mn`,
+    );
+    assert.strictEqual(emulator.inRectMarkMode, false);
   });
 
   test("typing a character in rectangle-mark-mode", async () => {
