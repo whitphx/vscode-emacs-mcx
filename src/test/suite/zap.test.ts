@@ -11,6 +11,8 @@ import {
   createEmulator,
 } from "./utils";
 
+// cSpell:words nhijklmn nopqrstu nvwxyz
+
 suite("findCharForward", () => {
   const testSuites: {
     name: string;
