@@ -5,6 +5,9 @@ import { revealPrimaryActive } from "./helpers/reveal";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { ITextEditorInterruptionHandler } from ".";
+import { Logger } from "../logger";
+
+const logger = Logger.get("ZapCommand");
 
 export class ZapCommandState {
   private accepting: boolean = false;
@@ -45,6 +48,64 @@ export class ZapToChar extends EmacsCommand implements ITextEditorInterruptionHa
   }
 }
 
+// Find the first occurrence of stopChar at or after the given position.
+export function findCharForward(
+  document: vscode.TextDocument,
+  active: vscode.Position,
+  stopChar: string,
+  repeat: number,
+): vscode.Position | undefined {
+  let lineIndex = active.line;
+  let charIndex = active.character;
+  let count = 0;
+  if (repeat === 0) {
+    return undefined;
+  } else if (repeat > 0) {
+    while (lineIndex < document.lineCount) {
+      const line = document.lineAt(lineIndex);
+      const lineText = line.text;
+      const lineRange = line.range;
+      while (charIndex < lineRange.end.character) {
+        const char = lineText.slice(charIndex, charIndex + stopChar.length); // Note: stopChar.length may be > 1 in some cases... e.g. surrogate pairs.
+        if (char === stopChar) {
+          count++;
+          if (count === repeat) {
+            return new vscode.Position(lineIndex, charIndex);
+          }
+        }
+        charIndex++;
+      }
+      lineIndex++;
+      charIndex = 0;
+    }
+  } else {
+    // repeat < 0
+    repeat = -repeat;
+    lineIndex = active.line;
+    charIndex = active.character;
+    while (lineIndex >= 0) {
+      const line = document.lineAt(lineIndex);
+      const lineText = line.text;
+      while (charIndex >= stopChar.length) {
+        const char = lineText.slice(charIndex - stopChar.length, charIndex); // Note: stopChar.length may be > 1 in some cases... e.g. surrogate pairs.
+        if (char === stopChar) {
+          count++;
+          if (count === repeat) {
+            return new vscode.Position(lineIndex, charIndex - stopChar.length);
+          }
+        }
+        charIndex--;
+      }
+      lineIndex--;
+      if (lineIndex >= 0) {
+        const prevLine = document.lineAt(lineIndex);
+        charIndex = prevLine.range.end.character;
+      }
+    }
+  }
+  return undefined;
+}
+
 export class ZapCharCommand extends EmacsCommand {
   public readonly id = "zapCharCommand";
 
@@ -58,41 +119,26 @@ export class ZapCharCommand extends EmacsCommand {
       return;
     }
     const stopChar = args;
-    // Note: prefix arg is currently ignored. The reason is that
-    // a key pressed immediately after ZapToChar is interpreted
-    // as a regular insertion command, not a ZapCharCommand.
+
+    if (stopChar.length !== 1) {
+      logger.warn("stopChar length is not 1");
+      // We can assume `stopChar` is a single character and it's not a surrogate pair
+      // because all possible characters are defined in the keybinding generator and they are only ASCII characters.
+      return;
+    }
+
+    const repeat = prefixArgument ?? 1;
+
     await textEditor.edit((editBuilder) => {
       textEditor.selections.forEach((selection) => {
         const active = selection.active;
         const document = textEditor.document;
-        const foundPosition = this.findCharForward(active, document, stopChar);
+        const foundPosition = findCharForward(document, active, stopChar, repeat);
         if (foundPosition) {
-          editBuilder.delete(new Range(active, foundPosition));
+          editBuilder.delete(new Range(active, foundPosition.translate(0, stopChar.length)));
         }
       });
     });
     revealPrimaryActive(textEditor);
-  }
-
-  // Find the first occurrence of stopChar at or after the given position.
-  private findCharForward(
-    active: vscode.Position,
-    document: vscode.TextDocument,
-    stopChar: string,
-  ): vscode.Position | undefined {
-    let lineIndex = active.line;
-    let charIndex = active.character;
-    while (lineIndex < document.lineCount) {
-      const lineText = document.lineAt(lineIndex).text;
-      while (charIndex < lineText.length) {
-        if (lineText[charIndex] === stopChar) {
-          return new vscode.Position(lineIndex, charIndex + 1);
-        }
-        charIndex++;
-      }
-      lineIndex++;
-      charIndex = 0;
-    }
-    return undefined;
   }
 }
