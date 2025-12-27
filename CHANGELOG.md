@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.102.0
+
+### Minor Changes
+
+- [#2658](https://github.com/whitphx/vscode-emacs-mcx/pull/2658) [`7da3113`](https://github.com/whitphx/vscode-emacs-mcx/commit/7da31132a87d82ea4be34c4089a26f5c5cc21d1c) Thanks [@yasushi-saito](https://github.com/yasushi-saito)! - Add the ZapToChar command
+
+- [#2664](https://github.com/whitphx/vscode-emacs-mcx/pull/2664) [`f4655d9`](https://github.com/whitphx/vscode-emacs-mcx/commit/f4655d9cb84a7d6255c7e585f0725a5f581e2e77) Thanks [@whitphx](https://github.com/whitphx)! - Update ZapToChar to work as kill
+
+### Patch Changes
+
+- [#2663](https://github.com/whitphx/vscode-emacs-mcx/pull/2663) [`cbbf05a`](https://github.com/whitphx/vscode-emacs-mcx/commit/cbbf05a154dcafa07ed11e7794b7f0accf36b5fe) Thanks [@whitphx](https://github.com/whitphx)! - ZapToChar supports prefix argument
+
+- [#2663](https://github.com/whitphx/vscode-emacs-mcx/pull/2663) [`cbbf05a`](https://github.com/whitphx/vscode-emacs-mcx/commit/cbbf05a154dcafa07ed11e7794b7f0accf36b5fe) Thanks [@whitphx](https://github.com/whitphx)! - Update ZapToChar to check the search query byte length
+
 ## 0.101.0
 
 ### Minor Changes
