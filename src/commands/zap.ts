@@ -124,7 +124,7 @@ export class ZapCharCommand extends EmacsCommand {
       logger.warn("stopChar length is not 1");
       // We can assume `stopChar` is a single character and it's not a surrogate pair
       // because all possible characters are defined in the keybinding generator and they are only ASCII characters.
-      return undefined;
+      return;
     }
 
     const repeat = prefixArgument ?? 1;
