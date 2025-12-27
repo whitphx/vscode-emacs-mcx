@@ -2,4 +2,4 @@
 "emacs-mcx": patch
 ---
 
-Update zap feature to deal with surrogate pairs
+Update ZapToChar to check the search query byte length
