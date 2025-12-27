@@ -393,7 +393,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     keybindings.push({
       key: num.toString(),
       command: "emacs-mcx.typeChar",
-      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand",
+      when: "!emacs-mcx.acceptingArgument && emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
       args: num.toString(),
     });
   }
@@ -410,7 +410,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   for (const char of ASSIGNABLE_KEYS_WO_NUMERICS) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand",
+      when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
       command: "emacs-mcx.typeChar",
       args: char,
     });
@@ -419,7 +419,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   // In addition, special characters.
   keybindings.push({
     key: "space",
-    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand",
+    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
     command: "emacs-mcx.typeChar",
     args: " ",
   });
@@ -443,7 +443,7 @@ export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
   for (const char of ASSIGNABLE_KEYS) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.inRectMarkMode && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand",
+      when: "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
       command: "emacs-mcx.typeChar",
       args: char,
     });
