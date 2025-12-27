@@ -68,7 +68,7 @@ suite("findCharForward", () => {
       text: "😀😃😄😁😆\n😅😂🤣😊😇\n😀😃😄😁😆\n😅😂🤣😊😇",
       testCases: [
         { start: new vscode.Position(0, 0), char: "😀", expected: new vscode.Position(0, 0) },
-        { start: new vscode.Position(0, 0), char: "😄", expected: new vscode.Position(0, 4) }, // Position.char doesn't take care of surrogate pairs and it counts UTF-16 chars as 2.
+        { start: new vscode.Position(0, 0), char: "😄", expected: new vscode.Position(0, 4) }, // Note: VS Code positions use UTF-16 code units, so each emoji (surrogate pair) occupies 2 character positions.
         { start: new vscode.Position(0, 2), char: "😀", expected: new vscode.Position(2, 0) },
       ],
     },
