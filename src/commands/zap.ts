@@ -135,7 +135,7 @@ export class ZapCharCommand extends KillYankCommand {
       .map((selection) => {
         const foundPosition = findCharForward(document, selection.active, stopChar, repeat);
         if (foundPosition) {
-          return new Range(selection.anchor, foundPosition.translate(0, stopChar.length));
+          return new Range(selection.active, foundPosition.translate(0, stopChar.length));
         }
       })
       .filter((range): range is Range => range !== undefined);
