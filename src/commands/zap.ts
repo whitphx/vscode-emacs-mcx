@@ -46,7 +46,7 @@ export class ZapToChar extends EmacsCommand implements ITextEditorInterruptionHa
 }
 
 // Find the first occurrence of stopChar at or after the given position.
-function findCharForward(
+export function findCharForward(
   document: vscode.TextDocument,
   active: vscode.Position,
   stopChar: string,
@@ -54,10 +54,13 @@ function findCharForward(
   let lineIndex = active.line;
   let charIndex = active.character;
   while (lineIndex < document.lineCount) {
-    const lineText = document.lineAt(lineIndex).text;
-    while (charIndex < lineText.length) {
-      if (lineText[charIndex] === stopChar) {
-        return new vscode.Position(lineIndex, charIndex + 1);
+    const line = document.lineAt(lineIndex);
+    const lineText = line.text;
+    const lineRange = line.range;
+    while (charIndex < lineRange.end.character) {
+      const char = lineText.slice(charIndex, charIndex + stopChar.length); // Note: stopChar.length may be > 1 in some cases... e.g. surrogate pairs.
+      if (char === stopChar) {
+        return new vscode.Position(lineIndex, charIndex);
       }
       charIndex++;
     }
@@ -89,7 +92,7 @@ export class ZapCharCommand extends EmacsCommand {
         const document = textEditor.document;
         const foundPosition = findCharForward(document, active, stopChar);
         if (foundPosition) {
-          editBuilder.delete(new Range(active, foundPosition));
+          editBuilder.delete(new Range(active, foundPosition.translate(0, stopChar.length)));
         }
       });
     });
