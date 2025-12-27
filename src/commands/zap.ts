@@ -5,6 +5,9 @@ import { revealPrimaryActive } from "./helpers/reveal";
 import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { ITextEditorInterruptionHandler } from ".";
+import { Logger } from "../logger";
+
+const logger = Logger.get("ZapCommand");
 
 export class ZapCommandState {
   private accepting: boolean = false;
@@ -83,6 +86,14 @@ export class ZapCharCommand extends EmacsCommand {
       return;
     }
     const stopChar = args;
+
+    if (stopChar.length !== 1) {
+      logger.warn("stopChar length is not 1");
+      // We can assume `stopChar` is a single character and it's not a surrogate pair
+      // because all possible characters are defined in the keybinding generator and they are only ASCII characters.
+      return undefined;
+    }
+
     // Note: prefix arg is currently ignored. The reason is that
     // a key pressed immediately after ZapToChar is interpreted
     // as a regular insertion command, not a ZapCharCommand.
