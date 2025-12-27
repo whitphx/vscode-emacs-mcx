@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as assert from "assert";
 import { EmacsEmulator } from "../../emulator";
 import { findCharForward } from "../../commands/zap";
+import { KillRing } from "../../kill-yank/kill-ring";
 import {
   assertTextEqual,
   cleanUpWorkspace,
@@ -148,11 +149,13 @@ suite("ZapCommands", () => {
 
   let activeTextEditor: vscode.TextEditor;
   let emulator: EmacsEmulator;
+  let killRing: KillRing;
 
   setup(async () => {
     activeTextEditor = await setupWorkspace(initialText, { language: "javascript" });
     activeTextEditor.options.tabSize = 2;
-    emulator = createEmulator(activeTextEditor);
+    killRing = new KillRing();
+    emulator = createEmulator(activeTextEditor, killRing);
   });
 
   teardown(cleanUpWorkspace);
@@ -162,6 +165,7 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "a");
     assertTextEqual(activeTextEditor, "bcd\nabcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 0]);
+    assert.strictEqual(killRing.getTop()?.asString(), "a");
   });
 
   test("zaps across lines to target in next line", async () => {
@@ -169,6 +173,7 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "c");
     assertTextEqual(activeTextEditor, "abcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 3]);
+    assert.strictEqual(killRing.getTop()?.asString(), "d\nabc");
   });
 
   test("delete middle character in first line", async () => {
@@ -176,6 +181,7 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "c");
     assertTextEqual(activeTextEditor, "d\nabcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 0]);
+    assert.strictEqual(killRing.getTop()?.asString(), "abc");
   });
 
   test("does nothing when target character does not exist", async () => {
@@ -183,6 +189,7 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "z");
     assertTextEqual(activeTextEditor, "abcd\nabcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 0]);
+    assert.strictEqual(killRing.getTop(), undefined);
   });
 
   test("stopchar before the cursor", async () => {
@@ -190,6 +197,7 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "a");
     assertTextEqual(activeTextEditor, "abcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 1]);
+    assert.strictEqual(killRing.getTop()?.asString(), "bcd\na");
   });
 
   test("delete char in second line", async () => {
@@ -197,6 +205,7 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "b");
     assertTextEqual(activeTextEditor, "abcd\ncdef\n");
     assertCursorsEqual(activeTextEditor, [1, 0]);
+    assert.strictEqual(killRing.getTop()?.asString(), "ab");
   });
 
   test("includes stopChar when at cursor position", async () => {
@@ -204,5 +213,6 @@ suite("ZapCommands", () => {
     await emulator.runCommand("zapCharCommand", "c");
     assertTextEqual(activeTextEditor, "abd\nabcdef\n");
     assertCursorsEqual(activeTextEditor, [0, 2]);
+    assert.strictEqual(killRing.getTop()?.asString(), "c");
   });
 });

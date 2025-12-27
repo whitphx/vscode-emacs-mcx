@@ -6,6 +6,7 @@ import { IEmacsController } from "../emulator";
 import { MessageManager } from "../message";
 import { ITextEditorInterruptionHandler } from ".";
 import { Logger } from "../logger";
+import { KillYankCommand } from "./kill";
 
 const logger = Logger.get("ZapCommand");
 
@@ -106,7 +107,7 @@ export function findCharForward(
   return undefined;
 }
 
-export class ZapCharCommand extends EmacsCommand {
+export class ZapCharCommand extends KillYankCommand {
   public readonly id = "zapCharCommand";
 
   public async run(
@@ -129,16 +130,21 @@ export class ZapCharCommand extends EmacsCommand {
 
     const repeat = prefixArgument ?? 1;
 
-    await textEditor.edit((editBuilder) => {
-      textEditor.selections.forEach((selection) => {
-        const active = selection.active;
-        const document = textEditor.document;
-        const foundPosition = findCharForward(document, active, stopChar, repeat);
+    const document = textEditor.document;
+    const killRanges = textEditor.selections
+      .map((selection) => {
+        const foundPosition = findCharForward(document, selection.active, stopChar, repeat);
         if (foundPosition) {
-          editBuilder.delete(new Range(active, foundPosition.translate(0, stopChar.length)));
+          return new Range(selection.active, foundPosition.translate(0, stopChar.length));
         }
-      });
-    });
+      })
+      .filter((range): range is Range => range !== undefined);
+
+    if (killRanges.length === 0) {
+      return;
+    }
+    await this.killYanker.kill(killRanges, false);
+
     revealPrimaryActive(textEditor);
   }
 }
