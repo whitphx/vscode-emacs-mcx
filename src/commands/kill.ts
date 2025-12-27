@@ -195,6 +195,10 @@ export class Yank extends KillYankCommand {
   public readonly id = "yank";
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    if (this.emacsController.inRectMarkMode) {
+      this.emacsController.exitMarkMode();
+    }
+
     this.emacsController.pushMark(textEditor.selections.map((selection) => selection.active));
     MessageManager.showMessage("Mark set");
 

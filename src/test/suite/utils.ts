@@ -143,7 +143,7 @@ export function assertSelectionsEqual(
   assert.strictEqual(
     textEditor.selections.length,
     selections.length,
-    "Number of selections does not match expected selections.",
+    `Number of selections does not match expected selections. Actual: ${JSON.stringify(textEditor.selections)} vs Expected: ${JSON.stringify(selections)}`,
   );
   textEditor.selections.forEach((actualSelection, idx) => {
     const maybeExpectedSelection = selections[idx];
