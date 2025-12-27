@@ -11,8 +11,6 @@ import {
   createEmulator,
 } from "./utils";
 
-// cSpell:words nhijklmn nopqrstu nvwxyz
-
 suite("findCharForward", () => {
   const testSuites: {
     name: string;
@@ -25,6 +23,7 @@ suite("findCharForward", () => {
       description?: string;
     }[];
   }[] = [
+    /* cSpell:disable */
     {
       name: "single byte characters",
       text: "abcdefg\nhijklmn\nopqrstu\nvwxyz",
@@ -118,6 +117,7 @@ suite("findCharForward", () => {
         { start: new vscode.Position(2, 0), char: "😀", repeat: -1, expected: new vscode.Position(0, 0) },
       ],
     },
+    /* cSpell:enable */
   ];
 
   testSuites.forEach(({ name, text, testCases }) => {
