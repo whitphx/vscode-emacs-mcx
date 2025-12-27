@@ -53,22 +53,55 @@ export function findCharForward(
   document: vscode.TextDocument,
   active: vscode.Position,
   stopChar: string,
+  repeat: number,
 ): vscode.Position | undefined {
   let lineIndex = active.line;
   let charIndex = active.character;
-  while (lineIndex < document.lineCount) {
-    const line = document.lineAt(lineIndex);
-    const lineText = line.text;
-    const lineRange = line.range;
-    while (charIndex < lineRange.end.character) {
-      const char = lineText.slice(charIndex, charIndex + stopChar.length); // Note: stopChar.length may be > 1 in some cases... e.g. surrogate pairs.
-      if (char === stopChar) {
-        return new vscode.Position(lineIndex, charIndex);
+  let count = 0;
+  if (repeat === 0) {
+    return undefined;
+  } else if (repeat > 0) {
+    while (lineIndex < document.lineCount) {
+      const line = document.lineAt(lineIndex);
+      const lineText = line.text;
+      const lineRange = line.range;
+      while (charIndex < lineRange.end.character) {
+        const char = lineText.slice(charIndex, charIndex + stopChar.length); // Note: stopChar.length may be > 1 in some cases... e.g. surrogate pairs.
+        if (char === stopChar) {
+          count++;
+          if (count === repeat) {
+            return new vscode.Position(lineIndex, charIndex);
+          }
+        }
+        charIndex++;
       }
-      charIndex++;
+      lineIndex++;
+      charIndex = 0;
     }
-    lineIndex++;
-    charIndex = 0;
+  } else {
+    // repeat < 0
+    repeat = -repeat;
+    lineIndex = active.line;
+    charIndex = active.character;
+    while (lineIndex >= 0) {
+      const line = document.lineAt(lineIndex);
+      const lineText = line.text;
+      while (charIndex >= stopChar.length) {
+        const char = lineText.slice(charIndex - stopChar.length, charIndex); // Note: stopChar.length may be > 1 in some cases... e.g. surrogate pairs.
+        if (char === stopChar) {
+          count++;
+          if (count === repeat) {
+            return new vscode.Position(lineIndex, charIndex - stopChar.length);
+          }
+        }
+        charIndex--;
+      }
+      lineIndex--;
+      if (lineIndex >= 0) {
+        const prevLine = document.lineAt(lineIndex);
+        charIndex = prevLine.range.end.character;
+      }
+    }
   }
   return undefined;
 }
@@ -94,14 +127,13 @@ export class ZapCharCommand extends EmacsCommand {
       return undefined;
     }
 
-    // Note: prefix arg is currently ignored. The reason is that
-    // a key pressed immediately after ZapToChar is interpreted
-    // as a regular insertion command, not a ZapCharCommand.
+    const repeat = prefixArgument ?? 1;
+
     await textEditor.edit((editBuilder) => {
       textEditor.selections.forEach((selection) => {
         const active = selection.active;
         const document = textEditor.document;
-        const foundPosition = findCharForward(document, active, stopChar);
+        const foundPosition = findCharForward(document, active, stopChar, repeat);
         if (foundPosition) {
           editBuilder.delete(new Range(active, foundPosition.translate(0, stopChar.length)));
         }
