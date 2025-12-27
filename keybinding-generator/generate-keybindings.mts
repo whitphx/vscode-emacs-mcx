@@ -410,7 +410,7 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   for (const char of ASSIGNABLE_KEYS_WO_NUMERICS) {
     keybindings.push({
       key: char,
-      when: "emacs-mcx.prefixArgumentExists && editorTextFocus  && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand",
+      when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand",
       command: "emacs-mcx.typeChar",
       args: char,
     });
