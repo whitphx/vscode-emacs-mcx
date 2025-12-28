@@ -3336,12 +3336,32 @@
       {
         "key": "ctrl+w",
         "command": "editor.action.clipboardCutAction",
-        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing"
+      },
+      {
+        "key": "alt+w",
+        "command": "editor.action.clipboardCopyAction",
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+w",
+        "command": "editor.action.clipboardCopyAction",
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape w",
+        "command": "editor.action.clipboardCopyAction",
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ w",
+        "command": "editor.action.clipboardCopyAction",
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing"
       },
       {
         "key": "alt+y",
