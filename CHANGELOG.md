@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.103.0
+
+### Minor Changes
+
+- [#2670](https://github.com/whitphx/vscode-emacs-mcx/pull/2670) [`b17ca4f`](https://github.com/whitphx/vscode-emacs-mcx/commit/b17ca4f9af66795c50ee4b80f9e18723cca97a0a) Thanks [@whitphx](https://github.com/whitphx)! - Assign M-w to the general copy command outside the text editor
+
+- [#2670](https://github.com/whitphx/vscode-emacs-mcx/pull/2670) [`b17ca4f`](https://github.com/whitphx/vscode-emacs-mcx/commit/b17ca4f9af66795c50ee4b80f9e18723cca97a0a) Thanks [@whitphx](https://github.com/whitphx)! - Change the when condition of the general clipboard actions so that they are enabled in more places outside the text editor, e.g. an input field in an extension interface
+
+### Patch Changes
+
+- [#2671](https://github.com/whitphx/vscode-emacs-mcx/pull/2671) [`7415848`](https://github.com/whitphx/vscode-emacs-mcx/commit/74158484af94b7f14bdd5fc34e18f3aceb8e97db) Thanks [@whitphx](https://github.com/whitphx)! - Fix the copy command keybinding on terminal
+
 ## 0.102.1
 
 ### Patch Changes
