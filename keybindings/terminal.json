@@ -181,9 +181,9 @@
     "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
   },
   {
-    // Copied from the copy keybinding in the default keybindings.
-    "key": "meta+y",
-    "command": "workbench.action.terminal.copySelection",
+    "key": "meta+w",
+    "command": "workbench.action.terminal.copyAndClearSelection",
+    // The when condition is copied from the "workbench.action.terminal.copySelection" keybinding in the default keybindings.
     "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
   }
 ]
