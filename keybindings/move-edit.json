@@ -240,19 +240,19 @@
     "key": "ctrl+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCutAction",
-    "when": "!editorTextFocus && !isComposing"
+    "when": "!editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "meta+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCopyAction",
-    "when": "!editorTextFocus && !isComposing"
+    "when": "!editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "ctrl+y",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardPasteAction",
-    "when": "!editorTextFocus && !isComposing"
+    "when": "!editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "meta+y",

@@ -3336,32 +3336,32 @@
       {
         "key": "ctrl+w",
         "command": "editor.action.clipboardCutAction",
-        "when": "!editorTextFocus && !isComposing"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing"
       },
       {
         "key": "alt+w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "!editorTextFocus && !isComposing"
+        "when": "!editorTextFocus && !terminalFocus && !isComposing"
       },
       {
         "key": "alt+y",
