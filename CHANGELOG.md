@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.102.1
+
+### Patch Changes
+
+- [#2667](https://github.com/whitphx/vscode-emacs-mcx/pull/2667) [`ee8ce50`](https://github.com/whitphx/vscode-emacs-mcx/commit/ee8ce50471b8ec9175efe5546bfb0f9d448d143d) Thanks [@whitphx](https://github.com/whitphx)! - Fix the yank behavior in rectangle-mark-mode to exit the mode before inserting the text
+
+- [#2666](https://github.com/whitphx/vscode-emacs-mcx/pull/2666) [`97d2906`](https://github.com/whitphx/vscode-emacs-mcx/commit/97d29062bd17d03394f8cb9e0f0c57ec32b41b01) Thanks [@whitphx](https://github.com/whitphx)! - Fix rectangle commands starting with C-x r to work in rectangle mark mode
+
 ## 0.102.0
 
 ### Minor Changes
