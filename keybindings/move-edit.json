@@ -240,17 +240,19 @@
     "key": "ctrl+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCutAction",
-    // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
-    // CAUTION: `textInputFocus` MUST NOT be included here because it becomes true even when the text editor is focused.
-    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
+    "when": "!editorTextFocus && !isComposing"
+  },
+  {
+    "key": "meta+w",
+    // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    "command": "editor.action.clipboardCopyAction",
+    "when": "!editorTextFocus && !isComposing"
   },
   {
     "key": "ctrl+y",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardPasteAction",
-    // I picked up the conditions from https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ manually without enough testing... Propose a fix on this line if you find a better condition or any issue.
-    // CAUTION: `textInputFocus` MUST NOT be included here because it becomes true even when the text editor is focused.
-    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus) && !isComposing"
+    "when": "!editorTextFocus && !isComposing"
   },
   {
     "key": "meta+y",
