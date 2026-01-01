@@ -63,6 +63,16 @@ function findEndOfWord(
   return len;
 }
 
+// Get the [start,end] positions for each group in a regexp.exec result.
+function getRanges(m: RegExpExecArray | null | undefined, nGroups: number): ([number, number] | null)[] {
+  const ranges: ([number, number] | null)[] = [];
+  const indices = m?.indices as ([number, number] | null)[];
+  for (let i = 0; i < nGroups; i++) {
+    ranges.push(indices?.[i] ?? null);
+  }
+  return ranges;
+}
+
 function findPreviousWordOnLine(
   lineContent: string,
   wordSeparators: WordCharacterClassifier,
@@ -204,10 +214,7 @@ function findNextWordOnLine(
   return null;
 }
 
-// Based on `moveWordRight` method with `wordNavigationType = WordNavigationType.WordEnd`
-// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L252
-// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L245
-export function findNextWordEnd(
+function findNextWordEndInternal(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
@@ -272,10 +279,46 @@ export function findNextWordEnd(
   return new Position(lineNumber, character);
 }
 
+// Based on Emacs's subword-forward-internal.
+function findNextSubwordEndInternal(doc: TextDocument, position: Position): Position | null {
+  const regexp = /\W*(([A-Z]*(\W?))[a-z\d]*)/dg;
+  const line = doc.lineAt(position).text.substring(position.character);
+  const [range0, range1, range2, range3] = getRanges(regexp.exec(line), 4);
+  if (!range0 || !range1 || !range2 || !range3 || range0[1] === 0) {
+    // No match.
+    return null;
+  }
+  // If we have an all-caps word with no following lower-case
+  // or non-word letter, don't leave the last char.
+  if (range2[1] - range2[0] > 1 && !(range3[1] <= range3[0] && range2[1] === range1[1])) {
+    return new Position(position.line, position.character + range3[1] - 1);
+  }
+  return new Position(position.line, position.character + range0[1]);
+}
+
+// Based on `moveWordRight` method with `wordNavigationType = WordNavigationType.WordEnd`
+// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L252
+// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L245
+export function findNextWordEnd(
+  doc: TextDocument,
+  wordSeparators: WordCharacterClassifier,
+  position: Position,
+  allowCrossLineWordNavigation: boolean,
+): Position {
+  if (wordSeparators.subwordMode) {
+    const nextPosition = findNextSubwordEndInternal(doc, position);
+    if (nextPosition) {
+      return nextPosition;
+    }
+    // Fall through.
+  }
+  return findNextWordEndInternal(doc, wordSeparators, position, allowCrossLineWordNavigation);
+}
+
 // Based on `moveWordLeft` method with `wordNavigationType = WordNavigationType.WordStartFast` that is called via `CursorWordLeft` command.
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L163
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L120
-export function findPreviousWordStart(
+function findPreviousWordStartInternal(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
@@ -344,4 +387,36 @@ export function findPreviousWordStart(
   }
 
   return new Position(lineNumber, prevWordOnLine ? prevWordOnLine.start : 0);
+}
+
+// Based on Emacs's subword-backward-internal.
+function findPreviousSubwordStartInternal(lineContent: string, position: Position): Position | null {
+  const regexp = /((\W|[a-z\d])([A-Z]+\W*)|\W\w+)/dg;
+  // Find the last regexp match after the position.
+  const matches = [...lineContent.substring(0, position.character).matchAll(regexp)];
+  const [range0, range1, range2, range3] = getRanges(matches[matches.length - 1], 4);
+
+  if (!range0 || !range1 || !range2 || !range3) {
+    return null;
+  }
+  if (range3[1] - range3[0] > 1 && range3[1] < position.character) {
+    return new Position(position.line, range3[1] - 1);
+  }
+  return new Position(position.line, range0[0] + 1);
+}
+
+export function findPreviousWordStart(
+  doc: TextDocument,
+  wordSeparators: WordCharacterClassifier,
+  position: Position,
+  allowCrossLineWordNavigation: boolean,
+): Position {
+  if (wordSeparators.subwordMode) {
+    const previousPosition = findPreviousSubwordStartInternal(doc.lineAt(position.line).text, position);
+    if (previousPosition) {
+      return previousPosition;
+    }
+    // Fall through.
+  }
+  return findPreviousWordStartInternal(doc, wordSeparators, position, allowCrossLineWordNavigation);
 }
