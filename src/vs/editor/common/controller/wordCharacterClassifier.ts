@@ -31,10 +31,11 @@ export class WordCharacterClassifier extends CharacterClassifier<WordCharacterCl
 function once<R>(computeFn: (input: string, subwordMode: boolean) => R): (input: string, subwordMode: boolean) => R {
 	let cache: { [key: string]: R; } = {}; // TODO@Alex unbounded cache
 	return (input: string, subwordMode: boolean): R => {
-		if (!cache.hasOwnProperty(`${input}XX${subwordMode}`)) {
-			cache[input] = computeFn(input, subwordMode);
+		const cacheKey = `${input}XX${subwordMode}`;
+		if (!cache.hasOwnProperty(cacheKey)) {
+			cache[cacheKey] = computeFn(input, subwordMode);
 		}
-		return cache[input]!;
+		return cache[cacheKey]!;
 	};
 }
 

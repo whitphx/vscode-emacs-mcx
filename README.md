@@ -205,7 +205,7 @@ When true, word-oriented move and edit commands, including M-f, M-b, M-d will
 recognize subwords (same as the Emacs variable `subword-mode`). It can also be
 set as per-language flag, for example:
 
-```
+```json
 "[go]": {
   "emacs-mcx.subwordMode": true
 }

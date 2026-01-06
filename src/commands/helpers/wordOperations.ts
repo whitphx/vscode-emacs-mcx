@@ -63,16 +63,6 @@ function findEndOfWord(
   return len;
 }
 
-// Get the [start,end] positions for each group in a regexp.exec result.
-function getRanges(m: RegExpExecArray | null | undefined, nGroups: number): ([number, number] | null)[] {
-  const ranges: ([number, number] | null)[] = [];
-  const indices = m?.indices as ([number, number] | null)[];
-  for (let i = 0; i < nGroups; i++) {
-    ranges.push(indices?.[i] ?? null);
-  }
-  return ranges;
-}
-
 function findPreviousWordOnLine(
   lineContent: string,
   wordSeparators: WordCharacterClassifier,
@@ -214,6 +204,7 @@ function findNextWordOnLine(
   return null;
 }
 
+// Finds the end of the whole word.
 function findNextWordEndInternal(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
@@ -279,11 +270,12 @@ function findNextWordEndInternal(
   return new Position(lineNumber, character);
 }
 
+// Finds the end of the subword.
 // Based on Emacs's subword-forward-internal.
 function findNextSubwordEndInternal(doc: TextDocument, position: Position): Position | null {
   const regexp = /\W*(([A-Z]*(\W?))[a-z\d]*)/dg;
   const line = doc.lineAt(position).text.substring(position.character);
-  const [range0, range1, range2, range3] = getRanges(regexp.exec(line), 4);
+  const [range0, range1, range2, range3] = regexp.exec(line)?.indices ?? [];
   if (!range0 || !range1 || !range2 || !range3 || range0[1] === 0) {
     // No match.
     return null;
@@ -394,7 +386,7 @@ function findPreviousSubwordStartInternal(lineContent: string, position: Positio
   const regexp = /((\W|[a-z\d])([A-Z]+\W*)|\W\w+)/dg;
   // Find the last regexp match after the position.
   const matches = [...lineContent.substring(0, position.character).matchAll(regexp)];
-  const [range0, range1, range2, range3] = getRanges(matches[matches.length - 1], 4);
+  const [range0, range1, range2, range3] = matches[matches.length - 1]?.indices ?? [];
 
   if (!range0 || !range1 || !range2 || !range3) {
     return null;

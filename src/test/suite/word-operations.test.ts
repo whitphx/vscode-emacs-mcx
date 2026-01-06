@@ -7,11 +7,11 @@ import { Position } from "vscode";
 
 // Starting from (0, 0), call findNextWordEnd repeatedly and
 // return the list of positions.
-function listAllNextWordEndPositions(doc: vscode.TextDocument, classfier: WordCharacterClassifier): Position[] {
+function listAllNextWordEndPositions(doc: vscode.TextDocument, classifier: WordCharacterClassifier): Position[] {
   const found: Position[] = [];
   let position = new Position(0, 0);
   while (true) {
-    const newPosition = findNextWordEnd(doc, classfier, position, true);
+    const newPosition = findNextWordEnd(doc, classifier, position, true);
     if (!newPosition.isAfter(position)) {
       break;
     }
@@ -23,12 +23,11 @@ function listAllNextWordEndPositions(doc: vscode.TextDocument, classfier: WordCh
 
 // Starting from the end of the document, call findPreviousWordStart
 // repeatedly and return the list of positions.
-function listAllPreviousWordStartPositions(doc: vscode.TextDocument, classfier: WordCharacterClassifier): Position[] {
+function listAllPreviousWordStartPositions(doc: vscode.TextDocument, classifier: WordCharacterClassifier): Position[] {
   const found: Position[] = [];
   let position = new Position(doc.lineCount - 1, doc.lineAt(doc.lineCount - 1).text.length);
-  console.log(`PREV: start pos=${JSON.stringify(position)}`);
   while (true) {
-    const newPosition = findPreviousWordStart(doc, classfier, position, true);
+    const newPosition = findPreviousWordStart(doc, classifier, position, true);
     if (!newPosition.isBefore(position)) {
       break;
     }
