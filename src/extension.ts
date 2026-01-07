@@ -221,6 +221,8 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.runCommand("killRingSave", args);
   });
 
+  bindEmulatorCommand("updateKillRingSave");
+
   bindEmulatorCommand("yank");
 
   bindEmulatorCommand("yankPop");

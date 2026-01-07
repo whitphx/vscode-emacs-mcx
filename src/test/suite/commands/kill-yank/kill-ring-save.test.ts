@@ -10,6 +10,68 @@ import {
   createEmulator,
 } from "../../utils";
 
+suite("updateKillRingSave", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  setup(async () => {
+    const initialText = `0123456789
+abcdefghij
+ABCDEFGHIJ`;
+    activeTextEditor = await setupWorkspace(initialText);
+    emulator = createEmulator(activeTextEditor, new KillRing());
+  });
+
+  teardown(cleanUpWorkspace);
+
+  test("replaces current kill with selected text", async () => {
+    // First, copy some text to populate the kill ring
+    activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 5))];
+    await emulator.runCommand("killRingSave");
+
+    // Replace with different text using updateKillRingSave
+    activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 5))];
+    await emulator.runCommand("updateKillRingSave");
+
+    // Verify yank gives the replaced text
+    await clearTextEditor(activeTextEditor);
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "abcde");
+
+    // YankPop cycles back to the same (only one entry)
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "abcde");
+  });
+
+  test("pushes to kill ring when empty", async () => {
+    // Call updateKillRingSave without any prior kills
+    activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 5))];
+    await emulator.runCommand("updateKillRingSave");
+
+    // Verify yank works
+    await clearTextEditor(activeTextEditor);
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "01234");
+  });
+
+  test("mark-mode is disabled and selections are unset after update", async () => {
+    // First, copy some text
+    activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 5))];
+    await emulator.runCommand("killRingSave");
+
+    // Update with new selection
+    activeTextEditor.selections = [new Selection(new Position(1, 0), new Position(1, 5))];
+    await emulator.runCommand("updateKillRingSave");
+
+    // Selection is unset
+    assertSelectionsEqual(activeTextEditor, new Selection(1, 5, 1, 5));
+
+    // mark-mode is disabled
+    await emulator.runCommand("forwardChar");
+    assertSelectionsEqual(activeTextEditor, new Selection(1, 6, 1, 6));
+  });
+});
+
 [true, false].forEach((withKillRing) => {
   suite(`killRingSave, ${withKillRing ? "with" : "without"} killRing`, () => {
     let activeTextEditor: TextEditor;
