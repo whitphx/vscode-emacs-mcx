@@ -221,6 +221,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       new KillCommands.Yank(this, killYanker),
       new KillCommands.YankPop(this, killYanker),
       new KillCommands.BrowseKillRing(this, killYanker),
+      new KillCommands.UpdateKillRingSave(this, killYanker),
       new ZapCommands.ZapToChar(this, zapCommandState),
       new ZapCommands.ZapCharCommand(this, killYanker),
       new RegisterCommands.CopyToRegister(this, registerCommandState),

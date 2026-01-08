@@ -191,6 +191,24 @@ export class KillRingSave extends KillYankCommand {
   }
 }
 
+export class UpdateKillRingSave extends KillYankCommand {
+  public readonly id = "updateKillRingSave";
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    if (this.emacsController.inRectMarkMode) {
+      const ranges = this.emacsController.nativeSelections;
+      await this.killYanker.copy(ranges, true, true, AppendDirection.Replace);
+    } else {
+      const ranges = getNonEmptySelections(textEditor);
+      await this.killYanker.copy(ranges, false, true, AppendDirection.Replace);
+    }
+    this.emacsController.exitMarkMode();
+    this.killYanker.cancelKillAppend();
+    makeSelectionsEmpty(textEditor);
+    revealPrimaryActive(textEditor);
+  }
+}
+
 export class Yank extends KillYankCommand {
   public readonly id = "yank";
 
