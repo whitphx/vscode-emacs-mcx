@@ -527,4 +527,4 @@ With this keybinding, you can call `emacs-mcx.yankPop` command with a prefix arg
 
 Your contributions are very welcome!
 
-Please see [DEVELOPMENT.md](./DEVELOPMENT.md) about development of this extension.
+Please see [CONTRIBUTING.md](./CONTRIBUTING.md) about development of this extension.
