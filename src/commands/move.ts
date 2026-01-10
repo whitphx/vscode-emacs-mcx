@@ -61,6 +61,7 @@ export class ForwardChar extends EmacsCommand {
       textEditor.selections = newSelections;
       revealPrimaryActive(textEditor);
     }
+    console.log(`ForwardChar done: ${prefixArgument}:${charDelta} ${JSON.stringify(textEditor.selection.active)}`);
   }
 }
 
