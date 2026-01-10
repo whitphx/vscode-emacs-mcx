@@ -482,6 +482,15 @@ export function generateKeybindingsForZapCommands(): KeyBinding[] {
       command: "emacs-mcx.zapCharCommand",
       args: char,
     });
+    const shiftChar = SHIFT_CHARS.get(char);
+    if (shiftChar) {
+      keybindings.push({
+        key: `shift+${char}`,
+        when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        command: "emacs-mcx.zapCharCommand",
+        args: shiftChar,
+      });
+    }
   }
   keybindings.push({
     key: "space",
@@ -568,5 +577,27 @@ function getAssignableKeys(includeNumerics: boolean): string[] {
 
   return keys;
 }
+
 const ASSIGNABLE_KEYS = getAssignableKeys(true);
 const ASSIGNABLE_KEYS_WO_NUMERICS = getAssignableKeys(false);
+
+const SHIFT_CHARS = (() => {
+  const m = new Map([
+    [";", ":"],
+    ["=", "+"],
+    ["[", "{"],
+    ["]", "}"],
+    ["\\", "|"],
+    ["`", "~"],
+    ["'", '"'],
+    ["-", "_"],
+    [".", ">"],
+    [",", "<"],
+    ["/", "?"],
+  ]);
+  // Lowercase -> upppercase.
+  for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
+    m.set(String.fromCharCode(charCode), String.fromCharCode(charCode - 0x20));
+  }
+  return m;
+})();
