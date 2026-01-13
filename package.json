@@ -3814,82 +3814,10 @@
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
-        "key": "'",
+        "key": "space",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "'"
-      },
-      {
-        "key": "shift+'",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "\""
-      },
-      {
-        "key": ",",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": ","
-      },
-      {
-        "key": "shift+,",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "<"
-      },
-      {
-        "key": "-",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "-"
-      },
-      {
-        "key": "shift+-",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "_"
-      },
-      {
-        "key": ".",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "."
-      },
-      {
-        "key": "shift+.",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": ">"
-      },
-      {
-        "key": "/",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "/"
-      },
-      {
-        "key": "shift+/",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "?"
-      },
-      {
-        "key": "0",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "0"
-      },
-      {
-        "key": "shift+0",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": ")"
-      },
-      {
-        "key": "1",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "1"
+        "args": " "
       },
       {
         "key": "shift+1",
@@ -3898,22 +3826,10 @@
         "args": "!"
       },
       {
-        "key": "2",
+        "key": "shift+'",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "2"
-      },
-      {
-        "key": "shift+2",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "@"
-      },
-      {
-        "key": "3",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "3"
+        "args": "\""
       },
       {
         "key": "shift+3",
@@ -3922,22 +3838,10 @@
         "args": "#"
       },
       {
-        "key": "4",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "4"
-      },
-      {
         "key": "shift+4",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "$"
-      },
-      {
-        "key": "5",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "5"
       },
       {
         "key": "shift+5",
@@ -3946,46 +3850,16 @@
         "args": "%"
       },
       {
-        "key": "6",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "6"
-      },
-      {
-        "key": "shift+6",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "^"
-      },
-      {
-        "key": "7",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "7"
-      },
-      {
         "key": "shift+7",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "&"
       },
       {
-        "key": "8",
+        "key": "'",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "8"
-      },
-      {
-        "key": "shift+8",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "*"
-      },
-      {
-        "key": "9",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "9"
+        "args": "'"
       },
       {
         "key": "shift+9",
@@ -3994,22 +3868,16 @@
         "args": "("
       },
       {
-        "key": ";",
+        "key": "shift+0",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": ";"
+        "args": ")"
       },
       {
-        "key": "shift+;",
+        "key": "shift+8",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": ":"
-      },
-      {
-        "key": "=",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "="
+        "args": "*"
       },
       {
         "key": "shift+=",
@@ -4018,58 +3886,130 @@
         "args": "+"
       },
       {
-        "key": "[",
+        "key": ",",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "["
+        "args": ","
       },
       {
-        "key": "shift+[",
+        "key": "-",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "{"
+        "args": "-"
       },
       {
-        "key": "\\",
+        "key": ".",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "\\"
+        "args": "."
       },
       {
-        "key": "shift+\\",
+        "key": "/",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "|"
+        "args": "/"
       },
       {
-        "key": "]",
+        "key": "0",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "]"
+        "args": "0"
       },
       {
-        "key": "shift+]",
+        "key": "1",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "}"
+        "args": "1"
       },
       {
-        "key": "`",
+        "key": "2",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "`"
+        "args": "2"
       },
       {
-        "key": "shift+`",
+        "key": "3",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "~"
+        "args": "3"
       },
       {
-        "key": "a",
+        "key": "4",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": "a"
+        "args": "4"
+      },
+      {
+        "key": "5",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "5"
+      },
+      {
+        "key": "6",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "6"
+      },
+      {
+        "key": "7",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "7"
+      },
+      {
+        "key": "8",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "8"
+      },
+      {
+        "key": "9",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "9"
+      },
+      {
+        "key": "shift+;",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": ":"
+      },
+      {
+        "key": ";",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": ";"
+      },
+      {
+        "key": "shift+,",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "<"
+      },
+      {
+        "key": "=",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "="
+      },
+      {
+        "key": "shift+.",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": ">"
+      },
+      {
+        "key": "shift+/",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "?"
+      },
+      {
+        "key": "shift+2",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "@"
       },
       {
         "key": "shift+a",
@@ -4078,22 +4018,10 @@
         "args": "A"
       },
       {
-        "key": "b",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "b"
-      },
-      {
         "key": "shift+b",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "B"
-      },
-      {
-        "key": "c",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "c"
       },
       {
         "key": "shift+c",
@@ -4102,22 +4030,10 @@
         "args": "C"
       },
       {
-        "key": "d",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "d"
-      },
-      {
         "key": "shift+d",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "D"
-      },
-      {
-        "key": "e",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "e"
       },
       {
         "key": "shift+e",
@@ -4126,22 +4042,10 @@
         "args": "E"
       },
       {
-        "key": "f",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "f"
-      },
-      {
         "key": "shift+f",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "F"
-      },
-      {
-        "key": "g",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "g"
       },
       {
         "key": "shift+g",
@@ -4150,22 +4054,10 @@
         "args": "G"
       },
       {
-        "key": "h",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "h"
-      },
-      {
         "key": "shift+h",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "H"
-      },
-      {
-        "key": "i",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "i"
       },
       {
         "key": "shift+i",
@@ -4174,22 +4066,10 @@
         "args": "I"
       },
       {
-        "key": "j",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "j"
-      },
-      {
         "key": "shift+j",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "J"
-      },
-      {
-        "key": "k",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "k"
       },
       {
         "key": "shift+k",
@@ -4198,22 +4078,10 @@
         "args": "K"
       },
       {
-        "key": "l",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "l"
-      },
-      {
         "key": "shift+l",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "L"
-      },
-      {
-        "key": "m",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "m"
       },
       {
         "key": "shift+m",
@@ -4222,22 +4090,10 @@
         "args": "M"
       },
       {
-        "key": "n",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "n"
-      },
-      {
         "key": "shift+n",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "N"
-      },
-      {
-        "key": "o",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "o"
       },
       {
         "key": "shift+o",
@@ -4246,22 +4102,10 @@
         "args": "O"
       },
       {
-        "key": "p",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "p"
-      },
-      {
         "key": "shift+p",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "P"
-      },
-      {
-        "key": "q",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "q"
       },
       {
         "key": "shift+q",
@@ -4270,22 +4114,10 @@
         "args": "Q"
       },
       {
-        "key": "r",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "r"
-      },
-      {
         "key": "shift+r",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "R"
-      },
-      {
-        "key": "s",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "s"
       },
       {
         "key": "shift+s",
@@ -4294,22 +4126,10 @@
         "args": "S"
       },
       {
-        "key": "t",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "t"
-      },
-      {
         "key": "shift+t",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "T"
-      },
-      {
-        "key": "u",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "u"
       },
       {
         "key": "shift+u",
@@ -4318,22 +4138,10 @@
         "args": "U"
       },
       {
-        "key": "v",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "v"
-      },
-      {
         "key": "shift+v",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "V"
-      },
-      {
-        "key": "w",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "w"
       },
       {
         "key": "shift+w",
@@ -4342,22 +4150,10 @@
         "args": "W"
       },
       {
-        "key": "x",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "x"
-      },
-      {
         "key": "shift+x",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "X"
-      },
-      {
-        "key": "y",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "y"
       },
       {
         "key": "shift+y",
@@ -4366,22 +4162,226 @@
         "args": "Y"
       },
       {
-        "key": "z",
-        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
-        "command": "emacs-mcx.zapCharCommand",
-        "args": "z"
-      },
-      {
         "key": "shift+z",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
         "args": "Z"
       },
       {
-        "key": "space",
+        "key": "[",
         "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
         "command": "emacs-mcx.zapCharCommand",
-        "args": " "
+        "args": "["
+      },
+      {
+        "key": "\\",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "\\"
+      },
+      {
+        "key": "]",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "]"
+      },
+      {
+        "key": "shift+6",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "^"
+      },
+      {
+        "key": "shift+-",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "_"
+      },
+      {
+        "key": "`",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "`"
+      },
+      {
+        "key": "a",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "a"
+      },
+      {
+        "key": "b",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "b"
+      },
+      {
+        "key": "c",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "c"
+      },
+      {
+        "key": "d",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "d"
+      },
+      {
+        "key": "e",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "e"
+      },
+      {
+        "key": "f",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "f"
+      },
+      {
+        "key": "g",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "g"
+      },
+      {
+        "key": "h",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "h"
+      },
+      {
+        "key": "i",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "i"
+      },
+      {
+        "key": "j",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "j"
+      },
+      {
+        "key": "k",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "k"
+      },
+      {
+        "key": "l",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "l"
+      },
+      {
+        "key": "m",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "m"
+      },
+      {
+        "key": "n",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "n"
+      },
+      {
+        "key": "o",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "o"
+      },
+      {
+        "key": "p",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "p"
+      },
+      {
+        "key": "q",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "q"
+      },
+      {
+        "key": "r",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "r"
+      },
+      {
+        "key": "s",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "s"
+      },
+      {
+        "key": "t",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "t"
+      },
+      {
+        "key": "u",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "u"
+      },
+      {
+        "key": "v",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "v"
+      },
+      {
+        "key": "w",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "w"
+      },
+      {
+        "key": "x",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "x"
+      },
+      {
+        "key": "y",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "y"
+      },
+      {
+        "key": "z",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "z"
+      },
+      {
+        "key": "shift+[",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "{"
+      },
+      {
+        "key": "shift+\\",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "|"
+      },
+      {
+        "key": "shift+]",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "}"
+      },
+      {
+        "key": "shift+`",
+        "when": "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        "command": "emacs-mcx.zapCharCommand",
+        "args": "~"
       },
       {
         "key": "ctrl+alt+v",
@@ -5194,10 +5194,76 @@
         "when": "!emacs-mcx.acceptingArgument && editorTextFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "space",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": " "
+      },
+      {
+        "key": "shift+1",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "!"
+      },
+      {
+        "key": "shift+'",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "\""
+      },
+      {
+        "key": "shift+3",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "#"
+      },
+      {
+        "key": "shift+4",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "$"
+      },
+      {
+        "key": "shift+5",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "%"
+      },
+      {
+        "key": "shift+7",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "&"
+      },
+      {
         "key": "'",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "'"
+      },
+      {
+        "key": "shift+9",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "("
+      },
+      {
+        "key": "shift+0",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": ")"
+      },
+      {
+        "key": "shift+8",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "*"
+      },
+      {
+        "key": "shift+=",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "+"
       },
       {
         "key": ",",
@@ -5224,10 +5290,22 @@
         "args": "/"
       },
       {
+        "key": "shift+;",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": ":"
+      },
+      {
         "key": ";",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": ";"
+      },
+      {
+        "key": "shift+,",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "<"
       },
       {
         "key": "=",
@@ -5236,157 +5314,175 @@
         "args": "="
       },
       {
-        "key": "A",
+        "key": "shift+.",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": ">"
+      },
+      {
+        "key": "shift+/",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "?"
+      },
+      {
+        "key": "shift+2",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "@"
+      },
+      {
+        "key": "shift+a",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "A"
       },
       {
-        "key": "B",
+        "key": "shift+b",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "B"
       },
       {
-        "key": "C",
+        "key": "shift+c",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "C"
       },
       {
-        "key": "D",
+        "key": "shift+d",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "D"
       },
       {
-        "key": "E",
+        "key": "shift+e",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "E"
       },
       {
-        "key": "F",
+        "key": "shift+f",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "F"
       },
       {
-        "key": "G",
+        "key": "shift+g",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "G"
       },
       {
-        "key": "H",
+        "key": "shift+h",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "H"
       },
       {
-        "key": "I",
+        "key": "shift+i",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "I"
       },
       {
-        "key": "J",
+        "key": "shift+j",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "J"
       },
       {
-        "key": "K",
+        "key": "shift+k",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "K"
       },
       {
-        "key": "L",
+        "key": "shift+l",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "L"
       },
       {
-        "key": "M",
+        "key": "shift+m",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "M"
       },
       {
-        "key": "N",
+        "key": "shift+n",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "N"
       },
       {
-        "key": "O",
+        "key": "shift+o",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "O"
       },
       {
-        "key": "P",
+        "key": "shift+p",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "P"
       },
       {
-        "key": "Q",
+        "key": "shift+q",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "Q"
       },
       {
-        "key": "R",
+        "key": "shift+r",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "R"
       },
       {
-        "key": "S",
+        "key": "shift+s",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "S"
       },
       {
-        "key": "T",
+        "key": "shift+t",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "T"
       },
       {
-        "key": "U",
+        "key": "shift+u",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "U"
       },
       {
-        "key": "V",
+        "key": "shift+v",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "V"
       },
       {
-        "key": "W",
+        "key": "shift+w",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "W"
       },
       {
-        "key": "X",
+        "key": "shift+x",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "X"
       },
       {
-        "key": "Y",
+        "key": "shift+y",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "Y"
       },
       {
-        "key": "Z",
+        "key": "shift+z",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "Z"
@@ -5408,6 +5504,18 @@
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "]"
+      },
+      {
+        "key": "shift+6",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "^"
+      },
+      {
+        "key": "shift+-",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "_"
       },
       {
         "key": "`",
@@ -5572,10 +5680,28 @@
         "args": "z"
       },
       {
-        "key": "space",
+        "key": "shift+[",
         "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
-        "args": " "
+        "args": "{"
+      },
+      {
+        "key": "shift+\\",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "|"
+      },
+      {
+        "key": "shift+]",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "}"
+      },
+      {
+        "key": "shift+`",
+        "when": "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "~"
       },
       {
         "key": "enter",
@@ -5628,10 +5754,76 @@
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {
+        "key": "space",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": " "
+      },
+      {
+        "key": "shift+1",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "!"
+      },
+      {
+        "key": "shift+'",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "\""
+      },
+      {
+        "key": "shift+3",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "#"
+      },
+      {
+        "key": "shift+4",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "$"
+      },
+      {
+        "key": "shift+5",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "%"
+      },
+      {
+        "key": "shift+7",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "&"
+      },
+      {
         "key": "'",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "'"
+      },
+      {
+        "key": "shift+9",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "("
+      },
+      {
+        "key": "shift+0",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": ")"
+      },
+      {
+        "key": "shift+8",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "*"
+      },
+      {
+        "key": "shift+=",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "+"
       },
       {
         "key": ",",
@@ -5718,10 +5910,22 @@
         "args": "9"
       },
       {
+        "key": "shift+;",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": ":"
+      },
+      {
         "key": ";",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": ";"
+      },
+      {
+        "key": "shift+,",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "<"
       },
       {
         "key": "=",
@@ -5730,157 +5934,175 @@
         "args": "="
       },
       {
-        "key": "A",
+        "key": "shift+.",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": ">"
+      },
+      {
+        "key": "shift+/",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "?"
+      },
+      {
+        "key": "shift+2",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "@"
+      },
+      {
+        "key": "shift+a",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "A"
       },
       {
-        "key": "B",
+        "key": "shift+b",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "B"
       },
       {
-        "key": "C",
+        "key": "shift+c",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "C"
       },
       {
-        "key": "D",
+        "key": "shift+d",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "D"
       },
       {
-        "key": "E",
+        "key": "shift+e",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "E"
       },
       {
-        "key": "F",
+        "key": "shift+f",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "F"
       },
       {
-        "key": "G",
+        "key": "shift+g",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "G"
       },
       {
-        "key": "H",
+        "key": "shift+h",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "H"
       },
       {
-        "key": "I",
+        "key": "shift+i",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "I"
       },
       {
-        "key": "J",
+        "key": "shift+j",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "J"
       },
       {
-        "key": "K",
+        "key": "shift+k",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "K"
       },
       {
-        "key": "L",
+        "key": "shift+l",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "L"
       },
       {
-        "key": "M",
+        "key": "shift+m",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "M"
       },
       {
-        "key": "N",
+        "key": "shift+n",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "N"
       },
       {
-        "key": "O",
+        "key": "shift+o",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "O"
       },
       {
-        "key": "P",
+        "key": "shift+p",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "P"
       },
       {
-        "key": "Q",
+        "key": "shift+q",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "Q"
       },
       {
-        "key": "R",
+        "key": "shift+r",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "R"
       },
       {
-        "key": "S",
+        "key": "shift+s",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "S"
       },
       {
-        "key": "T",
+        "key": "shift+t",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "T"
       },
       {
-        "key": "U",
+        "key": "shift+u",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "U"
       },
       {
-        "key": "V",
+        "key": "shift+v",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "V"
       },
       {
-        "key": "W",
+        "key": "shift+w",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "W"
       },
       {
-        "key": "X",
+        "key": "shift+x",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "X"
       },
       {
-        "key": "Y",
+        "key": "shift+y",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "Y"
       },
       {
-        "key": "Z",
+        "key": "shift+z",
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "Z"
@@ -5902,6 +6124,18 @@
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "]"
+      },
+      {
+        "key": "shift+6",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "^"
+      },
+      {
+        "key": "shift+-",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "_"
       },
       {
         "key": "`",
@@ -6064,6 +6298,30 @@
         "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
         "command": "emacs-mcx.registerNameCommand",
         "args": "z"
+      },
+      {
+        "key": "shift+[",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "{"
+      },
+      {
+        "key": "shift+\\",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "|"
+      },
+      {
+        "key": "shift+]",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "}"
+      },
+      {
+        "key": "shift+`",
+        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
+        "command": "emacs-mcx.registerNameCommand",
+        "args": "~"
       },
       {
         "key": "space",
@@ -6122,10 +6380,76 @@
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
       },
       {
+        "key": "space",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": " "
+      },
+      {
+        "key": "shift+1",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "!"
+      },
+      {
+        "key": "shift+'",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "\""
+      },
+      {
+        "key": "shift+3",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "#"
+      },
+      {
+        "key": "shift+4",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "$"
+      },
+      {
+        "key": "shift+5",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "%"
+      },
+      {
+        "key": "shift+7",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "&"
+      },
+      {
         "key": "'",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "'"
+      },
+      {
+        "key": "shift+9",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "("
+      },
+      {
+        "key": "shift+0",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": ")"
+      },
+      {
+        "key": "shift+8",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "*"
+      },
+      {
+        "key": "shift+=",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "+"
       },
       {
         "key": ",",
@@ -6212,10 +6536,22 @@
         "args": "9"
       },
       {
+        "key": "shift+;",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": ":"
+      },
+      {
         "key": ";",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": ";"
+      },
+      {
+        "key": "shift+,",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "<"
       },
       {
         "key": "=",
@@ -6224,157 +6560,175 @@
         "args": "="
       },
       {
-        "key": "A",
+        "key": "shift+.",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": ">"
+      },
+      {
+        "key": "shift+/",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "?"
+      },
+      {
+        "key": "shift+2",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "@"
+      },
+      {
+        "key": "shift+a",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "A"
       },
       {
-        "key": "B",
+        "key": "shift+b",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "B"
       },
       {
-        "key": "C",
+        "key": "shift+c",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "C"
       },
       {
-        "key": "D",
+        "key": "shift+d",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "D"
       },
       {
-        "key": "E",
+        "key": "shift+e",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "E"
       },
       {
-        "key": "F",
+        "key": "shift+f",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "F"
       },
       {
-        "key": "G",
+        "key": "shift+g",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "G"
       },
       {
-        "key": "H",
+        "key": "shift+h",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "H"
       },
       {
-        "key": "I",
+        "key": "shift+i",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "I"
       },
       {
-        "key": "J",
+        "key": "shift+j",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "J"
       },
       {
-        "key": "K",
+        "key": "shift+k",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "K"
       },
       {
-        "key": "L",
+        "key": "shift+l",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "L"
       },
       {
-        "key": "M",
+        "key": "shift+m",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "M"
       },
       {
-        "key": "N",
+        "key": "shift+n",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "N"
       },
       {
-        "key": "O",
+        "key": "shift+o",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "O"
       },
       {
-        "key": "P",
+        "key": "shift+p",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "P"
       },
       {
-        "key": "Q",
+        "key": "shift+q",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "Q"
       },
       {
-        "key": "R",
+        "key": "shift+r",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "R"
       },
       {
-        "key": "S",
+        "key": "shift+s",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "S"
       },
       {
-        "key": "T",
+        "key": "shift+t",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "T"
       },
       {
-        "key": "U",
+        "key": "shift+u",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "U"
       },
       {
-        "key": "V",
+        "key": "shift+v",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "V"
       },
       {
-        "key": "W",
+        "key": "shift+w",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "W"
       },
       {
-        "key": "X",
+        "key": "shift+x",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "X"
       },
       {
-        "key": "Y",
+        "key": "shift+y",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "Y"
       },
       {
-        "key": "Z",
+        "key": "shift+z",
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "Z"
@@ -6396,6 +6750,18 @@
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "]"
+      },
+      {
+        "key": "shift+6",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "^"
+      },
+      {
+        "key": "shift+-",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "_"
       },
       {
         "key": "`",
@@ -6558,6 +6924,30 @@
         "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
         "command": "emacs-mcx.typeChar",
         "args": "z"
+      },
+      {
+        "key": "shift+[",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "{"
+      },
+      {
+        "key": "shift+\\",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "|"
+      },
+      {
+        "key": "shift+]",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "}"
+      },
+      {
+        "key": "shift+`",
+        "when": "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
+        "command": "emacs-mcx.typeChar",
+        "args": "~"
       },
       {
         "key": "ctrl+alt+i",
