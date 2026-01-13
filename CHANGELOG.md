@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.104.0
+
+### Minor Changes
+
+- [#2697](https://github.com/whitphx/vscode-emacs-mcx/pull/2697) [`b9458b1`](https://github.com/whitphx/vscode-emacs-mcx/commit/b9458b1d83e5bcaea4382c5a47a9db1d0083295f) Thanks [@whitphx](https://github.com/whitphx)! - Assign M-p and M-n in find widget to commands for history navigation
+
+- [#2693](https://github.com/whitphx/vscode-emacs-mcx/pull/2693) [`aad97bb`](https://github.com/whitphx/vscode-emacs-mcx/commit/aad97bbaf2cd374bcaa6aba395ca37c6d76c6741) Thanks [@whitphx](https://github.com/whitphx)! - Support uppercase and other shifted characters in zapToChar
+
+### Patch Changes
+
+- [#2683](https://github.com/whitphx/vscode-emacs-mcx/pull/2683) [`9fcc13d`](https://github.com/whitphx/vscode-emacs-mcx/commit/9fcc13d128cb3899208dfcd391350dcaf6ed4968) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2685](https://github.com/whitphx/vscode-emacs-mcx/pull/2685) [`98f8cf9`](https://github.com/whitphx/vscode-emacs-mcx/commit/98f8cf9849861dc0067b754c903935070d988fa7) Thanks [@whitphx](https://github.com/whitphx)! - Update README.md about kill commands
+
+- [#2696](https://github.com/whitphx/vscode-emacs-mcx/pull/2696) [`946fc30`](https://github.com/whitphx/vscode-emacs-mcx/commit/946fc307c5c89c5648d204a914528b0ccdce5a94) Thanks [@whitphx](https://github.com/whitphx)! - Add M-z (zap-to-char) to README.md
+
+- [#2695](https://github.com/whitphx/vscode-emacs-mcx/pull/2695) [`9c9a33b`](https://github.com/whitphx/vscode-emacs-mcx/commit/9c9a33b2c8599f8f53080b7e43fd909011b67d3d) Thanks [@whitphx](https://github.com/whitphx)! - Fix shifted keys with typeChar, registerNameCommand, and zapCharCommand
+
 ## 0.103.0
 
 ### Minor Changes
