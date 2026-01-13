@@ -7793,7 +7793,7 @@
     "@vscode/test-web": "^0.0.78",
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
-    "cspell": "^9.4.0",
+    "cspell": "^9.6.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",
@@ -7812,7 +7812,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.1",
+    "typescript-eslint": "^8.53.0",
     "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1"
   },
