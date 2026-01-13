@@ -595,7 +595,7 @@ const SHIFT_CHARS = (() => {
     [",", "<"],
     ["/", "?"],
   ]);
-  // Lowercase -> upppercase.
+  // Lowercase -> uppercase.
   for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
     m.set(String.fromCharCode(charCode), String.fromCharCode(charCode - 0x20));
   }
