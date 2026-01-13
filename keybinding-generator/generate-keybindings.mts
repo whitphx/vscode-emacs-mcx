@@ -461,12 +461,6 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
       args: char,
     });
   }
-  keybindings.push({
-    key: "space",
-    when: "emacs-mcx.acceptingRegisterName && editorTextFocus",
-    command: "emacs-mcx.registerNameCommand",
-    args: " ",
-  });
   return keybindings;
 }
 

@@ -6324,12 +6324,6 @@
         "args": "~"
       },
       {
-        "key": "space",
-        "when": "emacs-mcx.acceptingRegisterName && editorTextFocus",
-        "command": "emacs-mcx.registerNameCommand",
-        "args": " "
-      },
-      {
         "key": "y",
         "command": "emacs-mcx.yankRectangle",
         "when": "emacs-mcx.acceptingRectCommand && editorTextFocus"
