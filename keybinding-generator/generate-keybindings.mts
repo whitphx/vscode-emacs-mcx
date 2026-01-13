@@ -475,7 +475,14 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
 export function generateKeybindingsForZapCommands(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  for (const char of ASSIGNABLE_KEYS) {
+  // Filter out uppercase letters (A-Z) to avoid duplicate keybindings.
+  // Uppercase letters will be covered by shift variants of lowercase letters.
+  const keysToProcess = ASSIGNABLE_KEYS.filter((char) => {
+    const charCode = char.charCodeAt(0);
+    return charCode < 0x41 || charCode > 0x5a; // Exclude 'A' ~ 'Z'
+  });
+
+  for (const char of keysToProcess) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
