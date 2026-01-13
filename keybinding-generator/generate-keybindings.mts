@@ -475,13 +475,29 @@ export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
 export function generateKeybindingsForZapCommands(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  for (const char of ASSIGNABLE_KEYS) {
+  // Filter out uppercase letters (A-Z) to avoid duplicate keybindings.
+  // Uppercase letters will be covered by shift variants of lowercase letters.
+  const keysToProcess = ASSIGNABLE_KEYS.filter((char) => {
+    const charCode = char.charCodeAt(0);
+    return charCode < 0x41 || charCode > 0x5a; // Exclude 'A' ~ 'Z'
+  });
+
+  for (const char of keysToProcess) {
     keybindings.push({
       key: char,
       when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
       command: "emacs-mcx.zapCharCommand",
       args: char,
     });
+    const shiftChar = SHIFT_CHARS.get(char);
+    if (shiftChar) {
+      keybindings.push({
+        key: `shift+${char}`,
+        when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
+        command: "emacs-mcx.zapCharCommand",
+        args: shiftChar,
+      });
+    }
   }
   keybindings.push({
     key: "space",
@@ -568,5 +584,37 @@ function getAssignableKeys(includeNumerics: boolean): string[] {
 
   return keys;
 }
+
 const ASSIGNABLE_KEYS = getAssignableKeys(true);
 const ASSIGNABLE_KEYS_WO_NUMERICS = getAssignableKeys(false);
+
+const SHIFT_CHARS = (() => {
+  const m = new Map([
+    [";", ":"],
+    ["=", "+"],
+    ["[", "{"],
+    ["]", "}"],
+    ["\\", "|"],
+    ["`", "~"],
+    ["'", '"'],
+    ["-", "_"],
+    [".", ">"],
+    [",", "<"],
+    ["/", "?"],
+    ["1", "!"],
+    ["2", "@"],
+    ["3", "#"],
+    ["4", "$"],
+    ["5", "%"],
+    ["6", "^"],
+    ["7", "&"],
+    ["8", "*"],
+    ["9", "("],
+    ["0", ")"],
+  ]);
+  // Lowercase -> uppercase.
+  for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
+    m.set(String.fromCharCode(charCode), String.fromCharCode(charCode - 0x20));
+  }
+  return m;
+})();
