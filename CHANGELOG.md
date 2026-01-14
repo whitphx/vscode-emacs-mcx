@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.105.0
+
+### Minor Changes
+
+- [#2680](https://github.com/whitphx/vscode-emacs-mcx/pull/2680) [`dfd3718`](https://github.com/whitphx/vscode-emacs-mcx/commit/dfd371836a902f188ded1f7c6abe0fbabbe9d2ec) Thanks [@knu](https://github.com/knu)! - Add updateKillRingSave command to replace the current kill ring entry.
+
 ## 0.104.0
 
 ### Minor Changes
