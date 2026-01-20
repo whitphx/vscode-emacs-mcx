@@ -13,9 +13,8 @@ export const enum WordCharacterClass {
 }
 
 export class WordCharacterClassifier extends CharacterClassifier<WordCharacterClass> {
-	// If subwordMode=true, wordSeparators are ignored. Instead, word boundaries are detected using a hard-coded regexp
-	// in wordOperations.ts
-	constructor(wordSeparators: string, readonly subwordMode: boolean) {
+
+	constructor(wordSeparators: string) {
 		super(WordCharacterClass.Regular);
 
 		for (let i = 0, len = wordSeparators.length; i < len; i++) {
@@ -28,17 +27,16 @@ export class WordCharacterClassifier extends CharacterClassifier<WordCharacterCl
 
 }
 
-function once<R>(computeFn: (input: string, subwordMode: boolean) => R): (input: string, subwordMode: boolean) => R {
+function once<R>(computeFn: (input: string) => R): (input: string) => R {
 	let cache: { [key: string]: R; } = {}; // TODO@Alex unbounded cache
-	return (input: string, subwordMode: boolean): R => {
-		const cacheKey = `${input}XX${subwordMode}`;
-		if (!cache.hasOwnProperty(cacheKey)) {
-			cache[cacheKey] = computeFn(input, subwordMode);
+	return (input: string): R => {
+		if (!cache.hasOwnProperty(input)) {
+			cache[input] = computeFn(input);
 		}
-		return cache[cacheKey]!;
+		return cache[input]!;
 	};
 }
 
 export const getMapForWordSeparators = once<WordCharacterClassifier>(
-	(input, subwordMode) => new WordCharacterClassifier(input, subwordMode)
+	(input) => new WordCharacterClassifier(input)
 );

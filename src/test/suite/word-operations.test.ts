@@ -7,11 +7,15 @@ import { Position } from "vscode";
 
 // Starting from (0, 0), call findNextWordEnd repeatedly and
 // return the list of positions.
-function listAllNextWordEndPositions(doc: vscode.TextDocument, classifier: WordCharacterClassifier): Position[] {
+function listAllNextWordEndPositions(
+  doc: vscode.TextDocument,
+  classifier: WordCharacterClassifier,
+  subwordMode: boolean,
+): Position[] {
   const found: Position[] = [];
   let position = new Position(0, 0);
   while (true) {
-    const newPosition = findNextWordEnd(doc, classifier, position, true);
+    const newPosition = findNextWordEnd(doc, classifier, position, true, subwordMode);
     if (!newPosition.isAfter(position)) {
       break;
     }
@@ -23,11 +27,15 @@ function listAllNextWordEndPositions(doc: vscode.TextDocument, classifier: WordC
 
 // Starting from the end of the document, call findPreviousWordStart
 // repeatedly and return the list of positions.
-function listAllPreviousWordStartPositions(doc: vscode.TextDocument, classifier: WordCharacterClassifier): Position[] {
+function listAllPreviousWordStartPositions(
+  doc: vscode.TextDocument,
+  classifier: WordCharacterClassifier,
+  subwordMode: boolean,
+): Position[] {
   const found: Position[] = [];
   let position = new Position(doc.lineCount - 1, doc.lineAt(doc.lineCount - 1).text.length);
   while (true) {
-    const newPosition = findPreviousWordStart(doc, classifier, position, true);
+    const newPosition = findPreviousWordStart(doc, classifier, position, true, subwordMode);
     if (!newPosition.isBefore(position)) {
       break;
     }
@@ -47,8 +55,8 @@ suite("findNextWordEnd", () => {
   });
 
   test("forward whole word", async () => {
-    const classifier = new WordCharacterClassifier(":=", false);
-    assert.deepStrictEqual(listAllNextWordEndPositions(doc, classifier), [
+    const classifier = new WordCharacterClassifier(":=");
+    assert.deepStrictEqual(listAllNextWordEndPositions(doc, classifier, false), [
       new Position(0, 8),
       new Position(0, 11),
       new Position(0, 15),
@@ -57,8 +65,8 @@ suite("findNextWordEnd", () => {
     ]);
   });
   test("forward subword", async () => {
-    const classifier = new WordCharacterClassifier("", true);
-    assert.deepStrictEqual(listAllNextWordEndPositions(doc, classifier), [
+    const classifier = new WordCharacterClassifier("");
+    assert.deepStrictEqual(listAllNextWordEndPositions(doc, classifier, true), [
       new Position(0, 3),
       new Position(0, 5),
       new Position(0, 6),
@@ -81,8 +89,8 @@ suite("findPreviousWordStart", () => {
   });
 
   test("backward whole word", async () => {
-    const classifier = new WordCharacterClassifier(":=", false);
-    assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier), [
+    const classifier = new WordCharacterClassifier(":=");
+    assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, false), [
       new Position(1, 2),
       new Position(1, 0),
       new Position(0, 12),
@@ -91,8 +99,8 @@ suite("findPreviousWordStart", () => {
     ]);
   });
   test("backward subword", async () => {
-    const classifier = new WordCharacterClassifier("", true);
-    assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier), [
+    const classifier = new WordCharacterClassifier("");
+    assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, true), [
       new Position(1, 2),
       new Position(1, 0),
       new Position(0, 12),
