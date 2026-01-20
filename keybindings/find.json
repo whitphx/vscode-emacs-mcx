@@ -92,6 +92,20 @@
     "command": "toggleSearchCaseSensitive",
     "inheritWhenFromDefault": true
   },
+  // History navigation
+  // Emacs has 'search ring' (https://www.gnu.org/software/emacs/manual/html_node/emacs/Repeat-Isearch.html)
+  // and provides commands M-p (isearch-ring-retreat) and M-n (isearch-ring-advance) to move through the ring to pick a search string to reuse.
+  // However this extension doesn't implement the search ring feature and it relies on VSCode's search history.
+  {
+    "key": "meta+p",
+    "command": "history.showPrevious",
+    "inheritWhenFromDefault": true
+  },
+  {
+    "key": "meta+n",
+    "command": "history.showNext",
+    "inheritWhenFromDefault": true
+  },
   // Disable Emacs-like keybindings on the find and replace widgets (native UI).
   // See https://github.com/whitphx/vscode-emacs-mcx/issues/55
   {

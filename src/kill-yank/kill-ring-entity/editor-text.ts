@@ -5,6 +5,7 @@ import { getEolChar } from "../../commands/helpers/eol";
 export enum AppendDirection {
   Forward,
   Backward,
+  Replace,
 }
 
 interface IRegionText {
@@ -29,7 +30,9 @@ class AppendedRegionTexts {
   }
 
   public append(another: AppendedRegionTexts, appendDirection: AppendDirection = AppendDirection.Forward) {
-    if (appendDirection === AppendDirection.Forward) {
+    if (appendDirection === AppendDirection.Replace) {
+      this.regionTexts = another.regionTexts;
+    } else if (appendDirection === AppendDirection.Forward) {
       this.regionTexts = this.regionTexts.concat(another.regionTexts);
     } else {
       this.regionTexts = another.regionTexts.concat(this.regionTexts);

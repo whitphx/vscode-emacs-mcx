@@ -407,9 +407,13 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
     }),
   );
 
-  for (const char of ASSIGNABLE_KEYS_WO_NUMERICS) {
+  for (const { char, key, isNumeric } of CHAR_KEY_MAPPINGS) {
+    if (isNumeric) {
+      continue;
+    }
+
     keybindings.push({
-      key: char,
+      key,
       when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
       command: "emacs-mcx.typeChar",
       args: char,
@@ -417,12 +421,6 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
   }
 
   // In addition, special characters.
-  keybindings.push({
-    key: "space",
-    when: "emacs-mcx.prefixArgumentExists && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
-    command: "emacs-mcx.typeChar",
-    args: " ",
-  });
   keybindings.push({
     key: "enter",
     command: "emacs-mcx.newLine",
@@ -440,9 +438,9 @@ export function generateKeybindingsForPrefixArgument(): KeyBinding[] {
 export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  for (const char of ASSIGNABLE_KEYS) {
+  for (const { char, key } of CHAR_KEY_MAPPINGS) {
     keybindings.push({
-      key: char,
+      key,
       when: "emacs-mcx.inRectMarkMode && !emacs-mcx.acceptingArgument && editorTextFocus && !editorReadonly && !emacs-mcx.acceptingRegisterName && !emacs-mcx.acceptingZapCommand && !emacs-mcx.acceptingRectCommand",
       command: "emacs-mcx.typeChar",
       args: char,
@@ -455,40 +453,28 @@ export function generateKeybindingsForTypeCharInRectMarkMode(): KeyBinding[] {
 export function generateKeybindingsForRegisterCommands(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  for (const char of ASSIGNABLE_KEYS) {
+  for (const { char, key } of CHAR_KEY_MAPPINGS) {
     keybindings.push({
-      key: char,
+      key,
       when: "emacs-mcx.acceptingRegisterName && editorTextFocus",
       command: "emacs-mcx.registerNameCommand",
       args: char,
     });
   }
-  keybindings.push({
-    key: "space",
-    when: "emacs-mcx.acceptingRegisterName && editorTextFocus",
-    command: "emacs-mcx.registerNameCommand",
-    args: " ",
-  });
   return keybindings;
 }
 
 export function generateKeybindingsForZapCommands(): KeyBinding[] {
   const keybindings: KeyBinding[] = [];
 
-  for (const char of ASSIGNABLE_KEYS) {
+  for (const { char, key } of CHAR_KEY_MAPPINGS) {
     keybindings.push({
-      key: char,
+      key,
       when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
       command: "emacs-mcx.zapCharCommand",
       args: char,
     });
   }
-  keybindings.push({
-    key: "space",
-    when: "emacs-mcx.acceptingZapCommand && editorTextFocus",
-    command: "emacs-mcx.zapCharCommand",
-    args: " ",
-  });
   return keybindings;
 }
 
@@ -544,29 +530,78 @@ export function generateCtrlGKeybindings(): KeyBinding[] {
     .concat(osxSpecificCtrlGKeybindings);
 }
 
-function getAssignableKeys(includeNumerics: boolean): string[] {
-  const keys: string[] = [];
-  // Found these valid keys by registering all printable characters (0x20 <= charCode <= 0x7e) to the keybindings and picking up the validly registered keys from the keybindings setting tab.
-  // Ref: Ascii printable characters: https://www.ascii-code.com/
-  keys.push("'", ",", "-", ".", "/");
-  if (includeNumerics) {
-    for (let charCode = 0x30; charCode <= 0x39; charCode++) {
-      // '0' ~ '9'
-      keys.push(String.fromCharCode(charCode));
+function getCharKeyMappings(): { char: string; key: string; isNumeric: boolean }[] {
+  function assertCharCode(char: string, code: number): string {
+    if (char.length !== 1) {
+      throw new Error(`Expected a single character, but got "${char}"`);
     }
-  }
-  keys.push(";", "=");
-  for (let charCode = 0x41; charCode <= 0x5a; charCode++) {
-    // 'A' ~ 'Z'
-    keys.push(String.fromCharCode(charCode));
-  }
-  keys.push("[", "\\", "]", "`");
-  for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
-    // 'a' ~ 'z'
-    keys.push(String.fromCharCode(charCode));
+    if (char.charCodeAt(0) !== code) {
+      throw new Error(`Expected character code ${code} but got ${char.charCodeAt(0)} for character "${char}"`);
+    }
+    return char;
   }
 
-  return keys;
+  const mappings: { key: string; char: string; isNumeric?: boolean }[] = [];
+
+  // Found these valid keys by registering all printable characters (0x20 <= charCode <= 0x7e) to the keybindings and picking up the validly registered keys from the keybindings setting tab.
+  // Ref: Ascii printable characters: https://www.ascii-code.com/
+  mappings.push(
+    { char: assertCharCode(" ", 0x20), key: "space" },
+    { char: assertCharCode("!", 0x21), key: "shift+1" },
+    { char: assertCharCode('"', 0x22), key: "shift+'" },
+    { char: assertCharCode("#", 0x23), key: "shift+3" },
+    { char: assertCharCode("$", 0x24), key: "shift+4" },
+    { char: assertCharCode("%", 0x25), key: "shift+5" },
+    { char: assertCharCode("&", 0x26), key: "shift+7" },
+    { char: assertCharCode("'", 0x27), key: "'" },
+    { char: assertCharCode("(", 0x28), key: "shift+9" },
+    { char: assertCharCode(")", 0x29), key: "shift+0" },
+    { char: assertCharCode("*", 0x2a), key: "shift+8" },
+    { char: assertCharCode("+", 0x2b), key: "shift+=" },
+    { char: assertCharCode(",", 0x2c), key: "," },
+    { char: assertCharCode("-", 0x2d), key: "-" },
+    { char: assertCharCode(".", 0x2e), key: "." },
+    { char: assertCharCode("/", 0x2f), key: "/" },
+  );
+  for (let charCode = 0x30; charCode <= 0x39; charCode++) {
+    // '0' ~ '9'
+    const key = String.fromCharCode(charCode);
+    mappings.push({ key: key, char: key, isNumeric: true });
+  }
+  mappings.push(
+    { char: assertCharCode(":", 0x3a), key: "shift+;" },
+    { char: assertCharCode(";", 0x3b), key: ";" },
+    { char: assertCharCode("<", 0x3c), key: "shift+," },
+    { char: assertCharCode("=", 0x3d), key: "=" },
+    { char: assertCharCode(">", 0x3e), key: "shift+." },
+    { char: assertCharCode("?", 0x3f), key: "shift+/" },
+    { char: assertCharCode("@", 0x40), key: "shift+2" },
+  );
+  for (let charCode = 0x41; charCode <= 0x5a; charCode++) {
+    // 'A' ~ 'Z'
+    const char = String.fromCharCode(charCode);
+    const smallChar = char.toLowerCase();
+    mappings.push({ char: char, key: `shift+${smallChar}` });
+  }
+  mappings.push(
+    { char: assertCharCode("[", 0x5b), key: "[" },
+    { char: assertCharCode("\\", 0x5c), key: "\\" },
+    { char: assertCharCode("]", 0x5d), key: "]" },
+    { char: assertCharCode("^", 0x5e), key: "shift+6" },
+    { char: assertCharCode("_", 0x5f), key: "shift+-" },
+    { char: assertCharCode("`", 0x60), key: "`" },
+  );
+  for (let charCode = 0x61; charCode <= 0x7a; charCode++) {
+    // 'a' ~ 'z'
+    const char = String.fromCharCode(charCode);
+    mappings.push({ char: char, key: char });
+  }
+  mappings.push(
+    { char: assertCharCode("{", 0x7b), key: "shift+[" },
+    { char: assertCharCode("|", 0x7c), key: "shift+\\" },
+    { char: assertCharCode("}", 0x7d), key: "shift+]" },
+    { char: assertCharCode("~", 0x7e), key: "shift+`" },
+  );
+  return mappings.map((mapping) => ({ ...mapping, isNumeric: mapping.isNumeric ?? false }));
 }
-const ASSIGNABLE_KEYS = getAssignableKeys(true);
-const ASSIGNABLE_KEYS_WO_NUMERICS = getAssignableKeys(false);
+const CHAR_KEY_MAPPINGS = getCharKeyMappings();
