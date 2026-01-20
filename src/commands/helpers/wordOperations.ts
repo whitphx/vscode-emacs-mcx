@@ -296,8 +296,9 @@ export function findNextWordEnd(
   wordSeparators: WordCharacterClassifier,
   position: Position,
   allowCrossLineWordNavigation: boolean,
+  subwordMode: boolean = false,
 ): Position {
-  if (wordSeparators.subwordMode) {
+  if (subwordMode) {
     const nextPosition = findNextSubwordEndInternal(doc, position);
     if (nextPosition) {
       return nextPosition;
@@ -402,8 +403,9 @@ export function findPreviousWordStart(
   wordSeparators: WordCharacterClassifier,
   position: Position,
   allowCrossLineWordNavigation: boolean,
+  subwordMode: boolean = false,
 ): Position {
-  if (wordSeparators.subwordMode) {
+  if (subwordMode) {
     const previousPosition = findPreviousSubwordStartInternal(doc.lineAt(position.line).text, position);
     if (previousPosition) {
       return previousPosition;
