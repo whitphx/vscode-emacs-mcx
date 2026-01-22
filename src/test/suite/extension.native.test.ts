@@ -67,10 +67,6 @@ suite("package.json", () => {
         return false;
       }
 
-      if (keyFirstSegment == "subwordMode") {
-        // Special case subwordMode. It's handled by wordSeparators.ts.
-        return false;
-      }
       return true;
     });
     assert.strictEqual(
