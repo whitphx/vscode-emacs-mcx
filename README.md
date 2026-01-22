@@ -212,19 +212,7 @@ It can also be set as per-language flag, for example:
 }
 ```
 
-**Requirements:** This option only takes effect when `emacs-mcx.wordNavigationStyle` is set to `"emacs"`.
-
-**Subword boundaries:** Recognized patterns include:
-
-- camelCase → `camel|Case`
-- PascalCase → `Pascal|Case`
-- HTMLParser → `HTML|Parser`
-- snake_case → `snake|_case`
-
-**Limitations:**
-
-- The `editor.wordSeparators` setting is ignored in subword mode. Instead, non-word characters (`\W` regex class) are used as separators.
-- Subword detection only works within a single line. At line boundaries, the cursor falls back to whole-word navigation to cross lines.
+The `editor.wordSeparators` setting is ignored in subword mode. Instead, non-word characters (`\W` regex class) are used as separators.
 
 ### `emacs-mcx.debug.*`
 
