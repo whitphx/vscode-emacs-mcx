@@ -199,6 +199,21 @@ Key-value pairs of parentheses like the following example to be used in the ParE
 }
 ```
 
+### `emacs-mcx.subwordMode`
+
+When true, word-oriented move and edit commands, including M-f, M-b, M-d will
+recognize subwords (same as the Emacs variable `subword-mode`). Note that this
+setting is effective only when `emacs-mcx.wordNavigationStyle` is set to `emacs`.
+It can also be set as per-language flag, for example:
+
+```json
+"[go]": {
+  "emacs-mcx.subwordMode": true
+}
+```
+
+The `editor.wordSeparators` setting is ignored in subword mode. Instead, non-word characters (`\W` regex class) are used as separators.
+
 ### `emacs-mcx.debug.*`
 
 Configurations for debugging.

@@ -207,7 +207,7 @@ function findNextWordOnLine(
 // Based on `moveWordRight` method with `wordNavigationType = WordNavigationType.WordEnd`
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L252
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L245
-export function findNextWordEnd(
+function findNextWordEndInternal(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
@@ -272,10 +272,45 @@ export function findNextWordEnd(
   return new Position(lineNumber, character);
 }
 
+// Based on Emacs's subword-forward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L282 )
+function findNextSubwordEndInternal(doc: TextDocument, position: Position): Position | null {
+  const regexp = /\W*(([A-Z]*(\W?))[a-z\d]*)/dg;
+  const line = doc.lineAt(position).text.substring(position.character);
+  const [range0, range1, range2, range3] = regexp.exec(line)?.indices ?? [];
+  if (!range0 || !range1 || !range2 || !range3 || range0[1] === 0) {
+    // No match.
+    return null;
+  }
+  // If we have an all-caps word (e.g., "URL" in "getURLString") with a following
+  // lowercase letter, stop before the last uppercase char to leave it for the next subword.
+  // This handles: "getURL|String" instead of "getURLS|tring"
+  if (range2[1] - range2[0] > 1 && !(range3[1] <= range3[0] && range2[1] === range1[1])) {
+    return new Position(position.line, position.character + range3[1] - 1);
+  }
+  return new Position(position.line, position.character + range0[1]);
+}
+
+export function findNextWordEnd(
+  doc: TextDocument,
+  wordSeparators: WordCharacterClassifier,
+  position: Position,
+  allowCrossLineWordNavigation: boolean,
+  subwordMode: boolean = false,
+): Position {
+  if (subwordMode) {
+    const nextPosition = findNextSubwordEndInternal(doc, position);
+    if (nextPosition) {
+      return nextPosition;
+    }
+    // Fall through.
+  }
+  return findNextWordEndInternal(doc, wordSeparators, position, allowCrossLineWordNavigation);
+}
+
 // Based on `moveWordLeft` method with `wordNavigationType = WordNavigationType.WordStartFast` that is called via `CursorWordLeft` command.
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L163
 // https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L120
-export function findPreviousWordStart(
+function findPreviousWordStartInternal(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
   position: Position,
@@ -344,4 +379,39 @@ export function findPreviousWordStart(
   }
 
   return new Position(lineNumber, prevWordOnLine ? prevWordOnLine.start : 0);
+}
+
+// Based on Emacs's subword-backward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L302 )
+function findPreviousSubwordStartInternal(lineContent: string, position: Position): Position | null {
+  const regexp = /((\W|[a-z\d])([A-Z]+\W*)|\W\w+)/dg;
+  // Find the last regexp match before the position.
+  const matches = [...lineContent.substring(0, position.character).matchAll(regexp)];
+  const [range0, range1, range2, range3] = matches[matches.length - 1]?.indices ?? [];
+
+  if (!range0 || !range1 || !range2 || !range3) {
+    return null;
+  }
+  // For all-caps sequences (e.g., "URL" in "getURLString"), stop after keeping
+  // the last uppercase char with the following subword: "get|URL|String" not "get|UR|LString"
+  if (range3[1] - range3[0] > 1 && range3[1] < position.character) {
+    return new Position(position.line, range3[1] - 1);
+  }
+  return new Position(position.line, range0[0] + 1);
+}
+
+export function findPreviousWordStart(
+  doc: TextDocument,
+  wordSeparators: WordCharacterClassifier,
+  position: Position,
+  allowCrossLineWordNavigation: boolean,
+  subwordMode: boolean = false,
+): Position {
+  if (subwordMode) {
+    const previousPosition = findPreviousSubwordStartInternal(doc.lineAt(position.line).text, position);
+    if (previousPosition) {
+      return previousPosition;
+    }
+    // Fall through.
+  }
+  return findPreviousWordStartInternal(doc, wordSeparators, position, allowCrossLineWordNavigation);
 }

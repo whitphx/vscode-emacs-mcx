@@ -11,7 +11,7 @@ import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 import type { IEmacsController } from "../emulator";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
-import { getWordSeparators } from "./helpers/wordSeparators";
+import { getWordSeparators, shouldRespectSubwordMode } from "./helpers/wordSeparators";
 import { makeSelectionsEmpty } from "./helpers/selection";
 
 // TODO: be unnecessary
@@ -297,13 +297,14 @@ export class ForwardWord extends EmacsCommand {
 
     const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     const wordSeparators = getWordSeparators(textEditor.document);
+    const subwordMode = shouldRespectSubwordMode(textEditor.document);
     const doc = textEditor.document;
 
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => {
         let active = curActive;
         for (let i = 0; i < repeat; i++) {
-          active = findNextWordEnd(doc, wordSeparators, active, allowCrossLineWordNavigation);
+          active = findNextWordEnd(doc, wordSeparators, active, allowCrossLineWordNavigation, subwordMode);
         }
         return active;
       });
@@ -313,7 +314,7 @@ export class ForwardWord extends EmacsCommand {
     textEditor.selections = textEditor.selections.map((selection) => {
       let active = selection.active;
       for (let i = 0; i < repeat; i++) {
-        active = findNextWordEnd(doc, wordSeparators, active, allowCrossLineWordNavigation);
+        active = findNextWordEnd(doc, wordSeparators, active, allowCrossLineWordNavigation, subwordMode);
       }
       const anchor = isInMarkMode ? selection.anchor : active;
       return new vscode.Selection(anchor, active);
@@ -344,13 +345,14 @@ export class BackwardWord extends EmacsCommand {
 
     const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     const wordSeparators = getWordSeparators(textEditor.document);
+    const subwordMode = shouldRespectSubwordMode(textEditor.document);
     const doc = textEditor.document;
 
     if (this.emacsController.inRectMarkMode) {
       this.emacsController.moveRectActives((curActive) => {
         let active = curActive;
         for (let i = 0; i < repeat; i++) {
-          active = findPreviousWordStart(doc, wordSeparators, active, allowCrossLineWordNavigation);
+          active = findPreviousWordStart(doc, wordSeparators, active, allowCrossLineWordNavigation, subwordMode);
         }
         return active;
       });
@@ -360,7 +362,7 @@ export class BackwardWord extends EmacsCommand {
     textEditor.selections = textEditor.selections.map((selection) => {
       let active = selection.active;
       for (let i = 0; i < repeat; i++) {
-        active = findPreviousWordStart(doc, wordSeparators, active, allowCrossLineWordNavigation);
+        active = findPreviousWordStart(doc, wordSeparators, active, allowCrossLineWordNavigation, subwordMode);
       }
       const anchor = isInMarkMode ? selection.anchor : active;
       return new vscode.Selection(anchor, active);

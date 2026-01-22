@@ -185,6 +185,11 @@
             "{": "}"
           }
         },
+        "emacs-mcx.subwordMode": {
+          "type": "boolean",
+          "description": "Make word-oriented move and edit commands recognize subwords. Active only when emacs-mcx.wordNavigationStyle is set to \"emacs\".",
+          "default": false
+        },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
           "description": "If true, all logs are suppressed.",

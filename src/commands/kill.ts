@@ -4,7 +4,7 @@ import { IEmacsController } from "../emulator";
 import { AppendDirection, KillYanker } from "../kill-yank";
 import { Configuration } from "../configuration/configuration";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
-import { getWordSeparators } from "./helpers/wordSeparators";
+import { getWordSeparators, shouldRespectSubwordMode } from "./helpers/wordSeparators";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { getNonEmptySelections, makeSelectionsEmpty } from "./helpers/selection";
 import { MessageManager } from "../message";
@@ -26,10 +26,11 @@ function findNextKillWordRange(doc: TextDocument, position: Position, repeat = 1
 
   const wordSeparators = getWordSeparators(doc);
   const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
+  const subwordMode = shouldRespectSubwordMode(doc);
 
   let wordEnd = position;
   for (let i = 0; i < repeat; ++i) {
-    wordEnd = findNextWordEnd(doc, wordSeparators, wordEnd, allowCrossLineWordNavigation);
+    wordEnd = findNextWordEnd(doc, wordSeparators, wordEnd, allowCrossLineWordNavigation, subwordMode);
   }
 
   const range = new Range(position, wordEnd);
@@ -63,10 +64,11 @@ function findPreviousKillWordRange(doc: TextDocument, position: Position, repeat
 
   const wordSeparators = getWordSeparators(doc);
   const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
+  const subwordMode = shouldRespectSubwordMode(doc);
 
   let wordStart = position;
   for (let i = 0; i < repeat; ++i) {
-    wordStart = findPreviousWordStart(doc, wordSeparators, wordStart, allowCrossLineWordNavigation);
+    wordStart = findPreviousWordStart(doc, wordSeparators, wordStart, allowCrossLineWordNavigation, subwordMode);
   }
 
   const range = new Range(wordStart, position);
