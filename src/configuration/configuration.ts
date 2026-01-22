@@ -38,6 +38,8 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   public clearSelectionBeforeCharMove = false;
   public shiftSelectMode = false;
 
+  public subwordMode = false;
+
   public keepCursorInVisibleRange = false;
 
   public killWholeLine = false;

@@ -46,6 +46,11 @@ export interface IConfiguration {
    */
   shiftSelectMode: boolean;
 
+  /**
+   * When true, word navigation and deletion commands operate in subword mode
+   */
+  subwordMode: boolean;
+
   enableOverridingTypeCommand: boolean;
 
   /**

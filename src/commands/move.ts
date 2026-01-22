@@ -296,7 +296,8 @@ export class ForwardWord extends EmacsCommand {
     }
 
     const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
-    const { classifier: wordSeparators, subwordMode } = getWordSeparators(textEditor.document);
+    const wordSeparators = getWordSeparators(textEditor.document);
+    const subwordMode = Configuration.instance.subwordMode;
     const doc = textEditor.document;
 
     if (this.emacsController.inRectMarkMode) {
@@ -343,7 +344,8 @@ export class BackwardWord extends EmacsCommand {
     }
 
     const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
-    const { classifier: wordSeparators, subwordMode } = getWordSeparators(textEditor.document);
+    const wordSeparators = getWordSeparators(textEditor.document);
+    const subwordMode = Configuration.instance.subwordMode;
     const doc = textEditor.document;
 
     if (this.emacsController.inRectMarkMode) {
