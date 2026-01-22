@@ -204,7 +204,9 @@ function findNextWordOnLine(
   return null;
 }
 
-// Finds the end of the whole word.
+// Based on `moveWordRight` method with `wordNavigationType = WordNavigationType.WordEnd`
+// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L252
+// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L245
 function findNextWordEndInternal(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
@@ -270,8 +272,7 @@ function findNextWordEndInternal(
   return new Position(lineNumber, character);
 }
 
-// Finds the end of the subword.
-// Based on Emacs's subword-forward-internal.
+// Based on Emacs's subword-forward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L282 )
 function findNextSubwordEndInternal(doc: TextDocument, position: Position): Position | null {
   const regexp = /\W*(([A-Z]*(\W?))[a-z\d]*)/dg;
   const line = doc.lineAt(position).text.substring(position.character);
@@ -288,9 +289,6 @@ function findNextSubwordEndInternal(doc: TextDocument, position: Position): Posi
   return new Position(position.line, position.character + range0[1]);
 }
 
-// Based on `moveWordRight` method with `wordNavigationType = WordNavigationType.WordEnd`
-// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/common/controller/cursorWordOperations.ts#L252
-// https://github.com/microsoft/vscode/blob/0fbda8ef061b5e86904a3c4265c9f3ee0903b7fd/src/vs/editor/contrib/wordOperations/wordOperations.ts#L245
 export function findNextWordEnd(
   doc: TextDocument,
   wordSeparators: WordCharacterClassifier,
@@ -382,7 +380,7 @@ function findPreviousWordStartInternal(
   return new Position(lineNumber, prevWordOnLine ? prevWordOnLine.start : 0);
 }
 
-// Based on Emacs's subword-backward-internal.
+// Based on Emacs's subword-backward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L302 )
 function findPreviousSubwordStartInternal(lineContent: string, position: Position): Position | null {
   const regexp = /((\W|[a-z\d])([A-Z]+\W*)|\W\w+)/dg;
   // Find the last regexp match after the position.
