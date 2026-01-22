@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.106.0
+
+### Minor Changes
+
+- [#2676](https://github.com/whitphx/vscode-emacs-mcx/pull/2676) [`0854e44`](https://github.com/whitphx/vscode-emacs-mcx/commit/0854e44aacf22e75d20f5978f98940e3c118235d) Thanks [@yasushi-saito](https://github.com/yasushi-saito)! - Add subword mode support for word-oriented navigation and editing commands.
+
+  When `emacs-mcx.subwordMode` is enabled (and `emacs-mcx.wordNavigationStyle` is set to `"emacs"`), commands like `M-f`, `M-b`, and `M-d` will recognize subword boundaries in camelCase and PascalCase identifiers, mirroring Emacs's `subword-mode`.
+
 ## 0.105.0
 
 ### Minor Changes
