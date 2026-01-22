@@ -273,22 +273,6 @@ function findNextWordEndInternal(
 }
 
 // Based on Emacs's subword-forward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L282 )
-//
-// The regex pattern matches subword boundaries in camelCase/PascalCase:
-//   \W*                 - Skip leading non-word characters (separators, whitespace)
-//   (                   - Group 1: The full subword match
-//     ([A-Z]*(\W?))     - Group 2: Uppercase prefix; Group 3: Optional trailing non-word char
-//     [a-z\d]*          - Lowercase letters or digits following the uppercase
-//   )
-//
-// Examples of subword boundaries detected (| marks where cursor stops):
-//   "camelCase"    -> "camel|Case|"
-//   "PascalCase"   -> "Pascal|Case|"
-//   "HTMLParser"   -> "HTML|Parser|"
-//   "getURLString" -> "get|URL|String|"
-//
-// Note: This uses the 'd' flag for regex indices, requiring ES2022+ target.
-// Note: This ignores editor.wordSeparators config and uses \W (non-word chars) instead.
 function findNextSubwordEndInternal(doc: TextDocument, position: Position): Position | null {
   const regexp = /\W*(([A-Z]*(\W?))[a-z\d]*)/dg;
   const line = doc.lineAt(position).text.substring(position.character);
@@ -398,24 +382,6 @@ function findPreviousWordStartInternal(
 }
 
 // Based on Emacs's subword-backward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L302 )
-//
-// The regex pattern matches subword boundaries when moving backward:
-//   (                       - Group 1: Full match (one of two alternatives)
-//     (\W|[a-z\d])          - Group 2: Non-word char OR lowercase/digit (boundary marker)
-//     ([A-Z]+\W*)           - Group 3: One or more uppercase chars + optional non-word chars
-//   |                       - OR
-//     \W\w+                 - Non-word char followed by word chars (handles snake_case)
-//   )
-//
-// Examples of subword boundaries detected (| marks where cursor stops):
-//   "camelCase"    -> "|camel|Case"
-//   "PascalCase"   -> "|Pascal|Case"
-//   "HTMLParser"   -> "|HTML|Parser"
-//   "getURLString" -> "|get|URL|String"
-//   "snake_case"   -> "|snake|_case" (via \W\w+ alternative)
-//
-// Note: This uses the 'd' flag for regex indices, requiring ES2022+ target.
-// Note: This ignores editor.wordSeparators config and uses \W (non-word chars) instead.
 function findPreviousSubwordStartInternal(lineContent: string, position: Position): Position | null {
   const regexp = /((\W|[a-z\d])([A-Z]+\W*)|\W\w+)/dg;
   // Find the last regexp match before the position.
