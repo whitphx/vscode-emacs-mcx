@@ -47,7 +47,8 @@ export interface IConfiguration {
   shiftSelectMode: boolean;
 
   /**
-   * When true, word navigation and deletion commands operate in subword mode
+   * When true, word navigation and deletion commands operate in subword mode.
+   * Effective when `emacs-mcx.wordNavigationStyle` is set to `emacs`.
    */
   subwordMode: boolean;
 

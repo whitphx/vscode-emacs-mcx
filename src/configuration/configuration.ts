@@ -83,6 +83,13 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     return this.scrollDownCommandBehavior;
   }
 
+  public get $subwordMode(): boolean {
+    if (this.wordNavigationStyle === "emacs") {
+      return this.subwordMode;
+    }
+    return false;
+  }
+
   public paredit: IPareditConfiguration = {
     parentheses: { "[": "]", "(": ")", "{": "}" },
   };
