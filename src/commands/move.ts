@@ -11,7 +11,7 @@ import { MessageManager } from "../message";
 import { revealPrimaryActive } from "./helpers/reveal";
 import type { IEmacsController } from "../emulator";
 import { findNextWordEnd, findPreviousWordStart } from "./helpers/wordOperations";
-import { getWordSeparators } from "./helpers/wordSeparators";
+import { getWordSeparators, shouldRespectSubwordMode } from "./helpers/wordSeparators";
 import { makeSelectionsEmpty } from "./helpers/selection";
 
 // TODO: be unnecessary
@@ -297,7 +297,7 @@ export class ForwardWord extends EmacsCommand {
 
     const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     const wordSeparators = getWordSeparators(textEditor.document);
-    const subwordMode = Configuration.instance.$subwordMode;
+    const subwordMode = shouldRespectSubwordMode(textEditor.document);
     const doc = textEditor.document;
 
     if (this.emacsController.inRectMarkMode) {
@@ -345,7 +345,7 @@ export class BackwardWord extends EmacsCommand {
 
     const allowCrossLineWordNavigation = Configuration.instance.wordNavigationStyle === "emacs";
     const wordSeparators = getWordSeparators(textEditor.document);
-    const subwordMode = Configuration.instance.$subwordMode;
+    const subwordMode = shouldRespectSubwordMode(textEditor.document);
     const doc = textEditor.document;
 
     if (this.emacsController.inRectMarkMode) {
