@@ -38,8 +38,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
   public clearSelectionBeforeCharMove = false;
   public shiftSelectMode = false;
 
-  public subwordMode = false;
-
   public keepCursorInVisibleRange = false;
 
   public killWholeLine = false;
@@ -81,13 +79,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
       return "emacs";
     }
     return this.scrollDownCommandBehavior;
-  }
-
-  public get $subwordMode(): boolean {
-    if (this.wordNavigationStyle === "emacs") {
-      return this.subwordMode;
-    }
-    return false;
   }
 
   public paredit: IPareditConfiguration = {
