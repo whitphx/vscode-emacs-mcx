@@ -1,7 +1,9 @@
 import assert from "assert";
+import * as vscode from "vscode";
 import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
 import { assertTextEqual, cleanUpWorkspace, setupWorkspace, createEmulator } from "../utils";
+import { Configuration } from "../../../configuration/configuration";
 
 suite("transformToUppercase", () => {
   let activeTextEditor: TextEditor;
@@ -116,6 +118,66 @@ suite("transformToLowercase", () => {
       teardown(cleanUpWorkspace);
 
       test("cursor moves with downcasing which enables continuous transformation when the selection is empty", async () => {
+        activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
+
+        for (const { cursorAt, text } of expectedResults) {
+          await emulator.runCommand("transformToLowercase");
+          assertTextEqual(activeTextEditor, text);
+          assert.ok(activeTextEditor.selections.length === 1);
+          assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));
+        }
+      });
+    });
+  });
+});
+
+suite("transform with subword mode", () => {
+  const testCases = [
+    {
+      initialText: "AAA BBB CCC",
+      expectedResults: [
+        { cursorAt: new Position(0, 3), text: "aaa BBB CCC" },
+        { cursorAt: new Position(0, 7), text: "aaa bbb CCC" },
+        { cursorAt: new Position(0, 11), text: "aaa bbb ccc" },
+      ],
+    },
+    {
+      initialText: "abCDEf",
+      expectedResults: [
+        { cursorAt: new Position(0, 2), text: "abCDEf" },
+        { cursorAt: new Position(0, 4), text: "abcdEf" },
+        { cursorAt: new Position(0, 6), text: "abcdef" },
+      ],
+    },
+  ];
+
+  testCases.forEach(({ initialText, expectedResults }) => {
+    suite(`initialText is ${initialText}`, () => {
+      let activeTextEditor: vscode.TextEditor;
+      let emulator: EmacsEmulator;
+      let originalSubwordMode: undefined;
+
+      setup(async () => {
+        const emacsConfig = vscode.workspace.getConfiguration("emacs-mcx");
+        originalSubwordMode = emacsConfig.get("subwordMode");
+        await emacsConfig.update("subwordMode", true, vscode.ConfigurationTarget.Global);
+
+        activeTextEditor = await setupWorkspace(initialText);
+        emulator = createEmulator(activeTextEditor);
+      });
+      setup(() => {
+        Configuration.instance.wordNavigationStyle = "emacs";
+      });
+      teardown(() => {
+        Configuration.reload();
+      });
+      teardown(async () => {
+        const emacsConfig = vscode.workspace.getConfiguration("emacs-mcx");
+        await emacsConfig.update("subwordMode", originalSubwordMode, vscode.ConfigurationTarget.Global);
+        await cleanUpWorkspace();
+      });
+
+      test("downcasing with subword mode", async () => {
         activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
 
         for (const { cursorAt, text } of expectedResults) {

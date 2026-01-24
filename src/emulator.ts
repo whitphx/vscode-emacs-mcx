@@ -36,7 +36,7 @@ const logger = Logger.get("EmacsEmulator");
 export interface IEmacsController {
   readonly textEditor: TextEditor;
 
-  runCommand(commandName: string): void | Thenable<unknown>;
+  runCommand(commandName: string, args?: unknown): void | Thenable<unknown>;
 
   enterMarkMode(pushMark?: boolean): void;
   exitMarkMode(): void;
