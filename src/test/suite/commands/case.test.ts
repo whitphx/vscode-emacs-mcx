@@ -179,7 +179,7 @@ suite("transformToTitlecase", () => {
 
       teardown(cleanUpWorkspace);
 
-      test("cursor moves with titlecasing which enables continuous transformation when the selection is empty", async () => {
+      test("cursor moves with titlecase which enables continuous transformation when the selection is empty", async () => {
         activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
 
         for (const { cursorAt, text } of expectedResults) {
