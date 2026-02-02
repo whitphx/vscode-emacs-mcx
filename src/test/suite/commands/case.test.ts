@@ -131,7 +131,7 @@ suite("transformToLowercase", () => {
   });
 });
 
-suite("transform with subword mode", () => {
+suite("transformToLowercase (subword mode)", () => {
   const testCases = [
     {
       initialText: "AAA BBB CCC",
