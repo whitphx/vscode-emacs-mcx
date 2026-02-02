@@ -155,7 +155,7 @@ suite("transform with subword mode", () => {
     suite(`initialText is ${initialText}`, () => {
       let activeTextEditor: vscode.TextEditor;
       let emulator: EmacsEmulator;
-      let originalSubwordMode: undefined;
+      let originalSubwordMode: boolean | undefined;
 
       setup(async () => {
         const emacsConfig = vscode.workspace.getConfiguration("emacs-mcx");
