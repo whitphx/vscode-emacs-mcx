@@ -131,6 +131,68 @@ suite("transformToLowercase", () => {
   });
 });
 
+suite("transformToTitlecase", () => {
+  let activeTextEditor: TextEditor;
+  let emulator: EmacsEmulator;
+
+  const testCases = [
+    {
+      initialText: "aaa bbb ccc",
+      expectedResults: [
+        { cursorAt: new Position(0, 3), text: "Aaa bbb ccc" },
+        { cursorAt: new Position(0, 7), text: "Aaa Bbb ccc" },
+        { cursorAt: new Position(0, 11), text: "Aaa Bbb Ccc" },
+      ],
+    },
+    {
+      initialText: "AAA BBB CCC",
+      expectedResults: [
+        { cursorAt: new Position(0, 3), text: "Aaa BBB CCC" },
+        { cursorAt: new Position(0, 7), text: "Aaa Bbb CCC" },
+        { cursorAt: new Position(0, 11), text: "Aaa Bbb Ccc" },
+      ],
+    },
+    {
+      initialText: "aaa  bbb  ccc",
+      expectedResults: [
+        { cursorAt: new Position(0, 3), text: "Aaa  bbb  ccc" },
+        { cursorAt: new Position(0, 8), text: "Aaa  Bbb  ccc" },
+        { cursorAt: new Position(0, 13), text: "Aaa  Bbb  Ccc" },
+      ],
+    },
+    {
+      initialText: "aaa\nbbb\nccc",
+      expectedResults: [
+        { cursorAt: new Position(0, 3), text: "Aaa\nbbb\nccc" },
+        { cursorAt: new Position(1, 3), text: "Aaa\nBbb\nccc" },
+        { cursorAt: new Position(2, 3), text: "Aaa\nBbb\nCcc" },
+      ],
+    },
+  ];
+
+  testCases.forEach(({ initialText, expectedResults }) => {
+    suite(`initialText is ${initialText}`, () => {
+      setup(async () => {
+        activeTextEditor = await setupWorkspace(initialText);
+        emulator = createEmulator(activeTextEditor);
+      });
+
+      teardown(cleanUpWorkspace);
+
+      test("cursor moves with titlecasing which enables continuous transformation when the selection is empty", async () => {
+        activeTextEditor.selections = [new Selection(new Position(0, 0), new Position(0, 0))];
+
+        for (const { cursorAt, text } of expectedResults) {
+          await emulator.runCommand("transformToTitlecase");
+          assertTextEqual(activeTextEditor, text);
+          assert.ok(activeTextEditor.selections.length === 1);
+          assert.ok(activeTextEditor.selection.active.isEqual(cursorAt));
+        }
+      });
+    });
+  });
+});
+
 suite("transformToLowercase (subword mode)", () => {
   const testCases = [
     {
