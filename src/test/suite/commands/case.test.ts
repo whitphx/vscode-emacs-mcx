@@ -218,12 +218,14 @@ suite("transformToLowercase (subword mode)", () => {
       let activeTextEditor: vscode.TextEditor;
       let emulator: EmacsEmulator;
       let originalSubwordMode: boolean | undefined;
+      let originalWordNavigationStyle: typeof Configuration.instance.wordNavigationStyle;
 
       setup(async () => {
         const emacsConfig = vscode.workspace.getConfiguration("emacs-mcx");
         originalSubwordMode = emacsConfig.get("subwordMode");
         await emacsConfig.update("subwordMode", true, vscode.ConfigurationTarget.Global);
 
+        originalWordNavigationStyle = Configuration.instance.wordNavigationStyle;
         Configuration.instance.wordNavigationStyle = "emacs";
 
         activeTextEditor = await setupWorkspace(initialText);
@@ -233,6 +235,7 @@ suite("transformToLowercase (subword mode)", () => {
         const emacsConfig = vscode.workspace.getConfiguration("emacs-mcx");
         await emacsConfig.update("subwordMode", originalSubwordMode, vscode.ConfigurationTarget.Global);
 
+        Configuration.instance.wordNavigationStyle = originalWordNavigationStyle;
         Configuration.reload();
 
         await cleanUpWorkspace();
