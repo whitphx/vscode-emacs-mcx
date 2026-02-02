@@ -29,14 +29,13 @@ async function transformWordInternal(
     });
 }
 
+const titleBoundary = new RegExp("(^|[^\\p{L}\\p{N}']|((^|\\P{L})'))\\p{L}", "gmu"); // Ref: https://github.com/microsoft/vscode/blob/238adc8bc607dd294a57e24b37073fbd939aaca9/src/vs/editor/contrib/linesOperations/browser/linesOperations.ts#L1218
+
 export class TransformToTitlecase extends EmacsCommand {
   public readonly id = "transformToTitlecase";
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     return transformWordInternal(this.emacsController, textEditor, prefixArgument, (text: string) => {
-      if (text.length == 0) {
-        return text;
-      }
-      return text.charAt(0).toUpperCase() + text.substring(1).toLowerCase();
+      return text.toLocaleLowerCase().replace(titleBoundary, (b) => b.toLocaleUpperCase()); // Ref: https://github.com/microsoft/vscode/blob/238adc8bc607dd294a57e24b37073fbd939aaca9/src/vs/editor/contrib/linesOperations/browser/linesOperations.ts#L1235-L1237
     });
   }
 }
@@ -44,8 +43,11 @@ export class TransformToTitlecase extends EmacsCommand {
 export class TransformToUppercase extends EmacsCommand {
   public readonly id = "transformToUppercase";
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    return transformWordInternal(this.emacsController, textEditor, prefixArgument, (text: string) =>
-      text.toUpperCase(),
+    return transformWordInternal(
+      this.emacsController,
+      textEditor,
+      prefixArgument,
+      (text: string) => text.toLocaleUpperCase(), // Use toLocaleUpperCase as same as https://github.com/microsoft/vscode/blob/238adc8bc607dd294a57e24b37073fbd939aaca9/src/vs/editor/contrib/linesOperations/browser/linesOperations.ts#L1167
     );
   }
 }
@@ -53,8 +55,11 @@ export class TransformToUppercase extends EmacsCommand {
 export class TransformToLowercase extends EmacsCommand {
   public readonly id = "transformToLowercase";
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
-    return transformWordInternal(this.emacsController, textEditor, prefixArgument, (text: string) =>
-      text.toLowerCase(),
+    return transformWordInternal(
+      this.emacsController,
+      textEditor,
+      prefixArgument,
+      (text: string) => text.toLocaleLowerCase(), // Use toLocaleLowerCase as same as https://github.com/microsoft/vscode/blob/238adc8bc607dd294a57e24b37073fbd939aaca9/src/vs/editor/contrib/linesOperations/browser/linesOperations.ts#L1182
     );
   }
 }
