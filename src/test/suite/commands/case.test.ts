@@ -162,18 +162,17 @@ suite("transform with subword mode", () => {
         originalSubwordMode = emacsConfig.get("subwordMode");
         await emacsConfig.update("subwordMode", true, vscode.ConfigurationTarget.Global);
 
+        Configuration.instance.wordNavigationStyle = "emacs";
+
         activeTextEditor = await setupWorkspace(initialText);
         emulator = createEmulator(activeTextEditor);
-      });
-      setup(() => {
-        Configuration.instance.wordNavigationStyle = "emacs";
-      });
-      teardown(() => {
-        Configuration.reload();
       });
       teardown(async () => {
         const emacsConfig = vscode.workspace.getConfiguration("emacs-mcx");
         await emacsConfig.update("subwordMode", originalSubwordMode, vscode.ConfigurationTarget.Global);
+
+        Configuration.reload();
+
         await cleanUpWorkspace();
       });
 
