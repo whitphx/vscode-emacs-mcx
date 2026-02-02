@@ -10,7 +10,7 @@ async function transformWordInternal(
   transformer: (text: string) => string,
 ): Promise<void> {
   const oldPositions: Position[] = textEditor.selections.map((selection) => selection.active);
-  await emacsController.runCommand("forwardWord", prefixArgument);
+  await emacsController.runCommand("forwardWord", { prefixArgument });
   if (textEditor.selections.length != oldPositions.length) {
     return;
   }
