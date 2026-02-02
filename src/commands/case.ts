@@ -16,10 +16,8 @@ async function transformWordInternal(
   }
   return textEditor
     .edit((editBuilder) => {
-      let i = 0;
-      textEditor.selections.forEach((selection) => {
+      textEditor.selections.forEach((selection, i) => {
         const range = new Range(oldPositions[i] as Position, selection.active);
-        i++;
         const text = textEditor.document.getText(range);
         editBuilder.replace(range, transformer(text));
       });
