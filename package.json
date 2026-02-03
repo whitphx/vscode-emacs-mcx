@@ -7838,7 +7838,7 @@
     "@vscode/test-web": "^0.0.78",
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
-    "cspell": "^9.6.0",
+    "cspell": "^9.6.3",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",
