@@ -9,7 +9,7 @@
     "url": "https://github.com/whitphx/vscode-emacs-mcx"
   },
   "engines": {
-    "vscode": "^1.106.0"
+    "vscode": "^1.89.0"
   },
   "categories": [
     "Other",
@@ -7388,67 +7388,67 @@
       },
       {
         "key": "ctrl+alt+i",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "ctrl+cmd+i",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape ctrl+i",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ ctrl+i",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+tab",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+tab",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape tab",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ tab",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+/",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+/",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape /",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ /",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+'",
-        "command": "workbench.action.terminal.triggerSuggest",
+        "command": "emacs-mcx.terminalTriggerSuggest",
         "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible"
       },
       {
@@ -7832,7 +7832,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.10.2",
     "@types/sinon": "^21.0.0",
-    "@types/vscode": "^1.106.0",
+    "@types/vscode": "^1.89.0",
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.79",
