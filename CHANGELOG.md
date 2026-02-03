@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.107.0
+
+### Minor Changes
+
+- [#2722](https://github.com/whitphx/vscode-emacs-mcx/pull/2722) [`6b34fbc`](https://github.com/whitphx/vscode-emacs-mcx/commit/6b34fbc7cf549f88d25ebfe96a5584c25cb16071) Thanks [@whitphx](https://github.com/whitphx)! - Support both >=1.106.0 and <1.106.0 by adding a proxy command to support the different terminal suggestion commands
+
 ## 0.106.1
 
 ### Patch Changes
