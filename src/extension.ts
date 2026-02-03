@@ -162,11 +162,7 @@ export function activate(context: vscode.ExtensionContext): void {
     return emulator.typeChar(args);
   });
 
-  moveCommandIds.map((commandName) => {
-    registerEmulatorCommand(`emacs-mcx.${commandName}`, (emulator, args) => {
-      return emulator.runCommand(commandName, args);
-    });
-  });
+  moveCommandIds.forEach((commandName) => bindEmulatorCommand(commandName));
 
   bindEmulatorCommand("gotoLine");
 
@@ -197,13 +193,9 @@ export function activate(context: vscode.ExtensionContext): void {
   bindEmulatorCommand("zapToChar");
   bindEmulatorCommand("zapCharCommand");
 
-  registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => {
-    return emulator.universalArgument();
-  });
+  registerEmulatorCommand("emacs-mcx.universalArgument", (emulator) => emulator.universalArgument());
 
-  registerEmulatorCommand("emacs-mcx.negativeArgument", (emulator) => {
-    return emulator.negativeArgument();
-  });
+  registerEmulatorCommand("emacs-mcx.negativeArgument", (emulator) => emulator.negativeArgument());
 
   bindEmulatorCommand("killLine");
 
@@ -233,9 +225,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   bindEmulatorCommand("browseKillRing");
 
-  registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator, args) => {
-    return emulator.runCommand("startAcceptingRectCommand", args);
-  });
+  registerEmulatorCommand("emacs-mcx.startRectCommand", (emulator, args) =>
+    emulator.runCommand("startAcceptingRectCommand", args),
+  );
 
   bindEmulatorCommand("killRectangle");
 
@@ -253,29 +245,19 @@ export function activate(context: vscode.ExtensionContext): void {
 
   bindEmulatorCommand("replaceKillRingToRectangle");
 
-  registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => {
-    return emulator.setMarkCommand();
-  });
+  registerEmulatorCommand("emacs-mcx.setMarkCommand", (emulator) => emulator.setMarkCommand());
 
-  registerEmulatorCommand("emacs-mcx.rectangleMarkMode", (emulator) => {
-    return emulator.rectangleMarkMode();
-  });
+  registerEmulatorCommand("emacs-mcx.rectangleMarkMode", (emulator) => emulator.rectangleMarkMode());
 
-  registerEmulatorCommand("emacs-mcx.popMark", (emulator) => {
-    return emulator.popMark();
-  });
+  registerEmulatorCommand("emacs-mcx.popMark", (emulator) => emulator.popMark());
 
-  registerEmulatorCommand("emacs-mcx.exchangePointAndMark", (emulator) => {
-    return emulator.exchangePointAndMark();
-  });
+  registerEmulatorCommand("emacs-mcx.exchangePointAndMark", (emulator) => emulator.exchangePointAndMark());
 
   bindEmulatorCommand("addSelectionToNextFindMatch");
 
   bindEmulatorCommand("addSelectionToPreviousFindMatch");
 
-  registerEmulatorCommand("emacs-mcx.cancel", (emulator) => {
-    return emulator.cancel();
-  });
+  registerEmulatorCommand("emacs-mcx.cancel", (emulator) => emulator.cancel());
 
   bindEmulatorCommand("newLine");
 
