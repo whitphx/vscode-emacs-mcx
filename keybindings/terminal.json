@@ -150,8 +150,8 @@
       "meta+/", // Emacs' hippie expand. https://github.com/whitphx/vscode-emacs-mcx/pull/476
       "ctrl+'" // For backward-compatibility
     ],
-    "command": "workbench.action.terminal.triggerSuggest",
-    "inheritWhenFromDefault": true
+    "command": "emacs-mcx.terminalTriggerSuggest",
+    "inheritWhenFromDefault": "workbench.action.terminal.triggerSuggest"
   },
   {
     "keys": ["ctrl+p", "meta+p"],

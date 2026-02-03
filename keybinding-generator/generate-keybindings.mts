@@ -11,7 +11,7 @@ export interface KeyBindingSource {
   command?: string;
   when?: string;
   whens?: string[];
-  inheritWhenFromDefault?: boolean;
+  inheritWhenFromDefault?: boolean | string;
   args?: unknown;
   isearchInterruptible?: boolean | "interruptOnly";
   shiftVariants?: boolean;
@@ -183,7 +183,7 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
     if (src.when || src.whens) {
       throw new Error("inheritWhenFromDefault can't be used with .when or .whens");
     }
-    const command = src.command;
+    const command = typeof src.inheritWhenFromDefault === "string" ? src.inheritWhenFromDefault : src.command;
     if (command == null) {
       throw new Error(`command must be defined when inheritWhenFromDefault = true`);
     }

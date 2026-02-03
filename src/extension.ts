@@ -341,6 +341,23 @@ export function activate(context: vscode.ExtensionContext): void {
       return emulator.executeCommandWithPrefixArgument(args["command"], args["args"], args["prefixArgumentKey"]);
     }
   });
+
+  const [major = 0, minor = 0] = vscode.version.split(".").map((x) => parseInt(x, 10));
+  context.subscriptions.push(
+    vscode.commands.registerCommand("emacs-mcx.terminalTriggerSuggest", async () => {
+      // `workbench.action.terminal.requestCompletions` was renamed to `workbench.action.terminal.triggerSuggest` since 1.106.0.
+      // ref: https://github.com/microsoft/vscode/pull/273377
+      // This proxy command handles both versions.
+      // Some VSCode-based IDEs are forked from older versions of VSCode and may not have the new command
+      // so we need to support the older command as well.
+      // ref: https://github.com/whitphx/vscode-emacs-mcx/pull/2687
+      if (major > 1 || (major === 1 && minor >= 106)) {
+        await vscode.commands.executeCommand("workbench.action.terminal.triggerSuggest");
+      } else {
+        await vscode.commands.executeCommand("workbench.action.terminal.requestCompletions");
+      }
+    }),
+  );
 }
 
 // this method is called when your extension is deactivated
