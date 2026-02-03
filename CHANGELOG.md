@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.106.1
+
+### Patch Changes
+
+- [#2713](https://github.com/whitphx/vscode-emacs-mcx/pull/2713) [`10e9af4`](https://github.com/whitphx/vscode-emacs-mcx/commit/10e9af44404e69191dd38ad37c562224504dc952) Thanks [@yasushi-saito](https://github.com/yasushi-saito)! - Update TransformTo\* commands to support subwords
+
 ## 0.106.0
 
 ### Minor Changes
