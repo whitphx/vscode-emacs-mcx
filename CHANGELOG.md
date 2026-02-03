@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.107.1
+
+### Patch Changes
+
+- [#2725](https://github.com/whitphx/vscode-emacs-mcx/pull/2725) [`7d9328d`](https://github.com/whitphx/vscode-emacs-mcx/commit/7d9328dc03489c485bf0c7df34433fff7f42ac53) Thanks [@whitphx](https://github.com/whitphx)! - Refactoring command definitions
+
 ## 0.107.0
 
 ### Minor Changes
