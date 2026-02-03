@@ -342,9 +342,10 @@ export function activate(context: vscode.ExtensionContext): void {
     }
   });
 
-  function parseVSCodeMajorMinor(version: string): { major: number; minor: number } {
+  function parseVSCodeMajorMinorInner(version: string): { major: number; minor: number } {
     // Handle possible pre-release/build suffixes like "-insider" or "-rc"
-    const core = version.split("-")[0];
+    const core = version.split("-")[0]!;
+
     const parts = core.split(".");
 
     const rawMajor = parts[0] ?? "";
@@ -357,6 +358,13 @@ export function activate(context: vscode.ExtensionContext): void {
     const minor = Number.isFinite(parsedMinor) ? parsedMinor : 0;
 
     return { major, minor };
+  }
+  function parseVSCodeMajorMinor(version: string): { major: number; minor: number } {
+    try {
+      return parseVSCodeMajorMinorInner(version);
+    } catch {
+      return { major: 0, minor: 0 };
+    }
   }
 
   const { major, minor } = parseVSCodeMajorMinor(vscode.version);
