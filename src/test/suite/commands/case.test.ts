@@ -2,7 +2,7 @@ import assert from "assert";
 import * as vscode from "vscode";
 import { Position, Selection, TextEditor } from "vscode";
 import { EmacsEmulator } from "../../../emulator";
-import { assertTextEqual, cleanUpWorkspace, setupWorkspace, createEmulator } from "../utils";
+import { assertTextEqual, cleanUpWorkspace, setEmptyCursors, setupWorkspace, createEmulator } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
 
 suite("transformToUppercase", () => {
@@ -252,5 +252,69 @@ suite("transformToLowercase (subword mode)", () => {
         }
       });
     });
+  });
+});
+
+suite("case transformations exit mark mode", () => {
+  teardown(cleanUpWorkspace);
+
+  test("transformToUppercase exits mark mode", async () => {
+    const activeTextEditor = await setupWorkspace("aaa bbb ccc");
+    const emulator = createEmulator(activeTextEditor);
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+
+    // Verify we are in mark mode with a selection
+    assert.ok(emulator.isInMarkMode);
+    assert.ok(!activeTextEditor.selection.isEmpty);
+
+    await emulator.runCommand("transformToUppercase");
+
+    // After transformation, mark mode should be exited
+    assert.ok(!emulator.isInMarkMode);
+    assert.ok(activeTextEditor.selection.isEmpty);
+    assertTextEqual(activeTextEditor, "aAA bbb ccc");
+  });
+
+  test("transformToLowercase exits mark mode", async () => {
+    const activeTextEditor = await setupWorkspace("AAA BBB CCC");
+    const emulator = createEmulator(activeTextEditor);
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+
+    // Verify we are in mark mode with a selection
+    assert.ok(emulator.isInMarkMode);
+    assert.ok(!activeTextEditor.selection.isEmpty);
+
+    await emulator.runCommand("transformToLowercase");
+
+    // After transformation, mark mode should be exited
+    assert.ok(!emulator.isInMarkMode);
+    assert.ok(activeTextEditor.selection.isEmpty);
+    assertTextEqual(activeTextEditor, "Aaa BBB CCC");
+  });
+
+  test("transformToTitlecase exits mark mode", async () => {
+    const activeTextEditor = await setupWorkspace("aaa bbb ccc");
+    const emulator = createEmulator(activeTextEditor);
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+    await emulator.setMarkCommand();
+    await emulator.runCommand("forwardChar");
+
+    // Verify we are in mark mode with a selection
+    assert.ok(emulator.isInMarkMode);
+    assert.ok(!activeTextEditor.selection.isEmpty);
+
+    await emulator.runCommand("transformToTitlecase");
+
+    // After transformation, mark mode should be exited
+    assert.ok(!emulator.isInMarkMode);
+    assert.ok(activeTextEditor.selection.isEmpty);
+    assertTextEqual(activeTextEditor, "aAa bbb ccc");
   });
 });

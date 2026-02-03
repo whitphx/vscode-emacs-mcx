@@ -9,6 +9,8 @@ async function transformWordInternal(
   prefixArgument: number | undefined,
   transformer: (text: string) => string,
 ): Promise<void> {
+  emacsController.exitMarkMode();
+
   const oldPositions: Position[] = textEditor.selections.map((selection) => selection.active);
   await emacsController.runCommand("forwardWord", { prefixArgument });
   if (textEditor.selections.length != oldPositions.length) {
