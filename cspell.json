@@ -30,6 +30,7 @@
     "reindent",
     "Bksp",
     "dabbrev-expand",
+    "isearch",
     // npm
     "unproxify",
     "jsep",
@@ -37,6 +38,7 @@
     "jscoverage",
     "openvsx",
     // VSCode API
+    "titlecase",
     "webvieweditor",
     "treesticky",
     "reindentselectedlines",
