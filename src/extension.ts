@@ -342,7 +342,24 @@ export function activate(context: vscode.ExtensionContext): void {
     }
   });
 
-  const [major = 0, minor = 0] = vscode.version.split(".").map((x) => parseInt(x, 10));
+  function parseVSCodeMajorMinor(version: string): { major: number; minor: number } {
+    // Handle possible pre-release/build suffixes like "-insider" or "-rc"
+    const core = version.split("-")[0];
+    const parts = core.split(".");
+
+    const rawMajor = parts[0] ?? "";
+    const rawMinor = parts[1] ?? "0";
+
+    const parsedMajor = parseInt(rawMajor, 10);
+    const parsedMinor = parseInt(rawMinor, 10);
+
+    const major = Number.isFinite(parsedMajor) ? parsedMajor : 0;
+    const minor = Number.isFinite(parsedMinor) ? parsedMinor : 0;
+
+    return { major, minor };
+  }
+
+  const { major, minor } = parseVSCodeMajorMinor(vscode.version);
   context.subscriptions.push(
     vscode.commands.registerCommand("emacs-mcx.terminalTriggerSuggest", async () => {
       // `workbench.action.terminal.requestCompletions` was renamed to `workbench.action.terminal.triggerSuggest` since 1.106.0.
