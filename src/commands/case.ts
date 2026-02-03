@@ -1,7 +1,7 @@
 import { Position, Range, TextEditor } from "vscode";
 import { EmacsCommand } from ".";
 import { revealPrimaryActive } from "./helpers/reveal";
-import { IEmacsController } from "./../emulator";
+import { IEmacsController } from "../emulator";
 
 async function transformWordInternal(
   emacsController: IEmacsController,
