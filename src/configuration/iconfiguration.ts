@@ -1,7 +1,3 @@
-export interface IPareditConfiguration {
-  parentheses: { [key: string]: string };
-}
-
 export interface IDebugConfiguration {
   /**
    * Boolean indicating whether all logs should be suppressed
@@ -58,11 +54,6 @@ export interface IConfiguration {
   scrollUpCommandBehavior: "vscode" | "emacs";
   scrollDownCommandBehavior: "vscode" | "emacs";
   wordNavigationStyle: "vscode" | "emacs";
-
-  /**
-   * Paredit configuration
-   */
-  paredit: IPareditConfiguration;
 
   /**
    * Extension debugging settings

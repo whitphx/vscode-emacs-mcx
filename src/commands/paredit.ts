@@ -1,5 +1,6 @@
 import * as paredit from "paredit.js";
 import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
+import * as vscode from "vscode";
 import { EmacsCommand } from ".";
 import { KillYankCommand } from "./kill";
 import { AppendDirection } from "../kill-yank";
@@ -19,8 +20,15 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
     // However, in other languages, semicolon should be treated as one entity, but not comment for convenience.
     // To do so, ";" is replaced with another character which is not treated as comment by paredit.js
     // if the document is not lisp or lisp-like languages.
-    src = src.split(";").join("_"); // split + join = replaceAll
+    src = src.replaceAll(";", "_");
   }
+
+  const resource = doc.uri;
+  const parentheses = vscode.workspace
+    .getConfiguration("emacs-mcx", resource)
+    .get<{ [key: string]: string }>("paredit.parentheses", { "[": "]", "(": ")", "{": "}" });
+  paredit.reader.setParentheses(parentheses);
+
   const ast = paredit.parse(src);
 
   return (position: Position, repeat: number): Position => {
