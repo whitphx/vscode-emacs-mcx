@@ -14,7 +14,6 @@ import {
   assertSelectionsEqual,
   createEmulator,
 } from "../utils";
-import { Configuration } from "../../../configuration/configuration";
 
 suite("paredit commands", () => {
   let activeTextEditor: TextEditor;
@@ -83,17 +82,20 @@ suite("Parentheses config", () => {
   });
   teardown(async () => {
     getConfigurationStub.restore();
-    Configuration.reload();
     await cleanUpWorkspace();
   });
 
   function mockPareditConfig(parentheses: Record<string, string>) {
-    getConfigurationStub.returns({
-      paredit: {
-        parentheses,
-      },
-    });
-    Configuration.reload();
+    getConfigurationStub.withArgs("emacs-mcx", activeTextEditor.document).returns(
+      new (class {
+        get(section: string) {
+          if (section === "paredit.parentheses") {
+            return parentheses;
+          }
+          return undefined;
+        }
+      })(),
+    );
   }
 
   test("forwardSexp", async () => {
