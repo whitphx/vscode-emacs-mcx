@@ -569,16 +569,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "closeBreakpointWidget",
         "when": "breakpointWidgetVisible && textInputFocus"
       },
@@ -679,16 +669,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "inlineChat.discardHunkChange",
-        "when": "inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && inlineChatResponseType == 'messagesAndEdits'"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "inlineChat.discardHunkChange",
-        "when": "inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && inlineChatResponseType == 'messagesAndEdits' && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "search.action.focusQueryEditorWidget",
         "when": "inSearchEditor"
       },
@@ -729,16 +709,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "inlineChat.close",
-        "when": "inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook'"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "inlineChat.close",
-        "when": "inlineChatHasNotebookInline && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "notebook.hideFind",
         "when": "findWidgetVisible && notebookEditorFocused"
       },
@@ -746,6 +716,16 @@
         "key": "escape escape escape",
         "command": "notebook.hideFind",
         "when": "findWidgetVisible && notebookEditorFocused && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.browser.hideFind",
+        "when": "browserFindWidgetVisible && activeEditor == 'workbench.editor.browser'"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.action.browser.hideFind",
+        "when": "browserFindWidgetVisible && activeEditor == 'workbench.editor.browser' && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -849,6 +829,16 @@
       },
       {
         "key": "ctrl+g",
+        "command": "agentSession.exitAgentSessionProjection",
+        "when": "chatInAgentSessionProjection && chatIsEnabled"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "agentSession.exitAgentSessionProjection",
+        "when": "chatInAgentSessionProjection && chatIsEnabled && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
         "command": "commentsClearFilterText",
         "when": "commentsFilterFocus"
       },
@@ -920,12 +910,22 @@
       {
         "key": "ctrl+g",
         "command": "scm.clearInput",
-        "when": "scmRepository && !editorHasSelection && !suggestWidgetVisible"
+        "when": "scmRepository && !editorHasSelection && !inlineSuggestionVisible && !scmInputHasValidationMessage && !suggestWidgetVisible"
       },
       {
         "key": "escape escape escape",
         "command": "scm.clearInput",
-        "when": "scmRepository && !editorHasSelection && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "scmRepository && !editorHasSelection && !inlineSuggestionVisible && !scmInputHasValidationMessage && !suggestWidgetVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "scm.clearValidation",
+        "when": "scmInputHasValidationMessage && scmRepository"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "scm.clearValidation",
+        "when": "scmInputHasValidationMessage && scmRepository && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -946,6 +946,16 @@
         "key": "escape escape escape",
         "command": "settings.action.focusLevelUp",
         "when": "inSettingsEditor && !inSettingsJSONEditor && !inSettingsSearch && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.browser.addElementToChat",
+        "when": "browserElementSelectionActive && chatIsEnabled && config.chat.sendElementsToChat.enabled && activeEditor == 'workbench.editor.browser'"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.action.browser.addElementToChat",
+        "when": "browserElementSelectionActive && chatIsEnabled && config.chat.sendElementsToChat.enabled && activeEditor == 'workbench.editor.browser' && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1020,12 +1030,22 @@
       {
         "key": "ctrl+g",
         "command": "inlineChat2.close",
-        "when": "chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook'"
+        "when": "chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && config.inlineChat.renderMode != 'hover' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode != 'hover' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && config.inlineChat.renderMode != 'hover' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode != 'hover'"
       },
       {
         "key": "escape escape escape",
         "command": "inlineChat2.close",
-        "when": "(chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook') && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "(chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && config.inlineChat.renderMode != 'hover' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode != 'hover' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && config.inlineChat.renderMode != 'hover' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode != 'hover') && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlineChat2.undo",
+        "when": "chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && config.inlineChat.renderMode == 'hover' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover'"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "inlineChat2.undo",
+        "when": "(chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && config.inlineChat.renderMode == 'hover' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover') && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1176,6 +1196,16 @@
         "key": "escape escape escape",
         "command": "diffEditor.exitCompareMove",
         "when": "comparingMovedCode && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isMac"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isMac && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
