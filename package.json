@@ -175,7 +175,10 @@
           "type": "object",
           "patternProperties": {
             "^\\S$": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "pattern": "^\\S$"
             }
           },
@@ -183,7 +186,8 @@
             "[": "]",
             "(": ")",
             "{": "}"
-          }
+          },
+          "scope": "language-overridable"
         },
         "emacs-mcx.subwordMode": {
           "type": "boolean",

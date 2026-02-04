@@ -189,7 +189,7 @@ When true, line-move moves point by visual lines (same as an Emacs variable line
 
 ### `emacs-mcx.paredit.parentheses`
 
-Key-value pairs of parentheses like the following example to be used in the ParEdit commands.
+Key-value pairs of parentheses to be used in the ParEdit commands like the following example.
 
 ```json
 {
@@ -197,6 +197,22 @@ Key-value pairs of parentheses like the following example to be used in the ParE
   "(": ")",
   "{": "}"
 }
+```
+
+User-defined pairs are merged with the default pairs.
+You can also override the default pairs or disable them by setting `null` as the value. For example:
+
+```json
+"emacs-mcx.paredit.parentheses": {
+  "<": ">",  // New pair
+  "{": null,  // Default pair disabled
+}
+// This will result in the following configuration for files of the language:
+// {
+//   "[": "]",
+//   "(": ")",
+//   "<": ">"
+// }
 ```
 
 ### `emacs-mcx.subwordMode`

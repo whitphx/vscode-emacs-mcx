@@ -6,8 +6,25 @@ import { KillYankCommand } from "./kill";
 import { AppendDirection } from "../kill-yank";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { MessageManager } from "../message";
+import { Logger } from "../logger";
+
+const logger = Logger.get("paredit");
 
 type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
+
+function getPareditParenthesesConfig(document: vscode.TextDocument): { [key: string]: string } {
+  const config = vscode.workspace.getConfiguration("emacs-mcx", document);
+  const parentheses = config.get<{ [key: string]: string | null }>("paredit.parentheses", {});
+  // parentheses[open] can be null to explicitly disable a pair
+  const filteredParentheses: { [key: string]: string } = {};
+  for (const open in parentheses) {
+    const close = parentheses[open];
+    if (close != null) {
+      filteredParentheses[open] = close;
+    }
+  }
+  return filteredParentheses;
+}
 
 // Languages in which semicolon represents comment
 const languagesSemicolonComment = new Set(["clojure", "lisp", "scheme"]);
@@ -23,10 +40,8 @@ const makeSexpTravelFunc = (doc: TextDocument, pareditNavigatorFn: PareditNaviga
     src = src.replaceAll(";", "_");
   }
 
-  const resource = doc.uri;
-  const parentheses = vscode.workspace
-    .getConfiguration("emacs-mcx", resource)
-    .get<{ [key: string]: string }>("paredit.parentheses", { "[": "]", "(": ")", "{": "}" });
+  const parentheses = getPareditParenthesesConfig(doc);
+  logger.debug(`Using paredit parentheses: ${JSON.stringify(parentheses)}`);
   paredit.reader.setParentheses(parentheses);
 
   const ast = paredit.parse(src);
