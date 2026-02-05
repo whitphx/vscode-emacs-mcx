@@ -187,6 +187,7 @@
             "(": ")",
             "{": "}"
           },
+          "description": "Defines matching parenthesis pairs used by Paredit commands. Keys are opening delimiters and values are their corresponding closing delimiters.",
           "scope": "language-overridable"
         },
         "emacs-mcx.subwordMode": {
