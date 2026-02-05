@@ -199,13 +199,13 @@ Key-value pairs of parentheses to be used in the ParEdit commands like the follo
 }
 ```
 
-User-defined pairs are merged with the default pairs.
+The parentheses pairs are inherited from a default configuration and merged in order: Default → User-defined global config → User-defined per-language. Each finer-grained config can override individual pair definitions from its parent.
 You can also override the default pairs or disable them by setting `null` as the value. For example:
 
 ```json
 "emacs-mcx.paredit.parentheses": {
   "<": ">",  // New pair
-  "{": null,  // Default pair disabled
+  "{": null,  // Override to disable
 }
 // This will result in the following configuration for files of the language:
 // {
