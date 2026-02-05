@@ -68,7 +68,7 @@ suite("package.json", () => {
       }
 
       if (keyFirstSegment && ["subwordMode", "paredit"].includes(keyFirstSegment)) {
-        // Special case subwordMode. It's handled by wordSeparators.ts.
+        // These configs are consumed in code but do not have direct handlers in Configuration class.
         return false;
       }
       return true;
