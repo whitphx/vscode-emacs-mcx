@@ -14,7 +14,7 @@ type PareditNavigatorFn = (ast: paredit.AST, idx: number) => number;
 
 function getPareditParenthesesConfig(document: vscode.TextDocument): { [key: string]: string } {
   const config = vscode.workspace.getConfiguration("emacs-mcx", document);
-  const parentheses = config.get<{ [key: string]: string | null }>("paredit.parentheses", {});
+  const parentheses = config.get<{ [key: string]: string | null }>("paredit.parentheses");
   // parentheses[open] can be null to explicitly disable a pair
   const filteredParentheses: { [key: string]: string } = {};
   for (const open in parentheses) {
