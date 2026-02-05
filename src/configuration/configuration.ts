@@ -4,8 +4,7 @@
 
 import { Logger } from "../logger";
 import * as vscode from "vscode";
-import { IConfiguration, IDebugConfiguration, IPareditConfiguration } from "./iconfiguration";
-import * as paredit from "paredit.js";
+import { IConfiguration, IDebugConfiguration } from "./iconfiguration";
 
 export class Configuration implements IConfiguration, vscode.Disposable {
   /**
@@ -81,10 +80,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     return this.scrollDownCommandBehavior;
   }
 
-  public paredit: IPareditConfiguration = {
-    parentheses: { "[": "]", "(": ")", "{": "}" },
-  };
-
   public debug: IDebugConfiguration = {
     silent: false,
     loggingLevelForAlert: "error",
@@ -124,9 +119,6 @@ export class Configuration implements IConfiguration, vscode.Disposable {
     }
 
     Logger.configChanged(this);
-
-    // Update configs in the third-party libraries.
-    paredit.reader.setParentheses(this.paredit.parentheses);
   }
 
   private static unproxify(obj: { [key: string]: unknown }) {
