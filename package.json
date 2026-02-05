@@ -7862,7 +7862,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.10.2",
     "@types/sinon": "^21.0.0",
-    "@types/vscode": "^1.89.0",
+    "@types/vscode": "^1.109.0",
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.79",
