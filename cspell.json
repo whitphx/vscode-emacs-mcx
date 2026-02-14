@@ -31,6 +31,8 @@
     "Bksp",
     "dabbrev-expand",
     "isearch",
+    // Programming
+    "iconfiguration",
     // npm
     "unproxify",
     "jsep",
