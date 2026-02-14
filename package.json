@@ -188,7 +188,8 @@
         "emacs-mcx.subwordMode": {
           "type": "boolean",
           "description": "Make word-oriented move and edit commands recognize subwords.",
-          "default": false
+          "default": false,
+          "scope": "language-overridable"
         },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
