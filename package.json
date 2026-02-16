@@ -175,7 +175,10 @@
           "type": "object",
           "patternProperties": {
             "^\\S$": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "pattern": "^\\S$"
             }
           },
@@ -183,7 +186,9 @@
             "[": "]",
             "(": ")",
             "{": "}"
-          }
+          },
+          "description": "Defines matching parenthesis pairs used by Paredit commands. Keys are opening delimiters and values are their corresponding closing delimiters.",
+          "scope": "language-overridable"
         },
         "emacs-mcx.subwordMode": {
           "type": "boolean",
