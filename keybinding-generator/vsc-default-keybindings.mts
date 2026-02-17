@@ -35,12 +35,14 @@ async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Pro
   try {
     response = await fetch(url);
   } catch (error) {
-    throw new Error(`Failed to fetch keybindings from ${url}: ${String(error)}`);
+    throw new Error(`Failed to fetch keybindings from ${url}`, {
+      cause: error,
+    });
   }
   if (!response.ok) {
     throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
   }
-  const vscDefaultKeybindings = (await response.json()) as unknown;
+  const vscDefaultKeybindings = await response.json();
   if (!Array.isArray(vscDefaultKeybindings)) {
     throw new Error("vscDefaultKeybindings is not an array");
   }
