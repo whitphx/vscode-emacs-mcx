@@ -139,6 +139,6 @@ Releases are now driven by [Changesets](https://github.com/changesets/changesets
 1. PRs must include a changeset (see above) to describe the changes made.
    - If the PR author forgets to add a changeset, maintainers can add it during review, or even if the PR is merged without changeset, maintainers can add it afterward on the main branch.
 2. After the PR merges, the Changesets workflow automatically opens a "Version Packages" PR that bumps `package.json`, updates `CHANGELOG.md`, and removes consumed changesets. Review and merge it once it's ready to release.
-3. Once the release PR is merged, the workflow automatically triggers the release process. It creates and pushes a new version tag `v<version>`, which triggers the "Test and Build" workflow followed by "Postbuild". They build and publish the extension package to the Visual Studio Marketplace and Open VSX.
+3. Once the release PR is merged, the workflow automatically triggers the release process. It creates and pushes a new version tag `v<version>`, which triggers the "Test and Build" workflow followed by "Post-build". They build and publish the extension package to the Visual Studio Marketplace and Open VSX.
 
 Only fall back to `scripts/new-version.sh` for emergency manual releases, and always ensure CI succeeded before cutting a tag.
