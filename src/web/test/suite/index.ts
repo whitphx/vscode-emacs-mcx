@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 // imports mocha for the browser, defining the `mocha` global.
 import "mocha/mocha";
 

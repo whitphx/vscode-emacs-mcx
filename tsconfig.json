@@ -13,6 +13,7 @@
     "strict": true,
     "strictBuiltinIteratorReturn": false, // To work around an error from `lru-cache`: https://github.com/isaacs/node-lru-cache/issues/348#issuecomment-2296786407
     "esModuleInterop": true,
+    "skipLibCheck": true,
     /* Additional Checks */
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true
