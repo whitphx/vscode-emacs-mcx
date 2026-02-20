@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.107.3
+
+### Patch Changes
+
+- [#2751](https://github.com/whitphx/vscode-emacs-mcx/pull/2751) [`f853c50`](https://github.com/whitphx/vscode-emacs-mcx/commit/f853c5035732b454a01d20dc907076058a97eeac) Thanks [@whitphx](https://github.com/whitphx)! - Update ESLint and @eslint/js to v10. Includes non-functional code changes to satisfy new lint rules.
+
 ## 0.107.2
 
 ### Patch Changes
