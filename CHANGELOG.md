@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.107.4
+
+### Patch Changes
+
+- [#2762](https://github.com/whitphx/vscode-emacs-mcx/pull/2762) [`e8f509a`](https://github.com/whitphx/vscode-emacs-mcx/commit/e8f509ab84997ae3106eebcf1dcfe029effe9e50) Thanks [@whitphx](https://github.com/whitphx)! - Fix cmd+x (Cut) not working in Cursor's Agent chat input by adding textInputFocus guard to clipboard keybindings (ctrl+w, meta+w, ctrl+y) so they only activate in actual text input widgets.
+
 ## 0.107.3
 
 ### Patch Changes
