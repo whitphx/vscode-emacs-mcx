@@ -1,47 +1,194 @@
 # Repository Guidelines
 
-See `CONTRIBUTING.md` for the full contributor guide (setup, debugging in VS Code, lint/test commands, release flow); the notes below are a quick reference and may be out of date—if anything conflicts, defer to `CONTRIBUTING.md`.
+This file provides guidance for AI coding agents working with this repository. See `CONTRIBUTING.md` for the full contributor guide (setup, debugging in VS Code, lint/test commands, release flow); if anything here conflicts, defer to `CONTRIBUTING.md`.
 
-## Project Structure & Module Organization
+## Project Overview
 
-TypeScript sources live in `src/`, with `src/commands/` holding individual `EmacsCommand` subclasses, `src/emulator.ts` coordinating command dispatch, and `src/test/` hosting VS Code integration specs. Keybinding data stays in `keybindings/`, while the generator CLI in `keybinding-generator/` (see `cli.mts`) writes back into `package.json`. Bundler configs sit under `build/` and `webpack.config.js`, reusable scripts in `scripts/`, shipping assets in `images/`, and vendorized deps (such as `paredit.js`) in `vendor/`. Built artifacts land in `dist/` and should be regenerated rather than edited.
+This is a Visual Studio Code extension called "Awesome Emacs Keymap" (emacs-mcx) that provides comprehensive Emacs-like keybindings and operations for VSCode. The extension supports multi-cursor operations, kill-ring integration with system clipboard, mark-mode, mark-ring, prefix arguments, and sexp operations. The extension works both as a desktop extension and as a web extension.
 
 ## Setup & Debugging
 
 - Install dependencies with `npm install`, open the repo in VS Code, and use Run and Debug targets: "Launch Extension" and "Extension Tests" for desktop, plus "Run Web Extension in VS Code" / "Extension Tests in VS Code" for web. See `CONTRIBUTING.md` for the step-by-step workflow.
 
-## Build, Test, and Development Commands
+## Development Commands
 
-- `npm run webpack` / `npm run webpack:prod`: bundle the desktop extension in dev or production mode.
-- `npm run compile-web`, `watch-web`, or `package-web`: build the web-targeted artifact defined in `build/web-extension.webpack.config.js`.
-- `npm run check:eslint` / `npm run check:prettier`: lint/format checks (use `npm run fix:eslint` / `npm run fix:prettier` to autofix).
-- `npm run gen-keys`: regenerate `contributes.keybindings` from the JSON templates.
-- `npm run vscode:prepublish`: full release pipeline (install, clean `dist/`, generate keybindings, production bundles for desktop + web).
+### Build Commands
+
+- `npm run webpack:dev` - Development build with webpack
+- `npm run webpack:prod` - Production build with webpack (hidden source maps)
+- `npm run test-compile` - TypeScript compilation with tsc-alias
+- `npm run compile-web` - Web extension compilation
+- `npm run watch-web` - Watch mode for web extension
+- `npm run package-web` - Production web extension build
+- `npm run vscode:prepublish` - Full release pipeline (install, clean dist/, gen-keys, production bundles)
+
+### Test Commands
+
+- `npm run test` - Run VSCode extension tests from command line (requires VSCode to be installed)
+- Alternatively, run tests through VSCode debug sidebar: "Extension Tests" launch configuration
+- `npm run test:web` - Run web extension tests
+- `npm run test-gen-keys` - Test keybinding generator
+
+### Lint and Format Commands
+
+- `npm run check:eslint` - Check ESLint rules
+- `npm run fix:eslint` - Fix ESLint issues automatically
+- `npm run check:prettier` - Check Prettier formatting
+- `npm run fix:prettier` - Fix Prettier formatting automatically
+
+### Keybinding Generation
+
+- `npm run gen-keys` - Generate keybindings from keybindings/\*.json to package.json
+
+## Architecture
+
+### Core Components
+
+**EmacsEmulator** (src/emulator.ts)
+
+- Central controller managing all Emacs functionality
+- Handles command registration and execution
+- Manages mark-mode, prefix arguments, and kill-ring integration
+- Coordinates between different command categories
+- Each text editor gets its own EmacsEmulator instance to maintain independent state
+
+**Extension Activation** (src/extension.ts)
+
+- Creates shared state objects: KillRing, Minibuffer, Registers, RectangleState
+- These shared objects are passed to all EmacsEmulator instances
+- Maintains a Map<documentId, EmacsEmulator> to track emulator instances per document
+- Registers all commands using `registerEmulatorCommand` helper
+- Handles lifecycle: creates emulators on-demand, disposes when documents close
+
+**Command Architecture**
+
+- Commands are organized by category in src/commands/
+- Each command extends EmacsCommand base class
+- Commands are registered in EmacsCommandRegistry within EmacsEmulator constructor
+- Command categories: move, edit, kill, find, case, paredit, rectangle, etc.
+- Commands receive IEmacsController interface to interact with emulator state
+
+**Kill-Ring System** (src/kill-yank/)
+
+- Integrates with system clipboard
+- Maintains kill-ring history separate from clipboard
+- Supports both editor text and clipboard text entities
+- Shared across all emulator instances (one global kill-ring)
+
+**Mark and Selection Management**
+
+- Mark-mode implementation with mark-ring support (per-editor state)
+- Rectangle mark mode for block operations
+- Multi-cursor support throughout all operations
+- NativeSelectionsStore manages underlying selections vs visual rectangle selections
+
+### Project Structure
+
+- `src/` - TypeScript sources
+  - `src/commands/` - Individual EmacsCommand subclasses
+  - `src/emulator.ts` - Command dispatch coordination
+  - `src/kill-yank/` - Kill-ring and yank functionality
+  - `src/configuration/` - Extension configuration management
+  - `src/test/` - VS Code integration specs
+- `keybindings/` - Source keybinding definitions (NOT package.json directly)
+- `keybinding-generator/` - Generator CLI (`cli.mts`) that writes into package.json
+- `build/` - Bundler configs (including `web-extension.webpack.config.js`)
+- `scripts/` - Reusable scripts
+- `vendor/` - Vendorized deps (e.g., `paredit.js`)
+- `images/` - Shipping assets
+- `dist/` - Built artifacts (regenerate, don't edit)
+
+### Key Files
+
+- `src/extension.ts` - Extension entry point, activation, shared state, command registration
+- `src/emulator.ts` - Core emulator implementation, per-editor state management
+- `src/commands/` - All command implementations organized by category
+- `src/kill-yank/` - Kill-ring and yank functionality
+- `src/configuration/` - Extension configuration management
+- `keybindings/*.json` - Source keybinding definitions (NOT package.json directly)
+
+## Development Workflow
+
+### Adding New Commands
+
+1. Create command class in appropriate src/commands/ file (extends EmacsCommand)
+2. Register command in EmacsCommandRegistry within EmacsEmulator constructor
+3. Add command to extension.ts using `bindEmulatorCommand(name)` or `registerEmulatorCommand(...)`
+4. Add keybinding to appropriate file in keybindings/ directory (NOT package.json)
+5. Run `npm run gen-keys` to update package.json with generated keybindings
+6. Update README.md with new keybinding documentation
+
+See DEVELOPMENT.md for detailed instructions.
+
+### Keybinding System
+
+- **CRITICAL: Never edit package.json keybindings directly**
+- Edit JSON files in keybindings/ directory instead (`./keybindings/*.json`)
+- Run `npm run gen-keys` to generate package.json keybindings
+- Commit the regenerated `package.json` alongside `keybindings/*.json`, and mention new bindings in `README.md`
+- Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `DEVELOPMENT.md` to keep definitions DRY
+- Extended syntax in `keybindings/*.json`:
+  - `keys` array: define multiple key combinations for one command
+  - `whens` array: define multiple when conditions for one command
+  - `meta` key: automatically generates alt/cmd/ctrl+[/escape variants with config conditions
+  - `inheritWhenFromDefault`: copies when condition from VSCode's default keybinding
+  - Comments are supported (will be stripped during generation)
+
+### Testing
+
+- Unit tests use VSCode's extension testing framework
+- Tests are located in src/test/suite/
+- Run tests via VSCode debug sidebar ("Extension Tests" configuration) or `npm run test` from command line (pretest triggers `npm run test-compile` automatically)
+- Web extension tests run separately with `npm run test:web`
+- Keybinding generator tests: `npm run test-gen-keys`
+- Name suites after the command under test; aim to cover both positive flows and VS Code integration edge cases
+- Failing tests block CI
+
+## Configuration
+
+The extension provides extensive configuration through `emacs-mcx.*` settings:
+
+- `emacs-mcx.killRingMax` - Kill ring size (default: 60)
+- `emacs-mcx.useMetaPrefixEscape` - Enable Escape as Meta prefix
+- `emacs-mcx.useMetaPrefixCtrlLeftBracket` - Enable Ctrl+[ as Meta prefix
+- `emacs-mcx.useMetaPrefixAlt` - Enable Alt as Meta prefix (default: true)
+- `emacs-mcx.useMetaPrefixMacCmd` - Enable Cmd (⌘) as Meta prefix on macOS
+- `emacs-mcx.strictEmacsMove` - (Deprecated) Strict Emacs cursor movement
+- Movement behavior configs: `moveBeginningOfLineBehavior`, `moveEndOfLineBehavior`, `scrollUpCommandBehavior`, `scrollDownCommandBehavior`
+- And many more documented in package.json and README.md
 
 ## Coding Style & Naming Conventions
 
-Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth—stick to 2-space indentation, trailing commas, and explicit semicolons they enforce. New commands should be named after the original Emacs command with PascalCase class names (e.g., `ForwardWordCommand`) and exported from files that mirror that casing. Use snake-case JSON keys for keybinding definitions and prefix configuration IDs with `emacs-mcx.` to match existing contributes schema.
-
-## Testing Guidelines
-
-Use `npm test` for the Electron runner (pretest triggers `npm run test-compile` automatically) and `npm run test:web` for the browser target. Generator logic has dedicated coverage runnable through `npm run test-gen-keys`. You can also run "Extension Tests" from VS Code's debug sidebar. Add `*.test.ts` files beneath `src/test/` or alongside generator modules, name suites after the command under test, and extend fixtures so new keymaps, mark-ring behaviors, or rectangle actions are exercised. Aim to cover both positive flows and VS Code integration edge cases; failing tests block CI.
+- Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth
+- 2-space indentation, trailing commas, explicit semicolons
+- New commands: name after the original Emacs command with PascalCase class names (e.g., `ForwardWordCommand`)
+- Use snake-case JSON keys for keybinding definitions
+- Prefix configuration IDs with `emacs-mcx.`
 
 ## Commit & Pull Request Guidelines
 
-Write commits in the imperative mood with concise scopes (e.g., `Add yank history telemetry`) and cross-reference an issue number when applicable. Every PR should summarize the behavior change, list manual/automated test commands (`npm run check:eslint`, `npm run check:prettier`, `npm test`), and include screenshots or screencasts when the UX shifts. When altering keybindings, commit the updated `keybindings/*.json`, regenerated `package.json`, and README tables together. Confirm CI passes before requesting review and call out any follow-up tasks or known limitations in the description.
-
-Each PR should have a changeset fragment if it includes user-facing changes (new features, bug fixes, keybinding updates) that should be included in the release notes. Use `npm run changeset` to generate the fragment and commit it alongside your code changes. The release workflow will aggregate these fragments into a cohesive changelog entry for the next release.
-
-## Keybinding Workflow Tips
-
-Never edit the `contributes.keybindings` array in `package.json` directly; instead update the declarative source JSON in `keybindings/*.json`, run `npm run gen-keys`, and verify the diff. Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `DEVELOPMENT.md` to keep definitions DRY. Commit the regenerated `package.json` alongside `keybindings/*.json`, and mention new bindings in `README.md` so users see them in the public matrix.
+- Imperative mood with concise scopes (e.g., `Add yank history telemetry`)
+- Cross-reference an issue number when applicable
+- PRs should summarize the behavior change, list manual/automated test commands, and include screenshots when the UX shifts
+- When altering keybindings, commit updated `keybindings/*.json`, regenerated `package.json`, and README tables together
+- Confirm CI passes before requesting review
+- Include a changeset fragment (`npm run changeset`) for user-facing changes (new features, bug fixes, keybinding updates); commit it alongside code changes
 
 ## Behavior Alignment
 
-When emulating an Emacs command that has an equivalent or close counterpart in VS Code, default to the VS Code-like behavior to stay aligned with the editor. If an Emacs-like variant is also useful, add it behind a configuration option and keep the VS Code-like value as the default.
+When emulating an Emacs command that has an equivalent or close counterpart in VS Code, default to the VS Code-like behavior. If an Emacs-like variant is also useful, add it behind a configuration option and keep the VS Code-like value as the default.
 
 Examples:
 
-- Char moves: keep VS Code's default of collapsing selections, with an opt-in config for Emacs-like pre-clearing selections (`emacs-mcx.clearSelectionBeforeCharMove`).
-- Word moves: default to VS Code's word boundary rules, with a configuration switch for Emacs-style word parsing (`emacs-mcx.wordNavigationStyle`).
-- Line start/end: default to VS Code behavior for home/end movement (`emacs-mcx.moveBeginningOfLineBehavior` / `emacs-mcx.moveEndOfLineBehavior`), with Emacs-like options available.
+- Char moves: keep VS Code's default of collapsing selections, with opt-in `emacs-mcx.clearSelectionBeforeCharMove`
+- Word moves: default to VS Code's word boundary rules, with `emacs-mcx.wordNavigationStyle` for Emacs-style
+- Line start/end: default to VS Code behavior via `emacs-mcx.moveBeginningOfLineBehavior` / `emacs-mcx.moveEndOfLineBehavior`
+
+## Important Notes
+
+- Extension targets VSCode ^1.89.0
+- Uses webpack for bundling with separate web extension build
+- Requires TypeScript compilation with tsc-alias for path mapping
+- Keybinding conflicts with VSCode defaults are documented in README.md
+- The extension uses paredit.js library for sexp operations
+- CI must pass all ESLint, Prettier, and unit tests before PR merge
