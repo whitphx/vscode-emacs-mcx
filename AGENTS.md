@@ -118,7 +118,7 @@ This is a Visual Studio Code extension called "Awesome Emacs Keymap" (emacs-mcx)
 5. Run `npm run gen-keys` to update package.json with generated keybindings
 6. Update README.md with new keybinding documentation
 
-See DEVELOPMENT.md for detailed instructions.
+See CONTRIBUTING.md for detailed instructions.
 
 ### Keybinding System
 
@@ -126,7 +126,7 @@ See DEVELOPMENT.md for detailed instructions.
 - Edit JSON files in keybindings/ directory instead (`./keybindings/*.json`)
 - Run `npm run gen-keys` to generate package.json keybindings
 - Commit the regenerated `package.json` alongside `keybindings/*.json`, and mention new bindings in `README.md`
-- Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `DEVELOPMENT.md` to keep definitions DRY
+- Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `CONTRIBUTING.md` to keep definitions DRY
 - Extended syntax in `keybindings/*.json`:
   - `keys` array: define multiple key combinations for one command
   - `whens` array: define multiple when conditions for one command
