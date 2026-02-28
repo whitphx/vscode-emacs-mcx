@@ -38,7 +38,7 @@ This is a Visual Studio Code extension called "Awesome Emacs Keymap" (emacs-mcx)
 
 ### Keybinding Generation
 
-- `npm run gen-keys` - Generate keybindings from keybindings/\*.json to package.json
+- `npm run gen-keys` - Generate keybindings from `keybindings/*.json` to package.json
 
 ## Architecture
 
@@ -162,7 +162,7 @@ The extension provides extensive configuration through `emacs-mcx.*` settings:
 - Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth
 - 2-space indentation, trailing commas, explicit semicolons
 - New commands: name after the original Emacs command with PascalCase class names (e.g., `ForwardWordCommand`)
-- Use snake-case JSON keys for keybinding definitions
+- Use camelCase JSON keys for keybinding definitions, matching the existing `keybindings/*.json` schema (e.g., `isearchInterruptible`, `shiftVariants`)
 - Prefix configuration IDs with `emacs-mcx.`
 
 ## Commit & Pull Request Guidelines
