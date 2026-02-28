@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. See `CONTRIBUTING.md` for the full contributor guide (setup, debugging, lint/test commands, release flow); if anything here conflicts, defer to `CONTRIBUTING.md`.
 
 ## Project Overview
 
@@ -14,7 +14,9 @@ This is a Visual Studio Code extension called "Awesome Emacs Keymap" (emacs-mcx)
 - `npm run webpack:prod` - Production build with webpack (hidden source maps)
 - `npm run test-compile` - TypeScript compilation with tsc-alias
 - `npm run compile-web` - Web extension compilation
+- `npm run watch-web` - Watch mode for web extension
 - `npm run package-web` - Production web extension build
+- `npm run vscode:prepublish` - Full release pipeline (install, clean dist/, gen-keys, production bundles)
 
 ### Test Commands
 
@@ -76,6 +78,22 @@ This is a Visual Studio Code extension called "Awesome Emacs Keymap" (emacs-mcx)
 - Multi-cursor support throughout all operations
 - NativeSelectionsStore manages underlying selections vs visual rectangle selections
 
+### Project Structure
+
+- `src/` - TypeScript sources
+  - `src/commands/` - Individual EmacsCommand subclasses
+  - `src/emulator.ts` - Command dispatch coordination
+  - `src/kill-yank/` - Kill-ring and yank functionality
+  - `src/configuration/` - Extension configuration management
+  - `src/test/` - VS Code integration specs
+- `keybindings/` - Source keybinding definitions (NOT package.json directly)
+- `keybinding-generator/` - Generator CLI (`cli.mts`) that writes into package.json
+- `build/` - Bundler configs (including `web-extension.webpack.config.js`)
+- `scripts/` - Reusable scripts
+- `vendor/` - Vendorized deps (e.g., `paredit.js`)
+- `images/` - Shipping assets
+- `dist/` - Built artifacts (regenerate, don't edit)
+
 ### Key Files
 
 - `src/extension.ts` - Extension entry point, activation, shared state, command registration
@@ -101,9 +119,9 @@ See DEVELOPMENT.md for detailed instructions.
 ### Keybinding System
 
 - **CRITICAL: Never edit package.json keybindings directly**
-- Edit JSON files in keybindings/ directory instead (e.g., move-edit.json, paredit.json, etc.)
+- Edit JSON files in keybindings/ directory instead (`./keybindings/*.json`)
 - Run `npm run gen-keys` to generate package.json keybindings
-- Extended syntax in keybindings/\*.json:
+- Extended syntax in `keybindings/*.json`:
   - `keys` array: define multiple key combinations for one command
   - `whens` array: define multiple when conditions for one command
   - `meta` key: automatically generates alt/cmd/ctrl+[/escape variants with config conditions
@@ -114,9 +132,11 @@ See DEVELOPMENT.md for detailed instructions.
 
 - Unit tests use VSCode's extension testing framework
 - Tests are located in src/test/suite/
-- Run tests via VSCode debug sidebar ("Extension Tests" configuration) or `npm run test` from command line
+- Run tests via VSCode debug sidebar ("Extension Tests" configuration) or `npm run test` from command line (pretest triggers `npm run test-compile` automatically)
 - Web extension tests run separately with `npm run test:web`
 - Keybinding generator tests: `npm run test-gen-keys`
+- Name suites after the command under test; aim to cover both positive flows and VS Code integration edge cases
+- Failing tests block CI
 
 ## Configuration
 
@@ -130,6 +150,33 @@ The extension provides extensive configuration through `emacs-mcx.*` settings:
 - `emacs-mcx.strictEmacsMove` - (Deprecated) Strict Emacs cursor movement
 - Movement behavior configs: `moveBeginningOfLineBehavior`, `moveEndOfLineBehavior`, `scrollUpCommandBehavior`, `scrollDownCommandBehavior`
 - And many more documented in package.json and README.md
+
+## Coding Style & Naming Conventions
+
+- Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth
+- 2-space indentation, trailing commas, explicit semicolons
+- New commands: name after the original Emacs command with PascalCase class names (e.g., `ForwardWordCommand`)
+- Use snake-case JSON keys for keybinding definitions
+- Prefix configuration IDs with `emacs-mcx.`
+
+## Commit & Pull Request Guidelines
+
+- Imperative mood with concise scopes (e.g., `Add yank history telemetry`)
+- Cross-reference an issue number when applicable
+- PRs should summarize the behavior change, list manual/automated test commands, and include screenshots when the UX shifts
+- When altering keybindings, commit updated `keybindings/*.json`, regenerated `package.json`, and README tables together
+- Confirm CI passes before requesting review
+- Include a changeset fragment (`npm run changeset`) for user-facing changes (new features, bug fixes, keybinding updates); commit it alongside code changes
+
+## Behavior Alignment
+
+When emulating an Emacs command that has an equivalent or close counterpart in VS Code, default to the VS Code-like behavior. If an Emacs-like variant is also useful, add it behind a configuration option and keep the VS Code-like value as the default.
+
+Examples:
+
+- Char moves: keep VS Code's default of collapsing selections, with opt-in `emacs-mcx.clearSelectionBeforeCharMove`
+- Word moves: default to VS Code's word boundary rules, with `emacs-mcx.wordNavigationStyle` for Emacs-style
+- Line start/end: default to VS Code behavior via `emacs-mcx.moveBeginningOfLineBehavior` / `emacs-mcx.moveEndOfLineBehavior`
 
 ## Important Notes
 

@@ -20,7 +20,7 @@ TypeScript sources live in `src/`, with `src/commands/` holding individual `Emac
 
 ## Coding Style & Naming Conventions
 
-Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth—stick to 2-space indentation, trailing commas, and explicit semicolons they enforce. New commands should be named with descriptive PascalCase class names (e.g., `ForwardWordCommand`) and exported from files that mirror that casing. Use snake-case JSON keys for keybinding definitions and prefix configuration IDs with `emacs-mcx.` to match existing contributes schema.
+Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth—stick to 2-space indentation, trailing commas, and explicit semicolons they enforce. New commands should be named after the original Emacs command with PascalCase class names (e.g., `ForwardWordCommand`) and exported from files that mirror that casing. Use snake-case JSON keys for keybinding definitions and prefix configuration IDs with `emacs-mcx.` to match existing contributes schema.
 
 ## Testing Guidelines
 
@@ -30,13 +30,11 @@ Use `npm test` for the Electron runner (pretest triggers `npm run test-compile` 
 
 Write commits in the imperative mood with concise scopes (e.g., `Add yank history telemetry`) and cross-reference an issue number when applicable. Every PR should summarize the behavior change, list manual/automated test commands (`npm run check:eslint`, `npm run check:prettier`, `npm test`), and include screenshots or screencasts when the UX shifts. When altering keybindings, commit the updated `keybindings/*.json`, regenerated `package.json`, and README tables together. Confirm CI passes before requesting review and call out any follow-up tasks or known limitations in the description.
 
-## Release Workflow
-
-Queue user-visible updates with `npm run changeset` and commit the generated note. The `Release` workflow (`.github/workflows/release.yml`) opens the aggregated release PR; when merged it bumps versioning via Changesets and runs `npm run changeset:release` to tag `v<version>` and push, which triggers the existing build/publish pipelines. Don't edit `CHANGELOG.md` or `package.json` manually—Changesets owns them. For the full checklist, follow `CONTRIBUTING.md`.
+Each PR should have a changeset fragment if it includes user-facing changes (new features, bug fixes, keybinding updates) that should be included in the release notes. Use `npm run changeset` to generate the fragment and commit it alongside your code changes. The release workflow will aggregate these fragments into a cohesive changelog entry for the next release.
 
 ## Keybinding Workflow Tips
 
-Never edit the `contributes.keybindings` array directly; instead update the declarative source JSON, run `npm run gen-keys`, and verify the diff. Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `DEVELOPMENT.md` to keep definitions DRY. Commit the regenerated `package.json` alongside `keybindings/*.json`, and mention new bindings in `README.md` so users see them in the public matrix.
+Never edit the `contributes.keybindings` array in `package.json` directly; instead update the declarative source JSON in `keybindings/*.json`, run `npm run gen-keys`, and verify the diff. Use the `keys`, `whens`, and `inheritWhenFromDefault` helpers documented in `DEVELOPMENT.md` to keep definitions DRY. Commit the regenerated `package.json` alongside `keybindings/*.json`, and mention new bindings in `README.md` so users see them in the public matrix.
 
 ## Behavior Alignment
 
