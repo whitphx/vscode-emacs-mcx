@@ -161,9 +161,8 @@ The extension provides extensive configuration through `emacs-mcx.*` settings:
 
 - Prettier (`.prettierrc`) and ESLint (`eslint.config.mjs`) are the single sources of truth
 - 2-space indentation, trailing commas, explicit semicolons
-- New commands: name after the original Emacs command with PascalCase class names (e.g., `ForwardWordCommand`)
-- Use camelCase JSON keys for keybinding definitions, matching the existing `keybindings/*.json` schema (e.g., `isearchInterruptible`, `shiftVariants`)
-- Prefix configuration IDs with `emacs-mcx.`
+- Use PascalCase for command class names (e.g., `ForwardWordCommand`) in `src/commands/`, whose `id` should be camelCase versions of the original Emacs command (e.g., `forwardWord`).
+- Use camelCase name keys prefixed with `emacs-mcx.` for keybinding definitions in `keybindings/*.json` (e.g., `emacs-mcx.forwardWord`).
 
 ## Commit & Pull Request Guidelines
 
