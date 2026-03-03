@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.107.5
+
+### Patch Changes
+
+- [#2734](https://github.com/whitphx/vscode-emacs-mcx/pull/2734) [`46e7540`](https://github.com/whitphx/vscode-emacs-mcx/commit/46e7540a06696983e95237fa0fb7dc284c808548) Thanks [@whitphx](https://github.com/whitphx)! - Fix the scope of the emacs-mcx.subwordMode config field to make it language-overridable
+
+- [#2730](https://github.com/whitphx/vscode-emacs-mcx/pull/2730) [`59eecbf`](https://github.com/whitphx/vscode-emacs-mcx/commit/59eecbf0f7fb906a5e5d5475077e04e5f663873a) Thanks [@whitphx](https://github.com/whitphx)! - Paredit config effective per document rather than globally
+
 ## 0.107.4
 
 ### Patch Changes
