@@ -18,7 +18,6 @@ vendor/
 cspell.json
 eslint.config.mjs
 lint-staged.config.js
-DEVELOPMENT.md
 AGENTS.md
 CLAUDE.md
 .claude

@@ -35,12 +35,14 @@ async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Pro
   try {
     response = await fetch(url);
   } catch (error) {
-    throw new Error(`Failed to fetch keybindings from ${url}: ${String(error)}`);
+    throw new Error(`Failed to fetch keybindings from ${url}`, {
+      cause: error,
+    });
   }
   if (!response.ok) {
     throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
   }
-  const vscDefaultKeybindings = (await response.json()) as unknown;
+  const vscDefaultKeybindings = await response.json();
   if (!Array.isArray(vscDefaultKeybindings)) {
     throw new Error("vscDefaultKeybindings is not an array");
   }
@@ -66,18 +68,20 @@ function compileDefaultKeybindingsSet(
 ): VscKeybindingPerPlatform {
   const { linux, win, osx } = keybindings;
 
-  const linuxJsons = linux.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
-  const winJsons = win.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
-  const osxJsons = osx.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
+  const linuxJsonStrs = linux.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
+  const winJsonStrs = win.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
+  const osxJsonStrs = osx.map((b) => (ignoreKeys ? { ...b, key: "" } : b)).map((b) => JSON.stringify(b));
 
-  const allPlatformsJsons = linuxJsons.filter((b) => winJsons.includes(b) && osxJsons.includes(b));
-  const linuxSpecificJsons = linuxJsons.filter((b) => !allPlatformsJsons.includes(b));
-  const winSpecificJsons = winJsons.filter((b) => !allPlatformsJsons.includes(b));
-  const osxSpecificJsons = osxJsons.filter((b) => !allPlatformsJsons.includes(b));
-  const allPlatforms: VscKeybinding[] = Array.from(allPlatformsJsons).map((json) => JSON.parse(json) as VscKeybinding);
-  const linuxSpecific: VscKeybinding[] = linuxSpecificJsons.map((json) => JSON.parse(json) as VscKeybinding);
-  const winSpecific: VscKeybinding[] = winSpecificJsons.map((json) => JSON.parse(json) as VscKeybinding);
-  const osxSpecific: VscKeybinding[] = osxSpecificJsons.map((json) => JSON.parse(json) as VscKeybinding);
+  const allPlatformsJsonStrs = linuxJsonStrs.filter((b) => winJsonStrs.includes(b) && osxJsonStrs.includes(b));
+  const linuxSpecificJsonStrs = linuxJsonStrs.filter((b) => !allPlatformsJsonStrs.includes(b));
+  const winSpecificJsonStrs = winJsonStrs.filter((b) => !allPlatformsJsonStrs.includes(b));
+  const osxSpecificJsonStrs = osxJsonStrs.filter((b) => !allPlatformsJsonStrs.includes(b));
+  const allPlatforms: VscKeybinding[] = Array.from(allPlatformsJsonStrs).map(
+    (json) => JSON.parse(json) as VscKeybinding,
+  );
+  const linuxSpecific: VscKeybinding[] = linuxSpecificJsonStrs.map((json) => JSON.parse(json) as VscKeybinding);
+  const winSpecific: VscKeybinding[] = winSpecificJsonStrs.map((json) => JSON.parse(json) as VscKeybinding);
+  const osxSpecific: VscKeybinding[] = osxSpecificJsonStrs.map((json) => JSON.parse(json) as VscKeybinding);
 
   return {
     allPlatforms,

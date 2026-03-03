@@ -339,7 +339,7 @@ suite("Universal argument (C-u)", () => {
       assertCursorsEqual(activeTextEditor, [0, 4]); // The command normally worked since it has exited from universal argument mode.
     });
 
-    test("multicursor with given argument", async () => {
+    test("multi-cursor with given argument", async () => {
       setEmptyCursors(activeTextEditor, [0, 0], [1, 0]);
 
       resetExecuteCommandSpy();

@@ -2,7 +2,7 @@
   "name": "emacs-mcx",
   "displayName": "Awesome Emacs Keymap",
   "description": "Emacs emulation for VSCode with multi-cursor support, clipboard-integrated kill-ring, well-emulated mark-mode, and more.",
-  "version": "0.107.1",
+  "version": "0.107.4",
   "publisher": "tuttieee",
   "repository": {
     "type": "git",
@@ -193,7 +193,8 @@
         "emacs-mcx.subwordMode": {
           "type": "boolean",
           "description": "Make word-oriented move and edit commands recognize subwords.",
-          "default": false
+          "default": false,
+          "scope": "language-overridable"
         },
         "emacs-mcx.debug.silent": {
           "type": "boolean",
@@ -3426,32 +3427,32 @@
       {
         "key": "ctrl+w",
         "command": "editor.action.clipboardCutAction",
-        "when": "!editorTextFocus && !terminalFocus && !isComposing"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
       },
       {
         "key": "alt+w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "!editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "!editorTextFocus && !terminalFocus && !isComposing"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
       },
       {
         "key": "alt+y",
@@ -7862,7 +7863,7 @@
     "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
     "@changesets/write": "^0.4.0",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.10.2",
@@ -7870,21 +7871,21 @@
     "@types/vscode": "^1.89.0",
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/test-web": "^0.0.79",
+    "@vscode/test-web": "^0.0.80",
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
-    "cspell": "^9.6.3",
-    "eslint": "^9.39.2",
+    "cspell": "^9.7.0",
+    "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",
-    "glob": "^13.0.1",
+    "glob": "^13.0.6",
     "husky": "^9.1.7",
     "jsep": "^1.4.0",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^16.3.1",
     "mocha": "^11.7.1",
     "prettier": "^3.8.1",
     "process": "^0.11.10",
-    "rimraf": "^6.1.2",
+    "rimraf": "^6.1.3",
     "sinon": "^21.0.1",
     "strip-json-comments": "^5.0.3",
     "ts-loader": "^9.5.4",
@@ -7892,8 +7893,8 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0",
-    "webpack": "^5.105.0",
+    "typescript-eslint": "^8.56.1",
+    "webpack": "^5.105.3",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {

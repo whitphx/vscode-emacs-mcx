@@ -31,6 +31,7 @@
     "Bksp",
     "dabbrev-expand",
     "isearch",
+    "killring",
     // Programming
     "iconfiguration",
     // npm
@@ -39,12 +40,15 @@
     "wscript",
     "jscoverage",
     "openvsx",
+    // webpack
+    "nosources",
     // VSCode API
     "titlecase",
     "webvieweditor",
     "treesticky",
     "reindentselectedlines",
     "editoridentity",
+    "iconfiguration",
     // Names
     "Yuichiro",
     "Tachibana",

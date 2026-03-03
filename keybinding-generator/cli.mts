@@ -25,6 +25,7 @@ const srcFileNames = fs
   .map((dirent) => dirent.name);
 const packageJsonPath = url.fileURLToPath(import.meta.resolve("../package.json"));
 
+// cSpell:ignore srcs
 const keybindingSrcs: Array<unknown> = [];
 for (const srcFileName of srcFileNames) {
   const srcFilePath = path.join(srcDirPath, srcFileName);

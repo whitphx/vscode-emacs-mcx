@@ -192,7 +192,7 @@ suite("ZapCommands", () => {
     assert.strictEqual(killRing.getTop(), undefined);
   });
 
-  test("stopchar before the cursor", async () => {
+  test("stopChar before the cursor", async () => {
     setEmptyCursors(activeTextEditor, [0, 1]);
     await emulator.runCommand("zapCharCommand", "a");
     assertTextEqual(activeTextEditor, "abcdef\n");
@@ -203,7 +203,7 @@ suite("ZapCommands", () => {
   test("delete char in second line", async () => {
     setEmptyCursors(activeTextEditor, [1, 0]);
     await emulator.runCommand("zapCharCommand", "b");
-    assertTextEqual(activeTextEditor, "abcd\ncdef\n");
+    assertTextEqual(activeTextEditor, "abcd\ncdef\n"); // cspell:disable-line
     assertCursorsEqual(activeTextEditor, [1, 0]);
     assert.strictEqual(killRing.getTop()?.asString(), "ab");
   });
