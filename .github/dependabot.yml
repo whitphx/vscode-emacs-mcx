@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "@types/node"
+        # This allows updates within the current major (e.g., 24.x.x)
+        # but ignores 25.x.x, 26.x.x, etc.
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.107.4
+
+### Patch Changes
+
+- [#2762](https://github.com/whitphx/vscode-emacs-mcx/pull/2762) [`e8f509a`](https://github.com/whitphx/vscode-emacs-mcx/commit/e8f509ab84997ae3106eebcf1dcfe029effe9e50) Thanks [@whitphx](https://github.com/whitphx)! - Fix cmd+x (Cut) not working in Cursor's Agent chat input by adding textInputFocus guard to clipboard keybindings (ctrl+w, meta+w, ctrl+y) so they only activate in actual text input widgets.
+
+## 0.107.3
+
+### Patch Changes
+
+- [#2751](https://github.com/whitphx/vscode-emacs-mcx/pull/2751) [`f853c50`](https://github.com/whitphx/vscode-emacs-mcx/commit/f853c5035732b454a01d20dc907076058a97eeac) Thanks [@whitphx](https://github.com/whitphx)! - Update ESLint and @eslint/js to v10. Includes non-functional code changes to satisfy new lint rules.
+
+## 0.107.2
+
+### Patch Changes
+
+- [#2731](https://github.com/whitphx/vscode-emacs-mcx/pull/2731) [`9ed76eb`](https://github.com/whitphx/vscode-emacs-mcx/commit/9ed76eb3b02d70da9a560c5ea5817ce9b1a78865) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
 ## 0.107.1
 
 ### Patch Changes

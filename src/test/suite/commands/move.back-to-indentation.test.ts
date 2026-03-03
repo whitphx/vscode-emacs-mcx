@@ -7,12 +7,12 @@ suite("back-to-indentation", () => {
   let emulator: EmacsEmulator;
 
   setup(async () => {
-    const initialtext =
+    const initialText =
       `non-indented-line
     4-space-indented-line
 non-indented-line with space
     4-space-indented-line with space` + "\n    "; // Empty but indented line
-    activeTextEditor = await setupWorkspace(initialtext);
+    activeTextEditor = await setupWorkspace(initialText);
     emulator = createEmulator(activeTextEditor);
   });
 

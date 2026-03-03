@@ -236,23 +236,27 @@
     "command": "emacs-mcx.yank",
     "when": "emacs-mcx.minibufferReading"
   },
+  // The following clipboard bindings (ctrl+w, meta+w, ctrl+y) require `textInputFocus` in the
+  // when clause. Using only `!editorTextFocus && !terminalFocus` is too broad and breaks native
+  // shortcuts (e.g. cmd+x Cut) in Cursor's Agent chat due to a keybinding resolver conflict.
+  // See: https://github.com/whitphx/vscode-emacs-mcx/issues/2748
   {
     "key": "ctrl+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCutAction",
-    "when": "!editorTextFocus && !terminalFocus && !isComposing"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "meta+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCopyAction",
-    "when": "!editorTextFocus && !terminalFocus && !isComposing"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "ctrl+y",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardPasteAction",
-    "when": "!editorTextFocus && !terminalFocus && !isComposing"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "meta+y",

@@ -31,18 +31,22 @@
     "Bksp",
     "dabbrev-expand",
     "isearch",
+    "killring",
     // npm
     "unproxify",
     "jsep",
     "wscript",
     "jscoverage",
     "openvsx",
+    // webpack
+    "nosources",
     // VSCode API
     "titlecase",
     "webvieweditor",
     "treesticky",
     "reindentselectedlines",
     "editoridentity",
+    "iconfiguration",
     // Names
     "Yuichiro",
     "Tachibana",
