@@ -32,6 +32,8 @@
     "dabbrev-expand",
     "isearch",
     "killring",
+    // Programming
+    "iconfiguration",
     // npm
     "unproxify",
     "jsep",
