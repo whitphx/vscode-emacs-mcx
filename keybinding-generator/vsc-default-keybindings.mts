@@ -1,3 +1,4 @@
+import stripJsonComments from "strip-json-comments";
 import { addWhenCond } from "./utils.mjs";
 
 export interface VscKeybinding {
@@ -30,7 +31,8 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   return true;
 }
 async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Promise<VscKeybinding[]> {
-  const url = `https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings/doc.keybindings.${platform}.json`;
+  const platformFilePrefix = platform === "linux" ? "linux" : platform === "win" ? "windows" : "macos";
+  const url = `https://raw.githubusercontent.com/codebling/vs-code-default-keybindings/refs/heads/master/${platformFilePrefix}.keybindings.json`;
   let response: Response;
   try {
     response = await fetch(url);
@@ -40,9 +42,10 @@ async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Pro
     });
   }
   if (!response.ok) {
-    throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
+    throw new Error(`Failed to fetch keybindings for ${platform} (${url}): ${response.status} ${response.statusText}`);
   }
-  const vscDefaultKeybindings = await response.json();
+  const text = await response.text();
+  const vscDefaultKeybindings = JSON.parse(stripJsonComments(text)) as unknown;
   if (!Array.isArray(vscDefaultKeybindings)) {
     throw new Error("vscDefaultKeybindings is not an array");
   }

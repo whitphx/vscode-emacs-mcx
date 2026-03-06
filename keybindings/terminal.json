@@ -151,7 +151,7 @@
       "ctrl+'" // For backward-compatibility
     ],
     "command": "emacs-mcx.terminalTriggerSuggest",
-    "inheritWhenFromDefault": "workbench.action.terminal.triggerSuggest"
+    "when": "config.terminal.integrated.suggest.enabled && terminalFocus && terminalProcessSupported && !terminalSuggestWidgetVisible"
   },
   {
     "keys": ["ctrl+p", "meta+p"],
