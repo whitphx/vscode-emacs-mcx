@@ -6,6 +6,7 @@ import {
   KeyBindingSource,
   KeyBinding,
 } from "./generate-keybindings.mjs";
+import { _setDefaultKeybindingsSetForTesting } from "./vsc-default-keybindings.mjs";
 
 describe("generateKeybindings", () => {
   it("converts src including 'keys'", () => {
@@ -264,6 +265,51 @@ describe("generateKeybindings", () => {
       },
     ];
     assert.deepStrictEqual(generateKeybindings(src), expected);
+  });
+});
+
+describe("generateKeybindings with inheritWhenFromDefault", () => {
+  it("inherits the when condition from default keybindings", () => {
+    _setDefaultKeybindingsSetForTesting({
+      linux: [{ key: "ctrl+f", command: "doSomething", when: "editorTextFocus" }],
+      win: [{ key: "ctrl+f", command: "doSomething", when: "editorTextFocus" }],
+      osx: [{ key: "ctrl+f", command: "doSomething", when: "editorTextFocus" }],
+    });
+    const src: KeyBindingSource = {
+      key: "ctrl+f",
+      command: "doSomething",
+      inheritWhenFromDefault: true,
+    };
+    const result = generateKeybindings(src);
+    assert.deepStrictEqual(result, [{ key: "ctrl+f", command: "doSomething", when: "editorTextFocus" }]);
+  });
+
+  it("produces unconditional binding when default has no when", () => {
+    _setDefaultKeybindingsSetForTesting({
+      linux: [{ key: "f2", command: "doSomething" }],
+      win: [{ key: "f2", command: "doSomething" }],
+      osx: [{ key: "f2", command: "doSomething" }],
+    });
+    const src: KeyBindingSource = {
+      key: "f2",
+      command: "doSomething",
+      inheritWhenFromDefault: true,
+    };
+    const result = generateKeybindings(src);
+    assert.deepStrictEqual(result, [{ key: "f2", command: "doSomething", when: undefined }]);
+  });
+
+  it("throws when the command is not found in default keybindings", () => {
+    _setDefaultKeybindingsSetForTesting({ linux: [], win: [], osx: [] });
+    const src: KeyBindingSource = {
+      key: "ctrl+f",
+      command: "nonexistent.command",
+      inheritWhenFromDefault: true,
+    };
+    assert.throws(
+      () => generateKeybindings(src),
+      /Command "nonexistent.command" not found in VSCode default keybindings/,
+    );
   });
 });
 
