@@ -106,7 +106,7 @@ function compileKeybinding(opts: { key: string; command?: string; when?: string;
   const hasMeta = keyElements.includes("meta");
   if (isUnconditional && hasModifiers && !hasMeta) {
     throw new Error(
-      `Keybinding "${key}" has a modifier but is unconditional. It may cause issues in Emacs in the terminal. ` +
+      `Keybinding ${key} bound to ${command} has a modifier but is unconditional. It may cause issues in Emacs in the terminal. ` +
         `Consider adding "!terminalFocus" condition to the keybinding.`,
     );
   }
@@ -188,10 +188,9 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       throw new Error(`command must be defined when inheritWhenFromDefault = true`);
     }
     const defaultKeybindingWhen = getVscDefaultKeybindingWhenCondition(command);
-    if (defaultKeybindingWhen == null) {
-      throw new Error(`Command "${command}" was not found in the default keybindings`);
+    if (defaultKeybindingWhen != null) {
+      whens.push(defaultKeybindingWhen);
     }
-    whens = [defaultKeybindingWhen];
   }
   if (src.when) {
     whens = [src.when];

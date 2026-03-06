@@ -1,3 +1,4 @@
+import stripJsonComments from "strip-json-comments";
 import { addWhenCond } from "./utils.mjs";
 
 export interface VscKeybinding {
@@ -30,7 +31,8 @@ function isVscKeybinding(keybinding: unknown): keybinding is VscKeybinding {
   return true;
 }
 async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Promise<VscKeybinding[]> {
-  const url = `https://raw.githubusercontent.com/microsoft/vscode-docs/refs/heads/main/build/keybindings/doc.keybindings.${platform}.json`;
+  const platformFilePrefix = platform === "linux" ? "linux" : platform === "win" ? "windows" : "macos";
+  const url = `https://raw.githubusercontent.com/codebling/vs-code-default-keybindings/refs/heads/master/${platformFilePrefix}.keybindings.json`;
   let response: Response;
   try {
     response = await fetch(url);
@@ -40,9 +42,10 @@ async function loadVscDefaultKeybindings(platform: "linux" | "win" | "osx"): Pro
     });
   }
   if (!response.ok) {
-    throw new Error(`Failed to fetch keybindings: ${response.status} ${response.statusText}`);
+    throw new Error(`Failed to fetch keybindings for ${platform} (${url}): ${response.status} ${response.statusText}`);
   }
-  const vscDefaultKeybindings = await response.json();
+  const text = await response.text();
+  const vscDefaultKeybindings = JSON.parse(stripJsonComments(text)) as unknown;
   if (!Array.isArray(vscDefaultKeybindings)) {
     throw new Error("vscDefaultKeybindings is not an array");
   }
@@ -62,7 +65,7 @@ interface VscKeybindingPerPlatform {
   winSpecific: VscKeybinding[];
   osxSpecific: VscKeybinding[];
 }
-function compileDefaultKeybindingsSet(
+export function compileDefaultKeybindingsSet(
   keybindings: { linux: VscKeybinding[]; win: VscKeybinding[]; osx: VscKeybinding[] },
   ignoreKeys: boolean,
 ): VscKeybindingPerPlatform {
@@ -110,6 +113,18 @@ export async function prepareVscDefaultKeybindingsSet(): Promise<void> {
   defaultKeybindingsSetCache = await loadVscDefaultKeybindingsSet();
 }
 
+/** @internal Inject mock data for testing without network calls. */
+export function _setDefaultKeybindingsSetForTesting(keybindings: {
+  linux: VscKeybinding[];
+  win: VscKeybinding[];
+  osx: VscKeybinding[];
+}): void {
+  defaultKeybindingsSetCache = {
+    withKeys: compileDefaultKeybindingsSet(keybindings, false),
+    withoutKeys: compileDefaultKeybindingsSet(keybindings, true),
+  };
+}
+
 export function getVscDefaultKeybindingsSet(ignoreKeys: boolean): VscKeybindingPerPlatform {
   if (defaultKeybindingsSetCache) {
     return ignoreKeys ? defaultKeybindingsSetCache.withoutKeys : defaultKeybindingsSetCache.withKeys;
@@ -120,37 +135,59 @@ export function getVscDefaultKeybindingsSet(ignoreKeys: boolean): VscKeybindingP
 
 export function getVscDefaultKeybindingWhenCondition(command: string): string | undefined {
   const { allPlatforms, linuxSpecific, osxSpecific, winSpecific } = getVscDefaultKeybindingsSet(true);
-  const simple = allPlatforms.find((keybinding) => keybinding.command === command)?.when;
-  if (simple) {
-    return simple;
+
+  const allPlatformMatch = allPlatforms.find((keybinding) => keybinding.command === command);
+  const linuxMatch = linuxSpecific.find((keybinding) => keybinding.command === command);
+  const osxMatch = osxSpecific.find((keybinding) => keybinding.command === command);
+  const winMatch = winSpecific.find((keybinding) => keybinding.command === command);
+
+  if (!allPlatformMatch && !linuxMatch && !osxMatch && !winMatch) {
+    throw new Error(`Command "${command}" not found in VSCode default keybindings`);
   }
 
-  const srcLinuxWhen = linuxSpecific.find((keybinding) => keybinding.command === command)?.when;
-  const srcOsxWhen = osxSpecific.find((keybinding) => keybinding.command === command)?.when;
-  const srcWinWhen = winSpecific.find((keybinding) => keybinding.command === command)?.when;
+  if (allPlatformMatch?.when) {
+    return allPlatformMatch.when;
+  }
+  if (allPlatformMatch) {
+    return undefined;
+  }
 
   // Even when the command is only defined in a specific platform,
   // we define its keybinding on all platforms from this extension.
-  const srcDefaultWhen = srcOsxWhen ?? srcWinWhen ?? srcLinuxWhen; // OSX is the top priority because I use it :)
+  // OSX is the top priority because I use it :)
+  const srcDefaultWhen = osxMatch?.when ?? winMatch?.when ?? linuxMatch?.when;
 
-  const linuxWhen = srcLinuxWhen && srcLinuxWhen !== srcDefaultWhen ? srcLinuxWhen : srcDefaultWhen;
-  const osxWhen = srcOsxWhen && srcOsxWhen !== srcDefaultWhen ? srcOsxWhen : srcDefaultWhen;
-  const winWhen = srcWinWhen && srcWinWhen !== srcDefaultWhen ? srcWinWhen : srcDefaultWhen;
+  // For each platform, determine the effective `when`:
+  // - Match with `when` → use that condition
+  // - Match without `when` (unconditional) → undefined
+  // - No match → use fallback from other platforms
+  const linuxWhen = linuxMatch ? linuxMatch.when : srcDefaultWhen;
+  const osxWhen = osxMatch ? osxMatch.when : srcDefaultWhen;
+  const winWhen = winMatch ? winMatch.when : srcDefaultWhen;
 
   if (osxWhen === linuxWhen && linuxWhen === winWhen) {
-    // All platforms share the same condition
+    // All platforms share the same condition (or all unconditional)
     return osxWhen;
   }
 
   const whenParts = [];
   if (linuxWhen) {
     whenParts.push(addWhenCond(linuxWhen, "isLinux"));
+  } else if (linuxMatch) {
+    // Unconditional on Linux
+    whenParts.push("isLinux");
   }
   if (osxWhen) {
     whenParts.push(addWhenCond(osxWhen, "isMac"));
+  } else if (osxMatch) {
+    // Unconditional on macOS
+    whenParts.push("isMac");
   }
   if (winWhen) {
     whenParts.push(addWhenCond(winWhen, "isWindows"));
+  } else if (winMatch) {
+    // Unconditional on Windows
+    whenParts.push("isWindows");
   }
   if (whenParts.length === 0) {
     return undefined;
