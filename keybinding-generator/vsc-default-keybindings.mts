@@ -65,7 +65,7 @@ interface VscKeybindingPerPlatform {
   winSpecific: VscKeybinding[];
   osxSpecific: VscKeybinding[];
 }
-function compileDefaultKeybindingsSet(
+export function compileDefaultKeybindingsSet(
   keybindings: { linux: VscKeybinding[]; win: VscKeybinding[]; osx: VscKeybinding[] },
   ignoreKeys: boolean,
 ): VscKeybindingPerPlatform {
@@ -113,6 +113,18 @@ export async function prepareVscDefaultKeybindingsSet(): Promise<void> {
   defaultKeybindingsSetCache = await loadVscDefaultKeybindingsSet();
 }
 
+/** @internal Inject mock data for testing without network calls. */
+export function _setDefaultKeybindingsSetForTesting(keybindings: {
+  linux: VscKeybinding[];
+  win: VscKeybinding[];
+  osx: VscKeybinding[];
+}): void {
+  defaultKeybindingsSetCache = {
+    withKeys: compileDefaultKeybindingsSet(keybindings, false),
+    withoutKeys: compileDefaultKeybindingsSet(keybindings, true),
+  };
+}
+
 export function getVscDefaultKeybindingsSet(ignoreKeys: boolean): VscKeybindingPerPlatform {
   if (defaultKeybindingsSetCache) {
     return ignoreKeys ? defaultKeybindingsSetCache.withoutKeys : defaultKeybindingsSetCache.withKeys;
@@ -140,32 +152,42 @@ export function getVscDefaultKeybindingWhenCondition(command: string): string | 
     return undefined;
   }
 
-  const srcLinuxWhen = linuxMatch?.when;
-  const srcOsxWhen = osxMatch?.when;
-  const srcWinWhen = winMatch?.when;
-
   // Even when the command is only defined in a specific platform,
   // we define its keybinding on all platforms from this extension.
-  const srcDefaultWhen = srcOsxWhen ?? srcWinWhen ?? srcLinuxWhen; // OSX is the top priority because I use it :)
+  // OSX is the top priority because I use it :)
+  const srcDefaultWhen = osxMatch?.when ?? winMatch?.when ?? linuxMatch?.when;
 
-  const linuxWhen = srcLinuxWhen && srcLinuxWhen !== srcDefaultWhen ? srcLinuxWhen : srcDefaultWhen;
-  const osxWhen = srcOsxWhen && srcOsxWhen !== srcDefaultWhen ? srcOsxWhen : srcDefaultWhen;
-  const winWhen = srcWinWhen && srcWinWhen !== srcDefaultWhen ? srcWinWhen : srcDefaultWhen;
+  // For each platform, determine the effective `when`:
+  // - Match with `when` → use that condition
+  // - Match without `when` (unconditional) → undefined
+  // - No match → use fallback from other platforms
+  const linuxWhen = linuxMatch ? linuxMatch.when : srcDefaultWhen;
+  const osxWhen = osxMatch ? osxMatch.when : srcDefaultWhen;
+  const winWhen = winMatch ? winMatch.when : srcDefaultWhen;
 
   if (osxWhen === linuxWhen && linuxWhen === winWhen) {
-    // All platforms share the same condition
+    // All platforms share the same condition (or all unconditional)
     return osxWhen;
   }
 
   const whenParts = [];
   if (linuxWhen) {
     whenParts.push(addWhenCond(linuxWhen, "isLinux"));
+  } else if (linuxMatch) {
+    // Unconditional on Linux
+    whenParts.push("isLinux");
   }
   if (osxWhen) {
     whenParts.push(addWhenCond(osxWhen, "isMac"));
+  } else if (osxMatch) {
+    // Unconditional on macOS
+    whenParts.push("isMac");
   }
   if (winWhen) {
     whenParts.push(addWhenCond(winWhen, "isWindows"));
+  } else if (winMatch) {
+    // Unconditional on Windows
+    whenParts.push("isWindows");
   }
   if (whenParts.length === 0) {
     return undefined;
