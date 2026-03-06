@@ -120,14 +120,26 @@ export function getVscDefaultKeybindingsSet(ignoreKeys: boolean): VscKeybindingP
 
 export function getVscDefaultKeybindingWhenCondition(command: string): string | undefined {
   const { allPlatforms, linuxSpecific, osxSpecific, winSpecific } = getVscDefaultKeybindingsSet(true);
-  const simple = allPlatforms.find((keybinding) => keybinding.command === command)?.when;
-  if (simple) {
-    return simple;
+
+  const allPlatformMatch = allPlatforms.find((keybinding) => keybinding.command === command);
+  const linuxMatch = linuxSpecific.find((keybinding) => keybinding.command === command);
+  const osxMatch = osxSpecific.find((keybinding) => keybinding.command === command);
+  const winMatch = winSpecific.find((keybinding) => keybinding.command === command);
+
+  if (!allPlatformMatch && !linuxMatch && !osxMatch && !winMatch) {
+    throw new Error(`Command "${command}" not found in VSCode default keybindings`);
   }
 
-  const srcLinuxWhen = linuxSpecific.find((keybinding) => keybinding.command === command)?.when;
-  const srcOsxWhen = osxSpecific.find((keybinding) => keybinding.command === command)?.when;
-  const srcWinWhen = winSpecific.find((keybinding) => keybinding.command === command)?.when;
+  if (allPlatformMatch?.when) {
+    return allPlatformMatch.when;
+  }
+  if (allPlatformMatch) {
+    return undefined;
+  }
+
+  const srcLinuxWhen = linuxMatch?.when;
+  const srcOsxWhen = osxMatch?.when;
+  const srcWinWhen = winMatch?.when;
 
   // Even when the command is only defined in a specific platform,
   // we define its keybinding on all platforms from this extension.

@@ -188,10 +188,9 @@ export function generateKeybindings(src: KeyBindingSource): KeyBinding[] {
       throw new Error(`command must be defined when inheritWhenFromDefault = true`);
     }
     const defaultKeybindingWhen = getVscDefaultKeybindingWhenCondition(command);
-    if (defaultKeybindingWhen == null) {
-      throw new Error(`Command "${command}" was not found in the default keybindings`);
+    if (defaultKeybindingWhen != null) {
+      whens.push(defaultKeybindingWhen);
     }
-    whens = [defaultKeybindingWhen];
   }
   if (src.when) {
     whens = [src.when];
