@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.107.6
+
+### Patch Changes
+
+- [#2785](https://github.com/whitphx/vscode-emacs-mcx/pull/2785) [`f5cff41`](https://github.com/whitphx/vscode-emacs-mcx/commit/f5cff41d1a1b7747236c58e380aea0e6e8b2c66e) Thanks [@whitphx](https://github.com/whitphx)! - Update the base default VSCode keybindings to 1.110.0, change the data source of it, and fix the keybindings generator
+
 ## 0.107.5
 
 ### Patch Changes
