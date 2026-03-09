@@ -11,7 +11,7 @@
     // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+f",
     "command": "cursorRight",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // left
   {
@@ -25,7 +25,7 @@
     // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+b",
     "command": "cursorLeft",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // up
   {
@@ -39,7 +39,7 @@
     // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+p",
     "command": "cursorUp",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // down
   {
@@ -53,7 +53,7 @@
     // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+n",
     "command": "cursorDown",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // home
   {
@@ -67,7 +67,7 @@
     // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+a",
     "command": "cursorHome",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // end
   {
@@ -81,7 +81,7 @@
     // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+e",
     "command": "cursorEnd",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // forward word (meta + f)
   {
@@ -92,9 +92,10 @@
     "shiftVariants": true
   },
   {
+    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "meta+f",
     "command": "cursorWordRight",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // backward word (meta + b)
   {
@@ -105,9 +106,10 @@
     "shiftVariants": true
   },
   {
+    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "meta+b",
     "command": "cursorWordLeft",
-    "when": "!editorTextFocus && textInputFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // right-word (ctrl + <right>)
   // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
@@ -226,9 +228,21 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+d",
+    "command": "deleteRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+  },
+  {
     "key": "ctrl+h",
     "command": "emacs-mcx.deleteBackwardChar",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+h",
+    "command": "deleteLeft",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   {
     "key": "meta+\\",
@@ -249,6 +263,12 @@
     "key": "ctrl+k",
     "command": "emacs-mcx.killLine",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+k",
+    "command": "deleteAllRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   {
     "key": "ctrl+shift+backspace",
