@@ -7,6 +7,12 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+f",
+    "command": "cursorRight",
+    "when": "!editorTextFocus && textInputFocus"
+  },
   // left
   {
     "keys": ["left", "ctrl+b"],
@@ -14,6 +20,12 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+b",
+    "command": "cursorLeft",
+    "when": "!editorTextFocus && textInputFocus"
   },
   // up
   {
@@ -23,6 +35,12 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+p",
+    "command": "cursorUp",
+    "when": "!editorTextFocus && textInputFocus"
+  },
   // down
   {
     "keys": ["down", "ctrl+n"],
@@ -30,6 +48,12 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+n",
+    "command": "cursorDown",
+    "when": "!editorTextFocus && textInputFocus"
   },
   // home
   {
@@ -39,6 +63,12 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+a",
+    "command": "cursorHome",
+    "when": "!editorTextFocus && textInputFocus"
+  },
   // end
   {
     "keys": ["end", "ctrl+e"],
@@ -46,6 +76,12 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "ctrl+e",
+    "command": "cursorEnd",
+    "when": "!editorTextFocus && textInputFocus"
   },
   // forward word (meta + f)
   {
@@ -55,6 +91,11 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    "key": "meta+f",
+    "command": "cursorWordRight",
+    "when": "!editorTextFocus && textInputFocus"
+  },
   // backward word (meta + b)
   {
     "key": "meta+b",
@@ -62,6 +103,11 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    "key": "meta+b",
+    "command": "cursorWordLeft",
+    "when": "!editorTextFocus && textInputFocus"
   },
   // right-word (ctrl + <right>)
   // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
