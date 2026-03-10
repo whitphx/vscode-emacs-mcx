@@ -1,4 +1,7 @@
 [
+  // Entries with "textInputFocus && !editorTextFocus && !terminalFocus" target
+  // non-editor text inputs (e.g. chat input) using built-in VSCode commands.
+
   // right
   {
     "keys": ["right", "ctrl+f"],
@@ -8,7 +11,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+f",
     "command": "cursorRight",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -22,7 +24,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+b",
     "command": "cursorLeft",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -36,7 +37,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+p",
     "command": "cursorUp",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -50,7 +50,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+n",
     "command": "cursorDown",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -64,7 +63,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+a",
     "command": "cursorHome",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -78,7 +76,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+e",
     "command": "cursorEnd",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -92,7 +89,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "meta+f",
     "command": "cursorWordRight",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -106,7 +102,6 @@
     "shiftVariants": true
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "meta+b",
     "command": "cursorWordLeft",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -228,7 +223,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+d",
     "command": "deleteRight",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -239,7 +233,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+h",
     "command": "deleteLeft",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -255,7 +248,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "meta+d",
     "command": "deleteWordRight",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -266,7 +258,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "meta+backspace",
     "command": "deleteWordLeft",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
@@ -277,7 +268,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    // For text inputs other than the editor (e.g. input box in the chat area).
     "key": "ctrl+k",
     "command": "deleteAllRight",
     "when": "textInputFocus && !editorTextFocus && !terminalFocus"
