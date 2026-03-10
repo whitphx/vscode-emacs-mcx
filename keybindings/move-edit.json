@@ -255,9 +255,21 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "meta+d",
+    "command": "deleteWordRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+  },
+  {
     "key": "meta+backspace",
     "command": "emacs-mcx.backwardKillWord",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    // For text inputs other than the editor (e.g. input box in the chat area).
+    "key": "meta+backspace",
+    "command": "deleteWordLeft",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   {
     "key": "ctrl+k",

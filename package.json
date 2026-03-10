@@ -581,6 +581,16 @@
       },
       {
         "key": "ctrl+g",
+        "command": "workbench.action.closeModalEditor",
+        "when": "editorFocus && editorPartModal"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.action.closeModalEditor",
+        "when": "editorFocus && editorPartModal && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
         "command": "closeBreakpointWidget",
         "when": "breakpointWidgetVisible && textInputFocus"
       },
@@ -678,6 +688,16 @@
         "key": "escape escape escape",
         "command": "inlayHints.stopReadingLineWithHint",
         "when": "isReadingLineWithInlayHints && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "inlineChat.dismissEditorAffordance",
+        "when": "editorTextFocus && inlineChatAffordanceVisible && config.inlineChat.affordance == 'editor'"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "inlineChat.dismissEditorAffordance",
+        "when": "editorTextFocus && inlineChatAffordanceVisible && config.inlineChat.affordance == 'editor' && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1122,12 +1142,12 @@
       {
         "key": "ctrl+g",
         "command": "workbench.action.closeModalEditor",
-        "when": "editorPartModal"
+        "when": "editorPartModal && !editorFocus"
       },
       {
         "key": "escape escape escape",
         "command": "workbench.action.closeModalEditor",
-        "when": "editorPartModal && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "editorPartModal && !editorFocus && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1242,12 +1262,12 @@
       {
         "key": "ctrl+g",
         "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows"
+        "when": "inModelsEditor && inModelsSearch && isLinux"
       },
       {
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
@@ -3470,6 +3490,26 @@
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "alt+d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+backspace",
         "command": "emacs-mcx.backwardKillWord",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
@@ -3488,6 +3528,26 @@
         "key": "ctrl+[ backspace",
         "command": "emacs-mcx.backwardKillWord",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+k",
