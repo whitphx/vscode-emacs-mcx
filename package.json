@@ -1892,6 +1892,11 @@
         }
       },
       {
+        "key": "ctrl+f",
+        "command": "cursorRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+      },
+      {
         "key": "left",
         "command": "emacs-mcx.backwardChar",
         "when": "editorTextFocus"
@@ -1962,6 +1967,11 @@
             }
           }
         }
+      },
+      {
+        "key": "ctrl+b",
+        "command": "cursorLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "up",
@@ -2036,6 +2046,11 @@
         }
       },
       {
+        "key": "ctrl+p",
+        "command": "cursorUp",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+      },
+      {
         "key": "down",
         "command": "emacs-mcx.nextLine",
         "when": "editorTextFocus"
@@ -2106,6 +2121,11 @@
             }
           }
         }
+      },
+      {
+        "key": "ctrl+n",
+        "command": "cursorDown",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "home",
@@ -2180,6 +2200,11 @@
         }
       },
       {
+        "key": "ctrl+a",
+        "command": "cursorHome",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+      },
+      {
         "key": "end",
         "command": "emacs-mcx.moveEndOfLine",
         "when": "editorTextFocus"
@@ -2250,6 +2275,11 @@
             }
           }
         }
+      },
+      {
+        "key": "ctrl+e",
+        "command": "cursorEnd",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "alt+f",
@@ -2396,6 +2426,26 @@
         }
       },
       {
+        "key": "alt+f",
+        "command": "cursorWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+f",
+        "command": "cursorWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape f",
+        "command": "cursorWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ f",
+        "command": "cursorWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+b",
         "command": "emacs-mcx.backwardWord",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -2538,6 +2588,26 @@
             }
           }
         }
+      },
+      {
+        "key": "alt+b",
+        "command": "cursorWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+b",
+        "command": "cursorWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape b",
+        "command": "cursorWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ b",
+        "command": "cursorWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+right",
@@ -3165,6 +3235,26 @@
         }
       },
       {
+        "key": "alt+shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+shift+,",
         "command": "emacs-mcx.beginningOfBuffer",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -3223,6 +3313,26 @@
             "command": "emacs-mcx.beginningOfBuffer"
           }
         }
+      },
+      {
+        "key": "alt+shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+r",
@@ -3365,9 +3475,19 @@
         "when": "editorTextFocus && !editorReadonly"
       },
       {
+        "key": "ctrl+d",
+        "command": "deleteRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+      },
+      {
         "key": "ctrl+h",
         "command": "emacs-mcx.deleteBackwardChar",
         "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+h",
+        "command": "deleteLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "alt+\\",
@@ -3410,6 +3530,26 @@
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "alt+d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+backspace",
         "command": "emacs-mcx.backwardKillWord",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
@@ -3430,9 +3570,34 @@
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
+        "key": "alt+backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ backspace",
+        "command": "deleteWordLeft",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "ctrl+k",
         "command": "emacs-mcx.killLine",
         "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+k",
+        "command": "deleteAllRight",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "ctrl+shift+backspace",
@@ -3622,17 +3787,17 @@
       {
         "key": "ctrl+x u",
         "command": "undo",
-        "when": "editorTextFocus && !editorReadonly"
+        "when": "textInputFocus && !terminalFocus"
       },
       {
         "key": "ctrl+/",
         "command": "undo",
-        "when": "editorTextFocus && !editorReadonly"
+        "when": "textInputFocus && !terminalFocus"
       },
       {
         "key": "ctrl+shift+-",
         "command": "undo",
-        "when": "editorTextFocus && !editorReadonly"
+        "when": "textInputFocus && !terminalFocus"
       },
       {
         "key": "ctrl+x u",
@@ -7925,7 +8090,7 @@
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
     "cspell": "^9.7.0",
-    "eslint": "^10.0.2",
+    "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",
     "glob": "^13.0.6",
@@ -7943,7 +8108,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1",
+    "typescript-eslint": "^8.57.0",
     "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1"
   },
