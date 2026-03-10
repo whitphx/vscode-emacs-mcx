@@ -388,7 +388,7 @@
   {
     "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
     "command": "undo",
-    "when": "editorTextFocus && !editorReadonly",
+    "when": "textInputFocus && !terminalFocus",
     "isearchInterruptible": true
   },
   {

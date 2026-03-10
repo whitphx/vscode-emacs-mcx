@@ -3747,17 +3747,17 @@
       {
         "key": "ctrl+x u",
         "command": "undo",
-        "when": "editorTextFocus && !editorReadonly"
+        "when": "textInputFocus && !terminalFocus"
       },
       {
         "key": "ctrl+/",
         "command": "undo",
-        "when": "editorTextFocus && !editorReadonly"
+        "when": "textInputFocus && !terminalFocus"
       },
       {
         "key": "ctrl+shift+-",
         "command": "undo",
-        "when": "editorTextFocus && !editorReadonly"
+        "when": "textInputFocus && !terminalFocus"
       },
       {
         "key": "ctrl+x u",
