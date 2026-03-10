@@ -3235,6 +3235,26 @@
         }
       },
       {
+        "key": "alt+shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ shift+.",
+        "command": "cursorBottom",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
         "key": "alt+shift+,",
         "command": "emacs-mcx.beginningOfBuffer",
         "when": "editorTextFocus && config.emacs-mcx.useMetaPrefixAlt"
@@ -3293,6 +3313,26 @@
             "command": "emacs-mcx.beginningOfBuffer"
           }
         }
+      },
+      {
+        "key": "alt+shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ shift+,",
+        "command": "cursorTop",
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+r",

@@ -166,12 +166,22 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true
   },
+  {
+    "key": "meta+shift+.",
+    "command": "cursorBottom",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+  },
   // beginning of buffer (meta + <)
   {
     "key": "meta+shift+,",
     "command": "emacs-mcx.beginningOfBuffer",
     "when": "editorTextFocus",
     "isearchInterruptible": true
+  },
+  {
+    "key": "meta+shift+,",
+    "command": "cursorTop",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
   },
   // move-to-window-line-top-bottom
   {
