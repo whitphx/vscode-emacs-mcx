@@ -1894,7 +1894,7 @@
       {
         "key": "ctrl+f",
         "command": "cursorRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "left",
@@ -1971,7 +1971,7 @@
       {
         "key": "ctrl+b",
         "command": "cursorLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "up",
@@ -2048,7 +2048,7 @@
       {
         "key": "ctrl+p",
         "command": "cursorUp",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "down",
@@ -2125,7 +2125,7 @@
       {
         "key": "ctrl+n",
         "command": "cursorDown",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "home",
@@ -2202,7 +2202,7 @@
       {
         "key": "ctrl+a",
         "command": "cursorHome",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "end",
@@ -2279,7 +2279,7 @@
       {
         "key": "ctrl+e",
         "command": "cursorEnd",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "alt+f",
@@ -2428,22 +2428,22 @@
       {
         "key": "alt+f",
         "command": "cursorWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+f",
         "command": "cursorWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape f",
         "command": "cursorWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ f",
         "command": "cursorWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+b",
@@ -2592,22 +2592,22 @@
       {
         "key": "alt+b",
         "command": "cursorWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+b",
         "command": "cursorWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape b",
         "command": "cursorWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ b",
         "command": "cursorWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+right",
@@ -3237,22 +3237,22 @@
       {
         "key": "alt+shift+.",
         "command": "cursorBottom",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+shift+.",
         "command": "cursorBottom",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape shift+.",
         "command": "cursorBottom",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ shift+.",
         "command": "cursorBottom",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+shift+,",
@@ -3317,22 +3317,22 @@
       {
         "key": "alt+shift+,",
         "command": "cursorTop",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+shift+,",
         "command": "cursorTop",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape shift+,",
         "command": "cursorTop",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ shift+,",
         "command": "cursorTop",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+r",
@@ -3477,7 +3477,7 @@
       {
         "key": "ctrl+d",
         "command": "deleteRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "ctrl+h",
@@ -3487,7 +3487,7 @@
       {
         "key": "ctrl+h",
         "command": "deleteLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "alt+\\",
@@ -3532,22 +3532,22 @@
       {
         "key": "alt+d",
         "command": "deleteWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+d",
         "command": "deleteWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape d",
         "command": "deleteWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ d",
         "command": "deleteWordRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+backspace",
@@ -3572,22 +3572,22 @@
       {
         "key": "alt+backspace",
         "command": "deleteWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+backspace",
         "command": "deleteWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape backspace",
         "command": "deleteWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ backspace",
         "command": "deleteWordLeft",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+k",
@@ -3597,7 +3597,7 @@
       {
         "key": "ctrl+k",
         "command": "deleteAllRight",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
       },
       {
         "key": "ctrl+shift+backspace",

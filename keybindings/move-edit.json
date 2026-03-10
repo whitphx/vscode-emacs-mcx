@@ -1,6 +1,7 @@
 [
-  // Entries with "textInputFocus && !editorTextFocus && !terminalFocus" target
-  // non-editor text inputs (e.g. chat input) using built-in VSCode commands.
+  // Entries with "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  // target non-editor text inputs (e.g. chat input) using built-in VSCode commands.
+  // Find/Replace widgets are excluded to preserve the existing cursorMoveOnFindWidget config behavior.
 
   // right
   {
@@ -13,7 +14,7 @@
   {
     "key": "ctrl+f",
     "command": "cursorRight",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // left
   {
@@ -26,7 +27,7 @@
   {
     "key": "ctrl+b",
     "command": "cursorLeft",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // up
   {
@@ -39,7 +40,7 @@
   {
     "key": "ctrl+p",
     "command": "cursorUp",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // down
   {
@@ -52,7 +53,7 @@
   {
     "key": "ctrl+n",
     "command": "cursorDown",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // home
   {
@@ -65,7 +66,7 @@
   {
     "key": "ctrl+a",
     "command": "cursorHome",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // end
   {
@@ -78,7 +79,7 @@
   {
     "key": "ctrl+e",
     "command": "cursorEnd",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // forward word (meta + f)
   {
@@ -91,7 +92,7 @@
   {
     "key": "meta+f",
     "command": "cursorWordRight",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // backward word (meta + b)
   {
@@ -104,7 +105,7 @@
   {
     "key": "meta+b",
     "command": "cursorWordLeft",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // right-word (ctrl + <right>)
   // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
@@ -169,7 +170,7 @@
   {
     "key": "meta+shift+.",
     "command": "cursorBottom",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // beginning of buffer (meta + <)
   {
@@ -181,7 +182,7 @@
   {
     "key": "meta+shift+,",
     "command": "cursorTop",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // move-to-window-line-top-bottom
   {
@@ -235,7 +236,7 @@
   {
     "key": "ctrl+d",
     "command": "deleteRight",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "ctrl+h",
@@ -245,7 +246,7 @@
   {
     "key": "ctrl+h",
     "command": "deleteLeft",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "meta+\\",
@@ -260,7 +261,7 @@
   {
     "key": "meta+d",
     "command": "deleteWordRight",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "meta+backspace",
@@ -270,7 +271,7 @@
   {
     "key": "meta+backspace",
     "command": "deleteWordLeft",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "ctrl+k",
@@ -280,7 +281,7 @@
   {
     "key": "ctrl+k",
     "command": "deleteAllRight",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus"
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "ctrl+shift+backspace",
