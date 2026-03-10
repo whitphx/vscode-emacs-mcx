@@ -1,4 +1,8 @@
 [
+  // Entries with "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  // target non-editor text inputs (e.g. chat input) using built-in VSCode commands.
+  // Find/Replace widgets are excluded to preserve the existing cursorMoveOnFindWidget config behavior.
+
   // right
   {
     "keys": ["right", "ctrl+f"],
@@ -6,6 +10,11 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    "key": "ctrl+f",
+    "command": "cursorRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // left
   {
@@ -15,6 +24,11 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    "key": "ctrl+b",
+    "command": "cursorLeft",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
   // up
   {
     "keys": ["up", "ctrl+p"],
@@ -22,6 +36,11 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    "key": "ctrl+p",
+    "command": "cursorUp",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // down
   {
@@ -31,6 +50,11 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    "key": "ctrl+n",
+    "command": "cursorDown",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
   // home
   {
     "keys": ["home", "ctrl+a"],
@@ -38,6 +62,11 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    "key": "ctrl+a",
+    "command": "cursorHome",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // end
   {
@@ -47,6 +76,11 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    "key": "ctrl+e",
+    "command": "cursorEnd",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
   // forward word (meta + f)
   {
     "key": "meta+f",
@@ -55,6 +89,11 @@
     "isearchInterruptible": true,
     "shiftVariants": true
   },
+  {
+    "key": "meta+f",
+    "command": "cursorWordRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
   // backward word (meta + b)
   {
     "key": "meta+b",
@@ -62,6 +101,11 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true,
     "shiftVariants": true
+  },
+  {
+    "key": "meta+b",
+    "command": "cursorWordLeft",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // right-word (ctrl + <right>)
   // In left-to-right languages, right-word is same as forward-word, and VSCode is not supporting RTL now.
@@ -123,12 +167,22 @@
     "when": "editorTextFocus",
     "isearchInterruptible": true
   },
+  {
+    "key": "meta+shift+.",
+    "command": "cursorBottom",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
   // beginning of buffer (meta + <)
   {
     "key": "meta+shift+,",
     "command": "emacs-mcx.beginningOfBuffer",
     "when": "editorTextFocus",
     "isearchInterruptible": true
+  },
+  {
+    "key": "meta+shift+,",
+    "command": "cursorTop",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   // move-to-window-line-top-bottom
   {
@@ -180,9 +234,19 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
+    "key": "ctrl+d",
+    "command": "deleteRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
+  {
     "key": "ctrl+h",
     "command": "emacs-mcx.deleteBackwardChar",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+h",
+    "command": "deleteLeft",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "meta+\\",
@@ -195,14 +259,29 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
+    "key": "meta+d",
+    "command": "deleteWordRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
+  {
     "key": "meta+backspace",
     "command": "emacs-mcx.backwardKillWord",
     "when": "editorTextFocus && !editorReadonly"
   },
   {
+    "key": "meta+backspace",
+    "command": "deleteWordLeft",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+  },
+  {
     "key": "ctrl+k",
     "command": "emacs-mcx.killLine",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "deleteAllRight",
+    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
     "key": "ctrl+shift+backspace",
@@ -320,7 +399,7 @@
   {
     "keys": ["ctrl+x u", "ctrl+/", "ctrl+shift+-"],
     "command": "undo",
-    "when": "editorTextFocus && !editorReadonly",
+    "when": "textInputFocus && !terminalFocus",
     "isearchInterruptible": true
   },
   {
