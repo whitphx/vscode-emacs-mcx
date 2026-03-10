@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.108.0
+
+### Minor Changes
+
+- [#2789](https://github.com/whitphx/vscode-emacs-mcx/pull/2789) [`594c41f`](https://github.com/whitphx/vscode-emacs-mcx/commit/594c41fb7867aa9262541bfe31a8d308ad095a1d) Thanks [@whitphx](https://github.com/whitphx)! - Add Emacs-like keybindings for non-editor text inputs (e.g. chat input): cursor movement (C-f, C-b, C-p, C-n, C-a, C-e, M-f, M-b, M-<, M->), editing (C-d, C-h, C-k, M-d, M-backspace), and undo (C-x u, C-/, C-shift+-)
+
 ## 0.107.6
 
 ### Patch Changes
