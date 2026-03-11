@@ -56,11 +56,13 @@
     "when": "!terminalFocus"
   },
   {
+    // `delete-window` in Emacs.
     "key": "ctrl+x 0",
     "command": "workbench.action.closeEditorsInGroup",
-    "when": "!terminalFocus && editorFocus"
+    "when": "!terminalFocus && !auxiliaryBarFocus"
   },
   {
+    // `delete-window` in Emacs for auxiliaryBar.
     "key": "ctrl+x 0",
     "command": "workbench.action.closeAuxiliaryBar",
     "when": "!terminalFocus && auxiliaryBarFocus"
@@ -89,7 +91,7 @@
     // Emulates the `other-window` command in Emacs.
     "key": "ctrl+x o",
     "command": "workbench.action.navigateEditorGroups",
-    "when": "!terminalFocus"
+    "when": "!terminalFocus && !auxiliaryBarVisible"
   },
   {
     // Include the auxiliaryBar such as the chat widget in the focus cycle of `other-window` command.

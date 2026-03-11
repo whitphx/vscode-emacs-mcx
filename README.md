@@ -416,18 +416,18 @@ See [this page](https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-R
 
 ### Tab / Buffer Manipulation Commands
 
-| Command     | Desc                                         |
-| ----------- | -------------------------------------------- |
-| `C-x b`     | Switch to another open buffer                |
-| `C-x k`     | Close current tab (buffer)                   |
-| `C-x 0`     | Close editors in the current group.          |
-| `C-x 1`     | Close editors in other (split) group.        |
-| `C-x 2`     | Split editor horizontal                      |
-| `C-x 3`     | Split editor vertical                        |
-| `C-x 4`     | Toggle split layout (vertical to horizontal) |
-| `C-x o`     | Focus other split editor                     |
-| `C-x LEFT`  | Select the previous tab (previous-buffer).   |
-| `C-x RIGHT` | Select the next tab (next-buffer).           |
+| Command     | Desc                                              |
+| ----------- | ------------------------------------------------- |
+| `C-x b`     | Switch to another open buffer                     |
+| `C-x k`     | Close current tab (buffer)                        |
+| `C-x 0`     | Close the current editor group (`delete-window`). |
+| `C-x 1`     | Close editors in other (split) group.             |
+| `C-x 2`     | Split editor horizontal                           |
+| `C-x 3`     | Split editor vertical                             |
+| `C-x 4`     | Toggle split layout (vertical to horizontal)      |
+| `C-x o`     | Focus another editor group (`other-window`)       |
+| `C-x LEFT`  | Select the previous tab (previous-buffer).        |
+| `C-x RIGHT` | Select the next tab (next-buffer).                |
 
 ### Prefix argument
 
@@ -549,8 +549,7 @@ With this keybinding, you can call `emacs-mcx.yankPop` command with a prefix arg
 - `ctrl+y`: redo;
 - `ctrl+m`: editor.action.toggleTabFocusMode;
 - `ctrl+/`: editor.action.commentLine => **Use `ctrl+;` instead**;
-- `ctrl+p` & `ctrl+e`: workbench.action.quickOpen => **Use `ctrl+x b` instead**;
-- `ctrl+p`: workbench.action.quickOpenNavigateNext => **Use `ctrl+n` instead**.
+- `ctrl+p` & `ctrl+e`: workbench.action.quickOpen => **Use `ctrl+x ctrl+f` instead**;
 - `ctrl+o`: workbench.action.files.openFileFolder;
 
 ## Contributions/Development

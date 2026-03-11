@@ -7995,7 +7995,7 @@
       {
         "key": "ctrl+x 0",
         "command": "workbench.action.closeEditorsInGroup",
-        "when": "!terminalFocus && editorFocus"
+        "when": "!terminalFocus && !auxiliaryBarFocus"
       },
       {
         "key": "ctrl+x 0",
@@ -8025,7 +8025,7 @@
       {
         "key": "ctrl+x o",
         "command": "workbench.action.navigateEditorGroups",
-        "when": "!terminalFocus"
+        "when": "!terminalFocus && !auxiliaryBarVisible"
       },
       {
         "key": "ctrl+x o",
