@@ -13,7 +13,7 @@ function evaluateWhenCondition(
   let replacedWhen = when;
 
   // `config.emacs-mcx` is a valid identifier in the `when` condition but it's not valid in JavaScript, so replace it with `config.emacsMcx` before evaluating the expression.
-  replacedWhen = replacedWhen.replace("config.emacs-mcx", "config.emacsMcx");
+  replacedWhen = replacedWhen.replaceAll("config.emacs-mcx", "config.emacsMcx");
 
   const result = evaluateSimpleBooleanExpression(replacedWhen, context, defaultContextValue);
   if (typeof result !== "boolean") {
