@@ -2,8 +2,8 @@ import jsep from "jsep";
 
 export function evaluateSimpleBooleanExpression(
   expr: string,
-  context: Record<string, boolean | string>,
-  defaultContextValue: boolean,
+  context: Record<string, boolean | string> = {},
+  defaultContextValue: boolean = false,
 ): boolean {
   // Use jsep to parse the expression.
   const ast = jsep(expr);
