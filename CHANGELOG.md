@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.109.0
+
+### Minor Changes
+
+- [#2796](https://github.com/whitphx/vscode-emacs-mcx/pull/2796) [`e419754`](https://github.com/whitphx/vscode-emacs-mcx/commit/e419754e800857e206bbb9f016b6571242134a07) Thanks [@whitphx](https://github.com/whitphx)! - Add `C-x 0` and `C-x o` keybindings for the auxiliary bar (such as the chat widget).
+
 ## 0.108.0
 
 ### Minor Changes
