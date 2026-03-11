@@ -62,7 +62,7 @@
     "when": "!terminalFocus && !auxiliaryBarFocus"
   },
   {
-    // `delete-window` in Emacs for auxiliaryBar.
+    // `delete-window` in Emacs for the auxiliary bar.
     "key": "ctrl+x 0",
     "command": "workbench.action.closeAuxiliaryBar",
     "when": "!terminalFocus && auxiliaryBarFocus"
