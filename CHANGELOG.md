@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.109.1
+
+### Patch Changes
+
+- [#2799](https://github.com/whitphx/vscode-emacs-mcx/pull/2799) [`ecdadf9`](https://github.com/whitphx/vscode-emacs-mcx/commit/ecdadf9e2df5ee6cb318e87ed8ae3d477de0f595) Thanks [@whitphx](https://github.com/whitphx)! - Fix `C-x o` to focus on the chat widget only when the chat UI ID is 'workbench.panel.chat'
+
 ## 0.109.0
 
 ### Minor Changes
