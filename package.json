@@ -8025,7 +8025,7 @@
       {
         "key": "ctrl+x o",
         "command": "workbench.action.navigateEditorGroups",
-        "when": "!terminalFocus && !auxiliaryBarVisible"
+        "when": "!terminalFocus"
       },
       {
         "key": "ctrl+x o",

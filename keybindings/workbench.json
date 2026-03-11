@@ -91,7 +91,7 @@
     // Emulates the `other-window` command in Emacs.
     "key": "ctrl+x o",
     "command": "workbench.action.navigateEditorGroups",
-    "when": "!terminalFocus && !auxiliaryBarVisible"
+    "when": "!terminalFocus"
   },
   {
     // Include the auxiliaryBar such as the chat widget in the focus cycle of `other-window` command.
