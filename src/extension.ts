@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { moveCommandIds } from "./commands/move";
 import { type Registers, RegisterCommandState } from "./commands/registers";
 import { ZapCommandState } from "./commands/zap";
+import { CycleSpacingState } from "./commands/edit";
 import type { RectangleState } from "./commands/rectangle";
 import { Configuration } from "./configuration/configuration";
 import { WorkspaceConfigCache } from "./workspace-configuration";
@@ -27,6 +28,7 @@ export function activate(context: vscode.ExtensionContext): void {
   };
   const registerCommandState = new RegisterCommandState();
   const zapCommandState = new ZapCommandState();
+  const cycleSpacingState = new CycleSpacingState();
 
   const createEmacsEmulator = (editor: vscode.TextEditor): EmacsEmulator => {
     const emacsEmulator = new EmacsEmulator(
@@ -37,6 +39,7 @@ export function activate(context: vscode.ExtensionContext): void {
       registerCommandState,
       rectangleState,
       zapCommandState,
+      cycleSpacingState,
     );
     context.subscriptions.push(emacsEmulator);
     return emacsEmulator;
@@ -48,6 +51,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.window.onDidChangeActiveTextEditor(async (editor) => {
       registerCommandState.stopAcceptingRegisterName();
       zapCommandState.stopAccepting();
+      cycleSpacingState.reset();
 
       if (editor == null) {
         return;
@@ -189,6 +193,8 @@ export function activate(context: vscode.ExtensionContext): void {
   bindEmulatorCommand("deleteForwardChar");
 
   bindEmulatorCommand("deleteHorizontalSpace");
+
+  bindEmulatorCommand("cycleSpacing");
 
   bindEmulatorCommand("zapToChar");
   bindEmulatorCommand("zapCharCommand");

@@ -6,6 +6,7 @@ import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
 import { delay } from "../utils";
 import { Logger } from "../logger";
+import { IEmacsController } from "../emulator";
 
 const logger = Logger.get("EditCommands");
 
@@ -178,5 +179,267 @@ export class NewLine extends EmacsCommand {
     });
 
     revealPrimaryActive(textEditor);
+  }
+}
+
+function isHorizontalWhitespace(char: string): boolean {
+  return char === " " || char === "\t";
+}
+
+function findHorizontalWhitespaceRange(lineText: string, cursorChar: number): [number, number] {
+  let from = cursorChar;
+  while (from > 0 && isHorizontalWhitespace(lineText[from - 1]!)) {
+    from--;
+  }
+  let to = cursorChar;
+  while (to < lineText.length && isHorizontalWhitespace(lineText[to]!)) {
+    to++;
+  }
+  return [from, to];
+}
+
+interface CursorCycleData {
+  lineNum: number;
+  originalWhitespace: string;
+  originalCursorOffset: number;
+  expectedPosition: vscode.Position;
+}
+
+/**
+ * Shared state for the cycle-spacing command.
+ * Tracks the current cycle step and per-cursor data needed to advance the cycle.
+ * Consecutive invocations are detected by comparing the current cursor positions
+ * against the expected positions stored from the previous invocation.
+ */
+export class CycleSpacingState {
+  private _step: 0 | 1 | 2 = 0;
+  private _cursors: CursorCycleData[] | null = null;
+
+  public reset(): void {
+    this._step = 0;
+    this._cursors = null;
+  }
+
+  public get step(): 0 | 1 | 2 {
+    return this._step;
+  }
+
+  public get cursors(): readonly CursorCycleData[] | null {
+    return this._cursors;
+  }
+
+  public advance(cursors: CursorCycleData[], nextStep: 1 | 2): void {
+    this._cursors = cursors;
+    this._step = nextStep;
+  }
+
+  public isConsecutive(currentPositions: readonly vscode.Position[]): boolean {
+    if (this._step === 0 || this._cursors === null) return false;
+    if (this._cursors.length !== currentPositions.length) return false;
+    return this._cursors.every((cd, i) => cd.expectedPosition.isEqual(currentPositions[i]!));
+  }
+}
+
+/**
+ * Implements Emacs' `cycle-spacing` command (M-SPC).
+ *
+ * Cycles through three actions on consecutive invocations:
+ *   1. Replace all horizontal whitespace around point with a single space (just-one-space).
+ *   2. Delete all horizontal whitespace around point (delete-horizontal-space).
+ *   3. Restore the original whitespace and cursor position.
+ *
+ * Any non-consecutive invocation (cursor moved between calls) resets the cycle to step 1.
+ * A prefix argument sets the number of spaces inserted in step 1 (default: 1).
+ */
+export class CycleSpacing extends EmacsCommand {
+  public readonly id = "cycleSpacing";
+
+  constructor(
+    emacsController: IEmacsController,
+    private readonly cycleSpacingState: CycleSpacingState,
+  ) {
+    super(emacsController);
+  }
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    const currentPositions = textEditor.selections.map((s) => s.active);
+    if (!this.cycleSpacingState.isConsecutive(currentPositions)) {
+      this.cycleSpacingState.reset();
+    }
+
+    switch (this.cycleSpacingState.step) {
+      case 0:
+        return this.runStep1(textEditor, prefixArgument);
+      case 1:
+        return this.runStep2(textEditor);
+      case 2:
+        return this.runStep3(textEditor);
+    }
+  }
+
+  // Returns selection indices sorted left-to-right, top-to-bottom for safe lineOffset tracking.
+  private sortedSelectionIndices(textEditor: TextEditor): number[] {
+    return [...textEditor.selections.keys()].sort((a, b) => {
+      const sa = textEditor.selections[a]!;
+      const sb = textEditor.selections[b]!;
+      if (sa.active.line !== sb.active.line) return sa.active.line - sb.active.line;
+      return sa.active.character - sb.active.character;
+    });
+  }
+
+  private async runStep1(textEditor: TextEditor, prefixArgument: number | undefined): Promise<void> {
+    const document = textEditor.document;
+    const nSpaces = prefixArgument === undefined ? 1 : Math.max(0, prefixArgument);
+    const replacement = " ".repeat(nSpaces);
+
+    const sortedIndices = this.sortedSelectionIndices(textEditor);
+    const lineOffsets = new Map<number, number>();
+    const rawCursorData: Array<{ index: number; data: CursorCycleData }> = [];
+
+    for (const i of sortedIndices) {
+      const pos = textEditor.selections[i]!.active;
+      const line = pos.line;
+      const lineText = document.lineAt(line).text;
+      const [from, to] = findHorizontalWhitespaceRange(lineText, pos.character);
+      const originalWhitespace = lineText.substring(from, to);
+      const originalCursorOffset = pos.character - from;
+      const lineOffset = lineOffsets.get(line) ?? 0;
+      const newFrom = from + lineOffset;
+      const delta = nSpaces - (to - from);
+      lineOffsets.set(line, lineOffset + delta);
+      rawCursorData.push({
+        index: i,
+        data: {
+          lineNum: line,
+          originalWhitespace,
+          originalCursorOffset,
+          expectedPosition: new vscode.Position(line, newFrom + nSpaces),
+        },
+      });
+    }
+
+    const success = await textEditor.edit((editBuilder) => {
+      textEditor.selections.forEach((selection) => {
+        const pos = selection.active;
+        const line = pos.line;
+        const lineText = document.lineAt(line).text;
+        const [from, to] = findHorizontalWhitespaceRange(lineText, pos.character);
+        editBuilder.replace(new Range(line, from, line, to), replacement);
+      });
+    });
+
+    if (!success) {
+      logger.warn("cycleSpacing step1 edit failed");
+      return;
+    }
+
+    const newCursors = rawCursorData.sort((a, b) => a.index - b.index).map(({ data }) => data);
+
+    textEditor.selections = newCursors.map((cd) => {
+      const pos = cd.expectedPosition;
+      return new Selection(pos, pos);
+    });
+
+    this.cycleSpacingState.advance(newCursors, 1);
+  }
+
+  private async runStep2(textEditor: TextEditor): Promise<void> {
+    const document = textEditor.document;
+    const prevCursors = this.cycleSpacingState.cursors!;
+
+    const sortedIndices = this.sortedSelectionIndices(textEditor);
+    const lineOffsets = new Map<number, number>();
+    const rawCursorData: Array<{ index: number; data: CursorCycleData }> = [];
+
+    for (const i of sortedIndices) {
+      const pos = textEditor.selections[i]!.active;
+      const line = pos.line;
+      const lineText = document.lineAt(line).text;
+      const [from, to] = findHorizontalWhitespaceRange(lineText, pos.character);
+      const lineOffset = lineOffsets.get(line) ?? 0;
+      const newFrom = from + lineOffset;
+      const delta = -(to - from);
+      lineOffsets.set(line, lineOffset + delta);
+      rawCursorData.push({
+        index: i,
+        data: {
+          ...prevCursors[i]!,
+          expectedPosition: new vscode.Position(line, newFrom),
+        },
+      });
+    }
+
+    const success = await textEditor.edit((editBuilder) => {
+      textEditor.selections.forEach((selection) => {
+        const pos = selection.active;
+        const line = pos.line;
+        const lineText = document.lineAt(line).text;
+        const [from, to] = findHorizontalWhitespaceRange(lineText, pos.character);
+        editBuilder.delete(new Range(line, from, line, to));
+      });
+    });
+
+    if (!success) {
+      logger.warn("cycleSpacing step2 edit failed");
+      return;
+    }
+
+    const newCursors = rawCursorData.sort((a, b) => a.index - b.index).map(({ data }) => data);
+
+    textEditor.selections = newCursors.map((cd) => {
+      const pos = cd.expectedPosition;
+      return new Selection(pos, pos);
+    });
+
+    this.cycleSpacingState.advance(newCursors, 2);
+  }
+
+  private async runStep3(textEditor: TextEditor): Promise<void> {
+    const prevCursors = this.cycleSpacingState.cursors!;
+
+    const sortedIndices = this.sortedSelectionIndices(textEditor);
+    const lineOffsets = new Map<number, number>();
+    const rawCursorData: Array<{ index: number; data: CursorCycleData }> = [];
+
+    for (const i of sortedIndices) {
+      const pos = textEditor.selections[i]!.active;
+      const line = pos.line;
+      const cd = prevCursors[i]!;
+      const lineOffset = lineOffsets.get(line) ?? 0;
+      const newPos = pos.character + lineOffset;
+      const delta = cd.originalWhitespace.length;
+      lineOffsets.set(line, lineOffset + delta);
+      const restoredCursorCol = newPos + cd.originalCursorOffset;
+      rawCursorData.push({
+        index: i,
+        data: {
+          ...cd,
+          expectedPosition: new vscode.Position(line, restoredCursorCol),
+        },
+      });
+    }
+
+    const success = await textEditor.edit((editBuilder) => {
+      textEditor.selections.forEach((selection, i) => {
+        const pos = selection.active;
+        const cd = prevCursors[i]!;
+        editBuilder.insert(pos, cd.originalWhitespace);
+      });
+    });
+
+    if (!success) {
+      logger.warn("cycleSpacing step3 edit failed");
+      return;
+    }
+
+    const newCursors = rawCursorData.sort((a, b) => a.index - b.index).map(({ data }) => data);
+
+    textEditor.selections = newCursors.map((cd) => {
+      const pos = cd.expectedPosition;
+      return new Selection(pos, pos);
+    });
+
+    // Reset to step 0: next consecutive M-SPC will restart the cycle from step 1.
+    this.cycleSpacingState.reset();
   }
 }

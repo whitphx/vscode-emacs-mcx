@@ -249,6 +249,11 @@
     "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
   },
   {
+    "key": "meta+space",
+    "command": "emacs-mcx.cycleSpacing",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
     "key": "meta+\\",
     "command": "emacs-mcx.deleteHorizontalSpace",
     "when": "editorTextFocus && !editorReadonly"

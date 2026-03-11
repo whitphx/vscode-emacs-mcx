@@ -279,6 +279,10 @@
         "title": "Emacs-MCX: Copy Region"
       },
       {
+        "command": "emacs-mcx.cycleSpacing",
+        "title": "Emacs-MCX: Cycle Spacing"
+      },
+      {
         "command": "emacs-mcx.deleteBackwardChar",
         "title": "Emacs-MCX: Delete Backward Char"
       },
@@ -3488,6 +3492,26 @@
         "key": "ctrl+h",
         "command": "deleteLeft",
         "when": "textInputFocus && !editorTextFocus && !terminalFocus && !findInputFocussed && !replaceInputFocussed"
+      },
+      {
+        "key": "alt+space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "alt+\\",

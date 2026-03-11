@@ -151,6 +151,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
     registerCommandState: RegisterCommands.RegisterCommandState,
     rectangleState: RectangleCommands.RectangleState,
     zapCommandState: ZapCommands.ZapCommandState,
+    cycleSpacingState: EditCommands.CycleSpacingState,
   ) {
     this._textEditor = textEditor;
 
@@ -195,6 +196,7 @@ export class EmacsEmulator implements IEmacsController, vscode.Disposable {
       new EditCommands.DeleteBackwardChar(this),
       new EditCommands.DeleteForwardChar(this),
       new EditCommands.DeleteHorizontalSpace(this),
+      new EditCommands.CycleSpacing(this, cycleSpacingState),
       new EditCommands.NewLine(this),
       new DeleteBlankLinesCommands.DeleteBlankLines(this),
       new TransposeCommands.TransposeChars(this),

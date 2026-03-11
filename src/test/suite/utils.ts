@@ -6,6 +6,7 @@ import { KillRing } from "../../kill-yank/kill-ring";
 import { Minibuffer } from "../../minibuffer";
 import { Registers, RegisterCommandState } from "../../commands/registers";
 import { ZapCommandState } from "../../commands/zap";
+import { CycleSpacingState } from "../../commands/edit";
 import { RectangleState } from "../../commands/rectangle";
 export { delay } from "../../utils";
 
@@ -63,6 +64,7 @@ export function createEmulator(
   const rectangleState: RectangleState = { latestKilledRectangle: [] };
   const registerCommandState = new RegisterCommandState();
   const zapCommandState = new ZapCommandState();
+  const cycleSpacingState = new CycleSpacingState();
   return new EmacsEmulator(
     textEditor,
     killRing,
@@ -71,6 +73,7 @@ export function createEmulator(
     registerCommandState,
     rectangleState,
     zapCommandState,
+    cycleSpacingState,
   );
 }
 
