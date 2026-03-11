@@ -4,7 +4,11 @@ import { evaluateSimpleBooleanExpression } from "./simple-eval-bool.mjs";
 /**
  * Evaluates a `when` condition string with the provided context **in a very rough way**.
  */
-function evaluateWhenCondition(when: string, context: Record<string, boolean>, defaultContextValue: boolean): boolean {
+function evaluateWhenCondition(
+  when: string,
+  context: Record<string, boolean | string>,
+  defaultContextValue: boolean,
+): boolean {
   console.debug(`Evaluating when condition "${when}"`);
   let replacedWhen = when;
 
@@ -51,6 +55,7 @@ function ctrlEditsInFindWidgetOnWindowsOrLinux(keybindings: KeyBinding[]): strin
       findInputFocussed: true,
       replaceInputFocussed: false,
       isComposing: false,
+      activeAuxiliary: "",
     };
     const when = binding.when;
 
@@ -109,6 +114,7 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
       findInputFocussed: true,
       replaceInputFocussed: false,
       isComposing: false,
+      activeAuxiliary: "",
     };
     const when = binding.when;
 
@@ -166,6 +172,7 @@ function ctrlXOnTerminal(keybindings: KeyBinding[]): string[] {
       findInputFocussed: false,
       replaceInputFocussed: false,
       isComposing: false,
+      activeAuxiliary: "",
     };
     const when = binding.when;
 

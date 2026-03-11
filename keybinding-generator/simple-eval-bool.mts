@@ -2,7 +2,7 @@ import jsep from "jsep";
 
 export function evaluateSimpleBooleanExpression(
   expr: string,
-  context: Record<string, boolean>,
+  context: Record<string, boolean | string>,
   defaultContextValue: boolean,
 ): boolean {
   // Use jsep to parse the expression.
