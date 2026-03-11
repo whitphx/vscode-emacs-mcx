@@ -7995,7 +7995,12 @@
       {
         "key": "ctrl+x 0",
         "command": "workbench.action.closeEditorsInGroup",
-        "when": "!terminalFocus"
+        "when": "!terminalFocus && editorFocus"
+      },
+      {
+        "key": "ctrl+x 0",
+        "command": "workbench.action.closeAuxiliaryBar",
+        "when": "!terminalFocus && auxiliaryBarFocus"
       },
       {
         "key": "ctrl+x 1",
@@ -8021,6 +8026,11 @@
         "key": "ctrl+x o",
         "command": "workbench.action.navigateEditorGroups",
         "when": "!terminalFocus"
+      },
+      {
+        "key": "ctrl+x o",
+        "command": "workbench.action.focusAuxiliaryBar",
+        "when": "!terminalFocus && activeEditorGroupLast && auxiliaryBarVisible && !auxiliaryBarFocus"
       },
       {
         "key": "ctrl+x shift+=",
