@@ -8030,7 +8030,7 @@
       {
         "key": "ctrl+x o",
         "command": "workbench.action.focusAuxiliaryBar",
-        "when": "!terminalFocus && activeEditorGroupLast && auxiliaryBarVisible && !auxiliaryBarFocus"
+        "when": "activeAuxiliary == 'workbench.panel.chat' && !terminalFocus && activeEditorGroupLast && auxiliaryBarVisible && !auxiliaryBarFocus"
       },
       {
         "key": "ctrl+x shift+=",

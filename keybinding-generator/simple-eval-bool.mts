@@ -1,33 +1,43 @@
 import jsep from "jsep";
 
-export function evaluateSimpleBooleanExpression(expr: string): boolean {
+export function evaluateSimpleBooleanExpression(
+  expr: string,
+  context: Record<string, boolean>,
+  defaultContextValue: boolean,
+): boolean {
   // Use jsep to parse the expression.
   const ast = jsep(expr);
 
   // Recursive AST evaluator
-  function maybeEvaluate(node: jsep.Expression | jsep.baseTypes | (jsep.Expression | jsep.baseTypes)[]): boolean {
-    if (Array.isArray(node)) {
-      return node.every(maybeEvaluate);
-    }
-    if (typeof node === "boolean") {
-      return node;
-    }
+  function maybeEvaluate(
+    node: jsep.Expression | jsep.baseTypes | (jsep.Expression | jsep.baseTypes)[],
+  ): jsep.baseTypes {
     if (
+      typeof node === "boolean" ||
       typeof node === "string" ||
       typeof node === "number" ||
       node === null ||
       node === undefined ||
       node instanceof RegExp
     ) {
-      throw new Error(`Unexpected primitive value in expression: ${String(node)}`);
+      return node;
+    }
+
+    if (Array.isArray(node)) {
+      throw new Error(`Unexpected array in expression: ${JSON.stringify(node)}`);
     }
 
     return evaluate(node as unknown as jsep.Expression);
   }
-  function evaluate(node: jsep.Expression): boolean {
+  function evaluate(node: jsep.Expression): jsep.baseTypes {
     switch (node.type) {
       case "Literal": {
-        if (typeof node.value === "boolean") {
+        if (
+          typeof node.value === "boolean" ||
+          typeof node.value === "number" ||
+          typeof node.value === "string" ||
+          node.value === null
+        ) {
           return node.value;
         }
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
@@ -36,8 +46,10 @@ export function evaluateSimpleBooleanExpression(expr: string): boolean {
       case "Identifier": {
         if (node.name === "true") return true;
         if (node.name === "false") return false;
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-        throw new Error(`Unknown identifier: ${String(node.name)}`);
+        if (typeof node.name === "string" && node.name in context) {
+          return context[node.name];
+        }
+        return defaultContextValue;
       }
       case "LogicalExpression":
       case "BinaryExpression": {
@@ -48,6 +60,8 @@ export function evaluateSimpleBooleanExpression(expr: string): boolean {
             return left && right;
           case "||":
             return left || right;
+          case "==":
+            return left === right;
           default:
             // eslint-disable-next-line @typescript-eslint/no-base-to-string
             throw new Error(`Unsupported logical operator: ${String(node.operator)}`);
@@ -63,10 +77,12 @@ export function evaluateSimpleBooleanExpression(expr: string): boolean {
             throw new Error(`Unsupported unary operator: ${String(node.operator)}`);
         }
       }
+      case "MemberExpression":
+        return defaultContextValue; // XXX: Don't support member expressions and just return the default value for now because it's not needed for the use case in this extension.
       default:
-        throw new Error(`Unsupported node type: ${node.type}`);
+        throw new Error(`Unsupported node type: ${node.type} (${JSON.stringify(node)})`);
     }
   }
 
-  return evaluate(ast);
+  return Boolean(evaluate(ast));
 }

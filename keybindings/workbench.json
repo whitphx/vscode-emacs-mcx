@@ -94,10 +94,12 @@
     "when": "!terminalFocus"
   },
   {
-    // Include the auxiliary bar (e.g. the chat widget) in the focus cycle of the `other-window` command.
+    // Include the chat widget in the auxiliary bar in the focus cycle of the `other-window` command.
     "key": "ctrl+x o",
     "command": "workbench.action.focusAuxiliaryBar",
-    "when": "!terminalFocus && activeEditorGroupLast && auxiliaryBarVisible && !auxiliaryBarFocus"
+    // Only support focusing the chat widget in the auxiliary bar for safety, since other views in the auxiliary bar might not handle focus well.
+    // For example, Antigravity's agent panel (activeAuxiliary = "antigravity.agentViewContainerId") doesn't handle focus well and can cause the focus cycle to break.
+    "when": "activeAuxiliary == 'workbench.panel.chat' && !terminalFocus && activeEditorGroupLast && auxiliaryBarVisible && !auxiliaryBarFocus"
   },
   {
     "key": "ctrl+x shift+=",
