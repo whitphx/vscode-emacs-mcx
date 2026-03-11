@@ -12,7 +12,7 @@ describe("evaluateSimpleBooleanExpression", () => {
     { expr: "!(true && false)", expected: true },
   ].forEach(({ expr, expected }) => {
     it(`should evaluate "${expr}" to ${expected}`, () => {
-      const result = evaluateSimpleBooleanExpression(expr);
+      const result = evaluateSimpleBooleanExpression(expr, {}, false);
       assert.strictEqual(result, expected);
     });
   });

@@ -4,24 +4,18 @@ import { evaluateSimpleBooleanExpression } from "./simple-eval-bool.mjs";
 /**
  * Evaluates a `when` condition string with the provided context **in a very rough way**.
  */
-function evaluateWhenCondition(when: string, context: Record<string, boolean>, defaultValue: boolean): boolean {
+function evaluateWhenCondition(
+  when: string,
+  context: Record<string, boolean | string>,
+  defaultContextValue: boolean,
+): boolean {
   console.debug(`Evaluating when condition "${when}"`);
   let replacedWhen = when;
-  for (const cond of Object.keys(context)) {
-    // Replace `cond` with `true` in the when condition.
-    replacedWhen = replacedWhen.replace(new RegExp(`\\b${cond}\\b`, "g"), context[cond] ? "true" : "false");
-  }
-  console.debug(`when condition whose values were replaced with specified boolean values: "${replacedWhen}"`);
-  // Replace remaining conditions with the default value.
-  replacedWhen = replacedWhen.replace(/[a-zA-Z-.]+/g, (match) => {
-    if (match === "true" || match === "false") {
-      return match; // Keep true/false as is.
-    }
-    return defaultValue ? "true" : "false"; // Replace other conditions with the default value.
-  });
-  console.debug(`when condition whose values were fully replaced with boolean values: ${replacedWhen}`);
 
-  const result = evaluateSimpleBooleanExpression(replacedWhen);
+  // `config.emacs-mcx` is a valid identifier in the `when` condition but it's not valid in JavaScript, so replace it with `config.emacsMcx` before evaluating the expression.
+  replacedWhen = replacedWhen.replaceAll("config.emacs-mcx", "config.emacsMcx");
+
+  const result = evaluateSimpleBooleanExpression(replacedWhen, context, defaultContextValue);
   if (typeof result !== "boolean") {
     throw new Error(`When condition "${when}" does not evaluate to boolean.`);
   }
@@ -61,6 +55,7 @@ function ctrlEditsInFindWidgetOnWindowsOrLinux(keybindings: KeyBinding[]): strin
       findInputFocussed: true,
       replaceInputFocussed: false,
       isComposing: false,
+      activeAuxiliary: "",
     };
     const when = binding.when;
 
@@ -119,6 +114,7 @@ function cmdEditsInFindWidgetOnMac(keybindings: KeyBinding[]): string[] {
       findInputFocussed: true,
       replaceInputFocussed: false,
       isComposing: false,
+      activeAuxiliary: "",
     };
     const when = binding.when;
 
@@ -176,6 +172,7 @@ function ctrlXOnTerminal(keybindings: KeyBinding[]): string[] {
       findInputFocussed: false,
       replaceInputFocussed: false,
       isComposing: false,
+      activeAuxiliary: "",
     };
     const when = binding.when;
 
