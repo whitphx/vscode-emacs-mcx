@@ -162,8 +162,8 @@ suite("cycle-spacing", () => {
       // Next invocation should be fresh step 1, NOT step 3
       await emulator.runCommand("cycleSpacing");
 
-      // At col 4 ('1') in "word1word2": no surrounding whitespace → insert space
-      assertTextEqual(activeTextEditor, "word word2");
+      // At col 4 (between 'd' and '1') in "word1word2": no surrounding whitespace → insert space
+      assertTextEqual(activeTextEditor, "word 1word2");
       assertCursorsEqual(activeTextEditor, [0, 5]);
     });
   });
