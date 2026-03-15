@@ -74,6 +74,57 @@ export class DeleteHorizontalSpace extends EmacsCommand {
   }
 }
 
+export class JustOneSpace extends EmacsCommand {
+  public readonly id = "justOneSpace";
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    const n = prefixArgument === undefined ? 1 : prefixArgument;
+    const includeNewlines = n < 0;
+    const spacesToLeave = Math.abs(n);
+
+    return textEditor
+      .edit((editBuilder) => {
+        textEditor.selections.forEach((selection) => {
+          const doc = textEditor.document;
+          const offset = doc.offsetAt(selection.active);
+
+          let fromOffset = offset;
+          while (fromOffset > 0) {
+            const ch = doc.getText(new Range(doc.positionAt(fromOffset - 1), doc.positionAt(fromOffset)));
+            if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
+              fromOffset -= 1;
+            } else {
+              break;
+            }
+          }
+
+          let toOffset = offset;
+          const docLength = doc.getText().length;
+          while (toOffset < docLength) {
+            const ch = doc.getText(new Range(doc.positionAt(toOffset), doc.positionAt(toOffset + 1)));
+            if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
+              toOffset += 1;
+            } else {
+              break;
+            }
+          }
+
+          const from = doc.positionAt(fromOffset);
+          const to = doc.positionAt(toOffset);
+          editBuilder.replace(new Range(from, to), " ".repeat(spacesToLeave));
+        });
+      })
+      .then((success) => {
+        if (!success) {
+          logger.warn("justOneSpace failed");
+        }
+      })
+      .then(() => {
+        makeSelectionsEmpty(textEditor);
+      });
+  }
+}
+
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
