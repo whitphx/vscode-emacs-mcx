@@ -254,11 +254,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    "key": "meta+space",
-    "command": "emacs-mcx.justOneSpace",
-    "when": "editorTextFocus && !editorReadonly"
-  },
-  {
     "key": "meta+d",
     "command": "emacs-mcx.killWord",
     "when": "editorTextFocus && !editorReadonly"
