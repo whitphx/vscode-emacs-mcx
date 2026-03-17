@@ -82,33 +82,39 @@ export class JustOneSpace extends EmacsCommand {
     const includeNewlines = n < 0;
     const spacesToLeave = Math.abs(n);
 
+    const editInfos: { fromOffset: number; toOffset: number }[] = [];
+
+    const doc = textEditor.document;
+    textEditor.selections.forEach((selection) => {
+      const offset = doc.offsetAt(selection.active);
+
+      let fromOffset = offset;
+      while (fromOffset > 0) {
+        const ch = doc.getText(new Range(doc.positionAt(fromOffset - 1), doc.positionAt(fromOffset)));
+        if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
+          fromOffset -= 1;
+        } else {
+          break;
+        }
+      }
+
+      let toOffset = offset;
+      const docLength = doc.getText().length;
+      while (toOffset < docLength) {
+        const ch = doc.getText(new Range(doc.positionAt(toOffset), doc.positionAt(toOffset + 1)));
+        if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
+          toOffset += 1;
+        } else {
+          break;
+        }
+      }
+
+      editInfos.push({ fromOffset, toOffset });
+    });
+
     return textEditor
       .edit((editBuilder) => {
-        textEditor.selections.forEach((selection) => {
-          const doc = textEditor.document;
-          const offset = doc.offsetAt(selection.active);
-
-          let fromOffset = offset;
-          while (fromOffset > 0) {
-            const ch = doc.getText(new Range(doc.positionAt(fromOffset - 1), doc.positionAt(fromOffset)));
-            if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
-              fromOffset -= 1;
-            } else {
-              break;
-            }
-          }
-
-          let toOffset = offset;
-          const docLength = doc.getText().length;
-          while (toOffset < docLength) {
-            const ch = doc.getText(new Range(doc.positionAt(toOffset), doc.positionAt(toOffset + 1)));
-            if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
-              toOffset += 1;
-            } else {
-              break;
-            }
-          }
-
+        editInfos.forEach(({ fromOffset, toOffset }) => {
           const from = doc.positionAt(fromOffset);
           const to = doc.positionAt(toOffset);
           editBuilder.replace(new Range(from, to), " ".repeat(spacesToLeave));
@@ -117,10 +123,18 @@ export class JustOneSpace extends EmacsCommand {
       .then((success) => {
         if (!success) {
           logger.warn("justOneSpace failed");
+          return;
         }
-      })
-      .then(() => {
-        makeSelectionsEmpty(textEditor);
+
+        // Set cursors to the end of the inserted spaces.
+        // We need to account for the offset shift caused by earlier edits.
+        let cumulativeShift = 0;
+        textEditor.selections = editInfos.map(({ fromOffset, toOffset }) => {
+          const newCursorOffset = fromOffset + spacesToLeave + cumulativeShift;
+          cumulativeShift += spacesToLeave - (toOffset - fromOffset);
+          const pos = textEditor.document.positionAt(newCursorOffset);
+          return new Selection(pos, pos);
+        });
       });
   }
 }
