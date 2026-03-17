@@ -189,6 +189,7 @@ export function activate(context: vscode.ExtensionContext): void {
   bindEmulatorCommand("deleteForwardChar");
 
   bindEmulatorCommand("deleteHorizontalSpace");
+  bindEmulatorCommand("justOneSpace");
 
   bindEmulatorCommand("zapToChar");
   bindEmulatorCommand("zapCharCommand");
