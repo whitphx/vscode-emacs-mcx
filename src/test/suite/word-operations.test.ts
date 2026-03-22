@@ -49,7 +49,7 @@ suite("findNextWordEnd", () => {
   let doc: vscode.TextDocument;
   setup(async () => {
     doc = await vscode.workspace.openTextDocument({
-      content: "abcDeFGk := aBc\na C",
+      content: "abcDeFGk := aBc\na C\na_b_c",
       language: "text",
     });
   });
@@ -62,6 +62,7 @@ suite("findNextWordEnd", () => {
       new Position(0, 15),
       new Position(1, 1),
       new Position(1, 3),
+      new Position(2, 5),
     ]);
   });
   test("forward subword", async () => {
@@ -75,6 +76,9 @@ suite("findNextWordEnd", () => {
       new Position(0, 15),
       new Position(1, 1),
       new Position(1, 3),
+      new Position(2, 1),
+      new Position(2, 3),
+      new Position(2, 5),
     ]);
   });
 });
@@ -83,7 +87,7 @@ suite("findPreviousWordStart", () => {
   let doc: vscode.TextDocument;
   setup(async () => {
     doc = await vscode.workspace.openTextDocument({
-      content: "abcDeFGk := aBc\na C",
+      content: "abcDeFGk := aBc\na C\na_b\nc_d",
       language: "text",
     });
   });
@@ -91,6 +95,8 @@ suite("findPreviousWordStart", () => {
   test("backward whole word", async () => {
     const classifier = new WordCharacterClassifier(":=");
     assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, false), [
+      new Position(3, 0),
+      new Position(2, 0),
       new Position(1, 2),
       new Position(1, 0),
       new Position(0, 12),
@@ -101,6 +107,10 @@ suite("findPreviousWordStart", () => {
   test("backward subword", async () => {
     const classifier = new WordCharacterClassifier("");
     assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, true), [
+      new Position(3, 2),
+      new Position(3, 0),
+      new Position(2, 2),
+      new Position(2, 0),
       new Position(1, 2),
       new Position(1, 0),
       new Position(0, 12),

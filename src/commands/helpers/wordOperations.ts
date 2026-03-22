@@ -274,8 +274,24 @@ function findNextWordEndInternal(
 
 // Based on Emacs's subword-forward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L282 )
 function findNextSubwordEndInternal(doc: TextDocument, position: Position): Position | null {
-  const regexp = /\W*(([A-Z]*(\W?))[a-z\d]*)/dg;
-  const line = doc.lineAt(position).text.substring(position.character);
+  const regexp = /[\W_]*(([A-Z]*([\W_]?))[a-z\d]*)/dg;
+  let lineNumber = position.line;
+  let character = position.character;
+  let line = doc.lineAt(lineNumber).text.substring(character);
+  // If there is no non-space letters in the line, skip to the next nonempty line.
+  if (line.trim().length === 0) {
+    while (true) {
+      [lineNumber, character] = [lineNumber + 1, 0];
+      if (lineNumber >= doc.lineCount) {
+        return null;
+      }
+      const l = doc.lineAt(lineNumber);
+      if (!l.isEmptyOrWhitespace) {
+        line = l.text;
+        break;
+      }
+    }
+  }
   const [range0, range1, range2, range3] = regexp.exec(line)?.indices ?? [];
   if (!range0 || !range1 || !range2 || !range3 || range0[1] === 0) {
     // No match.
@@ -285,9 +301,9 @@ function findNextSubwordEndInternal(doc: TextDocument, position: Position): Posi
   // lowercase letter, stop before the last uppercase char to leave it for the next subword.
   // This handles: "getURL|String" instead of "getURLS|tring"
   if (range2[1] - range2[0] > 1 && !(range3[1] <= range3[0] && range2[1] === range1[1])) {
-    return new Position(position.line, position.character + range3[1] - 1);
+    return new Position(lineNumber, character + range3[1] - 1);
   }
-  return new Position(position.line, position.character + range0[1]);
+  return new Position(lineNumber, character + range0[1]);
 }
 
 export function findNextWordEnd(
@@ -382,21 +398,41 @@ function findPreviousWordStartInternal(
 }
 
 // Based on Emacs's subword-backward-internal ( https://github.com/emacs-mirror/emacs/blob/f2250ba24400c71040fbfb6e9c2f90b1f87dbb59/lisp/progmodes/subword.el#L302 )
-function findPreviousSubwordStartInternal(lineContent: string, position: Position): Position | null {
-  const regexp = /((\W|[a-z\d])([A-Z]+\W*)|\W\w+)/dg;
+function findPreviousSubwordStartInternal(doc: TextDocument, position: Position): Position | null {
+  const regexp = /(([\W_]|[a-z\d])([A-Z]+[\W_]*)|[\W_][0-9a-zA-Z]+)/dg;
+
+  let lineNumber = position.line;
+  let character = position.character;
+  let lineContent = doc.lineAt(position.line).text.substring(0, character);
+  if (character == 0) {
+    while (true) {
+      if (lineNumber <= 0) {
+        return null;
+      }
+      lineNumber = lineNumber - 1;
+      character = 0;
+      const l = doc.lineAt(lineNumber);
+      if (!l.isEmptyOrWhitespace) {
+        lineContent = l.text;
+        break;
+      }
+    }
+  }
+
   // Find the last regexp match before the position.
-  const matches = [...lineContent.substring(0, position.character).matchAll(regexp)];
+  const matches = [...lineContent.matchAll(regexp)];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [range0, range1, range2, range3] = matches[matches.length - 1]?.indices ?? [];
 
-  if (!range0 || !range1 || !range2 || !range3) {
-    return null;
-  }
   // For all-caps sequences (e.g., "URL" in "getURLString"), stop after keeping
   // the last uppercase char with the following subword: "get|URL|String" not "get|UR|LString"
-  if (range3[1] - range3[0] > 1 && range3[1] < position.character) {
-    return new Position(position.line, range3[1] - 1);
+  if (range3 && range3[1] - range3[0] > 1 && range3[1] < character) {
+    return new Position(lineNumber, range3[1] - 1);
   }
-  return new Position(position.line, range0[0] + 1);
+  if (!range0) {
+    return null;
+  }
+  return new Position(lineNumber, range0[0] + 1);
 }
 
 export function findPreviousWordStart(
@@ -407,7 +443,7 @@ export function findPreviousWordStart(
   subwordMode: boolean = false,
 ): Position {
   if (subwordMode) {
-    const previousPosition = findPreviousSubwordStartInternal(doc.lineAt(position.line).text, position);
+    const previousPosition = findPreviousSubwordStartInternal(doc, position);
     if (previousPosition) {
       return previousPosition;
     }
