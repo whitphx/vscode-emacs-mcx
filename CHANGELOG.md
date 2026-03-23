@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.110.0
+
+### Minor Changes
+
+- [#2804](https://github.com/whitphx/vscode-emacs-mcx/pull/2804) [`d257f54`](https://github.com/whitphx/vscode-emacs-mcx/commit/d257f5425b7985cefecd415590dd52cb46d7e9b3) Thanks [@whitphx](https://github.com/whitphx)! - Add `just-one-space` command that deletes spaces and tabs around point, leaving one space by default; with a numeric prefix argument it leaves that many spaces, and with a negative prefix it also collapses surrounding newlines
+
 ## 0.109.2
 
 ### Patch Changes
