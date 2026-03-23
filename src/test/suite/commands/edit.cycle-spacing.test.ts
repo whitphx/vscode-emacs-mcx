@@ -57,6 +57,41 @@ suite("cycle-spacing", () => {
     });
   });
 
+  suite("with prefix argument", () => {
+    setup(async () => {
+      activeTextEditor = await setupWorkspace("a   b   c");
+      emulator = createEmulator(activeTextEditor);
+    });
+
+    test("forwards prefix argument to just-one-space (phase 0)", async () => {
+      setEmptyCursors(activeTextEditor, [0, 2]);
+      await emulator.universalArgument(); // C-u sets prefix to 4
+      await emulator.runCommand("cycleSpacing");
+      assertTextEqual(activeTextEditor, "a    b   c");
+      assertCursorsEqual(activeTextEditor, [0, 5]);
+    });
+  });
+
+  suite("when phase produces no edit", () => {
+    setup(async () => {
+      activeTextEditor = await setupWorkspace("a b");
+      emulator = createEmulator(activeTextEditor);
+    });
+
+    test("restore works correctly when phase 0 is a no-op", async () => {
+      // Cursor at [0,1] in "a b": already one space, so just-one-space
+      // replaces " " with " " (document still changes).
+      // Phase 1 (delete-horizontal-space) deletes that space.
+      // Phase 2 (restore) should undo back to "a b".
+      setEmptyCursors(activeTextEditor, [0, 1]);
+      await emulator.runCommand("cycleSpacing");
+      await emulator.runCommand("cycleSpacing");
+      assertTextEqual(activeTextEditor, "ab");
+      await emulator.runCommand("cycleSpacing");
+      assertTextEqual(activeTextEditor, "a b");
+    });
+  });
+
   suite("cycle resets on interruption", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace("a   b   c");

@@ -171,15 +171,20 @@ export class CycleSpacing extends EmacsCommand implements ITextEditorInterruptio
 
     this.running = true;
     try {
+      const versionBefore = textEditor.document.version;
       switch (this.cyclePhase) {
         case 0:
           await this.emacsController.runCommand("justOneSpace", args);
-          this.editsToUndo = 1;
+          if (textEditor.document.version !== versionBefore) {
+            this.editsToUndo += 1;
+          }
           this.cyclePhase = 1;
           break;
         case 1:
           await this.emacsController.runCommand("deleteHorizontalSpace", args);
-          this.editsToUndo = 2;
+          if (textEditor.document.version !== versionBefore) {
+            this.editsToUndo += 1;
+          }
           this.cyclePhase = 2;
           break;
         case 2: {
