@@ -83,30 +83,23 @@ export class JustOneSpace extends EmacsCommand {
     const spacesToLeave = Math.abs(n);
 
     const doc = textEditor.document;
-    const docLength = doc.getText().length;
+    const docText = doc.getText();
+    const docLength = docText.length;
+
+    const isWhitespace = (ch: string) => ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"));
 
     // Compute the whitespace range for each cursor, tracking its original index.
     const perCursorInfos = textEditor.selections.map((selection, index) => {
       const offset = doc.offsetAt(selection.active);
 
       let fromOffset = offset;
-      while (fromOffset > 0) {
-        const ch = doc.getText(new Range(doc.positionAt(fromOffset - 1), doc.positionAt(fromOffset)));
-        if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
-          fromOffset -= 1;
-        } else {
-          break;
-        }
+      while (fromOffset > 0 && isWhitespace(docText[fromOffset - 1]!)) {
+        fromOffset -= 1;
       }
 
       let toOffset = offset;
-      while (toOffset < docLength) {
-        const ch = doc.getText(new Range(doc.positionAt(toOffset), doc.positionAt(toOffset + 1)));
-        if (ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"))) {
-          toOffset += 1;
-        } else {
-          break;
-        }
+      while (toOffset < docLength && isWhitespace(docText[toOffset]!)) {
+        toOffset += 1;
       }
 
       return { index, fromOffset, toOffset };
