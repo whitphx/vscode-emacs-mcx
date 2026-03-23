@@ -166,36 +166,35 @@ export class CycleSpacing extends EmacsCommand implements ITextEditorInterruptio
   private editsToUndo = 0;
   private running = false;
 
+  // Each entry maps to a command name, or null for "restore" (undo previous edits).
+  private static readonly actions: (string | null)[] = ["justOneSpace", "deleteHorizontalSpace", null];
+
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const args = prefixArgument !== undefined ? { prefixArgument } : undefined;
+    const actions = CycleSpacing.actions;
+
+    if (actions.length === 0) {
+      return;
+    }
 
     this.running = true;
     try {
-      const versionBefore = textEditor.document.version;
-      switch (this.cyclePhase) {
-        case 0:
-          await this.emacsController.runCommand("justOneSpace", args);
-          if (textEditor.document.version !== versionBefore) {
-            this.editsToUndo += 1;
-          }
-          this.cyclePhase = 1;
-          break;
-        case 1:
-          await this.emacsController.runCommand("deleteHorizontalSpace", args);
-          if (textEditor.document.version !== versionBefore) {
-            this.editsToUndo += 1;
-          }
-          this.cyclePhase = 2;
-          break;
-        case 2: {
-          const undoCount = this.editsToUndo;
-          for (let i = 0; i < undoCount; i++) {
-            await vscode.commands.executeCommand("undo");
-          }
-          this.resetCycle();
-          break;
+      const commandName = actions[this.cyclePhase % actions.length]!;
+
+      if (commandName != null) {
+        const versionBefore = textEditor.document.version;
+        await this.emacsController.runCommand(commandName, args);
+        this.editsToUndo += textEditor.document.version - versionBefore;
+      } else {
+        // "restore": undo all edits from previous phases
+        const undoCount = this.editsToUndo;
+        for (let i = 0; i < undoCount; i++) {
+          await vscode.commands.executeCommand("undo");
         }
+        this.editsToUndo = 0;
       }
+
+      this.cyclePhase = (this.cyclePhase + 1) % actions.length;
     } finally {
       this.running = false;
     }
