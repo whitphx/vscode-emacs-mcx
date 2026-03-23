@@ -74,6 +74,91 @@ export class DeleteHorizontalSpace extends EmacsCommand {
   }
 }
 
+export class JustOneSpace extends EmacsCommand {
+  public readonly id = "justOneSpace";
+
+  public run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Thenable<void> {
+    const n = prefixArgument === undefined ? 1 : prefixArgument;
+    const includeNewlines = n < 0;
+    const spacesToLeave = Math.abs(n);
+
+    const doc = textEditor.document;
+    const docText = doc.getText();
+    const docLength = docText.length;
+
+    const isWhitespace = (ch: string) => ch === " " || ch === "\t" || (includeNewlines && (ch === "\n" || ch === "\r"));
+
+    // Compute the whitespace range for each cursor, tracking its original index.
+    const perCursorInfos = textEditor.selections.map((selection, index) => {
+      const offset = doc.offsetAt(selection.active);
+
+      let fromOffset = offset;
+      while (fromOffset > 0 && isWhitespace(docText[fromOffset - 1]!)) {
+        fromOffset -= 1;
+      }
+
+      let toOffset = offset;
+      while (toOffset < docLength && isWhitespace(docText[toOffset]!)) {
+        toOffset += 1;
+      }
+
+      return { index, fromOffset, toOffset };
+    });
+
+    // Sort by document position, then merge overlapping ranges.
+    // textEditor.selections is not guaranteed to be in document order
+    // (primary selection is always at index 0), and multiple cursors
+    // in the same whitespace span produce identical ranges that VSCode
+    // would reject as overlapping edits.
+    const sorted = perCursorInfos.slice().sort((a, b) => a.fromOffset - b.fromOffset);
+    const mergedEdits: { fromOffset: number; toOffset: number; selectionIndexes: number[] }[] = [];
+    for (const info of sorted) {
+      const last = mergedEdits.at(-1);
+      if (last != null && info.fromOffset <= last.toOffset) {
+        last.toOffset = Math.max(last.toOffset, info.toOffset);
+        last.selectionIndexes.push(info.index);
+      } else {
+        mergedEdits.push({
+          fromOffset: info.fromOffset,
+          toOffset: info.toOffset,
+          selectionIndexes: [info.index],
+        });
+      }
+    }
+
+    return textEditor
+      .edit((editBuilder) => {
+        mergedEdits.forEach(({ fromOffset, toOffset }) => {
+          const from = doc.positionAt(fromOffset);
+          const to = doc.positionAt(toOffset);
+          editBuilder.replace(new Range(from, to), " ".repeat(spacesToLeave));
+        });
+      })
+      .then((success) => {
+        if (!success) {
+          logger.warn("justOneSpace failed");
+          return;
+        }
+
+        // Compute the new cursor offset for each original selection.
+        const cursorOffsets = new Array<number>(perCursorInfos.length);
+        let cumulativeShift = 0;
+        for (const { fromOffset, toOffset, selectionIndexes } of mergedEdits) {
+          const newCursorOffset = fromOffset + spacesToLeave + cumulativeShift;
+          for (const i of selectionIndexes) {
+            cursorOffsets[i] = newCursorOffset;
+          }
+          cumulativeShift += spacesToLeave - (toOffset - fromOffset);
+        }
+
+        textEditor.selections = cursorOffsets.map((offset) => {
+          const pos = textEditor.document.positionAt(offset);
+          return new Selection(pos, pos);
+        });
+      });
+  }
+}
+
 export class NewLine extends EmacsCommand {
   public readonly id = "newLine";
 
