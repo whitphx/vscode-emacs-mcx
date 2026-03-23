@@ -15,8 +15,10 @@ suite("just-one-space", () => {
 
   teardown(cleanUpWorkspace);
 
+  // "a   b   c" has two 3-space whitespace groups:
+  //  positions: a=0, ' '=1, ' '=2, ' '=3, b=4, ' '=5, ' '=6, ' '=7, c=8
   suite("with spaces", () => {
-    const initialText = "a   b\na   b";
+    const initialText = "a   b   c";
 
     setup(async () => {
       activeTextEditor = await setupWorkspace(initialText);
@@ -26,36 +28,42 @@ suite("just-one-space", () => {
     test("replaces multiple spaces around cursor with one space", async () => {
       setEmptyCursors(activeTextEditor, [0, 2]);
       await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a b\na   b");
+      assertTextEqual(activeTextEditor, "a b   c");
       assertCursorsEqual(activeTextEditor, [0, 2]);
-    });
-
-    test("works with multi-cursor", async () => {
-      setEmptyCursors(activeTextEditor, [0, 2], [1, 2]);
-      await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a b\na b");
-      assertCursorsEqual(activeTextEditor, [0, 2], [1, 2]);
-    });
-
-    test("inserts a space when there is no space around cursor", async () => {
-      setEmptyCursors(activeTextEditor, [0, 0]);
-      await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, " a   b\na   b");
-      assertCursorsEqual(activeTextEditor, [0, 1]);
     });
 
     test("reduces to one space when cursor is at the start of whitespace region", async () => {
       setEmptyCursors(activeTextEditor, [0, 1]);
       await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a b\na   b");
+      assertTextEqual(activeTextEditor, "a b   c");
       assertCursorsEqual(activeTextEditor, [0, 2]);
     });
 
     test("reduces to one space when cursor is at end of whitespace region", async () => {
-      setEmptyCursors(activeTextEditor, [0, 4]);
+      setEmptyCursors(activeTextEditor, [0, 3]);
       await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a b\na   b");
+      assertTextEqual(activeTextEditor, "a b   c");
       assertCursorsEqual(activeTextEditor, [0, 2]);
+    });
+
+    test("inserts a space when there is no space around cursor", async () => {
+      setEmptyCursors(activeTextEditor, [0, 0]);
+      await emulator.runCommand("justOneSpace");
+      assertTextEqual(activeTextEditor, " a   b   c");
+      assertCursorsEqual(activeTextEditor, [0, 1]);
+    });
+
+    test("multi-cursor in different whitespace groups on the same line", async () => {
+      setEmptyCursors(activeTextEditor, [0, 2], [0, 6]);
+      await emulator.runCommand("justOneSpace");
+      assertTextEqual(activeTextEditor, "a b c");
+      assertCursorsEqual(activeTextEditor, [0, 2], [0, 4]);
+    });
+
+    test("two cursors in the same whitespace span", async () => {
+      setEmptyCursors(activeTextEditor, [0, 2], [0, 3]);
+      await emulator.runCommand("justOneSpace");
+      assertTextEqual(activeTextEditor, "a b   c");
     });
   });
 
@@ -77,7 +85,7 @@ suite("just-one-space", () => {
 
   suite("with prefix argument", () => {
     setup(async () => {
-      activeTextEditor = await setupWorkspace("a   b");
+      activeTextEditor = await setupWorkspace("a   b   c");
       emulator = createEmulator(activeTextEditor);
     });
 
@@ -85,7 +93,7 @@ suite("just-one-space", () => {
       setEmptyCursors(activeTextEditor, [0, 2]);
       await emulator.universalArgument(); // C-u sets prefix to 4
       await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a    b");
+      assertTextEqual(activeTextEditor, "a    b   c");
       assertCursorsEqual(activeTextEditor, [0, 5]);
     });
   });
@@ -116,33 +124,6 @@ suite("just-one-space", () => {
       await emulator.runCommand("justOneSpace");
       assertTextEqual(activeTextEditor, "a b");
       assertCursorsEqual(activeTextEditor, [0, 2]);
-    });
-  });
-
-  suite("with multi-cursor in different whitespace groups on the same line", () => {
-    setup(async () => {
-      activeTextEditor = await setupWorkspace("a   b   c");
-      emulator = createEmulator(activeTextEditor);
-    });
-
-    test("reduces both whitespace groups with cursors in each", async () => {
-      setEmptyCursors(activeTextEditor, [0, 2], [0, 6]);
-      await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a b c");
-      assertCursorsEqual(activeTextEditor, [0, 2], [0, 4]);
-    });
-  });
-
-  suite("with two cursors in the same whitespace span", () => {
-    setup(async () => {
-      activeTextEditor = await setupWorkspace("a     b");
-      emulator = createEmulator(activeTextEditor);
-    });
-
-    test("produces one space even with two cursors in the same whitespace region", async () => {
-      setEmptyCursors(activeTextEditor, [0, 2], [0, 4]);
-      await emulator.runCommand("justOneSpace");
-      assertTextEqual(activeTextEditor, "a b");
     });
   });
 
