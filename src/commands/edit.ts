@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Range, Selection, TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, type ITextEditorInterruptionHandler } from ".";
 import { makeParallel } from "./helpers/parallel";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
@@ -156,6 +156,55 @@ export class JustOneSpace extends EmacsCommand {
           return new Selection(pos, pos);
         });
       });
+  }
+}
+
+export class CycleSpacing extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "cycleSpacing";
+
+  private cyclePhase = 0;
+  private editsToUndo = 0;
+  private running = false;
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    const args = prefixArgument !== undefined ? { prefixArgument } : undefined;
+
+    this.running = true;
+    try {
+      switch (this.cyclePhase) {
+        case 0:
+          await this.emacsController.runCommand("justOneSpace", args);
+          this.editsToUndo = 1;
+          this.cyclePhase = 1;
+          break;
+        case 1:
+          await this.emacsController.runCommand("deleteHorizontalSpace", args);
+          this.editsToUndo = 2;
+          this.cyclePhase = 2;
+          break;
+        case 2: {
+          const undoCount = this.editsToUndo;
+          for (let i = 0; i < undoCount; i++) {
+            await vscode.commands.executeCommand("undo");
+          }
+          this.resetCycle();
+          break;
+        }
+      }
+    } finally {
+      this.running = false;
+    }
+  }
+
+  public onDidInterruptTextEditor(): void {
+    if (!this.running) {
+      this.resetCycle();
+    }
+  }
+
+  private resetCycle(): void {
+    this.cyclePhase = 0;
+    this.editsToUndo = 0;
   }
 }
 
