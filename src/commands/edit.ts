@@ -82,10 +82,10 @@ export class JustOneSpace extends EmacsCommand {
     const includeNewlines = n < 0;
     const spacesToLeave = Math.abs(n);
 
-    const editInfos: { fromOffset: number; toOffset: number }[] = [];
-
     const doc = textEditor.document;
-    textEditor.selections.forEach((selection) => {
+
+    // Compute the whitespace range for each cursor.
+    const perCursorInfos = textEditor.selections.map((selection) => {
       const offset = doc.offsetAt(selection.active);
 
       let fromOffset = offset;
@@ -109,12 +109,23 @@ export class JustOneSpace extends EmacsCommand {
         }
       }
 
-      editInfos.push({ fromOffset, toOffset });
+      return { fromOffset, toOffset };
     });
+
+    // Deduplicate overlapping edit ranges (multiple cursors in the same whitespace span).
+    const uniqueEdits: { fromOffset: number; toOffset: number }[] = [];
+    const seen = new Set<string>();
+    for (const info of perCursorInfos) {
+      const key = `${info.fromOffset}:${info.toOffset}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueEdits.push(info);
+      }
+    }
 
     return textEditor
       .edit((editBuilder) => {
-        editInfos.forEach(({ fromOffset, toOffset }) => {
+        uniqueEdits.forEach(({ fromOffset, toOffset }) => {
           const from = doc.positionAt(fromOffset);
           const to = doc.positionAt(toOffset);
           editBuilder.replace(new Range(from, to), " ".repeat(spacesToLeave));
@@ -126,12 +137,18 @@ export class JustOneSpace extends EmacsCommand {
           return;
         }
 
-        // Set cursors to the end of the inserted spaces.
-        // We need to account for the offset shift caused by earlier edits.
+        // Build a map from original edit range to its cumulative shift,
+        // so each cursor (including duplicates) can find its position.
+        const shiftMap = new Map<string, number>();
         let cumulativeShift = 0;
-        textEditor.selections = editInfos.map(({ fromOffset, toOffset }) => {
-          const newCursorOffset = fromOffset + spacesToLeave + cumulativeShift;
+        for (const { fromOffset, toOffset } of uniqueEdits) {
+          shiftMap.set(`${fromOffset}:${toOffset}`, cumulativeShift);
           cumulativeShift += spacesToLeave - (toOffset - fromOffset);
+        }
+
+        textEditor.selections = perCursorInfos.map(({ fromOffset, toOffset }) => {
+          const shift = shiftMap.get(`${fromOffset}:${toOffset}`) ?? 0;
+          const newCursorOffset = fromOffset + spacesToLeave + shift;
           const pos = textEditor.document.positionAt(newCursorOffset);
           return new Selection(pos, pos);
         });

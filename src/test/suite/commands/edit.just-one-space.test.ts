@@ -119,6 +119,33 @@ suite("just-one-space", () => {
     });
   });
 
+  suite("with multi-cursor in different whitespace groups on the same line", () => {
+    setup(async () => {
+      activeTextEditor = await setupWorkspace("a   b   c");
+      emulator = createEmulator(activeTextEditor);
+    });
+
+    test("reduces both whitespace groups with cursors in each", async () => {
+      setEmptyCursors(activeTextEditor, [0, 2], [0, 6]);
+      await emulator.runCommand("justOneSpace");
+      assertTextEqual(activeTextEditor, "a b c");
+      assertCursorsEqual(activeTextEditor, [0, 2], [0, 4]);
+    });
+  });
+
+  suite("with two cursors in the same whitespace span", () => {
+    setup(async () => {
+      activeTextEditor = await setupWorkspace("a     b");
+      emulator = createEmulator(activeTextEditor);
+    });
+
+    test("produces one space even with two cursors in the same whitespace region", async () => {
+      setEmptyCursors(activeTextEditor, [0, 2], [0, 4]);
+      await emulator.runCommand("justOneSpace");
+      assertTextEqual(activeTextEditor, "a b");
+    });
+  });
+
   suite("when already exactly one space", () => {
     setup(async () => {
       activeTextEditor = await setupWorkspace("a b");
