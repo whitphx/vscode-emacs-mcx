@@ -164,32 +164,42 @@ export class CycleSpacing extends EmacsCommand implements ITextEditorInterruptio
 
   private cyclePhase = 0;
   private editsToUndo = 0;
+  private running = false;
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
     const args = prefixArgument !== undefined ? { prefixArgument } : undefined;
 
-    switch (this.cyclePhase) {
-      case 0:
-        await this.emacsController.runCommand("justOneSpace", args);
-        this.editsToUndo = 1;
-        this.cyclePhase = 1;
-        break;
-      case 1:
-        await this.emacsController.runCommand("deleteHorizontalSpace", args);
-        this.editsToUndo = 2;
-        this.cyclePhase = 2;
-        break;
-      case 2:
-        for (let i = 0; i < this.editsToUndo; i++) {
-          await vscode.commands.executeCommand("undo");
+    this.running = true;
+    try {
+      switch (this.cyclePhase) {
+        case 0:
+          await this.emacsController.runCommand("justOneSpace", args);
+          this.editsToUndo = 1;
+          this.cyclePhase = 1;
+          break;
+        case 1:
+          await this.emacsController.runCommand("deleteHorizontalSpace", args);
+          this.editsToUndo = 2;
+          this.cyclePhase = 2;
+          break;
+        case 2: {
+          const undoCount = this.editsToUndo;
+          for (let i = 0; i < undoCount; i++) {
+            await vscode.commands.executeCommand("undo");
+          }
+          this.resetCycle();
+          break;
         }
-        this.resetCycle();
-        break;
+      }
+    } finally {
+      this.running = false;
     }
   }
 
   public onDidInterruptTextEditor(): void {
-    this.resetCycle();
+    if (!this.running) {
+      this.resetCycle();
+    }
   }
 
   private resetCycle(): void {

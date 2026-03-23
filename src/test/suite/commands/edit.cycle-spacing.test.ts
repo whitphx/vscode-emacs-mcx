@@ -73,7 +73,7 @@ suite("cycle-spacing", () => {
 
       // Next cycle-spacing should start from phase 0 again
       await emulator.runCommand("cycleSpacing");
-      assertTextEqual(activeTextEditor, "a b  c");
+      assertTextEqual(activeTextEditor, "a b c");
       assertCursorsEqual(activeTextEditor, [0, 4]);
     });
   });
