@@ -64,6 +64,7 @@ suite("just-one-space", () => {
       setEmptyCursors(activeTextEditor, [0, 2], [0, 3]);
       await emulator.runCommand("justOneSpace");
       assertTextEqual(activeTextEditor, "a b   c");
+      assertCursorsEqual(activeTextEditor, [0, 2], [0, 2]);
     });
   });
 
