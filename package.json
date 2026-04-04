@@ -1260,6 +1260,16 @@
         "when": "comparingMovedCode && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
+        "key": "ctrl+g",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isLinux"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
         "key": "ctrl+s",
         "command": "emacs-mcx.isearchForward",
         "when": "!findInputFocussed"
@@ -3497,6 +3507,26 @@
       {
         "key": "ctrl+[ \\",
         "command": "emacs-mcx.deleteHorizontalSpace",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape space",
+        "command": "emacs-mcx.cycleSpacing",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ space",
+        "command": "emacs-mcx.cycleSpacing",
         "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
