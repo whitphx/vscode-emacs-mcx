@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.110.0
+
+### Minor Changes
+
+- [#2818](https://github.com/whitphx/vscode-emacs-mcx/pull/2818) [`f8eb771`](https://github.com/whitphx/vscode-emacs-mcx/commit/f8eb771d1819efad6a302827ab9335b56a6a2d71) Thanks [@whitphx](https://github.com/whitphx)! - Add `cycle-spacing` command (M-SPC) that cycles through three actions on successive calls: first reduces whitespace to one space (just-one-space), then deletes all whitespace (delete-horizontal-space), then restores the original whitespace.
+
+- [#2804](https://github.com/whitphx/vscode-emacs-mcx/pull/2804) [`d257f54`](https://github.com/whitphx/vscode-emacs-mcx/commit/d257f5425b7985cefecd415590dd52cb46d7e9b3) Thanks [@whitphx](https://github.com/whitphx)! - Add `just-one-space` command that deletes spaces and tabs around point, leaving one space by default; with a numeric prefix argument it leaves that many spaces, and with a negative prefix it also collapses surrounding newlines
+
+### Patch Changes
+
+- [#2823](https://github.com/whitphx/vscode-emacs-mcx/pull/2823) [`d84283e`](https://github.com/whitphx/vscode-emacs-mcx/commit/d84283e76194eb1c51f2fc3988a2c1295ee2214f) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
 ## 0.109.2
 
 ### Patch Changes
