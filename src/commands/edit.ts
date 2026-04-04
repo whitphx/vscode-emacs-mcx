@@ -170,6 +170,10 @@ export class CycleSpacing extends EmacsCommand implements ITextEditorInterruptio
   private static readonly actions: (string | null)[] = ["justOneSpace", "deleteHorizontalSpace", null];
 
   public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    if (this.running) {
+      return;
+    }
+
     const args = prefixArgument !== undefined ? { prefixArgument } : undefined;
     const actions = CycleSpacing.actions;
 
