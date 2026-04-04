@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Range, Selection, TextEditor } from "vscode";
-import { EmacsCommand } from ".";
+import { EmacsCommand, type ITextEditorInterruptionHandler } from ".";
 import { makeParallel } from "./helpers/parallel";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
@@ -156,6 +156,63 @@ export class JustOneSpace extends EmacsCommand {
           return new Selection(pos, pos);
         });
       });
+  }
+}
+
+export class CycleSpacing extends EmacsCommand implements ITextEditorInterruptionHandler {
+  public readonly id = "cycleSpacing";
+
+  private cyclePhase = 0;
+  private editsToUndo = 0;
+  private running = false;
+
+  // Each entry maps to a command name, or null for "restore" (undo previous edits).
+  private static readonly actions: (string | null)[] = ["justOneSpace", "deleteHorizontalSpace", null];
+
+  public async run(textEditor: TextEditor, isInMarkMode: boolean, prefixArgument: number | undefined): Promise<void> {
+    if (this.running) {
+      return;
+    }
+
+    const args = prefixArgument !== undefined ? { prefixArgument } : undefined;
+    const actions = CycleSpacing.actions;
+
+    if (actions.length === 0) {
+      return;
+    }
+
+    this.running = true;
+    try {
+      const commandName = actions[this.cyclePhase % actions.length]!;
+
+      if (commandName != null) {
+        const versionBefore = textEditor.document.version;
+        await this.emacsController.runCommand(commandName, args);
+        this.editsToUndo += textEditor.document.version - versionBefore;
+      } else {
+        // "restore": undo all edits from previous phases
+        const undoCount = this.editsToUndo;
+        for (let i = 0; i < undoCount; i++) {
+          await vscode.commands.executeCommand("undo");
+        }
+        this.editsToUndo = 0;
+      }
+
+      this.cyclePhase = (this.cyclePhase + 1) % actions.length;
+    } finally {
+      this.running = false;
+    }
+  }
+
+  public onDidInterruptTextEditor(): void {
+    if (!this.running) {
+      this.resetCycle();
+    }
+  }
+
+  private resetCycle(): void {
+    this.cyclePhase = 0;
+    this.editsToUndo = 0;
   }
 }
 
