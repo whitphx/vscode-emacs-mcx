@@ -30,7 +30,6 @@ export class KillYanker implements vscode.Disposable {
   private prevKillPositions: readonly Position[];
   private prevYankPositions: readonly Position[];
 
-  private textChangeCount: number;
   private prevYankChanges: number;
 
   private disposables: vscode.Disposable[];
@@ -45,7 +44,6 @@ export class KillYanker implements vscode.Disposable {
     this.prevKillPositions = [];
     this.prevYankPositions = [];
 
-    this.textChangeCount = 0; // This is used in yank and yankPop to set `this.prevYankChanges`.
     this.prevYankChanges = 0; // Indicates how many document changes happened in the previous yank or yankPop. This is usually 1, but can be 2 if auto-indent occurred by formatOnPaste setting.
 
     this.disposables = [];
@@ -66,8 +64,6 @@ export class KillYanker implements vscode.Disposable {
       this.isAppending = false;
       this.continuousYankInterrupted = true;
     }
-
-    this.textChangeCount++;
   };
 
   public onDidChangeTextEditorSelection = (e: vscode.TextEditorSelectionChangeEvent): void => {
@@ -264,9 +260,9 @@ export class KillYanker implements vscode.Disposable {
   }
 
   public async yankKillRingEntity(killRingEntityToPaste: KillRingEntity, interrupt = false): Promise<void> {
-    this.textChangeCount = 0;
+    const versionBefore = this.textEditor.document.version;
     await this.pasteKillRingEntity(killRingEntityToPaste);
-    this.prevYankChanges = this.textChangeCount;
+    this.prevYankChanges = this.textEditor.document.version - versionBefore;
 
     this.continuousYankInterrupted = interrupt;
     this.prevYankPositions = this.textEditor.selections.map((selection) => selection.active);
