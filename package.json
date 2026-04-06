@@ -8119,7 +8119,7 @@
     "@vscode/test-web": "^0.0.80",
     "@vscode/vsce": "^3.7.1",
     "assert": "^2.1.0",
-    "cspell": "^9.7.0",
+    "cspell": "^10.0.0",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^11.2.0",
