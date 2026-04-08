@@ -1,4 +1,4 @@
-import * as paredit from "paredit.js";
+import * as paredit from "../../vendor/paredit.js";
 import { TextDocument, Selection, Range, TextEditor, Position } from "vscode";
 import * as vscode from "vscode";
 import { EmacsCommand } from ".";

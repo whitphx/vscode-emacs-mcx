@@ -8153,7 +8153,6 @@
     "webpack-cli": "^7.0.2"
   },
   "dependencies": {
-    "paredit.js": "./vendor/paredit.js",
     "winston": "^3.19.0",
     "winston-console-for-electron": "^0.0.7",
     "winston-transport": "^4.9.0"
