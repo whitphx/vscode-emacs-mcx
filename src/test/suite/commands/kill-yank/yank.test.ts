@@ -428,3 +428,64 @@ suite("yank-from-kill-ring", () => {
     assertTextEqual(activeTextEditor, "Lorem ipsumLorem ipsum");
   });
 });
+
+suite("yank-pop after a paste that produces multiple document versions", () => {
+  // Regression test for the `prevYankChanges` tracking via `document.version` delta.
+  // When a yank causes more than one document change (e.g. formatOnPaste /
+  // autoIndentOnPaste adds a follow-up edit on top of the initial paste),
+  // yank-pop must undo every one of those changes before pasting the next
+  // kill-ring entry. This is exercised here deterministically by stubbing the
+  // paste commands to apply two distinct `TextEditor.edit` calls per yank.
+  let activeTextEditor: vscode.TextEditor;
+  let executeCommandStub: sinon.SinonStub | undefined;
+
+  setup(async () => {
+    activeTextEditor = await setupWorkspace("");
+    await vscode.env.clipboard.writeText("");
+  });
+
+  teardown(async () => {
+    executeCommandStub?.restore();
+    executeCommandStub = undefined;
+    await cleanUpWorkspace();
+  });
+
+  test("yank-pop reverts all edits from the previous multi-edit yank", async () => {
+    const killRing = new KillRing();
+    killRing.push(new ClipboardTextKillRingEntity("first"));
+    killRing.push(new ClipboardTextKillRingEntity("second"));
+    // Match the clipboard to the latest entry so `pushClipboardTextIfNeeded`
+    // doesn't insert an extra entity in front of "second".
+    await vscode.env.clipboard.writeText("second");
+    const emulator = createEmulator(activeTextEditor, killRing);
+
+    // Intercept the paste commands invoked by `pasteKillRingEntity` and apply
+    // the paste as two separate edits, bumping `document.version` twice.
+    const realExecuteCommand = vscode.commands.executeCommand.bind(vscode.commands);
+    executeCommandStub = sinon.stub(vscode.commands, "executeCommand");
+    executeCommandStub.callsFake(async (command: string, ...args: unknown[]) => {
+      if (command === "paste" || command === "editor.action.clipboardPasteAction") {
+        const text = command === "paste" ? (args[0] as { text: string }).text : await vscode.env.clipboard.readText();
+        await activeTextEditor.edit((editBuilder) => {
+          editBuilder.insert(activeTextEditor.selection.active, "[");
+        });
+        await activeTextEditor.edit((editBuilder) => {
+          editBuilder.insert(activeTextEditor.selection.active, `${text}]`);
+        });
+        return;
+      }
+      return realExecuteCommand(command, ...(args as []));
+    });
+
+    setEmptyCursors(activeTextEditor, [0, 0]);
+
+    await emulator.runCommand("yank");
+    assertTextEqual(activeTextEditor, "[second]");
+
+    // Both edits from the previous yank must be undone before pasting "first";
+    // if only one is undone, a leftover "[" would remain and the buffer would
+    // become "[[first]".
+    await emulator.runCommand("yankPop");
+    assertTextEqual(activeTextEditor, "[first]");
+  });
+});
