@@ -1270,6 +1270,16 @@
         "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
+        "key": "ctrl+g",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isWindows"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
         "key": "ctrl+s",
         "command": "emacs-mcx.isearchForward",
         "when": "!findInputFocussed"
@@ -8143,7 +8153,6 @@
     "webpack-cli": "^7.0.2"
   },
   "dependencies": {
-    "paredit.js": "./vendor/paredit.js",
     "winston": "^3.19.0",
     "winston-console-for-electron": "^0.0.7",
     "winston-transport": "^4.9.0"
