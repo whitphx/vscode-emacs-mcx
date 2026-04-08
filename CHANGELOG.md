@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.110.1
+
+### Patch Changes
+
+- [#2836](https://github.com/whitphx/vscode-emacs-mcx/pull/2836) [`fb5dbce`](https://github.com/whitphx/vscode-emacs-mcx/commit/fb5dbce96bd8e499090f1c002e7e44e0f8c00ae3) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2841](https://github.com/whitphx/vscode-emacs-mcx/pull/2841) [`49ca0d8`](https://github.com/whitphx/vscode-emacs-mcx/commit/49ca0d8d56828f8b6fac4561fd1dbe141a33e0e5) Thanks [@whitphx](https://github.com/whitphx)! - Import the vendored `paredit.js` via a relative path instead of a `file:` dependency, avoiding the installation of its unused devDependencies (mocha, chai, uglify-js, ace.improved, …) into `node_modules`.
+
 ## 0.110.0
 
 ### Minor Changes
