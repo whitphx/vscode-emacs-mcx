@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.110.3
+
+### Patch Changes
+
+- [#2846](https://github.com/whitphx/vscode-emacs-mcx/pull/2846) [`67e0ab1`](https://github.com/whitphx/vscode-emacs-mcx/commit/67e0ab1cab42842cdabf44cb7db040f85bdde3cc) Thanks [@whitphx](https://github.com/whitphx)! - Upgrade TypeScript to v6.
+
 ## 0.110.2
 
 ### Patch Changes
