@@ -1,3 +1,4 @@
+/// <reference types="webpack-env" />
 // imports mocha for the browser, defining the `mocha` global.
 import "mocha/mocha";
 
