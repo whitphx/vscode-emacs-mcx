@@ -1262,22 +1262,12 @@
       {
         "key": "ctrl+g",
         "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isLinux"
+        "when": "inModelsEditor && inModelsSearch && isMac"
       },
       {
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "inModelsEditor && inModelsSearch && isMac && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
