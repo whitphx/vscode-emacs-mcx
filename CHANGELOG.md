@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.110.2
+
+### Patch Changes
+
+- [#2845](https://github.com/whitphx/vscode-emacs-mcx/pull/2845) [`7d8537d`](https://github.com/whitphx/vscode-emacs-mcx/commit/7d8537d1027dd52d0573a6b7b66f03b8e6971432) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2819](https://github.com/whitphx/vscode-emacs-mcx/pull/2819) [`2e3d592`](https://github.com/whitphx/vscode-emacs-mcx/commit/2e3d5922a00babc5f485a4bfd62483d678ee9ebb) Thanks [@whitphx](https://github.com/whitphx)! - Use `document.version` instead of event-based counter to track undo steps for yank-pop, making the undo count more robust.
+
+- [#2844](https://github.com/whitphx/vscode-emacs-mcx/pull/2844) [`f3083c3`](https://github.com/whitphx/vscode-emacs-mcx/commit/f3083c3a87f2c7a19fd4b760d62f384e1fe5cadf) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
 ## 0.110.1
 
 ### Patch Changes
