@@ -1,0 +1,29 @@
+# See https://github.com/AikidoSec/safe-chain?tab=readme-ov-file#usage-in-cicd
+name: Install Aikido Safe Chain
+description: Install Aikido Safe Chain in CI mode so subsequent npm/npx invocations are routed through its malware scanner.
+
+inputs:
+  version:
+    description: The safe-chain version to install.
+    required: false
+    default: "1.4.7"
+
+runs:
+  using: composite
+  steps:
+    - name: Install Aikido Safe Chain (Unix)
+      if: runner.os != 'Windows'
+      shell: bash
+      env:
+        SAFE_CHAIN_INSTALL_VERSION: ${{ inputs.version }}
+      run: curl -fsSL "https://github.com/AikidoSec/safe-chain/releases/download/${SAFE_CHAIN_INSTALL_VERSION}/install-safe-chain.sh" | sh -s -- --ci
+
+    - name: Install Aikido Safe Chain (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      env:
+        SAFE_CHAIN_INSTALL_VERSION: ${{ inputs.version }}
+      run: |
+        $url = "https://github.com/AikidoSec/safe-chain/releases/download/$env:SAFE_CHAIN_INSTALL_VERSION/install-safe-chain.ps1"
+        Invoke-WebRequest -Uri $url -OutFile install-safe-chain.ps1 -UseBasicParsing
+        ./install-safe-chain.ps1 -ci
