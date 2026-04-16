@@ -822,12 +822,12 @@
       {
         "key": "ctrl+g",
         "command": "editor.action.inlineSuggest.hide",
-        "when": "inlineEditIsVisible || inlineSuggestionVisible"
+        "when": "editorTextFocus && inlineEditIsVisible || editorTextFocus && inlineSuggestionVisible"
       },
       {
         "key": "escape escape escape",
         "command": "editor.action.inlineSuggest.hide",
-        "when": "(inlineEditIsVisible || inlineSuggestionVisible) && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "(editorTextFocus && inlineEditIsVisible || editorTextFocus && inlineSuggestionVisible) && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1258,16 +1258,6 @@
         "key": "escape escape escape",
         "command": "diffEditor.exitCompareMove",
         "when": "comparingMovedCode && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isMac"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isMac && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
