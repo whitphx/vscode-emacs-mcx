@@ -27,6 +27,9 @@ jobs:
           node-version-file: .nvmrc
           cache: "npm"
 
+      - name: Install Aikido Safe Chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.4.7/install-safe-chain.sh | sh -s -- --ci
+
       - name: Install dependencies
         run: npm ci
 

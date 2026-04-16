@@ -83,6 +83,14 @@ jobs:
           node-version-file: .nvmrc
           cache: "npm"
 
+      - name: Install Aikido Safe Chain
+        if: runner.os != 'Windows'
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.4.7/install-safe-chain.sh | sh -s -- --ci
+      - name: Install Aikido Safe Chain (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: iex "& { $(iwr 'https://github.com/AikidoSec/safe-chain/releases/download/1.4.7/install-safe-chain.ps1' -UseBasicParsing) } -ci"
+
       - name: Install dependencies
         run: npm ci
 
@@ -131,6 +139,9 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: "npm"
+
+      - name: Install Aikido Safe Chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.4.7/install-safe-chain.sh | sh -s -- --ci
 
       - name: Install dependencies
         run: npm ci
