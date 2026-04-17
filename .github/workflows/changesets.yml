@@ -10,6 +10,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write # For Takumi Guard OIDC-based audit logging.
+
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -27,6 +30,10 @@ jobs:
           node-version-file: .nvmrc
           cache: "npm"
 
+      - name: Set up Takumi Guard for npm
+        uses: flatt-security/setup-takumi-guard-npm@f0e333d43cd7a88d2caabee1f16048baab3a35a9 # v1.1.1
+        with:
+          bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
       - name: Install Aikido Safe Chain
         uses: ./.github/actions/install-safe-chain
 
