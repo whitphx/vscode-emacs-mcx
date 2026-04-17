@@ -107,7 +107,7 @@ jobs:
       - name: Check keybinding diff
         run: |
           npm run gen-keys
-          git diff --exit-code || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
+          git diff --exit-code -- package.json || (echo "You have to run 'npm run gen-keys' and commit the updated package.json" && exit -1)
 
       - name: Build for test
         run: npm run webpack
