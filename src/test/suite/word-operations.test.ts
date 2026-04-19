@@ -49,7 +49,7 @@ suite("findNextWordEnd", () => {
   let doc: vscode.TextDocument;
   setup(async () => {
     doc = await vscode.workspace.openTextDocument({
-      content: "abcDeFGk := aBc\na C",
+      content: "abcDeFGk := aBc\na C\na_b_c",
       language: "text",
     });
   });
@@ -62,6 +62,7 @@ suite("findNextWordEnd", () => {
       new Position(0, 15),
       new Position(1, 1),
       new Position(1, 3),
+      new Position(2, 5),
     ]);
   });
   test("forward subword", async () => {
@@ -75,6 +76,9 @@ suite("findNextWordEnd", () => {
       new Position(0, 15),
       new Position(1, 1),
       new Position(1, 3),
+      new Position(2, 1),
+      new Position(2, 3),
+      new Position(2, 5),
     ]);
   });
 });
@@ -83,7 +87,7 @@ suite("findPreviousWordStart", () => {
   let doc: vscode.TextDocument;
   setup(async () => {
     doc = await vscode.workspace.openTextDocument({
-      content: "abcDeFGk := aBc\na C",
+      content: "abcDeFGk := aBc\na C\na_b\nc_d",
       language: "text",
     });
   });
@@ -91,6 +95,8 @@ suite("findPreviousWordStart", () => {
   test("backward whole word", async () => {
     const classifier = new WordCharacterClassifier(":=");
     assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, false), [
+      new Position(3, 0),
+      new Position(2, 0),
       new Position(1, 2),
       new Position(1, 0),
       new Position(0, 12),
@@ -101,6 +107,10 @@ suite("findPreviousWordStart", () => {
   test("backward subword", async () => {
     const classifier = new WordCharacterClassifier("");
     assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, true), [
+      new Position(3, 2),
+      new Position(3, 0),
+      new Position(2, 2),
+      new Position(2, 0),
       new Position(1, 2),
       new Position(1, 0),
       new Position(0, 12),
@@ -202,6 +212,70 @@ suite("findNextWordEnd edge cases", () => {
       new Position(0, 16), // test2 (ends before C)
       new Position(0, 20), // Case (ends at end of line)
     ]);
+  });
+});
+
+suite("findNextWordEnd across blank lines", () => {
+  test("forward subword skips empty and whitespace-only lines", async () => {
+    const doc = await vscode.workspace.openTextDocument({
+      content: "foo\n\n   \nbar",
+      language: "text",
+    });
+    const classifier = new WordCharacterClassifier("");
+    assert.deepStrictEqual(listAllNextWordEndPositions(doc, classifier, true), [
+      new Position(0, 3),
+      new Position(3, 3),
+    ]);
+  });
+
+  test("forward subword does not skip past blank lines when cross-line navigation is disabled", async () => {
+    const doc = await vscode.workspace.openTextDocument({
+      content: "foo\n\nbar",
+      language: "text",
+    });
+    const classifier = new WordCharacterClassifier("");
+    const atFooEnd = new Position(0, 3);
+    // With cross-line disabled, the fallback whole-word logic still crosses one line boundary
+    // (VS Code base behavior) but does NOT skip past the blank line to reach "bar".
+    assert.deepStrictEqual(findNextWordEnd(doc, classifier, atFooEnd, false, true), new Position(1, 0));
+  });
+});
+
+suite("findPreviousWordStart across blank lines", () => {
+  test("backward subword skips empty and whitespace-only lines", async () => {
+    const doc = await vscode.workspace.openTextDocument({
+      content: "foo\n\n   \nbar",
+      language: "text",
+    });
+    const classifier = new WordCharacterClassifier("");
+    assert.deepStrictEqual(listAllPreviousWordStartPositions(doc, classifier, true), [
+      new Position(3, 0),
+      new Position(0, 0),
+    ]);
+  });
+
+  test("backward subword does not skip past blank lines when cross-line navigation is disabled", async () => {
+    const doc = await vscode.workspace.openTextDocument({
+      content: "foo\n\nbar",
+      language: "text",
+    });
+    const classifier = new WordCharacterClassifier("");
+    const atBarStart = new Position(2, 0);
+    // With cross-line disabled, the fallback whole-word logic still crosses one line boundary
+    // (VS Code base behavior) but does NOT skip past the blank line to reach "foo".
+    assert.deepStrictEqual(findPreviousWordStart(doc, classifier, atBarStart, false, true), new Position(1, 0));
+  });
+
+  test("backward subword preserves all-caps split when wrapping to previous line", async () => {
+    // When wrapping from the start of line 1 back into "getURLString",
+    // we must treat the effective cursor as being at end-of-line so the
+    // all-caps split returns (0, 6) = start of "String", not (0, 3).
+    const doc = await vscode.workspace.openTextDocument({
+      content: "getURLString\nfoo",
+      language: "text",
+    });
+    const classifier = new WordCharacterClassifier("");
+    assert.deepStrictEqual(findPreviousWordStart(doc, classifier, new Position(1, 0), true, true), new Position(0, 6));
   });
 });
 
