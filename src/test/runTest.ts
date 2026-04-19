@@ -14,7 +14,9 @@ async function main() {
 
     // Download VS Code, unzip it and run the integration test.
     // Disable the built-in TypeScript extension to prevent Automatic Type
-    // Acquisition from shelling out to npm, which Aikido Safe-chain blocks in CI.
+    // Acquisition from shelling out to npm: in CI, Aikido Safe-chain wraps
+    // npm and rejects downloads of packages younger than its minimum-age
+    // threshold (e.g. fresh `types-registry` releases), which fails the step.
     await runTests({
       extensionDevelopmentPath,
       extensionTestsPath,
