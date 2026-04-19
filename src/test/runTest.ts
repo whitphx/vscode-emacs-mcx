@@ -12,8 +12,14 @@ async function main() {
     // Passed to --extensionTestsPath
     const extensionTestsPath = path.resolve(__dirname, "./suite/index");
 
-    // Download VS Code, unzip it and run the integration test
-    await runTests({ extensionDevelopmentPath, extensionTestsPath });
+    // Download VS Code, unzip it and run the integration test.
+    // Disable the built-in TypeScript extension to prevent Automatic Type
+    // Acquisition from shelling out to npm, which Aikido Safe-chain blocks in CI.
+    await runTests({
+      extensionDevelopmentPath,
+      extensionTestsPath,
+      launchArgs: ["--disable-extension=vscode.typescript-language-features"],
+    });
   } catch (err) {
     console.error(err);
     console.error("Failed to run tests");
