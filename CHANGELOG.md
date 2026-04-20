@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.110.5
+
+### Patch Changes
+
+- [#2816](https://github.com/whitphx/vscode-emacs-mcx/pull/2816) [`84b2e3b`](https://github.com/whitphx/vscode-emacs-mcx/commit/84b2e3bcdaac3454cd8fca740153e2c177537805) Thanks [@yasushi-saito](https://github.com/yasushi-saito)! - Fix subword mode behavior on '\_' and empty lines
+
 ## 0.110.4
 
 ### Patch Changes
