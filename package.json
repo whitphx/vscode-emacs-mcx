@@ -1635,16 +1635,6 @@
         "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
       },
       {
-        "key": "ctrl+w",
-        "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
-      },
-      {
-        "key": "alt+w",
-        "command": "",
-        "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
-      },
-      {
         "key": "alt+y",
         "command": "",
         "when": "isWindows && config.emacs-mcx.cursorMoveOnFindWidget && findInputFocussed && !isComposing"
@@ -1736,16 +1726,6 @@
       },
       {
         "key": "ctrl+k",
-        "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing"
-      },
-      {
-        "key": "ctrl+w",
-        "command": "",
-        "when": "isWindows && replaceInputFocussed && !isComposing"
-      },
-      {
-        "key": "alt+w",
         "command": "",
         "when": "isWindows && replaceInputFocussed && !isComposing"
       },
@@ -3652,32 +3632,32 @@
       {
         "key": "ctrl+w",
         "command": "editor.action.clipboardCutAction",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing"
       },
       {
         "key": "alt+w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing && config.emacs-mcx.useMetaPrefixAlt"
       },
       {
         "mac": "cmd+w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd"
       },
       {
         "key": "escape w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+[ w",
         "command": "editor.action.clipboardCopyAction",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
       },
       {
         "key": "ctrl+y",
         "command": "editor.action.clipboardPasteAction",
-        "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
+        "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing"
       },
       {
         "key": "alt+y",

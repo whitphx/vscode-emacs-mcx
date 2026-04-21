@@ -123,8 +123,9 @@
       "ctrl+h",
       "alt+d",
       "ctrl+k",
-      "ctrl+w",
-      "alt+w",
+      // ctrl+w, alt+w, and ctrl+y are intentionally not listed here so that the clipboard
+      // cut/copy/paste bindings in move-edit.json can fire in the find/replace widget.
+      // See: https://github.com/whitphx/vscode-emacs-mcx/issues/2824
       "alt+y",
       "ctrl+m",
       "ctrl+j",

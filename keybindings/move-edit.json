@@ -320,27 +320,31 @@
     "command": "emacs-mcx.yank",
     "when": "emacs-mcx.minibufferReading"
   },
-  // The following clipboard bindings (ctrl+w, meta+w, ctrl+y) require `textInputFocus` in the
-  // when clause. Using only `!editorTextFocus && !terminalFocus` is too broad and breaks native
-  // shortcuts (e.g. cmd+x Cut) in Cursor's Agent chat due to a keybinding resolver conflict.
+  // The following clipboard bindings (ctrl+w, meta+w, ctrl+y) target non-editor text inputs.
+  // The when clause enumerates the specific focus contexts (find/replace/search/input boxes)
+  // because `textInputFocus` is not reliably set in those widgets — see #2824.
+  // The trailing `textInputFocus && !editorTextFocus && !terminalFocus` arm covers other
+  // non-editor inputs (e.g. extension UIs) while preserving the guard from #2748 that keeps
+  // Cursor Agent chat's native cmd+x working.
   // See: https://github.com/whitphx/vscode-emacs-mcx/issues/2748
+  //      https://github.com/whitphx/vscode-emacs-mcx/issues/2824
   {
     "key": "ctrl+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCutAction",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
+    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing"
   },
   {
     "key": "meta+w",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardCopyAction",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
+    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing"
   },
   {
     "key": "ctrl+y",
     // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
     "command": "editor.action.clipboardPasteAction",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
+    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing"
   },
   {
     "key": "meta+y",
