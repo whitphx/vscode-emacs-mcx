@@ -293,6 +293,32 @@
     "command": "emacs-mcx.killWholeLine",
     "when": "editorTextFocus"
   },
+  // Clipboard cut/copy/paste bindings route to VS Code's built-in clipboard commands, which
+  // are overridden internally for webviews (Markdown preview, Simple Browser, Release Notes,
+  // etc.) to operate on the DOM selection via execCommand — see #2824.
+  // meta+w inherits VS Code's default cmd+c when (unconditional); ctrl+w uses !terminalFocus
+  // as the equivalent (the generator disallows unconditional ctrl+* bindings to keep Emacs
+  // in the terminal working).
+  // These broad bindings are placed BEFORE the editor-specific emacs-mcx bindings
+  // (killRegion / killRingSave / yank) below so that, when both match in the main editor,
+  // VS Code's resolver picks the later (emacs-mcx) entry — preserving kill-ring behavior.
+  // See: https://github.com/whitphx/vscode-emacs-mcx/issues/2824
+  {
+    "key": "ctrl+w",
+    "command": "editor.action.clipboardCutAction",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "meta+w",
+    "command": "editor.action.clipboardCopyAction",
+    "inheritWhenFromDefault": true
+  },
+  {
+    "key": "ctrl+y",
+    // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
+    "command": "editor.action.clipboardPasteAction",
+    "when": "(findInputFocussed || replaceInputFocussed || inputBoxFocus || patternExcludesInputBoxFocus || patternIncludesInputBoxFocus || searchInputBoxFocus || replaceInputBoxFocus || (textInputFocus && !editorTextFocus && !terminalFocus)) && !isComposing"
+  },
   {
     "key": "ctrl+w",
     "command": "emacs-mcx.killRegion",
@@ -319,28 +345,6 @@
     "key": "ctrl+y",
     "command": "emacs-mcx.yank",
     "when": "emacs-mcx.minibufferReading"
-  },
-  // The following clipboard bindings (ctrl+w, meta+w, ctrl+y) require `textInputFocus` in the
-  // when clause. Using only `!editorTextFocus && !terminalFocus` is too broad and breaks native
-  // shortcuts (e.g. cmd+x Cut) in Cursor's Agent chat due to a keybinding resolver conflict.
-  // See: https://github.com/whitphx/vscode-emacs-mcx/issues/2748
-  {
-    "key": "ctrl+w",
-    // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
-    "command": "editor.action.clipboardCutAction",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
-  },
-  {
-    "key": "meta+w",
-    // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
-    "command": "editor.action.clipboardCopyAction",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
-  },
-  {
-    "key": "ctrl+y",
-    // Ref: https://github.com/microsoft/vscode/issues/251427#issuecomment-3106145657
-    "command": "editor.action.clipboardPasteAction",
-    "when": "textInputFocus && !editorTextFocus && !terminalFocus && !isComposing"
   },
   {
     "key": "meta+y",
