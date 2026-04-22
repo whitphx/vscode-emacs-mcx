@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.110.6
+
+### Patch Changes
+
+- [#2869](https://github.com/whitphx/vscode-emacs-mcx/pull/2869) [`ed5936c`](https://github.com/whitphx/vscode-emacs-mcx/commit/ed5936c1f17f4852f15c45838151e895fae0d9c7) Thanks [@whitphx](https://github.com/whitphx)! - Fix C-w (cut), M-w (copy), and C-y (paste) not firing in non-editor surfaces (regression from [#2670](https://github.com/whitphx/vscode-emacs-mcx/issues/2670) / [#2748](https://github.com/whitphx/vscode-emacs-mcx/issues/2748)). The bindings now also work in:
+  - Find/replace/search/input-box widgets (C-w, M-w, and C-y).
+  - Webview-backed views — Markdown preview, Simple Browser, Release Notes, etc. — for C-w and M-w, which route to VS Code's built-in clipboard commands that are overridden internally to operate on the DOM selection.
+  - Windows find/replace widget (C-w and M-w removed from the Windows-only unbind list).
+
+  The editor-side emacs-mcx bindings (`killRegion`, `killRingSave`, `yank`) are preserved unchanged; they continue to take priority in the main editor via source ordering.
+
 ## 0.110.5
 
 ### Patch Changes
