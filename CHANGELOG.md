@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.110.7
+
+### Patch Changes
+
+- [#2871](https://github.com/whitphx/vscode-emacs-mcx/pull/2871) [`615d7a6`](https://github.com/whitphx/vscode-emacs-mcx/commit/615d7a6d6668f3621e3279de1e1ad46202bbaa99) Thanks [@whitphx](https://github.com/whitphx)! - Fix Tab handling interfering with VS Code's Next Edit Suggestions. The `emacs-mcx.tabToTabStop` when clause now also excludes `inlineEditIsVisible`, so pressing Tab accepts an inline edit suggestion (e.g., from GitHub Copilot's Next Edit Suggestions) instead of being intercepted by Emacs-like tab behavior. Closes [#2825](https://github.com/whitphx/vscode-emacs-mcx/issues/2825).
+
 ## 0.110.6
 
 ### Patch Changes
