@@ -8087,7 +8087,7 @@
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.80",
-    "@vscode/vsce": "^3.8.0",
+    "@vscode/vsce": "^3.8.1",
     "assert": "^2.1.0",
     "cspell": "^9.7.0",
     "eslint": "^10.2.0",
