@@ -982,12 +982,12 @@
       {
         "key": "ctrl+g",
         "command": "workbench.action.browser.addElementToChat",
-        "when": "browserElementSelectionActive && browserHasUrl && chatIsEnabled && config.chat.sendElementsToChat.enabled && !browserHasError && activeEditor == 'workbench.editor.browser'"
+        "when": "browserElementSelectionActive && browserHasUrl && chatIsEnabled && !browserHasError && activeEditor == 'workbench.editor.browser'"
       },
       {
         "key": "escape escape escape",
         "command": "workbench.action.browser.addElementToChat",
-        "when": "browserElementSelectionActive && browserHasUrl && chatIsEnabled && config.chat.sendElementsToChat.enabled && !browserHasError && activeEditor == 'workbench.editor.browser' && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "browserElementSelectionActive && browserHasUrl && chatIsEnabled && !browserHasError && activeEditor == 'workbench.editor.browser' && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1258,6 +1258,26 @@
         "key": "escape escape escape",
         "command": "diffEditor.exitCompareMove",
         "when": "comparingMovedCode && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isWindows"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "chat.models.action.clearSearchResults",
+        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isWindows"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isWindows && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
