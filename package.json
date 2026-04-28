@@ -8096,7 +8096,7 @@
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.6.0",
-    "@changesets/cli": "^2.30.0",
+    "@changesets/cli": "^2.31.0",
     "@changesets/write": "^0.4.0",
     "@eslint/js": "^10.0.1",
     "@types/glob": "^9.0.0",
@@ -8128,7 +8128,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.58.2",
+    "typescript-eslint": "^8.59.0",
     "webpack": "^5.106.2",
     "webpack-cli": "^7.0.2"
   },
