@@ -551,16 +551,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "inlineChat.hideInput",
-        "when": "inlineChatHasEditsAgent && inlineChatInputWidgetFocused || inlineChatHasNotebookAgent && inlineChatInputWidgetFocused && activeEditor == 'workbench.editor.notebook'"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "inlineChat.hideInput",
-        "when": "(inlineChatHasEditsAgent && inlineChatInputWidgetFocused || inlineChatHasNotebookAgent && inlineChatInputWidgetFocused && activeEditor == 'workbench.editor.notebook') && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "notebook.cell.quitEdit",
         "when": "inputFocus && notebookEditorFocused && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !inlineChatFocused"
       },
@@ -1081,16 +1071,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "inlineChat2.undo",
-        "when": "chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && config.inlineChat.renderMode == 'hover' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover'"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "inlineChat2.undo",
-        "when": "(chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible && config.inlineChat.renderMode == 'hover' || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications && config.inlineChat.renderMode == 'hover' || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook' && config.inlineChat.renderMode == 'hover') && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "workbench.action.terminal.hideSuggestWidget",
         "when": "terminalFocus && terminalHasBeenCreated && terminalIsOpen && terminalSuggestWidgetVisible || terminalFocus && terminalIsOpen && terminalProcessSupported && terminalSuggestWidgetVisible"
       },
@@ -1262,22 +1242,22 @@
       {
         "key": "ctrl+g",
         "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows"
+        "when": "inModelsEditor && inModelsSearch && isLinux"
       },
       {
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
         "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows"
+        "when": "outputFilterFocus && isLinux"
       },
       {
         "key": "escape escape escape",
         "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "outputFilterFocus && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
@@ -8107,7 +8087,7 @@
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.80",
-    "@vscode/vsce": "^3.8.1",
+    "@vscode/vsce": "^3.9.1",
     "assert": "^2.1.0",
     "cspell": "^9.7.0",
     "eslint": "^10.2.1",
