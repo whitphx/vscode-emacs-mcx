@@ -26,15 +26,17 @@ export async function setupWorkspace(
     language,
   });
 
-  await vscode.window.showTextDocument(doc, column, false);
-
-  const activeTextEditor = vscode.window.activeTextEditor;
-  assert.ok(activeTextEditor);
+  // Return the `TextEditor` that `showTextDocument` resolves to instead of
+  // reading `vscode.window.activeTextEditor` after the call. The active editor
+  // can change between the resolution of `showTextDocument` and the next
+  // synchronous read, which would leave the test holding a reference to an
+  // unrelated editor and produce flaky failures.
+  const textEditor = await vscode.window.showTextDocument(doc, column, false);
 
   // Set EOL to LF for the tests to work even on Windows
-  await activeTextEditor.edit((editBuilder) => editBuilder.setEndOfLine(eol));
+  await textEditor.edit((editBuilder) => editBuilder.setEndOfLine(eol));
 
-  return activeTextEditor;
+  return textEditor;
 }
 
 export async function clearTextEditor(textEditor: TextEditor, initializeWith = ""): Promise<void> {
@@ -76,6 +78,18 @@ export function createEmulator(
 
 export function setEmptyCursors(textEditor: TextEditor, ...positions: Array<[number, number]>): void {
   textEditor.selections = positions.map((p) => new Selection(new Position(p[0], p[1]), new Position(p[0], p[1])));
+}
+
+// Select the whole text of `textEditor`. Use this instead of
+// `vscode.commands.executeCommand("editor.action.selectAll")` in tests because
+// the latter operates on `vscode.window.activeTextEditor`, which can drift
+// during the test (e.g. when an unrelated editor or output document grabs
+// focus) and produce flaky failures.
+export function selectAllText(textEditor: TextEditor): void {
+  const doc = textEditor.document;
+  const start = new Position(0, 0);
+  const end = doc.positionAt(doc.getText().length);
+  textEditor.selections = [new Selection(start, end)];
 }
 
 export async function cleanUpWorkspace(): Promise<void> {
