@@ -250,6 +250,15 @@ eols.forEach(([eol, eolStr]) => {
           // XXX: First, trigger the language's auto-indent feature without any assertion before the main test execution.
           // This is necessary for the test to be successful at VSCode 1.50.
           // It may be because the first execution warms up the language server.
+          // The warm-up runs the same `universalArgument + newLine` path the
+          // main assertion uses (not a single `default:type` `\n`), because
+          // `NewLine.run` with `prefixArgument > 1` fires `default:type`
+          // twice with only a ~33ms gap and then reads the auto-indent
+          // result. On a cold JS language service the second auto-indent
+          // doesn't land in time, the captured pattern is wrong, and the
+          // rebuilt insert ends up missing a ` * ` continuation line.
+          // Priming via the same path reliably warms the second-call
+          // timing as well as the first.
           // TODO: Remove this workaround with later versions of VSCode
           activeTextEditor = await setupWorkspace(initialText, {
             eol,
@@ -259,7 +268,8 @@ eols.forEach(([eol, eolStr]) => {
 
           setEmptyCursors(activeTextEditor, [0, 3]);
 
-          await vscode.commands.executeCommand("default:type", { text: "\n" });
+          await emulator.universalArgument();
+          await emulator.runCommand("newLine");
           await clearTextEditor(activeTextEditor);
           // XXX: (end of the workaround)
 
