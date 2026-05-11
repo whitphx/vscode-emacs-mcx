@@ -1,4 +1,5 @@
-import { Position, Range, TextEditor } from "vscode";
+import * as vscode from "vscode";
+import { Position, Range, TextDocument, TextEditor } from "vscode";
 
 export function equalPositions(positions1: readonly Position[], positions2: readonly Position[]): boolean {
   if (positions1.length !== positions2.length) {
@@ -9,6 +10,34 @@ export function equalPositions(positions1: readonly Position[], positions2: read
 
 export function delay(time?: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+// Wait until `document` has not emitted an `onDidChangeTextDocument` event for
+// `settleMs`, or until `timeoutMs` elapses, whichever comes first. Used to
+// wait for asynchronous editor follow-ups (e.g. `OnEnter` rule auto-indent)
+// that arrive after the triggering command's promise has already resolved.
+export async function waitForDocumentToSettle(
+  document: TextDocument,
+  { settleMs = 100, timeoutMs = 1000 }: { settleMs?: number; timeoutMs?: number } = {},
+): Promise<void> {
+  let lastChangeAt = Date.now();
+  const disposable = vscode.workspace.onDidChangeTextDocument((event) => {
+    if (event.document === document) {
+      lastChangeAt = Date.now();
+    }
+  });
+  try {
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      const sinceLastChange = Date.now() - lastChangeAt;
+      if (sinceLastChange >= settleMs) {
+        return;
+      }
+      await delay(Math.min(settleMs - sinceLastChange, 20));
+    }
+  } finally {
+    disposable.dispose();
+  }
 }
 
 // HACK: Currently there is no official type-safe way to handle

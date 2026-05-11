@@ -4,7 +4,7 @@ import { EmacsCommand, type ITextEditorInterruptionHandler } from ".";
 import { makeParallel } from "./helpers/parallel";
 import { makeSelectionsEmpty } from "./helpers/selection";
 import { revealPrimaryActive } from "./helpers/reveal";
-import { delay } from "../utils";
+import { waitForDocumentToSettle } from "../utils";
 import { Logger } from "../logger";
 
 const logger = Logger.get("EditCommands");
@@ -244,9 +244,17 @@ export class NewLine extends EmacsCommand {
       return selection.active.isEqual(textEditor.document.lineAt(selection.active.line).range.end);
     });
 
+    // After `default:type "\n"` resolves, language-specific `OnEnter` rules
+    // (e.g. JSDoc ` * ` continuation) are applied as a follow-up
+    // `onDidChangeTextDocument` event rather than synchronously with the type
+    // command. Capturing the document state before that follow-up arrives
+    // produces wrong patterns and breaks the rebuilt insert below. Wait for
+    // the document to stop changing between and after the two `default:type`
+    // calls so the captures see the fully indented state.
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
-    await delay(33); // Wait for code completion to finish. The value is ad-hoc.
+    await waitForDocumentToSettle(textEditor.document);
     await vscode.commands.executeCommand<void>("default:type", { text: "\n" });
+    await waitForDocumentToSettle(textEditor.document);
 
     // The first inserted lines can be affected by the second ones.
     // We need to capture its final content after the second insertion to achieve the desired result.
