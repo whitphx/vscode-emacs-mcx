@@ -10,6 +10,7 @@ import {
   assertCursorsEqual,
   cleanUpWorkspace,
   clearTextEditor,
+  selectAllText,
   setEmptyCursors,
   setupWorkspace,
   createEmulator,
@@ -150,18 +151,22 @@ abcdefghij
       );
     });
 
-    // Test kill appending is not enabled after cursorMove or some other commands
-    const otherInterruptingCommands = ["editor.action.selectAll"];
+    // Test kill appending is not enabled after cursorMove or some other commands.
+    // Interrupters are passed the target editor so that the test does not rely
+    // on `vscode.window.activeTextEditor`, which can drift during the test run.
+    const otherInterrupters: Array<[string, (editor: vscode.TextEditor) => void]> = [
+      ["selectAllText", (editor) => selectAllText(editor)],
+    ];
 
-    const interruptingCommands: string[] = [...otherInterruptingCommands];
-    interruptingCommands.forEach((interruptingCommand) => {
-      test(`it does not appends killed text if another command (${interruptingCommand}) invoked`, async () => {
+    const interrupters: Array<[string, (editor: vscode.TextEditor) => void]> = [...otherInterrupters];
+    interrupters.forEach(([interrupterLabel, interrupt]) => {
+      test(`it does not appends killed text if another command (${interrupterLabel}) invoked`, async () => {
         setEmptyCursors(activeTextEditor, [1, 5]);
 
         await emulator.runCommand("killLine"); // 2st line
         await emulator.runCommand("killLine"); // EOL of 2st
 
-        await vscode.commands.executeCommand(interruptingCommand); // Interrupt
+        interrupt(activeTextEditor); // Interrupt
 
         const endOfDoc = activeTextEditor.document.lineAt(activeTextEditor.document.lineCount - 1).range.end;
         const secondKillAtEndOfDoc = activeTextEditor.selections.every((selection) =>
