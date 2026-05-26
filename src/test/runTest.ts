@@ -31,6 +31,11 @@ async function main() {
 
     // Download VS Code, unzip it and run the integration test
     await runTests({
+      // Pinned: VS Code 1.121.0 regressed focus/active-editor behavior on
+      // macOS CI, causing ~320 tests that drive the editor via
+      // `vscode.commands.executeCommand` to fail. Keep on 1.120.0 until the
+      // upstream regression is resolved (or all tests are made focus-resilient).
+      version: "1.120.0",
       extensionDevelopmentPath,
       extensionTestsPath,
       launchArgs: [`--user-data-dir=${userDataDir}`],
