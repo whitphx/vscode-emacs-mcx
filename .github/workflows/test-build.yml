@@ -66,11 +66,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Diagnostic: macos-15-large (Intel macOS 15.7.7). Same OS minor version
-        # as macos-latest (arm64 15.7.7), different chip & image build. If this
-        # passes, the regression is arm64-image specific. If it also fails, the
-        # OS 15.7.7 patch itself is the cause.
-        os: [macos-15-large, ubuntu-latest, windows-latest]
+        # Diagnostic: macos-26-arm64 (Tahoe 26.4). Same chip as macos-latest
+        # (arm64) but a much newer OS — and macOS 26.4 is what passes 726/726
+        # locally. If green, the bug is bounded to the 15.7.x lineage and we
+        # can pin to macos-26 until upstream resolves it.
+        os: [macos-26-arm64, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
