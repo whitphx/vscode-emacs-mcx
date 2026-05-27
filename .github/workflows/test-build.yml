@@ -66,7 +66,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        # Diagnostic: macos-13 (Intel x64). macos-latest (arm64 15.7.7) regressed,
+        # pinning VS Code & forcing focus didn't help. Trying a different image
+        # lineage to isolate whether the bug is in the macos-15-arm64 image.
+        os: [macos-13, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
