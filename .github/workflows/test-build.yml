@@ -66,11 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Diagnostic: pin macos-14 (Sonoma) instead of macos-latest (Sequoia 15.7.7).
-        # macos-latest started failing ~320 tests on 2026-05-15 after the runner image
-        # OS bumped 15.7.4 -> 15.7.7. Pinning VS Code to 1.120.0 did not help, so the
-        # OS is the next suspect. Revert this if green so we know it's macOS 15.7.x.
-        os: [macos-14, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
