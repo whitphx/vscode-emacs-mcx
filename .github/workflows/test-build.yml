@@ -66,10 +66,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Diagnostic: macos-13 (Intel x64). macos-latest (arm64 15.7.7) regressed,
-        # pinning VS Code & forcing focus didn't help. Trying a different image
-        # lineage to isolate whether the bug is in the macos-15-arm64 image.
-        os: [macos-13, ubuntu-latest, windows-latest]
+        # Diagnostic: macos-15-large (Intel macOS 15.7.7). Same OS minor version
+        # as macos-latest (arm64 15.7.7), different chip & image build. If this
+        # passes, the regression is arm64-image specific. If it also fails, the
+        # OS 15.7.7 patch itself is the cause.
+        os: [macos-15-large, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
