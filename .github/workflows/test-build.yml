@@ -100,19 +100,12 @@ jobs:
           node-version-file: .nvmrc
           cache: "npm"
 
-      # Diagnostic: Takumi Guard and Aikido Safe Chain are both disabled to
-      # confirm whether one of the two npm proxies/wrappers is the cause of
-      # the persistent `npm ci` hang on ubuntu-native and windows-native.
-      # Disabling Aikido alone did NOT fix it, so Takumi Guard is now the
-      # primary suspect — it points npm at the Takumi-bot proxy registry,
-      # which may have a per-bot concurrency cap that two simultaneous jobs
-      # trip. Revert before merge.
-      # - name: Set up Takumi Guard for npm
-      #   uses: flatt-security/setup-takumi-guard-npm@f0e333d43cd7a88d2caabee1f16048baab3a35a9 # v1.1.1
-      #   with:
-      #     bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
-      # - name: Install Aikido Safe Chain
-      #   uses: ./.github/actions/install-safe-chain
+      - name: Set up Takumi Guard for npm
+        uses: flatt-security/setup-takumi-guard-npm@f0e333d43cd7a88d2caabee1f16048baab3a35a9 # v1.1.1
+        with:
+          bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
+      - name: Install Aikido Safe Chain
+        uses: ./.github/actions/install-safe-chain
 
       - name: Install dependencies
         run: npm ci
