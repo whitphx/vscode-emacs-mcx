@@ -66,15 +66,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Pin macOS to macos-15-large (Intel) instead of macos-latest (arm64).
+        # Use macos-latest-large (Intel) instead of macos-latest (arm64).
         # The macos-15-arm64 hosted-runner image rolled forward to release
         # 20260520.0085 (macOS 15.7.7) and ~324 of our extension-host tests
-        # started failing on that image only. Same macOS version on Intel
-        # (macos-15-large) is green. The regression is bounded to the arm64
-        # image, not the OS, not VS Code, and not our test code — diagnostic
-        # PRs in this branch's history ruled those out one at a time. Until
-        # the arm64 image is fixed upstream, pin to Intel here.
-        os: [macos-15-large, ubuntu-latest, windows-latest]
+        # started failing on that image only. Same macOS version on Intel is
+        # green. The regression is bounded to the arm64 image, not the OS,
+        # not VS Code, and not our test code — diagnostic PRs in this
+        # branch's history ruled those out one at a time.
+        #
+        # `macos-latest-large` (rather than `macos-15-large`) is deliberate:
+        # the goal of this pin is to dodge the arm64 image bug, not to
+        # freeze the macOS major version. Letting `-large` roll forward the
+        # same way `macos-latest` does keeps us tracking GHA's current Intel
+        # image — once the arm64 image regression is fixed upstream, we can
+        # drop the `-large` suffix and go back to arm64.
+        os: [macos-latest-large, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
