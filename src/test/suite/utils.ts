@@ -33,12 +33,6 @@ export async function setupWorkspace(
   // unrelated editor and produce flaky failures.
   const textEditor = await vscode.window.showTextDocument(doc, column, false);
 
-  // Diagnostic: forcibly focus the editor group on macOS CI. The hosted
-  // runner appears to leave focus on an Output / panel / Explorer view, so
-  // subsequent `vscode.commands.executeCommand("cursorRightSelect")` and
-  // friends don't reach this editor and ~320 tests fail.
-  await vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
-
   // Set EOL to LF for the tests to work even on Windows
   await textEditor.edit((editBuilder) => editBuilder.setEndOfLine(eol));
 

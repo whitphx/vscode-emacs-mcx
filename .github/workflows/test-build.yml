@@ -66,12 +66,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Diagnostic: macos-15-large is Intel macOS 15.7.7 (vs macos-latest =
-        # arm64 macOS 15.7.7 / image 20260520.0085 where ~324 tests started
-        # failing). If Intel-15 passes, the bug is arm64-image-specific and we
-        # can pin to macos-15-large until upstream resolves it. If it also
-        # fails, the regression is macOS 15.7.7 generic and we need a deeper
-        # fix at the test layer.
+        # Pin macOS to macos-15-large (Intel) instead of macos-latest (arm64).
+        # The macos-15-arm64 hosted-runner image rolled forward to release
+        # 20260520.0085 (macOS 15.7.7) and ~324 of our extension-host tests
+        # started failing on that image only. Same macOS version on Intel
+        # (macos-15-large) is green. The regression is bounded to the arm64
+        # image, not the OS, not VS Code, and not our test code — diagnostic
+        # PRs in this branch's history ruled those out one at a time. Until
+        # the arm64 image is fixed upstream, pin to Intel here.
         os: [macos-15-large, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
