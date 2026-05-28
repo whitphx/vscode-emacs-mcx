@@ -66,11 +66,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Diagnostic: macos-26-arm64 (Tahoe 26.4). Same chip as macos-latest
-        # (arm64) but a much newer OS — and macOS 26.4 is what passes 726/726
-        # locally. If green, the bug is bounded to the 15.7.x lineage and we
-        # can pin to macos-26 until upstream resolves it.
-        os: [macos-26-arm64, ubuntu-latest, windows-latest]
+        # Diagnostic: macos-15-large is Intel macOS 15.7.7 (vs macos-latest =
+        # arm64 macOS 15.7.7 / image 20260520.0085 where ~324 tests started
+        # failing). If Intel-15 passes, the bug is arm64-image-specific and we
+        # can pin to macos-15-large until upstream resolves it. If it also
+        # fails, the regression is macOS 15.7.7 generic and we need a deeper
+        # fix at the test layer.
+        os: [macos-15-large, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
