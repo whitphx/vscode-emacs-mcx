@@ -66,21 +66,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Use macos-latest-large (Intel) instead of macos-latest (arm64).
-        # The macos-15-arm64 hosted-runner image rolled forward to release
-        # 20260520.0085 (macOS 15.7.7) and ~324 of our extension-host tests
-        # started failing on that image only. Same macOS version on Intel is
-        # green. The regression is bounded to the arm64 image, not the OS,
-        # not VS Code, and not our test code — diagnostic PRs in this
-        # branch's history ruled those out one at a time.
+        # Use macos-15-intel instead of macos-latest (arm64). The macos-15-
+        # arm64 hosted-runner image rolled forward to release 20260520.0085
+        # (macOS 15.7.7) and ~324 of our extension-host tests started failing
+        # on that image only. The same macOS version on Intel is green; the
+        # regression is bounded to the arm64 image, not the OS, not VS Code,
+        # and not our test code — diagnostic PRs in this branch's history
+        # ruled those out one at a time.
         #
-        # `macos-latest-large` (rather than `macos-15-large`) is deliberate:
-        # the goal of this pin is to dodge the arm64 image bug, not to
-        # freeze the macOS major version. Letting `-large` roll forward the
-        # same way `macos-latest` does keeps us tracking GHA's current Intel
-        # image — once the arm64 image regression is fixed upstream, we can
-        # drop the `-large` suffix and go back to arm64.
-        os: [macos-latest-large, ubuntu-latest, windows-latest]
+        # `macos-15-intel` (not `macos-latest-large`, also not `macos-26-
+        # intel`) is deliberate: `macos-latest-large` failed allocation 3
+        # runs in a row (3-sec exits, empty `runner_name`) for unclear GHA-
+        # side reasons, and `macos-26-intel` is newer but unproven for this
+        # job. `macos-15-intel` is an alias of `macos-15-large`, which we
+        # already validated passes (4m31s and 4m43s in this branch's
+        # history). Re-evaluate once the arm64 image regression is fixed
+        # upstream and we can return to `macos-latest`.
+        os: [macos-15-intel, ubuntu-latest, windows-latest]
         type: ["native"]
         include:
           - os: ubuntu-latest
