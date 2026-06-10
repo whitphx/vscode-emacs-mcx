@@ -31,6 +31,7 @@ suite("package.json", () => {
     const exceptions = [
       "", // Empty string is used for unregistering commands.
       "references-view.findReferences", // This command is registered by the references-view extension and it's not activated in the test environment.
+      "workbench.action.browser.hideEmulationToolbar",
     ];
 
     for (const keybinding of keybindings) {
