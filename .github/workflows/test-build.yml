@@ -110,7 +110,9 @@ jobs:
       #   uses: ./.github/actions/install-safe-chain
 
       - name: Install dependencies
-        run: npm ci --verbose
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
       - name: ESLint & Prettier
         run: |
@@ -135,6 +137,10 @@ jobs:
       - name: Test
         run: npm test
         if: runner.os != 'Linux' && matrix.type == 'native'
+
+      - name: Install Chromium for web tests
+        run: npm exec -- playwright install chromium --with-deps
+        if: matrix.type == 'web'
 
       - name: Test Web
         run: npm run test:web -- --headless
@@ -167,6 +173,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
       # Ref: https://github.com/redhat-developer/vscode-yaml/blob/89c53763249932454b766d09e7aa9035da7fb5b8/.github/workflows/CI.yaml#L48-L61
       - name: Build the vsix package on Linux
