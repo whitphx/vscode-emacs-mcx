@@ -141,10 +141,14 @@ jobs:
       - name: Use system Chrome for web tests
         run: |
           chrome_path="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)"
-          playwright_chromium_path="$(node -e "console.log(require('playwright').chromium.executablePath())")"
-          mkdir -p "$(dirname "$playwright_chromium_path")"
-          ln -sf "$chrome_path" "$playwright_chromium_path"
-          "$playwright_chromium_path" --version
+          for playwright_chromium_path in \
+            "$(node -e "console.log(require('playwright').chromium.executablePath())")" \
+            "$(node -e "const { registry } = require('./node_modules/playwright-core/lib/server/registry'); console.log(registry.findExecutable('chromium-headless-shell').executablePath('javascript'))")"
+          do
+            mkdir -p "$(dirname "$playwright_chromium_path")"
+            ln -sf "$chrome_path" "$playwright_chromium_path"
+            "$playwright_chromium_path" --version
+          done
         if: matrix.type == 'web'
 
       - name: Test Web
