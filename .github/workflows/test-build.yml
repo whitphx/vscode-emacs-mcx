@@ -148,8 +148,9 @@ jobs:
         if: matrix.type == 'web'
 
       - name: Test Web
-        run: npm run test:web -- --headless
+        run: npm run test:web -- --headless --browserOption=--disable-dev-shm-usage
         if: matrix.type == 'web'
+        timeout-minutes: 10
 
   build:
     needs: [test, set-build-info]
