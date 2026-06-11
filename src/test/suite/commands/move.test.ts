@@ -12,6 +12,9 @@ import {
   createEmulator,
 } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
+import { Logger } from "../../../logger";
+
+const logger = Logger.get("move.test");
 
 suite("moveBeginning/EndOfLine", () => {
   let activeTextEditor: TextEditor;
@@ -472,6 +475,7 @@ suite("scroll-up/down-command", () => {
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
       const visibleRangeInfo = getVisibleRangeInfo();
+      logger.warn(`visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
       const { startLine, endLine } = visibleRangeInfo;
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
@@ -578,7 +582,9 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const visibleRangeInfo = getVisibleRangeInfo();
+      logger.warn(`visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
+      const { startLine, endLine } = visibleRangeInfo;
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
