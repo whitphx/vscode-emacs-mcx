@@ -471,7 +471,9 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const visibleRangeInfo = getVisibleRangeInfo();
+      console.log(visibleRangeInfo);
+      const { startLine, endLine } = visibleRangeInfo;
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
