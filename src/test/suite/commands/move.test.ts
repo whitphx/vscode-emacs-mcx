@@ -472,20 +472,19 @@ suite("scroll-up/down-command", () => {
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
       const visibleRangeInfo = getVisibleRangeInfo();
-      console.log(visibleRangeInfo);
       const { startLine, endLine } = visibleRangeInfo;
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(12);
+      await emulator.subsequentArgumentDigit(3);
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
         getVisibleRangeInfo().startLine,
-        startLine + 12,
-        "Expected the visibleRange has been scrolled 12 lines",
+        startLine + 3,
+        "Expected the visibleRange has been scrolled 3 lines",
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
