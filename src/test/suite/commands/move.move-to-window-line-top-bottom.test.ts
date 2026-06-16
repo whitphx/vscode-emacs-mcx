@@ -179,36 +179,36 @@ suite("moveToWindowLineTopBottom", () => {
 
   suite("mark mode behavior", () => {
     test("preserves selection when moving to middle", async () => {
-      setEmptyCursors(activeTextEditor, [45, 0]);
-      await emulator.setMarkCommand();
-
-      await emulator.runCommand("moveToWindowLineTopBottom");
-
       const expectedMiddleLine = calcMiddleLine(activeTextEditor.visibleRanges);
       if (expectedMiddleLine == null) {
         throw new Error("No visible ranges available to calculate middle line");
       }
 
-      assert.notEqual(expectedMiddleLine, 45, "Target line should not be the same as initial cursor position");
-      assertSelectionsEqual(activeTextEditor, [45, 0, expectedMiddleLine, 0]);
+      const initialLine = expectedMiddleLine > 0 ? expectedMiddleLine - 1 : expectedMiddleLine + 1;
+      setEmptyCursors(activeTextEditor, [initialLine, 0]);
+      await emulator.setMarkCommand();
+
+      await emulator.runCommand("moveToWindowLineTopBottom");
+
+      assertSelectionsEqual(activeTextEditor, [initialLine, 0, expectedMiddleLine, 0]);
     });
 
     test("preserves selection with prefix argument", async () => {
-      setEmptyCursors(activeTextEditor, [45, 0]);
-      await emulator.setMarkCommand();
-
       const firstVisibleRange = activeTextEditor.visibleRanges[0];
       if (!firstVisibleRange) {
         throw new Error("No visible range available");
       }
 
+      const expectedLine = firstVisibleRange.start.line + 5;
+      const initialLine = expectedLine > 0 ? expectedLine - 1 : expectedLine + 1;
+      setEmptyCursors(activeTextEditor, [initialLine, 0]);
+      await emulator.setMarkCommand();
+
       await emulator.universalArgument();
       await emulator.subsequentArgumentDigit(5);
       await emulator.runCommand("moveToWindowLineTopBottom");
 
-      const expectedLine = firstVisibleRange.start.line + 5;
-      assert.notEqual(expectedLine, 45, "Target line should not be the same as initial cursor position");
-      assertSelectionsEqual(activeTextEditor, [45, 0, expectedLine, 0]);
+      assertSelectionsEqual(activeTextEditor, [initialLine, 0, expectedLine, 0]);
     });
   });
 

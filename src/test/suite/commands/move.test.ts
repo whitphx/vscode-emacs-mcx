@@ -471,19 +471,25 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const { startLine, endLine, visibleLineCount } = getVisibleRangeInfo();
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
+      const argument = 3;
+      assert.ok(
+        argument < visibleLineCount,
+        "The argument should be less than the number of visible lines for this test",
+      );
+
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(12);
+      await emulator.subsequentArgumentDigit(argument);
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
         getVisibleRangeInfo().startLine,
-        startLine + 12,
-        "Expected the visibleRange has been scrolled 12 lines",
+        startLine + argument,
+        `Expected the visibleRange has been scrolled ${argument} lines`,
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
@@ -577,19 +583,25 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const { startLine, endLine } = getVisibleRangeInfo();
+      const { startLine, endLine, visibleLineCount } = getVisibleRangeInfo();
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
+      const argument = 3;
+      assert.ok(
+        argument < visibleLineCount / 2,
+        "The argument should be less than half the number of visible lines for this test",
+      );
+
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(12);
+      await emulator.subsequentArgumentDigit(argument);
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
         getVisibleRangeInfo().startLine,
-        startLine - 12,
-        "Expected the visibleRange has been scrolled 2 lines",
+        startLine - argument,
+        `Expected the visibleRange has been scrolled ${argument} lines`,
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
