@@ -16,6 +16,40 @@ import { Logger } from "../../../logger";
 
 const logger = Logger.get("move.test");
 
+type TestLogLevel = "error" | "warn" | "debug" | "verbose";
+type ShellLogLevel = "error" | "warn" | "debug";
+type CodeAutomationLog = (type: ShellLogLevel, args: unknown[]) => Promise<void> | void;
+
+const shellLogLevels: Record<TestLogLevel, ShellLogLevel> = {
+  error: "error",
+  warn: "warn",
+  debug: "debug",
+  verbose: "debug",
+};
+
+function getCodeAutomationLog(): CodeAutomationLog | undefined {
+  const codeAutomationLog = (globalThis as typeof globalThis & { codeAutomationLog?: unknown }).codeAutomationLog;
+  return typeof codeAutomationLog === "function" ? (codeAutomationLog as CodeAutomationLog) : undefined;
+}
+
+async function logForWebBrowserTest(level: TestLogLevel, message: string): Promise<void> {
+  logger[level](message);
+
+  if (typeof navigator === "undefined") {
+    return;
+  }
+
+  const shellMessage = `emacs-mcx.move.test: ${message}`;
+  const shellLogLevel = shellLogLevels[level];
+  const codeAutomationLog = getCodeAutomationLog();
+  if (codeAutomationLog) {
+    await codeAutomationLog(shellLogLevel, [shellMessage]);
+    return;
+  }
+
+  console[shellLogLevel](shellMessage);
+}
+
 suite("moveBeginning/EndOfLine", () => {
   let activeTextEditor: TextEditor;
   let emulator: EmacsEmulator;
@@ -475,7 +509,7 @@ suite("scroll-up/down-command", () => {
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
       const visibleRangeInfo = getVisibleRangeInfo();
-      logger.warn(`visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
+      await logForWebBrowserTest("warn", `visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
       const { startLine, endLine } = visibleRangeInfo;
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
@@ -583,7 +617,7 @@ suite("scroll-up/down-command", () => {
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
       const visibleRangeInfo = getVisibleRangeInfo();
-      logger.warn(`visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
+      await logForWebBrowserTest("warn", `visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
       const { startLine, endLine } = visibleRangeInfo;
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
