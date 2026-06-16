@@ -8096,7 +8096,7 @@
     "ts-loader": "^9.5.7",
     "tsc-alias": "^1.8.17",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.1",
     "webpack": "^5.106.2",
