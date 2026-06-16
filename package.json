@@ -981,16 +981,6 @@
       },
       {
         "key": "ctrl+g",
-        "command": "workbench.action.browser.hideEmulationToolbar",
-        "when": "browserEmulationToolbarVisible && activeEditor == 'workbench.editor.browser'"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "workbench.action.browser.hideEmulationToolbar",
-        "when": "browserEmulationToolbarVisible && activeEditor == 'workbench.editor.browser' && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
         "command": "workbench.action.closeQuickOpen",
         "when": "inQuickOpen"
       },
@@ -1258,16 +1248,6 @@
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
         "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
