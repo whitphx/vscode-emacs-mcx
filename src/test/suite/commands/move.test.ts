@@ -624,13 +624,13 @@ suite("scroll-up/down-command", () => {
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(12);
+      await emulator.subsequentArgumentDigit(3);
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
         getVisibleRangeInfo().startLine,
-        startLine - 12,
-        "Expected the visibleRange has been scrolled 2 lines",
+        startLine - 3,
+        "Expected the visibleRange has been scrolled 3 lines",
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
