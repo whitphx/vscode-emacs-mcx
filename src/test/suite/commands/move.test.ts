@@ -12,43 +12,6 @@ import {
   createEmulator,
 } from "../utils";
 import { Configuration } from "../../../configuration/configuration";
-import { Logger } from "../../../logger";
-
-const logger = Logger.get("move.test");
-
-type TestLogLevel = "error" | "warn" | "debug" | "verbose";
-type ShellLogLevel = "error" | "warn" | "debug";
-type CodeAutomationLog = (type: ShellLogLevel, args: unknown[]) => Promise<void> | void;
-
-const shellLogLevels: Record<TestLogLevel, ShellLogLevel> = {
-  error: "error",
-  warn: "warn",
-  debug: "debug",
-  verbose: "debug",
-};
-
-function getCodeAutomationLog(): CodeAutomationLog | undefined {
-  const codeAutomationLog = (globalThis as typeof globalThis & { codeAutomationLog?: unknown }).codeAutomationLog;
-  return typeof codeAutomationLog === "function" ? (codeAutomationLog as CodeAutomationLog) : undefined;
-}
-
-async function logForWebBrowserTest(level: TestLogLevel, message: string): Promise<void> {
-  logger[level](message);
-
-  if (typeof navigator === "undefined") {
-    return;
-  }
-
-  const shellMessage = `emacs-mcx.move.test: ${message}`;
-  const shellLogLevel = shellLogLevels[level];
-  const codeAutomationLog = getCodeAutomationLog();
-  if (codeAutomationLog) {
-    await codeAutomationLog(shellLogLevel, [shellMessage]);
-    return;
-  }
-
-  console[shellLogLevel](shellMessage);
-}
 
 suite("moveBeginning/EndOfLine", () => {
   let activeTextEditor: TextEditor;
@@ -508,21 +471,25 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const visibleRangeInfo = getVisibleRangeInfo();
-      await logForWebBrowserTest("warn", `visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
-      const { startLine, endLine } = visibleRangeInfo;
+      const { startLine, endLine, visibleLineCount } = getVisibleRangeInfo();
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
+      const argument = 3;
+      assert.ok(
+        argument < visibleLineCount,
+        "The argument should be less than the number of visible lines for this test",
+      );
+
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(3);
+      await emulator.subsequentArgumentDigit(argument);
       await emulator.runCommand("scrollUpCommand");
 
       assert.equal(
         getVisibleRangeInfo().startLine,
-        startLine + 3,
-        "Expected the visibleRange has been scrolled 3 lines",
+        startLine + argument,
+        `Expected the visibleRange has been scrolled ${argument} lines`,
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
@@ -616,21 +583,25 @@ suite("scroll-up/down-command", () => {
     });
 
     test("it scrolls with the specified number of lines by the prefix argument", async () => {
-      const visibleRangeInfo = getVisibleRangeInfo();
-      await logForWebBrowserTest("warn", `visibleRangeInfo: ${JSON.stringify(visibleRangeInfo)}`);
-      const { startLine, endLine } = visibleRangeInfo;
+      const { startLine, endLine, visibleLineCount } = getVisibleRangeInfo();
 
       const middleVisibleLine = Math.floor((startLine + endLine) / 2);
       setEmptyCursors(activeTextEditor, [middleVisibleLine, 0]);
 
+      const argument = 3;
+      assert.ok(
+        argument < visibleLineCount / 2,
+        "The argument should be less than half the number of visible lines for this test",
+      );
+
       await emulator.universalArgument();
-      await emulator.subsequentArgumentDigit(3);
+      await emulator.subsequentArgumentDigit(argument);
       await emulator.runCommand("scrollDownCommand");
 
       assert.equal(
         getVisibleRangeInfo().startLine,
-        startLine - 3,
-        "Expected the visibleRange has been scrolled 3 lines",
+        startLine - argument,
+        `Expected the visibleRange has been scrolled ${argument} lines`,
       );
       assertCursorsEqual(activeTextEditor, [middleVisibleLine, 0]);
     });
