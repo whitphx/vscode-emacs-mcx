@@ -39,6 +39,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          # The Changesets release job does not run browser tests. Skip
+          # Playwright's postinstall browser download so `npm ci` only installs
+          # package dependencies and cannot hang on browser provisioning.
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
       - name: Generate a token
         id: generate-token
