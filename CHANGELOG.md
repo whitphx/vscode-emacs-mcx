@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.110.10
+
+### Patch Changes
+
+- [#2929](https://github.com/whitphx/vscode-emacs-mcx/pull/2929) [`7054585`](https://github.com/whitphx/vscode-emacs-mcx/commit/70545852705b109da0f301267d6d8c05144074e1) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2891](https://github.com/whitphx/vscode-emacs-mcx/pull/2891) [`51f9bc3`](https://github.com/whitphx/vscode-emacs-mcx/commit/51f9bc39bf3990153951c31cfa49f920a17b44b8) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2907](https://github.com/whitphx/vscode-emacs-mcx/pull/2907) [`140b544`](https://github.com/whitphx/vscode-emacs-mcx/commit/140b544801e8db3b87111150e1daa14e1d27f97d) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2925](https://github.com/whitphx/vscode-emacs-mcx/pull/2925) [`6ff3bdc`](https://github.com/whitphx/vscode-emacs-mcx/commit/6ff3bdce7f2f7afbde20b942f7c75be469eea9b0) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
 ## 0.110.9
 
 ### Patch Changes
