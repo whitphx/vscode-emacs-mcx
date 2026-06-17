@@ -8075,7 +8075,7 @@
     "@types/sinon": "^21.0.1",
     "@types/vscode": "^1.89.0",
     "@types/webpack-env": "^1.18.8",
-    "@vscode/test-electron": "^2.5.2",
+    "@vscode/test-electron": "^3.0.0",
     "@vscode/test-web": "^0.0.80",
     "@vscode/vsce": "^3.9.2",
     "assert": "^2.1.0",
