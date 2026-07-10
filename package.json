@@ -1270,16 +1270,6 @@
         "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
         "key": "ctrl+s",
         "command": "emacs-mcx.isearchForward",
         "when": "!findInputFocussed"
