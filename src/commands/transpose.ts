@@ -65,19 +65,27 @@ async function transposeInternal(
       return new Selection(start, active);
     });
     const pos2 = await aux(prefixArgument);
+
+    // Compute each selection's target offset while the document is still
+    // unmodified. subr1 swaps regions of possibly-different lengths, so
+    // offsetAt on the post-edit document no longer maps r1/r2 to their
+    // original text.
+    const newActiveOffsets = pos2.map((r2, i) => {
+      const r1 = pos1[i];
+      const sourceLength = r1 ? textEditor.document.offsetAt(r1.end) - textEditor.document.offsetAt(r1.start) : 0;
+      return textEditor.document.offsetAt(r2.start) + sourceLength;
+    });
+
     await subr1(pos1, pos2);
 
     // Move the active position to the start of the range(s).
     textEditor.selections = textEditor.selections.map((selection, i) => {
-      const r1 = pos1[i];
-      const r2 = pos2[i];
-      if (r2 === undefined) {
+      const offset = newActiveOffsets[i];
+      if (offset === undefined) {
         // shouldn't happen.
         return selection;
       }
-      const delta = r1 ? textEditor.document.offsetAt(r1.end) - textEditor.document.offsetAt(r1.start) : 0;
-      const offset = textEditor.document.offsetAt(r2.start);
-      const newPosition = textEditor.document.positionAt(offset + delta);
+      const newPosition = textEditor.document.positionAt(offset);
       return new Selection(newPosition, newPosition);
     });
   }
