@@ -463,10 +463,6 @@
         "title": "Emacs-MCX: Transpose Lines"
       },
       {
-        "command": "emacs-mcx.transposeWords",
-        "title": "Emacs-MCX: Transpose Words"
-      },
-      {
         "command": "emacs-mcx.universalArgument",
         "title": "Emacs-MCX: Universal Argument"
       },
@@ -1262,26 +1258,6 @@
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
         "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isWindows && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
@@ -8166,7 +8142,7 @@
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.13.2",
-    "@types/sinon": "^21.0.1",
+    "@types/sinon": "^22.0.0",
     "@types/vscode": "^1.89.0",
     "@types/webpack-env": "^1.18.8",
     "@vscode/test-electron": "^3.0.0",
@@ -8182,7 +8158,7 @@
     "jsep": "^1.4.0",
     "lint-staged": "^17.0.7",
     "mocha": "^11.7.6",
-    "prettier": "^3.8.4",
+    "prettier": "^3.9.4",
     "process": "^0.11.10",
     "rimraf": "^6.1.3",
     "sinon": "^22.0.0",
@@ -8193,7 +8169,7 @@
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1",
-    "webpack": "^5.107.2",
+    "webpack": "^5.108.3",
     "webpack-cli": "^7.0.3"
   },
   "dependencies": {
