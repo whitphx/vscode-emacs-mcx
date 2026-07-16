@@ -3745,6 +3745,66 @@
         }
       },
       {
+        "key": "alt+t",
+        "command": "emacs-mcx.transposeWords",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixAlt"
+      },
+      {
+        "mac": "cmd+t",
+        "command": "emacs-mcx.transposeWords",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixMacCmd"
+      },
+      {
+        "key": "escape t",
+        "command": "emacs-mcx.transposeWords",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+[ t",
+        "command": "emacs-mcx.transposeWords",
+        "when": "editorTextFocus && !editorReadonly && config.emacs-mcx.useMetaPrefixCtrlLeftBracket"
+      },
+      {
+        "key": "alt+t",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixAlt",
+        "args": {
+          "then": {
+            "command": "emacs-mcx.transposeWords"
+          }
+        }
+      },
+      {
+        "mac": "cmd+t",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixMacCmd",
+        "args": {
+          "then": {
+            "command": "emacs-mcx.transposeWords"
+          }
+        }
+      },
+      {
+        "key": "escape t",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixEscape",
+        "args": {
+          "then": {
+            "command": "emacs-mcx.transposeWords"
+          }
+        }
+      },
+      {
+        "key": "ctrl+[ t",
+        "command": "emacs-mcx.isearchExit",
+        "when": "editorFocus && findWidgetVisible && !replaceInputFocussed && !isComposing && config.emacs-mcx.useMetaPrefixCtrlLeftBracket",
+        "args": {
+          "then": {
+            "command": "emacs-mcx.transposeWords"
+          }
+        }
+      },
+      {
         "key": "ctrl+x ctrl+t",
         "command": "emacs-mcx.transposeLines",
         "when": "editorTextFocus && !editorReadonly"
