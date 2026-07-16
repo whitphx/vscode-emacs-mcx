@@ -41,8 +41,13 @@ async function transposeInternal(
         if (!p1.end.isAfter(p2.start)) {
           const text1 = textEditor.document.getText(p1);
           const text2 = textEditor.document.getText(p2);
-          edit.replace(p1, text2);
-          edit.replace(p2, text1);
+          // delete+insert rather than replace: inserting text1 at p2.start
+          // leaves the point after it, which the positive-prefix branch relies
+          // on to position the cursor without setting selections explicitly.
+          edit.delete(new Selection(p1.start, p1.end));
+          edit.delete(new Selection(p2.start, p2.end));
+          edit.insert(p1.start, text2);
+          edit.insert(p2.start, text1);
         }
       }
     });
