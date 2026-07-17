@@ -41,6 +41,9 @@ async function transposeInternal(
         if (!p1.end.isAfter(p2.start)) {
           const text1 = textEditor.document.getText(p1);
           const text2 = textEditor.document.getText(p2);
+          // delete+insert rather than replace: inserting text1 at p2.start
+          // leaves the point after it, which the positive-prefix branch relies
+          // on to position the cursor without setting selections explicitly.
           edit.delete(new Selection(p1.start, p1.end));
           edit.delete(new Selection(p2.start, p2.end));
           edit.insert(p1.start, text2);
@@ -60,37 +63,36 @@ async function transposeInternal(
     const pos1 = await aux(-1);
 
     // Move the active position to the start of the range(s).
-    {
-      const newSelections: Selection[] = [];
-      for (let i = 0; i < textEditor.selections.length; i++) {
-        const selection = textEditor.selections[i]!;
-        const range = pos1[i];
-        newSelections.push(new Selection(range?.start ?? selection.anchor, range?.start ?? selection.active));
-      }
-      textEditor.selections = newSelections;
-    }
+    textEditor.selections = textEditor.selections.map((selection, i) => {
+      const range = pos1[i];
+      const start = range?.start ?? selection.anchor;
+      const active = range?.start ?? selection.active;
+      return new Selection(start, active);
+    });
     const pos2 = await aux(prefixArgument);
+
+    // Compute each selection's target offset while the document is still
+    // unmodified. subr1 swaps regions of possibly-different lengths, so
+    // offsetAt on the post-edit document no longer maps r1/r2 to their
+    // original text.
+    const newActiveOffsets = pos2.map((r2, i) => {
+      const r1 = pos1[i];
+      const sourceLength = r1 ? textEditor.document.offsetAt(r1.end) - textEditor.document.offsetAt(r1.start) : 0;
+      return textEditor.document.offsetAt(r2.start) + sourceLength;
+    });
+
     await subr1(pos1, pos2);
 
     // Move the active position to the start of the range(s).
-    {
-      const newSelections: Selection[] = [];
-      for (let i = 0; i < textEditor.selections.length; i++) {
-        const selection = textEditor.selections[i]!;
-        const r1 = pos1[i];
-        const r2 = pos2[i];
-        if (r2 === undefined) {
-          // shouldn't happen.
-          newSelections.push(selection);
-          continue;
-        }
-        const delta = r1 ? textEditor.document.offsetAt(r1.end) - textEditor.document.offsetAt(r1.start) : 0;
-        const offset = r2 ? textEditor.document.offsetAt(r2.start) : 0;
-        const newPosition = textEditor.document.positionAt(offset + delta);
-        newSelections.push(new Selection(newPosition, newPosition));
+    textEditor.selections = textEditor.selections.map((selection, i) => {
+      const offset = newActiveOffsets[i];
+      if (offset === undefined) {
+        // shouldn't happen.
+        return selection;
       }
-      textEditor.selections = newSelections;
-    }
+      const newPosition = textEditor.document.positionAt(offset);
+      return new Selection(newPosition, newPosition);
+    });
   }
 }
 
