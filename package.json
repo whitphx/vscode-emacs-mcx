@@ -8169,7 +8169,7 @@
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1",
-    "webpack": "^5.108.3",
+    "webpack": "^5.108.4",
     "webpack-cli": "^7.0.3"
   },
   "dependencies": {
