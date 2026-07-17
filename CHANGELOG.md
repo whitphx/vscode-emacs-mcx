@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.111.0
+
+### Minor Changes
+
+- [#2833](https://github.com/whitphx/vscode-emacs-mcx/pull/2833) [`992b2ae`](https://github.com/whitphx/vscode-emacs-mcx/commit/992b2ae1d0f7afbb362e091d025c96464ea4714d) Thanks [@yasushi-saito](https://github.com/yasushi-saito)! - Add the transpose-word command.
+
+### Patch Changes
+
+- [#2949](https://github.com/whitphx/vscode-emacs-mcx/pull/2949) [`e70bc82`](https://github.com/whitphx/vscode-emacs-mcx/commit/e70bc824d990dcd2f3e4ffc58db7eaa02c57e4e9) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2970](https://github.com/whitphx/vscode-emacs-mcx/pull/2970) [`fb23957`](https://github.com/whitphx/vscode-emacs-mcx/commit/fb23957cec3229993c378a4b08ca94a42b323d48) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2968](https://github.com/whitphx/vscode-emacs-mcx/pull/2968) [`16e1e2f`](https://github.com/whitphx/vscode-emacs-mcx/commit/16e1e2f156583a6ebc7ed6acdf2dc939c3c3b49e) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
+- [#2955](https://github.com/whitphx/vscode-emacs-mcx/pull/2955) [`0990375`](https://github.com/whitphx/vscode-emacs-mcx/commit/099037599d502e133bb7d01db38d15bc298b5edc) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
 ## 0.110.11
 
 ### Patch Changes
