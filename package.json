@@ -8164,7 +8164,7 @@
     "sinon": "^22.0.0",
     "strip-json-comments": "^5.0.3",
     "ts-loader": "^9.6.2",
-    "tsc-alias": "^1.8.17",
+    "tsc-alias": "^1.9.0",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3",
