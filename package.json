@@ -8168,7 +8168,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.63.0",
+    "typescript-eslint": "^8.64.0",
     "webpack": "^5.108.4",
     "webpack-cli": "^7.2.1"
   },
