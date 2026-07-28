@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.111.1
+
+### Patch Changes
+
+- [#2986](https://github.com/whitphx/vscode-emacs-mcx/pull/2986) [`97a4198`](https://github.com/whitphx/vscode-emacs-mcx/commit/97a4198a83aa37010502dcba404d449f6ea65c39) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update keybindings from the latest remote definitions.
+
 ## 0.111.0
 
 ### Minor Changes
