@@ -551,13 +551,23 @@
       },
       {
         "key": "ctrl+g",
+        "command": "agentsVoice.cancelActiveRequest",
+        "when": "agentsVoiceConnected && chatSessionHasActiveRequest && config.agents.voice.enabled && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "agentsVoice.cancelActiveRequest",
+        "when": "agentsVoiceConnected && chatSessionHasActiveRequest && config.agents.voice.enabled && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
         "command": "agentsVoice.disconnect",
-        "when": "agentsVoiceConnected && config.agents.voice.enabled && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible"
+        "when": "agentsVoiceConnected && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible"
       },
       {
         "key": "escape escape escape",
         "command": "agentsVoice.disconnect",
-        "when": "agentsVoiceConnected && config.agents.voice.enabled && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "agentsVoiceConnected && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1078,6 +1088,16 @@
         "key": "escape escape escape",
         "command": "inlineChat2.close",
         "when": "(chatInputHasFocus && inlineChatHasEditsAgent && inlineChatVisible || chatInputHasFocus && inlineChatHasNotebookAgent && inlineChatVisible && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasEditsAgent && inlineChatVisible && !chatEdits.hasEditorModifications || editorFocus && inlineChatHasNotebookAgent && inlineChatVisible && !chatEdits.hasEditorModifications && activeEditor == 'workbench.editor.notebook') && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.action.chat.cancelSpeechToText",
+        "when": "chatSpeechToTextRecording && inChatInput"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.action.chat.cancelSpeechToText",
+        "when": "chatSpeechToTextRecording && inChatInput && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
