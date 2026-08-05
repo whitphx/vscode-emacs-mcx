@@ -8200,7 +8200,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0",
     "webpack": "^5.108.4",
-    "webpack-cli": "^7.2.1"
+    "webpack-cli": "^7.2.2"
   },
   "dependencies": {
     "winston": "^3.19.0",
