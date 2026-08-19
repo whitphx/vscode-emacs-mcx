@@ -8157,7 +8157,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.1",
-    "@changesets/write": "^0.4.0",
+    "@changesets/write": "^1.0.0",
     "@eslint/js": "^10.0.1",
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
