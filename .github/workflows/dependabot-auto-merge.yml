@@ -1,9 +1,10 @@
 name: Dependabot auto-merge
 
-# `pull_request_target` is what makes this work at all: the `GITHUB_TOKEN` handed to
-# Dependabot's `pull_request` events is read-only, so a `pull_request`-triggered job
-# cannot enable auto-merge. This workflow never checks out or runs the PR's code, so
-# the write-capable base-branch context stays out of the branch's reach.
+# Dependabot's `pull_request` events run with a read-only `GITHUB_TOKEN` that the
+# `permissions` key cannot raise, so enabling auto-merge needs `pull_request_target`
+# and its base-branch context. Nothing here checks out or executes the PR's code,
+# which is what keeps that write-capable context out of the branch's reach.
+# Ref: https://github.com/dependabot/fetch-metadata#enabling-auto-merge
 on:
   pull_request_target:
     branches: ["main"]
@@ -22,10 +23,14 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
 
-      # GitHub holds the merge until every required check on `main` passes, so a red
-      # test run leaves the PR sitting open rather than landing broken.
+      # Match the update types to merge rather than the ones to skip. Dependabot omits
+      # `update-type` from the commit trailer on multi-dependency and transitive-only
+      # PRs, and those have carried majors here before, so an unknown type has to fall
+      # through to a manual merge instead of being treated as non-major.
       - name: Enable auto-merge
-        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        if: >-
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
