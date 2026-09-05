@@ -1,0 +1,32 @@
+name: Dependabot auto-merge
+
+# `pull_request_target` is what makes this work at all: the `GITHUB_TOKEN` handed to
+# Dependabot's `pull_request` events is read-only, so a `pull_request`-triggered job
+# cannot enable auto-merge. This workflow never checks out or runs the PR's code, so
+# the write-capable base-branch context stays out of the branch's reach.
+on:
+  pull_request_target:
+    branches: ["main"]
+
+permissions: {}
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      # GitHub holds the merge until every required check on `main` passes, so a red
+      # test run leaves the PR sitting open rather than landing broken.
+      - name: Enable auto-merge
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
