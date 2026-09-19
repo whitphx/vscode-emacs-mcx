@@ -242,8 +242,13 @@ jobs:
           files=( ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix )
           echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
 
+      # The checkout only provides the vsce pinned in package-lock.json; the VSIX to publish
+      # comes from the verified artifact above. It deliberately checks out the default branch
+      # (the workflow_run context) rather than a ref taken from the triggering run's artifact.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Install Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -258,7 +263,9 @@ jobs:
         uses: ./.github/actions/install-safe-chain
 
       - name: Install dependencies
-        run: npm ci
+        # This job holds Marketplace publish rights, so dependency lifecycle scripts are not run;
+        # vsce needs none of them.
+        run: npm ci --ignore-scripts
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
@@ -270,8 +277,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Publish to Visual Studio Marketplace
-        # `--azure-credential` makes vsce take the Entra ID token from the Azure CLI session
-        # that azure/login set up above, instead of a personal access token.
+        # vsce reads the Entra ID token from the Azure CLI session the previous step created.
         run: npm exec -- vsce publish --azure-credential --packagePath "${{ env.vsix_filename }}"
 
   publish-openvsx:

@@ -150,6 +150,6 @@ The "Post-build" workflow publishes to the Visual Studio Marketplace with a Micr
 1. Create a user-assigned managed identity in Azure and assign it the Reader role on its subscription.
 2. Add a federated credential to the identity with the issuer `https://token.actions.githubusercontent.com`, the subject `repo:whitphx/vscode-emacs-mcx:environment:marketplace`, and the audience `api://AzureADTokenExchange`.
 3. Add the identity as a member of the `tuttieee` publisher with the Contributor role on the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage), identified by its resource ID (the `id` field printed by `az identity show`).
-4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` with the identity's client ID, tenant ID, and subscription ID.
+4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` with the identity's client ID, tenant ID, and subscription ID. Leave its deployment branch policy unrestricted (or allow `main`), because the "Post-build" workflow runs in the default branch context even for tag releases.
 
 Open VSX is not affected; the `publish-openvsx` job keeps using the `OPEN_VSX_TOKEN` secret.
