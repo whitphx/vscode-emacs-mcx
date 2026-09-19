@@ -142,3 +142,14 @@ Releases are now driven by [Changesets](https://github.com/changesets/changesets
 3. Once the release PR is merged, the workflow automatically triggers the release process. It creates and pushes a new version tag `v<version>`, which triggers the "Test and Build" workflow followed by "Post-build". They build and publish the extension package to the Visual Studio Marketplace and Open VSX.
 
 Only fall back to `scripts/new-version.sh` for emergency manual releases, and always ensure CI succeeded before cutting a tag.
+
+## Marketplace publishing credentials
+
+The "Post-build" workflow publishes to the Visual Studio Marketplace with a Microsoft Entra ID identity instead of a personal access token, because Azure DevOps retires global personal access tokens on December 1, 2026 (see [Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) in the VS Code docs). The `publish-marketplace` job exchanges the GitHub Actions OIDC token for an Entra ID token with `azure/login`, and `vsce publish --azure-credential` publishes with that token. This is the one-time setup it relies on:
+
+1. Create a user-assigned managed identity in Azure and assign it the Reader role on its subscription.
+2. Add a federated credential to the identity with the issuer `https://token.actions.githubusercontent.com`, the subject `repo:whitphx/vscode-emacs-mcx:environment:marketplace`, and the audience `api://AzureADTokenExchange`.
+3. Add the identity as a member of the `tuttieee` publisher with the Contributor role on the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage), identified by its resource ID (the `id` field printed by `az identity show`).
+4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` with the identity's client ID, tenant ID, and subscription ID.
+
+Open VSX is not affected; the `publish-openvsx` job keeps using the `OPEN_VSX_TOKEN` secret.
