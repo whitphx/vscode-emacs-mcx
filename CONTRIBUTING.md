@@ -147,9 +147,18 @@ Only fall back to `scripts/new-version.sh` for emergency manual releases, and al
 
 The "Post-build" workflow publishes to the Visual Studio Marketplace with a Microsoft Entra ID identity instead of a personal access token, because Azure DevOps retires global personal access tokens on December 1, 2026 (see [Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) in the VS Code docs). The `publish-marketplace` job exchanges the GitHub Actions OIDC token for an Entra ID token with `azure/login`, and `vsce publish --azure-credential` publishes with that token. This is the one-time setup it relies on:
 
-1. Create a user-assigned managed identity in Azure and assign it the Reader role on its subscription.
-2. Add a federated credential to the identity with the issuer `https://token.actions.githubusercontent.com`, the subject `repo:whitphx/vscode-emacs-mcx:environment:marketplace`, and the audience `api://AzureADTokenExchange`.
-3. Add the identity as a member of the `tuttieee` publisher with the Contributor role on the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage), identified by its resource ID (the `id` field printed by `az identity show`).
-4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` with the identity's client ID, tenant ID, and subscription ID. Leave its deployment branch policy unrestricted (or allow `main`), because the "Post-build" workflow runs in the default branch context even for tag releases.
+1. Register an application in [Microsoft Entra ID](https://entra.microsoft.com) and note its application (client) ID and directory (tenant) ID. An app registration lives in the tenant, so it needs no Azure subscription, unlike the managed identity the VS Code docs suggest.
+2. Add a federated credential to it for the "GitHub Actions deploying Azure resources" scenario, with the organization `whitphx`, the repository `vscode-emacs-mcx`, the entity type `Environment`, and the environment name `marketplace`. That yields the subject `repo:whitphx/vscode-emacs-mcx:environment:marketplace` and the audience `api://AzureADTokenExchange`.
+3. Add the identity as a member of the `tuttieee` publisher with the Contributor role on the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage), identified there by its Azure DevOps profile ID.
+4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID` and `AZURE_TENANT_ID`. Leave its deployment branch policy unrestricted (or allow `main`), because the "Post-build" workflow runs in the default branch context even for tag releases.
+
+The profile ID in step 3 comes from signing in as the identity, which needs a client secret that can be deleted again immediately afterwards:
+
+```bash
+az login --service-principal --username <client-id> --password <secret> --tenant <tenant-id> --allow-no-subscriptions
+az rest --url https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798
+```
+
+Signed in that way, `npm exec -- vsce verify-pat tuttieee --azure-credential` confirms the setup before a release depends on it.
 
 Open VSX is not affected; the `publish-openvsx` job keeps using the `OPEN_VSX_TOKEN` secret.
