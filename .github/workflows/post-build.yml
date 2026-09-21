@@ -186,16 +186,19 @@ jobs:
           generate_release_notes: true
           tag_name: ${{ needs.get-build-info.outputs.tag }}
 
-  publish:
+  publish-marketplace:
     if: ${{ startsWith(needs.get-build-info.outputs.tag, 'v') }}
     needs: [get-build-info]
 
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [marketplace, openvsx]
+    # The federated credential of the Entra ID identity that publishes to the Marketplace
+    # is bound to this GitHub environment. See "Marketplace publishing credentials" in CONTRIBUTING.md.
+    environment: marketplace
+
+    permissions:
+      contents: read
+      id-token: write # For azure/login to exchange the GitHub OIDC token for a Microsoft Entra ID token, and for Takumi Guard OIDC-based audit logging.
 
     steps:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -238,15 +241,95 @@ jobs:
       - run: |
           files=( ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix )
           echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
-      - if: matrix.target == 'marketplace'
-        name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2.0.0
+
+      # The checkout only provides the vsce pinned in package-lock.json; the VSIX to publish
+      # comes from the verified artifact above. It deliberately checks out the default branch
+      # (the workflow_run context) rather than a ref taken from the triggering run's artifact.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          extensionFile: "${{ env.vsix_filename }}"
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
-      - if: matrix.target == 'openvsx'
-        name: Publish to Open VSX Registry
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: "npm"
+
+      - name: Set up Takumi Guard for npm
+        uses: flatt-security/setup-takumi-guard-npm@f0e333d43cd7a88d2caabee1f16048baab3a35a9 # v1.1.1
+        with:
+          bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
+      - name: Install Aikido Safe Chain
+        uses: ./.github/actions/install-safe-chain
+
+      - name: Install dependencies
+        # This job holds Marketplace publish rights, so dependency lifecycle scripts are not run;
+        # vsce needs none of them.
+        run: npm ci --ignore-scripts
+
+      - name: Log in to Azure
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          # vsce's token is tenant-scoped, so the identity has no subscription to sign in to.
+          allow-no-subscriptions: true
+
+      - name: Publish to Visual Studio Marketplace
+        # vsce reads the Entra ID token from the Azure CLI session the previous step created.
+        run: npm exec -- vsce publish --azure-credential --packagePath "${{ env.vsix_filename }}"
+
+  publish-openvsx:
+    if: ${{ startsWith(needs.get-build-info.outputs.tag, 'v') }}
+    needs: [get-build-info]
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: emacs-mcx
+          path: ${{ runner.temp }}/emacs-mcx
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify artifact attestation
+        run: |
+          echo "Verifying attestation..."
+          VSIX_FILES=(${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix)
+          if [ ${#VSIX_FILES[@]} -eq 0 ]; then
+            echo "Error: No VSIX file found matching emacs-mcx*.vsix" >&2
+            exit 1
+          elif [ ${#VSIX_FILES[@]} -gt 1 ]; then
+            echo "Error: Multiple VSIX files found matching emacs-mcx*.vsix: ${VSIX_FILES[*]}" >&2
+            exit 1
+          fi
+          VSIX_FILE="${VSIX_FILES[0]}"
+
+          VERIFICATION_RESULT=$(gh attestation verify "$VSIX_FILE" \
+            --repo ${{ github.repository }} \
+            --predicate-type https://slsa.dev/provenance/v1 \
+            --format json)
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.path' <<< "$VERIFICATION_RESULT" | \
+            grep -x ".github/workflows/test-build.yml" || {
+              echo "Error: Attestation does not match expected workflow definition path" >&2
+              exit 1
+            }
+          jq -r '.[].verificationResult.statement.predicate.buildDefinition.externalParameters.workflow.ref' <<< "$VERIFICATION_RESULT" | \
+            grep "refs/tags/v" || {
+              echo "Error: Attestation does not match expected workflow trigger ref" >&2
+              exit 1
+            }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: |
+          files=( ${{ runner.temp }}/emacs-mcx/emacs-mcx*.vsix )
+          echo "vsix_filename=${files[0]}" >> $GITHUB_ENV
+      - name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2.0.0
         with:
           extensionFile: "${{ env.vsix_filename }}"
