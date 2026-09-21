@@ -152,13 +152,13 @@ The "Post-build" workflow publishes to the Visual Studio Marketplace with a Micr
 3. Add the identity as a member of the `tuttieee` publisher with the Contributor role on the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage), identified there by its Azure DevOps profile ID.
 4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID` and `AZURE_TENANT_ID`. Leave its deployment branch policy unrestricted (or allow `main`), because the "Post-build" workflow runs in the default branch context even for tag releases.
 
-The profile ID in step 3 comes from signing in as the identity, which needs a client secret that can be deleted again immediately afterwards:
+Reading that profile ID means signing in as the identity, which needs a client secret. Create one under the app registration's Certificates & secrets, and delete it once the ID is in place, because CI authenticates through the federated credential instead. The `id` field of the response below is the value the publisher page wants:
 
 ```bash
 az login --service-principal --username <client-id> --password <secret> --tenant <tenant-id> --allow-no-subscriptions
 az rest --url https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798
 ```
 
-Signed in that way, `npm exec -- vsce verify-pat tuttieee --azure-credential` confirms the setup before a release depends on it.
+Signed in that way, `npm exec -- vsce verify-pat tuttieee --azure-credential` confirms the publisher membership from step 3. The federated credential and the GitHub environment are only exercised by a real release.
 
 Open VSX is not affected; the `publish-openvsx` job keeps using the `OPEN_VSX_TOKEN` secret.
