@@ -562,12 +562,12 @@
       {
         "key": "ctrl+g",
         "command": "agentsVoice.disconnect",
-        "when": "agentsVoiceConnected && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow"
+        "when": "agentsVoiceConnected && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow || agentsVoiceConnecting && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnecting && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow || agentsVoiceConnected && agentsVoiceConnecting && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && agentsVoiceConnecting && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow"
       },
       {
         "key": "escape escape escape",
         "command": "agentsVoice.disconnect",
-        "when": "(agentsVoiceConnected && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow) && config.emacs-mcx.useMetaPrefixEscape"
+        "when": "(agentsVoiceConnected && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow || agentsVoiceConnecting && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnecting && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow || agentsVoiceConnected && agentsVoiceConnecting && agentsVoiceEntitled && agentsVoiceInitiatedHere && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && agentsVoiceConnecting && agentsVoiceEntitled && chatIsEnabled && config.agents.voice.enabled && inChatInput && !chatSessionHasActiveRequest && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && !isSessionsWindow) && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+g",
@@ -1281,13 +1281,13 @@
       },
       {
         "key": "ctrl+g",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows"
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isLinux"
       },
       {
         "key": "escape escape escape",
-        "command": "chat.models.action.clearSearchResults",
-        "when": "inModelsEditor && inModelsSearch && isWindows && config.emacs-mcx.useMetaPrefixEscape"
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
