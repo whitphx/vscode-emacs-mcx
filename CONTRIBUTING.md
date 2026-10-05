@@ -142,3 +142,23 @@ Releases are now driven by [Changesets](https://github.com/changesets/changesets
 3. Once the release PR is merged, the workflow automatically triggers the release process. It creates and pushes a new version tag `v<version>`, which triggers the "Test and Build" workflow followed by "Post-build". They build and publish the extension package to the Visual Studio Marketplace and Open VSX.
 
 Only fall back to `scripts/new-version.sh` for emergency manual releases, and always ensure CI succeeded before cutting a tag.
+
+## Marketplace publishing credentials
+
+The "Post-build" workflow publishes to the Visual Studio Marketplace with a Microsoft Entra ID identity instead of a personal access token, because Azure DevOps retires global personal access tokens on December 1, 2026 (see [Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) in the VS Code docs). The `publish-marketplace` job exchanges the GitHub Actions OIDC token for an Entra ID token with `azure/login`, and `vsce publish --azure-credential` publishes with that token. This is the one-time setup it relies on:
+
+1. Register an application in [Microsoft Entra ID](https://entra.microsoft.com) and note its application (client) ID and directory (tenant) ID. An app registration lives in the tenant, so it needs no Azure subscription, unlike the managed identity the VS Code docs suggest.
+2. Add a federated credential to it for the "GitHub Actions deploying Azure resources" scenario, with the organization `whitphx`, the repository `vscode-emacs-mcx`, the entity type `Environment`, and the environment name `marketplace`. That yields the subject `repo:whitphx/vscode-emacs-mcx:environment:marketplace` and the audience `api://AzureADTokenExchange`.
+3. Add the identity as a member of the `tuttieee` publisher with the Contributor role on the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage), identified there by its Azure DevOps profile ID.
+4. Create a GitHub environment named `marketplace` in this repository and give it the secrets `AZURE_CLIENT_ID` and `AZURE_TENANT_ID`. Leave its deployment branch policy unrestricted (or allow `main`), because the "Post-build" workflow runs in the default branch context even for tag releases.
+
+Reading that profile ID means signing in as the identity, which needs a client secret. Create one under the app registration's Certificates & secrets, and delete it once the ID is in place, because CI authenticates through the federated credential instead. The `id` field of the response below is the value the publisher page wants:
+
+```bash
+az login --service-principal --username <client-id> --password <secret> --tenant <tenant-id> --allow-no-subscriptions
+az rest --url https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798
+```
+
+Signed in that way, `npm exec -- vsce verify-pat tuttieee --azure-credential` confirms the publisher membership from step 3. The federated credential and the GitHub environment are only exercised by a real release.
+
+Open VSX is not affected; the `publish-openvsx` job keeps using the `OPEN_VSX_TOKEN` secret.
