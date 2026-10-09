@@ -45,6 +45,13 @@ jobs:
           # package dependencies and cannot hang on browser provisioning.
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
+      # setup-takumi-guard-npm writes the registry URL and its access token into the
+      # project `.npmrc`, and changesets/action commits every change in the working tree
+      # to the release PR. Revert `.npmrc` once the dependencies are installed so the
+      # token is never committed.
+      - name: Restore .npmrc
+        run: git checkout -- .npmrc
+
       - name: Generate a token
         id: generate-token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
