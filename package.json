@@ -8152,7 +8152,7 @@
     "prepare": "husky",
     "cspell": "cspell lint --no-progress --cache --config ./cspell.json .",
     "changeset": "changeset",
-    "changeset:release": "changeset tag && git push --follow-tags"
+    "changeset:release": "changeset git-tag"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^1.0.0",
