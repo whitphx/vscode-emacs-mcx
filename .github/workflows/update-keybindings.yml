@@ -9,9 +9,10 @@ on:
 jobs:
   update-keybindings:
     runs-on: ubuntu-latest
+    # The PR is pushed and opened with the GitHub App token generated below, so the
+    # workflow's own `GITHUB_TOKEN` only needs to read the repository.
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write # For Takumi Guard OIDC-based audit logging.
 
     steps:
@@ -64,11 +65,27 @@ jobs:
             process.cwd()
           );
           "
+      # PRs opened with `GITHUB_TOKEN` don't run CI workflows without a manual approval,
+      # so open the PR as the Changesets GitHub App instead, the same way the
+      # Changesets workflow does. The token is scoped to this repository and to the
+      # two permissions the steps below need.
+      # Ref: https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+      - name: Generate a token
+        if: steps.changes.outputs.has_changes == 'true'
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.CHANGESETS_APP_ID }}
+          private-key: ${{ secrets.CHANGESETS_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Create Pull Request
         if: steps.changes.outputs.has_changes == 'true'
+        id: cpr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           add-paths: |
             package.json
             .changeset/*.md
@@ -83,3 +100,26 @@ jobs:
           labels: |
             automated
             keybindings
+
+      # Auto-merge waits for the status checks the `main` ruleset requires, so the PR
+      # is merged only after CI passes. `--match-head-commit` pins the merge to the
+      # commit this run pushed: if anything else lands on the branch, the merge is
+      # refused. The file check below makes sure the PR touches nothing but the
+      # generated files before auto-merge is turned on.
+      - name: Enable auto-merge
+        if: >-
+          steps.cpr.outputs.pull-request-operation == 'created' ||
+          steps.cpr.outputs.pull-request-operation == 'updated'
+        run: |
+          unexpected_files="$(gh pr view "$PR_NUMBER" --json files --jq '.files[].path' | grep -Ev '^(package\.json|\.changeset/[^/]+\.md)$' || true)"
+          if [ -n "$unexpected_files" ]; then
+            echo "::error::The PR changes files other than the generated ones; not enabling auto-merge:"
+            echo "$unexpected_files"
+            exit 1
+          fi
+          gh pr merge "$PR_NUMBER" --auto --squash --match-head-commit "$HEAD_SHA"
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          HEAD_SHA: ${{ steps.cpr.outputs.pull-request-head-sha }}
