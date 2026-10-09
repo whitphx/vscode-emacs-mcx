@@ -19,8 +19,8 @@ jobs:
         with:
           fetch-depth: 0
           # `persist-credentials: false` is important not only for security reasons
-          # but also to ensure that `git push --follow-tags` run by the Changesets action in the later step
-          # don't use the default GITHUB_TOKEN, which doesn't trigger other workflows such as the release workflow.
+          # but also to ensure that git operations in the later steps don't use the default GITHUB_TOKEN,
+          # which doesn't trigger other workflows such as the release workflow.
           # Ref: https://github.com/orgs/community/discussions/26220
           persist-credentials: false
 
@@ -57,11 +57,12 @@ jobs:
       - name: Create Release Pull Request or Tag
         uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         with:
-          publish: npm run changeset:release
-        env:
+          publish-script: npm run changeset:release
           # PRs created using `GITHUB_TOKEN` doesn't trigger CI workflows, so we need to use a PAT or app token.
           # - The PAT should be fine-grained and its permissions are properly configured (R/W for Contents and Pull Requests).
           # - The app token should be generated using a GitHub App that has proper permissions (R/W for Contents and Pull Requests).
           # Ref: https://github.com/orgs/community/discussions/55906
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          # GITHUB_TOKEN: ${{ secrets.CHANGESETS_PAT }}
+          # changesets/action v2 only accepts a custom token through this input, not the GITHUB_TOKEN env var.
+          # It also pushes the git tags created by the publish script through the GitHub API with this token.
+          github-token: ${{ steps.generate-token.outputs.token }}
+          # github-token: ${{ secrets.CHANGESETS_PAT }}
