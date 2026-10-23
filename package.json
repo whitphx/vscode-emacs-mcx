@@ -8180,7 +8180,7 @@
     "@vscode/vsce": "^3.9.2",
     "assert": "^2.1.0",
     "cspell": "^10.1.1",
-    "eslint": "^10.12.0",
+    "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-mocha": "^12.0.2",
     "glob": "^13.0.6",
