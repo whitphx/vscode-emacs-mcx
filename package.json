@@ -8165,7 +8165,7 @@
     "changeset:release": "changeset git-tag"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^1.0.0",
+    "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
     "@changesets/write": "^1.0.1",
     "@eslint/js": "^10.0.1",
