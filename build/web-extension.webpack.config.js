@@ -47,6 +47,15 @@ const config = /** @type WebpackConfig */ {
           },
         ],
       },
+      {
+        // mocha >= 12 declares `"type": "module"` in its package.json, so webpack would
+        // parse its prebuilt UMD bundle (`mocha/mocha.js`) as ESM. Inside an ES module the
+        // free `module`/`exports` references fall through to the output bundle's CommonJS
+        // wrapper, and the UMD header overwrites the test entry's exports with the mocha
+        // instance. Parse it as non-ESM so the UMD wrapper binds to its own module.
+        test: /[\\/]node_modules[\\/]mocha[\\/]mocha\.js$/,
+        type: "javascript/auto",
+      },
     ],
   },
   plugins: [
