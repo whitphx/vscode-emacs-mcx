@@ -551,6 +551,16 @@
       },
       {
         "key": "ctrl+g",
+        "command": "editor.action.hideEmptyEditorHint",
+        "when": "editorTextFocus && emptyEditorHintActionsVisible && !editorHasMultipleSelections && !editorHasSelection"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "editor.action.hideEmptyEditorHint",
+        "when": "editorTextFocus && emptyEditorHintActionsVisible && !editorHasMultipleSelections && !editorHasSelection && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
         "command": "agentsVoice.cancelActiveRequest",
         "when": "agentsVoiceConnected && agentsVoiceEntitled && chatIsEnabled && chatSessionHasActiveRequest && config.agents.voice.enabled && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible || agentsVoiceConnected && chatIsEnabled && chatSessionHasActiveRequest && config.agents.voice.enabled && inChatInput && !editorHasMultipleSelections && !editorHasSelection && !editorHoverVisible && config.agents.voice.useBYOKVoiceModel =~ /\\S/"
       },
@@ -1181,6 +1191,16 @@
       },
       {
         "key": "ctrl+g",
+        "command": "imageCarousel.finishMarkUp",
+        "when": "imageCarouselMarkingUp"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "imageCarousel.finishMarkUp",
+        "when": "imageCarouselMarkingUp && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
         "command": "closeReferenceSearch",
         "when": "editorTextFocus && referenceSearchVisible && !config.editor.stablePeek || referenceSearchVisible && !config.editor.stablePeek && !inputFocus"
       },
@@ -1278,16 +1298,6 @@
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
         "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
-      },
-      {
-        "key": "ctrl+g",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isLinux"
-      },
-      {
-        "key": "escape escape escape",
-        "command": "workbench.actions.workbench.panel.output.clearFilterText",
-        "when": "outputFilterFocus && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
