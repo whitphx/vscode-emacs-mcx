@@ -1191,12 +1191,12 @@
       },
       {
         "key": "ctrl+g",
-        "command": "imageCarousel.finishMarkUp",
+        "command": "imageCarousel.cancelMarkUp",
         "when": "imageCarouselMarkingUp"
       },
       {
         "key": "escape escape escape",
-        "command": "imageCarousel.finishMarkUp",
+        "command": "imageCarousel.cancelMarkUp",
         "when": "imageCarouselMarkingUp && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
@@ -1298,6 +1298,16 @@
         "key": "escape escape escape",
         "command": "chat.models.action.clearSearchResults",
         "when": "inModelsEditor && inModelsSearch && isLinux && config.emacs-mcx.useMetaPrefixEscape"
+      },
+      {
+        "key": "ctrl+g",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isLinux"
+      },
+      {
+        "key": "escape escape escape",
+        "command": "workbench.actions.workbench.panel.output.clearFilterText",
+        "when": "outputFilterFocus && isLinux && config.emacs-mcx.useMetaPrefixEscape"
       },
       {
         "key": "ctrl+s",
